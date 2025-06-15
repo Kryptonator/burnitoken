@@ -1,5 +1,18 @@
 // main.js: Core functionality for Burni Token website
 console.log('Main.js loading...');
+
+// Global fallback functions - defined first before any other scripts
+if (typeof window.checkFontAwesome !== 'function') {
+  window.checkFontAwesome = function () {
+    console.log('FontAwesome check: Fallback function active');
+    // Überprüfe, ob FontAwesome korrekt geladen wurde
+    const faElements = document.querySelectorAll('[class*="fa-"]');
+    if (faElements.length > 0) {
+      console.log('FontAwesome Icons gefunden:', faElements.length);
+    }
+  };
+}
+
 // Sofortiger Test für main.js loading
 window.mainJsLoaded = true;
 console.log('Main.js loaded and ready');
@@ -148,18 +161,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Fallback für fehlende checkFontAwesome-Funktion
-  if (typeof window.checkFontAwesome !== 'function') {
-    window.checkFontAwesome = function () {
-      console.log('FontAwesome check: Fallback function active');
-      // Überprüfe, ob FontAwesome korrekt geladen wurde
-      const faElements = document.querySelectorAll('[class*="fa-"]');
-      if (faElements.length > 0) {
-        console.log('FontAwesome Icons gefunden:', faElements.length);
-      }
-    };
-  }
-
   let supplyChartInstance, athAtlChartInstance, scheduleChartInstance;
   let currentLang = 'en';
 
@@ -190,26 +191,41 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Language selector found:', !!langSelect);
     if (langSelect) {
       console.log('Quick i18n event listener attached');
-      langSelect.addEventListener('change', (e) => {
+
+      // Safari compatibility - use both change and input events
+      const handleLanguageChange = (e) => {
         const newLang = e.target.value;
         console.log(`Quick i18n: Language change to ${newLang}`);
-        // Quick test translation - sofortige Aktualisierung für Tests
-        const homeElements = document.querySelectorAll('[data-i18n="nav_home"]');
-        console.log(`Found ${homeElements.length} nav_home elements`);
-        homeElements.forEach((el, index) => {
-          if (newLang === 'de') {
-            el.textContent = 'Startseite';
-          } else if (newLang === 'es') {
-            el.textContent = 'Inicio';
-          } else if (newLang === 'fr') {
-            el.textContent = 'Accueil';
-          } else {
-            el.textContent = 'Home';
-          }
-          console.log(`Updated element ${index} to: "${el.textContent}"`);
-        });
-        console.log(`Updated ${homeElements.length} nav_home elements`);
-      });
+
+        // Safari-specific timing adjustment
+        const updateElements = () => {
+          const homeElements = document.querySelectorAll('[data-i18n="nav_home"]');
+          console.log(`Found ${homeElements.length} nav_home elements`);
+          homeElements.forEach((el, index) => {
+            if (newLang === 'de') {
+              el.textContent = 'Startseite';
+            } else if (newLang === 'es') {
+              el.textContent = 'Inicio';
+            } else if (newLang === 'fr') {
+              el.textContent = 'Accueil';
+            } else {
+              el.textContent = 'Home';
+            }
+            console.log(`Updated element ${index} to: "${el.textContent}"`);
+          });
+          console.log(`Updated ${homeElements.length} nav_home elements`);
+        };
+
+        // Safari needs a small delay
+        if (/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)) {
+          setTimeout(updateElements, 50);
+        } else {
+          updateElements();
+        }
+      };
+
+      langSelect.addEventListener('change', handleLanguageChange);
+      langSelect.addEventListener('input', handleLanguageChange); // Safari fallback
     }
   } catch (error) {
     console.error('Error in quick i18n setup:', error);
@@ -1519,7 +1535,7 @@ const translations = {
     use_case_governance_desc: 'Mantén Burni para participar en decisiones importantes sobre el futuro del proyecto y tener voz.',
     token_schedule_title: 'Burni Coin: Programa Deflacionario',
     token_schedule_description: 'Creemos en la transparencia y el desarrollo de valor a largo plazo de Burni Coin. Un componente clave de nuestro ecosistema es el mecanismo deflacionario único que reduce continuamente la cantidad total de Burni Coins en circulación.',
-    tokenomics_title: 'El Mundo de Burni: Hechos y Cifras',
+    tokenomics_title: 'El Mundo de Burni: Hechos y Números',
     tokenomics_description: 'Aquí tienes un vistazo a las cifras clave que definen a Burni. Estos datos te dan una perspectiva de la base económica y el potencial del token.',
     kpi_max_supply: 'Suministro Máximo',
     kpi_circulating_supply: 'Suministro Circulante',
@@ -1547,7 +1563,7 @@ const translations = {
     supply_chart_description: 'Este gráfico visualiza el suministro circulante en relación al suministro máximo.',
     xrpl_home_title: 'En Casa en el XRP Ledger',
     xrpl_home_description: 'Burni opera en el XRP Ledger (XRPL), conocido por su velocidad, bajos costos de transacción y escalabilidad. Esto significa para ti: ¡transacciones rápidas y rentables! Para mantener o comerciar Burni, necesitas configurar una Trustline – un procedimiento estándar en el XRPL.',
-    xrpl_slogan: 'Rápido, eficiente y confiable – esa es la base de Burni.',
+    xrpl_slogan: 'Rápido, eficiente y confiable - essa é a base do Burni.',
     date: 'Fecha',
     day: 'Día',
     process_no: 'Proceso No.',
@@ -1618,7 +1634,7 @@ const translations = {
     supply_chart_description: 'Ce graphique visualise l\'offre circulante par rapport à l\'offre maximale.',
     xrpl_home_title: 'Chez Nous sur le XRP Ledger',
     xrpl_home_description: 'Burni fonctionne sur le XRP Ledger (XRPL), connu pour sa vitesse, ses faibles coûts de transaction et sa scalabilité. Cela signifie pour vous : des transactions rapides et rentables ! Pour détenir ou échanger Burni, vous devez configurer une Trustline – une procédure standard sur le XRPL.',
-    xrpl_slogan: 'Rapide, efficace et fiable – c\'est la base de Burni.',
+    xrpl_slogan: 'Rapide, efficace et fiable - c\'est la base de Burni.',
     date: 'Date',
     day: 'Jour',
     process_no: 'Processus No.',
@@ -1665,13 +1681,13 @@ const translations = {
     tokenomics_description: 'إليك نظرة على الأرقام الرئيسية التي تعرّف بورني. هذه البيانات تمنحك نظرة ثاقبة على الأساس الاقتصادي وإمكانات الرمز.',
     kpi_max_supply: 'الإمداد الأقصى',
     kpi_circulating_supply: 'الإمداد المتداول',
-    kpi_current_price: 'سعر بورني الحالي',
-    kpi_xrp_price: 'سعر XRP الحالي',
-    kpi_xpm_price: 'سعر XPM الحالي',
+    kpi_current_price: 'السعر الحالي لبورني',
+    kpi_xrp_price: 'السعر الحالي لـ XRP',
+    kpi_xpm_price: 'السعر الحالي لـ XPM',
     kpi_holders: 'عدد الحاملين',
     kpi_trustlines: 'عدد خطوط الثقة',
     kpi_issuer_fee: 'رسوم المُصدر',
-    price_error_message: 'تعذر تحميل بيانات الأسعار. يرجى المحاولة مرة أخرى لاحقاً.',
+    price_error_message: 'تعذر تحميل بيانات الأسعار. يرجى المحاولة مرة أخرى لاحقًا.',
     last_updated_label: 'آخر تحديث:',
     token_details_title: 'تفاصيل الرمز',
     created_on: 'تم إنشاؤه في',
@@ -1759,7 +1775,7 @@ const translations = {
     supply_chart_caption: 'এই চার্টটি টোকেন সরবরাহকে ভিজুয়ালাইজ করে।',
     supply_chart_description: 'এই চার্টটি সর্বোচ্চ সরবরাহের সাথে সম্পর্কিত প্রচলিত সরবরাহকে ভিজুয়ালাইজ করে।',
     xrpl_home_title: 'XRP লেজারে বাড়িতে',
-    xrpl_home_description: 'বার্নি XRP লেজার (XRPL) এ কাজ করে, যা তার গতি, কম লেনদেন খরচ এবং স্কেলেবিলিটির জন্য পরিচিত।',
+    xrpl_home_description: 'বার্নি XRP লেজার (XRPL) এ কাজ করে, যা তার গতি, কম লেনদেন খরচ এবং স্কোলেবিলিটির জন্য পরিচিত।',
     xrpl_slogan: 'দ্রুত, দক্ষ এবং নির্ভরযোগ্য - এটিই বার্নির ভিত্তি।',
     date: 'তারিখ',
     day: 'দিন',
@@ -1813,7 +1829,7 @@ const translations = {
     kpi_holders: '保有者数',
     kpi_trustlines: 'トラストライン数',
     kpi_issuer_fee: '発行者手数料',
-    price_error_message: '価格データを読み込めませんでした。後でもう一度お試しください。',
+    price_error_message: '価格データをローディングできませんでした。後でもう一度お試しください。',
     last_updated_label: '最終更新：',
     token_details_title: 'トークン詳細',
     created_on: '作成日',
@@ -1925,12 +1941,12 @@ const translations = {
     about_title: '버니란 무엇인가요?',
     about_description: '버니는 단순한 토큰 그 이상입니다. 디플레이션 미래에 대한 약속입니다. 버니의 핵심에는 유통에서 토큰을 영구적으로 제거하여 남은 토큰의 가치를 잠재적으로 증가시키는 메커니즘이 있습니다.',
     burn_title: '토큰 소각의 비밀',
-    burn_description: '마법의 불에서 통나무처럼 토큰이 태워지는 것을 상상해보세요. 영원히 사라집니다! "토큰 소각"이라고 불리는 이 과정은 버니 토큰의 총 공급량을 줄입니다.',
+    burn_description: '마법의 불에서 통나무처럼 토큰이 태워지는 것을 상상해보세요. 영원히 사라집니다! 이 과정은 "토큰 소각"이라고 불리며, 버니 토큰의 총 공급량을 줄입니다.',
     burn_animation_note: '이 애니메이션은 토큰이 상징적으로 유통에서 제거되는 방식을 보여줍니다.',
     blackholed_title: '버니의 약속: "블랙홀화"',
     blackholed_description: '버니는 "블랙홀화: 예"로 표시됩니다. 이는 버니 토큰의 최대 공급량이 고정되어 있고 새로운 토큰이 생성될 수 없음을 의미합니다.',
     blackholed_tooltip_trigger: '"블랙홀화"는 무엇을 의미하나요?',
-    blackholed_tooltip_text: '토큰 발행자가 "블랙홀화"되면 발행 주소가 새로운 토큰을 생성하거나 토큰 속성을 변경할 권리를 포기했음을 의미합니다.',
+    blackholed_tooltip_text: '토큰 발행자가 "블랙홀화"되면 발행 주소가 새로운 토큰을 발행하거나 토큰 속성을 변경할 권리를 포기했음을 의미합니다.',
     use_cases_title: '사용 사례: 버니 코인의 활용법',
     use_cases_description: '버니 코인은 단순한 토큰이 아니라 XRPL 생태계에서 성장하는 애플리케이션을 가진 다목적 디지털 자산입니다.',
     use_case_gaming_title: '분산형 게이밍',
@@ -2180,7 +2196,7 @@ const translations = {
     platform: '平台',
     issuer_address: '发行者地址',
     explorer_links: '浏览器链接',
-    note_data_disclaimer: '注意：数据可能会发生变化。',
+    note_data_disclaimer: '注：数据可能会发生变化。',
     supply_overview_title: '供应概览',
     supply_chart_caption: '此图表可视化代币供应量。',
     supply_chart_description: '此图表可视化流通供应量与最大供应量的关系。',
@@ -2214,9 +2230,9 @@ const translations = {
     blackholed_title: 'बर्नी का वादा: "ब्लैकहोल्ड"',
     blackholed_description: 'बर्नी को "ब्लैकहोल्ड: हाँ" के रूप में चिह्नित किया गया है। इसका मतलब है कि बर्नी टोकन की अधिकतम आपूर्ति निश्चित है और नए टोकन कभी नहीं बनाए जा सकते।',
     blackholed_tooltip_trigger: '"ब्लैकहोल्ड" का क्या मतलब है?',
-    blackholed_tooltip_text: 'जब एक टोकन जारीकर्ता "ब्लैकहोल्ड" होता है, तो इसका मतलब है कि जारी करने वाले पते ने नए टोकन बनाने या टोकन गुणों को बदलने के अपने अधिकार छोड़ दिए हैं।',
+    blackholed_tooltip_text: 'जब एक टोकन इश्यूकर "ब्लैकहोल्ड" होता है, तो इसका मतलब है कि इश्यू करने वाले पते ने नए टोकन बनाने या टोकन गुणों को बदलने के अपने अधिकार छोड़ दिए हैं।',
     use_cases_title: 'उपयोग के मामले: बर्नी कॉइन का उपयोग कहाँ किया जा सकता है',
-    use_cases_description: 'बर्नी कॉइन सिर्फ एक टोकन नहीं है, बल्कि XRPL इकोसिस्टम में बढ़ते अनुप्रयोगों के साथ एक बहुमुखी डिजिटल संपत्ति है।',
+    use_cases_description: 'बर्नी कॉइन सिर्फ एक टोकन नहीं है, बल्कि XRPL इकोसिस्टम में बढ़ते अनुप्रयोगों के साथ एक बहुमुखी डिजिटली संपत्ति है।',
     use_case_gaming_title: 'विकेंद्रीकृत गेमिंग',
     use_case_gaming_desc: 'भविष्य के XRPL गेम्स में इन-गेम करेंसी या विशेष इन-गेम एसेट्स के लिए बर्नी का उपयोग करें।',
     use_case_nfts_title: 'NFT एकीकरण',
@@ -2244,9 +2260,9 @@ const translations = {
     token_details_title: 'टोकन विवरण',
     created_on: 'बनाया गया',
     ath: 'सर्वकालिक उच्च (ATH)',
-    ath_tooltip: 'बर्नी कॉइन द्वारा पहुंची सर्वोच्च कीमत।',
+    ath_tooltip: 'बर्नी कॉइन द्वारा पहुंची सर्वोच्च कीमत。',
     atl: 'सर्वकालिक निम्न (ATL)',
-    atl_tooltip: 'बर्नी कॉइन द्वारा पहुंची सबसे कम कीमत।',
+    atl_tooltip: 'बर्नी कॉइन द्वारा पहुंची सबसे कम कीमत。',
     total_supply: 'कुल आपूर्ति',
     platform: 'प्लेटफॉर्म',
     issuer_address: 'जारीकर्ता पता',
@@ -2258,7 +2274,7 @@ const translations = {
     xrpl_home_title: 'XRP लेजर में घर',
     xrpl_home_description: 'बर्नी XRP लेजर (XRPL) पर काम करता है, जो अपनी गति, कम लेनदेन लागत और स्केलेबिलिटी के लिए जाना जाता है।',
     xrpl_slogan: 'तेज़, कुशल और विश्वसनीय - यही बर्नी की नींव है।',
-    date: 'दिनांक',
+    date: 'तारीख',
     day: 'दिन',
     process_no: 'प्रक्रिया संख्या',
     remaining_coins: 'बचे हुए सिक्के (लगभग)'
@@ -2335,3 +2351,371 @@ const translations = {
     remaining_coins: 'Monete Rimanenti (appross.)'
   }
 };
+
+// ===== ENHANCED FEATURE INTEGRATION =====
+
+// Initialize advanced features when available
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('Initializing enhanced features...');
+
+  // Track page load with analytics
+  if (window.BurniAnalytics) {
+    window.BurniAnalytics.trackPageView('homepage');
+    window.BurniAnalytics.trackFeatureUsage('website', 'page_loaded');
+  }
+
+  // Setup theme change listener for charts
+  window.addEventListener('themeChanged', (event) => {
+    console.log('Theme changed to:', event.detail.theme);
+
+    // Update chart colors based on theme
+    updateChartsForTheme(event.detail.theme);
+
+    // Track theme change
+    if (window.BurniAnalytics) {
+      window.BurniAnalytics.trackFeatureUsage('theme', `changed_to_${event.detail.theme}`);
+    }
+  });
+
+  // Setup performance monitoring alerts
+  if (window.PerformanceMonitor) {
+    // Listen for performance issues
+    document.addEventListener('performanceIssue', (event) => {
+      console.warn('Performance issue detected:', event.detail);
+
+      if (window.BurniAnalytics) {
+        window.BurniAnalytics.trackCustomEvent('performance_issue', event.detail);
+      }
+    });
+  }
+
+  // Setup accessibility announcements
+  if (window.AccessibilityManager) {
+    // Announce important page updates
+    setTimeout(() => {
+      window.AccessibilityManager.announceToScreenReader('Burni Token website loaded successfully');
+    }, 2000);
+  }
+
+  // Enhanced error tracking
+  window.addEventListener('error', (event) => {
+    console.error('Global error caught:', event.error);
+
+    if (window.BurniAnalytics) {
+      window.BurniAnalytics.trackError(event.error, {
+        filename: event.filename,
+        lineno: event.lineno,
+        colno: event.colno,
+        type: 'javascript_error'
+      });
+    }
+  });
+
+  // Enhanced unhandled promise rejection tracking
+  window.addEventListener('unhandledrejection', (event) => {
+    console.error('Unhandled promise rejection:', event.reason);
+
+    if (window.BurniAnalytics) {
+      window.BurniAnalytics.trackError(new Error(event.reason), {
+        type: 'unhandled_promise_rejection',
+        reason: event.reason
+      });
+    }
+  });
+
+  // Setup connection status monitoring
+  window.addEventListener('online', () => {
+    console.log('Connection restored');
+    if (window.BurniAnalytics) {
+      window.BurniAnalytics.trackCustomEvent('connection_status', { status: 'online' });
+    }
+  });
+
+  window.addEventListener('offline', () => {
+    console.log('Connection lost');
+    if (window.BurniAnalytics) {
+      window.BurniAnalytics.trackCustomEvent('connection_status', { status: 'offline' });
+    }
+  });
+});
+
+// Function to update chart colors for theme changes
+function updateChartsForTheme(theme) {
+  const isDark = theme === 'dark';
+
+  // Define color schemes
+  const lightColors = {
+    text: '#111827',
+    grid: '#E5E7EB',
+    background: '#FFFFFF'
+  };
+
+  const darkColors = {
+    text: '#F3F4F6',
+    grid: '#374151',
+    background: '#1F2937'
+  };
+
+  const colors = isDark ? darkColors : lightColors;
+
+  // Update existing charts if they exist
+  if (window.supplyChartInstance) {
+    window.supplyChartInstance.options.plugins.legend.labels.color = colors.text;
+    window.supplyChartInstance.options.scales.x.ticks.color = colors.text;
+    window.supplyChartInstance.options.scales.y.ticks.color = colors.text;
+    window.supplyChartInstance.options.scales.x.grid.color = colors.grid;
+    window.supplyChartInstance.options.scales.y.grid.color = colors.grid;
+    window.supplyChartInstance.update();
+  }
+
+  if (window.athAtlChartInstance) {
+    window.athAtlChartInstance.options.plugins.legend.labels.color = colors.text;
+    window.athAtlChartInstance.options.scales.x.ticks.color = colors.text;
+    window.athAtlChartInstance.options.scales.y.ticks.color = colors.text;
+    window.athAtlChartInstance.options.scales.x.grid.color = colors.grid;
+    window.athAtlChartInstance.options.scales.y.grid.color = colors.grid;
+    window.athAtlChartInstance.update();
+  }
+
+  if (window.scheduleChartInstance) {
+    window.scheduleChartInstance.options.plugins.legend.labels.color = colors.text;
+    window.scheduleChartInstance.options.scales.x.ticks.color = colors.text;
+    window.scheduleChartInstance.options.scales.y.ticks.color = colors.text;
+    window.scheduleChartInstance.options.scales.x.grid.color = colors.grid;
+    window.scheduleChartInstance.options.scales.y.grid.color = colors.grid;
+    window.scheduleChartInstance.update();
+  }
+}
+
+// Enhanced feature detection and graceful degradation
+function checkFeatureSupport() {
+  const features = {
+    serviceWorker: 'serviceWorker' in navigator,
+    notifications: 'Notification' in window,
+    geolocation: 'geolocation' in navigator,
+    localStorage: (() => {
+      try {
+        localStorage.setItem('test', 'test');
+        localStorage.removeItem('test');
+        return true;
+      } catch (e) {
+        return false;
+      }
+    })(),
+    intersectionObserver: 'IntersectionObserver' in window,
+    performanceObserver: 'PerformanceObserver' in window,
+    webAnimations: 'animate' in document.createElement('div'),
+    webp: (() => {
+      const canvas = document.createElement('canvas');
+      return canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+    })(),
+  };
+
+  console.log('Feature support:', features);
+
+  if (window.BurniAnalytics) {
+    window.BurniAnalytics.trackCustomEvent('feature_support', features);
+  }
+
+  return features;
+}
+
+// Initialize feature detection
+checkFeatureSupport();
+
+// Enhanced keyboard shortcuts
+document.addEventListener('keydown', (event) => {
+  // Ctrl/Cmd + K: Focus search (if search is added later)
+  if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+    event.preventDefault();
+    const searchInput = document.querySelector('input[type="search"]');
+    if (searchInput) {
+      searchInput.focus();
+    }
+  }
+
+  // Ctrl/Cmd + /: Show keyboard shortcuts help
+  if ((event.ctrlKey || event.metaKey) && event.key === '/') {
+    event.preventDefault();
+    showKeyboardShortcutsHelp();
+  }
+});
+
+function showKeyboardShortcutsHelp() {
+  const shortcuts = [
+    { key: 'Ctrl + Shift + D', description: 'Toggle dark mode' },
+    { key: 'Ctrl + Shift + P', description: 'Toggle performance monitor' },
+    { key: 'Alt + A', description: 'Open accessibility panel' },
+    { key: 'Alt + H', description: 'Toggle high contrast' },
+    { key: 'Alt + M', description: 'Toggle reduced motion' },
+    { key: 'Ctrl + /', description: 'Show this help' },
+  ];
+
+  const modal = document.createElement('div');
+  modal.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50';
+  modal.innerHTML = `
+    <div class="bg-white dark:bg-dark-card rounded-lg p-6 max-w-md w-full mx-4">
+      <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Keyboard Shortcuts</h3>
+      <div class="space-y-2">
+        ${shortcuts.map(shortcut => `
+          <div class="flex justify-between items-center">
+            <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm font-mono">${shortcut.key}</kbd>
+            <span class="text-sm text-gray-600 dark:text-gray-300">${shortcut.description}</span>
+          </div>
+        `).join('')}
+      </div>
+      <button id="close-shortcuts-help" class="mt-4 w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+        Close
+      </button>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  // Close modal
+  const closeBtn = modal.querySelector('#close-shortcuts-help');
+  closeBtn.addEventListener('click', () => {
+    document.body.removeChild(modal);
+  });
+
+  // Close on escape or click outside
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      document.body.removeChild(modal);
+    }
+  });
+
+  document.addEventListener('keydown', function escapeHandler(e) {
+    if (e.key === 'Escape') {
+      document.body.removeChild(modal);
+      document.removeEventListener('keydown', escapeHandler);
+    }
+  });
+}
+
+// Progressive Web App installation prompt
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  console.log('PWA install prompt available');
+  e.preventDefault();
+  deferredPrompt = e;
+
+  // Show custom install button
+  showInstallPrompt();
+});
+
+function showInstallPrompt() {
+  const installButton = document.createElement('button');
+  installButton.className = `
+    fixed top-4 left-1/2 transform -translate-x-1/2 z-50
+    bg-blue-600 hover:bg-blue-700 text-white
+    px-4 py-2 rounded-lg shadow-lg
+    flex items-center space-x-2
+    transition-all duration-300
+    hover:scale-105
+  `;
+  installButton.innerHTML = `
+    <i class="fas fa-download"></i>
+    <span>Install App</span>
+  `;
+
+  installButton.addEventListener('click', () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the install prompt');
+          if (window.BurniAnalytics) {
+            window.BurniAnalytics.trackConversion('pwa_install', 'accepted');
+          }
+        } else {
+          console.log('User dismissed the install prompt');
+          if (window.BurniAnalytics) {
+            window.BurniAnalytics.trackConversion('pwa_install', 'dismissed');
+          }
+        }
+        deferredPrompt = null;
+        document.body.removeChild(installButton);
+      });
+    }
+  });
+
+  document.body.appendChild(installButton);
+
+  // Auto-hide after 10 seconds
+  setTimeout(() => {
+    if (installButton.parentNode) {
+      document.body.removeChild(installButton);
+    }
+  }, 10000);
+}
+
+// Service Worker registration with enhanced error handling
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then((registration) => {
+        console.log('ServiceWorker registration successful:', registration);
+
+        // Listen for service worker updates
+        registration.addEventListener('updatefound', () => {
+          const newWorker = registration.installing;
+          if (newWorker) {
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed') {
+                if (navigator.serviceWorker.controller) {
+                  // New version available
+                  showUpdateAvailableNotification();
+                } else {
+                  // First time installation
+                  console.log('Content cached for offline use');
+                }
+              }
+            });
+          }
+        });
+
+        if (window.BurniAnalytics) {
+          window.BurniAnalytics.trackFeatureUsage('service_worker', 'registered');
+        }
+      })
+      .catch((error) => {
+        console.log('ServiceWorker registration failed:', error);
+
+        if (window.BurniAnalytics) {
+          window.BurniAnalytics.trackError(error, { type: 'service_worker_registration' });
+        }
+      });
+  });
+}
+
+function showUpdateAvailableNotification() {
+  const notification = document.createElement('div');
+  notification.className = `
+    fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50
+    bg-blue-600 text-white px-6 py-3 rounded-lg shadow-lg
+    flex items-center space-x-4
+  `;
+  notification.innerHTML = `
+    <span>New version available!</span>
+    <button id="update-app" class="bg-white text-blue-600 px-3 py-1 rounded font-medium hover:bg-gray-100">
+      Update
+    </button>
+    <button id="dismiss-update" class="text-blue-200 hover:text-white">
+      <i class="fas fa-times"></i>
+    </button>
+  `;
+
+  document.body.appendChild(notification);
+
+  // Update app
+  notification.querySelector('#update-app').addEventListener('click', () => {
+    window.location.reload();
+  });
+
+  // Dismiss notification
+  notification.querySelector('#dismiss-update').addEventListener('click', () => {
+    document.body.removeChild(notification);
+  });
+}
