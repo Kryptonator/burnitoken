@@ -3,147 +3,283 @@
 @tailwind utilities;
 
 @layer components {
+  /* ===== PIXAR COMIC DESIGN SYSTEM ===== */
+
+  /* Main Button System */
   .pixar-button {
-    @apply rounded-full bg-orange-500 font-bold py-2 px-4 text-white shadow-lg transform transition-all duration-300 hover:scale-105 hover:bg-orange-600 active:scale-95 focus:ring-2 focus:ring-orange-300;
-    will-change: transform;
+    @apply rounded-full bg-gradient-to-r from-orange-500 to-orange-600 font-bold py-3 px-6 text-white shadow-2xl transform transition-all duration-300;
+    background-size: 200% 200%;
+    background-image: linear-gradient(
+      135deg,
+      #f97316 0%,
+      #ea580c 25%,
+      #dc2626 50%,
+      #ea580c 75%,
+      #f97316 100%
+    );
+    box-shadow:
+      0 8px 25px rgba(249, 115, 22, 0.4),
+      0 4px 12px rgba(0, 0, 0, 0.15),
+      inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    will-change: transform, box-shadow;
+    animation: gradientShift 6s ease-in-out infinite;
   }
 
+  .pixar-button:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow:
+      0 15px 35px rgba(249, 115, 22, 0.5),
+      0 8px 20px rgba(0, 0, 0, 0.2),
+      inset 0 2px 6px rgba(255, 255, 255, 0.4);
+    background-position: 100% 100%;
+  }
+
+  .pixar-button:active {
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  /* Glasmorphism Card System */
+  .pixar-card {
+    @apply rounded-3xl p-6 transform transition-all duration-500;
+    background: rgba(255, 255, 255, 0.15);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.1),
+      0 8px 20px rgba(249, 115, 22, 0.1),
+      inset 0 2px 4px rgba(255, 255, 255, 0.4);
+    will-change: transform, box-shadow;
+  }
+
+  .pixar-card:hover {
+    transform: translateY(-8px) rotateX(2deg) rotateY(1deg);
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.15),
+      0 12px 30px rgba(249, 115, 22, 0.2),
+      inset 0 2px 6px rgba(255, 255, 255, 0.5);
+    border-color: rgba(249, 115, 22, 0.4);
+  }
+
+  /* Enhanced Navigation */
   .nav-link {
-    @apply rounded-md text-sm font-semibold px-3 py-2 text-gray-600 transition-colors duration-300 hover:text-orange-600;
-
-    &.active {
-      @apply text-orange-600;
-    }
+    @apply rounded-2xl text-sm font-bold px-4 py-3 transition-all duration-300 relative overflow-hidden;
+    background: rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #374151;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
   }
 
-  .section-card {
-    @apply rounded-2xl bg-white p-6 shadow-lg transition-shadow duration-300 hover:shadow-xl;
+  .nav-link:hover {
+    background: rgba(249, 115, 22, 0.9);
+    color: white;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(249, 115, 22, 0.4);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   }
 
+  .nav-link.active {
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    color: white;
+    box-shadow:
+      0 6px 20px rgba(249, 115, 22, 0.4),
+      inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  }
+
+  /* Hero Section Enhancements */
+  .hero-gradient {
+    background:
+      radial-gradient(ellipse at top, rgba(249, 115, 22, 0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at bottom, rgba(234, 88, 12, 0.1) 0%, transparent 60%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+    -webkit-backdrop-filter: blur(1px);
+    backdrop-filter: blur(1px);
+  }
+
+  /* Enhanced Burni Mascot */
+  .burni-mascot {
+    @apply transform transition-all duration-700;
+    filter: drop-shadow(0 10px 25px rgba(249, 115, 22, 0.3));
+    will-change: transform, filter;
+  }
+
+  .burni-mascot:hover {
+    transform: scale(1.1) rotateZ(5deg);
+    filter: drop-shadow(0 15px 35px rgba(249, 115, 22, 0.4))
+      drop-shadow(0 0 20px rgba(249, 115, 22, 0.2));
+    animation: burniFloat 3s ease-in-out infinite;
+  }
+
+  /* KPI Cards with Comic Style */
   .kpi-card {
-    @apply rounded-xl bg-white p-4 shadow-md text-center;
+    @apply rounded-2xl p-6 text-center transform transition-all duration-400;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(249, 115, 22, 0.2);
+    box-shadow:
+      0 8px 30px rgba(0, 0, 0, 0.1),
+      0 4px 15px rgba(249, 115, 22, 0.1),
+      inset 0 2px 4px rgba(255, 255, 255, 0.6);
+  }
+
+  .kpi-card:hover {
+    transform: translateY(-6px) scale(1.03);
+    border-color: rgba(249, 115, 22, 0.4);
+    box-shadow:
+      0 15px 45px rgba(0, 0, 0, 0.15),
+      0 8px 25px rgba(249, 115, 22, 0.2);
   }
 
   .kpi-value {
-    @apply text-3xl font-bold text-orange-600;
+    @apply text-4xl font-black mb-2;
+    background: linear-gradient(135deg, #f97316, #ea580c, #dc2626);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    animation: colorShift 4s ease-in-out infinite;
   }
 
   .kpi-label {
-    @apply text-sm text-gray-500 mt-1;
+    @apply text-sm font-semibold text-gray-600 uppercase tracking-wider;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
   }
 
+  /* Enhanced Chart Container */
+  .chart-container {
+    @apply w-full rounded-3xl overflow-hidden;
+    height: 350px;
+    background: rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.1),
+      inset 0 2px 4px rgba(255, 255, 255, 0.4);
+  }
+
+  /* Typography Enhancements */
+  .pixar-title {
+    @apply font-black text-5xl md:text-6xl leading-tight;
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #dc2626 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: textGlow 3s ease-in-out infinite alternate;
+  }
+
+  .pixar-subtitle {
+    @apply font-bold text-xl md:text-2xl text-gray-700;
+    text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+  }
+
+  /* Enhanced Tooltips */
   .tooltip {
     @apply relative inline-block;
-
-    .tooltiptext {
-      @apply absolute invisible w-48 bg-gray-800 text-white text-center rounded-md py-2 px-3 z-10 bottom-full left-1/2 -ml-24 opacity-0 transition-opacity duration-300;
-    }
-
-    &:hover .tooltiptext {
-      @apply visible opacity-100;
-    }
   }
 
-  .burni-mascot {
-    @apply w-40 h-40 object-contain md:w-52 md:h-52;
+  .tooltip .tooltiptext {
+    @apply absolute invisible w-64 text-center rounded-2xl py-3 px-4 z-20 bottom-full left-1/2 opacity-0 transition-all duration-300;
+    background: rgba(0, 0, 0, 0.9);
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    color: white;
+    margin-left: -8rem;
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.3),
+      0 4px 15px rgba(249, 115, 22, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .chart-container {
-    @apply w-full h-[300px];
-  }
-
-  /* Fade in animations */
-  .fade-in {
-    animation: fadeIn 0.6s ease-in-out;
-  }
-
-  .fade-in-up {
-    animation: fadeInUp 0.8s ease-out;
-  }
-
-  .fade-in-scale {
-    animation: fadeInScale 0.5s ease-out;
-  }
-
-  /* Loading animations */
-  .pulse-slow {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-
-  .loading-dots {
-    animation: loadingDots 1.4s infinite ease-in-out;
-  }
-
-  /* Burni-specific animations */
-  .burni-glow {
-    animation: burniGlow 3s ease-in-out infinite alternate;
-  }
-
-  .price-update {
-    animation: priceUpdate 0.5s ease-in-out;
-  }
-
-  .chart-animate {
-    animation: chartSlide 1s ease-out;
-  }
-
-  /* Hover effects with performance optimization */
-  .hover-lift {
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: transform;
-  }
-
-  .hover-lift:hover {
+  .tooltip:hover .tooltiptext {
+    @apply visible opacity-100;
     transform: translateY(-8px) scale(1.02);
   }
 
-  /* Image optimization classes */
-  .optimized-image {
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-    transform: translateZ(0);
+  /* Loading States with Comic Style */
+  .loading-skeleton {
+    background: linear-gradient(
+      90deg,
+      rgba(249, 115, 22, 0.1) 0%,
+      rgba(249, 115, 22, 0.2) 50%,
+      rgba(249, 115, 22, 0.1) 100%
+    );
+    background-size: 200% 100%;
+    animation: skeletonWave 1.5s ease-in-out infinite;
   }
 
-  .lazy-image {
-    transition: opacity 0.3s;
-    will-change: opacity;
+  /* Enhanced Animations */
+  .fade-in {
+    animation: pixarFadeIn 0.8s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
-  /* i18n Loading States */
-  .i18n-loading [data-i18n] {
-    transition: opacity 0.3s ease-in-out;
+  .fade-in-up {
+    animation: pixarFadeInUp 1s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
-  /* Language Selector Styles */
+  .fade-in-scale {
+    animation: pixarFadeInScale 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .bounce-in {
+    animation: pixarBounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  /* Hover Effects */
+  .hover-lift {
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    will-change: transform, box-shadow;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-12px) scale(1.03) rotateX(5deg);
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.15),
+      0 10px 30px rgba(249, 115, 22, 0.2);
+  }
+
+  /* Enhanced i18n Styles */
   .lang-select-style {
-    transition: all 0.2s ease;
-  }
-
-  /* i18n Animation */
-  .i18n-fade {
-    opacity: 0.7;
-    transition: opacity 0.1s ease-in-out;
+    @apply rounded-xl px-4 py-2 font-semibold transition-all duration-300;
+    background: rgba(255, 255, 255, 0.8);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(249, 115, 22, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   }
 
   .lang-select-style:hover {
-    @apply border-orange-400 bg-orange-50;
+    background: rgba(249, 115, 22, 0.1);
+    border-color: rgba(249, 115, 22, 0.4);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(249, 115, 22, 0.2);
   }
 
   .lang-select-style:focus {
-    @apply border-orange-500 ring-2 ring-orange-200;
+    border-color: #f97316;
+    outline: none;
+    box-shadow:
+      0 0 0 4px rgba(249, 115, 22, 0.2),
+      0 8px 25px rgba(249, 115, 22, 0.3);
   }
 
-  /* Loading indicator for language switching */
+  /* Enhanced Loading Indicator */
   .i18n-loading::before {
     content: '';
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg, #f97316, #ea580c);
+    height: 6px;
+    background: linear-gradient(90deg, #f97316, #ea580c, #dc2626, #ea580c, #f97316);
+    background-size: 300% 100%;
     z-index: 9999;
-    animation: loading-bar 0.3s ease-in-out;
+    animation: loadingGradient 1.5s ease-in-out infinite;
+    box-shadow: 0 2px 8px rgba(249, 115, 22, 0.4);
   }
 }
 
@@ -185,6 +321,119 @@
 }
 
 /* ===== KEYFRAME ANIMATIONS ===== */
+/* ===== KEYFRAME ANIMATIONS ===== */
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes burniFloat {
+  0%,
+  100% {
+    transform: translateY(0px) scale(1.1) rotateZ(5deg);
+  }
+  50% {
+    transform: translateY(-10px) scale(1.1) rotateZ(5deg);
+  }
+}
+
+@keyframes colorShift {
+  0%,
+  100% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(10deg);
+  }
+}
+
+@keyframes textGlow {
+  0% {
+    filter: brightness(1) drop-shadow(0 0 5px rgba(249, 115, 22, 0.3));
+  }
+  100% {
+    filter: brightness(1.1) drop-shadow(0 0 15px rgba(249, 115, 22, 0.5));
+  }
+}
+
+@keyframes skeletonWave {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes pixarFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pixarFadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 40px, 0) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes pixarFadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8) rotateX(10deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotateX(0deg);
+  }
+}
+
+@keyframes pixarBounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotateY(180deg);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.05) rotateY(90deg);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(0.95) rotateY(10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotateY(0deg);
+  }
+}
+
+@keyframes loadingGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -277,6 +526,56 @@
 
   100% {
     transform: translateX(0);
+  }
+}
+
+/* ===== CUSTOM ANIMATIONS ===== */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes burniFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes colorShift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes textGlow {
+  0% {
+    text-shadow: 0 0 10px rgba(249, 115, 22, 0.7);
+  }
+
+  100% {
+    text-shadow: 0 0 20px rgba(249, 115, 22, 0.9);
   }
 }
 

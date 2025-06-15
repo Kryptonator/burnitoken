@@ -584,40 +584,91 @@
         <section
           id="hero"
           aria-labelledby="hero-title-h1"
-          class="py-16 md:py-24 bg-gradient-to-br from-orange-300 via-red-300 to-yellow-300 min-h-[70vh] flex items-center rounded-3xl shadow-xl mb-12"
+          class="py-20 md:py-32 hero-gradient min-h-[80vh] flex items-center rounded-3xl mb-12 relative overflow-hidden"
         >
-          <div class="container mx-auto px-6 text-center relative z-10">
-            <picture>
-              <source srcset="/assets/images/burniimage.webp" type="image/webp" />
-              <img
-                src="/assets/images/burniimage.jpg"
-                alt="Burni Token Mascot"
-                class="burni-mascot mx-auto mb-8 hover-lift optimized-image fade-in-scale gpu-accelerated burni-glow"
-                loading="lazy"
-                decoding="async"
-              />
-            </picture>
-            <h1
-              id="hero-title-h1"
-              class="text-5xl md:text-7xl font-bold mb-6 leading-tight font-baloo-2"
-              data-i18n="hero_title"
-            >
-              Welcome to Burni!
-            </h1>
-            <p class="text-xl md:text-2xl mb-10 max-w-2xl mx-auto" data-i18n="hero_description">
-              Discover the deflationary token designed to create value through scarcity. Join us on
-              a fiery journey of discovery!
-            </p>
-            <a
-              href="#about"
-              class="pixar-button px-10 py-4 text-xl rounded-full font-baloo-2"
-              data-i18n="hero_button"
-              >Learn More! <span aria-hidden="true">✨</span></a
-            >
+          <!-- Animated Background Elements -->
+          <div class="absolute inset-0 z-0">
+            <div
+              class="absolute top-10 left-10 w-20 h-20 bg-orange-400 rounded-full opacity-20 animate-bounce"
+            ></div>
+            <div
+              class="absolute bottom-20 right-20 w-16 h-16 bg-yellow-400 rounded-full opacity-30 animation-delay-2s"
+            ></div>
+            <div
+              class="absolute top-1/2 left-1/4 w-12 h-12 bg-red-400 rounded-full opacity-25 animate-pulse"
+            ></div>
+          </div>
+
+          <div class="container mx-auto px-8 text-center relative z-20">
+            <div class="pixar-card max-w-4xl mx-auto p-8 mb-8 bounce-in">
+              <picture>
+                <source srcset="/assets/images/burniimage.webp" type="image/webp" />
+                <img
+                  src="/assets/images/burniimage.jpg"
+                  alt="Burni Token Mascot - Comic Style Character"
+                  class="burni-mascot mx-auto mb-8 hover-lift optimized-image fade-in-scale gpu-accelerated"
+                  loading="eager"
+                  decoding="async"
+                />
+              </picture>
+
+              <h1 id="hero-title-h1" class="pixar-title mb-6 fade-in" data-i18n="hero_title">
+                Burni Token - Creating Value Through Scarcity
+              </h1>
+
+              <p
+                class="pixar-subtitle mb-10 max-w-3xl mx-auto fade-in-up"
+                data-i18n="hero_subtitle"
+              >
+                Join the revolutionary deflationary cryptocurrency that burns tokens to increase
+                value. Built on XRPL with community-driven innovation.
+              </p>
+
+              <div class="flex flex-col sm:flex-row gap-4 justify-center items-center fade-in-up">
+                <button
+                  type="button"
+                  class="pixar-button text-lg px-8 py-4 hover-lift"
+                  onclick="scrollToSection('about')"
+                  data-i18n="cta_learn_more"
+                  aria-label="Learn more about Burni Token"
+                >
+                  🔥 Discover Burni Magic
+                </button>
+                <button
+                  type="button"
+                  class="pixar-button bg-gradient-to-r from-purple-500 to-pink-500 text-lg px-8 py-4 hover-lift"
+                  onclick="scrollToSection('interact')"
+                  data-i18n="cta_get_started"
+                  aria-label="Start trading Burni tokens"
+                >
+                  🚀 Start Trading
+                </button>
+              </div>
+            </div>
+
+            <!-- Live Stats Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 fade-in-up">
+              <div class="kpi-card hover-lift">
+                <div class="kpi-value" id="total-supply-hero">1,000,000</div>
+                <div class="kpi-label" data-i18n="total_supply">Total Supply</div>
+              </div>
+              <div class="kpi-card hover-lift">
+                <div class="kpi-value" id="burned-tokens-hero">0</div>
+                <div class="kpi-label" data-i18n="burned_tokens">Burned 🔥</div>
+              </div>
+              <div class="kpi-card hover-lift">
+                <div class="kpi-value" id="price-hero">$0.00</div>
+                <div class="kpi-label" data-i18n="current_price">Price</div>
+              </div>
+              <div class="kpi-card hover-lift">
+                <div class="kpi-value" id="market-cap-hero">$0</div>
+                <div class="kpi-label" data-i18n="market_cap">Market Cap</div>
+              </div>
+            </div>
           </div>
         </section>
 
-        <!-- About Section -->
+        <!-- About Burni Section -->
         <section id="about" aria-labelledby="about-title-h2" class="py-16">
           <div class="text-center mb-12">
             <h2 id="about-title-h2" class="mb-4 font-baloo-2" data-i18n="about_title">
