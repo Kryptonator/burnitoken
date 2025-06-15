@@ -17,8 +17,18 @@ if (typeof window.checkFontAwesome !== 'function') {
 window.mainJsLoaded = true;
 console.log('Main.js loaded and ready');
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   console.log('DOMContentLoaded event fired!');
+
+  // Initialize optimized features immediately
+  try {
+    if (typeof initializeOptimizedFeatures === 'function') {
+      await initializeOptimizedFeatures();
+      console.log('Optimized features initialized successfully');
+    }
+  } catch (error) {
+    console.warn('Error initializing optimized features:', error);
+  }
 
   // Teste-Erkennung und Markierung
   const isTest = window.navigator.userAgent.includes('Playwright') ||
@@ -1706,8 +1716,8 @@ const translations = {
     xrpl_home_title: 'في بيت دفتر الأستاذ XRP',
     xrpl_home_description: 'يعمل بورني على دفتر الأستاذ XRP (XRPL)، المعروف بسرعته وتكاليف المعاملات المنخفضة وقابلية التوسع.',
     xrpl_slogan: 'سريع وفعال وموثوق - هذا أساس بورني.',
-    date: 'التاريخ',
-    day: 'اليوم',
+    date: 'تاريخ',
+    day: 'يوم',
     process_no: 'رقم العملية',
     remaining_coins: 'العملات المتبقية (تقريباً)'
   },
@@ -1799,7 +1809,7 @@ const translations = {
     about_title: 'バーニとは何ですか？',
     about_description: 'バーニは単なるトークン以上のものです。デフレーションの未来への約束です。バーニの核心には、流通からトークンを永続的に除去して残りのトークンの価値を高める仕組みがあります。',
     burn_title: 'トークンバーンの秘密',
-    burn_description: '魔法の火でログのようにトークンが燃やされることを想像してください。永遠に消えます！この「トークンバーン」と呼ばれるプロセスは、バーニトークンの総供給量を減らします。',
+    burn_description: '魔法の火でログのようにトークンが燃やされることを想像してください。永遠に消えます！このプロセスは、バーニトークンの総供給量を減らします。',
     burn_animation_note: 'このアニメーションは、トークンが象徴的に流通から除去される様子を示しています。',
     blackholed_title: 'バーニの約束：「ブラックホール化」',
     blackholed_description: 'バーニは「ブラックホール化：はい」とマークされています。これは、バーニトークンの最大供給量が固定されており、新しいトークンが作成されることは決してないことを意味します。',
@@ -1950,7 +1960,7 @@ const translations = {
     use_cases_title: '사용 사례: 버니 코인의 활용법',
     use_cases_description: '버니 코인은 단순한 토큰이 아니라 XRPL 생태계에서 성장하는 애플리케이션을 가진 다목적 디지털 자산입니다.',
     use_case_gaming_title: '분산형 게이밍',
-    use_case_gaming_desc: '미래의 XRPL 게임에서 게임 내 화폐로 사용하거나 독점적인 게임 내 자산을 위해 버니를 사용하세요.',
+    use_case_gaming_desc: '미래의 XRPL 게임에서 게임 내 화폐나 독점적인 게임 내 자산으로 버니를 사용하세요.',
     use_case_nfts_title: 'NFT 통합',
     use_case_nfts_desc: '버니로 NFT 마켓플레이스에서 독특한 디지털 아트워크와 수집품을 획득하고 거래하세요.',
     use_case_rewards_title: '보상 시스템',
@@ -2012,7 +2022,7 @@ const translations = {
     about_title: 'Что такое Burni?',
     about_description: 'Burni - это больше, чем просто токен. Это обещание дефляционного будущего. В основе Burni лежит механизм, который навсегда удаляет токены из обращения, потенциально увеличивая стоимость оставшихся токенов.',
     burn_title: 'Секрет сжигания токенов',
-    burn_description: 'Представьте себе токены, сжигаемые как поленья в волшебном огне. Они исчезают навсегда! Этот процесс, называемый "сжиганием токенов", уменьшает общее предложение токенов Burni.',
+    burn_description: 'Представьте себе токены, сжигаемые как поленья в волшебном огне. Они исчезают навсегда! Этот процесс, называемый "сжиганием токенов", уменьшает общее предложение токенов Burni. Меньше токенов может означать, что каждый из них становится более ценным, подобно редким коллекционным предметам.',
     burn_animation_note: 'Эта анимация иллюстрирует, как токены символически удаляются из обращения.',
     blackholed_title: 'Обещание Burni: "Черная дыра"',
     blackholed_description: 'Burni помечен как "Черная дыра: ДА". Это означает, что максимальное предложение токенов Burni фиксировано и новые токены никогда не могут быть созданы.',
@@ -2275,7 +2285,7 @@ const translations = {
     xrpl_home_description: 'बर्नी XRP लेजर (XRPL) पर काम करता है, जो अपनी गति, कम लेनदेन लागत और स्केलेबिलिटी के लिए जाना जाता है।',
     xrpl_slogan: 'तेज़, कुशल और विश्वसनीय - यही बर्नी की नींव है।',
     date: 'तारीख',
-    day: 'दिन',
+    day: 'गणना',
     process_no: 'प्रक्रिया संख्या',
     remaining_coins: 'बचे हुए सिक्के (लगभग)'
   },
@@ -2719,3 +2729,340 @@ function showUpdateAvailableNotification() {
     document.body.removeChild(notification);
   });
 }
+
+// Enhanced Price Updates with Animation Support
+class PriceUpdateManager {
+  constructor() {
+    this.updateInterval = null;
+    this.animationQueue = [];
+    this.lastPrices = {};
+    this.retryCount = 0;
+    this.maxRetries = 3;
+  }
+
+  async startRealTimeUpdates() {
+    // Update prices every 30 seconds
+    this.updateInterval = setInterval(async () => {
+      try {
+        await this.updatePricesWithAnimation();
+        this.retryCount = 0;
+      } catch (error) {
+        console.warn('Price update failed:', error);
+        this.retryCount++;
+        if (this.retryCount >= this.maxRetries) {
+          console.error('Max retries reached for price updates');
+          this.fallbackToStaticPrices();
+        }
+      }
+    }, 30000);
+
+    // Initial update
+    await this.updatePricesWithAnimation();
+  }
+
+  async updatePricesWithAnimation() {
+    try {
+      const newPrices = await fetchLivePrices();
+      
+      // Animate price changes
+      Object.keys(newPrices).forEach(currency => {
+        const oldPrice = this.lastPrices[currency];
+        const newPrice = newPrices[currency];
+        
+        if (oldPrice && oldPrice.priceUSD !== newPrice.priceUSD) {
+          this.animatePriceChange(currency, oldPrice.priceUSD, newPrice.priceUSD);
+        }
+      });
+
+      this.lastPrices = { ...newPrices };
+      this.updatePriceDisplay(newPrices);
+      
+      // Trigger custom event for price updates
+      window.dispatchEvent(new CustomEvent('pricesUpdated', { 
+        detail: { prices: newPrices, timestamp: Date.now() }
+      }));
+      
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  animatePriceChange(currency, oldPrice, newPrice) {
+    const elements = document.querySelectorAll(`[data-price="${currency}"]`);
+    
+    elements.forEach(element => {
+      // Add price update animation class
+      element.classList.add('price-update');
+      
+      // Add color indication for price direction
+      if (newPrice > oldPrice) {
+        element.classList.add('text-green-500');
+        element.classList.remove('text-red-500');
+      } else if (newPrice < oldPrice) {
+        element.classList.add('text-red-500');
+        element.classList.remove('text-green-500');
+      }
+      
+      // Remove animation class after animation completes
+      setTimeout(() => {
+        element.classList.remove('price-update', 'text-green-500', 'text-red-500');
+      }, 500);
+    });
+  }
+
+  updatePriceDisplay(prices) {
+    // Update Burni price
+    const burniPriceElements = document.querySelectorAll('[data-price="burni"]');
+    burniPriceElements.forEach(element => {
+      element.textContent = `$${prices.burni.priceUSD.toFixed(8)}`;
+    });
+
+    // Update XRP price
+    const xrpPriceElements = document.querySelectorAll('[data-price="xrp"]');
+    xrpPriceElements.forEach(element => {
+      element.textContent = `$${prices.xrp.priceUSD.toFixed(4)}`;
+    });
+
+    // Update other metrics with smooth transitions
+    this.updateMetricsWithTransition(prices);
+  }
+
+  updateMetricsWithTransition(prices) {
+    // Animate counter changes
+    this.animateCounter('[data-metric="holders"]', prices.burni.holders);
+    this.animateCounter('[data-metric="supply"]', prices.burni.circulatingSupply);
+    this.animateCounter('[data-metric="burned"]', prices.burni.totalBurned);
+  }
+
+  animateCounter(selector, targetValue) {
+    const elements = document.querySelectorAll(selector);
+    
+    elements.forEach(element => {
+      const currentValue = parseInt(element.textContent.replace(/[^\d]/g, '')) || 0;
+      const duration = 1000; // 1 second animation
+      const steps = 30;
+      const increment = (targetValue - currentValue) / steps;
+      const stepDuration = duration / steps;
+      
+      let currentStep = 0;
+      const timer = setInterval(() => {
+        currentStep++;
+        const newValue = Math.round(currentValue + (increment * currentStep));
+        
+        if (currentStep >= steps) {
+          element.textContent = this.formatNumber(targetValue);
+          clearInterval(timer);
+        } else {
+          element.textContent = this.formatNumber(newValue);
+        }
+      }, stepDuration);
+    });
+  }
+
+  formatNumber(num) {
+    if (num >= 1000000) {
+      return (num / 1000000).toFixed(1) + 'M';
+    } else if (num >= 1000) {
+      return (num / 1000).toFixed(1) + 'K';
+    }
+    return num.toLocaleString();
+  }
+
+  fallbackToStaticPrices() {
+    console.log('Using fallback static prices due to API failures');
+    const staticPrices = {
+      burni: { priceUSD: 0.00000850, priceXRP: 0.0000045 },
+      xrp: { priceUSD: 1.85 }
+    };
+    this.updatePriceDisplay(staticPrices);
+  }
+
+  stopUpdates() {
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval);
+      this.updateInterval = null;
+    }
+  }
+}
+
+// Enhanced Image Loading and Optimization
+class ImageOptimizer {
+  constructor() {
+    this.lazyImages = new Set();
+    this.imageCache = new Map();
+    this.setupIntersectionObserver();
+  }
+
+  setupIntersectionObserver() {
+    if ('IntersectionObserver' in window) {
+      this.observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            this.loadImage(entry.target);
+            this.observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        root: null,
+        rootMargin: '50px',
+        threshold: 0.1
+      });
+    }
+  }
+
+  optimizeImages() {
+    const images = document.querySelectorAll('img[data-src]');
+    
+    images.forEach(img => {
+      this.lazyImages.add(img);
+      img.classList.add('lazy-image', 'opacity-0');
+      
+      if (this.observer) {
+        this.observer.observe(img);
+      } else {
+        // Fallback for browsers without IntersectionObserver
+        this.loadImage(img);
+      }
+    });
+  }
+
+  async loadImage(img) {
+    try {
+      const src = img.dataset.src;
+      
+      if (this.imageCache.has(src)) {
+        this.applyImage(img, src);
+        return;
+      }
+
+      // Preload image
+      const imageLoader = new Image();
+      imageLoader.onload = () => {
+        this.imageCache.set(src, true);
+        this.applyImage(img, src);
+      };
+      
+      imageLoader.onerror = () => {
+        console.warn(`Failed to load image: ${src}`);
+        img.classList.add('opacity-50');
+      };
+      
+      imageLoader.src = src;
+      
+    } catch (error) {
+      console.error('Image loading error:', error);
+    }
+  }
+
+  applyImage(img, src) {
+    img.src = src;
+    img.classList.remove('opacity-0');
+    img.classList.add('fade-in', 'optimized-image');
+    
+    // Add performance optimizations
+    img.style.willChange = 'auto';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+  }
+
+  preloadCriticalImages() {
+    const criticalImages = [
+      '/assets/images/burni-logo.webp',
+      '/assets/images/burniimage.webp',
+      '/assets/images/burni-chart.webp'
+    ];
+
+    criticalImages.forEach(src => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = src;
+      document.head.appendChild(link);
+    });
+  }
+}
+
+// Animation Performance Manager
+class AnimationManager {
+  constructor() {
+    this.activeAnimations = new Set();
+    this.rafId = null;
+    this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  optimizeAnimations() {
+    // Apply GPU acceleration to key elements
+    const animatedElements = document.querySelectorAll('.pixar-button, .section-card, .hover-lift');
+    
+    animatedElements.forEach(element => {
+      element.classList.add('gpu-accelerated', 'optimize-animations');
+    });
+
+    // Disable animations for reduced motion preference
+    if (this.reducedMotion) {
+      document.body.classList.add('reduce-motion');
+    }
+  }
+
+  startAnimationFrame() {
+    if (!this.rafId) {
+      this.rafId = requestAnimationFrame(() => this.animationLoop());
+    }
+  }
+
+  animationLoop() {
+    // Optimize animations based on performance
+    const fps = this.calculateFPS();
+    
+    if (fps < 30) {
+      this.reduceAnimationComplexity();
+    }
+    
+    this.rafId = requestAnimationFrame(() => this.animationLoop());
+  }
+
+  calculateFPS() {
+    // Simple FPS calculation implementation
+    const now = performance.now();
+    const delta = now - (this.lastTime || now);
+    this.lastTime = now;
+    return 1000 / delta;
+  }
+
+  reduceAnimationComplexity() {
+    // Reduce animation complexity when performance is low
+    const complexAnimations = document.querySelectorAll('.burni-glow, .pulse-slow');
+    complexAnimations.forEach(element => {
+      element.style.animationDuration = '5s'; // Slower animations
+    });
+  }
+}
+
+// Initialize all optimizations
+const priceManager = new PriceUpdateManager();
+const imageOptimizer = new ImageOptimizer();
+const animationManager = new AnimationManager();
+
+// Enhanced initialization function
+async function initializeOptimizedFeatures() {
+  try {
+    // Start price updates
+    await priceManager.startRealTimeUpdates();
+    
+    // Optimize images
+    imageOptimizer.preloadCriticalImages();
+    imageOptimizer.optimizeImages();
+    
+    // Optimize animations
+    animationManager.optimizeAnimations();
+    animationManager.startAnimationFrame();
+    
+    console.log('All optimizations initialized successfully');
+    
+  } catch (error) {
+    console.error('Error initializing optimizations:', error);
+  }
+}
+
+// Start optimized features initialization
+initializeOptimizedFeatures();

@@ -415,7 +415,7 @@
     <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-md py-3">
         <div class="container mx-auto px-6 flex items-center justify-between">
             <a href="#hero" class="flex items-center" aria-label="Burni Token Homepage">
-                <img src="/assets/images/favicon-32x32.png" alt="Burni Logo" class="h-8 w-8 mr-2" />
+                <img src="/assets/images/favicon-32x32.png" alt="Burni Logo" class="h-8 w-8 mr-2 optimized-image" loading="eager" decoding="async" />
                 <span class="text-3xl font-bold text-orange-600 font-baloo-2">Burni</span>
             </a>
             <div class="flex items-center space-x-2 md:space-x-4">
@@ -490,7 +490,8 @@
                     <picture>
                         <source srcset="/assets/images/burniimage.webp" type="image/webp" />
                         <img src="/assets/images/burniimage.jpg" alt="Burni Token Mascot"
-                            class="burni-mascot mx-auto mb-8" />
+                            class="burni-mascot mx-auto mb-8 hover-lift optimized-image fade-in-scale gpu-accelerated burni-glow" 
+                            loading="lazy" decoding="async" />
                     </picture>
                     <h1 id="hero-title-h1"
                         class="text-5xl md:text-7xl font-bold mb-6 leading-tight font-baloo-2"

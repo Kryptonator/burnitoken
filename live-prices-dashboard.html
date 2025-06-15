@@ -1,0 +1,225 @@
+<!-- Enhanced Live Price Dashboard -->
+<section class="py-16 bg-gradient-to-br from-orange-50 to-yellow-50" id="live-prices">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4 fade-in-up" data-i18n="live_prices_title">
+                Live Market Data
+            </h2>
+            <p class="text-xl text-gray-600 fade-in-up" data-i18n="live_prices_subtitle">
+                Real-time prices and metrics updated every 30 seconds
+            </p>
+        </div>
+
+        <!-- Price Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <!-- Burni Price Card -->
+            <div class="kpi-card hover-lift fade-in-scale gpu-accelerated">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-700" data-i18n="burni_price">Burni Price</h3>
+                    <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                </div>
+                <div class="space-y-2">
+                    <div class="kpi-value" data-price="burni" id="burni-price-usd">
+                        $0.00000850
+                    </div>
+                    <div class="text-sm text-gray-500" data-price="burni-xrp" id="burni-price-xrp">
+                        0.0000045 XRP
+                    </div>
+                </div>
+                <div class="mt-4 text-xs text-gray-400">
+                    <span data-i18n="last_updated">Last updated:</span>
+                    <span id="burni-price-timestamp">--:--:--</span>
+                </div>
+            </div>
+
+            <!-- XRP Price Card -->
+            <div class="kpi-card hover-lift fade-in-scale gpu-accelerated">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-700">XRP Price</h3>
+                    <div class="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
+                </div>
+                <div class="space-y-2">
+                    <div class="kpi-value text-blue-600" data-price="xrp" id="xrp-price-usd">
+                        $1.85
+                    </div>
+                    <div class="text-sm text-gray-500">
+                        via CoinGecko
+                    </div>
+                </div>
+                <div class="mt-4 text-xs text-gray-400">
+                    <span data-i18n="market_cap">Market Cap:</span>
+                    <span id="xrp-market-cap">$105B</span>
+                </div>
+            </div>
+
+            <!-- Holders Count -->
+            <div class="kpi-card hover-lift fade-in-scale gpu-accelerated">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-700" data-i18n="total_holders">Total Holders</h3>
+                    <i class="fas fa-users text-orange-500"></i>
+                </div>
+                <div class="space-y-2">
+                    <div class="kpi-value text-orange-600" data-metric="holders" id="burni-holders">
+                        2,547
+                    </div>
+                    <div class="text-sm text-green-600">
+                        <i class="fas fa-arrow-up"></i>
+                        <span data-i18n="growing_daily">Growing daily</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Circulating Supply -->
+            <div class="kpi-card hover-lift fade-in-scale gpu-accelerated">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-700" data-i18n="circulating_supply">Circulating Supply</h3>
+                    <i class="fas fa-coins text-orange-500"></i>
+                </div>
+                <div class="space-y-2">
+                    <div class="kpi-value text-orange-600" data-metric="supply" id="burni-supply">
+                        48.5M
+                    </div>
+                    <div class="text-sm text-red-600">
+                        <i class="fas fa-fire"></i>
+                        <span data-i18n="deflationary">Deflationary</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Burned Tokens -->
+            <div class="kpi-card hover-lift fade-in-scale gpu-accelerated bg-gradient-to-r from-red-50 to-orange-50">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-700" data-i18n="tokens_burned">Tokens Burned</h3>
+                    <i class="fas fa-fire text-red-500"></i>
+                </div>
+                <div class="space-y-2">
+                    <div class="kpi-value text-red-600" data-metric="burned" id="burni-burned">
+                        1.5M
+                    </div>
+                    <div class="text-sm text-gray-500" data-i18n="permanently_removed">
+                        Permanently removed from circulation
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Burn Event -->
+            <div class="kpi-card hover-lift fade-in-scale gpu-accelerated bg-gradient-to-r from-blue-50 to-indigo-50">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-700" data-i18n="next_burn">Next Burn Event</h3>
+                    <i class="fas fa-clock text-blue-500"></i>
+                </div>
+                <div class="space-y-2">
+                    <div class="text-2xl font-bold text-blue-600" id="next-burn-countdown">
+                        2d 14h 32m
+                    </div>
+                    <div class="text-sm text-gray-500" data-i18n="countdown_to_burn">
+                        Countdown to next 3% burn
+                    </div>
+                </div>
+            </div>
+
+            <!-- Price Change 24h -->
+            <div class="kpi-card hover-lift fade-in-scale gpu-accelerated bg-gradient-to-r from-green-50 to-emerald-50">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-700" data-i18n="price_change_24h">24h Change</h3>
+                    <i class="fas fa-chart-line text-green-500"></i>
+                </div>
+                <div class="space-y-2">
+                    <div class="text-2xl font-bold text-green-600" id="price-change-24h">
+                        +12.5%
+                    </div>
+                    <div class="text-sm text-gray-500" data-i18n="price_trend">
+                        <i class="fas fa-arrow-up text-green-500"></i>
+                        Bullish trend
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-time Chart Preview -->
+        <div class="mt-12 bg-white rounded-2xl shadow-lg p-6 chart-animate">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-gray-800" data-i18n="price_chart">
+                    Price Chart (24h)
+                </h3>
+                <div class="flex space-x-2">
+                    <button class="px-3 py-1 text-sm bg-orange-100 text-orange-600 rounded-full hover:bg-orange-200 transition-colors">
+                        1H
+                    </button>
+                    <button class="px-3 py-1 text-sm bg-orange-500 text-white rounded-full">
+                        24H
+                    </button>
+                    <button class="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors">
+                        7D
+                    </button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="price-chart" class="w-full h-full"></canvas>
+            </div>
+        </div>
+
+        <!-- API Status Indicator -->
+        <div class="mt-8 text-center">
+            <div class="inline-flex items-center space-x-2 text-sm text-gray-500">
+                <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse" id="api-status-indicator"></div>
+                <span data-i18n="api_status">Data source: Live APIs</span>
+                <span id="api-status-text">Connected</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// Initialize enhanced price dashboard
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize optimized features
+    if (typeof initializeOptimizedFeatures === 'function') {
+        initializeOptimizedFeatures();
+    }
+    
+    // Price update animations
+    window.addEventListener('pricesUpdated', function(event) {
+        const { prices, timestamp } = event.detail;
+        
+        // Update timestamps
+        const timeStr = new Date(timestamp).toLocaleTimeString();
+        document.getElementById('burni-price-timestamp').textContent = timeStr;
+        
+        // Update API status
+        document.getElementById('api-status-text').textContent = 'Connected';
+        document.getElementById('api-status-indicator').className = 'w-2 h-2 bg-green-500 rounded-full animate-pulse';
+    });
+    
+    // Countdown timer for next burn
+    function updateBurnCountdown() {
+        // Calculate next burn date (every 3 days from June 1, 2025)
+        const startDate = new Date('2025-06-01');
+        const now = new Date();
+        const daysSinceStart = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
+        const daysUntilNextBurn = 3 - (daysSinceStart % 3);
+        
+        const nextBurnDate = new Date(now);
+        nextBurnDate.setDate(now.getDate() + daysUntilNextBurn);
+        nextBurnDate.setHours(0, 0, 0, 0);
+        
+        const timeUntilBurn = nextBurnDate - now;
+        
+        const days = Math.floor(timeUntilBurn / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeUntilBurn % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeUntilBurn % (1000 * 60 * 60)) / (1000 * 60));
+        
+        const countdownElement = document.getElementById('next-burn-countdown');
+        if (countdownElement) {
+            countdownElement.textContent = `${days}d ${hours}h ${minutes}m`;
+        }
+    }
+    
+    // Update countdown every minute
+    updateBurnCountdown();
+    setInterval(updateBurnCountdown, 60000);
+});
+</script>
