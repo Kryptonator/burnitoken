@@ -1,5 +1,7 @@
 // tests/i18n.test.js
 const { JSDOM } = require('jsdom');
+const fs = require('fs');
+const path = require('path');
 
 describe('Language Switcher', () => {
   let window, document;
@@ -8,6 +10,13 @@ describe('Language Switcher', () => {
     const dom = new JSDOM(`
       <!DOCTYPE html>
       <html>
+        <head>
+          <script>
+            // Mock Chart global für Tests
+            window.Chart = function() {};
+            window.Chart.register = function() {};
+          </script>
+        </head>
         <body>
           <select id="lang-select">
             <option value="en">EN</option>
@@ -15,13 +24,23 @@ describe('Language Switcher', () => {
           </select>
           <span data-i18n="nav_home">Home</span>
           <span data-i18n="nav_about">About</span>
+          <span data-i18n="nav_tokenomics">Tokenomics</span>
         </body>
       </html>
-    `);
+    `, {
+      runScripts: "dangerously",
+      resources: "usable"
+    });
+
     window = dom.window;
     document = window.document;
     global.document = document;
     global.window = window;
+    global.console = console; // Für Debugging
+
+    // Grundlegende globals für main.js
+    window.mainJsLoaded = false;
+    window.inlineScriptLoaded = true;
   });
 
   const translations = {
