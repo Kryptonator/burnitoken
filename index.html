@@ -518,6 +518,13 @@
               aria-label="Navigate to Community section"
               >Community</a
             >
+            <a
+              href="#xrpl-resources"
+              class="nav-link"
+              data-i18n="nav_xrpl_resources"
+              aria-label="Navigate to XRPL Resources section"
+              >XRPL Explorer</a
+            >
           </nav>
           <button
             type="button"
@@ -580,6 +587,13 @@
           data-i18n="nav_community"
           aria-label="Navigate to Community section"
           >Community</a
+        >
+        <a
+          href="#xrpl-resources"
+          class="block px-6 py-3 text-orange-600 hover:bg-orange-100"
+          data-i18n="nav_xrpl_resources"
+          aria-label="Navigate to XRPL Resources section"
+          >XRPL Explorer</a
         >
       </nav>
     </header>
@@ -1312,431 +1326,199 @@
             </figure>
           </div>
         </section>
-        <section id="live-data" class="py-16 bg-white rounded-3xl shadow-xl mb-12">
-          <div class="text-center mb-12">
-            <h2 class="text-4xl md:text-5xl mb-4" data-i18n="live_data_title">Live-Preisdaten</h2>
-            <p class="text-lg text-gray-700 max-w-xl mx-auto" data-i18n="live_data_description">
-              Verfolge die aktuellen Preise von Burni Coin, XRP und XPM sowie
-              AMM-Pool-Veränderungen.
-            </p>
-          </div>
-          <div class="grid md:grid-cols-3 gap-8 mb-12">
-            <div class="kpi-card">
-              <div id="burniPrice" class="kpi-value">$0.0011</div>
-              <div class="kpi-label" data-i18n="burni_price">Burni Coin Preis</div>
-            </div>
-            <div class="kpi-card">
-              <div id="xrpPrice" class="kpi-value">$0.50</div>
-              <div class="kpi-label" data-i18n="xrp_price">XRP Preis</div>
-            </div>
-            <div class="kpi-card">
-              <div id="xpmPrice" class="kpi-value">$0.02</div>
-              <div class="kpi-label" data-i18n="xpm_price">XPM Preis</div>
-            </div>
-          </div>
-          <div class="flex justify-center mb-4">
-            <button id="interval-day" class="pixar-button px-4 py-2 mx-2" data-i18n="interval_day">
-              Tag
-            </button>
-            <button
-              id="interval-week"
-              class="pixar-button px-4 py-2 mx-2"
-              data-i18n="interval_week"
-            >
-              Woche
-            </button>
-            <button
-              id="interval-month"
-              class="pixar-button px-4 py-2 mx-2"
-              data-i18n="interval_month"
-            >
-              Monat
-            </button>
-          </div>
-          <div class="chart-container">
-            <canvas id="priceChart"></canvas>
-          </div>
-        </section>
-        <!-- Tweets Section -->
-        <section
-          id="tweets"
-          aria-labelledby="tweets-title-h2"
-          class="py-16 bg-white rounded-3xl shadow-xl mb-12"
-        >
-          <div class="text-center mb-12">
-            <h2 id="tweets-title-h2" class="mb-4 font-baloo-2" data-i18n="tweets_title">
-              Latest Updates from Burni Coin
-            </h2>
-            <p class="text-lg text-gray-700 max-w-xl mx-auto" data-i18n="tweets_description">
-              Follow the latest news and announcements directly from our official X (Twitter)
-              account.
-            </p>
-          </div>
-          <div class="flex justify-center">
-            <div class="max-w-2xl w-full">
-              <a
-                class="twitter-timeline"
-                data-height="600"
-                data-theme="light"
-                href="https://x.com/burnicoin"
-                lang="en"
-                >Tweets by burnicoin</a
+
+        <!-- XRPL Explorer & Resources Section -->
+        <section id="xrpl-resources" class="py-16 bg-gradient-to-br from-blue-50 to-indigo-100">
+          <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+              <h2
+                class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 font-baloo-2"
+                data-i18n="xrpl_resources_title"
               >
-              <div id="twitter-fallback" class="hidden text-gray-600 p-4 text-center">
-                <p>Twitter feed could not be loaded.</p>
-                <div class="space-y-4 mt-4">
+                🌐 XRPL Explorer & Resources
+              </h2>
+              <p
+                class="text-xl text-gray-600 max-w-3xl mx-auto"
+                data-i18n="xrpl_resources_subtitle"
+              >
+                Explore BURNI Token on the XRP Ledger with official tools and real-time blockchain
+                data.
+              </p>
+            </div>
+            <div class="flex justify-center mb-8">
+              <img
+                src="/assets/images/burni.png"
+                class="burni-mascot"
+                loading="lazy"
+                data-i18n-alt="alt_burni_explorer_mascot"
+                alt="Burni mascot exploring the XRPL blockchain"
+              />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <!-- XRPL Livenet -->
+              <a
+                href="https://livenet.xrpl.org"
+                target="_blank"
+                class="section-card p-6 text-center hover:shadow-2xl transition-all duration-300 flex flex-col items-center justify-center bg-gradient-to-br from-blue-400 to-blue-600 text-white hover:scale-105"
+                rel="noopener noreferrer"
+              >
+                <i class="fas fa-globe fa-2x mb-3"></i>
+                <h3 class="mb-2 font-baloo-2 font-bold" data-i18n="xrpl_livenet_title">
+                  🌍 XRPL Livenet
+                </h3>
+                <p class="text-blue-100 text-sm font-medium" data-i18n="xrpl_livenet_desc">
+                  Official XRPL Mainnet Explorer
+                </p>
+              </a>
+
+              <!-- Ripple Explorer GitHub -->
+              <a
+                href="https://github.com/ripple/explorer"
+                target="_blank"
+                class="section-card p-6 text-center hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center justify-center"
+                rel="noopener noreferrer"
+              >
+                <i class="fab fa-github fa-2x mb-3 text-gray-800"></i>
+                <h3 class="mb-2 text-gray-800 font-baloo-2" data-i18n="ripple_explorer_title">
+                  🔧 Ripple Explorer
+                </h3>
+                <p class="text-gray-600 text-sm" data-i18n="ripple_explorer_desc">
+                  Open Source XRPL Explorer Code
+                </p>
+              </a>
+
+              <!-- BURNI on XRPL -->
+              <a
+                href="https://livenet.xrpl.org/accounts/rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2"
+                target="_blank"
+                class="section-card p-6 text-center hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center justify-center"
+                rel="noopener noreferrer"
+              >
+                <i class="fas fa-fire fa-2x mb-3 text-orange-500"></i>
+                <h3 class="mb-2 text-orange-600 font-baloo-2" data-i18n="burni_on_xrpl_title">
+                  🔥 BURNI on XRPL
+                </h3>
+                <p class="text-gray-600 text-sm" data-i18n="burni_on_xrpl_desc">
+                  View BURNI Token data on XRPL Livenet
+                </p>
+              </a>
+
+              <!-- XRPScan -->
+              <a
+                href="https://xrpscan.com/token/rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2"
+                target="_blank"
+                class="section-card p-6 text-center hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center justify-center"
+                rel="noopener noreferrer"
+              >
+                <i class="fas fa-search fa-2x mb-3 text-green-500"></i>
+                <h3 class="mb-2 text-green-600 font-baloo-2" data-i18n="xrpscan_title">
+                  🔍 XRPScan
+                </h3>
+                <p class="text-gray-600 text-sm" data-i18n="xrpscan_desc">
+                  Advanced XRPL Token Analytics
+                </p>
+              </a>
+
+              <!-- Bithomp -->
+              <a
+                href="https://bithomp.com/explorer/rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2"
+                target="_blank"
+                class="section-card p-6 text-center hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center justify-center"
+                rel="noopener noreferrer"
+              >
+                <i class="fas fa-chart-line fa-2x mb-3 text-purple-500"></i>
+                <h3 class="mb-2 text-purple-600 font-baloo-2" data-i18n="bithomp_title">
+                  📊 Bithomp
+                </h3>
+                <p class="text-gray-600 text-sm" data-i18n="bithomp_desc">
+                  XRPL Transaction & Account Explorer
+                </p>
+              </a>
+
+              <!-- XRPL.org Documentation -->
+              <a
+                href="https://xrpl.org/tokens.html"
+                target="_blank"
+                class="section-card p-6 text-center hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center justify-center"
+                rel="noopener noreferrer"
+              >
+                <i class="fas fa-book fa-2x mb-3 text-indigo-500"></i>
+                <h3 class="mb-2 text-indigo-600 font-baloo-2" data-i18n="xrpl_docs_title">
+                  📚 XRPL Documentation
+                </h3>
+                <p class="text-gray-600 text-sm" data-i18n="xrpl_docs_desc">
+                  Learn about XRPL Tokens & Technology
+                </p>
+              </a>
+            </div>
+
+            <!-- Real-time XRPL Status -->
+            <div class="mt-12 bg-white rounded-xl p-6 shadow-lg">
+              <h3
+                class="text-xl font-bold text-center mb-6 text-gray-800"
+                data-i18n="xrpl_status_title"
+              >
+                📡 Real-time XRPL Network Status
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                <div class="bg-green-50 rounded-lg p-4">
+                  <div class="text-2xl font-bold text-green-600" id="xrpl-ledger-index">
+                    Loading...
+                  </div>
+                  <div class="text-sm text-gray-600" data-i18n="current_ledger">Current Ledger</div>
+                </div>
+                <div class="bg-blue-50 rounded-lg p-4">
+                  <div class="text-2xl font-bold text-blue-600" id="xrpl-transaction-count">
+                    Loading...
+                  </div>
+                  <div class="text-sm text-gray-600" data-i18n="total_transactions">
+                    Total Transactions
+                  </div>
+                </div>
+                <div class="bg-orange-50 rounded-lg p-4">
+                  <div class="text-2xl font-bold text-orange-600" id="xrpl-account-count">
+                    Loading...
+                  </div>
+                  <div class="text-sm text-gray-600" data-i18n="total_accounts">Total Accounts</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Developer Resources -->
+            <div class="mt-12 text-center">
+              <div class="bg-gray-800 rounded-xl p-6 shadow-lg inline-block text-white">
+                <h3 class="text-xl font-bold mb-2">👨‍💻 Developer Resources</h3>
+                <p class="text-gray-300 mb-4">Build on XRPL with BURNI Token integration</p>
+                <div class="flex flex-wrap justify-center gap-4">
                   <a
-                    href="https://x.com/burnicoin"
-                    class="block"
+                    href="https://xrpl.org/get-started.html"
                     target="_blank"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300"
                     rel="noopener noreferrer"
                   >
-                    <h4 class="font-bold">Latest Tweet</h4>
-                    <p>Check our latest updates on X</p>
+                    <i class="fas fa-code mr-2"></i>
+                    XRPL Dev Docs
                   </a>
                   <a
-                    href="https://x.com/burnicoin"
-                    class="pixar-button"
+                    href="https://github.com/XRPLF"
                     target="_blank"
+                    class="bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors duration-300"
                     rel="noopener noreferrer"
                   >
-                    Follow @burnicoin on X
+                    <i class="fab fa-github mr-2"></i>
+                    XRPL Foundation
+                  </a>
+                  <a
+                    href="https://xrpl.org/websocket-api.html"
+                    target="_blank"
+                    class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-300"
+                    rel="noopener noreferrer"
+                  >
+                    <i class="fas fa-plug mr-2"></i>
+                    WebSocket API
                   </a>
                 </div>
               </div>
-              <div id="twitter-error" class="hidden text-center text-red-500">
-                Twitter feed could not be loaded.
-              </div>
-            </div>
-          </div>
-          <script
-            async
-            src="https://platform.twitter.com/widgets.js"
-            charset="utf-8"
-            defer
-          ></script>
-        </section>
-        <section
-          id="faq"
-          aria-labelledby="faq-title-h2"
-          class="py-16 bg-white rounded-3xl shadow-xl mb-12"
-        >
-          <div class="text-center mb-12">
-            <h2 id="faq-title-h2" class="mb-4 font-baloo-2" data-i18n="faq_title">
-              Frequently Asked Questions (FAQ)
-            </h2>
-            <p class="text-lg text-gray-700 max-w-xl mx-auto" data-i18n="faq_description">
-              Find answers to the most common questions about Burni Coin here.
-            </p>
-          </div>
-          <div class="max-w-3xl mx-auto mb-8">
-            <label for="faq-search" class="sr-only" data-i18n="faq_search_label_sr"
-              >Search FAQs</label
-            >
-            <input
-              type="text"
-              id="faq-search"
-              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
-              placeholder="Search FAQs..."
-              aria-label="Search FAQs"
-              aria-describedby="faq-search-description"
-            />
-            <p id="faq-search-description" class="sr-only" data-i18n="faq_search_desc_sr">
-              Enter a search term to filter the FAQs.
-            </p>
-          </div>
-          <div class="max-w-3xl mx-auto space-y-6">
-            <div class="section-card p-6">
-              <h3 class="font-semibold mb-3 font-baloo-2" data-i18n="faq_q1">
-                1. How do I buy Burni Coin?
-              </h3>
-              <p class="text-gray-600" data-i18n="faq_a1">
-                Burni Coin can be traded on XPMarket through the DEX trading interface, AMM Pool, or
-                using the swap feature. Visit our official AMM Pool at
-                <a
-                  href="https://xpmarket.com/token/Burni-rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2"
-                  target="_blank"
-                  class="text-orange-500 hover:text-orange-700 underline"
-                  rel="noopener noreferrer"
-                  >xpmarket.com/token/Burni</a
-                >. First, set up a trustline, then you can trade using XRP or other supported
-                tokens.
-              </p>
-            </div>
-            <div class="section-card p-6">
-              <h3 class="font-semibold mb-3 font-baloo-2" data-i18n="faq_q2">
-                2. What is a "Trustline" and why do I need it?
-              </h3>
-              <p class="text-gray-600" data-i18n="faq_a2">
-                A Trustline is a feature on the XRP Ledger that allows you to hold and trade tokens.
-                It's a simple one-time setup that's required before you can receive or trade Burni
-                Coin. Learn more about trustlines in our documentation.
-              </p>
-            </div>
-            <div class="section-card p-6">
-              <h3 class="font-semibold mb-3 font-baloo-2" data-i18n="faq_q3">
-                3. What makes Burni Coin unique?
-              </h3>
-              <p class="text-gray-600" data-i18n="faq_a3">
-                Burni Coin stands out due to its innovative deflationary mechanism, combining
-                regular token burns with a locking system to create natural scarcity over time. Our
-                unique approach to token economics and community governance sets us apart.
-              </p>
-            </div>
-            <div class="section-card p-6">
-              <h3 class="font-semibold mb-3 font-baloo-2" data-i18n="faq_q4">
-                4. Is Burni Coin secure?
-              </h3>
-              <p class="text-gray-600" data-i18n="faq_a4">
-                Yes, Burni Coin operates on the secure XRP Ledger and uses standard trustline
-                mechanics. The contract is blackholed, meaning the supply can never be increased.
-                Additionally, the XRPL's proven security track record provides a robust foundation.
-              </p>
-            </div>
-            <div class="section-card p-6">
-              <h3 class="font-semibold mb-3 font-baloo-2" data-i18n="faq_q5">
-                5. How can I participate in the community?
-              </h3>
-              <p class="text-gray-600" data-i18n="faq_a5">
-                Join us on X (Twitter), Telegram, and Discord to connect with other Burni
-                enthusiasts and stay updated on the latest developments. You can also participate in
-                community governance and contribute to various initiatives.
-              </p>
-            </div>
-          </div>
-        </section>
-        <section
-          id="community"
-          aria-labelledby="community-title-h2"
-          class="py-16 bg-white rounded-3xl shadow-xl mb-12"
-        >
-          <div class="text-center mb-12">
-            <h2 id="community-title-h2" class="mb-4 font-baloo-2" data-i18n="community_title">
-              Join Our Community
-            </h2>
-            <p class="text-lg text-gray-700 max-w-xl mx-auto" data-i18n="community_description">
-              Become part of the Burni community! Connect with fellow enthusiasts, stay updated on
-              the latest developments, and help shape the future of Burni Coin through active
-              participation.
-            </p>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
-            <a
-              href="https://x.com/burnicoin"
-              target="_blank"
-              class="section-card p-6 hover:shadow-lg transition-shadow duration-300 text-center group"
-              rel="noopener noreferrer"
-            >
-              <i
-                class="fab fa-twitter fa-3x mb-4 text-blue-400 group-hover:text-blue-500 transition-colors"
-              ></i>
-              <h3 class="font-semibold mb-2">X (Twitter)</h3>
-              <p class="text-gray-600">
-                Follow us for the latest updates, announcements, and community highlights
-              </p>
-            </a>
-            <a
-              href="https://t.me/burnicoin"
-              target="_blank"
-              class="section-card p-6 hover:shadow-lg transition-shadow duration-300 text-center group"
-              rel="noopener noreferrer"
-            >
-              <i
-                class="fab fa-telegram fa-3x mb-4 text-blue-500 group-hover:text-blue-600 transition-colors"
-              ></i>
-              <h3 class="font-semibold mb-2">Telegram</h3>
-              <p class="text-gray-600">
-                Join our active Telegram community for real-time discussions and support
-              </p>
-            </a>
-            <a
-              href="https://discord.gg/burnicoin"
-              target="_blank"
-              class="section-card p-6 hover:shadow-lg transition-shadow duration-300 text-center group"
-              rel="noopener noreferrer"
-            >
-              <i
-                class="fab fa-discord fa-3x mb-4 text-indigo-500 group-hover:text-indigo-600 transition-colors"
-              ></i>
-              <h3 class="font-semibold mb-2">Discord</h3>
-              <p class="text-gray-600">
-                Connect with the community on Discord for deeper discussions and collaboration
-              </p>
-            </a>
-          </div>
-          <div class="text-center mt-8">
-            <p class="text-gray-600 mb-4">Want to contribute to the project?</p>
-            <a
-              href="https://github.com/burnitoken/project"
-              target="_blank"
-              class="pixar-button inline-flex items-center space-x-2"
-              rel="noopener noreferrer"
-            >
-              <i class="fab fa-github"></i>
-              <span>Visit our GitHub</span>
-            </a>
-          </div>
-        </section>
-
-        <!-- BURNI Trading Section -->
-        <section
-          id="burni-trade"
-          aria-labelledby="burni-trade-title-h2"
-          class="py-16 bg-gradient-to-br from-orange-50 to-yellow-50 rounded-3xl mb-12"
-        >
-          <div class="text-center mb-12">
-            <h2
-              id="burni-trade-title-h2"
-              class="mb-4 font-baloo-2 text-orange-600"
-              data-i18n="burni_trade_title"
-            >
-              🔥 Trading BURNI Token
-            </h2>
-            <p class="text-lg text-gray-700 max-w-xl mx-auto" data-i18n="burni_trade_description">
-              Ready to get some BURNI? Access the AMM Pool and trading features on XPMarket. Trade,
-              provide liquidity, and be part of the deflationary revolution!
-            </p>
-          </div>
-          <div class="flex justify-center mb-8">
-            <img
-              src="/assets/images/burni.png"
-              class="burni-mascot"
-              loading="lazy"
-              data-i18n-alt="alt_burni_trade_mascot"
-              alt="Burni mascot showing the way for trading BURNI"
-            />
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- AMM Pool Link -->
-            <a
-              href="https://xpmarket.com/token/Burni-rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2"
-              target="_blank"
-              class="section-card p-6 text-center hover:shadow-2xl transition-all duration-300 flex flex-col items-center justify-center bg-gradient-to-br from-orange-400 to-red-500 text-white hover:scale-105"
-              rel="noopener noreferrer"
-            >
-              <i class="fas fa-fire fa-2x mb-3"></i>
-              <h3 class="mb-2 font-baloo-2 font-bold" data-i18n="burni_amm_pool_link">
-                🔥 BURNI AMM Pool
-              </h3>
-              <p class="text-orange-100 text-sm font-medium" data-i18n="burni_amm_pool_desc">
-                Access the official BURNI AMM Pool on XPMarket
-              </p>
-            </a>
-
-            <!-- BURNI Token Page -->
-            <a
-              href="https://xpmarket.com/token/Burni-rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2"
-              target="_blank"
-              class="section-card p-6 text-center hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center justify-center"
-              rel="noopener noreferrer"
-            >
-              <i class="fas fa-coins fa-2x mb-3 text-orange-500"></i>
-              <h3 class="mb-2 text-orange-600 font-baloo-2" data-i18n="burni_token_page_link">
-                BURNI Token Page
-              </h3>
-              <p class="text-gray-600 text-sm" data-i18n="burni_token_page_desc">
-                All info about BURNI on XPMarket.
-              </p>
-            </a>
-
-            <!-- BURNI Trustline -->
-            <a
-              href="https://xpmarket.com/trustline/Burni-rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2/set"
-              target="_blank"
-              class="section-card p-6 text-center hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center justify-center"
-              rel="noopener noreferrer"
-            >
-              <i class="fas fa-handshake fa-2x mb-3 text-green-500"></i>
-              <h3 class="mb-2 text-orange-600 font-baloo-2" data-i18n="burni_set_trustline_link">
-                Set BURNI Trustline
-              </h3>
-              <p class="text-gray-600 text-sm" data-i18n="burni_set_trustline_desc">
-                Activate BURNI in your XRPL wallet.
-              </p>
-            </a>
-
-            <!-- BURNI DEX Trading -->
-            <a
-              href="https://xpmarket.com/dex/Burni-rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2/XRP?trade=market"
-              target="_blank"
-              class="section-card p-6 text-center hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center justify-center"
-              rel="noopener noreferrer"
-            >
-              <i class="fas fa-chart-line fa-2x mb-3 text-blue-500"></i>
-              <h3 class="mb-2 text-orange-600 font-baloo-2" data-i18n="burni_dex_trade_link">
-                BURNI DEX Trading
-              </h3>
-              <p class="text-gray-600 text-sm" data-i18n="burni_dex_trade_desc">
-                Buy/Sell BURNI on the decentralized exchange.
-              </p>
-            </a>
-          </div>
-
-          <!-- Additional BURNI Features -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-            <!-- BURNI Swap -->
-            <a
-              href="https://xpmarket.com/swap/Burni-rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2/XRP/market"
-              target="_blank"
-              class="section-card p-6 text-center hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center justify-center"
-              rel="noopener noreferrer"
-            >
-              <i class="fas fa-exchange-alt fa-2x mb-3 text-purple-500"></i>
-              <h3 class="mb-2 text-orange-600 font-baloo-2" data-i18n="burni_swap_link">
-                SWAP BURNI
-              </h3>
-              <p class="text-gray-600 text-sm" data-i18n="burni_swap_desc">
-                Easily exchange BURNI for other tokens.
-              </p>
-            </a>
-
-            <!-- Liquidity Pool -->
-            <a
-              href="https://xpmarket.com/amm/Burni-rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2/XRP"
-              target="_blank"
-              class="section-card p-6 text-center hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center justify-center"
-              rel="noopener noreferrer"
-            >
-              <i class="fas fa-water fa-2x mb-3 text-cyan-500"></i>
-              <h3 class="mb-2 text-orange-600 font-baloo-2" data-i18n="burni_liquidity_link">
-                Add Liquidity
-              </h3>
-              <p class="text-gray-600 text-sm" data-i18n="burni_liquidity_desc">
-                Provide liquidity to the BURNI/XRP pool.
-              </p>
-            </a>
-
-            <!-- Analytics -->
-            <a
-              href="https://xpmarket.com/token/Burni-rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2/analytics"
-              target="_blank"
-              class="section-card p-6 text-center hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center justify-center"
-              rel="noopener noreferrer"
-            >
-              <i class="fas fa-chart-bar fa-2x mb-3 text-indigo-500"></i>
-              <h3 class="mb-2 text-orange-600 font-baloo-2" data-i18n="burni_analytics_link">
-                BURNI Analytics
-              </h3>
-              <p class="text-gray-600 text-sm" data-i18n="burni_analytics_desc">
-                View detailed trading metrics and statistics.
-              </p>
-            </a>
-          </div>
-
-          <!-- Call to Action -->
-          <div class="mt-12 text-center">
-            <div class="bg-white rounded-xl p-6 shadow-lg inline-block">
-              <h3 class="text-xl font-bold text-orange-600 mb-2">🚀 Start Trading BURNI Now!</h3>
-              <p class="text-gray-600 mb-4">Join the deflationary revolution on XPMarket</p>
-              <a
-                href="https://xpmarket.com/token/Burni-rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2"
-                target="_blank"
-                class="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-lg font-semibold hover:from-orange-600 hover:to-red-600 transition-all duration-300 hover:scale-105 inline-block"
-                rel="noopener noreferrer"
-              >
-                <i class="fas fa-external-link-alt mr-2"></i>
-                Visit BURNI on XPMarket
-              </a>
             </div>
           </div>
         </section>
@@ -1804,6 +1586,13 @@
               aria-label="Navigate to Community section"
               >Community</a
             >
+            <a
+              href="#xrpl-resources"
+              class="hover:text-orange-400"
+              data-i18n="nav_xrpl_resources"
+              aria-label="Navigate to XRPL Resources section"
+              >XRPL Explorer</a
+            >
           </nav>
         </div>
         <div class="border-t border-gray-700 pt-4 text-center text-sm">
@@ -1859,6 +1648,8 @@
     <script src="/assets/price-tracker.js" defer></script>
     <script src="/assets/community-features.js" defer></script>
     <script src="/assets/security-monitor.js" defer></script>
+    <!-- XRPL Real-time Data Module -->
+    <script src="/assets/xrpl-data.js" defer></script>
     <!-- Temporary: Test live prices -->
     <script src="/test-burni-live-prices.js" defer></script>
     <script src="/test-price-widget.js" defer></script>

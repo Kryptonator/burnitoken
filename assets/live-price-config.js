@@ -7,6 +7,10 @@ const PRICE_CONFIG = {
     xrpScan: 'https://api.xrpscan.com/api/v1',
     bitrue: 'https://www.bitrue.com/api/v1',
     backup: 'https://s1.ripple.com:51234',
+    xrplLivenet: 'https://livenet.xrpl.org',
+    rippleExplorer: 'https://github.com/ripple/explorer',
+    xrplServices: 'https://s1.ripple.com:51234',
+    xrplMainnet: 'wss://xrplcluster.com',
   },
 
   // Token-Konfiguration (diese müssen mit echten Daten aktualisiert werden)
