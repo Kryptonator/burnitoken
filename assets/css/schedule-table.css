@@ -1,0 +1,138 @@
+/* Schedule Table Styles - Enhanced Readability */
+#scheduleTable {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+#scheduleTable table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+#scheduleTable thead tr {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+}
+
+#scheduleTable thead th {
+  color: white !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  padding: 16px 20px !important;
+  text-align: left !important;
+  font-size: 13px !important;
+  border: none !important;
+}
+
+#scheduleTable tbody tr {
+  transition: all 0.2s ease;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+#scheduleTable tbody tr:nth-child(even) {
+  background-color: #f8fafc;
+}
+
+#scheduleTable tbody tr:nth-child(odd) {
+  background-color: white;
+}
+
+#scheduleTable tbody tr:hover {
+  background-color: #fef3c7 !important;
+  transform: scale(1.01);
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.1);
+}
+
+#scheduleTable tbody td {
+  padding: 14px 20px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: #374151 !important;
+  border: none !important;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+/* Spezielle Formatierung für verschiedene Spalten */
+#scheduleTable tbody td:first-child {
+  color: #dc2626 !important; /* Rot für Datum */
+  font-weight: 600 !important;
+}
+
+#scheduleTable tbody td:nth-child(2) {
+  color: #059669 !important; /* Grün für Tag */
+  font-weight: 600 !important;
+}
+
+#scheduleTable tbody td:nth-child(3) {
+  color: #7c3aed !important; /* Lila für Process No. */
+  text-align: center !important;
+  font-weight: 600 !important;
+}
+
+#scheduleTable tbody td:last-child {
+  color: #dc2626 !important; /* Rot für Remaining Coins */
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace !important;
+  text-align: right !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  #scheduleTable thead th,
+  #scheduleTable tbody td {
+    padding: 12px 8px !important;
+    font-size: 12px !important;
+  }
+
+  #scheduleTable tbody td:last-child {
+    font-size: 13px !important;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  #scheduleTable {
+    background: #1f2937;
+  }
+
+  #scheduleTable table {
+    background: #1f2937;
+  }
+
+  #scheduleTable tbody tr:nth-child(even) {
+    background-color: #374151;
+  }
+
+  #scheduleTable tbody tr:nth-child(odd) {
+    background-color: #1f2937;
+  }
+
+  #scheduleTable tbody tr:hover {
+    background-color: #422006 !important;
+  }
+
+  #scheduleTable tbody td {
+    color: #e5e7eb !important;
+    border-bottom-color: #4b5563 !important;
+  }
+}
+
+/* Animation for better UX */
+@keyframes fadeInTable {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#scheduleTable table {
+  animation: fadeInTable 0.5s ease-out;
+}

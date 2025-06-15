@@ -47,23 +47,48 @@ class SecureDOM {
   }
 
   static createSecureTable(data, headers) {
-    const table = this.createSafeElement('table', 'w-full border-collapse');
+    const table = this.createSafeElement(
+      'table',
+      'w-full border-collapse bg-white shadow-lg rounded-lg overflow-hidden',
+    );
     const thead = this.createSafeElement('thead');
     const tbody = this.createSafeElement('tbody');
 
-    // Header erstellen
-    const headerRow = this.createSafeElement('tr');
+    // Header erstellen mit besseren Farben
+    const headerRow = this.createSafeElement(
+      'tr',
+      'bg-gradient-to-r from-orange-500 to-orange-600',
+    );
     headers.forEach((header) => {
-      const th = this.createSafeElement('th', 'border p-2 bg-gray-100', header);
+      const th = this.createSafeElement(
+        'th',
+        'border border-orange-300 p-4 text-white font-bold text-left',
+        header,
+      );
       headerRow.appendChild(th);
     });
     thead.appendChild(headerRow);
 
-    // Daten-Rows erstellen
-    data.forEach((row) => {
-      const tr = this.createSafeElement('tr');
-      Object.values(row).forEach((cell) => {
-        const td = this.createSafeElement('td', 'border p-2', String(cell));
+    // Daten-Rows erstellen mit alternativen Farben
+    data.forEach((row, index) => {
+      const isEven = index % 2 === 0;
+      const rowClass = isEven ? 'bg-gray-50 hover:bg-gray-100' : 'bg-white hover:bg-gray-50';
+      const tr = this.createSafeElement('tr', rowClass);
+
+      Object.values(row).forEach((cell, cellIndex) => {
+        const cellText = String(cell);
+        let cellClass = 'border border-gray-200 p-4 text-gray-800 font-medium';
+
+        // Spezielle Formatierung für bestimmte Spalten
+        if (cellIndex === 0) {
+          // Datum
+          cellClass += ' text-orange-600 font-semibold';
+        } else if (cellIndex === 3) {
+          // Remaining Coins
+          cellClass += ' text-right font-mono text-green-700';
+        }
+
+        const td = this.createSafeElement('td', cellClass, cellText);
         tr.appendChild(td);
       });
       tbody.appendChild(tr);
