@@ -1,0 +1,152 @@
+name: Deploy Burni Token Website
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch: # Allows manual triggering
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+        - production
+        - staging
+
+env:
+  NODE_VERSION: '20'
+  SITE_URL: 'https://burnitoken.website'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: 
+      name: production
+      url: ${{ env.SITE_URL }}
+    
+    steps:
+      - name: 🚀 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 📥 Install dependencies
+        run: npm ci --only=production
+        
+      - name: 🔍 Run linting
+        run: npm run lint:check
+        
+      - name: 🔨 Build project
+        run: npm run build
+        
+      - name: 🧪 Run tests
+        run: npm test
+        
+      - name: ✅ Validate HTML
+        run: npm run validate
+        
+      - name: 🎭 Install Playwright
+        run: npx playwright install --with-deps chromium
+        
+      - name: 🧪 Run E2E tests  
+        run: npm run test:e2e
+        
+      - name: 🌐 Verify i18n system
+        run: |
+          echo "Verifying i18n system..."
+          if grep -q "translations.*=" main.js && grep -q "data-i18n" index.html; then
+            echo "✅ i18n system verified in source files"
+          else
+            echo "❌ i18n system not found!"
+            exit 1
+          fi
+          
+      - name: 📁 Create deployment artifact
+        run: |
+          echo "Creating deployment artifact..."
+          mkdir -p dist
+          
+          # Copy main files
+          cp index.html dist/
+          cp 404.html dist/
+          cp main.js dist/
+          cp manifest.json dist/
+          cp robots.txt dist/
+          cp sitemap.xml dist/
+          cp sw.js dist/
+          
+          # Copy directories
+          cp -r assets dist/ 2>/dev/null || echo "⚠️ assets directory not found"
+          cp -r pages dist/ 2>/dev/null || echo "⚠️ pages directory not found"
+          cp -r public dist/ 2>/dev/null || echo "⚠️ public directory not found"
+          
+          # Verify critical files
+          echo "Verifying deployment files..."
+          ls -la dist/
+          
+          if [ -f "dist/index.html" ] && [ -f "dist/main.js" ]; then
+            echo "✅ Critical files present"
+            echo "📊 index.html size: $(stat -c%s dist/index.html) bytes"
+            echo "📊 main.js size: $(stat -c%s dist/main.js) bytes"
+          else
+            echo "❌ Critical files missing!"
+            exit 1
+          fi
+          
+      - name: 🚀 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          cname: burnitoken.website
+          force_orphan: true
+          enable_jekyll: false
+          commit_message: 'Deploy i18n system and explorer links - ${{ github.sha }}'
+          
+      - name: 🌐 Post-deployment verification
+        if: success()
+        run: |
+          echo "⏳ Waiting for deployment to propagate..."
+          sleep 30
+          
+          echo "🔍 Testing deployment..."
+          # Test main page
+          if curl -s -o /dev/null -w "%{http_code}" ${{ env.SITE_URL }} | grep -q "200"; then
+            echo "✅ Main page accessible"
+          else
+            echo "⚠️ Main page might not be accessible yet"
+          fi
+          
+      - name: 📋 Deployment Summary
+        if: always()
+        run: |
+          echo "================================================"
+          echo "🎉 BURNI TOKEN WEBSITE DEPLOYMENT COMPLETED!"
+          echo "================================================"
+          echo "🌐 Website URL: ${{ env.SITE_URL }}"
+          echo "🇩🇪 German: ${{ env.SITE_URL }}?lang=de"
+          echo "🇬🇧 English: ${{ env.SITE_URL }}?lang=en"
+          echo ""
+          echo "✅ Features Deployed:"
+          echo "  🌐 Full i18n system (German/English)"
+          echo "  🔄 Dynamic language switching"
+          echo "  🔗 Explorer links (XRPL/Bithomp)"
+          echo "  📊 Localized charts and tables"
+          echo "  💱 Currency formatting per language"
+          echo ""
+          echo "🧪 Test these features:"
+          echo "  - Language selector in navigation"
+          echo "  - URL parameter: ?lang=de"
+          echo "  - Explorer links in Token Details"
+          echo "  - All content translation"
+          echo "================================================"

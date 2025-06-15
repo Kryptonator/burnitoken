@@ -1,0 +1,15 @@
+Dein konzeptioneller Ansatz ist gut strukturiert und berücksichtigt die wichtigsten Hürden (CORS, API-Schlüssel, Backend-Sicherheit). Um ihn umzusetzen, würde ich in zwei Schritten vorgehen:
+
+1. Kurzfristig: Mock-Dashboard  
+  – Simulation realistischer Preis- und Pool-Daten mit zufälligen Schwankungen  
+  – Chart.js-Diagramme mit Tages/Wochen/Monats-Intervallen und interaktiven Buttons  
+  – KPI-Karten für Burni, XRP und XPM-Preise, die sich alle 10 Sekunden leicht aktualisieren  
+  – So hast du ein Prototyp-Frontend, das später auf echte Daten umgestellt werden kann  
+
+2. Langfristig: echtes Backend  
+  – Node.js/Express-Proxy, der APIs wie CoinGecko (Preise) und XRPL (AMM-Pools) abfrägt  
+  – Sichere Verwaltung der API-Schlüssel in Umgebungsvariablen, CORS-Handling im Server  
+  – Aggregation historischer Pool-Transaktionen (via xrpl.js), um Tages-/Wochen-/Monatscharts zu füttern  
+  – Frontend holt sich alle 60 Sekunden die echten Daten vom eigenen Endpoint  
+
+Damit trennst du Front- und Backend sinnvoll, löst CORS- und Sicherheitsprobleme und bereitest den Weg für professionelle, live-fähige Preisdaten und AMM-Pool-Visualisierungen.

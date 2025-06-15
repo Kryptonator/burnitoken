@@ -1,0 +1,5 @@
+Contact: mailto:security@burnitoken.com
+Contact: https://t.me/burnicoin_admin
+Expires: 2026-06-14
+Policy: https://burnitoken.com/SECURITY.md
+Preferred-Languages: en, de

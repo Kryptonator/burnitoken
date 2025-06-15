@@ -1,0 +1,12 @@
+node_modules/
+.DS_Store
+*.log
+.env
+dist/
+assets/css/*.min.css
+data_i18n_keys.txt
+coverage/
+playwright-report/
+.DS_Store
+.env
+assets/fonts/

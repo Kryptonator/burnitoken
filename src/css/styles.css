@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .pixar-button {
+    @apply rounded-full bg-orange-500 px-4 py-2 font-bold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-orange-600;
+  }
+
+  /* i18n Loading States */
+  .i18n-loading [data-i18n] {
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  /* Language Selector Styles */
+  .lang-select-style {
+    transition: all 0.2s ease;
+  }
+
+  /* i18n Animation */
+  .i18n-fade {
+    opacity: 0.7;
+    transition: opacity 0.1s ease-in-out;
+  }
+
+  .lang-select-style:hover {
+    @apply border-orange-400 bg-orange-50;
+  }
+
+  .lang-select-style:focus {
+    @apply border-orange-500 ring-2 ring-orange-200;
+  }
+
+  /* Loading indicator for language switching */
+  .i18n-loading::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #f97316, #ea580c);
+    z-index: 9999;
+    animation: loading-bar 0.3s ease-in-out;
+  }
+
+  @keyframes loading-bar {
+    0% {
+      transform: translateX(-100%);
+    }
+
+    100% {
+      transform: translateX(0);
+    }
+  }
+}
