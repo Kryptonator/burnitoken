@@ -13,6 +13,14 @@ test.describe('Language Switcher E2E Tests', () => {
     await page.waitForTimeout(2000); // Wait for JavaScript to initialize
   });
   test('Language switcher updates all translatable elements', async ({ page }) => {
+    // Check if main.js loaded
+    const mainJsLoaded = await page.evaluate(() => window.mainJsLoaded);
+    console.log(`Main.js loaded: ${mainJsLoaded}`);
+    
+    // Check if inline script loaded
+    const inlineScriptLoaded = await page.evaluate(() => window.inlineScriptLoaded);
+    console.log(`Inline script loaded: ${inlineScriptLoaded}`);
+    
     // Check if the language select works
     const langSelect = page.locator('#lang-select');
     await expect(langSelect).toBeVisible();

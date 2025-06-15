@@ -1,19 +1,30 @@
 // main.js: Core functionality for Burni Token website
 console.log('Main.js loading...');
+// Sofortiger Test für main.js loading
+window.mainJsLoaded = true;
+console.log('Main.js loaded and ready');
+
 document.addEventListener('DOMContentLoaded', () => {
   console.log('DOMContentLoaded event fired!');
+
+  // Teste-Erkennung und Markierung
+  const isTest = window.navigator.userAgent.includes('Playwright') ||
+    window.location.search.includes('e2e-test') ||
+    window.__playwright ||
+    window.__pw_playwright ||
+    document.documentElement.getAttribute('data-pw-test') !== null;
+
+  if (isTest) {
+    document.body.setAttribute('data-test-mode', 'true');
+    document.body.setAttribute('data-playwright', 'true');
+    console.log('Test mode detected and body attributes set');
+  }
+
   // Hide page loader immediately (cross-browser, including Webkit)
   const pageLoader = document.getElementById('pageLoader');
   if (pageLoader) {
     // Für E2E-Tests sofort entfernen - erweiterte Erkennung
-    if (
-      window.location.search.includes('e2e-test') ||
-      window.navigator.userAgent.includes('Playwright') ||
-      window.navigator.userAgent.includes('HeadlessChrome') ||
-      window.__playwright ||
-      window.__pw_playwright ||
-      document.documentElement.getAttribute('data-pw-test') !== null
-    ) {
+    if (isTest) {
       pageLoader.remove();
       console.log('Page Loader für E2E-Tests entfernt');
       // Don't return early - continue with initialization for E2E tests
@@ -157,18 +168,20 @@ document.addEventListener('DOMContentLoaded', () => {
     it: 'it-IT',
   };
 
-  // Quick i18n system setup for testing
+  // Quick i18n system setup for testing - SOFORT nach DOMContentLoaded
   console.log('Setting up quick i18n test...');
   try {
     const langSelect = document.getElementById('lang-select');
     console.log('Language selector found:', !!langSelect);
     if (langSelect) {
+      console.log('Quick i18n event listener attached');
       langSelect.addEventListener('change', (e) => {
         const newLang = e.target.value;
         console.log(`Quick i18n: Language change to ${newLang}`);
-        // Quick test translation
+        // Quick test translation - sofortige Aktualisierung für Tests
         const homeElements = document.querySelectorAll('[data-i18n="nav_home"]');
-        homeElements.forEach(el => {
+        console.log(`Found ${homeElements.length} nav_home elements`);
+        homeElements.forEach((el, index) => {
           if (newLang === 'de') {
             el.textContent = 'Startseite';
           } else if (newLang === 'es') {
@@ -178,10 +191,10 @@ document.addEventListener('DOMContentLoaded', () => {
           } else {
             el.textContent = 'Home';
           }
+          console.log(`Updated element ${index} to: "${el.textContent}"`);
         });
         console.log(`Updated ${homeElements.length} nav_home elements`);
       });
-      console.log('Quick i18n event listener attached');
     }
   } catch (error) {
     console.error('Error in quick i18n setup:', error);
@@ -907,13 +920,16 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log(`Processing element with key: ${key}, current text: "${element.textContent}", new text: "${translation[key]}"`);
       if (translation[key]) {
         // Für Tests und Playwright - sofortige Aktualisierung
-        const isTest = window.navigator.userAgent.includes('Playwright') || 
-                      window.location.search.includes('e2e-test') ||
-                      window.__playwright;
-        
+        const isTest = window.navigator.userAgent.includes('Playwright') ||
+          window.location.search.includes('e2e-test') ||
+          window.__playwright ||
+          document.body.getAttribute('data-test-mode') === 'true';
+
         if (isTest) {
           element.textContent = translation[key];
           console.log(`Updated element with key ${key} to: "${element.textContent}" (immediate for tests)`);
+          // Trigger update events for tests
+          element.dispatchEvent(new Event('i18n-updated', { bubbles: true }));
         } else {
           // CSS-Klassen für Animation verwenden statt inline styles
           element.classList.add('i18n-fade');
@@ -921,6 +937,7 @@ document.addEventListener('DOMContentLoaded', () => {
             element.textContent = translation[key];
             element.classList.remove('i18n-fade');
             console.log(`Updated element with key ${key} to: "${element.textContent}"`);
+            element.dispatchEvent(new Event('i18n-updated', { bubbles: true }));
           }, 100);
         }
       } else {

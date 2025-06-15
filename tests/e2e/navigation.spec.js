@@ -17,6 +17,12 @@ test.describe('Navigation Tests', () => {
   });
 
   test('Navigation works and all sections are visible', async ({ page }) => {
+    // Wait for page loader to be removed
+    await page.waitForFunction(() => {
+      const pageLoader = document.getElementById('pageLoader');
+      return !pageLoader || pageLoader.style.display === 'none' || !pageLoader.offsetParent;
+    }, { timeout: 10000 });
+    
     // Test navigation to tokenomics section
     await page.click('a[href="#tokenomics"]');
     await page.waitForTimeout(1000); // Wait for smooth scroll
@@ -28,6 +34,12 @@ test.describe('Navigation Tests', () => {
   test('Mobile menu opens and closes', async ({ page }) => {
     // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
+
+    // Wait for page loader to be removed
+    await page.waitForFunction(() => {
+      const pageLoader = document.getElementById('pageLoader');
+      return !pageLoader || pageLoader.style.display === 'none' || !pageLoader.offsetParent;
+    }, { timeout: 10000 });
 
     const mobileMenuButton = page.locator('#mobile-menu-button');
     const mobileMenu = page.locator('#mobile-menu');
@@ -46,6 +58,12 @@ test.describe('Navigation Tests', () => {
   });
 
   test('Smooth scrolling to sections works', async ({ page }) => {
+    // Wait for page loader to be removed
+    await page.waitForFunction(() => {
+      const pageLoader = document.getElementById('pageLoader');
+      return !pageLoader || pageLoader.style.display === 'none' || !pageLoader.offsetParent;
+    }, { timeout: 10000 });
+    
     // Test navigation to multiple sections
     const sections = ['#about', '#use-cases', '#token-schedule'];
 
@@ -59,6 +77,12 @@ test.describe('Navigation Tests', () => {
   });
 
   test('Active navigation state updates on scroll', async ({ page }) => {
+    // Wait for page loader to be removed
+    await page.waitForFunction(() => {
+      const pageLoader = document.getElementById('pageLoader');
+      return !pageLoader || pageLoader.style.display === 'none' || !pageLoader.offsetParent;
+    }, { timeout: 10000 });
+    
     // First scroll to top to ensure we start from hero section
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.waitForTimeout(500);
