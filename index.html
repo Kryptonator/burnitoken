@@ -1294,8 +1294,7 @@
     <!-- Main application scripts -->
     <script src="/main.js" defer></script>
     <script src="/assets/scripts.min.js" defer></script>
-    <!-- Chart.js UMD bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.umd.min.js"></script>
+    <!-- Chart.js wird asynchron in main.js geladen -->
     <script>
         // Alle Performance-Monitoring und Initialisierungen zusammenfassen
         (function () {
@@ -1306,13 +1305,22 @@
                 performance.measure('app-loading', 'app-start', 'app-loaded');
             });
 
+            // FontAwesome Check Function
+            function checkFontAwesome() {
+                return Array.from(document.styleSheets).some(function (sheet) {
+                    try {
+                        return (
+                            (sheet.href && sheet.href.includes('font-awesome')) ||
+                            (sheet.href && sheet.href.includes('fontawesome'))
+                        );
+                    } catch (e) {
+                        return false;
+                    }
+                });
+            }
+
             // Font Awesome Fallback
-            var faLoaded = Array.from(document.styleSheets).some(function (sheet) {
-                return (
-                    (sheet.href && sheet.href.includes('font-awesome')) ||
-                    (sheet.href && sheet.href.includes('fontawesome'))
-                );
-            });
+            var faLoaded = checkFontAwesome();
             if (!faLoaded) {
                 var fallbackLink = document.createElement('link');
                 fallbackLink.rel = 'stylesheet';

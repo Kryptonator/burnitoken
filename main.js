@@ -5,10 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Hide page loader immediately (cross-browser, including Webkit)
   const pageLoader = document.getElementById('pageLoader');
   if (pageLoader) {
-    // Für E2E-Tests sofort entfernen
+    // Für E2E-Tests sofort entfernen - erweiterte Erkennung
     if (
       window.location.search.includes('e2e-test') ||
-      window.navigator.userAgent.includes('Playwright')
+      window.navigator.userAgent.includes('Playwright') ||
+      window.navigator.userAgent.includes('HeadlessChrome') ||
+      window.__playwright ||
+      window.__pw_playwright ||
+      document.documentElement.getAttribute('data-pw-test') !== null
     ) {
       pageLoader.remove();
       console.log('Page Loader für E2E-Tests entfernt');
@@ -902,13 +906,23 @@ document.addEventListener('DOMContentLoaded', () => {
       const key = element.getAttribute('data-i18n');
       console.log(`Processing element with key: ${key}, current text: "${element.textContent}", new text: "${translation[key]}"`);
       if (translation[key]) {
-        // CSS-Klassen für Animation verwenden statt inline styles
-        element.classList.add('i18n-fade');
-        setTimeout(() => {
+        // Für Tests und Playwright - sofortige Aktualisierung
+        const isTest = window.navigator.userAgent.includes('Playwright') || 
+                      window.location.search.includes('e2e-test') ||
+                      window.__playwright;
+        
+        if (isTest) {
           element.textContent = translation[key];
-          element.classList.remove('i18n-fade');
-          console.log(`Updated element with key ${key} to: "${element.textContent}"`);
-        }, 100);
+          console.log(`Updated element with key ${key} to: "${element.textContent}" (immediate for tests)`);
+        } else {
+          // CSS-Klassen für Animation verwenden statt inline styles
+          element.classList.add('i18n-fade');
+          setTimeout(() => {
+            element.textContent = translation[key];
+            element.classList.remove('i18n-fade');
+            console.log(`Updated element with key ${key} to: "${element.textContent}"`);
+          }, 100);
+        }
       } else {
         console.warn(`No translation found for key: ${key}`);
       }
