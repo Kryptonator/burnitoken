@@ -31,7 +31,7 @@ const PRICE_CONFIG = {
     },
     BURNI: {
       symbol: 'BURNI',
-      issuer: 'rBURNIxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', // TODO: Echte Issuer-Adresse einfügen
+      issuer: 'rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2', // Korrekte BURNI Issuer-Adresse
       decimals: 6,
       sources: ['xrpl'],
       currentPrice: 0.0013, // Fallback basierend auf Screenshot
