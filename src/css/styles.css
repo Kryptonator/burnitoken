@@ -140,6 +140,8 @@
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    /* Fallback für Browser ohne background-clip Support */
+    color: #f97316;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     animation: colorShift 4s ease-in-out infinite;
   }
