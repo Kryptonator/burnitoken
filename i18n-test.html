@@ -1,174 +1,181 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>i18n System Test</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
 
-        .test-section {
-            margin: 20px 0;
-            padding: 20px;
-            border: 1px solid #ccc;
-        }
+      .test-section {
+        margin: 20px 0;
+        padding: 20px;
+        border: 1px solid #ccc;
+      }
 
-        .success {
-            background-color: #d4edda;
-        }
+      .success {
+        background-color: #d4edda;
+      }
 
-        .error {
-            background-color: #f8d7da;
-        }
+      .error {
+        background-color: #f8d7da;
+      }
 
-        select {
-            padding: 10px;
-            margin: 10px;
-        }
+      select {
+        padding: 10px;
+        margin: 10px;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <h1>🧪 i18n System Test</h1>
 
     <div class="test-section">
-        <h2>Language Selector Test</h2>
-        <select id="lang-select">
-            <option value="en">English</option>
-            <option value="de">Deutsch</option>
-        </select>
-        <p>Current URL: <span id="current-url"></span></p>
+      <h2>Language Selector Test</h2>
+      <select id="lang-select">
+        <option value="en">English</option>
+        <option value="de">Deutsch</option>
+      </select>
+      <p>Current URL: <span id="current-url"></span></p>
     </div>
 
     <div class="test-section">
-        <h2>Translation Test</h2>
-        <h3 data-i18n="hero_title">Welcome to Burni!</h3>
-        <p data-i18n="hero_description">Discover the deflationary token designed to create value
-            through scarcity. Join us on a fiery journey of discovery!</p>
-        <button data-i18n="hero_button">Learn More!</button>
+      <h2>Translation Test</h2>
+      <h3 data-i18n="hero_title">Welcome to Burni!</h3>
+      <p data-i18n="hero_description">
+        Discover the deflationary token designed to create value through scarcity. Join us on a
+        fiery journey of discovery!
+      </p>
+      <button data-i18n="hero_button">Learn More!</button>
     </div>
 
     <div class="test-section">
-        <h2>Debug Information</h2>
-        <p>Translations object available: <span id="translations-available">❌</span></p>
-        <p>Current language: <span id="current-lang">❌</span></p>
-        <p>German hero_title: <span id="german-title">❌</span></p>
-        <p>Event listener attached: <span id="event-listener">❌</span></p>
+      <h2>Debug Information</h2>
+      <p>Translations object available: <span id="translations-available">❌</span></p>
+      <p>Current language: <span id="current-lang">❌</span></p>
+      <p>German hero_title: <span id="german-title">❌</span></p>
+      <p>Event listener attached: <span id="event-listener">❌</span></p>
     </div>
 
     <div class="test-section">
-        <h2>Console Output</h2>
-        <div id="console-output"
-            style="background: #f0f0f0; padding: 10px; height: 200px; overflow-y: scroll; font-family: monospace;">
-        </div>
+      <h2>Console Output</h2>
+      <div
+        id="console-output"
+        style="
+          background: #f0f0f0;
+          padding: 10px;
+          height: 200px;
+          overflow-y: scroll;
+          font-family: monospace;
+        "
+      ></div>
     </div>
 
     <script>
-        // Override console.log to capture output
-        const originalConsoleLog = console.log;
-        const consoleOutput = document.getElementById('console-output');
+      // Override console.log to capture output
+      const originalConsoleLog = console.log;
+      const consoleOutput = document.getElementById('console-output');
 
-        console.log = function (...args) {
-            originalConsoleLog.apply(console, args);
-            consoleOutput.innerHTML += args.join(' ') + '\n';
-            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+      console.log = function (...args) {
+        originalConsoleLog.apply(console, args);
+        consoleOutput.innerHTML += args.join(' ') + '\n';
+        consoleOutput.scrollTop = consoleOutput.scrollHeight;
+      };
+
+      console.log('🔧 Starting i18n System Test...');
+
+      // Update current URL display
+      document.getElementById('current-url').textContent = window.location.href;
+
+      // Wait for DOM to be ready then load the main script
+      document.addEventListener('DOMContentLoaded', () => {
+        console.log('📄 DOM ready, checking main.js...');
+
+        // Load the main.js script dynamically
+        const script = document.createElement('script');
+        script.src = './main.js';
+        script.onload = () => {
+          console.log('✅ main.js loaded successfully');
+
+          // Test after a short delay to allow initialization
+          setTimeout(() => {
+            runTests();
+          }, 2000);
         };
+        script.onerror = () => {
+          console.log('❌ Failed to load main.js');
+        };
+        document.head.appendChild(script);
+      });
 
-        console.log('🔧 Starting i18n System Test...');
+      function runTests() {
+        console.log('🧪 Running i18n tests...');
 
-        // Update current URL display
-        document.getElementById('current-url').textContent = window.location.href;
-
-        // Wait for DOM to be ready then load the main script
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('📄 DOM ready, checking main.js...');
-
-            // Load the main.js script dynamically
-            const script = document.createElement('script');
-            script.src = './main.js';
-            script.onload = () => {
-                console.log('✅ main.js loaded successfully');
-
-                // Test after a short delay to allow initialization
-                setTimeout(() => {
-                    runTests();
-                }, 2000);
-            };
-            script.onerror = () => {
-                console.log('❌ Failed to load main.js');
-            };
-            document.head.appendChild(script);
-        });
-
-        function runTests() {
-            console.log('🧪 Running i18n tests...');
-
-            // Test 1: Check if translations object exists
-            if (typeof translations !== 'undefined') {
-                document.getElementById('translations-available').textContent = '✅';
-                console.log('✅ Translations object found');
-                console.log('Available languages:', Object.keys(translations));
-            } else {
-                document.getElementById('translations-available').textContent = '❌';
-                console.log('❌ Translations object not found');
-            }
-
-            // Test 2: Check current language
-            if (typeof currentLang !== 'undefined') {
-                document.getElementById('current-lang').textContent = currentLang + ' ✅';
-                console.log('✅ Current language:', currentLang);
-            } else {
-                document.getElementById('current-lang').textContent = '❌';
-                console.log('❌ currentLang variable not found');
-            }
-
-            // Test 3: Check German translation
-            if (typeof translations !== 'undefined' && translations.de && translations.de.hero_title) {
-                document.getElementById('german-title').textContent = translations.de.hero_title + ' ✅';
-                console.log('✅ German hero_title:', translations.de.hero_title);
-            } else {
-                document.getElementById('german-title').textContent = '❌';
-                console.log('❌ German hero_title not found');
-            }
-
-            // Test 4: Check event listener
-            const langSelect = document.getElementById('lang-select');
-            if (langSelect) {
-                console.log('✅ Language selector found');
-
-                // Test manual language change
-                langSelect.addEventListener('change', (e) => {
-                    console.log('🔄 Language changed to:', e.target.value);
-
-                    // Test if changeLanguage function exists
-                    if (typeof changeLanguage === 'function') {
-                        document.getElementById('event-listener').textContent = '✅';
-                        console.log('✅ changeLanguage function found, calling...');
-                        changeLanguage(e.target.value);
-
-                        // Check if translation was applied
-                        setTimeout(() => {
-                            const heroTitle = document.querySelector('[data-i18n="hero_title"]');
-                            if (heroTitle) {
-                                console.log('📝 Hero title after change:', heroTitle.textContent);
-                            }
-                        }, 500);
-                    } else {
-                        document.getElementById('event-listener').textContent = '❌';
-                        console.log('❌ changeLanguage function not found');
-                    }
-                });
-            } else {
-                console.log('❌ Language selector not found');
-            }
-
-            console.log('🏁 Test setup complete. Try changing the language!');
+        // Test 1: Check if translations object exists
+        if (typeof translations !== 'undefined') {
+          document.getElementById('translations-available').textContent = '✅';
+          console.log('✅ Translations object found');
+          console.log('Available languages:', Object.keys(translations));
+        } else {
+          document.getElementById('translations-available').textContent = '❌';
+          console.log('❌ Translations object not found');
         }
-    </script>
-</body>
 
+        // Test 2: Check current language
+        if (typeof currentLang !== 'undefined') {
+          document.getElementById('current-lang').textContent = currentLang + ' ✅';
+          console.log('✅ Current language:', currentLang);
+        } else {
+          document.getElementById('current-lang').textContent = '❌';
+          console.log('❌ currentLang variable not found');
+        }
+
+        // Test 3: Check German translation
+        if (typeof translations !== 'undefined' && translations.de && translations.de.hero_title) {
+          document.getElementById('german-title').textContent = translations.de.hero_title + ' ✅';
+          console.log('✅ German hero_title:', translations.de.hero_title);
+        } else {
+          document.getElementById('german-title').textContent = '❌';
+          console.log('❌ German hero_title not found');
+        }
+
+        // Test 4: Check event listener
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+          console.log('✅ Language selector found');
+
+          // Test manual language change
+          langSelect.addEventListener('change', (e) => {
+            console.log('🔄 Language changed to:', e.target.value);
+
+            // Test if changeLanguage function exists
+            if (typeof changeLanguage === 'function') {
+              document.getElementById('event-listener').textContent = '✅';
+              console.log('✅ changeLanguage function found, calling...');
+              changeLanguage(e.target.value);
+
+              // Check if translation was applied
+              setTimeout(() => {
+                const heroTitle = document.querySelector('[data-i18n="hero_title"]');
+                if (heroTitle) {
+                  console.log('📝 Hero title after change:', heroTitle.textContent);
+                }
+              }, 500);
+            } else {
+              document.getElementById('event-listener').textContent = '❌';
+              console.log('❌ changeLanguage function not found');
+            }
+          });
+        } else {
+          console.log('❌ Language selector not found');
+        }
+
+        console.log('🏁 Test setup complete. Try changing the language!');
+      }
+    </script>
+  </body>
 </html>

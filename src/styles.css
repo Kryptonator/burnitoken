@@ -4,23 +4,20 @@
 
 @layer components {
   .pixar-button {
-    @apply rounded-full bg-orange-500 font-bold py-2 px-4 text-white shadow-lg 
-           transform transition-all duration-300 hover:scale-105 hover:bg-orange-600
-           active:scale-95 focus:ring-2 focus:ring-orange-300;
+    @apply rounded-full bg-orange-500 font-bold py-2 px-4 text-white shadow-lg transform transition-all duration-300 hover:scale-105 hover:bg-orange-600 active:scale-95 focus:ring-2 focus:ring-orange-300;
     will-change: transform;
   }
 
   .nav-link {
-    @apply rounded-md text-sm font-semibold px-3 py-2 text-gray-600
-           transition-colors duration-300 hover:text-orange-600;
+    @apply rounded-md text-sm font-semibold px-3 py-2 text-gray-600 transition-colors duration-300 hover:text-orange-600;
+
     &.active {
       @apply text-orange-600;
     }
   }
 
   .section-card {
-    @apply rounded-2xl bg-white p-6 shadow-lg transition-shadow duration-300 
-           hover:shadow-xl;
+    @apply rounded-2xl bg-white p-6 shadow-lg transition-shadow duration-300 hover:shadow-xl;
   }
 
   .kpi-card {
@@ -37,11 +34,11 @@
 
   .tooltip {
     @apply relative inline-block;
+
     .tooltiptext {
-      @apply absolute invisible w-48 bg-gray-800 text-white text-center rounded-md 
-             py-2 px-3 z-10 bottom-full left-1/2 -ml-24 opacity-0
-             transition-opacity duration-300;
+      @apply absolute invisible w-48 bg-gray-800 text-white text-center rounded-md py-2 px-3 z-10 bottom-full left-1/2 -ml-24 opacity-0 transition-opacity duration-300;
     }
+
     &:hover .tooltiptext {
       @apply visible opacity-100;
     }
@@ -59,54 +56,54 @@
   .fade-in {
     animation: fadeIn 0.6s ease-in-out;
   }
-  
+
   .fade-in-up {
     animation: fadeInUp 0.8s ease-out;
   }
-  
+
   .fade-in-scale {
     animation: fadeInScale 0.5s ease-out;
   }
-  
+
   /* Loading animations */
   .pulse-slow {
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
-  
+
   .loading-dots {
     animation: loadingDots 1.4s infinite ease-in-out;
   }
-  
+
   /* Burni-specific animations */
   .burni-glow {
     animation: burniGlow 3s ease-in-out infinite alternate;
   }
-  
+
   .price-update {
     animation: priceUpdate 0.5s ease-in-out;
   }
-  
+
   .chart-animate {
     animation: chartSlide 1s ease-out;
   }
-  
+
   /* Hover effects with performance optimization */
   .hover-lift {
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     will-change: transform;
   }
-  
+
   .hover-lift:hover {
     transform: translateY(-8px) scale(1.02);
   }
-  
+
   /* Image optimization classes */
   .optimized-image {
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
     transform: translateZ(0);
   }
-  
+
   .lazy-image {
     transition: opacity 0.3s;
     will-change: opacity;
@@ -118,13 +115,16 @@
     .no-print {
       display: none !important;
     }
+
     body {
       background: none;
       color: black;
     }
+
     .section-card {
       break-inside: avoid;
     }
+
     a[href^='http']:after {
       content: ' (' attr(href) ')';
     }
@@ -135,13 +135,13 @@
     transform: translateZ(0);
     will-change: transform;
   }
-  
+
   .optimize-animations {
     transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
     perspective: 1000px;
   }
-  
+
   .smooth-scroll {
     scroll-behavior: smooth;
   }
@@ -149,8 +149,13 @@
 
 /* ===== KEYFRAME ANIMATIONS ===== */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes fadeInUp {
@@ -158,6 +163,7 @@
     opacity: 0;
     transform: translate3d(0, 30px, 0);
   }
+
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0);
@@ -169,6 +175,7 @@
     opacity: 0;
     transform: scale(0.9);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -176,9 +183,12 @@
 }
 
 @keyframes loadingDots {
-  0%, 80%, 100% {
+  0%,
+  80%,
+  100% {
     transform: scale(0);
   }
+
   40% {
     transform: scale(1);
   }
@@ -188,15 +198,27 @@
   from {
     box-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
   }
+
   to {
-    box-shadow: 0 0 20px rgba(249, 115, 22, 0.8), 0 0 30px rgba(249, 115, 22, 0.4);
+    box-shadow:
+      0 0 20px rgba(249, 115, 22, 0.8),
+      0 0 30px rgba(249, 115, 22, 0.4);
   }
 }
 
 @keyframes priceUpdate {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); background-color: rgba(34, 197, 94, 0.1); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+    background-color: rgba(34, 197, 94, 0.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes chartSlide {
@@ -204,6 +226,7 @@
     opacity: 0;
     transform: translateX(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);

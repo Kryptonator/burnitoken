@@ -3,7 +3,8 @@ const { test, expect } = require('@playwright/test');
 
 test.describe('Navigation Tests', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    // Start fresh for each test
+    await page.goto('/', { waitUntil: 'networkidle' });
 
     // Aggressively remove page loader for WebKit compatibility
     await page.evaluate(() => {
@@ -17,23 +18,25 @@ test.describe('Navigation Tests', () => {
         '.page-loader',
         '[id*="loader"]',
         '[class*="loader"]',
-        '[class*="loading"]'
+        '[class*="loading"]',
       ];
 
-      selectors.forEach(selector => {
+      selectors.forEach((selector) => {
         const elements = document.querySelectorAll(selector);
-        elements.forEach(el => {
+        elements.forEach((el) => {
           el.remove();
         });
       });
 
       // Remove any element that might be intercepting pointer events
       const allElements = document.querySelectorAll('*');
-      allElements.forEach(el => {
+      allElements.forEach((el) => {
         const computedStyle = window.getComputedStyle(el);
-        if (computedStyle.zIndex > 9000 &&
+        if (
+          computedStyle.zIndex > 9000 &&
           (computedStyle.position === 'fixed' || computedStyle.position === 'absolute') &&
-          (el.id.includes('loader') || el.className.includes('loader'))) {
+          (el.id.includes('loader') || el.className.includes('loader'))
+        ) {
           el.remove();
         }
       });
@@ -47,25 +50,39 @@ test.describe('Navigation Tests', () => {
       console.log('Page loader not found or already removed');
     }
 
-    await page.waitForSelector('header', { timeout: 10000 });
+    // Wait for header to be available and visible - more robust approach
+    await page.waitForFunction(
+      () => {
+        const header = document.querySelector('header');
+        return header && header.offsetParent !== null;
+      },
+      { timeout: 30000 },
+    );
 
     // Double-check that page loader is gone and no elements are blocking
-    await page.waitForFunction(() => {
-      const pageLoader = document.getElementById('pageLoader');
-      if (pageLoader) return false;
+    await page.waitForFunction(
+      () => {
+        const pageLoader = document.getElementById('pageLoader');
+        if (pageLoader) return false;
 
-      // Also check for any element with high z-index that might be blocking
-      const highZElements = Array.from(document.querySelectorAll('*')).filter(el => {
-        const style = window.getComputedStyle(el);
-        return parseInt(style.zIndex) > 9000;
-      });
+        // Also check for any element with high z-index that might be blocking
+        const highZElements = Array.from(document.querySelectorAll('*')).filter((el) => {
+          const style = window.getComputedStyle(el);
+          return parseInt(style.zIndex) > 9000;
+        });
 
-      return highZElements.length === 0 || highZElements.every(el =>
-        el.style.display === 'none' ||
-        el.style.visibility === 'hidden' ||
-        el.style.pointerEvents === 'none'
-      );
-    }, { timeout: 5000 });
+        return (
+          highZElements.length === 0 ||
+          highZElements.every(
+            (el) =>
+              el.style.display === 'none' ||
+              el.style.visibility === 'hidden' ||
+              el.style.pointerEvents === 'none',
+          )
+        );
+      },
+      { timeout: 5000 },
+    );
 
     // Set up mobile menu functionality if main.js didn't load
     await page.evaluate(() => {
@@ -84,7 +101,10 @@ test.describe('Navigation Tests', () => {
             newButton.setAttribute('aria-expanded', String(!isExpanded));
             mobileMenu.classList.toggle('hidden');
             mobileMenu.classList.toggle('active');
-            console.log('Test: Mobile menu toggled, hidden:', mobileMenu.classList.contains('hidden'));
+            console.log(
+              'Test: Mobile menu toggled, hidden:',
+              mobileMenu.classList.contains('hidden'),
+            );
           });
 
           console.log('Test: Mobile menu event listener attached');
@@ -96,11 +116,15 @@ test.describe('Navigation Tests', () => {
           if (link.hash) {
             link.addEventListener('click', function () {
               // Remove active class from all links
-              navLinks.forEach(function (nav) { nav.classList.remove('active'); });
+              navLinks.forEach(function (nav) {
+                nav.classList.remove('active');
+              });
 
               // Add active class to clicked links
               const targetLinks = document.querySelectorAll('a[href="' + link.hash + '"]');
-              targetLinks.forEach(function (activeLink) { activeLink.classList.add('active'); });
+              targetLinks.forEach(function (activeLink) {
+                activeLink.classList.add('active');
+              });
 
               console.log('Test: Navigation active state updated for', link.hash);
             });
@@ -138,7 +162,7 @@ test.describe('Navigation Tests', () => {
         buttonExists: !!button,
         menuExists: !!menu,
         buttonHasListeners: button && button.onclick !== null,
-        menuClasses: menu ? menu.className : 'not found'
+        menuClasses: menu ? menu.className : 'not found',
       };
     });
     console.log('Mobile menu debug info:', debugInfo);
@@ -155,7 +179,7 @@ test.describe('Navigation Tests', () => {
       const button = document.getElementById('mobile-menu-button');
       return {
         menuClasses: menu ? menu.className : 'not found',
-        buttonAriaExpanded: button ? button.getAttribute('aria-expanded') : 'not found'
+        buttonAriaExpanded: button ? button.getAttribute('aria-expanded') : 'not found',
       };
     });
     console.log('Post-click debug info:', postClickInfo);
@@ -170,10 +194,13 @@ test.describe('Navigation Tests', () => {
 
   test('Smooth scrolling to sections works', async ({ page }) => {
     // Wait for page loader to be removed
-    await page.waitForFunction(() => {
-      const pageLoader = document.getElementById('pageLoader');
-      return !pageLoader || pageLoader.style.display === 'none' || !pageLoader.offsetParent;
-    }, { timeout: 10000 });
+    await page.waitForFunction(
+      () => {
+        const pageLoader = document.getElementById('pageLoader');
+        return !pageLoader || pageLoader.style.display === 'none' || !pageLoader.offsetParent;
+      },
+      { timeout: 10000 },
+    );
 
     // Test navigation to multiple sections
     const sections = ['#about', '#use-cases', '#token-schedule'];
@@ -189,10 +216,13 @@ test.describe('Navigation Tests', () => {
 
   test('Active navigation state updates on scroll', async ({ page }) => {
     // Wait for page loader to be removed
-    await page.waitForFunction(() => {
-      const pageLoader = document.getElementById('pageLoader');
-      return !pageLoader || pageLoader.style.display === 'none' || !pageLoader.offsetParent;
-    }, { timeout: 10000 });
+    await page.waitForFunction(
+      () => {
+        const pageLoader = document.getElementById('pageLoader');
+        return !pageLoader || pageLoader.style.display === 'none' || !pageLoader.offsetParent;
+      },
+      { timeout: 10000 },
+    );
 
     // First scroll to top to ensure we start from hero section
     await page.evaluate(() => window.scrollTo(0, 0));

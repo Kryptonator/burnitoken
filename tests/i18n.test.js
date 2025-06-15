@@ -7,7 +7,8 @@ describe('Language Switcher', () => {
   let window, document;
 
   beforeEach(() => {
-    const dom = new JSDOM(`
+    const dom = new JSDOM(
+      `
       <!DOCTYPE html>
       <html>
         <head>
@@ -27,10 +28,12 @@ describe('Language Switcher', () => {
           <span data-i18n="nav_tokenomics">Tokenomics</span>
         </body>
       </html>
-    `, {
-      runScripts: "dangerously",
-      resources: "usable"
-    });
+    `,
+      {
+        runScripts: 'dangerously',
+        resources: 'usable',
+      },
+    );
 
     window = dom.window;
     document = window.document;

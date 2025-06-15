@@ -41,7 +41,7 @@ module.exports = {
         },
       },
       boxShadow: {
-        'glow': '0 0 20px rgba(234, 88, 12, 0.5)',
+        glow: '0 0 20px rgba(234, 88, 12, 0.5)',
         'glow-dark': '0 0 20px rgba(194, 65, 12, 0.5)',
       },
       backdropBlur: {

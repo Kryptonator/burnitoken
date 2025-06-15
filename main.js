@@ -31,7 +31,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // Teste-Erkennung und Markierung
-  const isTest = window.navigator.userAgent.includes('Playwright') ||
+  const isTest =
+    window.navigator.userAgent.includes('Playwright') ||
     window.location.search.includes('e2e-test') ||
     window.__playwright ||
     window.__pw_playwright ||
@@ -353,7 +354,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const currentLocale = locales[currentLang] || 'en-US';
 
     // In Testumgebungen keine externen API-Calls
-    const isTestEnvironment = navigator.userAgent.includes('Playwright') ||
+    const isTestEnvironment =
+      navigator.userAgent.includes('Playwright') ||
       navigator.userAgent.includes('HeadlessChrome') ||
       window.location.search.includes('test');
 
@@ -486,7 +488,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   fetchLivePrices();
   setInterval(fetchLivePrices, 60000);
 
-  // Charts asynchron initialisieren 
+  // Charts asynchron initialisieren
   initializeChartsAsync();
 
   async function initializeChartsAsync() {
@@ -688,25 +690,25 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Mock-Daten für Live-Preise und AMM-Pool
   const mockData = {
     burni: {
-      day: [0.0011, 0.0012, 0.0010, 0.0013, 0.0011, 0.0014, 0.0012],
-      week: [0.0011, 0.0013, 0.0010, 0.0012, 0.0015, 0.0009, 0.0014],
-      month: [0.0011, 0.0014, 0.0010, 0.0013, 0.0012, 0.0016, 0.0011]
+      day: [0.0011, 0.0012, 0.001, 0.0013, 0.0011, 0.0014, 0.0012],
+      week: [0.0011, 0.0013, 0.001, 0.0012, 0.0015, 0.0009, 0.0014],
+      month: [0.0011, 0.0014, 0.001, 0.0013, 0.0012, 0.0016, 0.0011],
     },
     xrp: {
-      day: [0.50, 0.51, 0.49, 0.52, 0.50, 0.53, 0.51],
-      week: [0.50, 0.52, 0.48, 0.51, 0.54, 0.47, 0.52],
-      month: [0.50, 0.53, 0.47, 0.52, 0.51, 0.55, 0.49]
+      day: [0.5, 0.51, 0.49, 0.52, 0.5, 0.53, 0.51],
+      week: [0.5, 0.52, 0.48, 0.51, 0.54, 0.47, 0.52],
+      month: [0.5, 0.53, 0.47, 0.52, 0.51, 0.55, 0.49],
     },
     xpm: {
-      day: [0.02, 0.021, 0.019, 0.022, 0.020, 0.023, 0.021],
+      day: [0.02, 0.021, 0.019, 0.022, 0.02, 0.023, 0.021],
       week: [0.02, 0.022, 0.019, 0.021, 0.024, 0.018, 0.022],
-      month: [0.02, 0.023, 0.018, 0.022, 0.021, 0.025, 0.019]
+      month: [0.02, 0.023, 0.018, 0.022, 0.021, 0.025, 0.019],
     },
     ammPool: {
       day: [1000, 1010, 990, 1020, 1000, 1030, 1015],
       week: [1000, 1020, 980, 1010, 1040, 970, 1025],
-      month: [1000, 1030, 970, 1020, 1010, 1050, 995]
-    }
+      month: [1000, 1030, 970, 1020, 1010, 1050, 995],
+    },
   };
 
   let priceChartInstance;
@@ -714,116 +716,128 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Funktion zum Aktualisieren des Charts
   function updatePriceChart(interval) {
-    currentInterval = interval;
-    if (priceChartInstance) priceChartInstance.destroy();
+    try {
+      currentInterval = interval;
 
-    const ctx = document.getElementById('priceChart');
-    if (!ctx) return;
-
-    const chartContext = ctx.getContext('2d');
-    const labels = interval === 'day' ?
-      ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '23:59'] :
-      interval === 'week' ?
-        ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'] :
-        ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7'];
-
-    priceChartInstance = new Chart(chartContext, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: 'Burni Coin ($)',
-            data: mockData.burni[interval],
-            borderColor: '#F97316',
-            backgroundColor: 'rgba(249, 115, 22, 0.1)',
-            fill: false,
-            tension: 0.4
-          },
-          {
-            label: 'XRP ($)',
-            data: mockData.xrp[interval],
-            borderColor: '#10B981',
-            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-            fill: false,
-            tension: 0.4
-          },
-          {
-            label: 'XPM ($)',
-            data: mockData.xpm[interval],
-            borderColor: '#3B82F6',
-            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-            fill: false,
-            tension: 0.4
-          },
-          {
-            label: 'AMM Pool Volume',
-            data: mockData.ammPool[interval],
-            borderColor: '#8B5CF6',
-            backgroundColor: 'rgba(139, 92, 246, 0.1)',
-            fill: false,
-            tension: 0.4,
-            yAxisID: 'y1'
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        interaction: {
-          mode: 'index',
-          intersect: false,
-        },
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: interval === 'day' ? 'Zeit' : interval === 'week' ? 'Wochentag' : 'Woche',
-              color: '#374151'
-            },
-            grid: { color: 'rgba(0,0,0,0.1)' }
-          },
-          y: {
-            type: 'linear',
-            display: true,
-            position: 'left',
-            beginAtZero: false,
-            title: {
-              display: true,
-              text: 'Preis ($)',
-              color: '#374151'
-            },
-            grid: { color: 'rgba(0,0,0,0.1)' }
-          },
-          y1: {
-            type: 'linear',
-            display: true,
-            position: 'right',
-            title: {
-              display: true,
-              text: 'Pool Volume',
-              color: '#374151'
-            },
-            grid: {
-              drawOnChartArea: false,
-            },
-          }
-        },
-        plugins: {
-          legend: {
-            display: true,
-            position: 'top',
-            labels: { color: '#374151' }
-          },
-          tooltip: {
-            enabled: true,
-            backgroundColor: 'rgba(0,0,0,0.8)',
-            titleColor: '#fff',
-            bodyColor: '#fff'
-          }
-        }
+      // Chart.js Verfügbarkeit prüfen
+      if (typeof Chart === 'undefined') {
+        console.warn('Chart.js not available, deferring chart update...');
+        return;
       }
-    });
+
+      if (priceChartInstance) priceChartInstance.destroy();
+
+      const ctx = document.getElementById('priceChart');
+      if (!ctx) return;
+
+      const chartContext = ctx.getContext('2d');
+      const labels =
+        interval === 'day'
+          ? ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '23:59']
+          : interval === 'week'
+            ? ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
+            : ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7'];
+
+      priceChartInstance = new Chart(chartContext, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Burni Coin ($)',
+              data: mockData.burni[interval],
+              borderColor: '#F97316',
+              backgroundColor: 'rgba(249, 115, 22, 0.1)',
+              fill: false,
+              tension: 0.4,
+            },
+            {
+              label: 'XRP ($)',
+              data: mockData.xrp[interval],
+              borderColor: '#10B981',
+              backgroundColor: 'rgba(16, 185, 129, 0.1)',
+              fill: false,
+              tension: 0.4,
+            },
+            {
+              label: 'XPM ($)',
+              data: mockData.xpm[interval],
+              borderColor: '#3B82F6',
+              backgroundColor: 'rgba(59, 130, 246, 0.1)',
+              fill: false,
+              tension: 0.4,
+            },
+            {
+              label: 'AMM Pool Volume',
+              data: mockData.ammPool[interval],
+              borderColor: '#8B5CF6',
+              backgroundColor: 'rgba(139, 92, 246, 0.1)',
+              fill: false,
+              tension: 0.4,
+              yAxisID: 'y1',
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: 'index',
+            intersect: false,
+          },
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: interval === 'day' ? 'Zeit' : interval === 'week' ? 'Wochentag' : 'Woche',
+                color: '#374151',
+              },
+              grid: { color: 'rgba(0,0,0,0.1)' },
+            },
+            y: {
+              type: 'linear',
+              display: true,
+              position: 'left',
+              beginAtZero: false,
+              title: {
+                display: true,
+                text: 'Preis ($)',
+                color: '#374151',
+              },
+              grid: { color: 'rgba(0,0,0,0.1)' },
+            },
+            y1: {
+              type: 'linear',
+              display: true,
+              position: 'right',
+              title: {
+                display: true,
+                text: 'Pool Volume',
+                color: '#374151',
+              },
+              grid: {
+                drawOnChartArea: false,
+              },
+            },
+          },
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              labels: { color: '#374151' },
+            },
+            tooltip: {
+              enabled: true,
+              backgroundColor: 'rgba(0,0,0,0.8)',
+              titleColor: '#fff',
+              bodyColor: '#fff',
+            },
+          },
+        },
+      });
+    } catch (error) {
+      console.error('Error creating price chart:', error);
+    }
   }
 
   // Event-Listener für Intervall-Buttons
@@ -853,7 +867,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   function setActiveIntervalButton(activeInterval) {
-    ['day', 'week', 'month'].forEach(interval => {
+    ['day', 'week', 'month'].forEach((interval) => {
       const btn = document.getElementById(`interval-${interval}`);
       if (btn) {
         if (interval === activeInterval) {
@@ -876,7 +890,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (burniEl && xrpEl && xpmEl) {
       // Realistische Schwankungen um Basiswerte
       const burniBase = 0.0011;
-      const xrpBase = 0.50;
+      const xrpBase = 0.5;
       const xpmBase = 0.02;
 
       burniEl.textContent = `$${(burniBase + (Math.random() - 0.5) * 0.0002).toFixed(4)}`;
@@ -884,9 +898,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       xpmEl.textContent = `$${(xpmBase + (Math.random() - 0.5) * 0.002).toFixed(3)}`;
 
       // Aktualisiere auch Chart-Daten leicht (simuliert Live-Updates)
-      if (priceChartInstance && Math.random() > 0.7) { // 30% Chance für Chart-Update
+      if (priceChartInstance && Math.random() > 0.7) {
+        // 30% Chance für Chart-Update
         const lastIndex = mockData.burni[currentInterval].length - 1;
-        mockData.burni[currentInterval][lastIndex] = parseFloat(burniEl.textContent.replace('$', ''));
+        mockData.burni[currentInterval][lastIndex] = parseFloat(
+          burniEl.textContent.replace('$', ''),
+        );
         mockData.xrp[currentInterval][lastIndex] = parseFloat(xrpEl.textContent.replace('$', ''));
         mockData.xpm[currentInterval][lastIndex] = parseFloat(xpmEl.textContent.replace('$', ''));
         priceChartInstance.update('none'); // Update ohne Animation
@@ -927,7 +944,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       navigator.userLanguage,
       navigator.browserLanguage,
       navigator.systemLanguage,
-      ...(navigator.languages || [])
+      ...(navigator.languages || []),
     ].filter(Boolean);
 
     for (const lang of browserLanguages) {
@@ -966,19 +983,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     const i18nElements = document.querySelectorAll('[data-i18n]');
     console.log(`Found ${i18nElements.length} elements with data-i18n attribute`);
 
-    i18nElements.forEach(element => {
+    i18nElements.forEach((element) => {
       const key = element.getAttribute('data-i18n');
-      console.log(`Processing element with key: ${key}, current text: "${element.textContent}", new text: "${translation[key]}"`);
+      console.log(
+        `Processing element with key: ${key}, current text: "${element.textContent}", new text: "${translation[key]}"`,
+      );
       if (translation[key]) {
         // Für Tests und Playwright - sofortige Aktualisierung
-        const isTest = window.navigator.userAgent.includes('Playwright') ||
+        const isTest =
+          window.navigator.userAgent.includes('Playwright') ||
           window.location.search.includes('e2e-test') ||
           window.__playwright ||
           document.body.getAttribute('data-test-mode') === 'true';
 
         if (isTest) {
           element.textContent = translation[key];
-          console.log(`Updated element with key ${key} to: "${element.textContent}" (immediate for tests)`);
+          console.log(
+            `Updated element with key ${key} to: "${element.textContent}" (immediate for tests)`,
+          );
           // Trigger update events for tests
           element.dispatchEvent(new Event('i18n-updated', { bubbles: true }));
         } else {
@@ -997,7 +1019,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // Update all elements with data-i18n-alt attribute (for alt text)
-    document.querySelectorAll('[data-i18n-alt]').forEach(element => {
+    document.querySelectorAll('[data-i18n-alt]').forEach((element) => {
       const key = element.getAttribute('data-i18n-alt');
       if (translation[key]) {
         element.setAttribute('alt', translation[key]);
@@ -1005,7 +1027,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // Update all elements with data-i18n-aria-label attribute
-    document.querySelectorAll('[data-i18n-aria-label]').forEach(element => {
+    document.querySelectorAll('[data-i18n-aria-label]').forEach((element) => {
       const key = element.getAttribute('data-i18n-aria-label');
       if (translation[key]) {
         element.setAttribute('aria-label', translation[key]);
@@ -1054,7 +1076,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Regenerate dynamic content (schedules, charts) with new language
     if (typeof renderScheduleTable === 'function') {
-      const schedule = generateSchedule(new Date('2025-06-01'), 500000, 20, lang, translations[lang]);
+      const schedule = generateSchedule(
+        new Date('2025-06-01'),
+        500000,
+        20,
+        lang,
+        translations[lang],
+      );
       renderScheduleTable(schedule, lang);
     }
 
@@ -1105,7 +1133,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       const description = document.createElement('div');
       description.id = 'lang-description';
       description.className = 'sr-only';
-      description.textContent = 'Select your preferred language. Changes will be applied immediately.';
+      description.textContent =
+        'Select your preferred language. Changes will be applied immediately.';
       langSelect.parentNode.insertBefore(description, langSelect.nextSibling);
     }
 
@@ -1198,13 +1227,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function updateTokenomicsMetrics() {
     try {
       const metrics = await fetchBurniMetrics();
-      document.getElementById('circulatingSupplyValue').textContent = new Intl.NumberFormat(locales[currentLang] || 'en-US').format(metrics.circulatingSupply);
+      document.getElementById('circulatingSupplyValue').textContent = new Intl.NumberFormat(
+        locales[currentLang] || 'en-US',
+      ).format(metrics.circulatingSupply);
       document.getElementById('kpi_holders_value').textContent = metrics.holders;
       document.getElementById('kpi_trustlines_value').textContent = metrics.trustlines;
       // Simulate mock prices in tokenomics section
-      document.getElementById('burniPriceValue').textContent = `$${(Math.random() * 0.0005 + 0.001).toFixed(4)}`;
-      document.getElementById('xrpPriceValue').textContent = `$${(Math.random() * 0.05 + 0.50).toFixed(2)}`;
-      document.getElementById('xpmPriceValue').textContent = `$${(Math.random() * 0.005 + 0.02).toFixed(3)}`;
+      document.getElementById('burniPriceValue').textContent =
+        `$${(Math.random() * 0.0005 + 0.001).toFixed(4)}`;
+      document.getElementById('xrpPriceValue').textContent =
+        `$${(Math.random() * 0.05 + 0.5).toFixed(2)}`;
+      document.getElementById('xpmPriceValue').textContent =
+        `$${(Math.random() * 0.005 + 0.02).toFixed(3)}`;
     } catch (error) {
       console.error('Error updating tokenomics metrics:', error);
     }
@@ -1226,12 +1260,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       console.log('XRPL server info:', xrplData);
 
       // Fetch XRP price from a CORS-friendly endpoint
-      let xrpPrice = 0.50; // Fallback
+      let xrpPrice = 0.5; // Fallback
       try {
-        const priceResponse = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd');
+        const priceResponse = await fetch(
+          'https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd',
+        );
         if (priceResponse.ok) {
           const priceData = await priceResponse.json();
-          xrpPrice = priceData.ripple?.usd || 0.50;
+          xrpPrice = priceData.ripple?.usd || 0.5;
         }
       } catch (priceError) {
         console.warn('Could not fetch XRP price, using fallback:', priceError);
@@ -1240,7 +1276,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Try to fetch Burni token info from XRPL
       let burniData = { balance: 'N/A', holders: 'N/A', trustlines: 'N/A' };
       try {
-        const burniResponse = await fetch('https://livenet.xrpl.org/api/v1/account/rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2/currencies');
+        const burniResponse = await fetch(
+          'https://livenet.xrpl.org/api/v1/account/rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2/currencies',
+        );
         if (burniResponse.ok) {
           const burniInfo = await burniResponse.json();
           console.log('Burni token info:', burniInfo);
@@ -1252,21 +1290,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       return {
         xrpPrice: xrpPrice,
-        burniPrice: (Math.random() * 0.0005 + 0.001), // Still mock for Burni
-        xpmPrice: (Math.random() * 0.005 + 0.02), // Still mock for XPM
+        burniPrice: Math.random() * 0.0005 + 0.001, // Still mock for Burni
+        xpmPrice: Math.random() * 0.005 + 0.02, // Still mock for XPM
         serverInfo: xrplData,
-        burniData: burniData
+        burniData: burniData,
       };
-
     } catch (error) {
       console.error('Error fetching XRPL live data:', error);
       // Fallback to mock data
       return {
-        xrpPrice: (Math.random() * 0.05 + 0.50),
-        burniPrice: (Math.random() * 0.0005 + 0.001),
-        xpmPrice: (Math.random() * 0.005 + 0.02),
+        xrpPrice: Math.random() * 0.05 + 0.5,
+        burniPrice: Math.random() * 0.0005 + 0.001,
+        xpmPrice: Math.random() * 0.005 + 0.02,
         serverInfo: null,
-        burniData: { balance: 'N/A', holders: 'N/A', trustlines: 'N/A' }
+        burniData: { balance: 'N/A', holders: 'N/A', trustlines: 'N/A' },
       };
     }
   }
@@ -1304,12 +1341,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         console.log('Live prices updated:', liveData);
-
       } catch (error) {
         console.error('Error updating live prices:', error);
         // Fallback to previous mock behavior
         burniEl.textContent = `$${(0.0011 + (Math.random() - 0.5) * 0.0002).toFixed(4)}`;
-        xrpEl.textContent = `$${(0.50 + (Math.random() - 0.5) * 0.04).toFixed(2)}`;
+        xrpEl.textContent = `$${(0.5 + (Math.random() - 0.5) * 0.04).toFixed(2)}`;
         xpmEl.textContent = `$${(0.02 + (Math.random() - 0.5) * 0.002).toFixed(3)}`;
       }
     }
@@ -1325,7 +1361,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Update schedule chart if it exists
     if (scheduleChartInstance) {
-      scheduleChartInstance.options.scales.y.title.text = translation.remaining_coins || 'Number of Coins';
+      scheduleChartInstance.options.scales.y.title.text =
+        translation.remaining_coins || 'Number of Coins';
       scheduleChartInstance.options.scales.x.title.text = translation.date || 'Date';
       scheduleChartInstance.update();
     }
@@ -1378,33 +1415,47 @@ const translations = {
     nav_community: 'Community',
     menu_button: 'Menu',
     hero_title: 'Welcome to Burni!',
-    hero_description: 'Discover the deflationary token designed to create value through scarcity. Join us on a fiery journey of discovery!',
+    hero_description:
+      'Discover the deflationary token designed to create value through scarcity. Join us on a fiery journey of discovery!',
     hero_button: 'Learn More!',
     about_title: 'What is Burni?',
-    about_description: 'Burni is more than just a token. It\'s a promise for a deflationary future. At Burni\'s core is a mechanism that permanently removes tokens from circulation to potentially increase the value of the remaining tokens.',
+    about_description:
+      "Burni is more than just a token. It's a promise for a deflationary future. At Burni's core is a mechanism that permanently removes tokens from circulation to potentially increase the value of the remaining tokens.",
     burn_title: 'The Secret of Token Burning',
-    burn_description: 'Imagine tokens being burned like logs in a magical fire. They disappear forever! This process, called \'token burning,\' reduces the total supply of Burni tokens. Fewer tokens can mean each one becomes more valuable, similar to rare collectibles.',
-    burn_animation_note: 'This animation illustrates how tokens are symbolically removed from circulation.',
-    blackholed_title: 'Burni\'s Promise: \'Blackholed\'',
-    blackholed_description: 'Burni is marked as \'Blackholed: YES\'. This means that the maximum supply of Burni tokens is fixed and no new tokens can ever be created. It\'s like throwing away the key to the vault!',
-    blackholed_tooltip_trigger: 'What does \'Blackholed\' mean?',
-    blackholed_tooltip_text: 'When a token issuer is \'blackholed\', it means the issuing address has renounced its rights to mint new tokens or change token properties. This makes the maximum supply truly fixed.',
+    burn_description:
+      "Imagine tokens being burned like logs in a magical fire. They disappear forever! This process, called 'token burning,' reduces the total supply of Burni tokens. Fewer tokens can mean each one becomes more valuable, similar to rare collectibles.",
+    burn_animation_note:
+      'This animation illustrates how tokens are symbolically removed from circulation.',
+    blackholed_title: "Burni's Promise: 'Blackholed'",
+    blackholed_description:
+      "Burni is marked as 'Blackholed: YES'. This means that the maximum supply of Burni tokens is fixed and no new tokens can ever be created. It's like throwing away the key to the vault!",
+    blackholed_tooltip_trigger: "What does 'Blackholed' mean?",
+    blackholed_tooltip_text:
+      "When a token issuer is 'blackholed', it means the issuing address has renounced its rights to mint new tokens or change token properties. This makes the maximum supply truly fixed.",
     use_cases_title: 'Use Cases: What Burni Coin Can Be Used For',
-    use_cases_description: 'Burni Coin is not just a token, but a versatile digital asset with growing applications in the XRPL ecosystem.',
+    use_cases_description:
+      'Burni Coin is not just a token, but a versatile digital asset with growing applications in the XRPL ecosystem.',
     use_case_gaming_title: 'Decentralized Gaming',
-    use_case_gaming_desc: 'Use Burni as in-game currency or for exclusive in-game assets in future XRPL games.',
+    use_case_gaming_desc:
+      'Use Burni as in-game currency or for exclusive in-game assets in future XRPL games.',
     use_case_nfts_title: 'NFT Integration',
-    use_case_nfts_desc: 'Acquire and trade unique digital artworks and collectibles on NFT marketplaces with Burni.',
+    use_case_nfts_desc:
+      'Acquire and trade unique digital artworks and collectibles on NFT marketplaces with Burni.',
     use_case_rewards_title: 'Reward Systems',
-    use_case_rewards_desc: 'Earn Burni by participating in community actions, staking programs, or as rewards for contributions.',
+    use_case_rewards_desc:
+      'Earn Burni by participating in community actions, staking programs, or as rewards for contributions.',
     use_case_microtx_title: 'Microtransactions',
-    use_case_microtx_desc: 'Benefit from the extremely low transaction fees of the XRPL for fast and cost-effective payments.',
+    use_case_microtx_desc:
+      'Benefit from the extremely low transaction fees of the XRPL for fast and cost-effective payments.',
     use_case_governance_title: 'Community Governance',
-    use_case_governance_desc: 'Hold Burni to participate in important decisions about the future of the project and have a say.',
+    use_case_governance_desc:
+      'Hold Burni to participate in important decisions about the future of the project and have a say.',
     token_schedule_title: 'Burni Coin: Deflationary Schedule',
-    token_schedule_description: 'We believe in transparency and the long-term value development of Burni Coin. A key component of our ecosystem is the unique deflationary mechanism that continuously reduces the total amount of Burni Coins in circulation.',
-    tokenomics_title: 'Burni\'s World: Facts & Figures',
-    tokenomics_description: 'Here\'s a look at the key figures that define Burni. This data gives you insight into the economic foundation and potential of the token.',
+    token_schedule_description:
+      'We believe in transparency and the long-term value development of Burni Coin. A key component of our ecosystem is the unique deflationary mechanism that continuously reduces the total amount of Burni Coins in circulation.',
+    tokenomics_title: "Burni's World: Facts & Figures",
+    tokenomics_description:
+      "Here's a look at the key figures that define Burni. This data gives you insight into the economic foundation and potential of the token.",
     kpi_max_supply: 'Max Supply',
     kpi_circulating_supply: 'Circulating Supply',
     kpi_current_price: 'Current Burni Price',
@@ -1428,14 +1479,16 @@ const translations = {
     note_data_disclaimer: 'Note: Data is subject to change.',
     supply_overview_title: 'Supply Overview',
     supply_chart_caption: 'This chart visualizes the token supply.',
-    supply_chart_description: 'This chart visualizes the circulating supply in relation to the maximum supply.',
+    supply_chart_description:
+      'This chart visualizes the circulating supply in relation to the maximum supply.',
     xrpl_home_title: 'At Home on the XRP Ledger',
-    xrpl_home_description: 'Burni operates on the XRP Ledger (XRPL), known for its speed, low transaction costs, and scalability. This means for you: fast and cost-effective transactions! To hold or trade Burni, you need to set up a Trustline – a standard procedure on the XRPL.',
-    xrpl_slogan: 'Fast, efficient, and reliable – that\'s the foundation of Burni.',
+    xrpl_home_description:
+      'Burni operates on the XRP Ledger (XRPL), known for its speed, low transaction costs, and scalability. This means for you: fast and cost-effective transactions! To hold or trade Burni, you need to set up a Trustline – a standard procedure on the XRPL.',
+    xrpl_slogan: "Fast, efficient, and reliable – that's the foundation of Burni.",
     date: 'Date',
     day: 'Day',
     process_no: 'Process No.',
-    remaining_coins: 'Remaining Coins (approx.)'
+    remaining_coins: 'Remaining Coins (approx.)',
   },
   de: {
     page_title: 'Burni Token - Innovative dezentrale Kryptowährung',
@@ -1449,33 +1502,47 @@ const translations = {
     nav_community: 'Gemeinschaft',
     menu_button: 'Menü',
     hero_title: 'Willkommen bei Burni!',
-    hero_description: 'Entdecken Sie den deflationären Token, der durch Knappheit Wert schafft. Begleiten Sie uns auf einer feurigen Entdeckungsreise!',
+    hero_description:
+      'Entdecken Sie den deflationären Token, der durch Knappheit Wert schafft. Begleiten Sie uns auf einer feurigen Entdeckungsreise!',
     hero_button: 'Mehr erfahren!',
     about_title: 'Was ist Burni?',
-    about_description: 'Burni ist mehr als nur ein Token. Es ist ein Versprechen für eine deflationäre Zukunft. Im Kern von Burni steht ein Mechanismus, der Token dauerhaft aus dem Umlauf entfernt, um potenziell den Wert der verbleibenden Token zu steigern.',
+    about_description:
+      'Burni ist mehr als nur ein Token. Es ist ein Versprechen für eine deflationäre Zukunft. Im Kern von Burni steht ein Mechanismus, der Token dauerhaft aus dem Umlauf entfernt, um potenziell den Wert der verbleibenden Token zu steigern.',
     burn_title: 'Das Geheimnis des Token-Verbrennens',
-    burn_description: 'Stellen Sie sich vor, Token werden wie Holzscheite in einem magischen Feuer verbrannt. Sie verschwinden für immer! Dieser Prozess, genannt \'Token-Verbrennung\', reduziert die Gesamtmenge der Burni-Token. Weniger Token können bedeuten, dass jeder einzelne wertvoller wird, ähnlich wie seltene Sammlerstücke.',
-    burn_animation_note: 'Diese Animation veranschaulicht, wie Token symbolisch aus dem Umlauf entfernt werden.',
-    blackholed_title: 'Burnis Versprechen: \'Blackholed\'',
-    blackholed_description: 'Burni ist als \'Blackholed: JA\' markiert. Das bedeutet, dass die maximale Versorgung mit Burni-Token feststeht und niemals neue Token erstellt werden können. Es ist, als würde man den Schlüssel zum Tresor wegwerfen!',
-    blackholed_tooltip_trigger: 'Was bedeutet \'Blackholed\'?',
-    blackholed_tooltip_text: 'Wenn ein Token-Emittent \'blackholed\' ist, bedeutet das, dass die ausgebende Adresse auf ihre Rechte verzichtet hat, neue Token zu erstellen oder Token-Eigenschaften zu ändern. Dadurch wird die maximale Versorgung wirklich festgelegt.',
+    burn_description:
+      "Stellen Sie sich vor, Token werden wie Holzscheite in einem magischen Feuer verbrannt. Sie verschwinden für immer! Dieser Prozess, genannt 'Token-Verbrennung', reduziert die Gesamtmenge der Burni-Token. Weniger Token können bedeuten, dass jeder einzelne wertvoller wird, ähnlich wie seltene Sammlerstücke.",
+    burn_animation_note:
+      'Diese Animation veranschaulicht, wie Token symbolisch aus dem Umlauf entfernt werden.',
+    blackholed_title: "Burnis Versprechen: 'Blackholed'",
+    blackholed_description:
+      "Burni ist als 'Blackholed: JA' markiert. Das bedeutet, dass die maximale Versorgung mit Burni-Token feststeht und niemals neue Token erstellt werden können. Es ist, als würde man den Schlüssel zum Tresor wegwerfen!",
+    blackholed_tooltip_trigger: "Was bedeutet 'Blackholed'?",
+    blackholed_tooltip_text:
+      "Wenn ein Token-Emittent 'blackholed' ist, bedeutet das, dass die ausgebende Adresse auf ihre Rechte verzichtet hat, neue Token zu erstellen oder Token-Eigenschaften zu ändern. Dadurch wird die maximale Versorgung wirklich festgelegt.",
     use_cases_title: 'Anwendungsfälle: Wofür Burni Coin verwendet werden kann',
-    use_cases_description: 'Burni Coin ist nicht nur ein Token, sondern ein vielseitiges digitales Asset mit wachsenden Anwendungen im XRPL-Ökosystem.',
+    use_cases_description:
+      'Burni Coin ist nicht nur ein Token, sondern ein vielseitiges digitales Asset mit wachsenden Anwendungen im XRPL-Ökosystem.',
     use_case_gaming_title: 'Dezentrales Gaming',
-    use_case_gaming_desc: 'Verwenden Sie Burni als In-Game-Währung oder für exklusive In-Game-Assets in zukünftigen XRPL-Spielen.',
+    use_case_gaming_desc:
+      'Verwenden Sie Burni als In-Game-Währung oder für exklusive In-Game-Assets in zukünftigen XRPL-Spielen.',
     use_case_nfts_title: 'NFT-Integration',
-    use_case_nfts_desc: 'Erwerben und handeln Sie einzigartige digitale Kunstwerke und Sammlerstücke auf NFT-Marktplätzen mit Burni.',
+    use_case_nfts_desc:
+      'Erwerben und handeln Sie einzigartige digitale Kunstwerke und Sammlerstücke auf NFT-Marktplätzen mit Burni.',
     use_case_rewards_title: 'Belohnungssysteme',
-    use_case_rewards_desc: 'Verdienen Sie Burni durch Teilnahme an Community-Aktionen, Staking-Programmen oder als Belohnung für Beiträge.',
+    use_case_rewards_desc:
+      'Verdienen Sie Burni durch Teilnahme an Community-Aktionen, Staking-Programmen oder als Belohnung für Beiträge.',
     use_case_microtx_title: 'Mikrotransaktionen',
-    use_case_microtx_desc: 'Profitieren Sie von den extrem niedrigen Transaktionsgebühren des XRPL für schnelle und kostengünstige Zahlungen.',
+    use_case_microtx_desc:
+      'Profitieren Sie von den extrem niedrigen Transaktionsgebühren des XRPL für schnelle und kostengünstige Zahlungen.',
     use_case_governance_title: 'Community-Governance',
-    use_case_governance_desc: 'Halten Sie Burni, um an wichtigen Entscheidungen über die Zukunft des Projekts teilzunehmen und mitzubestimmen.',
+    use_case_governance_desc:
+      'Halten Sie Burni, um an wichtigen Entscheidungen über die Zukunft des Projekts teilzunehmen und mitzubestimmen.',
     token_schedule_title: 'Burni Coin: Deflationärer Zeitplan',
-    token_schedule_description: 'Wir glauben an Transparenz und die langfristige Wertentwicklung von Burni Coin. Ein Schlüsselkomponent unseres Ökosystems ist der einzigartige deflationäre Mechanismus, der die Gesamtmenge der im Umlauf befindlichen Burni Coins kontinuierlich reduziert.',
+    token_schedule_description:
+      'Wir glauben an Transparenz und die langfristige Wertentwicklung von Burni Coin. Ein Schlüsselkomponent unseres Ökosystems ist der einzigartige deflationäre Mechanismus, der die Gesamtmenge der im Umlauf befindlichen Burni Coins kontinuierlich reduziert.',
     tokenomics_title: 'Burnis Welt: Fakten & Zahlen',
-    tokenomics_description: 'Hier ist ein Blick auf die Schlüsselzahlen, die Burni definieren. Diese Daten geben Ihnen Einblick in die wirtschaftliche Grundlage und das Potenzial des Tokens.',
+    tokenomics_description:
+      'Hier ist ein Blick auf die Schlüsselzahlen, die Burni definieren. Diese Daten geben Ihnen Einblick in die wirtschaftliche Grundlage und das Potenzial des Tokens.',
     kpi_max_supply: 'Max. Versorgung',
     kpi_circulating_supply: 'Umlaufende Versorgung',
     kpi_current_price: 'Aktueller Burni-Preis',
@@ -1484,7 +1551,8 @@ const translations = {
     kpi_holders: 'Anzahl der Inhaber',
     kpi_trustlines: 'Anzahl der Trustlines',
     kpi_issuer_fee: 'Emittentengebühr',
-    price_error_message: 'Preisdaten konnten nicht geladen werden. Bitte versuchen Sie es später erneut.',
+    price_error_message:
+      'Preisdaten konnten nicht geladen werden. Bitte versuchen Sie es später erneut.',
     last_updated_label: 'Zuletzt aktualisiert:',
     token_details_title: 'Token-Details',
     created_on: 'Erstellt am',
@@ -1499,14 +1567,16 @@ const translations = {
     note_data_disclaimer: 'Hinweis: Daten können sich ändern.',
     supply_overview_title: 'Angebotsübersicht',
     supply_chart_caption: 'Dieses Diagramm visualisiert das Token-Angebot.',
-    supply_chart_description: 'Dieses Diagramm visualisiert das umlaufende Angebot im Verhältnis zum maximalen Angebot.',
+    supply_chart_description:
+      'Dieses Diagramm visualisiert das umlaufende Angebot im Verhältnis zum maximalen Angebot.',
     xrpl_home_title: 'Zuhause im XRP Ledger',
-    xrpl_home_description: 'Burni läuft auf dem XRP Ledger (XRPL), bekannt für seine Geschwindigkeit, niedrigen Transaktionskosten und Skalierbarkeit. Das bedeutet für Sie: schnelle und kostengünstige Transaktionen! Um Burni zu halten oder zu handeln, müssen Sie eine Trustline einrichten – ein Standardverfahren im XRPL.',
+    xrpl_home_description:
+      'Burni läuft auf dem XRP Ledger (XRPL), bekannt für seine Geschwindigkeit, niedrigen Transaktionskosten und Skalierbarkeit. Das bedeutet für Sie: schnelle und kostengünstige Transaktionen! Um Burni zu halten oder zu handeln, müssen Sie eine Trustline einrichten – ein Standardverfahren im XRPL.',
     xrpl_slogan: 'Schnell, effizient und zuverlässig – das ist die Grundlage von Burni.',
     date: 'Datum',
     day: 'Tag',
     process_no: 'Prozess Nr.',
-    remaining_coins: 'Verbleibende Münzen (ca.)'
+    remaining_coins: 'Verbleibende Münzen (ca.)',
   },
   es: {
     page_title: 'Burni Token - Criptomoneda Descentralizada Innovadora',
@@ -1520,33 +1590,47 @@ const translations = {
     nav_community: 'Comunidad',
     menu_button: 'Menú',
     hero_title: '¡Bienvenido a Burni!',
-    hero_description: '¡Descubre el token deflacionario diseñado para crear valor a través de la escasez. Únete a nosotros en un viaje ardiente de descubrimiento!',
+    hero_description:
+      '¡Descubre el token deflacionario diseñado para crear valor a través de la escasez. Únete a nosotros en un viaje ardiente de descubrimiento!',
     hero_button: '¡Aprende Más!',
     about_title: '¿Qué es Burni?',
-    about_description: 'Burni es más que solo un token. Es una promesa para un futuro deflacionario. En el núcleo de Burni hay un mecanismo que remueve permanentemente tokens de la circulación para potencialmente aumentar el valor de los tokens restantes.',
+    about_description:
+      'Burni es más que solo un token. Es una promesa para un futuro deflacionario. En el núcleo de Burni hay un mecanismo que remueve permanentemente tokens de la circulación para potencialmente aumentar el valor de los tokens restantes.',
     burn_title: 'El Secreto de la Quema de Tokens',
-    burn_description: '¡Imagina tokens siendo quemados como troncos en un fuego mágico. Desaparecen para siempre! Este proceso, llamado "quema de tokens", reduce el suministro total de tokens Burni. Menos tokens pueden significar que cada uno se vuelve más valioso, similar a los coleccionables raros.',
-    burn_animation_note: 'Esta animación ilustra cómo los tokens son simbólicamente removidos de la circulación.',
+    burn_description:
+      '¡Imagina tokens siendo quemados como troncos en un fuego mágico. Desaparecen para siempre! Este proceso, llamado "quema de tokens", reduce el suministro total de tokens Burni. Menos tokens pueden significar que cada uno se vuelve más valioso, similar a los coleccionables raros.',
+    burn_animation_note:
+      'Esta animación ilustra cómo los tokens son simbólicamente removidos de la circulación.',
     blackholed_title: 'Promesa de Burni: "Blackholed"',
-    blackholed_description: 'Burni está marcado como "Blackholed: SÍ". Esto significa que el suministro máximo de tokens Burni está fijo y nunca se pueden crear nuevos tokens. ¡Es como tirar la llave de la bóveda!',
+    blackholed_description:
+      'Burni está marcado como "Blackholed: SÍ". Esto significa que el suministro máximo de tokens Burni está fijo y nunca se pueden crear nuevos tokens. ¡Es como tirar la llave de la bóveda!',
     blackholed_tooltip_trigger: '¿Qué significa "Blackholed"?',
-    blackholed_tooltip_text: 'Cuando un emisor de tokens está "blackholed", significa que la dirección emisora ha renunciado a sus derechos de crear nuevos tokens o cambiar propiedades del token. Esto hace que el suministro máximo sea verdaderamente fijo.',
+    blackholed_tooltip_text:
+      'Cuando un emisor de tokens está "blackholed", significa que la dirección emisora ha renunciado a sus derechos de crear nuevos tokens o cambiar propiedades del token. Esto hace que el suministro máximo sea verdaderamente fijo.',
     use_cases_title: 'Casos de Uso: Para Qué Puede Usarse Burni Coin',
-    use_cases_description: 'Burni Coin no es solo un token, sino un activo digital versátil con aplicaciones crecientes en el ecosistema XRPL.',
+    use_cases_description:
+      'Burni Coin no es solo un token, sino un activo digital versátil con aplicaciones crecientes en el ecosistema XRPL.',
     use_case_gaming_title: 'Gaming Descentralizado',
-    use_case_gaming_desc: 'Usa Burni como moneda en el juego o para activos exclusivos en futuros juegos XRPL.',
+    use_case_gaming_desc:
+      'Usa Burni como moneda en el juego o para activos exclusivos en futuros juegos XRPL.',
     use_case_nfts_title: 'Integración NFT',
-    use_case_nfts_desc: 'Adquiere e intercambia obras de arte digitales únicas y coleccionables en mercados NFT con Burni.',
+    use_case_nfts_desc:
+      'Adquiere e intercambia obras de arte digitales únicas y coleccionables en mercados NFT con Burni.',
     use_case_rewards_title: 'Sistemas de Recompensas',
-    use_case_rewards_desc: 'Gana Burni participando en acciones comunitarias, programas de staking, o como recompensas por contribuciones.',
+    use_case_rewards_desc:
+      'Gana Burni participando en acciones comunitarias, programas de staking, o como recompensas por contribuciones.',
     use_case_microtx_title: 'Microtransacciones',
-    use_case_microtx_desc: 'Benefíciate de las tarifas de transacción extremadamente bajas del XRPL para pagos rápidos y rentables.',
+    use_case_microtx_desc:
+      'Benefíciate de las tarifas de transacción extremadamente bajas del XRPL para pagos rápidos y rentables.',
     use_case_governance_title: 'Gobernanza Comunitaria',
-    use_case_governance_desc: 'Mantén Burni para participar en decisiones importantes sobre el futuro del proyecto y tener voz.',
+    use_case_governance_desc:
+      'Mantén Burni para participar en decisiones importantes sobre el futuro del proyecto y tener voz.',
     token_schedule_title: 'Burni Coin: Programa Deflacionario',
-    token_schedule_description: 'Creemos en la transparencia y el desarrollo de valor a largo plazo de Burni Coin. Un componente clave de nuestro ecosistema es el mecanismo deflacionario único que reduce continuamente la cantidad total de Burni Coins en circulación.',
+    token_schedule_description:
+      'Creemos en la transparencia y el desarrollo de valor a largo plazo de Burni Coin. Un componente clave de nuestro ecosistema es el mecanismo deflacionario único que reduce continuamente la cantidad total de Burni Coins en circulación.',
     tokenomics_title: 'El Mundo de Burni: Hechos y Números',
-    tokenomics_description: 'Aquí tienes un vistazo a las cifras clave que definen a Burni. Estos datos te dan una perspectiva de la base económica y el potencial del token.',
+    tokenomics_description:
+      'Aquí tienes un vistazo a las cifras clave que definen a Burni. Estos datos te dan una perspectiva de la base económica y el potencial del token.',
     kpi_max_supply: 'Suministro Máximo',
     kpi_circulating_supply: 'Suministro Circulante',
     kpi_current_price: 'Precio Actual de Burni',
@@ -1555,7 +1639,8 @@ const translations = {
     kpi_holders: 'Número de Poseedores',
     kpi_trustlines: 'Número de Trustlines',
     kpi_issuer_fee: 'Tarifa del Emisor',
-    price_error_message: 'Los datos de precio no pudieron cargarse. Por favor intenta de nuevo más tarde.',
+    price_error_message:
+      'Los datos de precio no pudieron cargarse. Por favor intenta de nuevo más tarde.',
     last_updated_label: 'Última Actualización:',
     token_details_title: 'Detalles del Token',
     created_on: 'Creado el',
@@ -1570,14 +1655,16 @@ const translations = {
     note_data_disclaimer: 'Nota: Los datos están sujetos a cambios.',
     supply_overview_title: 'Resumen del Suministro',
     supply_chart_caption: 'Este gráfico visualiza el suministro del token.',
-    supply_chart_description: 'Este gráfico visualiza el suministro circulante en relación al suministro máximo.',
+    supply_chart_description:
+      'Este gráfico visualiza el suministro circulante en relación al suministro máximo.',
     xrpl_home_title: 'En Casa en el XRP Ledger',
-    xrpl_home_description: 'Burni opera en el XRP Ledger (XRPL), conocido por su velocidad, bajos costos de transacción y escalabilidad. Esto significa para ti: ¡transacciones rápidas y rentables! Para mantener o comerciar Burni, necesitas configurar una Trustline – un procedimiento estándar en el XRPL.',
+    xrpl_home_description:
+      'Burni opera en el XRP Ledger (XRPL), conocido por su velocidad, bajos costos de transacción y escalabilidad. Esto significa para ti: ¡transacciones rápidas y rentables! Para mantener o comerciar Burni, necesitas configurar una Trustline – un procedimiento estándar en el XRPL.',
     xrpl_slogan: 'Rápido, eficiente y confiable - essa é a base do Burni.',
     date: 'Fecha',
     day: 'Día',
     process_no: 'Proceso No.',
-    remaining_coins: 'Monedas Restantes (aprox.)'
+    remaining_coins: 'Monedas Restantes (aprox.)',
   },
   fr: {
     page_title: 'Burni Token - Cryptomonnaie Décentralisée Innovante',
@@ -1585,39 +1672,53 @@ const translations = {
     nav_home: 'Accueil',
     nav_about: 'À propos de Burni',
     nav_tokenomics: 'Tokenomics',
-    nav_use_cases: 'Cas d\'Usage',
+    nav_use_cases: "Cas d'Usage",
     nav_token_schedule: 'Programme du Token',
     nav_trade: 'Échanger des Tokens',
     nav_community: 'Communauté',
     menu_button: 'Menu',
     hero_title: 'Bienvenue chez Burni !',
-    hero_description: 'Découvrez le token déflationniste conçu pour créer de la valeur par la rareté. Rejoignez-nous dans un voyage ardent de découverte !',
+    hero_description:
+      'Découvrez le token déflationniste conçu pour créer de la valeur par la rareté. Rejoignez-nous dans un voyage ardent de découverte !',
     hero_button: 'En savoir plus !',
-    about_title: 'Qu\'est-ce que Burni ?',
-    about_description: 'Burni est plus qu\'un simple token. C\'est une promesse pour un avenir déflationniste. Au cœur de Burni se trouve un mécanisme qui retire définitivement des tokens de la circulation pour potentiellement augmenter la valeur des tokens restants.',
+    about_title: "Qu'est-ce que Burni ?",
+    about_description:
+      "Burni est plus qu'un simple token. C'est une promesse pour un avenir déflationniste. Au cœur de Burni se trouve un mécanisme qui retire définitivement des tokens de la circulation pour potentiellement augmenter la valeur des tokens restants.",
     burn_title: 'Le Secret de la Combustion de Tokens',
-    burn_description: 'Imaginez des tokens brûlés comme des bûches dans un feu magique. Ils disparaissent à jamais ! Ce processus, appelé "combustion de tokens", réduit l\'offre totale de tokens Burni. Moins de tokens peuvent signifier que chacun devient plus précieux, similaire aux objets de collection rares.',
-    burn_animation_note: 'Cette animation illustre comment les tokens sont symboliquement retirés de la circulation.',
+    burn_description:
+      'Imaginez des tokens brûlés comme des bûches dans un feu magique. Ils disparaissent à jamais ! Ce processus, appelé "combustion de tokens", réduit l\'offre totale de tokens Burni. Moins de tokens peuvent signifier que chacun devient plus précieux, similaire aux objets de collection rares.',
+    burn_animation_note:
+      'Cette animation illustre comment les tokens sont symboliquement retirés de la circulation.',
     blackholed_title: 'Promesse de Burni : "Blackholed"',
-    blackholed_description: 'Burni est marqué comme "Blackholed: OUI". Cela signifie que l\'offre maximale de tokens Burni est fixe et qu\'aucun nouveau token ne peut jamais être créé. C\'est comme jeter la clé du coffre-fort !',
+    blackholed_description:
+      "Burni est marqué comme \"Blackholed: OUI\". Cela signifie que l'offre maximale de tokens Burni est fixe et qu'aucun nouveau token ne peut jamais être créé. C'est comme jeter la clé du coffre-fort !",
     blackholed_tooltip_trigger: 'Que signifie "Blackholed" ?',
-    blackholed_tooltip_text: 'Quand un émetteur de token est "blackholed", cela signifie que l\'adresse émettrice a renoncé à ses droits de créer de nouveaux tokens ou de changer les propriétés du token. Cela rend l\'offre maximale vraiment fixe.',
-    use_cases_title: 'Cas d\'Usage : À Quoi Peut Servir Burni Coin',
-    use_cases_description: 'Burni Coin n\'est pas juste un token, mais un actif numérique polyvalent avec des applications croissantes dans l\'écosystème XRPL.',
+    blackholed_tooltip_text:
+      'Quand un émetteur de token est "blackholed", cela signifie que l\'adresse émettrice a renoncé à ses droits de créer de nouveaux tokens ou de changer les propriétés du token. Cela rend l\'offre maximale vraiment fixe.',
+    use_cases_title: "Cas d'Usage : À Quoi Peut Servir Burni Coin",
+    use_cases_description:
+      "Burni Coin n'est pas juste un token, mais un actif numérique polyvalent avec des applications croissantes dans l'écosystème XRPL.",
     use_case_gaming_title: 'Gaming Décentralisé',
-    use_case_gaming_desc: 'Utilisez Burni comme monnaie de jeu ou pour des actifs exclusifs dans de futurs jeux XRPL.',
+    use_case_gaming_desc:
+      'Utilisez Burni comme monnaie de jeu ou pour des actifs exclusifs dans de futurs jeux XRPL.',
     use_case_nfts_title: 'Intégration NFT',
-    use_case_nfts_desc: 'Acquérez et échangez des œuvres d\'art numériques uniques et des objets de collection sur les marchés NFT avec Burni.',
+    use_case_nfts_desc:
+      "Acquérez et échangez des œuvres d'art numériques uniques et des objets de collection sur les marchés NFT avec Burni.",
     use_case_rewards_title: 'Systèmes de Récompenses',
-    use_case_rewards_desc: 'Gagnez des Burni en participant aux actions communautaires, programmes de staking, ou comme récompenses pour les contributions.',
+    use_case_rewards_desc:
+      'Gagnez des Burni en participant aux actions communautaires, programmes de staking, ou comme récompenses pour les contributions.',
     use_case_microtx_title: 'Microtransactions',
-    use_case_microtx_desc: 'Bénéficiez des frais de transaction extrêmement bas du XRPL pour des paiements rapides et rentables.',
+    use_case_microtx_desc:
+      'Bénéficiez des frais de transaction extrêmement bas du XRPL pour des paiements rapides et rentables.',
     use_case_governance_title: 'Gouvernance Communautaire',
-    use_case_governance_desc: 'Détenez Burni pour participer aux décisions importantes sur l\'avenir du projet et avoir votre mot à dire.',
+    use_case_governance_desc:
+      "Détenez Burni pour participer aux décisions importantes sur l'avenir du projet et avoir votre mot à dire.",
     token_schedule_title: 'Burni Coin : Programme Déflationniste',
-    token_schedule_description: 'Nous croyons en la transparence et le développement de valeur à long terme de Burni Coin. Un composant clé de notre écosystème est le mécanisme déflationniste unique qui réduit continuellement la quantité totale de Burni Coins en circulation.',
+    token_schedule_description:
+      'Nous croyons en la transparence et le développement de valeur à long terme de Burni Coin. Un composant clé de notre écosystème est le mécanisme déflationniste unique qui réduit continuellement la quantité totale de Burni Coins en circulation.',
     tokenomics_title: 'Le Monde de Burni : Faits et Chiffres',
-    tokenomics_description: 'Voici un aperçu des chiffres clés qui définissent Burni. Ces données vous donnent un aperçu de la base économique et du potentiel du token.',
+    tokenomics_description:
+      'Voici un aperçu des chiffres clés qui définissent Burni. Ces données vous donnent un aperçu de la base économique et du potentiel du token.',
     kpi_max_supply: 'Offre Maximale',
     kpi_circulating_supply: 'Offre Circulante',
     kpi_current_price: 'Prix Actuel de Burni',
@@ -1625,8 +1726,9 @@ const translations = {
     kpi_xpm_price: 'Prix Actuel de XPM',
     kpi_holders: 'Nombre de Détenteurs',
     kpi_trustlines: 'Nombre de Trustlines',
-    kpi_issuer_fee: 'Frais de l\'Émetteur',
-    price_error_message: 'Les données de prix n\'ont pas pu être chargées. Veuillez réessayer plus tard.',
+    kpi_issuer_fee: "Frais de l'Émetteur",
+    price_error_message:
+      "Les données de prix n'ont pas pu être chargées. Veuillez réessayer plus tard.",
     last_updated_label: 'Dernière Mise à Jour :',
     token_details_title: 'Détails du Token',
     created_on: 'Créé le',
@@ -1636,19 +1738,21 @@ const translations = {
     atl_tooltip: 'Le prix le plus bas jamais atteint par Burni Coin.',
     total_supply: 'Offre Totale',
     platform: 'Plateforme',
-    issuer_address: 'Adresse de l\'Émetteur',
-    explorer_links: 'Liens de l\'Explorateur',
+    issuer_address: "Adresse de l'Émetteur",
+    explorer_links: "Liens de l'Explorateur",
     note_data_disclaimer: 'Note : Les données sont sujettes à changement.',
-    supply_overview_title: 'Aperçu de l\'Offre',
-    supply_chart_caption: 'Ce graphique visualise l\'offre du token.',
-    supply_chart_description: 'Ce graphique visualise l\'offre circulante par rapport à l\'offre maximale.',
+    supply_overview_title: "Aperçu de l'Offre",
+    supply_chart_caption: "Ce graphique visualise l'offre du token.",
+    supply_chart_description:
+      "Ce graphique visualise l'offre circulante par rapport à l'offre maximale.",
     xrpl_home_title: 'Chez Nous sur le XRP Ledger',
-    xrpl_home_description: 'Burni fonctionne sur le XRP Ledger (XRPL), connu pour sa vitesse, ses faibles coûts de transaction et sa scalabilité. Cela signifie pour vous : des transactions rapides et rentables ! Pour détenir ou échanger Burni, vous devez configurer une Trustline – une procédure standard sur le XRPL.',
-    xrpl_slogan: 'Rapide, efficace et fiable - c\'est la base de Burni.',
+    xrpl_home_description:
+      'Burni fonctionne sur le XRP Ledger (XRPL), connu pour sa vitesse, ses faibles coûts de transaction et sa scalabilité. Cela signifie pour vous : des transactions rapides et rentables ! Pour détenir ou échanger Burni, vous devez configurer une Trustline – une procédure standard sur le XRPL.',
+    xrpl_slogan: "Rapide, efficace et fiable - c'est la base de Burni.",
     date: 'Date',
     day: 'Jour',
     process_no: 'Processus No.',
-    remaining_coins: 'Pièces Restantes (approx.)'
+    remaining_coins: 'Pièces Restantes (approx.)',
   },
   ar: {
     page_title: 'رمز بورني - عملة مشفرة لامركزية مبتكرة',
@@ -1662,33 +1766,46 @@ const translations = {
     nav_community: 'المجتمع',
     menu_button: 'القائمة',
     hero_title: 'مرحباً بك في بورني!',
-    hero_description: 'اكتشف الرمز الانكماشي المصمم لخلق قيمة من خلال الندرة. انضم إلينا في رحلة اكتشاف مشتعلة!',
+    hero_description:
+      'اكتشف الرمز الانكماشي المصمم لخلق قيمة من خلال الندرة. انضم إلينا في رحلة اكتشاف مشتعلة!',
     hero_button: 'اعرف المزيد!',
     about_title: 'ما هو بورني؟',
-    about_description: 'بورني أكثر من مجرد رمز. إنه وعد لمستقبل انكماشي. في جوهر بورني آلية تزيل الرموز بشكل دائم من التداول لزيادة قيمة الرموز المتبقية.',
+    about_description:
+      'بورني أكثر من مجرد رمز. إنه وعد لمستقبل انكماشي. في جوهر بورني آلية تزيل الرموز بشكل دائم من التداول لزيادة قيمة الرموز المتبقية.',
     burn_title: 'سر حرق الرموز',
-    burn_description: 'تخيل الرموز تحترق مثل الحطب في نار سحرية. تختفي إلى الأبد! هذه العملية، تسمى "حرق الرموز"، تقلل من إجمالي المعروض من رموز بورني.',
+    burn_description:
+      'تخيل الرموز تحترق مثل الحطب في نار سحرية. تختفي إلى الأبد! هذه العملية، تسمى "حرق الرموز"، تقلل من إجمالي المعروض من رموز بورني.',
     burn_animation_note: 'هذه الرسوم المتحركة توضح كيف يتم إزالة الرموز رمزياً من التداول.',
     blackholed_title: 'وعد بورني: "الثقب الأسود"',
-    blackholed_description: 'بورني مميز كـ "ثقب أسود: نعم". هذا يعني أن الحد الأقصى لإمداد رموز بورني ثابت ولا يمكن إنشاء رموز جديدة.',
+    blackholed_description:
+      'بورني مميز كـ "ثقب أسود: نعم". هذا يعني أن الحد الأقصى لإمداد رموز بورني ثابت ولا يمكن إنشاء رموز جديدة.',
     blackholed_tooltip_trigger: 'ما معنى "الثقب الأسود"؟',
-    blackholed_tooltip_text: 'عندما يكون مُصدر الرمز "في ثقب أسود"، فهذا يعني أن العنوان المُصدر تخلى عن حقوقه في سك رموز جديدة أو تغيير خصائص الرمز.',
+    blackholed_tooltip_text:
+      'عندما يكون مُصدر الرمز "في ثقب أسود"، فهذا يعني أن العنوان المُصدر تخلى عن حقوقه في سك رموز جديدة أو تغيير خصائص الرمز.',
     use_cases_title: 'حالات الاستخدام: لماذا يمكن استخدام عملة بورني',
-    use_cases_description: 'عملة بورني ليست مجرد رمز، بل أصل رقمي متعدد الاستخدامات مع تطبيقات متنامية في نظام XRPL.',
+    use_cases_description:
+      'عملة بورني ليست مجرد رمز، بل أصل رقمي متعدد الاستخدامات مع تطبيقات متنامية في نظام XRPL.',
     use_case_gaming_title: 'الألعاب اللامركزية',
-    use_case_gaming_desc: 'استخدم بورني كعملة داخل اللعبة أو للأصول الحصرية في ألعاب XRPL المستقبلية.',
+    use_case_gaming_desc:
+      'استخدم بورني كعملة داخل اللعبة أو للأصول الحصرية في ألعاب XRPL المستقبلية.',
     use_case_nfts_title: 'تكامل NFT',
-    use_case_nfts_desc: 'احصل على وتداول الأعمال الفنية الرقمية الفريدة والمقتنيات في أسواق NFT باستخدام بورني.',
+    use_case_nfts_desc:
+      'احصل على وتداول الأعمال الفنية الرقمية الفريدة والمقتنيات في أسواق NFT باستخدام بورني.',
     use_case_rewards_title: 'أنظمة المكافآت',
-    use_case_rewards_desc: 'اكسب بورني من خلال المشاركة في أنشطة المجتمع أو برامج التخزين أو كمكافآت للمساهمات.',
+    use_case_rewards_desc:
+      'اكسب بورني من خلال المشاركة في أنشطة المجتمع أو برامج التخزين أو كمكافآت للمساهمات.',
     use_case_microtx_title: 'المعاملات الصغيرة',
-    use_case_microtx_desc: 'استفد من رسوم المعاملات المنخفضة للغاية في XRPL للمدفوعات السريعة والفعالة من حيث التكلفة.',
+    use_case_microtx_desc:
+      'استفد من رسوم المعاملات المنخفضة للغاية في XRPL للمدفوعات السريعة والفعالة من حيث التكلفة.',
     use_case_governance_title: 'حوكمة المجتمع',
-    use_case_governance_desc: 'امتلك بورني للمشاركة في القرارات المهمة حول مستقبل المشروع وإبداء رأيك.',
+    use_case_governance_desc:
+      'امتلك بورني للمشاركة في القرارات المهمة حول مستقبل المشروع وإبداء رأيك.',
     token_schedule_title: 'عملة بورني: الجدول الانكماشي',
-    token_schedule_description: 'نؤمن بالشفافية والتطوير طويل المدى لقيمة عملة بورني. مكون رئيسي في نظامنا البيئي هو الآلية الانكماشية الفريدة.',
+    token_schedule_description:
+      'نؤمن بالشفافية والتطوير طويل المدى لقيمة عملة بورني. مكون رئيسي في نظامنا البيئي هو الآلية الانكماشية الفريدة.',
     tokenomics_title: 'عالم بورني: الحقائق والأرقام',
-    tokenomics_description: 'إليك نظرة على الأرقام الرئيسية التي تعرّف بورني. هذه البيانات تمنحك نظرة ثاقبة على الأساس الاقتصادي وإمكانات الرمز.',
+    tokenomics_description:
+      'إليك نظرة على الأرقام الرئيسية التي تعرّف بورني. هذه البيانات تمنحك نظرة ثاقبة على الأساس الاقتصادي وإمكانات الرمز.',
     kpi_max_supply: 'الإمداد الأقصى',
     kpi_circulating_supply: 'الإمداد المتداول',
     kpi_current_price: 'السعر الحالي لبورني',
@@ -1714,12 +1831,13 @@ const translations = {
     supply_chart_caption: 'يوضح هذا الرسم البياني معروض الرمز.',
     supply_chart_description: 'يوضح هذا الرسم البياني المعروض المتداول بالنسبة للمعروض الأقصى.',
     xrpl_home_title: 'في بيت دفتر الأستاذ XRP',
-    xrpl_home_description: 'يعمل بورني على دفتر الأستاذ XRP (XRPL)، المعروف بسرعته وتكاليف المعاملات المنخفضة وقابلية التوسع.',
+    xrpl_home_description:
+      'يعمل بورني على دفتر الأستاذ XRP (XRPL)، المعروف بسرعته وتكاليف المعاملات المنخفضة وقابلية التوسع.',
     xrpl_slogan: 'سريع وفعال وموثوق - هذا أساس بورني.',
     date: 'تاريخ',
     day: 'يوم',
     process_no: 'رقم العملية',
-    remaining_coins: 'العملات المتبقية (تقريباً)'
+    remaining_coins: 'العملات المتبقية (تقريباً)',
   },
   bn: {
     page_title: 'বার্নি টোকেন - উদ্ভাবনী বিকেন্দ্রীভূত ক্রিপ্টোকারেন্সি',
@@ -1733,33 +1851,47 @@ const translations = {
     nav_community: 'কমিউনিটি',
     menu_button: 'মেনু',
     hero_title: 'বার্নিতে স্বাগতম!',
-    hero_description: 'দুর্লভতার মাধ্যমে মূল্য সৃষ্টির জন্য ডিজাইন করা ডিফ্লেশনারি টোকেনটি আবিষ্কার করুন। আবিষ্কারের একটি জ্বলন্ত যাত্রায় আমাদের সাথে যোগ দিন!',
+    hero_description:
+      'দুর্লভতার মাধ্যমে মূল্য সৃষ্টির জন্য ডিজাইন করা ডিফ্লেশনারি টোকেনটি আবিষ্কার করুন। আবিষ্কারের একটি জ্বলন্ত যাত্রায় আমাদের সাথে যোগ দিন!',
     hero_button: 'আরও জানুন!',
     about_title: 'বার্নি কি?',
-    about_description: 'বার্নি শুধু একটি টোকেনের চেয়ে বেশি। এটি একটি ডিফ্লেশনারি ভবিষ্যতের জন্য একটি প্রতিশ্রুতি। বার্নির মূলে রয়েছে একটি পদ্ধতি যা স্থায়ীভাবে টোকেনগুলি প্রচলন থেকে সরিয়ে দেয়।',
+    about_description:
+      'বার্নি শুধু একটি টোকেনের চেয়ে বেশি। এটি একটি ডিফ্লেশনারি ভবিষ্যতের জন্য একটি প্রতিশ্রুতি। বার্নির মূলে রয়েছে একটি পদ্ধতি যা স্থায়ীভাবে টোকেনগুলি প্রচলন থেকে সরিয়ে দেয়।',
     burn_title: 'টোকেন পোড়ানোর রহস্য',
-    burn_description: 'কল্পনা করুন টোকেনগুলি একটি জাদুকরী আগুনে কাঠের মতো পুড়ছে। তারা চিরতরে অদৃশ্য হয়ে যায়! এই প্রক্রিয়াটি, "টোকেন পোড়ানো" বলা হয়, বার্নি টোকেনের মোট সরবরাহ হ্রাস করে।',
-    burn_animation_note: 'এই অ্যানিমেশনটি দেখায় কিভাবে টোকেনগুলি প্রতীকীভাবে প্রচলন থেকে সরানো হয়।',
+    burn_description:
+      'কল্পনা করুন টোকেনগুলি একটি জাদুকরী আগুনে কাঠের মতো পুড়ছে। তারা চিরতরে অদৃশ্য হয়ে যায়! এই প্রক্রিয়াটি, "টোকেন পোড়ানো" বলা হয়, বার্নি টোকেনের মোট সরবরাহ হ্রাস করে।',
+    burn_animation_note:
+      'এই অ্যানিমেশনটি দেখায় কিভাবে টোকেনগুলি প্রতীকীভাবে প্রচলন থেকে সরানো হয়।',
     blackholed_title: 'বার্নির প্রতিশ্রুতি: "ব্ল্যাকহোল্ড"',
-    blackholed_description: 'বার্নি "ব্ল্যাকহোল্ড: হ্যাঁ" হিসাবে চিহ্নিত। এর মানে হল বার্নি টোকেনের সর্বোচ্চ সরবরাহ নির্দিষ্ট এবং কোন নতুন টোকেন তৈরি করা যাবে না।',
+    blackholed_description:
+      'বার্নি "ব্ল্যাকহোল্ড: হ্যাঁ" হিসাবে চিহ্নিত। এর মানে হল বার্নি টোকেনের সর্বোচ্চ সরবরাহ নির্দিষ্ট এবং কোন নতুন টোকেন তৈরি করা যাবে না।',
     blackholed_tooltip_trigger: '"ব্ল্যাকহোল্ড" মানে কি?',
-    blackholed_tooltip_text: 'যখন একটি টোকেন ইস্যুকারী "ব্ল্যাকহোল্ড" হয়, এর মানে ইস্যুকারী ঠিকানা নতুন টোকেন তৈরি বা টোকেন বৈশিষ্ট্য পরিবর্তন করার অধিকার ত্যাগ করেছে।',
+    blackholed_tooltip_text:
+      'যখন একটি টোকেন ইস্যুকারী "ব্ল্যাকহোল্ড" হয়, এর মানে ইস্যুকারী ঠিকানা নতুন টোকেন তৈরি বা টোকেন বৈশিষ্ট্য পরিবর্তন করার অধিকার ত্যাগ করেছে।',
     use_cases_title: 'ব্যবহারের ক্ষেত্র: বার্নি কয়েন কিসের জন্য ব্যবহার করা যেতে পারে',
-    use_cases_description: 'বার্নি কয়েন শুধু একটি টোকেন নয়, বরং XRPL ইকোসিস্টেমে ক্রমবর্ধমান অ্যাপ্লিকেশন সহ একটি বহুমুখী ডিজিটাল সম্পদ।',
+    use_cases_description:
+      'বার্নি কয়েন শুধু একটি টোকেন নয়, বরং XRPL ইকোসিস্টেমে ক্রমবর্ধমান অ্যাপ্লিকেশন সহ একটি বহুমুখী ডিজিটাল সম্পদ।',
     use_case_gaming_title: 'বিকেন্দ্রীভূত গেমিং',
-    use_case_gaming_desc: 'ভবিষ্যতের XRPL গেমগুলিতে ইন-গেম কারেন্সি বা এক্সক্লুসিভ ইন-গেম সম্পদের জন্য বার্নি ব্যবহার করুন।',
+    use_case_gaming_desc:
+      'ভবিষ্যতের XRPL গেমগুলিতে ইন-গেম কারেন্সি বা এক্সক্লুসিভ ইন-গেম সম্পদের জন্য বার্নি ব্যবহার করুন।',
     use_case_nfts_title: 'NFT ইন্টিগ্রেশন',
-    use_case_nfts_desc: 'বার্নি দিয়ে NFT মার্কেটপ্লেসে অনন্য ডিজিটাল শিল্পকর্ম এবং সংগ্রহযোগ্য জিনিস অর্জন এবং ট্রেড করুন।',
+    use_case_nfts_desc:
+      'বার্নি দিয়ে NFT মার্কেটপ্লেসে অনন্য ডিজিটাল শিল্পকর্ম এবং সংগ্রহযোগ্য জিনিস অর্জন এবং ট্রেড করুন।',
     use_case_rewards_title: 'পুরস্কার সিস্টেম',
-    use_case_rewards_desc: 'কমিউনিটি ক্রিয়াকলাপে অংশগ্রহণ, স্ট্যাকিং প্রোগ্রাম বা অবদানের জন্য পুরস্কার হিসাবে বার্নি অর্জন করুন।',
+    use_case_rewards_desc:
+      'কমিউনিটি ক্রিয়াকলাপে অংশগ্রহণ, স্ট্যাকিং প্রোগ্রাম বা অবদানের জন্য পুরস্কার হিসাবে বার্নি অর্জন করুন।',
     use_case_microtx_title: 'মাইক্রো ট্রানজেকশন',
-    use_case_microtx_desc: 'দ্রুত এবং সাশ্রয়ী পেমেন্টের জন্য XRPL এর অত্যন্ত কম লেনদেন ফি থেকে উপকৃত হন।',
+    use_case_microtx_desc:
+      'দ্রুত এবং সাশ্রয়ী পেমেন্টের জন্য XRPL এর অত্যন্ত কম লেনদেন ফি থেকে উপকৃত হন।',
     use_case_governance_title: 'কমিউনিটি গভর্নেন্স',
-    use_case_governance_desc: 'প্রকল্পের ভবিষ্যত সম্পর্কে গুরুত্বপূর্ণ সিদ্ধান্তে অংশগ্রহণ এবং মতামত দিতে বার্নি ধরে রাখুন।',
+    use_case_governance_desc:
+      'প্রকল্পের ভবিষ্যত সম্পর্কে গুরুত্বপূর্ণ সিদ্ধান্তে অংশগ্রহণ এবং মতামত দিতে বার্নি ধরে রাখুন।',
     token_schedule_title: 'বার্নি কয়েন: ডিফ্লেশনারি সূচি',
-    token_schedule_description: 'আমরা স্বচ্ছতা এবং বার্নি কয়েনের দীর্ঘমেয়াদী মূল্য উন্নয়নে বিশ্বাস করি। আমাদের ইকোসিস্টেমের একটি মূল উপাদান হল অনন্য ডিফ্লেশনারি পদ্ধতি।',
+    token_schedule_description:
+      'আমরা স্বচ্ছতা এবং বার্নি কয়েনের দীর্ঘমেয়াদী মূল্য উন্নয়নে বিশ্বাস করি। আমাদের ইকোসিস্টেমের একটি মূল উপাদান হল অনন্য ডিফ্লেশনারি পদ্ধতি।',
     tokenomics_title: 'বার্নির জগত: তথ্য ও পরিসংখ্যান',
-    tokenomics_description: 'এখানে বার্নিকে সংজ্ঞায়িত করে এমন মূল পরিসংখ্যানগুলির একটি দৃশ্য রয়েছে। এই ডেটা আপনাকে টোকেনের অর্থনৈতিক ভিত্তি এবং সম্ভাবনার অন্তর্দৃষ্টি দেয়।',
+    tokenomics_description:
+      'এখানে বার্নিকে সংজ্ঞায়িত করে এমন মূল পরিসংখ্যানগুলির একটি দৃশ্য রয়েছে। এই ডেটা আপনাকে টোকেনের অর্থনৈতিক ভিত্তি এবং সম্ভাবনার অন্তর্দৃষ্টি দেয়।',
     kpi_max_supply: 'সর্বোচ্চ সরবরাহ',
     kpi_circulating_supply: 'প্রচলিত সরবরাহ',
     kpi_current_price: 'বর্তমান বার্নি দাম',
@@ -1783,14 +1915,16 @@ const translations = {
     note_data_disclaimer: 'দ্রষ্টব্য: ডেটা পরিবর্তনের সাপেক্ষে।',
     supply_overview_title: 'সরবরাহের সংক্ষিপ্ত বিবরণ',
     supply_chart_caption: 'এই চার্টটি টোকেন সরবরাহকে ভিজুয়ালাইজ করে।',
-    supply_chart_description: 'এই চার্টটি সর্বোচ্চ সরবরাহের সাথে সম্পর্কিত প্রচলিত সরবরাহকে ভিজুয়ালাইজ করে।',
+    supply_chart_description:
+      'এই চার্টটি সর্বোচ্চ সরবরাহের সাথে সম্পর্কিত প্রচলিত সরবরাহকে ভিজুয়ালাইজ করে।',
     xrpl_home_title: 'XRP লেজারে বাড়িতে',
-    xrpl_home_description: 'বার্নি XRP লেজার (XRPL) এ কাজ করে, যা তার গতি, কম লেনদেন খরচ এবং স্কোলেবিলিটির জন্য পরিচিত।',
+    xrpl_home_description:
+      'বার্নি XRP লেজার (XRPL) এ কাজ করে, যা তার গতি, কম লেনদেন খরচ এবং স্কোলেবিলিটির জন্য পরিচিত।',
     xrpl_slogan: 'দ্রুত, দক্ষ এবং নির্ভরযোগ্য - এটিই বার্নির ভিত্তি।',
     date: 'তারিখ',
     day: 'দিন',
     process_no: 'প্রক্রিয়া নং',
-    remaining_coins: 'অবশিষ্ট কয়েন (আনুমানিক)'
+    remaining_coins: 'অবশিষ্ট কয়েন (আনুমানিক)',
   },
   ja: {
     page_title: 'バーニトークン - 革新的な分散型暗号通貨',
@@ -1804,33 +1938,47 @@ const translations = {
     nav_community: 'コミュニティ',
     menu_button: 'メニュー',
     hero_title: 'バーニへようこそ！',
-    hero_description: '希少性を通じて価値を創造するように設計されたデフレトークンを発見してください。燃える発見の旅に参加しましょう！',
+    hero_description:
+      '希少性を通じて価値を創造するように設計されたデフレトークンを発見してください。燃える発見の旅に参加しましょう！',
     hero_button: '詳細を学ぶ！',
     about_title: 'バーニとは何ですか？',
-    about_description: 'バーニは単なるトークン以上のものです。デフレーションの未来への約束です。バーニの核心には、流通からトークンを永続的に除去して残りのトークンの価値を高める仕組みがあります。',
+    about_description:
+      'バーニは単なるトークン以上のものです。デフレーションの未来への約束です。バーニの核心には、流通からトークンを永続的に除去して残りのトークンの価値を高める仕組みがあります。',
     burn_title: 'トークンバーンの秘密',
-    burn_description: '魔法の火でログのようにトークンが燃やされることを想像してください。永遠に消えます！このプロセスは、バーニトークンの総供給量を減らします。',
-    burn_animation_note: 'このアニメーションは、トークンが象徴的に流通から除去される様子を示しています。',
+    burn_description:
+      '魔法の火でログのようにトークンが燃やされることを想像してください。永遠に消えます！このプロセスは、バーニトークンの総供給量を減らします。',
+    burn_animation_note:
+      'このアニメーションは、トークンが象徴的に流通から除去される様子を示しています。',
     blackholed_title: 'バーニの約束：「ブラックホール化」',
-    blackholed_description: 'バーニは「ブラックホール化：はい」とマークされています。これは、バーニトークンの最大供給量が固定されており、新しいトークンが作成されることは決してないことを意味します。',
+    blackholed_description:
+      'バーニは「ブラックホール化：はい」とマークされています。これは、バーニトークンの最大供給量が固定されており、新しいトークンが作成されることは決してないことを意味します。',
     blackholed_tooltip_trigger: '「ブラックホール化」とは何ですか？',
-    blackholed_tooltip_text: 'トークン発行者が「ブラックホール化」されると、発行アドレスが新しいトークンを発行したり、トークンのプロパティを変更したりする権利を放棄したことを意味します。',
+    blackholed_tooltip_text:
+      'トークン発行者が「ブラックホール化」されると、発行アドレスが新しいトークンを発行したり、トークンのプロパティを変更したりする権利を放棄したことを意味します。',
     use_cases_title: '使用例：バーニコインの使用法',
-    use_cases_description: 'バーニコインは単なるトークンではなく、XRPLエコシステムで成長するアプリケーションを持つ多目的なデジタル資産です。',
+    use_cases_description:
+      'バーニコインは単なるトークンではなく、XRPLエコシステムで成長するアプリケーションを持つ多目的なデジタル資産です。',
     use_case_gaming_title: '分散型ゲーミング',
-    use_case_gaming_desc: '将来のXRPLゲームでゲーム内通貨や独占的なゲーム内資産としてバーニを使用してください。',
+    use_case_gaming_desc:
+      '将来のXRPLゲームでゲーム内通貨や独占的なゲーム内資産としてバーニを使用してください。',
     use_case_nfts_title: 'NFT統合',
-    use_case_nfts_desc: 'バーニを使ってNFTマーケットプレイスでユニークなデジタルアートワークやコレクタブルを取得・取引してください。',
+    use_case_nfts_desc:
+      'バーニを使ってNFTマーケットプレイスでユニークなデジタルアートワークやコレクタブルを取得・取引してください。',
     use_case_rewards_title: '報酬システム',
-    use_case_rewards_desc: 'コミュニティ活動への参加、ステーキングプログラム、または貢献への報酬としてバーニを獲得してください。',
+    use_case_rewards_desc:
+      'コミュニティ活動への参加、ステーキングプログラム、または貢献への報酬としてバーニを獲得してください。',
     use_case_microtx_title: 'マイクロトランザクション',
-    use_case_microtx_desc: '高速で費用対効果の高い支払いのためにXRPLの極めて低い取引手数料の恩恵を受けてください。',
+    use_case_microtx_desc:
+      '高速で費用対効果の高い支払いのためにXRPLの極めて低い取引手数料の恩恵を受けてください。',
     use_case_governance_title: 'コミュニティガバナンス',
-    use_case_governance_desc: 'プロジェクトの将来に関する重要な決定に参加し、発言権を持つためにバーニを保有してください。',
+    use_case_governance_desc:
+      'プロジェクトの将来に関する重要な決定に参加し、発言権を持つためにバーニを保有してください。',
     token_schedule_title: 'バーニコイン：デフレスケジュール',
-    token_schedule_description: '私たちはバーニコインの透明性と長期的な価値開発を信じています。私たちのエコシステムの主要コンポーネントは、流通するバーニコインの総量を継続的に削減するユニークなデフレメカニズムです。',
+    token_schedule_description:
+      '私たちはバーニコインの透明性と長期的な価値開発を信じています。私たちのエコシステムの主要コンポーネントは、流通するバーニコインの総量を継続的に削減するユニークなデフレメカニズムです。',
     tokenomics_title: 'バーニの世界：事実と数字',
-    tokenomics_description: 'ここでバーニを定義する主要な数字をご覧ください。このデータは、トークンの経済的基盤と可能性についての洞察を提供します。',
+    tokenomics_description:
+      'ここでバーニを定義する主要な数字をご覧ください。このデータは、トークンの経済的基盤と可能性についての洞察を提供します。',
     kpi_max_supply: '最大供給量',
     kpi_circulating_supply: '流通供給量',
     kpi_current_price: '現在のバーニ価格',
@@ -1856,12 +2004,13 @@ const translations = {
     supply_chart_caption: 'このチャートはトークン供給を視覚化します。',
     supply_chart_description: 'このチャートは最大供給量に対する流通供給量を視覚化します。',
     xrpl_home_title: 'XRPレジャーの本拠地',
-    xrpl_home_description: 'バーニは速度、低い取引コスト、スケーラビリティで知られるXRPレジャー（XRPL）で動作します。これはあなたにとって：高速で費用対効果の高い取引を意味します！',
+    xrpl_home_description:
+      'バーニは速度、低い取引コスト、スケーラビリティで知られるXRPレジャー（XRPL）で動作します。これはあなたにとって：高速で費用対効果の高い取引を意味します！',
     xrpl_slogan: '高速、効率的、信頼性 - それがバーニの基盤です。',
     date: '日付',
     day: '曜日',
     process_no: 'プロセス番号',
-    remaining_coins: '残りコイン（概算）'
+    remaining_coins: '残りコイン（概算）',
   },
   pt: {
     page_title: 'Burni Token - Criptomoeda Descentralizada Inovadora',
@@ -1875,33 +2024,47 @@ const translations = {
     nav_community: 'Comunidade',
     menu_button: 'Menu',
     hero_title: 'Bem-vindo ao Burni!',
-    hero_description: 'Descubra o token deflacionário projetado para criar valor através da escassez. Junte-se a nós numa jornada ardente de descoberta!',
+    hero_description:
+      'Descubra o token deflacionário projetado para criar valor através da escassez. Junte-se a nós numa jornada ardente de descoberta!',
     hero_button: 'Saiba Mais!',
     about_title: 'O que é Burni?',
-    about_description: 'Burni é mais que apenas um token. É uma promessa para um futuro deflacionário. No núcleo do Burni está um mecanismo que remove permanentemente tokens de circulação para potencialmente aumentar o valor dos tokens restantes.',
+    about_description:
+      'Burni é mais que apenas um token. É uma promessa para um futuro deflacionário. No núcleo do Burni está um mecanismo que remove permanentemente tokens de circulação para potencialmente aumentar o valor dos tokens restantes.',
     burn_title: 'O Segredo da Queima de Tokens',
-    burn_description: 'Imagine tokens sendo queimados como troncos numa fogueira mágica. Eles desaparecem para sempre! Este processo, chamado "queima de tokens", reduz o fornecimento total de tokens Burni.',
-    burn_animation_note: 'Esta animação ilustra como os tokens são simbolicamente removidos da circulação.',
+    burn_description:
+      'Imagine tokens sendo queimados como troncos numa fogueira mágica. Eles desaparecem para sempre! Este processo, chamado "queima de tokens", reduz o fornecimento total de tokens Burni.',
+    burn_animation_note:
+      'Esta animação ilustra como os tokens são simbolicamente removidos da circulação.',
     blackholed_title: 'Promessa do Burni: "Blackholed"',
-    blackholed_description: 'Burni está marcado como "Blackholed: SIM". Isso significa que o fornecimento máximo de tokens Burni é fixo e novos tokens nunca podem ser criados.',
+    blackholed_description:
+      'Burni está marcado como "Blackholed: SIM". Isso significa que o fornecimento máximo de tokens Burni é fixo e novos tokens nunca podem ser criados.',
     blackholed_tooltip_trigger: 'O que significa "Blackholed"?',
-    blackholed_tooltip_text: 'Quando um emissor de token está "blackholed", significa que o endereço emissor renunciou aos seus direitos de criar novos tokens ou alterar propriedades do token.',
+    blackholed_tooltip_text:
+      'Quando um emissor de token está "blackholed", significa que o endereço emissor renunciou aos seus direitos de criar novos tokens ou alterar propriedades do token.',
     use_cases_title: 'Casos de Uso: Para Que Pode Ser Usado o Burni Coin',
-    use_cases_description: 'Burni Coin não é apenas um token, mas um ativo digital versátil com aplicações crescentes no ecossistema XRPL.',
+    use_cases_description:
+      'Burni Coin não é apenas um token, mas um ativo digital versátil com aplicações crescentes no ecossistema XRPL.',
     use_case_gaming_title: 'Gaming Descentralizado',
-    use_case_gaming_desc: 'Use Burni como moeda no jogo ou para ativos exclusivos em futuros jogos XRPL.',
+    use_case_gaming_desc:
+      'Use Burni como moeda no jogo ou para ativos exclusivos em futuros jogos XRPL.',
     use_case_nfts_title: 'Integração NFT',
-    use_case_nfts_desc: 'Adquira e negocie obras de arte digitais únicas e colecionáveis em mercados NFT com Burni.',
+    use_case_nfts_desc:
+      'Adquira e negocie obras de arte digitais únicas e colecionáveis em mercados NFT com Burni.',
     use_case_rewards_title: 'Sistemas de Recompensas',
-    use_case_rewards_desc: 'Ganhe Burni participando de ações comunitárias, programas de staking, ou como recompensas por contribuições.',
+    use_case_rewards_desc:
+      'Ganhe Burni participando de ações comunitárias, programas de staking, ou como recompensas por contribuições.',
     use_case_microtx_title: 'Microtransações',
-    use_case_microtx_desc: 'Beneficie-se das taxas de transação extremamente baixas do XRPL para pagamentos rápidos e econômicos.',
+    use_case_microtx_desc:
+      'Beneficie-se das taxas de transação extremamente baixas do XRPL para pagamentos rápidos e econômicos.',
     use_case_governance_title: 'Governança Comunitária',
-    use_case_governance_desc: 'Mantenha Burni para participar de decisões importantes sobre o futuro do projeto e ter voz ativa.',
+    use_case_governance_desc:
+      'Mantenha Burni para participar de decisões importantes sobre o futuro do projeto e ter voz ativa.',
     token_schedule_title: 'Burni Coin: Cronograma Deflacionário',
-    token_schedule_description: 'Acreditamos na transparência e no desenvolvimento de valor a longo prazo do Burni Coin. Um componente chave do nosso ecossistema é o mecanismo deflacionário único.',
+    token_schedule_description:
+      'Acreditamos na transparência e no desenvolvimento de valor a longo prazo do Burni Coin. Um componente chave do nosso ecossistema é o mecanismo deflacionário único.',
     tokenomics_title: 'Mundo do Burni: Fatos e Números',
-    tokenomics_description: 'Aqui está uma visão dos números-chave que definem o Burni. Estes dados fornecem insights sobre a base econômica e potencial do token.',
+    tokenomics_description:
+      'Aqui está uma visão dos números-chave que definem o Burni. Estes dados fornecem insights sobre a base econômica e potencial do token.',
     kpi_max_supply: 'Fornecimento Máximo',
     kpi_circulating_supply: 'Fornecimento Circulante',
     kpi_current_price: 'Preço Atual do Burni',
@@ -1910,7 +2073,8 @@ const translations = {
     kpi_holders: 'Número de Detentores',
     kpi_trustlines: 'Número de Trustlines',
     kpi_issuer_fee: 'Taxa do Emissor',
-    price_error_message: 'Os dados de preço não puderam ser carregados. Tente novamente mais tarde.',
+    price_error_message:
+      'Os dados de preço não puderam ser carregados. Tente novamente mais tarde.',
     last_updated_label: 'Última Atualização:',
     token_details_title: 'Detalhes do Token',
     created_on: 'Criado em',
@@ -1925,14 +2089,16 @@ const translations = {
     note_data_disclaimer: 'Nota: Os dados estão sujeitos a alterações.',
     supply_overview_title: 'Visão Geral do Fornecimento',
     supply_chart_caption: 'Este gráfico visualiza o fornecimento do token.',
-    supply_chart_description: 'Este gráfico visualiza o fornecimento circulante em relação ao fornecimento máximo.',
+    supply_chart_description:
+      'Este gráfico visualiza o fornecimento circulante em relação ao fornecimento máximo.',
     xrpl_home_title: 'Em Casa no XRP Ledger',
-    xrpl_home_description: 'Burni opera no XRP Ledger (XRPL), conhecido por sua velocidade, custos baixos de transação e escalabilidade.',
+    xrpl_home_description:
+      'Burni opera no XRP Ledger (XRPL), conhecido por sua velocidade, custos baixos de transação e escalabilidade.',
     xrpl_slogan: 'Rápido, eficiente e confiável - essa é a base do Burni.',
     date: 'Data',
     day: 'Dia',
     process_no: 'Processo Nº',
-    remaining_coins: 'Moedas Restantes (aprox.)'
+    remaining_coins: 'Moedas Restantes (aprox.)',
   },
   ko: {
     page_title: '버니 토큰 - 혁신적인 분산형 암호화폐',
@@ -1946,33 +2112,46 @@ const translations = {
     nav_community: '커뮤니티',
     menu_button: '메뉴',
     hero_title: '버니에 오신 것을 환영합니다!',
-    hero_description: '희소성을 통해 가치를 창출하도록 설계된 디플레이션 토큰을 발견하세요. 불타는 발견의 여정에 참여하세요!',
+    hero_description:
+      '희소성을 통해 가치를 창출하도록 설계된 디플레이션 토큰을 발견하세요. 불타는 발견의 여정에 참여하세요!',
     hero_button: '더 알아보기!',
     about_title: '버니란 무엇인가요?',
-    about_description: '버니는 단순한 토큰 그 이상입니다. 디플레이션 미래에 대한 약속입니다. 버니의 핵심에는 유통에서 토큰을 영구적으로 제거하여 남은 토큰의 가치를 잠재적으로 증가시키는 메커니즘이 있습니다.',
+    about_description:
+      '버니는 단순한 토큰 그 이상입니다. 디플레이션 미래에 대한 약속입니다. 버니의 핵심에는 유통에서 토큰을 영구적으로 제거하여 남은 토큰의 가치를 잠재적으로 증가시키는 메커니즘이 있습니다.',
     burn_title: '토큰 소각의 비밀',
-    burn_description: '마법의 불에서 통나무처럼 토큰이 태워지는 것을 상상해보세요. 영원히 사라집니다! 이 과정은 "토큰 소각"이라고 불리며, 버니 토큰의 총 공급량을 줄입니다.',
+    burn_description:
+      '마법의 불에서 통나무처럼 토큰이 태워지는 것을 상상해보세요. 영원히 사라집니다! 이 과정은 "토큰 소각"이라고 불리며, 버니 토큰의 총 공급량을 줄입니다.',
     burn_animation_note: '이 애니메이션은 토큰이 상징적으로 유통에서 제거되는 방식을 보여줍니다.',
     blackholed_title: '버니의 약속: "블랙홀화"',
-    blackholed_description: '버니는 "블랙홀화: 예"로 표시됩니다. 이는 버니 토큰의 최대 공급량이 고정되어 있고 새로운 토큰이 생성될 수 없음을 의미합니다.',
+    blackholed_description:
+      '버니는 "블랙홀화: 예"로 표시됩니다. 이는 버니 토큰의 최대 공급량이 고정되어 있고 새로운 토큰이 생성될 수 없음을 의미합니다.',
     blackholed_tooltip_trigger: '"블랙홀화"는 무엇을 의미하나요?',
-    blackholed_tooltip_text: '토큰 발행자가 "블랙홀화"되면 발행 주소가 새로운 토큰을 발행하거나 토큰 속성을 변경할 권리를 포기했음을 의미합니다.',
+    blackholed_tooltip_text:
+      '토큰 발행자가 "블랙홀화"되면 발행 주소가 새로운 토큰을 발행하거나 토큰 속성을 변경할 권리를 포기했음을 의미합니다.',
     use_cases_title: '사용 사례: 버니 코인의 활용법',
-    use_cases_description: '버니 코인은 단순한 토큰이 아니라 XRPL 생태계에서 성장하는 애플리케이션을 가진 다목적 디지털 자산입니다.',
+    use_cases_description:
+      '버니 코인은 단순한 토큰이 아니라 XRPL 생태계에서 성장하는 애플리케이션을 가진 다목적 디지털 자산입니다.',
     use_case_gaming_title: '분산형 게이밍',
-    use_case_gaming_desc: '미래의 XRPL 게임에서 게임 내 화폐나 독점적인 게임 내 자산으로 버니를 사용하세요.',
+    use_case_gaming_desc:
+      '미래의 XRPL 게임에서 게임 내 화폐나 독점적인 게임 내 자산으로 버니를 사용하세요.',
     use_case_nfts_title: 'NFT 통합',
-    use_case_nfts_desc: '버니로 NFT 마켓플레이스에서 독특한 디지털 아트워크와 수집품을 획득하고 거래하세요.',
+    use_case_nfts_desc:
+      '버니로 NFT 마켓플레이스에서 독특한 디지털 아트워크와 수집품을 획득하고 거래하세요.',
     use_case_rewards_title: '보상 시스템',
-    use_case_rewards_desc: '커뮤니티 활동 참여, 스테이킹 프로그램, 또는 기여에 대한 보상으로 버니를 획득하세요.',
+    use_case_rewards_desc:
+      '커뮤니티 활동 참여, 스테이킹 프로그램, 또는 기여에 대한 보상으로 버니를 획득하세요.',
     use_case_microtx_title: '마이크로 거래',
-    use_case_microtx_desc: '빠르고 비용 효율적인 결제를 위해 XRPL의 극도로 낮은 거래 수수료의 혜택을 누리세요.',
+    use_case_microtx_desc:
+      '빠르고 비용 효율적인 결제를 위해 XRPL의 극도로 낮은 거래 수수료의 혜택을 누리세요.',
     use_case_governance_title: '커뮤니티 거버넌스',
-    use_case_governance_desc: '프로젝트의 미래에 대한 중요한 결정에 참여하고 발언권을 갖기 위해 버니를 보유하세요.',
+    use_case_governance_desc:
+      '프로젝트의 미래에 대한 중요한 결정에 참여하고 발언권을 갖기 위해 버니를 보유하세요.',
     token_schedule_title: '버니 코인: 디플레이션 일정',
-    token_schedule_description: '우리는 버니 코인의 투명성과 장기적인 가치 개발을 믿습니다. 우리 생태계의 핵심 구성 요소는 유통되는 버니 코인의 총량을 지속적으로 줄이는 독특한 디플레이션 메커니즘입니다.',
+    token_schedule_description:
+      '우리는 버니 코인의 투명성과 장기적인 가치 개발을 믿습니다. 우리 생태계의 핵심 구성 요소는 유통되는 버니 코인의 총량을 지속적으로 줄이는 독특한 디플레이션 메커니즘입니다.',
     tokenomics_title: '버니의 세계: 사실과 수치',
-    tokenomics_description: '버니를 정의하는 주요 수치들을 살펴보세요. 이 데이터는 토큰의 경제적 기반과 잠재력에 대한 통찰력을 제공합니다.',
+    tokenomics_description:
+      '버니를 정의하는 주요 수치들을 살펴보세요. 이 데이터는 토큰의 경제적 기반과 잠재력에 대한 통찰력을 제공합니다.',
     kpi_max_supply: '최대 공급량',
     kpi_circulating_supply: '유통 공급량',
     kpi_current_price: '현재 버니 가격',
@@ -1998,12 +2177,13 @@ const translations = {
     supply_chart_caption: '이 차트는 토큰 공급량을 시각화합니다.',
     supply_chart_description: '이 차트는 최대 공급량 대비 유통 공급량을 시각화합니다.',
     xrpl_home_title: 'XRP 레저의 본거지',
-    xrpl_home_description: '버니는 속도, 낮은 거래 비용, 확장성으로 유명한 XRP 레저(XRPL)에서 운영됩니다.',
+    xrpl_home_description:
+      '버니는 속도, 낮은 거래 비용, 확장성으로 유명한 XRP 레저(XRPL)에서 운영됩니다.',
     xrpl_slogan: '빠르고, 효율적이며, 신뢰할 수 있는 - 그것이 버니의 기반입니다.',
     date: '날짜',
     day: '요일',
     process_no: '프로세스 번호',
-    remaining_coins: '남은 코인 (대략)'
+    remaining_coins: '남은 코인 (대략)',
   },
   ru: {
     page_title: 'Burni Token - Инновативная децентрализованная криптовалюта',
@@ -2017,33 +2197,47 @@ const translations = {
     nav_community: 'Сообщество',
     menu_button: 'Меню',
     hero_title: 'Добро пожаловать в Burni!',
-    hero_description: 'Откройте для себя дефляционный токен, созданный для создания стоимости через дефицит. Присоединяйтесь к нам в горячем путешествии открытий!',
+    hero_description:
+      'Откройте для себя дефляционный токен, созданный для создания стоимости через дефицит. Присоединяйтесь к нам в горячем путешествии открытий!',
     hero_button: 'Узнать больше!',
     about_title: 'Что такое Burni?',
-    about_description: 'Burni - это больше, чем просто токен. Это обещание дефляционного будущего. В основе Burni лежит механизм, который навсегда удаляет токены из обращения, потенциально увеличивая стоимость оставшихся токенов.',
+    about_description:
+      'Burni - это больше, чем просто токен. Это обещание дефляционного будущего. В основе Burni лежит механизм, который навсегда удаляет токены из обращения, потенциально увеличивая стоимость оставшихся токенов.',
     burn_title: 'Секрет сжигания токенов',
-    burn_description: 'Представьте себе токены, сжигаемые как поленья в волшебном огне. Они исчезают навсегда! Этот процесс, называемый "сжиганием токенов", уменьшает общее предложение токенов Burni. Меньше токенов может означать, что каждый из них становится более ценным, подобно редким коллекционным предметам.',
-    burn_animation_note: 'Эта анимация иллюстрирует, как токены символически удаляются из обращения.',
+    burn_description:
+      'Представьте себе токены, сжигаемые как поленья в волшебном огне. Они исчезают навсегда! Этот процесс, называемый "сжиганием токенов", уменьшает общее предложение токенов Burni. Меньше токенов может означать, что каждый из них становится более ценным, подобно редким коллекционным предметам.',
+    burn_animation_note:
+      'Эта анимация иллюстрирует, как токены символически удаляются из обращения.',
     blackholed_title: 'Обещание Burni: "Черная дыра"',
-    blackholed_description: 'Burni помечен как "Черная дыра: ДА". Это означает, что максимальное предложение токенов Burni фиксировано и новые токены никогда не могут быть созданы.',
+    blackholed_description:
+      'Burni помечен как "Черная дыра: ДА". Это означает, что максимальное предложение токенов Burni фиксировано и новые токены никогда не могут быть созданы.',
     blackholed_tooltip_trigger: 'Что означает "Черная дыра"?',
-    blackholed_tooltip_text: 'Когда эмитент токена находится в "черной дыре", это означает, что адрес эмитента отказался от своих прав создавать новые токены или изменять свойства токена.',
+    blackholed_tooltip_text:
+      'Когда эмитент токена находится в "черной дыре", это означает, что адрес эмитента отказался от своих прав создавать новые токены или изменять свойства токена.',
     use_cases_title: 'Случаи использования: для чего можно использовать Burni Coin',
-    use_cases_description: 'Burni Coin - это не просто токен, а универсальный цифровой актив с растущими приложениями в экосистеме XRPL.',
+    use_cases_description:
+      'Burni Coin - это не просто токен, а универсальный цифровой актив с растущими приложениями в экосистеме XRPL.',
     use_case_gaming_title: 'Децентрализованные игры',
-    use_case_gaming_desc: 'Используйте Burni как внутриигровую валюту или для эксклюзивных игровых активов в будущих играх XRPL.',
+    use_case_gaming_desc:
+      'Используйте Burni как внутриигровую валюту или для эксклюзивных игровых активов в будущих играх XRPL.',
     use_case_nfts_title: 'Интеграция NFT',
-    use_case_nfts_desc: 'Приобретайте и торгуйте уникальными цифровыми произведениями искусства и коллекционными предметами на NFT-маркетплейсах с Burni.',
+    use_case_nfts_desc:
+      'Приобретайте и торгуйте уникальными цифровыми произведениями искусства и коллекционными предметами на NFT-маркетплейсах с Burni.',
     use_case_rewards_title: 'Системы вознаграждений',
-    use_case_rewards_desc: 'Зарабатывайте Burni, участвуя в общественных действиях, программах стейкинга или как вознаграждение за вклад.',
+    use_case_rewards_desc:
+      'Зарабатывайте Burni, участвуя в общественных действиях, программах стейкинга или как вознаграждение за вклад.',
     use_case_microtx_title: 'Микротранзакции',
-    use_case_microtx_desc: 'Воспользуйтесь преимуществами крайне низких комиссий за транзакции XRPL для быстрых и экономичных платежей.',
+    use_case_microtx_desc:
+      'Воспользуйтесь преимуществами крайне низких комиссий за транзакции XRPL для быстрых и экономичных платежей.',
     use_case_governance_title: 'Управление сообществом',
-    use_case_governance_desc: 'Держите Burni, чтобы участвовать в важных решениях о будущем проекта и иметь право голоса.',
+    use_case_governance_desc:
+      'Держите Burni, чтобы участвовать в важных решениях о будущем проекта и иметь право голоса.',
     token_schedule_title: 'Burni Coin: Дефляционный график',
-    token_schedule_description: 'Мы верим в прозрачность и долгосрочное развитие стоимости Burni Coin. Ключевым компонентом нашей экосистемы является уникальный дефляционный механизм.',
+    token_schedule_description:
+      'Мы верим в прозрачность и долгосрочное развитие стоимости Burni Coin. Ключевым компонентом нашей экосистемы является уникальный дефляционный механизм.',
     tokenomics_title: 'Мир Burni: факты и цифры',
-    tokenomics_description: 'Вот взгляд на ключевые цифры, которые определяют Burni. Эти данные дают представление об экономической основе и потенциале токена.',
+    tokenomics_description:
+      'Вот взгляд на ключевые цифры, которые определяют Burni. Эти данные дают представление об экономической основе и потенциале токена.',
     kpi_max_supply: 'Максимальное предложение',
     kpi_circulating_supply: 'Оборотное предложение',
     kpi_current_price: 'Текущая цена Burni',
@@ -2067,14 +2261,16 @@ const translations = {
     note_data_disclaimer: 'Примечание: данные могут изменяться.',
     supply_overview_title: 'Обзор предложения',
     supply_chart_caption: 'Этот график визуализирует предложение токенов.',
-    supply_chart_description: 'Этот график визуализирует оборотное предложение по отношению к максимальному предложению.',
+    supply_chart_description:
+      'Этот график визуализирует оборотное предложение по отношению к максимальному предложению.',
     xrpl_home_title: 'Дома в XRP Ledger',
-    xrpl_home_description: 'Burni работает на XRP Ledger (XRPL), известном своей скоростью, низкими транзакционными расходами и масштабируемостью.',
+    xrpl_home_description:
+      'Burni работает на XRP Ledger (XRPL), известном своей скоростью, низкими транзакционными расходами и масштабируемостью.',
     xrpl_slogan: 'Быстро, эффективно и надежно - это основа Burni.',
     date: 'Дата',
     day: 'День',
     process_no: 'Номер процесса',
-    remaining_coins: 'Оставшиеся монеты (приблизительно)'
+    remaining_coins: 'Оставшиеся монеты (приблизительно)',
   },
   tr: {
     page_title: 'Burni Token - Yenilikçi Merkezi Olmayan Kripto Para',
@@ -2087,34 +2283,48 @@ const translations = {
     nav_trade: 'Token Ticareti',
     nav_community: 'Topluluk',
     menu_button: 'Menü',
-    hero_title: 'Burni\'ye Hoş Geldiniz!',
-    hero_description: 'Kıtlık yoluyla değer yaratmak için tasarlanmış deflationist tokeni keşfedin. Ateşli bir keşif yolculuğunda bize katılın!',
+    hero_title: "Burni'ye Hoş Geldiniz!",
+    hero_description:
+      'Kıtlık yoluyla değer yaratmak için tasarlanmış deflationist tokeni keşfedin. Ateşli bir keşif yolculuğunda bize katılın!',
     hero_button: 'Daha Fazla Öğren!',
     about_title: 'Burni Nedir?',
-    about_description: 'Burni sadece bir token değildir. Deflationist bir gelecek için bir vaat. Burni\'nin merkezinde, kalan tokenların değerini potansiyel olarak artırmak için tokenları dolaşımdan kalıcı olarak çıkaran bir mekanizma var.',
+    about_description:
+      "Burni sadece bir token değildir. Deflationist bir gelecek için bir vaat. Burni'nin merkezinde, kalan tokenların değerini potansiyel olarak artırmak için tokenları dolaşımdan kalıcı olarak çıkaran bir mekanizma var.",
     burn_title: 'Token Yakma Sırrı',
-    burn_description: 'Tokenların sihirli ateşte odun parçaları gibi yanmasını hayal edin. Sonsuza dek kaybolurlar! "Token yakma" denilen bu süreç, Burni tokenlarının toplam arzını azaltır.',
-    burn_animation_note: 'Bu animasyon, tokenların sembolik olarak dolaşımdan nasıl çıkarıldığını gösterir.',
+    burn_description:
+      'Tokenların sihirli ateşte odun parçaları gibi yanmasını hayal edin. Sonsuza dek kaybolurlar! "Token yakma" denilen bu süreç, Burni tokenlarının toplam arzını azaltır.',
+    burn_animation_note:
+      'Bu animasyon, tokenların sembolik olarak dolaşımdan nasıl çıkarıldığını gösterir.',
     blackholed_title: 'Burni\'nin Vaadi: "Kara Delik"',
-    blackholed_description: 'Burni "Kara Delik: EVET" olarak işaretlenmiştir. Bu, Burni tokenlarının maksimum arzının sabit olduğu ve yeni tokenların asla oluşturulamayacağı anlamına gelir.',
+    blackholed_description:
+      'Burni "Kara Delik: EVET" olarak işaretlenmiştir. Bu, Burni tokenlarının maksimum arzının sabit olduğu ve yeni tokenların asla oluşturulamayacağı anlamına gelir.',
     blackholed_tooltip_trigger: '"Kara Delik" ne anlama gelir?',
-    blackholed_tooltip_text: 'Bir token ihraççısı "kara delik"te olduğunda, ihraç adresinin yeni tokenlar oluşturma veya token özelliklerini değiştirme haklarından vazgeçtiği anlamına gelir.',
+    blackholed_tooltip_text:
+      'Bir token ihraççısı "kara delik"te olduğunda, ihraç adresinin yeni tokenlar oluşturma veya token özelliklerini değiştirme haklarından vazgeçtiği anlamına gelir.',
     use_cases_title: 'Kullanım Alanları: Burni Coin Nerelerde Kullanılabilir',
-    use_cases_description: 'Burni Coin sadece bir token değil, XRPL ekosisteminde büyüyen uygulamalara sahip çok yönlü bir dijital varlıktır.',
+    use_cases_description:
+      'Burni Coin sadece bir token değil, XRPL ekosisteminde büyüyen uygulamalara sahip çok yönlü bir dijital varlıktır.',
     use_case_gaming_title: 'Merkezi Olmayan Oyun',
-    use_case_gaming_desc: 'Gelecekteki XRPL oyunlarında oyun içi para birimi veya özel oyun içi varlıklar için Burni kullanın.',
+    use_case_gaming_desc:
+      'Gelecekteki XRPL oyunlarında oyun içi para birimi veya özel oyun içi varlıklar için Burni kullanın.',
     use_case_nfts_title: 'NFT Entegrasyonu',
-    use_case_nfts_desc: 'Burni ile NFT pazarlarında benzersiz dijital sanat eserleri ve koleksiyonları edinin ve ticaretini yapın.',
+    use_case_nfts_desc:
+      'Burni ile NFT pazarlarında benzersiz dijital sanat eserleri ve koleksiyonları edinin ve ticaretini yapın.',
     use_case_rewards_title: 'Ödül Sistemleri',
-    use_case_rewards_desc: 'Topluluk eylemlerine katılarak, staking programları veya katkılar için ödül olarak Burni kazanın.',
+    use_case_rewards_desc:
+      'Topluluk eylemlerine katılarak, staking programları veya katkılar için ödül olarak Burni kazanın.',
     use_case_microtx_title: 'Mikro İşlemler',
-    use_case_microtx_desc: 'Hızlı ve uygun maliyetli ödemeler için XRPL\'nin son derece düşük işlem ücretlerinden yararlanın.',
+    use_case_microtx_desc:
+      "Hızlı ve uygun maliyetli ödemeler için XRPL'nin son derece düşük işlem ücretlerinden yararlanın.",
     use_case_governance_title: 'Topluluk Yönetimi',
-    use_case_governance_desc: 'Projenin geleceği hakkında önemli kararlara katılmak ve söz sahibi olmak için Burni tutun.',
+    use_case_governance_desc:
+      'Projenin geleceği hakkında önemli kararlara katılmak ve söz sahibi olmak için Burni tutun.',
     token_schedule_title: 'Burni Coin: Deflationist Program',
-    token_schedule_description: 'Burni Coin\'in şeffaflığına ve uzun vadeli değer gelişimine inanıyoruz. Ekosistemin önemli bir bileşeni, dolaşımdaki Burni Coin\'lerin toplam miktarını sürekli azaltan benzersiz deflationist mekanizmadır.',
-    tokenomics_title: 'Burni\'nin Dünyası: Gerçekler ve Rakamlar',
-    tokenomics_description: 'İşte Burni\'yi tanımlayan temel rakamlara bir bakış. Bu veriler, tokenın ekonomik temeli ve potansiyeli hakkında içgörü sağlar.',
+    token_schedule_description:
+      "Burni Coin'in şeffaflığına ve uzun vadeli değer gelişimine inanıyoruz. Ekosistemin önemli bir bileşeni, dolaşımdaki Burni Coin'lerin toplam miktarını sürekli azaltan benzersiz deflationist mekanizmadır.",
+    tokenomics_title: "Burni'nin Dünyası: Gerçekler ve Rakamlar",
+    tokenomics_description:
+      "İşte Burni'yi tanımlayan temel rakamlara bir bakış. Bu veriler, tokenın ekonomik temeli ve potansiyeli hakkında içgörü sağlar.",
     kpi_max_supply: 'Maksimum Arz',
     kpi_circulating_supply: 'Dolaşımdaki Arz',
     kpi_current_price: 'Mevcut Burni Fiyatı',
@@ -2128,9 +2338,9 @@ const translations = {
     token_details_title: 'Token Detayları',
     created_on: 'Oluşturulma Tarihi',
     ath: 'Tüm Zamanların En Yükseği (ATH)',
-    ath_tooltip: 'Burni Coin\'in ulaştığı en yüksek fiyat.',
+    ath_tooltip: "Burni Coin'in ulaştığı en yüksek fiyat.",
     atl: 'Tüm Zamanların En Düşüğü (ATL)',
-    atl_tooltip: 'Burni Coin\'in ulaştığı en düşük fiyat.',
+    atl_tooltip: "Burni Coin'in ulaştığı en düşük fiyat.",
     total_supply: 'Toplam Arz',
     platform: 'Platform',
     issuer_address: 'İhraççı Adresi',
@@ -2139,13 +2349,14 @@ const translations = {
     supply_overview_title: 'Arz Genel Bakış',
     supply_chart_caption: 'Bu grafik token arzını görselleştirir.',
     supply_chart_description: 'Bu grafik, maksimum arza göre dolaşımdaki arzı görselleştirir.',
-    xrpl_home_title: 'XRP Ledger\'da Evde',
-    xrpl_home_description: 'Burni, hızı, düşük işlem maliyetleri ve ölçeklenebilirliği ile bilinen XRP Ledger (XRPL) üzerinde çalışır.',
-    xrpl_slogan: 'Hızlı, verimli ve güvenilir - işte Burni\'nin temeli.',
+    xrpl_home_title: "XRP Ledger'da Evde",
+    xrpl_home_description:
+      'Burni, hızı, düşük işlem maliyetleri ve ölçeklenebilirliği ile bilinen XRP Ledger (XRPL) üzerinde çalışır.',
+    xrpl_slogan: "Hızlı, verimli ve güvenilir - işte Burni'nin temeli.",
     date: 'Tarih',
     day: 'Gün',
     process_no: 'İşlem No.',
-    remaining_coins: 'Kalan Coin\'ler (yaklaşık)'
+    remaining_coins: "Kalan Coin'ler (yaklaşık)",
   },
   zh: {
     page_title: 'Burni代币 - 创新去中心化加密货币',
@@ -2162,16 +2373,21 @@ const translations = {
     hero_description: '发现这个通过稀缺性创造价值的通缩代币。加入我们火热的发现之旅！',
     hero_button: '了解更多！',
     about_title: '什么是Burni？',
-    about_description: 'Burni不仅仅是一个代币。它是对通缩未来的承诺。Burni的核心是一个机制，永久地从流通中移除代币，以潜在地增加剩余代币的价值。',
+    about_description:
+      'Burni不仅仅是一个代币。它是对通缩未来的承诺。Burni的核心是一个机制，永久地从流通中移除代币，以潜在地增加剩余代币的价值。',
     burn_title: '代币燃烧的秘密',
-    burn_description: '想象代币像魔法火焰中的原木一样被燃烧。它们永远消失了！这个被称为"代币燃烧"的过程减少了Burni代币的总供应量。',
+    burn_description:
+      '想象代币像魔法火焰中的原木一样被燃烧。它们永远消失了！这个被称为"代币燃烧"的过程减少了Burni代币的总供应量。',
     burn_animation_note: '这个动画说明了代币如何象征性地从流通中移除。',
     blackholed_title: 'Burni的承诺："黑洞化"',
-    blackholed_description: 'Burni被标记为"黑洞化：是"。这意味着Burni代币的最大供应量是固定的，永远不能创建新代币。',
+    blackholed_description:
+      'Burni被标记为"黑洞化：是"。这意味着Burni代币的最大供应量是固定的，永远不能创建新代币。',
     blackholed_tooltip_trigger: '"黑洞化"是什么意思？',
-    blackholed_tooltip_text: '当代币发行者被"黑洞化"时，意味着发行地址已经放弃了创建新代币或更改代币属性的权利。',
+    blackholed_tooltip_text:
+      '当代币发行者被"黑洞化"时，意味着发行地址已经放弃了创建新代币或更改代币属性的权利。',
     use_cases_title: '使用案例：Burni币的用途',
-    use_cases_description: 'Burni币不仅仅是一个代币，而是在XRPL生态系统中具有不断增长应用的多功能数字资产。',
+    use_cases_description:
+      'Burni币不仅仅是一个代币，而是在XRPL生态系统中具有不断增长应用的多功能数字资产。',
     use_case_gaming_title: '去中心化游戏',
     use_case_gaming_desc: '在未来的XRPL游戏中使用Burni作为游戏内货币或专属游戏内资产。',
     use_case_nfts_title: 'NFT整合',
@@ -2183,7 +2399,8 @@ const translations = {
     use_case_governance_title: '社区治理',
     use_case_governance_desc: '持有Burni参与项目未来的重要决策并拥有发言权。',
     token_schedule_title: 'Burni币：通缩计划',
-    token_schedule_description: '我们相信Burni币的透明度和长期价值发展。我们生态系统的一个关键组成部分是独特的通缩机制，它持续减少流通中的Burni币总量。',
+    token_schedule_description:
+      '我们相信Burni币的透明度和长期价值发展。我们生态系统的一个关键组成部分是独特的通缩机制，它持续减少流通中的Burni币总量。',
     tokenomics_title: 'Burni的世界：事实与数据',
     tokenomics_description: '这里看一下定义Burni的关键数字。这些数据让您了解代币的经济基础和潜力。',
     kpi_max_supply: '最大供应量',
@@ -2216,7 +2433,7 @@ const translations = {
     date: '日期',
     day: '天',
     process_no: '流程编号',
-    remaining_coins: '剩余币数 (大约)'
+    remaining_coins: '剩余币数 (大约)',
   },
   hi: {
     page_title: 'बर्नी टोकन - नवाचार विकेंद्रीकृत क्रिप्टोकरेंसी',
@@ -2230,33 +2447,47 @@ const translations = {
     nav_community: 'समुदाय',
     menu_button: 'मेन्यू',
     hero_title: 'बर्नी में आपका स्वागत है!',
-    hero_description: 'दुर्लभता के माध्यम से मूल्य बनाने के लिए डिज़ाइन किए गए डिफ्लेशनरी टोकन की खोज करें। खोज की ज्वलंत यात्रा में हमारे साथ जुड़ें!',
+    hero_description:
+      'दुर्लभता के माध्यम से मूल्य बनाने के लिए डिज़ाइन किए गए डिफ्लेशनरी टोकन की खोज करें। खोज की ज्वलंत यात्रा में हमारे साथ जुड़ें!',
     hero_button: 'और जानें!',
     about_title: 'बर्नी क्या है?',
-    about_description: 'बर्नी सिर्फ एक टोकन से कहीं अधिक है। यह एक डिफ्लेशनरी भविष्य का वादा है। बर्नी के मूल में एक ऐसी प्रणाली है जो टोकन को स्थायी रूप से प्रचलन से हटा देती है ताकि बचे हुए टोकन की मूल्य संभावित रूप से बढ़ सके।',
+    about_description:
+      'बर्नी सिर्फ एक टोकन से कहीं अधिक है। यह एक डिफ्लेशनरी भविष्य का वादा है। बर्नी के मूल में एक ऐसी प्रणाली है जो टोकन को स्थायी रूप से प्रचलन से हटा देती है ताकि बचे हुए टोकन की मूल्य संभावित रूप से बढ़ सके।',
     burn_title: 'टोकन बर्निंग का रहस्य',
-    burn_description: 'कल्पना करें कि टोकन जादुई आग में लकड़ी के लट्ठों की तरह जल रहे हैं। वे हमेशा के लिए गायब हो जाते हैं! इस प्रक्रिया को "टोकन बर्निंग" कहा जाता है, जो बर्नी टोकन की कुल आपूर्ति को कम करती है।',
-    burn_animation_note: 'यह एनीमेशन दिखाता है कि टोकन को प्रतीकात्मक रूप से प्रचलन से कैसे हटाया जाता है।',
+    burn_description:
+      'कल्पना करें कि टोकन जादुई आग में लकड़ी के लट्ठों की तरह जल रहे हैं। वे हमेशा के लिए गायब हो जाते हैं! इस प्रक्रिया को "टोकन बर्निंग" कहा जाता है, जो बर्नी टोकन की कुल आपूर्ति को कम करती है।',
+    burn_animation_note:
+      'यह एनीमेशन दिखाता है कि टोकन को प्रतीकात्मक रूप से प्रचलन से कैसे हटाया जाता है।',
     blackholed_title: 'बर्नी का वादा: "ब्लैकहोल्ड"',
-    blackholed_description: 'बर्नी को "ब्लैकहोल्ड: हाँ" के रूप में चिह्नित किया गया है। इसका मतलब है कि बर्नी टोकन की अधिकतम आपूर्ति निश्चित है और नए टोकन कभी नहीं बनाए जा सकते।',
+    blackholed_description:
+      'बर्नी को "ब्लैकहोल्ड: हाँ" के रूप में चिह्नित किया गया है। इसका मतलब है कि बर्नी टोकन की अधिकतम आपूर्ति निश्चित है और नए टोकन कभी नहीं बनाए जा सकते।',
     blackholed_tooltip_trigger: '"ब्लैकहोल्ड" का क्या मतलब है?',
-    blackholed_tooltip_text: 'जब एक टोकन इश्यूकर "ब्लैकहोल्ड" होता है, तो इसका मतलब है कि इश्यू करने वाले पते ने नए टोकन बनाने या टोकन गुणों को बदलने के अपने अधिकार छोड़ दिए हैं।',
+    blackholed_tooltip_text:
+      'जब एक टोकन इश्यूकर "ब्लैकहोल्ड" होता है, तो इसका मतलब है कि इश्यू करने वाले पते ने नए टोकन बनाने या टोकन गुणों को बदलने के अपने अधिकार छोड़ दिए हैं।',
     use_cases_title: 'उपयोग के मामले: बर्नी कॉइन का उपयोग कहाँ किया जा सकता है',
-    use_cases_description: 'बर्नी कॉइन सिर्फ एक टोकन नहीं है, बल्कि XRPL इकोसिस्टम में बढ़ते अनुप्रयोगों के साथ एक बहुमुखी डिजिटली संपत्ति है।',
+    use_cases_description:
+      'बर्नी कॉइन सिर्फ एक टोकन नहीं है, बल्कि XRPL इकोसिस्टम में बढ़ते अनुप्रयोगों के साथ एक बहुमुखी डिजिटली संपत्ति है।',
     use_case_gaming_title: 'विकेंद्रीकृत गेमिंग',
-    use_case_gaming_desc: 'भविष्य के XRPL गेम्स में इन-गेम करेंसी या विशेष इन-गेम एसेट्स के लिए बर्नी का उपयोग करें।',
+    use_case_gaming_desc:
+      'भविष्य के XRPL गेम्स में इन-गेम करेंसी या विशेष इन-गेम एसेट्स के लिए बर्नी का उपयोग करें।',
     use_case_nfts_title: 'NFT एकीकरण',
-    use_case_nfts_desc: 'बर्नी के साथ NFT मार्केटप्लेस पर अनोखी डिजिटल कलाकृतियों और कलेक्टिबल्स का अधिग्रहण और व्यापार करें।',
+    use_case_nfts_desc:
+      'बर्नी के साथ NFT मार्केटप्लेस पर अनोखी डिजिटल कलाकृतियों और कलेक्टिबल्स का अधिग्रहण और व्यापार करें।',
     use_case_rewards_title: 'रिवार्ड सिस्टम',
-    use_case_rewards_desc: 'कम्युनिटी गतिविधियों में भाग लेकर, स्टेकिंग प्रोग्राम या योगदान के लिए रिवार्ड के रूप में बर्नी कमाएं।',
+    use_case_rewards_desc:
+      'कम्युनिटी गतिविधियों में भाग लेकर, स्टेकिंग प्रोग्राम या योगदान के लिए रिवार्ड के रूप में बर्नी कमाएं।',
     use_case_microtx_title: 'माइक्रो ट्रांजैक्शन',
-    use_case_microtx_desc: 'तेज़ और लागत-प्रभावी भुगतान के लिए XRPL की अत्यंत कम लेनदेन फीस का लाभ उठाएं।',
+    use_case_microtx_desc:
+      'तेज़ और लागत-प्रभावी भुगतान के लिए XRPL की अत्यंत कम लेनदेन फीस का लाभ उठाएं।',
     use_case_governance_title: 'कम्युनिटी गवर्नेंस',
-    use_case_governance_desc: 'प्रोजेक्ट के भविष्य के बारे में महत्वपूर्ण निर्णयों में भाग लेने और आवाज़ उठाने के लिए बर्नी रखें।',
+    use_case_governance_desc:
+      'प्रोजेक्ट के भविष्य के बारे में महत्वपूर्ण निर्णयों में भाग लेने और आवाज़ उठाने के लिए बर्नी रखें।',
     token_schedule_title: 'बर्नी कॉइन: डिफ्लेशनरी शेड्यूल',
-    token_schedule_description: 'हम बर्नी कॉइन की पारदर्शिता और दीर्घकालिक मूल्य विकास में विश्वास करते हैं। हमारे इकोसिस्टम का एक मुख्य घटक अनोखी डिफ्लेशनरी तंत्र है।',
+    token_schedule_description:
+      'हम बर्नी कॉइन की पारदर्शिता और दीर्घकालिक मूल्य विकास में विश्वास करते हैं। हमारे इकोसिस्टम का एक मुख्य घटक अनोखी डिफ्लेशनरी तंत्र है।',
     tokenomics_title: 'बर्नी की दुनिया: तथ्य और आंकड़े',
-    tokenomics_description: 'यहाँ बर्नी को परिभाषित करने वाले मुख्य आंकड़ों पर एक नज़र है। यह डेटा आपको टोकन की आर्थिक नींव और क्षमता की अंतर्दृष्टि देता है।',
+    tokenomics_description:
+      'यहाँ बर्नी को परिभाषित करने वाले मुख्य आंकड़ों पर एक नज़र है। यह डेटा आपको टोकन की आर्थिक नींव और क्षमता की अंतर्दृष्टि देता है।',
     kpi_max_supply: 'अधिकतम आपूर्ति',
     kpi_circulating_supply: 'प्रचलित आपूर्ति',
     kpi_current_price: 'वर्तमान बर्नी कीमत',
@@ -2282,12 +2513,13 @@ const translations = {
     supply_chart_caption: 'यह चार्ट टोकन आपूर्ति को दर्शाता है।',
     supply_chart_description: 'यह चार्ट अधिकतम आपूर्ति के संबंध में प्रचलित आपूर्ति को दर्शाता है।',
     xrpl_home_title: 'XRP लेजर में घर',
-    xrpl_home_description: 'बर्नी XRP लेजर (XRPL) पर काम करता है, जो अपनी गति, कम लेनदेन लागत और स्केलेबिलिटी के लिए जाना जाता है।',
+    xrpl_home_description:
+      'बर्नी XRP लेजर (XRPL) पर काम करता है, जो अपनी गति, कम लेनदेन लागत और स्केलेबिलिटी के लिए जाना जाता है।',
     xrpl_slogan: 'तेज़, कुशल और विश्वसनीय - यही बर्नी की नींव है।',
     date: 'तारीख',
     day: 'गणना',
     process_no: 'प्रक्रिया संख्या',
-    remaining_coins: 'बचे हुए सिक्के (लगभग)'
+    remaining_coins: 'बचे हुए सिक्के (लगभग)',
   },
   it: {
     page_title: 'Burni Token - Criptovaluta Decentralizzata Innovativa',
@@ -2295,39 +2527,53 @@ const translations = {
     nav_home: 'Home',
     nav_about: 'Info su Burni',
     nav_tokenomics: 'Tokenomics',
-    nav_use_cases: 'Casi d\'Uso',
+    nav_use_cases: "Casi d'Uso",
     nav_token_schedule: 'Programma Token',
     nav_trade: 'Scambia Token',
     nav_community: 'Comunità',
     menu_button: 'Menu',
     hero_title: 'Benvenuto in Burni!',
-    hero_description: 'Scopri il token deflazionistico progettato per creare valore attraverso la scarsità. Unisciti a noi in un viaggio ardente di scoperta!',
+    hero_description:
+      'Scopri il token deflazionistico progettato per creare valore attraverso la scarsità. Unisciti a noi in un viaggio ardente di scoperta!',
     hero_button: 'Scopri di Più!',
-    about_title: 'Cos\'è Burni?',
-    about_description: 'Burni è più di un semplice token. È una promessa per un futuro deflazionistico. Al centro di Burni c\'è un meccanismo che rimuove permanentemente i token dalla circolazione per aumentare potenzialmente il valore dei token rimanenti.',
+    about_title: "Cos'è Burni?",
+    about_description:
+      "Burni è più di un semplice token. È una promessa per un futuro deflazionistico. Al centro di Burni c'è un meccanismo che rimuove permanentemente i token dalla circolazione per aumentare potenzialmente il valore dei token rimanenti.",
     burn_title: 'Il Segreto del Burning dei Token',
-    burn_description: 'Immagina i token che vengono bruciati come tronchi in un fuoco magico. Scompaiono per sempre! Questo processo, chiamato "burning dei token", riduce l\'offerta totale di token Burni.',
-    burn_animation_note: 'Questa animazione illustra come i token vengono simbolicamente rimossi dalla circolazione.',
+    burn_description:
+      'Immagina i token che vengono bruciati come tronchi in un fuoco magico. Scompaiono per sempre! Questo processo, chiamato "burning dei token", riduce l\'offerta totale di token Burni.',
+    burn_animation_note:
+      'Questa animazione illustra come i token vengono simbolicamente rimossi dalla circolazione.',
     blackholed_title: 'Promessa di Burni: "Blackholed"',
-    blackholed_description: 'Burni è contrassegnato come "Blackholed: SÌ". Questo significa che l\'offerta massima di token Burni è fissa e non possono mai essere creati nuovi token.',
+    blackholed_description:
+      'Burni è contrassegnato come "Blackholed: SÌ". Questo significa che l\'offerta massima di token Burni è fissa e non possono mai essere creati nuovi token.',
     blackholed_tooltip_trigger: 'Cosa significa "Blackholed"?',
-    blackholed_tooltip_text: 'Quando un emittente di token è "blackholed", significa che l\'indirizzo emittente ha rinunciato ai suoi diritti di creare nuovi token o modificare le proprietà del token.',
-    use_cases_title: 'Casi d\'Uso: Per Cosa Può Essere Usato Burni Coin',
-    use_cases_description: 'Burni Coin non è solo un token, ma un asset digitale versatile con applicazioni crescenti nell\'ecosistema XRPL.',
+    blackholed_tooltip_text:
+      'Quando un emittente di token è "blackholed", significa che l\'indirizzo emittente ha rinunciato ai suoi diritti di creare nuovi token o modificare le proprietà del token.',
+    use_cases_title: "Casi d'Uso: Per Cosa Può Essere Usato Burni Coin",
+    use_cases_description:
+      "Burni Coin non è solo un token, ma un asset digitale versatile con applicazioni crescenti nell'ecosistema XRPL.",
     use_case_gaming_title: 'Gaming Decentralizzato',
-    use_case_gaming_desc: 'Usa Burni come valuta di gioco o per asset esclusivi nei futuri giochi XRPL.',
+    use_case_gaming_desc:
+      'Usa Burni come valuta di gioco o per asset esclusivi nei futuri giochi XRPL.',
     use_case_nfts_title: 'Integrazione NFT',
-    use_case_nfts_desc: 'Acquisisci e scambia opere d\'arte digitali uniche e oggetti da collezione sui marketplace NFT con Burni.',
+    use_case_nfts_desc:
+      "Acquisisci e scambia opere d'arte digitali uniche e oggetti da collezione sui marketplace NFT con Burni.",
     use_case_rewards_title: 'Sistemi di Ricompense',
-    use_case_rewards_desc: 'Guadagna Burni partecipando ad azioni della comunità, programmi di staking, o come ricompense per i contributi.',
+    use_case_rewards_desc:
+      'Guadagna Burni partecipando ad azioni della comunità, programmi di staking, o come ricompense per i contributi.',
     use_case_microtx_title: 'Microtransazioni',
-    use_case_microtx_desc: 'Beneficia delle commissioni di transazione estremamente basse di XRPL per pagamenti veloci ed economici.',
+    use_case_microtx_desc:
+      'Beneficia delle commissioni di transazione estremamente basse di XRPL per pagamenti veloci ed economici.',
     use_case_governance_title: 'Governance della Comunità',
-    use_case_governance_desc: 'Mantieni Burni per partecipare a decisioni importanti sul futuro del progetto e avere voce in capitolo.',
+    use_case_governance_desc:
+      'Mantieni Burni per partecipare a decisioni importanti sul futuro del progetto e avere voce in capitolo.',
     token_schedule_title: 'Burni Coin: Programma Deflazionistico',
-    token_schedule_description: 'Crediamo nella trasparenza e nello sviluppo del valore a lungo termine di Burni Coin. Un componente chiave del nostro ecosistema è il meccanismo deflazionistico unico.',
+    token_schedule_description:
+      'Crediamo nella trasparenza e nello sviluppo del valore a lungo termine di Burni Coin. Un componente chiave del nostro ecosistema è il meccanismo deflazionistico unico.',
     tokenomics_title: 'Il Mondo di Burni: Fatti e Cifre',
-    tokenomics_description: 'Ecco uno sguardo alle cifre chiave che definiscono Burni. Questi dati ti danno un\'idea della base economica e del potenziale del token.',
+    tokenomics_description:
+      "Ecco uno sguardo alle cifre chiave che definiscono Burni. Questi dati ti danno un'idea della base economica e del potenziale del token.",
     kpi_max_supply: 'Offerta Massima',
     kpi_circulating_supply: 'Offerta Circolante',
     kpi_current_price: 'Prezzo Attuale di Burni',
@@ -2349,17 +2595,19 @@ const translations = {
     issuer_address: 'Indirizzo Emittente',
     explorer_links: 'Collegamenti Explorer',
     note_data_disclaimer: 'Nota: I dati sono soggetti a modifiche.',
-    supply_overview_title: 'Panoramica dell\'Offerta',
-    supply_chart_caption: 'Questo grafico visualizza l\'offerta del token.',
-    supply_chart_description: 'Questo grafico visualizza l\'offerta circolante in relazione all\'offerta massima.',
+    supply_overview_title: "Panoramica dell'Offerta",
+    supply_chart_caption: "Questo grafico visualizza l'offerta del token.",
+    supply_chart_description:
+      "Questo grafico visualizza l'offerta circolante in relazione all'offerta massima.",
     xrpl_home_title: 'A Casa su XRP Ledger',
-    xrpl_home_description: 'Burni opera su XRP Ledger (XRPL), noto per la sua velocità, bassi costi di transazione e scalabilità.',
+    xrpl_home_description:
+      'Burni opera su XRP Ledger (XRPL), noto per la sua velocità, bassi costi di transazione e scalabilità.',
     xrpl_slogan: 'Veloce, efficiente e affidabile - questa è la base di Burni.',
     date: 'Data',
     day: 'Giorno',
     process_no: 'Processo N.',
-    remaining_coins: 'Monete Rimanenti (appross.)'
-  }
+    remaining_coins: 'Monete Rimanenti (appross.)',
+  },
 };
 
 // ===== ENHANCED FEATURE INTEGRATION =====
@@ -2416,7 +2664,7 @@ document.addEventListener('DOMContentLoaded', () => {
         filename: event.filename,
         lineno: event.lineno,
         colno: event.colno,
-        type: 'javascript_error'
+        type: 'javascript_error',
       });
     }
   });
@@ -2428,7 +2676,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.BurniAnalytics) {
       window.BurniAnalytics.trackError(new Error(event.reason), {
         type: 'unhandled_promise_rejection',
-        reason: event.reason
+        reason: event.reason,
       });
     }
   });
@@ -2457,13 +2705,13 @@ function updateChartsForTheme(theme) {
   const lightColors = {
     text: '#111827',
     grid: '#E5E7EB',
-    background: '#FFFFFF'
+    background: '#FFFFFF',
   };
 
   const darkColors = {
     text: '#F3F4F6',
     grid: '#374151',
-    background: '#1F2937'
+    background: '#1F2937',
   };
 
   const colors = isDark ? darkColors : lightColors;
@@ -2567,12 +2815,16 @@ function showKeyboardShortcutsHelp() {
     <div class="bg-white dark:bg-dark-card rounded-lg p-6 max-w-md w-full mx-4">
       <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Keyboard Shortcuts</h3>
       <div class="space-y-2">
-        ${shortcuts.map(shortcut => `
+        ${shortcuts
+          .map(
+            (shortcut) => `
           <div class="flex justify-between items-center">
             <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm font-mono">${shortcut.key}</kbd>
             <span class="text-sm text-gray-600 dark:text-gray-300">${shortcut.description}</span>
           </div>
-        `).join('')}
+        `,
+          )
+          .join('')}
       </div>
       <button id="close-shortcuts-help" class="mt-4 w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
         Close
@@ -2664,7 +2916,8 @@ function showInstallPrompt() {
 // Service Worker registration with enhanced error handling
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
+    navigator.serviceWorker
+      .register('/sw.js')
       .then((registration) => {
         console.log('ServiceWorker registration successful:', registration);
 
@@ -2762,13 +3015,16 @@ class PriceUpdateManager {
 
   async updatePricesWithAnimation() {
     try {
-      const newPrices = typeof fetchLivePrices === 'function' ? await fetchLivePrices() : await this.fetchPricesCompat();
-      
+      const newPrices =
+        typeof fetchLivePrices === 'function'
+          ? await fetchLivePrices()
+          : await this.fetchPricesCompat();
+
       // Animate price changes
-      Object.keys(newPrices).forEach(currency => {
+      Object.keys(newPrices).forEach((currency) => {
         const oldPrice = this.lastPrices[currency];
         const newPrice = newPrices[currency];
-        
+
         if (oldPrice && oldPrice.priceUSD !== newPrice.priceUSD) {
           this.animatePriceChange(currency, oldPrice.priceUSD, newPrice.priceUSD);
         }
@@ -2776,12 +3032,13 @@ class PriceUpdateManager {
 
       this.lastPrices = { ...newPrices };
       this.updatePriceDisplay(newPrices);
-      
+
       // Trigger custom event for price updates
-      window.dispatchEvent(new CustomEvent('pricesUpdated', { 
-        detail: { prices: newPrices, timestamp: Date.now() }
-      }));
-      
+      window.dispatchEvent(
+        new CustomEvent('pricesUpdated', {
+          detail: { prices: newPrices, timestamp: Date.now() },
+        }),
+      );
     } catch (error) {
       throw error;
     }
@@ -2791,20 +3048,22 @@ class PriceUpdateManager {
   async fetchPricesCompat() {
     const fallbackPrices = {
       burni: {
-        priceUSD: 0.00000850,
+        priceUSD: 0.0000085,
         priceXRP: 0.0000045,
         circulatingSupply: 48500000,
         holders: 2547,
-        totalBurned: 1500000
+        totalBurned: 1500000,
       },
       xrp: {
-        priceUSD: 1.85
-      }
+        priceUSD: 1.85,
+      },
     };
 
     try {
       // Try to fetch XRP price
-      const xrpResponse = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd');
+      const xrpResponse = await fetch(
+        'https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd',
+      );
       if (xrpResponse.ok) {
         const xrpData = await xrpResponse.json();
         fallbackPrices.xrp.priceUSD = xrpData.ripple?.usd || fallbackPrices.xrp.priceUSD;
@@ -2818,11 +3077,11 @@ class PriceUpdateManager {
 
   animatePriceChange(currency, oldPrice, newPrice) {
     const elements = document.querySelectorAll(`[data-price="${currency}"]`);
-    
-    elements.forEach(element => {
+
+    elements.forEach((element) => {
       // Add price update animation class
       element.classList.add('price-update');
-      
+
       // Add color indication for price direction
       if (newPrice > oldPrice) {
         element.classList.add('text-green-500');
@@ -2831,7 +3090,7 @@ class PriceUpdateManager {
         element.classList.add('text-red-500');
         element.classList.remove('text-green-500');
       }
-      
+
       // Remove animation class after animation completes
       setTimeout(() => {
         element.classList.remove('price-update', 'text-green-500', 'text-red-500');
@@ -2842,13 +3101,13 @@ class PriceUpdateManager {
   updatePriceDisplay(prices) {
     // Update Burni price
     const burniPriceElements = document.querySelectorAll('[data-price="burni"]');
-    burniPriceElements.forEach(element => {
+    burniPriceElements.forEach((element) => {
       element.textContent = `$${prices.burni.priceUSD.toFixed(8)}`;
     });
 
     // Update XRP price
     const xrpPriceElements = document.querySelectorAll('[data-price="xrp"]');
-    xrpPriceElements.forEach(element => {
+    xrpPriceElements.forEach((element) => {
       element.textContent = `$${prices.xrp.priceUSD.toFixed(4)}`;
     });
 
@@ -2865,19 +3124,19 @@ class PriceUpdateManager {
 
   animateCounter(selector, targetValue) {
     const elements = document.querySelectorAll(selector);
-    
-    elements.forEach(element => {
+
+    elements.forEach((element) => {
       const currentValue = parseInt(element.textContent.replace(/[^\d]/g, '')) || 0;
       const duration = 1000; // 1 second animation
       const steps = 30;
       const increment = (targetValue - currentValue) / steps;
       const stepDuration = duration / steps;
-      
+
       let currentStep = 0;
       const timer = setInterval(() => {
         currentStep++;
-        const newValue = Math.round(currentValue + (increment * currentStep));
-        
+        const newValue = Math.round(currentValue + increment * currentStep);
+
         if (currentStep >= steps) {
           element.textContent = this.formatNumber(targetValue);
           clearInterval(timer);
@@ -2900,8 +3159,8 @@ class PriceUpdateManager {
   fallbackToStaticPrices() {
     console.log('Using fallback static prices due to API failures');
     const staticPrices = {
-      burni: { priceUSD: 0.00000850, priceXRP: 0.0000045 },
-      xrp: { priceUSD: 1.85 }
+      burni: { priceUSD: 0.0000085, priceXRP: 0.0000045 },
+      xrp: { priceUSD: 1.85 },
     };
     this.updatePriceDisplay(staticPrices);
   }
@@ -2924,28 +3183,31 @@ class ImageOptimizer {
 
   setupIntersectionObserver() {
     if ('IntersectionObserver' in window) {
-      this.observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            this.loadImage(entry.target);
-            this.observer.unobserve(entry.target);
-          }
-        });
-      }, {
-        root: null,
-        rootMargin: '50px',
-        threshold: 0.1
-      });
+      this.observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              this.loadImage(entry.target);
+              this.observer.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          root: null,
+          rootMargin: '50px',
+          threshold: 0.1,
+        },
+      );
     }
   }
 
   optimizeImages() {
     const images = document.querySelectorAll('img[data-src]');
-    
-    images.forEach(img => {
+
+    images.forEach((img) => {
       this.lazyImages.add(img);
       img.classList.add('lazy-image', 'opacity-0');
-      
+
       if (this.observer) {
         this.observer.observe(img);
       } else {
@@ -2958,7 +3220,7 @@ class ImageOptimizer {
   async loadImage(img) {
     try {
       const src = img.dataset.src;
-      
+
       if (this.imageCache.has(src)) {
         this.applyImage(img, src);
         return;
@@ -2970,14 +3232,13 @@ class ImageOptimizer {
         this.imageCache.set(src, true);
         this.applyImage(img, src);
       };
-      
+
       imageLoader.onerror = () => {
         console.warn(`Failed to load image: ${src}`);
         img.classList.add('opacity-50');
       };
-      
+
       imageLoader.src = src;
-      
     } catch (error) {
       console.error('Image loading error:', error);
     }
@@ -2987,7 +3248,7 @@ class ImageOptimizer {
     img.src = src;
     img.classList.remove('opacity-0');
     img.classList.add('fade-in', 'optimized-image');
-    
+
     // Add performance optimizations
     img.style.willChange = 'auto';
     img.loading = 'lazy';
@@ -2998,10 +3259,10 @@ class ImageOptimizer {
     const criticalImages = [
       '/assets/images/burni-logo.webp',
       '/assets/images/burniimage.webp',
-      '/assets/images/burni-chart.webp'
+      '/assets/images/burni-chart.webp',
     ];
 
-    criticalImages.forEach(src => {
+    criticalImages.forEach((src) => {
       const link = document.createElement('link');
       link.rel = 'preload';
       link.as = 'image';
@@ -3022,8 +3283,8 @@ class AnimationManager {
   optimizeAnimations() {
     // Apply GPU acceleration to key elements
     const animatedElements = document.querySelectorAll('.pixar-button, .section-card, .hover-lift');
-    
-    animatedElements.forEach(element => {
+
+    animatedElements.forEach((element) => {
       element.classList.add('gpu-accelerated', 'optimize-animations');
     });
 
@@ -3042,11 +3303,11 @@ class AnimationManager {
   animationLoop() {
     // Optimize animations based on performance
     const fps = this.calculateFPS();
-    
+
     if (fps < 30) {
       this.reduceAnimationComplexity();
     }
-    
+
     this.rafId = requestAnimationFrame(() => this.animationLoop());
   }
 
@@ -3061,7 +3322,7 @@ class AnimationManager {
   reduceAnimationComplexity() {
     // Reduce animation complexity when performance is low
     const complexAnimations = document.querySelectorAll('.burni-glow, .pulse-slow');
-    complexAnimations.forEach(element => {
+    complexAnimations.forEach((element) => {
       element.style.animationDuration = '5s'; // Slower animations
     });
   }
@@ -3077,17 +3338,16 @@ async function initializeOptimizedFeatures() {
   try {
     // Start price updates
     await priceManager.startRealTimeUpdates();
-    
+
     // Optimize images
     imageOptimizer.preloadCriticalImages();
     imageOptimizer.optimizeImages();
-    
+
     // Optimize animations
     animationManager.optimizeAnimations();
     animationManager.startAnimationFrame();
-    
+
     console.log('All optimizations initialized successfully');
-    
   } catch (error) {
     console.error('Error initializing optimizations:', error);
   }

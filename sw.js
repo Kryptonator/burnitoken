@@ -62,7 +62,8 @@ const API_URLS = [
 self.addEventListener('install', (event) => {
   console.log('Service Worker installing...');
   event.waitUntil(
-    caches.open(CACHE_NAME)
+    caches
+      .open(CACHE_NAME)
       .then((cache) => {
         console.log('Caching app shell assets');
         return cache.addAll(ASSETS_TO_CACHE);
@@ -73,7 +74,7 @@ self.addEventListener('install', (event) => {
       })
       .catch((error) => {
         console.error('Service Worker installation failed:', error);
-      })
+      }),
   );
 });
 
@@ -81,7 +82,8 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   console.log('Service Worker activating...');
   event.waitUntil(
-    caches.keys()
+    caches
+      .keys()
       .then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
@@ -89,13 +91,13 @@ self.addEventListener('activate', (event) => {
               console.log('Deleting old cache:', cacheName);
               return caches.delete(cacheName);
             }
-          })
+          }),
         );
       })
       .then(() => {
         console.log('Service Worker activated');
         return self.clients.claim();
-      })
+      }),
   );
 });
 
@@ -104,40 +106,36 @@ self.addEventListener('fetch', (event) => {
   const requestUrl = new URL(event.request.url);
 
   // Handle API requests with network-first strategy
-  if (API_URLS.some(url => event.request.url.includes(url.split('?')[0]))) {
-    event.respondWith(
-      networkFirstStrategy(event.request, API_CACHE_NAME)
-    );
+  if (API_URLS.some((url) => event.request.url.includes(url.split('?')[0]))) {
+    event.respondWith(networkFirstStrategy(event.request, API_CACHE_NAME));
     return;
   }
 
   // Handle navigation requests
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request)
-        .catch(() => {
-          return caches.match('/index.html');
-        })
+      fetch(event.request).catch(() => {
+        return caches.match('/index.html');
+      }),
     );
     return;
   }
 
   // Handle asset requests with cache-first strategy
-  if (event.request.destination === 'image' ||
+  if (
+    event.request.destination === 'image' ||
     event.request.destination === 'style' ||
-    event.request.destination === 'script') {
-    event.respondWith(
-      cacheFirstStrategy(event.request, CACHE_NAME)
-    );
+    event.request.destination === 'script'
+  ) {
+    event.respondWith(cacheFirstStrategy(event.request, CACHE_NAME));
     return;
   }
 
   // Default strategy for other requests
   event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        return response || fetch(event.request);
-      })
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
+    }),
   );
 });
 
@@ -185,15 +183,11 @@ self.addEventListener('sync', (event) => {
   console.log('Background sync event:', event.tag);
 
   if (event.tag === 'background-analytics') {
-    event.waitUntil(
-      handleBackgroundAnalytics()
-    );
+    event.waitUntil(handleBackgroundAnalytics());
   }
 
   if (event.tag === 'background-price-update') {
-    event.waitUntil(
-      handleBackgroundPriceUpdate()
-    );
+    event.waitUntil(handleBackgroundPriceUpdate());
   }
 });
 
@@ -208,25 +202,23 @@ self.addEventListener('push', (event) => {
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
-      primaryKey: 1
+      primaryKey: 1,
     },
     actions: [
       {
         action: 'explore',
         title: 'Explore',
-        icon: '/assets/images/favicon-16x16.png'
+        icon: '/assets/images/favicon-16x16.png',
       },
       {
         action: 'close',
         title: 'Close',
-        icon: '/assets/images/favicon-16x16.png'
-      }
-    ]
+        icon: '/assets/images/favicon-16x16.png',
+      },
+    ],
   };
 
-  event.waitUntil(
-    self.registration.showNotification('Burni Token Update', options)
-  );
+  event.waitUntil(self.registration.showNotification('Burni Token Update', options));
 });
 
 // Notification click handler
@@ -236,9 +228,7 @@ self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
   if (event.action === 'explore') {
-    event.waitUntil(
-      clients.openWindow('/')
-    );
+    event.waitUntil(clients.openWindow('/'));
   }
 });
 
@@ -258,17 +248,19 @@ async function handleBackgroundAnalytics() {
 // Background price update handler
 async function handleBackgroundPriceUpdate() {
   try {
-    const priceResponse = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd');
+    const priceResponse = await fetch(
+      'https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd',
+    );
     if (priceResponse.ok) {
       const priceData = await priceResponse.json();
       await storePriceData(priceData);
 
       // Notify all clients about price update
       const clients = await self.clients.matchAll();
-      clients.forEach(client => {
+      clients.forEach((client) => {
         client.postMessage({
           type: 'PRICE_UPDATE',
-          data: priceData
+          data: priceData,
         });
       });
     }
