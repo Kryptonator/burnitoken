@@ -70,6 +70,7 @@
     <link rel="stylesheet" href="/assets/css/critical.css" />
     <link rel="stylesheet" href="/assets/css/price-widget.css" />
     <link rel="stylesheet" href="/assets/css/schedule-table.css" />
+    <link rel="stylesheet" href="/assets/css/burni-calculator.css" />
     <script src="/assets/security.js"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Baloo+2:wght@700&amp;display=swap"
@@ -510,6 +511,13 @@
               data-i18n="nav_trade"
               aria-label="Navigate to Trade section"
               >Trade Tokens</a
+            >
+            <a
+              href="#burni-calculator"
+              class="nav-link"
+              data-i18n="nav_calculator"
+              aria-label="Navigate to BURNI Calculator section"
+              >Calculator</a
             >
             <a
               href="#community"
@@ -1522,6 +1530,80 @@
             </div>
           </div>
         </section>
+
+        <!-- BURNI Calculator Section -->
+        <section id="burni-calculator" class="py-16 bg-gradient-to-br from-purple-50 to-pink-100">
+          <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+              <h2
+                class="text-4xl font-bold mb-4 text-gray-800 font-baloo-2"
+                data-i18n="calculator_title"
+              >
+                🧮 BURNI Token Calculator
+              </h2>
+              <p class="text-xl text-gray-600 max-w-3xl mx-auto" data-i18n="calculator_description">
+                Simulate the BURNI token burn and lock schedule. See how our deflationary mechanism
+                creates value through scarcity over time.
+              </p>
+            </div>
+
+            <!-- Calculator Container -->
+            <div id="calculator-display">
+              <div class="calculator-loading">Loading calculator...</div>
+            </div>
+
+            <!-- Calculator Info -->
+            <div class="mt-8 bg-white rounded-xl shadow-lg p-6">
+              <h3 class="text-2xl font-bold mb-4 text-gray-800">📊 How the Calculator Works</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h4 class="font-bold text-lg mb-2 text-orange-600">🔥 Burning Process</h4>
+                  <p class="text-gray-600">
+                    Every 3 days, 3% of the current BURNI token supply is permanently burned,
+                    reducing the total supply and creating scarcity.
+                  </p>
+                </div>
+                <div>
+                  <h4 class="font-bold text-lg mb-2 text-yellow-600">🔒 Locking Process</h4>
+                  <p class="text-gray-600">
+                    After burning, 2% of the remaining supply is locked away for future ecosystem
+                    development and community rewards.
+                  </p>
+                </div>
+                <div>
+                  <h4 class="font-bold text-lg mb-2 text-blue-600">📈 Value Creation</h4>
+                  <p class="text-gray-600">
+                    This dual mechanism creates immediate scarcity (burning) while ensuring
+                    long-term sustainability (locking).
+                  </p>
+                </div>
+                <div>
+                  <h4 class="font-bold text-lg mb-2 text-green-600">⏰ Timeline</h4>
+                  <p class="text-gray-600">
+                    The process continues for 256 iterations (approximately 2 years), creating a
+                    predictable deflationary schedule.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Interactive Controls -->
+            <div class="mt-8 text-center">
+              <div class="bg-gradient-to-r from-orange-500 to-red-500 rounded-xl p-6 text-white">
+                <h3 class="text-xl font-bold mb-4">🚀 Start Your Calculation</h3>
+                <p class="mb-4">
+                  Explore different scenarios and see how BURNI's deflationary mechanics work
+                </p>
+                <button
+                  onclick="initializeCalculator()"
+                  class="bg-white text-orange-600 px-6 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors duration-300"
+                >
+                  🔥 Launch Calculator
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
     <footer class="bg-gray-900 text-white py-8 mt-12">
@@ -1983,6 +2065,52 @@
       // Load prices immediately and every 30 seconds
       setTimeout(loadDirectPrices, 1000);
       setInterval(loadDirectPrices, 30000);
+    </script>
+
+    <!-- BURNI Calculator Script -->
+    <script src="/assets/burni-calculator.js"></script>
+    <script>
+      // Initialize Calculator
+      function initializeCalculator() {
+        const container = document.getElementById('calculator-display');
+        if (container && typeof burniCalculator !== 'undefined') {
+          container.innerHTML = burniCalculator.generateHTMLTable(20);
+
+          // Scroll to calculator
+          document.getElementById('burni-calculator').scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        } else {
+          console.error('Calculator not available');
+          container.innerHTML =
+            '<div class="text-center text-red-500">Calculator failed to load</div>';
+        }
+      }
+
+      // Auto-initialize calculator on page load
+      document.addEventListener('DOMContentLoaded', function () {
+        // Initialize calculator with basic view
+        setTimeout(() => {
+          const container = document.getElementById('calculator-display');
+          if (container && typeof burniCalculator !== 'undefined') {
+            try {
+              container.innerHTML = burniCalculator.generateHTMLTable(10);
+            } catch (error) {
+              console.error('Calculator initialization error:', error);
+              container.innerHTML = `
+                <div class="text-center p-8">
+                  <div class="text-red-500 text-lg font-bold mb-2">⚠️ Calculator Loading Error</div>
+                  <p class="text-gray-600">Please refresh the page or try again later.</p>
+                  <button onclick="initializeCalculator()" class="mt-4 bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">
+                    🔄 Retry
+                  </button>
+                </div>
+              `;
+            }
+          }
+        }, 2000);
+      });
     </script>
   </body>
 </html>

@@ -7,6 +7,11 @@
 - **XRPL Livenet:** https://livenet.xrpl.org/
 - **Ripple Explorer:** https://github.com/ripple/explorer
 
+### 🧮 **NEW: BURNI Calculator Integration**
+- **Calculator Date:** 15. Juni 2025
+- **Python Script Integration:** Complete burn/lock simulation
+- **Interactive Web Calculator:** Real-time calculations with visualization
+
 ---
 
 ## 🎯 **MAJOR FEATURES IMPLEMENTED:**
@@ -28,6 +33,55 @@
 - ✅ **Multiple API Fallbacks:** Hohe Verfügbarkeit
 - ✅ **Error Handling:** Graceful Degradation
 - ✅ **Performance Optimized:** Effiziente Datenabfrage
+
+### 4. **🧮 BURNI Token Calculator** (NEW!)
+- ✅ **Interactive Calculator:** Real-time burn/lock simulations
+- ✅ **Python Algorithm Integration:** Exact replication of provided script
+- ✅ **CSV Export:** Downloadable burn schedule data
+- ✅ **Customizable Parameters:** User-defined calculations
+- ✅ **Visual Statistics:** Comprehensive progress tracking
+- ✅ **Mobile Responsive:** Full tablet/phone support
+
+---
+
+## 🧮 **BURNI CALCULATOR - DETAILED FEATURES:**
+
+### **Core Functionality:**
+```
+🔥 Burn Calculation: 3% every 3 days (256 iterations)
+🔒 Lock Calculation: 2% of remainder after burn
+📊 Timeline: ~2 years (765 days total)
+💰 Starting Amount: 500,000 EUR (configurable)
+```
+
+### **Interactive Features:**
+- ✅ **Real-time Calculation:** Instant results as you adjust parameters
+- ✅ **CSV Export:** Download complete burn schedule
+- ✅ **Custom Parameters:** User-defined start amounts and rates
+- ✅ **Progress Visualization:** Statistics with percentage tracking
+- ✅ **Mobile Optimized:** Touch-friendly interface
+
+### **Technical Implementation:**
+```javascript
+// Calculator Algorithm (from Python script)
+burn = Math.round(current * 0.03);           // 3% burn
+remainder = current - burn;
+lock = Math.round(remainder * 0.02);         // 2% lock  
+newCurrent = remainder - lock;               // New amount
+```
+
+### **Data Outputs:**
+- 📈 **Total Burned:** 60.73% (303,637 EUR)
+- 🔒 **Total Locked:** 39.27% (196,347 EUR)  
+- ⏰ **Duration:** 765 days (256 iterations)
+- 📊 **Final Amount:** 16 EUR remaining
+
+### **Files Created:**
+```
+├── assets/burni-calculator.js        (Main calculator logic)
+├── assets/css/burni-calculator.css   (Styling and responsive design)
+└── test-burni-calculator.js          (Comprehensive testing)
+```
 
 ---
 
@@ -77,15 +131,19 @@
 
 ### **New Files Created:**
 ```
-├── assets/xrpl-data.js           (Real-time XRPL data module)
-└── test-xrpl-data.js            (Comprehensive testing script)
+├── assets/xrpl-data.js              (Real-time XRPL data module)
+├── assets/burni-calculator.js       (BURNI burn/lock calculator)
+├── assets/css/burni-calculator.css  (Calculator styling)
+├── test-xrpl-data.js               (XRPL testing script)
+└── test-burni-calculator.js        (Calculator testing script)
 ```
 
 ### **Modified Files:**
 ```
-├── index.html                   (Major section addition + navigation)
-├── assets/live-price-config.js  (Extended API endpoints)
-└── DEPLOYMENT_SUMMARY.md        (Updated documentation)
+├── index.html                      (Major sections: XRPL + Calculator + navigation)
+├── assets/live-price-config.js     (Extended API endpoints)
+├── DEPLOYMENT_SUMMARY.md           (Updated documentation)
+└── XRPL_INTEGRATION_REPORT.md      (This file - comprehensive updates)
 ```
 
 ### **Navigation Integration:**
@@ -146,14 +204,16 @@ Fallback: https://s1.ripple.com:51234
 ### **Visual Design:**
 - 🎨 **Gradient Cards:** Blue-to-indigo für XRPL branding
 - 🔥 **BURNI Integration:** Orange fire icons für Token-spezifische Links
+- 🧮 **Calculator Design:** Purple gradient with modern cards
 - 📱 **Responsive:** Perfect auf allen Geräten
 - ✨ **Hover Effects:** Smooth transitions und scale effects
 
 ### **User Experience:**
 - 🧭 **Clear Navigation:** Direkte Links zu allen wichtigen Explorern
-- ⚡ **Fast Loading:** Optimierte API-Calls
+- ⚡ **Fast Loading:** Optimierte API-Calls  
 - 🔄 **Live Updates:** Real-time Daten ohne Page Refresh
 - 🛡️ **Reliability:** Multiple Fallback-Optionen
+- 🧮 **Interactive Calculator:** Intuitive burn/lock simulation
 
 ---
 
@@ -205,6 +265,7 @@ Fallback: https://s1.ripple.com:51234
 - ✅ Real-time network data
 - ✅ BURNI-specific explorer links
 - ✅ Developer resources section
+- ✅ BURNI Token Calculator integration
 
 ### **Future Possibilities:**
 - 🔄 Enhanced real-time charts
@@ -234,3 +295,6 @@ Die Website bietet jetzt **umfassenden Zugang** zum XRPL-Ökosystem mit **real-t
 **Generated:** 15. Juni 2025  
 **Status:** ✅ COMPLETE & LIVE  
 **Integration:** 🌐 XRPL Livenet + GitHub Explorer
+
+
+
