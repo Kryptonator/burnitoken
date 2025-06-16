@@ -1,29 +1,36 @@
-# Burni Token Website - Saubere Arbeitsumgebung
+# 🚀 Burni Token - Fokussierte Arbeitsumgebung
 
-## 📁 Hauptdateien (die du normalerweise bearbeitest):
-- `index.html` - Hauptseite
+## 🎯 HAUPTDATEIEN (nur diese sind wichtig):
+
+### 📄 Core Files:
+- `index.html` - Hauptseite der Website
 - `main.js` - Haupt-JavaScript Logic
-- `sw.js` - Service Worker für PWA
-- `manifest.json` - PWA-Manifest
-- `assets/real-time-monitor.js` - Real-Time Features
+- `sw.js` - Service Worker für PWA Features
+- `manifest.json` - PWA-Manifest für App-Installation
+
+### 📁 Assets (deine Arbeitsdateien):
+- `assets/real-time-monitor.js` ← **AKTUELL BEARBEITET**
 - `assets/analytics.js` - Analytics & Tracking
 - `assets/security.js` - Security Features
-- `assets/css/critical.css` - Haupt-Styling (Input)
-- `assets/css/styles.min.css` - Minified CSS (Output)
+- `assets/scripts.js` - Core Scripts
+- `assets/css/critical.css` - Styling (Input)
+- `assets/css/styles.min.css` - Minified Output
 
-## 🚫 Automatisch ausgeblendete Ordner:
-- `node_modules/` - Dependencies
-- `coverage/` - Test Coverage Reports
-- `test-results/` - Playwright Test Results
-- `playwright-report/` - Test Reports
+### 🧪 Tests:
+- `tests/` - Vollständige Test-Suite (28 Tests)
 
-## ⚙️ Wichtige Commands:
-- `npm run build` - CSS Build
-- `npm test` - Tests ausführen
-- `npm run serve` - Development Server
-- `node comprehensive-audit-suite.js` - Audit ausführen
+## 🚫 AUTOMATISCH VERSTECKT:
+- `node_modules/`, `.github/`, `.lighthouseci/`
+- `coverage/`, `test-results/`, `playwright-report/`
+- Audit-Reports und Config-Dateien
 
-## 📝 Notizen:
-- Alle temporären/generierte Dateien sind ausgeblendet
-- VS Code zeigt nur relevante Arbeitsdateien
-- Repository ist sauber und synchronisiert
+## ⚡ QUICK COMMANDS:
+```bash
+npm run build    # CSS kompilieren
+npm test         # Tests ausführen  
+npm run serve    # Dev Server starten
+```
+
+## 💡 TIPP:
+Fokussiere dich nur auf die Assets-Dateien für deine Entwicklung!
+Alle anderen Dateien laufen automatisch im Hintergrund.

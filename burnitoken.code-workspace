@@ -1,0 +1,23 @@
+{
+    "folders": [
+        {
+            "name": "🚀 Burni Token - Main Files",
+            "path": "."
+        }
+    ],
+    "settings": {
+        "workbench.startupEditor": "none",
+        "explorer.openEditors.visible": 4,
+        "workbench.editor.limit.enabled": true,
+        "workbench.editor.limit.value": 5,
+        "workbench.editor.showTabs": "multiple",
+        "breadcrumbs.enabled": true
+    },
+    "extensions": {
+        "recommendations": [
+            "ms-vscode.vscode-typescript-next",
+            "bradlc.vscode-tailwindcss",
+            "esbenp.prettier-vscode"
+        ]
+    }
+}

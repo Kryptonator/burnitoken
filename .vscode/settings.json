@@ -2,14 +2,17 @@
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit"
-  },
-  "files.exclude": {
+  },  "files.exclude": {
     "**/node_modules": true,
     "**/coverage": true,
     "**/test-results": true,
     "**/playwright-report": true,
     "**/.git": false,
-    "**/.DS_Store": true
+    "**/.DS_Store": true,
+    "**/*.md": false,
+    "**/comprehensive-audit-*": true,
+    "**/.lighthouseci": true,
+    "**/.github": true
   },
   "search.exclude": {
     "**/node_modules": true,
