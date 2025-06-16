@@ -1,11 +1,11 @@
 {
-  "timestamp": "2025-06-16T17:57:41.668Z",
+  "timestamp": "2025-06-16T18:07:45.299Z",
   "domain": "burnitoken.website",
   "tests": {
     "connectivity": {
       "status": "PASS",
       "statusCode": 200,
-      "responseTime": 115,
+      "responseTime": 220,
       "headers": {
         "connection": "keep-alive",
         "content-length": "145213",
@@ -20,15 +20,15 @@
         "x-proxy-cache": "MISS",
         "x-github-request-id": "8BAA:320B6F:55DEAB:568F96:68505A9B",
         "accept-ranges": "bytes",
-        "age": "123",
-        "date": "Mon, 16 Jun 2025 17:57:42 GMT",
+        "age": "0",
+        "date": "Mon, 16 Jun 2025 18:07:46 GMT",
         "via": "1.1 varnish",
-        "x-served-by": "cache-vie6352-VIE",
+        "x-served-by": "cache-vie6355-VIE",
         "x-cache": "HIT",
         "x-cache-hits": "0",
-        "x-timer": "S1750096662.255350,VS0,VE3",
+        "x-timer": "S1750097266.889695,VS0,VE117",
         "vary": "Accept-Encoding",
-        "x-fastly-request-id": "ad161a297ac0c79626fbf240ccf48444c79c31e5"
+        "x-fastly-request-id": "1c362ac0f7d140b775e185bcb3dcea847cc998ca"
       }
     },
     "htmlStructure": {

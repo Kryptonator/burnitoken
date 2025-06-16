@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- SEO Meta Tags - KRITISCH FÜR SUCHMASCHINEN -->
-    <title>🔥 BurniToken - Revolutionary XRPL Token Burning Platform | Deflationäre Kryptowährung</title>
+    <title>🔥 BurniToken - XRPL Deflation Token | Crypto Investment</title>
     <meta name="description" content="🔥 BurniToken - Die erste deflationäre XRPL-basierte Kryptowährung mit automatischem Token-Burning-Mechanismus. Investieren Sie in die Zukunft der Blockchain-Technologie mit über 2 Milliarden verbrannten Tokens!" />
     <meta name="keywords" content="BurniToken, XRPL, Token Burning, Kryptowährung, Blockchain, Deflationär, Investment, Crypto, XRP Ledger" />
     <meta name="author" content="BurniToken Team" />
@@ -2552,10 +2552,12 @@
           </div>
         </div>
       </div>
-    </footer>
-    <!-- Error monitoring script -->
+    </footer>    <!-- Error monitoring script -->
     <script src="/sentry.client.js" defer></script>
-
+    
+    <!-- BURNI UNIFIED DARK MODE MANAGER -->
+    <script src="/assets/burni-dark-mode.js"></script>
+    
     <!-- Advanced Features -->
     <script src="/assets/analytics-dashboard.js" defer></script>
     <script src="/assets/price-tracker.js" defer></script>
@@ -2592,11 +2594,8 @@
         window.isSafari =
           /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ||
           (/WebKit/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent));
-      }
-
-      if (window.isSafari) {
+      }        if (window.isSafari) {
         console.log('Safari detected - creating immediate fallbacks');
-
         // Create accessibility button immediately
         const createAccessibilityFallback = () => {
           if (!document.getElementById('accessibility-toggle')) {
@@ -2681,53 +2680,6 @@
             document.body.setAttribute('data-accessibility-loaded', 'true');
             console.log('Safari accessibility fallback created');
           }
-        }; // Create dark mode toggle immediately
-        const createDarkModeFallback = () => {
-          // Only create fallback if DarkModeManager doesn't exist
-          if (!document.getElementById('theme-toggle') && !window.DarkModeManager) {
-            // Wait a bit to see if the real DarkModeManager loads
-            setTimeout(() => {
-              if (!document.getElementById('theme-toggle') && !window.DarkModeManager) {
-                const toggleContainer = document.createElement('div');
-                toggleContainer.className =
-                  'fixed top-4 right-4 z-50 bg-white dark:bg-gray-800 rounded-full shadow-lg p-1';
-                toggleContainer.id = 'theme-toggle-container';
-
-                const toggleButton = document.createElement('button');
-                toggleButton.className =
-                  'flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-orange-400 to-pink-400 text-white';
-                toggleButton.id = 'theme-toggle';
-                toggleButton.setAttribute('aria-label', 'Toggle theme');
-                toggleButton.innerHTML = '<i class="fas fa-sun"></i>';
-
-                let isDark = false;
-                const toggleTheme = () => {
-                  isDark = !isDark;
-                  if (isDark) {
-                    document.documentElement.classList.add('dark');
-                    toggleButton.innerHTML = '<i class="fas fa-moon"></i>';
-                  } else {
-                    document.documentElement.classList.remove('dark');
-                    toggleButton.innerHTML = '<i class="fas fa-sun"></i>';
-                  }
-                };
-
-                toggleButton.addEventListener('click', toggleTheme);
-
-                // Add keyboard shortcut (Ctrl+Shift+D)
-                document.addEventListener('keydown', (event) => {
-                  if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key === 'D') {
-                    event.preventDefault();
-                    toggleTheme();
-                  }
-                });
-
-                toggleContainer.appendChild(toggleButton);
-                document.body.appendChild(toggleContainer);
-                console.log('Safari dark mode fallback created');
-              }
-            }, 1000); // Wait 1 second for real DarkModeManager
-          }
         };
 
         // Create performance widget immediately
@@ -2787,14 +2739,12 @@
         if (document.readyState === 'loading') {
           document.addEventListener('DOMContentLoaded', () => {
             createAccessibilityFallback();
-            createDarkModeFallback();
             createPerformanceFallback();
             createAnalyticsFallback();
             createI18nFallback();
           });
         } else {
           createAccessibilityFallback();
-          createDarkModeFallback();
           createPerformanceFallback();
           createAnalyticsFallback();
           createI18nFallback();
