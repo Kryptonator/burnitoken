@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0, user-scalable=yes" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <!-- Enhanced Performance and Compatibility Meta Tags -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -30,8 +30,8 @@
   <meta property="og:title" content="Burni Token - Creating Value Through Scarcity" />
   <meta property="og:description"
     content="Join the Burni Token community and be part of the future of deflationary cryptocurrencies on XRPL." />
-  <meta property="og:image" content="https://burnitoken.com/assets/images/burni-social.webp" />
-  <meta property="og:url" content="https://burnitoken.com" />
+  <meta property="og:image" content="https://burnitoken.website/assets/images/burni-social.webp" />
+  <meta property="og:url" content="https://burnitoken.website" />
   <meta property="og:site_name" content="Burni Token" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en_US" />
@@ -41,7 +41,7 @@
   <meta name="twitter:title" content="Burni Token - Creating Value Through Scarcity" />
   <meta name="twitter:description"
     content="Join the Burni Token community and be part of the future of deflationary cryptocurrencies on XRPL." />
-  <meta name="twitter:image" content="https://burnitoken.com/assets/images/burni-social.webp" />
+  <meta name="twitter:image" content="https://burnitoken.website/assets/images/burni-social.webp" />
   <meta name="twitter:creator" content="@burnicoin" />
   <meta name="twitter:site" content="@burnicoin" />
   
@@ -161,11 +161,15 @@
   <link rel="preload" href="/assets/images/burniimage.webp" as="image" type="image/webp" />
   <link rel="preload" href="/assets/images/burniimage.jpg" as="image" type="image/jpeg" />
   <link rel="preload" href="/assets/css/styles.min.css" as="style" />
-  <link rel="preload" href="/assets/scripts.min.js" as="script" />
+  <!-- EMERGENCY: Disable preload of broken scripts.min.js -->
+  <!-- <link rel="preload" href="/assets/scripts.min.js" as="script" /> -->
+  <!-- Preload fixed scripts -->
+  <link rel="preload" href="/assets/scripts-fixed.min.js" as="script" />
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/chart.js" as="script" />
 
   <!-- Additional Performance Optimizations -->
-  <link rel="prefetch" href="/assets/scripts.min.js">
+  <!-- EMERGENCY: Disable prefetch of broken scripts.min.js -->
+  <!-- <link rel="prefetch" href="/assets/scripts.min.js"> -->
   <link rel="prefetch" href="/assets/images/burni-chart.webp">
 
   <!-- Optimize Critical Resource Loading -->
@@ -199,12 +203,9 @@
   <meta name="author" content="Burni Token Team" />
   <meta name="robots" content="index, follow" />
   <meta name="revisit-after" content="7 days" />
-  <meta name="theme-color" content="#f97316" />
   <meta name="msapplication-TileColor" content="#f97316" />
   <meta name="msapplication-navbutton-color" content="#f97316" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <!-- Removed duplicate theme-color meta tag for better browser compatibility -->
-  <meta name="msapplication-TileColor" content="#f97316" />
   <meta name="msapplication-config" content="/assets/browserconfig.xml" />
   <style>
     .loading-skeleton {
@@ -693,27 +694,7 @@
     </ol>
   </nav>
 
-  <!-- Breadcrumb Navigation -->
-  <nav aria-label="Breadcrumb" class="py-2 bg-gray-50">
-    <div class="container px-6 mx-auto">
-      <ol class="flex items-center space-x-2 text-sm text-gray-600">
-  </header>
-  <nav aria-label="Breadcrumb" class="breadcrumb-nav">
-    <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
-      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <a itemprop="item" href="/" class="breadcrumb-link">
-          <span itemprop="name">Home</span>
-        </a>
-        <meta itemprop="position" content="1" />
-      </li>
-      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <span itemprop="name" class="breadcrumb-current" aria-current="page">BURNI Token</span>
-        <meta itemprop="position" content="2" />
-      </li>
-    </ol>
-  </nav>
-
-  <!-- Breadcrumb Navigation -->
+  <!-- Main Breadcrumb Navigation -->
   <nav aria-label="Breadcrumb" class="py-2 bg-gray-50">
     <div class="container px-6 mx-auto">
       <ol class="flex items-center space-x-2 text-sm text-gray-600">
@@ -1878,8 +1859,8 @@
   <!-- Main application scripts -->
   <!-- ES5 Compatible Main Script for Maximum Browser Compatibility -->
   <script src="/assets/main-es5.js" defer></script>
-  <!-- ES5-only for 100% compatibility - no modern fallback -->
-  <script src="/assets/scripts.min.js" defer></script>
+  <!-- Fixed Scripts - Emergency Replacement -->
+  <script src="/assets/scripts-fixed.min.js" defer></script>
 
   <!-- Live Price Test (temporär) -->
   <script src="/test-live-prices.js" defer></script>
