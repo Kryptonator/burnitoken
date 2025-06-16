@@ -1,32 +1,32 @@
 {
-  "timestamp": "2025-06-16T09:37:58.620Z",
+  "timestamp": "2025-06-16T09:52:25.378Z",
   "audits": {
     "performance": {
-      "score": 100,
+      "score": 80,
       "checks": {
         "cssOptimized": true,
         "jsOptimized": true,
         "serviceWorker": true,
         "webpImages": true,
-        "performanceCSS": true
+        "performanceCSS": false
       }
     },
     "browserCompatibility": {
-      "score": 100,
+      "score": 20,
       "checks": {
-        "browserCSS": true,
+        "browserCSS": false,
         "vendorPrefixes": true,
-        "modernFeatures": true,
-        "fallbacks": true,
-        "webkitSupport": true
+        "modernFeatures": false,
+        "fallbacks": false,
+        "webkitSupport": false
       }
     },
     "responsiveDesign": {
-      "score": 100,
+      "score": 80,
       "checks": {
         "viewportMeta": true,
         "mediaQueries": true,
-        "proportionOptimization": true,
+        "proportionOptimization": false,
         "touchTargets": true,
         "mobileFirst": true
       }
@@ -119,7 +119,13 @@
       }
     }
   },
-  "overallScore": 100,
+  "overallScore": 88,
   "criticalIssues": [],
-  "recommendations": []
+  "recommendations": [
+    {
+      "category": "Performance",
+      "priority": "High",
+      "recommendation": "Optimize Core Web Vitals - implement lazy loading, optimize images, minify resources"
+    }
+  ]
 }
