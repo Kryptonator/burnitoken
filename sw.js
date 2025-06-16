@@ -1,6 +1,6 @@
-const CACHE_NAME = 'burni-cache-v9'; // Updated for enhanced compatibility
-const API_CACHE_NAME = 'burni-api-cache-v3';
-const RUNTIME_CACHE_NAME = 'burni-runtime-cache-v1';
+const CACHE_NAME = 'burni-cache-v10'; // Enhanced for maximum compatibility
+const API_CACHE_NAME = 'burni-api-cache-v4';
+const RUNTIME_CACHE_NAME = 'burni-runtime-cache-v2';
 
 // Enhanced asset caching with compression detection
 const ASSETS_TO_CACHE = [
@@ -10,7 +10,10 @@ const ASSETS_TO_CACHE = [
   '/manifest.json',
   '/assets/css/styles.min.css',
   '/assets/css/critical.css',
-  '/assets/scripts.min.js',
+  '/assets/css/enhanced-mobile-optimization.css',
+  '/assets/enhanced-polyfills.js',
+  '/assets/enhanced-functionality.js',
+  '/assets/scripts-fixed.min.js',
   '/assets/scripts.js',
   '/assets/analytics.js',
   '/assets/real-time-monitor.js',
