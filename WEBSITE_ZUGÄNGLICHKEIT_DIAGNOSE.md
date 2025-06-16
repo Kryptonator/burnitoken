@@ -20,21 +20,25 @@
 ## 🤔 **MÖGLICHE URSACHEN FÜR FEHLERMELDUNGEN:**
 
 ### 1. **Regionale/ISP-Probleme**
+
 - DNS-Propagation kann regional unterschiedlich sein
 - Manche ISPs haben DNS-Caching-Probleme
 - VPN oder Proxy könnte Zugriff blockieren
 
 ### 2. **Browser-Cache/Cookies**
+
 - Browser-Cache könnte veraltete DNS-Informationen haben
 - Cookies oder Session-Daten könnten interferieren
 - Browser-Extensions könnten blockieren
 
 ### 3. **Temporäre GitHub Pages Issues**
+
 - GitHub Pages hatte möglicherweise temporäre Ausfälle
 - Deployment war verzögert
 - CDN-Propagation brauchte Zeit
 
 ### 4. **Firewall/Antivirus-Software**
+
 - Corporate Firewall könnte burnitoken.website blockieren
 - Antivirus-Software könnte Website als verdächtig einstufen
 - Windows Defender SmartScreen könnte aktiviert sein
@@ -44,19 +48,23 @@
 ### **Für Benutzer die Probleme haben:**
 
 1. **DNS-Cache leeren:**
+
    ```bash
    ipconfig /flushdns
    ```
 
 2. **Browser-Cache leeren:**
+
    - Strg+Shift+Del → Alles löschen
    - Inkognito/Private Browsing versuchen
 
 3. **Andere DNS-Server testen:**
+
    - Google DNS: 8.8.8.8, 8.8.4.4
    - Cloudflare DNS: 1.1.1.1, 1.0.0.1
 
 4. **Direkter IP-Test:**
+
    - IP der GitHub Pages: 185.199.109.153
 
 5. **Alternative URLs testen:**
@@ -65,10 +73,12 @@
 ### **Für Entwickler:**
 
 1. **Monitoring implementieren:**
+
    - UptimeRobot für 24/7 Überwachung
    - StatusPage für Transparent-Kommunikation
 
 2. **Multiple DNS-Provider:**
+
    - Cloudflare als zusätzlicher DNS-Provider
    - Redundante Domain-Konfiguration
 
@@ -89,6 +99,7 @@
 **Die Website `https://burnitoken.website` ist ZUGÄNGLICH und funktioniert normal.**
 
 Die berichteten Probleme sind wahrscheinlich:
+
 - Temporärer Natur (DNS-Propagation, GitHub Pages Delays)
 - Regional begrenzt (ISP-DNS-Probleme)
 - Browser/System-spezifisch (Cache, Firewall)
