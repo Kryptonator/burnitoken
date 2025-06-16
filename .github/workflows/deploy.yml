@@ -14,30 +14,30 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: 🚀 Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          
+
       - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          
+
       - name: 📥 Install dependencies
         run: npm ci
-        
-      - name:  Build project
+
+      - name: Build project
         run: npm run build || echo "✅ Build completed"
-        
+
       - name: 📁 Create deployment artifact
         run: |
           echo "Creating deployment artifact..."
           mkdir -p dist
-          
+
           # Copy all necessary files
           cp *.html dist/ 2>/dev/null || echo "Copying HTML files"
           cp *.js dist/ 2>/dev/null || echo "Copying JS files"
@@ -47,10 +47,10 @@ jobs:
           cp -r assets dist/ 2>/dev/null || echo "Copying assets directory"
           cp -r pages dist/ 2>/dev/null || echo "Pages directory not found"
           cp -r public dist/ 2>/dev/null || echo "Public directory not found"
-          
+
           echo "✅ Deployment files prepared"
           ls -la dist/
-          
+
       - name: 🚀 Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
@@ -61,7 +61,7 @@ jobs:
           force_orphan: true
           enable_jekyll: false
           commit_message: 'Deploy Burni Token Website - ${{ github.sha }}'
-          
+
       - name: 📋 Deployment Summary
         if: always()
         run: |
