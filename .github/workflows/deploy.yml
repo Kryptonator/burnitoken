@@ -1,4 +1,4 @@
-name: Deploy Burni Token Website
+name: 🚀 Deploy Burnitoken Website - LIVE
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 env:
   NODE_VERSION: '20'
-  SITE_URL: 'https://burnitoken.website'
+  SITE_URL: 'https://kryptonator.github.io/burnitoken'
 
 jobs:
   deploy:
