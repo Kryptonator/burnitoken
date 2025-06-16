@@ -18,7 +18,8 @@ foreach ($file in $CriticalFiles) {
 
 if ($MissingFiles.Count -eq 0) {
     Write-Host "✅ All critical files present" -ForegroundColor Green
-} else {
+}
+else {
     Write-Host "❌ Missing files: $($MissingFiles -join ', ')" -ForegroundColor Red
     Write-Host "Please ensure all files are in the project directory" -ForegroundColor Yellow
     exit 1
@@ -52,7 +53,8 @@ Write-Host "✅ Configuration files copied" -ForegroundColor Green
 if (Test-Path "assets") {
     Copy-Item -Recurse "assets" -Destination "deployment" -ErrorAction SilentlyContinue
     Write-Host "✅ Assets directory copied" -ForegroundColor Green
-} else {
+}
+else {
     Write-Host "⚠️ Assets directory not found" -ForegroundColor Yellow
 }
 
