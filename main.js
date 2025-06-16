@@ -2816,15 +2816,15 @@ function showKeyboardShortcutsHelp() {
       <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Keyboard Shortcuts</h3>
       <div class="space-y-2">
         ${shortcuts
-      .map(
-        (shortcut) => `
+          .map(
+            (shortcut) => `
           <div class="flex justify-between items-center">
             <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm font-mono">${shortcut.key}</kbd>
             <span class="text-sm text-gray-600 dark:text-gray-300">${shortcut.description}</span>
           </div>
         `,
-      )
-      .join('')}
+          )
+          .join('')}
       </div>
       <button id="close-shortcuts-help" class="mt-4 w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
         Close
@@ -3363,7 +3363,7 @@ window.onerror = function (message, source, lineno, colno, error) {
     source,
     line: lineno,
     column: colno,
-    error: error?.stack
+    error: error?.stack,
   });
 
   // Optional: Send to monitoring service
@@ -3386,7 +3386,9 @@ window.addEventListener('load', function () {
     console.log('Performance Metrics:', {
       loadTime: perfData.loadEventEnd - perfData.loadEventStart,
       domContentLoaded: perfData.domContentLoadedEventEnd - perfData.domContentLoadedEventStart,
-      firstPaint: performance.getEntriesByType('paint').find(entry => entry.name === 'first-paint')?.startTime
+      firstPaint: performance
+        .getEntriesByType('paint')
+        .find((entry) => entry.name === 'first-paint')?.startTime,
     });
   }, 0);
 });
@@ -3401,20 +3403,23 @@ class AdvancedImageLoader {
 
   init() {
     if ('IntersectionObserver' in window) {
-      this.imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const img = entry.target;
-            this.loadImage(img);
-            observer.unobserve(img);
-          }
-        });
-      }, {
-        rootMargin: '50px 0px',
-        threshold: 0.01
-      });
+      this.imageObserver = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              this.loadImage(img);
+              observer.unobserve(img);
+            }
+          });
+        },
+        {
+          rootMargin: '50px 0px',
+          threshold: 0.01,
+        },
+      );
 
-      this.images.forEach(img => this.imageObserver.observe(img));
+      this.images.forEach((img) => this.imageObserver.observe(img));
     }
   }
 

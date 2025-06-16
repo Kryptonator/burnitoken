@@ -1,7 +1,7 @@
 {
-  "timestamp": "2025-06-16T15:35:23.437Z",
-  "score": 100,
-  "passedTests": 78,
+  "timestamp": "2025-06-16T15:49:01.731Z",
+  "score": 97,
+  "passedTests": 76,
   "totalTests": 78,
   "results": [
     {
@@ -150,9 +150,9 @@
     },
     {
       "name": "ES5 compatible code structure",
-      "passed": true,
+      "passed": false,
       "weight": 2,
-      "message": "✅ Passed"
+      "message": "❌ Failed"
     },
     {
       "name": "Feature detection",
@@ -261,7 +261,7 @@
     "polyfillCoverage": 100,
     "cssCompatibility": 100,
     "htmlCompatibility": 100,
-    "javascriptCompatibility": 100,
+    "javascriptCompatibility": 67,
     "serviceWorkerCompatibility": 100,
     "accessibilityCompatibility": 100,
     "performanceCompatibility": 100,

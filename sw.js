@@ -50,7 +50,7 @@ const performanceMetrics = {
   cacheHits: 0,
   cacheMisses: 0,
   networkRequests: 0,
-  errors: 0
+  errors: 0,
 };
 
 // API URLs with caching strategies
@@ -59,82 +59,82 @@ const API_CONFIG = {
     urls: [
       'https://api.coingecko.com/api/v3/simple/price',
       'https://api.xrpl.org',
-      'https://livenet.xrpl.org'
+      'https://livenet.xrpl.org',
     ],
     maxAge: 60000, // 1 minute
-    strategy: 'network-first'
+    strategy: 'network-first',
   },
   static: {
-    urls: [
-      'https://fonts.googleapis.com',
-      'https://fonts.gstatic.com',
-      'https://cdn.jsdelivr.net'
-    ],
+    urls: ['https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://cdn.jsdelivr.net'],
     maxAge: 86400000, // 24 hours
-    strategy: 'cache-first'
-  }
+    strategy: 'cache-first',
+  },
 };
 
 // Enhanced install event with progressive caching
 self.addEventListener('install', (event) => {
   console.log('Service Worker installing with enhanced features...');
-  
+
   event.waitUntil(
     Promise.all([
       // Cache critical assets first
       caches.open(CACHE_NAME).then((cache) => {
         console.log('Caching critical assets');
-        const criticalAssets = ASSETS_TO_CACHE.filter(asset => 
-          asset.includes('critical.css') || 
-          asset.includes('security.js') || 
-          asset === '/' || 
-          asset === '/index.html'
+        const criticalAssets = ASSETS_TO_CACHE.filter(
+          (asset) =>
+            asset.includes('critical.css') ||
+            asset.includes('security.js') ||
+            asset === '/' ||
+            asset === '/index.html',
         );
         return cache.addAll(criticalAssets);
       }),
-      
+
       // Cache remaining assets
       caches.open(CACHE_NAME).then((cache) => {
         console.log('Caching remaining assets');
-        const remainingAssets = ASSETS_TO_CACHE.filter(asset => 
-          !asset.includes('critical.css') && 
-          !asset.includes('security.js') && 
-          asset !== '/' && 
-          asset !== '/index.html'
+        const remainingAssets = ASSETS_TO_CACHE.filter(
+          (asset) =>
+            !asset.includes('critical.css') &&
+            !asset.includes('security.js') &&
+            asset !== '/' &&
+            asset !== '/index.html',
         );
-        
+
         return Promise.allSettled(
-          remainingAssets.map(asset => cache.add(asset).catch(err => {
-            console.warn(`Failed to cache ${asset}:`, err);
-            return null;
-          }))
+          remainingAssets.map((asset) =>
+            cache.add(asset).catch((err) => {
+              console.warn(`Failed to cache ${asset}:`, err);
+              return null;
+            }),
+          ),
         );
       }),
-      
+
       // Initialize runtime cache
-      caches.open(RUNTIME_CACHE_NAME)
+      caches.open(RUNTIME_CACHE_NAME),
     ])
-    .then(() => {
-      console.log('Service Worker installation complete with enhanced features');
-      
-      // Performance mark
-      if ('performance' in self && 'mark' in self.performance) {
-        self.performance.mark('sw-install-complete');
-      }
-      
-      return self.skipWaiting();
-    })
-    .catch((error) => {
-      console.error('Service Worker installation failed:', error);
-      performanceMetrics.errors++;
-    })
+      .then(() => {
+        console.log('Service Worker installation complete with enhanced features');
+
+        // Performance mark
+        if ('performance' in self && 'mark' in self.performance) {
+          self.performance.mark('sw-install-complete');
+        }
+
+        return self.skipWaiting();
+      })
+      .catch((error) => {
+        console.error('Service Worker installation failed:', error);
+        performanceMetrics.errors++;
+      }),
   );
 });
 
 // Enhanced activate event with intelligent cache management
 self.addEventListener('activate', (event) => {
   console.log('Service Worker activating with enhanced cleanup...');
-  
+
   event.waitUntil(
     Promise.all([
       // Clean up old caches
@@ -146,35 +146,36 @@ self.addEventListener('activate', (event) => {
               console.log('Deleting old cache:', cacheName);
               return caches.delete(cacheName);
             }
-          })
+          }),
         );
       }),
-      
+
       // Clear runtime cache if it's too large
       caches.open(RUNTIME_CACHE_NAME).then((cache) => {
         return cache.keys().then((keys) => {
-          if (keys.length > 100) { // Limit runtime cache size
+          if (keys.length > 100) {
+            // Limit runtime cache size
             console.log('Cleaning runtime cache (too many entries)');
             const oldEntries = keys.slice(0, keys.length - 50);
-            return Promise.all(oldEntries.map(key => cache.delete(key)));
+            return Promise.all(oldEntries.map((key) => cache.delete(key)));
           }
         });
-      })
+      }),
     ])
-    .then(() => {
-      console.log('Service Worker activated with enhanced features');
-      
-      // Performance mark
-      if ('performance' in self && 'mark' in self.performance) {
-        self.performance.mark('sw-activate-complete');
-      }
-      
-      return self.clients.claim();
-    })
-    .catch((error) => {
-      console.error('Service Worker activation failed:', error);
-      performanceMetrics.errors++;
-    })
+      .then(() => {
+        console.log('Service Worker activated with enhanced features');
+
+        // Performance mark
+        if ('performance' in self && 'mark' in self.performance) {
+          self.performance.mark('sw-activate-complete');
+        }
+
+        return self.clients.claim();
+      })
+      .catch((error) => {
+        console.error('Service Worker activation failed:', error);
+        performanceMetrics.errors++;
+      }),
   );
 });
 
@@ -182,22 +183,22 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const requestUrl = new URL(event.request.url);
   const request = event.request;
-  
+
   // Skip non-HTTP requests
   if (!request.url.startsWith('http')) {
     return;
   }
-  
+
   // Skip POST requests
   if (request.method !== 'GET') {
     return;
   }
-  
+
   // Determine caching strategy based on request type
   let strategy = 'cache-first';
   let cacheName = CACHE_NAME;
   let maxAge = null;
-  
+
   // API requests
   if (isApiRequest(request.url)) {
     const apiConfig = getApiConfig(request.url);
@@ -205,33 +206,35 @@ self.addEventListener('fetch', (event) => {
     cacheName = API_CACHE_NAME;
     maxAge = apiConfig.maxAge;
   }
-  
+
   // Runtime assets (not in main cache)
   else if (!ASSETS_TO_CACHE.includes(requestUrl.pathname)) {
     strategy = 'network-first';
     cacheName = RUNTIME_CACHE_NAME;
     maxAge = 3600000; // 1 hour
   }
-  
+
   event.respondWith(
-    executeStrategy(strategy, request, cacheName, maxAge)
-      .catch((error) => {
-        console.error(`Fetch failed for ${request.url}:`, error);
-        performanceMetrics.errors++;
-        
-        // Fallback to offline page for navigation requests
-        if (request.mode === 'navigate') {
-          return caches.match('/404.html') || new Response('Offline', {
+    executeStrategy(strategy, request, cacheName, maxAge).catch((error) => {
+      console.error(`Fetch failed for ${request.url}:`, error);
+      performanceMetrics.errors++;
+
+      // Fallback to offline page for navigation requests
+      if (request.mode === 'navigate') {
+        return (
+          caches.match('/404.html') ||
+          new Response('Offline', {
             status: 503,
-            statusText: 'Service Unavailable'
-          });
-        }
-        
-        return new Response('Network error', {
-          status: 503,
-          statusText: 'Service Unavailable'
-        });
-      })
+            statusText: 'Service Unavailable',
+          })
+        );
+      }
+
+      return new Response('Network error', {
+        status: 503,
+        statusText: 'Service Unavailable',
+      });
+    }),
   );
 });
 
@@ -261,11 +264,11 @@ function cacheFirstStrategy(request, cacheName, maxAge) {
           performanceMetrics.cacheHits++;
           return cachedResponse;
         }
-        
+
         performanceMetrics.cacheHits++;
         return cachedResponse;
       }
-      
+
       // Not in cache, fetch from network
       performanceMetrics.cacheMisses++;
       return fetchAndCache(request, cache);
@@ -276,18 +279,17 @@ function cacheFirstStrategy(request, cacheName, maxAge) {
 // Network-first strategy with timeout
 function networkFirstStrategy(request, cacheName, maxAge, timeout = 3000) {
   performanceMetrics.networkRequests++;
-  
+
   return caches.open(cacheName).then((cache) => {
-    const networkPromise = fetchWithTimeout(request, timeout)
-      .then((response) => {
-        if (response.ok) {
-          cache.put(request.clone(), response.clone());
-        }
-        return response;
-      });
-    
+    const networkPromise = fetchWithTimeout(request, timeout).then((response) => {
+      if (response.ok) {
+        cache.put(request.clone(), response.clone());
+      }
+      return response;
+    });
+
     const cachePromise = cache.match(request);
-    
+
     return Promise.race([
       networkPromise,
       new Promise((resolve) => {
@@ -299,7 +301,7 @@ function networkFirstStrategy(request, cacheName, maxAge, timeout = 3000) {
             }
           });
         }, timeout);
-      })
+      }),
     ]).catch(() => {
       // Network failed, try cache
       return cachePromise.then((cachedResponse) => {
@@ -318,12 +320,12 @@ function staleWhileRevalidateStrategy(request, cacheName, maxAge) {
   return caches.open(cacheName).then((cache) => {
     return cache.match(request).then((cachedResponse) => {
       const fetchPromise = fetchAndCache(request, cache);
-      
+
       if (cachedResponse) {
         performanceMetrics.cacheHits++;
         return cachedResponse;
       }
-      
+
       performanceMetrics.cacheMisses++;
       return fetchPromise;
     });
@@ -345,27 +347,27 @@ function fetchWithTimeout(request, timeout) {
     fetch(request),
     new Promise((_, reject) => {
       setTimeout(() => reject(new Error('Fetch timeout')), timeout);
-    })
+    }),
   ]);
 }
 
 function isCacheStale(response, maxAge) {
   const dateHeader = response.headers.get('date');
   if (!dateHeader) return false;
-  
+
   const date = new Date(dateHeader);
   return Date.now() - date.getTime() > maxAge;
 }
 
 function isApiRequest(url) {
-  return Object.values(API_CONFIG).some(config =>
-    config.urls.some(apiUrl => url.includes(apiUrl))
+  return Object.values(API_CONFIG).some((config) =>
+    config.urls.some((apiUrl) => url.includes(apiUrl)),
   );
 }
 
 function getApiConfig(url) {
   for (const [key, config] of Object.entries(API_CONFIG)) {
-    if (config.urls.some(apiUrl => url.includes(apiUrl))) {
+    if (config.urls.some((apiUrl) => url.includes(apiUrl))) {
       return config;
     }
   }
