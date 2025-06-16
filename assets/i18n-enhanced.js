@@ -384,8 +384,8 @@ class BURNIInternationalization {
             </button>
             <div class="language-dropdown" role="menu" aria-hidden="true">
                 ${Object.entries(this.supportedLanguages)
-                  .map(
-                    ([code, info]) => `
+        .map(
+          ([code, info]) => `
                     <button class="language-option ${code === this.currentLanguage ? 'active' : ''}" 
                             data-language="${code}" 
                             role="menuitem"
@@ -395,8 +395,8 @@ class BURNIInternationalization {
                         ${code === this.currentLanguage ? '<span class="checkmark">✓</span>' : ''}
                     </button>
                 `,
-                  )
-                  .join('')}
+        )
+        .join('')}
             </div>
         `;
 
