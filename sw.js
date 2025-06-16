@@ -183,25 +183,24 @@ async function networkFirstStrategy(request, cacheName) {
   }
 }
 
-// Background sync for offline data collection
-self.addEventListener('sync', (event) => {
-  console.log('Background sync event:', event.tag);
+// Real-Time Features and Advanced PWA Support
+const REALTIME_CACHE_NAME = 'burni-realtime-v1';
+const BACKGROUND_SYNC_TAG = 'background-sync';
 
-  if (event.tag === 'background-analytics') {
-    event.waitUntil(handleBackgroundAnalytics());
-  }
+// Advanced caching strategies
+const cacheStrategies = {
+  static: 'cache-first',
+  api: 'network-first',
+  realtime: 'network-only',
+  fallback: 'stale-while-revalidate',
+};
 
-  if (event.tag === 'background-price-update') {
-    event.waitUntil(handleBackgroundPriceUpdate());
-  }
-});
-
-// Push notification handler
-self.addEventListener('push', (event) => {
-  console.log('Push notification received:', event);
+// Push notification handling
+self.addEventListener('push', function (event) {
+  console.log('🔔 Push notification received');
 
   const options = {
-    body: event.data ? event.data.text() : 'New update from Burni Token!',
+    body: 'New Burni Token update available!',
     icon: '/assets/images/burni-logo.png',
     badge: '/assets/images/favicon-32x32.png',
     vibrate: [100, 50, 100],
@@ -212,134 +211,209 @@ self.addEventListener('push', (event) => {
     actions: [
       {
         action: 'explore',
-        title: 'Explore',
-        icon: '/assets/images/favicon-16x16.png',
+        title: 'View Update',
+        icon: '/assets/images/burni.png',
       },
       {
         action: 'close',
-        title: 'Close',
+        title: 'Dismiss',
         icon: '/assets/images/favicon-16x16.png',
       },
     ],
+    requireInteraction: false,
+    silent: false,
   };
 
-  event.waitUntil(self.registration.showNotification('Burni Token Update', options));
+  if (event.data) {
+    try {
+      const pushData = event.data.json();
+      options.body = pushData.body || options.body;
+      options.title = pushData.title || 'Burni Token';
+    } catch (error) {
+      console.log('Push data parsing failed:', error);
+    }
+  }
+
+  event.waitUntil(self.registration.showNotification('🔥 Burni Token', options));
 });
 
-// Notification click handler
-self.addEventListener('notificationclick', (event) => {
-  console.log('Notification click received:', event);
-
+// Notification click handling
+self.addEventListener('notificationclick', function (event) {
+  console.log('🔔 Notification clicked');
   event.notification.close();
 
   if (event.action === 'explore') {
     event.waitUntil(clients.openWindow('/'));
-  }
-});
-
-// Background analytics handler
-async function handleBackgroundAnalytics() {
-  try {
-    const analyticsData = await getStoredAnalytics();
-    if (analyticsData.length > 0) {
-      await sendAnalyticsData(analyticsData);
-      await clearStoredAnalytics();
-    }
-  } catch (error) {
-    console.error('Background analytics failed:', error);
-  }
-}
-
-// Background price update handler
-async function handleBackgroundPriceUpdate() {
-  try {
-    const priceResponse = await fetch(
-      'https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd',
-    );
-    if (priceResponse.ok) {
-      const priceData = await priceResponse.json();
-      await storePriceData(priceData);
-
-      // Notify all clients about price update
-      const clients = await self.clients.matchAll();
-      clients.forEach((client) => {
-        client.postMessage({
-          type: 'PRICE_UPDATE',
-          data: priceData,
-        });
-      });
-    }
-  } catch (error) {
-    console.error('Background price update failed:', error);
-  }
-}
-
-// Utility functions for data storage
-async function getStoredAnalytics() {
-  // Implementation would use IndexedDB
-  return [];
-}
-
-async function sendAnalyticsData(data) {
-  // Implementation would send data to analytics endpoint
-  console.log('Sending analytics data:', data);
-}
-
-async function clearStoredAnalytics() {
-  // Implementation would clear IndexedDB
-  console.log('Analytics data cleared');
-}
-
-async function storePriceData(data) {
-  // Implementation would store in IndexedDB
-  console.log('Price data stored:', data);
-}
-
-// Advanced Performance Optimization Strategies
-const PERFORMANCE_CACHE_NAME = 'burni-performance-v1';
-const DYNAMIC_CACHE_NAME = 'burni-dynamic-v1';
-
-// Cache performance-critical resources with network-first strategy
-const performanceCriticalUrls = [
-  '/assets/css/styles.min.css',
-  '/assets/css/critical.css',
-  '/assets/scripts.min.js',
-  '/assets/images/burni-logo.webp'
-];
-
-// Implement Stale-While-Revalidate for dynamic content
-self.addEventListener('fetch', event => {
-  if (performanceCriticalUrls.some(url => event.request.url.includes(url))) {
-    event.respondWith(
-      caches.open(PERFORMANCE_CACHE_NAME).then(cache => {
-        return cache.match(event.request).then(response => {
-          const fetchPromise = fetch(event.request).then(networkResponse => {
-            cache.put(event.request, networkResponse.clone());
-            return networkResponse;
-          });
-          return response || fetchPromise;
-        });
-      })
-    );
+  } else if (event.action === 'close') {
+    // Just close the notification
+    return;
+  } else {
+    // Default action - open the app
+    event.waitUntil(clients.openWindow('/'));
   }
 });
 
 // Background sync for offline actions
-self.addEventListener('sync', event => {
-  if (event.tag === 'background-sync') {
+self.addEventListener('sync', function (event) {
+  console.log('🔄 Background sync triggered:', event.tag);
+
+  if (event.tag === BACKGROUND_SYNC_TAG) {
     event.waitUntil(doBackgroundSync());
   }
 });
 
-function doBackgroundSync() {
-  // Implement background synchronization logic
-  console.log('Background sync performed');
+async function doBackgroundSync() {
+  try {
+    // Sync offline actions (price updates, user interactions, etc.)
+    await syncPriceData();
+    await syncUserInteractions();
+    await syncAnalytics();
+    console.log('✅ Background sync completed');
+  } catch (error) {
+    console.log('❌ Background sync failed:', error);
+  }
 }
 
-// Performance monitoring
-self.addEventListener('message', event => {
-  if (event.data && event.data.type === 'PERFORMANCE_MEASURE') {
-    // Log performance metrics
-    console.log('Performance metrics:', event.data.metrics);
+async function syncPriceData() {
+  try {
+    const response = await fetch('/api/prices');
+    if (response.ok) {
+      const priceData = await response.json();
+      // Cache the latest price data
+      const cache = await caches.open(REALTIME_CACHE_NAME);
+      cache.put('/api/prices', response.clone());
+    }
+  } catch (error) {
+    console.log('Price sync failed:', error);
   }
+}
+
+async function syncUserInteractions() {
+  // Sync queued user interactions from IndexedDB
+  try {
+    const db = await openIndexedDB();
+    const transaction = db.transaction(['interactions'], 'readonly');
+    const store = transaction.objectStore('interactions');
+    const interactions = await getAllFromStore(store);
+
+    for (const interaction of interactions) {
+      await sendInteractionToServer(interaction);
+    }
+
+    // Clear synced interactions
+    const clearTransaction = db.transaction(['interactions'], 'readwrite');
+    const clearStore = clearTransaction.objectStore('interactions');
+    await clearStore.clear();
+  } catch (error) {
+    console.log('Interaction sync failed:', error);
+  }
+}
+
+// Advanced request handling with strategies
+self.addEventListener('fetch', function (event) {
+  const url = new URL(event.request.url);
+
+  // Real-time API requests
+  if (url.pathname.startsWith('/api/realtime')) {
+    event.respondWith(networkOnlyStrategy(event.request));
+    return;
+  }
+
+  // Price API requests
+  if (url.pathname.startsWith('/api/prices')) {
+    event.respondWith(networkFirstStrategy(event.request));
+    return;
+  }
+
+  // Static assets
+  if (url.pathname.startsWith('/assets/')) {
+    event.respondWith(cacheFirstStrategy(event.request));
+    return;
+  }
+
+  // HTML pages
+  if (event.request.destination === 'document') {
+    event.respondWith(staleWhileRevalidateStrategy(event.request));
+    return;
+  }
+
+  // Default strategy
+  event.respondWith(networkFirstStrategy(event.request));
 });
+
+// Caching strategies implementation
+async function networkOnlyStrategy(request) {
+  return fetch(request);
+}
+
+async function networkFirstStrategy(request) {
+  try {
+    const response = await fetch(request);
+    if (response.ok) {
+      const cache = await caches.open(API_CACHE_NAME);
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch (error) {
+    return caches.match(request);
+  }
+}
+
+async function cacheFirstStrategy(request) {
+  const cachedResponse = await caches.match(request);
+  if (cachedResponse) {
+    return cachedResponse;
+  }
+
+  try {
+    const response = await fetch(request);
+    if (response.ok) {
+      const cache = await caches.open(CACHE_NAME);
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch (error) {
+    return new Response('Offline', { status: 503 });
+  }
+}
+
+async function staleWhileRevalidateStrategy(request) {
+  const cache = await caches.open(CACHE_NAME);
+  const cachedResponse = await cache.match(request);
+
+  const fetchPromise = fetch(request)
+    .then((response) => {
+      if (response.ok) {
+        cache.put(request, response.clone());
+      }
+      return response;
+    })
+    .catch(() => cachedResponse);
+
+  return cachedResponse || fetchPromise;
+}
+
+// IndexedDB helpers
+function openIndexedDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('BurniDB', 1);
+
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => resolve(request.result);
+
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result;
+      if (!db.objectStoreNames.contains('interactions')) {
+        db.createObjectStore('interactions', { keyPath: 'id', autoIncrement: true });
+      }
+    };
+  });
+}
+
+function getAllFromStore(store) {
+  return new Promise((resolve, reject) => {
+    const request = store.getAll();
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => resolve(request.result);
+  });
+}
