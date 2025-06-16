@@ -3,103 +3,103 @@
 
 # Content Security Policy
 <IfModule mod_headers.c>
-    Header always set Content-Security-Policy "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com https://api.coingecko.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https: wss: ws:; frame-src 'none';"
+Header always set Content-Security-Policy "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com https://api.coingecko.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https: wss: ws:; frame-src 'none';"
     
-    # X-Frame-Options
-    Header always set X-Frame-Options "DENY"
+# X-Frame-Options
+Header always set X-Frame-Options "DENY"
     
-    # X-Content-Type-Options
-    Header always set X-Content-Type-Options "nosniff"
+# X-Content-Type-Options
+Header always set X-Content-Type-Options "nosniff"
     
-    # Referrer Policy
-    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+# Referrer Policy
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
     
-    # X-XSS-Protection
-    Header always set X-XSS-Protection "1; mode=block"
+# X-XSS-Protection
+Header always set X-XSS-Protection "1; mode=block"
     
-    # Permissions Policy
-    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), fullscreen=(self)"
+# Permissions Policy
+Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), fullscreen=(self)"
     
-    # Additional Security Headers
-    Header always set X-Permitted-Cross-Domain-Policies "none"
-    Header always set Cross-Origin-Embedder-Policy "require-corp"
-    Header always set Cross-Origin-Opener-Policy "same-origin"
-    Header always set Cross-Origin-Resource-Policy "same-origin"
+# Additional Security Headers
+Header always set X-Permitted-Cross-Domain-Policies "none"
+Header always set Cross-Origin-Embedder-Policy "require-corp"
+Header always set Cross-Origin-Opener-Policy "same-origin"
+Header always set Cross-Origin-Resource-Policy "same-origin"
 </IfModule>
 
 # Cache Control für bessere Performance
 <IfModule mod_expires.c>
-    ExpiresActive On
+ExpiresActive On
     
-    # HTML-Dateien
-    ExpiresByType text/html "access plus 1 hour"
+# HTML-Dateien
+ExpiresByType text/html "access plus 1 hour"
     
-    # CSS und JavaScript
-    ExpiresByType text/css "access plus 1 month"
-    ExpiresByType application/javascript "access plus 1 month"
-    ExpiresByType text/javascript "access plus 1 month"
+# CSS und JavaScript
+ExpiresByType text/css "access plus 1 month"
+ExpiresByType application/javascript "access plus 1 month"
+ExpiresByType text/javascript "access plus 1 month"
     
-    # Bilder
-    ExpiresByType image/png "access plus 1 year"
-    ExpiresByType image/jpg "access plus 1 year"
-    ExpiresByType image/jpeg "access plus 1 year"
-    ExpiresByType image/webp "access plus 1 year"
-    ExpiresByType image/svg+xml "access plus 1 year"
+# Bilder
+ExpiresByType image/png "access plus 1 year"
+ExpiresByType image/jpg "access plus 1 year"
+ExpiresByType image/jpeg "access plus 1 year"
+ExpiresByType image/webp "access plus 1 year"
+ExpiresByType image/svg+xml "access plus 1 year"
     
-    # Fonts
-    ExpiresByType font/woff2 "access plus 1 year"
-    ExpiresByType font/woff "access plus 1 year"
-    ExpiresByType application/font-woff2 "access plus 1 year"
+# Fonts
+ExpiresByType font/woff2 "access plus 1 year"
+ExpiresByType font/woff "access plus 1 year"
+ExpiresByType application/font-woff2 "access plus 1 year"
     
-    # JSON und XML
-    ExpiresByType application/json "access plus 1 hour"
-    ExpiresByType application/xml "access plus 1 hour"
-    ExpiresByType text/xml "access plus 1 hour"
+# JSON und XML
+ExpiresByType application/json "access plus 1 hour"
+ExpiresByType application/xml "access plus 1 hour"
+ExpiresByType text/xml "access plus 1 hour"
 </IfModule>
 
 # Kompression für bessere Performance
 <IfModule mod_deflate.c>
-    # HTML, CSS, JavaScript komprimieren
-    AddOutputFilterByType DEFLATE text/plain
-    AddOutputFilterByType DEFLATE text/html
-    AddOutputFilterByType DEFLATE text/xml
-    AddOutputFilterByType DEFLATE text/css
-    AddOutputFilterByType DEFLATE application/xml
-    AddOutputFilterByType DEFLATE application/xhtml+xml
-    AddOutputFilterByType DEFLATE application/rss+xml
-    AddOutputFilterByType DEFLATE application/javascript
-    AddOutputFilterByType DEFLATE application/x-javascript
-    AddOutputFilterByType DEFLATE application/json
+# HTML, CSS, JavaScript komprimieren
+AddOutputFilterByType DEFLATE text/plain
+AddOutputFilterByType DEFLATE text/html
+AddOutputFilterByType DEFLATE text/xml
+AddOutputFilterByType DEFLATE text/css
+AddOutputFilterByType DEFLATE application/xml
+AddOutputFilterByType DEFLATE application/xhtml+xml
+AddOutputFilterByType DEFLATE application/rss+xml
+AddOutputFilterByType DEFLATE application/javascript
+AddOutputFilterByType DEFLATE application/x-javascript
+AddOutputFilterByType DEFLATE application/json
 </IfModule>
 
 # MIME-Type Korrekturen
 <IfModule mod_mime.c>
-    # WebP-Images
-    AddType image/webp .webp
+# WebP-Images
+AddType image/webp .webp
     
-    # Web App Manifest
-    AddType application/manifest+json .webmanifest
-    AddType application/json .json
+# Web App Manifest
+AddType application/manifest+json .webmanifest
+AddType application/json .json
     
-    # Service Worker
-    AddType application/javascript .js
+# Service Worker
+AddType application/javascript .js
     
-    # Fonts
-    AddType font/woff2 .woff2
-    AddType font/woff .woff
+# Fonts
+AddType font/woff2 .woff2
+AddType font/woff .woff
 </IfModule>
 
 # URL-Rewrites für bessere SEO
 <IfModule mod_rewrite.c>
-    RewriteEngine On
+RewriteEngine On
     
-    # HTTPS-Weiterleitung
-    RewriteCond %{HTTPS} off
-    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# HTTPS-Weiterleitung
+RewriteCond % { HTTPS } off
+RewriteRule ^(.*)$ https://% { HTTP_HOST }% { REQUEST_URI } [L, R=301]
     
-    # WWW-Weiterleitung
-    RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
-    RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+# WWW-Weiterleitung
+RewriteCond % { HTTP_HOST } ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301, L]
 </IfModule>
 
 # Error Pages
@@ -111,6 +111,6 @@ Options -Indexes
 
 # Server-Signatur ausblenden
 <IfModule mod_security.c>
-    ServerSignature Off
-    ServerTokens Prod
+ServerSignature Off
+ServerTokens Prod
 </IfModule>

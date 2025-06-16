@@ -73,7 +73,7 @@ class BurniDarkModeManager {
         // Container
         const container = document.createElement('div');
         container.id = 'burni-dark-mode-container';
-        container.className = 'fixed top-4 right-4 z-50';
+        container.className = 'fixed z-50 top-4 right-4';
         
         // Button
         this.toggleButton = document.createElement('button');
