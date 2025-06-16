@@ -4,6 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- SEO Meta Tags - KRITISCH FÜR SUCHMASCHINEN -->
+    <title>🔥 BurniToken - Revolutionary XRPL Token Burning Platform | Deflationäre Kryptowährung</title>
+    <meta name="description" content="🔥 BurniToken - Die erste deflationäre XRPL-basierte Kryptowährung mit automatischem Token-Burning-Mechanismus. Investieren Sie in die Zukunft der Blockchain-Technologie mit über 2 Milliarden verbrannten Tokens!" />
+    <meta name="keywords" content="BurniToken, XRPL, Token Burning, Kryptowährung, Blockchain, Deflationär, Investment, Crypto, XRP Ledger" />
+    <meta name="author" content="BurniToken Team" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://burnitoken.website/" />
+
     <!-- Enhanced Performance and Compatibility Meta Tags -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="format-detection" content="telephone=no" />
@@ -64,7 +74,14 @@
     <meta name="twitter:creator" content="@burnicoin" />
     <meta name="twitter:site" content="@burnicoin" />
 
-    <title data-i18n="page_title">Burni Token - Deflationäres Krypto-Projekt für 2025 | XRPL Token mit automatischem Burn</title>
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="./manifest.json" />
+    
+    <!-- Apple PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="BurniToken" />
+    <link rel="apple-touch-icon" href="./assets/images/apple-touch-icon.png" />
 
     <!-- Hreflang Links for International SEO -->
     <link rel="alternate" hreflang="en" href="https://www.burnitoken.website/en" />
@@ -3393,6 +3410,21 @@
           showCookieNotice();
         }
       });
+    </script>
+
+    <!-- PWA Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js')
+            .then((registration) => {
+              console.log('✅ Service Worker registered successfully:', registration.scope);
+            })
+            .catch((error) => {
+              console.log('❌ Service Worker registration failed:', error);
+            });
+        });
+      }
     </script>
   </body>
 </html>
