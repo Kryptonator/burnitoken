@@ -1,4 +1,4 @@
-const CACHE_NAME = 'burni-cache-v5';
+const CACHE_NAME = 'burni-cache-v6'; // Increased version to force cache refresh
 const API_CACHE_NAME = 'burni-api-cache-v1';
 const ASSETS_TO_CACHE = [
   '/',

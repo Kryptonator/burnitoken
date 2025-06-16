@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Burni Token - Minimal Test</title>
+    <link rel="stylesheet" href="/assets/css/styles.min.css">
+    <link rel="stylesheet" href="/assets/css/proportion-optimization.css">
+    <style>
+        .debug-info {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            z-index: 10000;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-info">
+        <div>Status: <span id="status">Loading...</span></div>
+        <div>Time: <span id="time"></span></div>
+        <div>Scripts: <span id="script-count">0</span></div>
+    </div>
+
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-md py-3">
+        <div class="container mx-auto px-6 flex items-center justify-between">
+            <a href="#hero" class="flex items-center">
+                <img src="/assets/images/burni-logo.png" alt="Burni Token Logo" class="h-10 w-auto mr-3">
+                <span class="text-3xl font-bold text-orange-600 font-baloo-2">Burni Token</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <section id="hero" class="py-12 md:py-20 hero-gradient min-h-[85vh] flex items-center rounded-3xl mb-12 relative overflow-hidden">
+            <div class="container mx-auto px-6 text-center relative z-20">
+                <div class="pixar-card max-w-4xl mx-auto p-6 mb-8">
+                    <picture>
+                        <source srcset="/assets/images/burniimage.webp" type="image/webp">
+                        <img src="/assets/images/burniimage.jpg" alt="Burni Token Mascot" class="burni-mascot mx-auto mb-6">
+                    </picture>
+
+                    <h1 class="pixar-title mb-4">Burni Token - Test Page</h1>
+                    <p class="pixar-subtitle mb-8 max-w-3xl mx-auto">
+                        This is a minimal test version to identify loading issues.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                        <button type="button" class="pixar-button text-base px-6 py-3">
+                            🔥 Test Button 1
+                        </button>
+                        <button type="button" class="pixar-button bg-gradient-to-r from-purple-500 to-pink-500 text-base px-6 py-3">
+                            🚀 Test Button 2
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8">
+                    <div class="kpi-card">
+                        <div class="kpi-value">1,000,000</div>
+                        <div class="kpi-label">Total Supply</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value">0</div>
+                        <div class="kpi-label">Burned 🔥</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value">$0.00</div>
+                        <div class="kpi-label">Price</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value">$0</div>
+                        <div class="kpi-label">Market Cap</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-12">
+            <div class="text-center mb-8">
+                <h2 class="mb-4 font-baloo-2">Test Section</h2>
+                <p class="text-lg text-gray-700 max-w-xl mx-auto">
+                    This minimal version should load correctly without any issues.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Minimal JavaScript for debugging
+        let startTime = Date.now();
+        
+        function updateStatus() {
+            const statusEl = document.getElementById('status');
+            const timeEl = document.getElementById('time');
+            const scriptCountEl = document.getElementById('script-count');
+            
+            statusEl.textContent = 'Loaded';
+            timeEl.textContent = (Date.now() - startTime) + 'ms';
+            scriptCountEl.textContent = document.scripts.length;
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Minimal test page loaded successfully');
+            updateStatus();
+        });
+        
+        // Monitor for any unexpected navigation
+        window.addEventListener('beforeunload', (e) => {
+            console.log('Page is being unloaded');
+        });
+        
+        window.addEventListener('pagehide', (e) => {
+            console.log('Page is being hidden');
+        });
+    </script>
+</body>
+</html>
