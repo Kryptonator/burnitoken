@@ -2816,15 +2816,15 @@ function showKeyboardShortcutsHelp() {
       <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Keyboard Shortcuts</h3>
       <div class="space-y-2">
         ${shortcuts
-          .map(
-            (shortcut) => `
+      .map(
+        (shortcut) => `
           <div class="flex justify-between items-center">
             <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm font-mono">${shortcut.key}</kbd>
             <span class="text-sm text-gray-600 dark:text-gray-300">${shortcut.description}</span>
           </div>
         `,
-          )
-          .join('')}
+      )
+      .join('')}
       </div>
       <button id="close-shortcuts-help" class="mt-4 w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
         Close
@@ -3357,7 +3357,7 @@ async function initializeOptimizedFeatures() {
 initializeOptimizedFeatures();
 
 // Enhanced Error Monitoring and Reporting
-window.onerror = function(message, source, lineno, colno, error) {
+window.onerror = function (message, source, lineno, colno, error) {
   console.error('Global Error:', {
     message,
     source,
@@ -3365,23 +3365,23 @@ window.onerror = function(message, source, lineno, colno, error) {
     column: colno,
     error: error?.stack
   });
-  
+
   // Optional: Send to monitoring service
   // sendErrorToMonitoring({ message, source, lineno, colno, stack: error?.stack });
-  
+
   return false;
 };
 
-window.addEventListener('unhandledrejection', function(event) {
+window.addEventListener('unhandledrejection', function (event) {
   console.error('Unhandled Promise Rejection:', event.reason);
-  
+
   // Optional: Send to monitoring service
   // sendErrorToMonitoring({ type: 'unhandledrejection', reason: event.reason });
 });
 
 // Performance monitoring
-window.addEventListener('load', function() {
-  setTimeout(function() {
+window.addEventListener('load', function () {
+  setTimeout(function () {
     const perfData = performance.getEntriesByType('navigation')[0];
     console.log('Performance Metrics:', {
       loadTime: perfData.loadEventEnd - perfData.loadEventStart,

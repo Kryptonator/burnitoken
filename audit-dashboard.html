@@ -1,27 +1,41 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Website Audit Dashboard - Burni Token</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .audit-card {
             transition: all 0.3s ease;
             border-left: 4px solid transparent;
         }
-        .audit-card.excellent { border-left-color: #10b981; }
-        .audit-card.good { border-left-color: #f59e0b; }
-        .audit-card.needs-improvement { border-left-color: #ef4444; }
+
+        .audit-card.excellent {
+            border-left-color: #10b981;
+        }
+
+        .audit-card.good {
+            border-left-color: #f59e0b;
+        }
+
+        .audit-card.needs-improvement {
+            border-left-color: #ef4444;
+        }
+
         .audit-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
+
         .progress-ring {
             transform: rotate(-90deg);
         }
+
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -29,6 +43,7 @@
         }
     </style>
 </head>
+
 <body class="bg-gray-50 min-h-screen">
     <div class="container mx-auto px-6 py-8">
         <!-- Header -->
@@ -39,7 +54,8 @@
                         <i class="fas fa-chart-line text-orange-500 mr-3"></i>
                         Website Audit Dashboard
                     </h1>
-                    <p class="text-gray-600 mt-2">Comprehensive quality monitoring for Burni Token website</p>
+                    <p class="text-gray-600 mt-2">Comprehensive quality monitoring for Burni Token
+                        website</p>
                 </div>
                 <div class="text-right">
                     <div class="text-3xl font-bold text-green-600" id="overall-score">94%</div>
@@ -61,7 +77,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex items-center">
                     <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
@@ -73,7 +89,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex items-center">
                     <div class="p-3 rounded-full bg-blue-100 text-blue-600">
@@ -85,7 +101,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex items-center">
                     <div class="p-3 rounded-full bg-purple-100 text-purple-600">
@@ -265,12 +281,13 @@
                         </div>
                         <div class="ml-3">
                             <div class="font-medium text-gray-900">Security audit completed</div>
-                            <div class="text-sm text-gray-500">Enhanced security headers implemented</div>
+                            <div class="text-sm text-gray-500">Enhanced security headers implemented
+                            </div>
                         </div>
                     </div>
                     <div class="text-sm text-gray-500">2 minutes ago</div>
                 </div>
-                
+
                 <div class="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
                     <div class="flex items-center">
                         <div class="p-2 bg-blue-100 rounded-full text-blue-600">
@@ -278,12 +295,13 @@
                         </div>
                         <div class="ml-3">
                             <div class="font-medium text-gray-900">Quick fixes applied</div>
-                            <div class="text-sm text-gray-500">6 improvements automatically implemented</div>
+                            <div class="text-sm text-gray-500">6 improvements automatically
+                                implemented</div>
                         </div>
                     </div>
                     <div class="text-sm text-gray-500">5 minutes ago</div>
                 </div>
-                
+
                 <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-lg">
                     <div class="flex items-center">
                         <div class="p-2 bg-yellow-100 rounded-full text-yellow-600">
@@ -291,7 +309,8 @@
                         </div>
                         <div class="ml-3">
                             <div class="font-medium text-gray-900">Mobile usability improved</div>
-                            <div class="text-sm text-gray-500">Touch targets optimized for better mobile experience</div>
+                            <div class="text-sm text-gray-500">Touch targets optimized for better
+                                mobile experience</div>
                         </div>
                     </div>
                     <div class="text-sm text-gray-500">10 minutes ago</div>
@@ -301,15 +320,18 @@
 
         <!-- Action Buttons -->
         <div class="mt-8 flex justify-center space-x-4">
-            <button onclick="runNewAudit()" class="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition-colors">
+            <button onclick="runNewAudit()"
+                class="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition-colors">
                 <i class="fas fa-play mr-2"></i>
                 Run New Audit
             </button>
-            <button onclick="downloadReport()" class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+            <button onclick="downloadReport()"
+                class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
                 <i class="fas fa-download mr-2"></i>
                 Download Report
             </button>
-            <button onclick="scheduleAudit()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+            <button onclick="scheduleAudit()"
+                class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
                 <i class="fas fa-calendar mr-2"></i>
                 Schedule Audit
             </button>
@@ -394,11 +416,12 @@
         setInterval(updateDashboard, 300000);
 
         // Initialize dashboard
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             console.log('✅ Website Audit Dashboard initialized');
             console.log('📊 Current overall score: 94%');
             console.log('🎯 8/10 audits passed with excellent scores');
         });
     </script>
 </body>
+
 </html>

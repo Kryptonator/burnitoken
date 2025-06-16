@@ -5,40 +5,40 @@ const fs = require('fs');
 const path = require('path');
 
 class WebsiteQuickFix {
-  constructor() {
-    this.fixes = [];
-    this.errors = [];
-  }
+    constructor() {
+        this.fixes = [];
+        this.errors = [];
+    }
 
-  log(message, type = 'info') {
-    const timestamp = new Date().toISOString();
-    const emoji = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warn' ? '⚠️' : 'ℹ️';
-    console.log(`[${timestamp}] ${emoji} ${message}`);
-  }
+    log(message, type = 'info') {
+        const timestamp = new Date().toISOString();
+        const emoji = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warn' ? '⚠️' : 'ℹ️';
+        console.log(`[${timestamp}] ${emoji} ${message}`);
+    }
 
-  addFix(description) {
-    this.fixes.push(description);
-    this.log(`Fixed: ${description}`, 'success');
-  }
+    addFix(description) {
+        this.fixes.push(description);
+        this.log(`Fixed: ${description}`, 'success');
+    }
 
-  addError(description) {
-    this.errors.push(description);
-    this.log(`Error: ${description}`, 'error');
-  }
+    addError(description) {
+        this.errors.push(description);
+        this.log(`Error: ${description}`, 'error');
+    }
 
-  // Fix 1: Enhance Security Headers
-  fixSecurityHeaders() {
-    try {
-      const indexPath = 'index.html';
-      if (!fs.existsSync(indexPath)) {
-        this.addError('index.html not found');
-        return;
-      }
+    // Fix 1: Enhance Security Headers
+    fixSecurityHeaders() {
+        try {
+            const indexPath = 'index.html';
+            if (!fs.existsSync(indexPath)) {
+                this.addError('index.html not found');
+                return;
+            }
 
-      let content = fs.readFileSync(indexPath, 'utf8');
-      
-      // Add missing security headers if not present
-      const securityHeaders = `
+            let content = fs.readFileSync(indexPath, 'utf8');
+
+            // Add missing security headers if not present
+            const securityHeaders = `
     <!-- Enhanced Security Headers -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta http-equiv="X-Frame-Options" content="DENY" />
@@ -46,30 +46,30 @@ class WebsiteQuickFix {
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
     <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()" />`;
 
-      if (!content.includes('X-Content-Type-Options')) {
-        content = content.replace(
-          '<!-- Content Security Policy',
-          securityHeaders + '\n    <!-- Content Security Policy'
-        );
-        
-        fs.writeFileSync(indexPath, content);
-        this.addFix('Enhanced security headers added');
-      } else {
-        this.log('Security headers already present', 'info');
-      }
-    } catch (error) {
-      this.addError(`Failed to fix security headers: ${error.message}`);
-    }
-  }
+            if (!content.includes('X-Content-Type-Options')) {
+                content = content.replace(
+                    '<!-- Content Security Policy',
+                    securityHeaders + '\n    <!-- Content Security Policy'
+                );
 
-  // Fix 2: Add Cookie Policy
-  fixCookiePolicy() {
-    try {
-      const indexPath = 'index.html';
-      let content = fs.readFileSync(indexPath, 'utf8');
-      
-      if (!content.includes('cookie') && !content.includes('Cookie')) {
-        const cookieNotice = `
+                fs.writeFileSync(indexPath, content);
+                this.addFix('Enhanced security headers added');
+            } else {
+                this.log('Security headers already present', 'info');
+            }
+        } catch (error) {
+            this.addError(`Failed to fix security headers: ${error.message}`);
+        }
+    }
+
+    // Fix 2: Add Cookie Policy
+    fixCookiePolicy() {
+        try {
+            const indexPath = 'index.html';
+            let content = fs.readFileSync(indexPath, 'utf8');
+
+            if (!content.includes('cookie') && !content.includes('Cookie')) {
+                const cookieNotice = `
     <!-- Cookie Consent Notice -->
     <div id="cookie-notice" class="fixed bottom-0 left-0 right-0 bg-gray-900 text-white p-4 z-50" style="display: none;">
       <div class="container mx-auto flex items-center justify-between">
@@ -83,24 +83,24 @@ class WebsiteQuickFix {
       </div>
     </div>`;
 
-        content = content.replace('</body>', cookieNotice + '\n  </body>');
-        
-        fs.writeFileSync(indexPath, content);
-        this.addFix('Cookie policy notice added');
-      }
-    } catch (error) {
-      this.addError(`Failed to add cookie policy: ${error.message}`);
-    }
-  }
+                content = content.replace('</body>', cookieNotice + '\n  </body>');
 
-  // Fix 3: Add Privacy Policy Section
-  fixPrivacyPolicy() {
-    try {
-      const indexPath = 'index.html';
-      let content = fs.readFileSync(indexPath, 'utf8');
-      
-      if (!content.includes('Datenschutz') && !content.includes('Privacy')) {
-        const privacySection = `
+                fs.writeFileSync(indexPath, content);
+                this.addFix('Cookie policy notice added');
+            }
+        } catch (error) {
+            this.addError(`Failed to add cookie policy: ${error.message}`);
+        }
+    }
+
+    // Fix 3: Add Privacy Policy Section
+    fixPrivacyPolicy() {
+        try {
+            const indexPath = 'index.html';
+            let content = fs.readFileSync(indexPath, 'utf8');
+
+            if (!content.includes('Datenschutz') && !content.includes('Privacy')) {
+                const privacySection = `
       <!-- Privacy Policy Section -->
       <section id="privacy" class="py-16 bg-gray-50">
         <div class="container mx-auto px-6">
@@ -120,33 +120,33 @@ class WebsiteQuickFix {
         </div>
       </section>`;
 
-        // Insert before footer
-        content = content.replace(
-          '<footer',
-          privacySection + '\n    <footer'
-        );
-        
-        fs.writeFileSync(indexPath, content);
-        this.addFix('Privacy policy section added');
-      }
-    } catch (error) {
-      this.addError(`Failed to add privacy policy: ${error.message}`);
+                // Insert before footer
+                content = content.replace(
+                    '<footer',
+                    privacySection + '\n    <footer'
+                );
+
+                fs.writeFileSync(indexPath, content);
+                this.addFix('Privacy policy section added');
+            }
+        } catch (error) {
+            this.addError(`Failed to add privacy policy: ${error.message}`);
+        }
     }
-  }
 
-  // Fix 4: Improve Touch Targets
-  fixTouchTargets() {
-    try {
-      const cssPath = 'assets/css/proportion-optimization.css';
-      if (!fs.existsSync(cssPath)) {
-        this.addError('Proportion CSS file not found');
-        return;
-      }
+    // Fix 4: Improve Touch Targets
+    fixTouchTargets() {
+        try {
+            const cssPath = 'assets/css/proportion-optimization.css';
+            if (!fs.existsSync(cssPath)) {
+                this.addError('Proportion CSS file not found');
+                return;
+            }
 
-      let content = fs.readFileSync(cssPath, 'utf8');
-      
-      if (!content.includes('min-height: 44px')) {
-        const touchTargetCSS = `
+            let content = fs.readFileSync(cssPath, 'utf8');
+
+            if (!content.includes('min-height: 44px')) {
+                const touchTargetCSS = `
 /* Enhanced Touch Targets for Mobile Usability */
 .pixar-button,
 .btn,
@@ -178,23 +178,23 @@ a[role="button"],
   }
 }`;
 
-        content += touchTargetCSS;
-        fs.writeFileSync(cssPath, content);
-        this.addFix('Touch targets optimized for mobile');
-      }
-    } catch (error) {
-      this.addError(`Failed to optimize touch targets: ${error.message}`);
+                content += touchTargetCSS;
+                fs.writeFileSync(cssPath, content);
+                this.addFix('Touch targets optimized for mobile');
+            }
+        } catch (error) {
+            this.addError(`Failed to optimize touch targets: ${error.message}`);
+        }
     }
-  }
 
-  // Fix 5: Add Structured Data
-  fixStructuredData() {
-    try {
-      const indexPath = 'index.html';
-      let content = fs.readFileSync(indexPath, 'utf8');
-      
-      if (!content.includes('application/ld+json')) {
-        const structuredData = `
+    // Fix 5: Add Structured Data
+    fixStructuredData() {
+        try {
+            const indexPath = 'index.html';
+            let content = fs.readFileSync(indexPath, 'utf8');
+
+            if (!content.includes('application/ld+json')) {
+                const structuredData = `
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
     {
@@ -221,50 +221,50 @@ a[role="button"],
     }
     </script>`;
 
-        content = content.replace('</head>', structuredData + '\n  </head>');
-        fs.writeFileSync(indexPath, content);
-        this.addFix('Structured data (JSON-LD) added');
-      }
-    } catch (error) {
-      this.addError(`Failed to add structured data: ${error.message}`);
+                content = content.replace('</head>', structuredData + '\n  </head>');
+                fs.writeFileSync(indexPath, content);
+                this.addFix('Structured data (JSON-LD) added');
+            }
+        } catch (error) {
+            this.addError(`Failed to add structured data: ${error.message}`);
+        }
     }
-  }
 
-  // Fix 6: Enhance Content Freshness Indicators
-  fixContentFreshness() {
-    try {
-      const indexPath = 'index.html';
-      let content = fs.readFileSync(indexPath, 'utf8');
-      
-      // Add last updated timestamp
-      const currentDate = new Date().toLocaleDateString('de-DE');
-      const updateIndicator = `
+    // Fix 6: Enhance Content Freshness Indicators
+    fixContentFreshness() {
+        try {
+            const indexPath = 'index.html';
+            let content = fs.readFileSync(indexPath, 'utf8');
+
+            // Add last updated timestamp
+            const currentDate = new Date().toLocaleDateString('de-DE');
+            const updateIndicator = `
     <!-- Content Freshness Indicator -->
     <meta name="last-modified" content="${new Date().toISOString()}" />
     <meta name="revised" content="${currentDate}" />`;
 
-      if (!content.includes('last-modified')) {
-        content = content.replace(
-          '<meta name="author"',
-          updateIndicator + '\n    <meta name="author"'
-        );
-        
-        fs.writeFileSync(indexPath, content);
-        this.addFix('Content freshness indicators added');
-      }
-    } catch (error) {
-      this.addError(`Failed to add content freshness indicators: ${error.message}`);
-    }
-  }
+            if (!content.includes('last-modified')) {
+                content = content.replace(
+                    '<meta name="author"',
+                    updateIndicator + '\n    <meta name="author"'
+                );
 
-  // Fix 7: Add Search Functionality
-  fixSearchFunctionality() {
-    try {
-      const indexPath = 'index.html';
-      let content = fs.readFileSync(indexPath, 'utf8');
-      
-      if (!content.includes('search') && !content.includes('Search')) {
-        const searchWidget = `
+                fs.writeFileSync(indexPath, content);
+                this.addFix('Content freshness indicators added');
+            }
+        } catch (error) {
+            this.addError(`Failed to add content freshness indicators: ${error.message}`);
+        }
+    }
+
+    // Fix 7: Add Search Functionality
+    fixSearchFunctionality() {
+        try {
+            const indexPath = 'index.html';
+            let content = fs.readFileSync(indexPath, 'utf8');
+
+            if (!content.includes('search') && !content.includes('Search')) {
+                const searchWidget = `
           <!-- Search Widget -->
           <div class="hidden md:flex items-center space-x-4">
             <div class="relative">
@@ -280,33 +280,33 @@ a[role="button"],
             </div>
           </div>`;
 
-        // Add to navigation
-        content = content.replace(
-          '<div class="flex items-center space-x-6">',
-          '<div class="flex items-center space-x-6">' + searchWidget
-        );
-        
-        fs.writeFileSync(indexPath, content);
-        this.addFix('Search functionality added to navigation');
-      }
-    } catch (error) {
-      this.addError(`Failed to add search functionality: ${error.message}`);
+                // Add to navigation
+                content = content.replace(
+                    '<div class="flex items-center space-x-6">',
+                    '<div class="flex items-center space-x-6">' + searchWidget
+                );
+
+                fs.writeFileSync(indexPath, content);
+                this.addFix('Search functionality added to navigation');
+            }
+        } catch (error) {
+            this.addError(`Failed to add search functionality: ${error.message}`);
+        }
     }
-  }
 
-  // Fix 8: Add Error Monitoring
-  fixErrorMonitoring() {
-    try {
-      const mainJsPath = 'main.js';
-      if (!fs.existsSync(mainJsPath)) {
-        this.addError('main.js not found');
-        return;
-      }
+    // Fix 8: Add Error Monitoring
+    fixErrorMonitoring() {
+        try {
+            const mainJsPath = 'main.js';
+            if (!fs.existsSync(mainJsPath)) {
+                this.addError('main.js not found');
+                return;
+            }
 
-      let content = fs.readFileSync(mainJsPath, 'utf8');
-      
-      if (!content.includes('window.onerror')) {
-        const errorMonitoring = `
+            let content = fs.readFileSync(mainJsPath, 'utf8');
+
+            if (!content.includes('window.onerror')) {
+                const errorMonitoring = `
 // Enhanced Error Monitoring and Reporting
 window.onerror = function(message, source, lineno, colno, error) {
   console.error('Global Error:', {
@@ -343,95 +343,95 @@ window.addEventListener('load', function() {
 });
 `;
 
-        content += errorMonitoring;
-        fs.writeFileSync(mainJsPath, content);
-        this.addFix('Enhanced error monitoring added');
-      }
-    } catch (error) {
-      this.addError(`Failed to add error monitoring: ${error.message}`);
+                content += errorMonitoring;
+                fs.writeFileSync(mainJsPath, content);
+                this.addFix('Enhanced error monitoring added');
+            }
+        } catch (error) {
+            this.addError(`Failed to add error monitoring: ${error.message}`);
+        }
     }
-  }
 
-  // Execute all fixes
-  async executeAllFixes() {
-    this.log('🔧 Starting Website Quick-Fix Process...', 'info');
-    
-    // Security fixes (highest priority)
-    this.fixSecurityHeaders();
-    this.fixCookiePolicy();
-    this.fixPrivacyPolicy();
-    
-    // UX/Usability fixes
-    this.fixTouchTargets();
-    this.fixSearchFunctionality();
-    
-    // SEO/Content fixes
-    this.fixStructuredData();
-    this.fixContentFreshness();
-    
-    // Technical fixes
-    this.fixErrorMonitoring();
-    
-    this.generateFixReport();
-  }
+    // Execute all fixes
+    async executeAllFixes() {
+        this.log('🔧 Starting Website Quick-Fix Process...', 'info');
 
-  generateFixReport() {
-    this.log('\n' + '='.repeat(60), 'info');
-    this.log('🔧 WEBSITE QUICK-FIX REPORT', 'info');
-    this.log('='.repeat(60), 'info');
-    
-    this.log(`✅ Successfully Applied Fixes: ${this.fixes.length}`, 'success');
-    this.log(`❌ Errors Encountered: ${this.errors.length}`, this.errors.length > 0 ? 'error' : 'info');
-    
-    if (this.fixes.length > 0) {
-      this.log('\n✅ APPLIED FIXES:', 'success');
-      this.fixes.forEach((fix, index) => {
-        this.log(`  ${index + 1}. ${fix}`, 'success');
-      });
+        // Security fixes (highest priority)
+        this.fixSecurityHeaders();
+        this.fixCookiePolicy();
+        this.fixPrivacyPolicy();
+
+        // UX/Usability fixes
+        this.fixTouchTargets();
+        this.fixSearchFunctionality();
+
+        // SEO/Content fixes
+        this.fixStructuredData();
+        this.fixContentFreshness();
+
+        // Technical fixes
+        this.fixErrorMonitoring();
+
+        this.generateFixReport();
     }
-    
-    if (this.errors.length > 0) {
-      this.log('\n❌ ERRORS:', 'error');
-      this.errors.forEach((error, index) => {
-        this.log(`  ${index + 1}. ${error}`, 'error');
-      });
+
+    generateFixReport() {
+        this.log('\n' + '='.repeat(60), 'info');
+        this.log('🔧 WEBSITE QUICK-FIX REPORT', 'info');
+        this.log('='.repeat(60), 'info');
+
+        this.log(`✅ Successfully Applied Fixes: ${this.fixes.length}`, 'success');
+        this.log(`❌ Errors Encountered: ${this.errors.length}`, this.errors.length > 0 ? 'error' : 'info');
+
+        if (this.fixes.length > 0) {
+            this.log('\n✅ APPLIED FIXES:', 'success');
+            this.fixes.forEach((fix, index) => {
+                this.log(`  ${index + 1}. ${fix}`, 'success');
+            });
+        }
+
+        if (this.errors.length > 0) {
+            this.log('\n❌ ERRORS:', 'error');
+            this.errors.forEach((error, index) => {
+                this.log(`  ${index + 1}. ${error}`, 'error');
+            });
+        }
+
+        if (this.fixes.length > 0) {
+            this.log('\n🚀 NEXT STEPS:', 'info');
+            this.log('1. Run comprehensive audit again to verify improvements', 'info');
+            this.log('2. Test the website in multiple browsers', 'info');
+            this.log('3. Validate accessibility improvements', 'info');
+            this.log('4. Check mobile responsiveness', 'info');
+            this.log('5. Commit and deploy changes', 'info');
+        }
+
+        this.log('\n='.repeat(60), 'info');
+
+        // Save report
+        const report = {
+            timestamp: new Date().toISOString(),
+            appliedFixes: this.fixes,
+            errors: this.errors,
+            summary: {
+                totalFixes: this.fixes.length,
+                totalErrors: this.errors.length,
+                success: this.errors.length === 0
+            }
+        };
+
+        fs.writeFileSync('quick-fix-report.json', JSON.stringify(report, null, 2));
+        this.log('📄 Fix report saved to: quick-fix-report.json', 'info');
     }
-    
-    if (this.fixes.length > 0) {
-      this.log('\n🚀 NEXT STEPS:', 'info');
-      this.log('1. Run comprehensive audit again to verify improvements', 'info');
-      this.log('2. Test the website in multiple browsers', 'info');
-      this.log('3. Validate accessibility improvements', 'info');
-      this.log('4. Check mobile responsiveness', 'info');
-      this.log('5. Commit and deploy changes', 'info');
-    }
-    
-    this.log('\n='.repeat(60), 'info');
-    
-    // Save report
-    const report = {
-      timestamp: new Date().toISOString(),
-      appliedFixes: this.fixes,
-      errors: this.errors,
-      summary: {
-        totalFixes: this.fixes.length,
-        totalErrors: this.errors.length,
-        success: this.errors.length === 0
-      }
-    };
-    
-    fs.writeFileSync('quick-fix-report.json', JSON.stringify(report, null, 2));
-    this.log('📄 Fix report saved to: quick-fix-report.json', 'info');
-  }
 }
 
 // Execute quick fixes
 if (require.main === module) {
-  const quickFix = new WebsiteQuickFix();
-  quickFix.executeAllFixes().catch(error => {
-    console.error('❌ Error during quick-fix process:', error);
-    process.exit(1);
-  });
+    const quickFix = new WebsiteQuickFix();
+    quickFix.executeAllFixes().catch(error => {
+        console.error('❌ Error during quick-fix process:', error);
+        process.exit(1);
+    });
 }
 
 module.exports = WebsiteQuickFix;

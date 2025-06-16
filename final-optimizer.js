@@ -11,13 +11,13 @@ console.log('🎯 Running Final Touch Target & Content Optimizer...');
 // Fix all touch targets in HTML
 function fixTouchTargets() {
     console.log('🔧 Fixing touch targets...');
-    
+
     const htmlPath = 'index.html';
     let html = fs.readFileSync(htmlPath, 'utf8');
-    
+
     // Remove all inline styles and apply CSS classes instead
     html = html.replace(/style="[^"]*min-height[^"]*"/g, 'class="touch-optimized"');
-    
+
     // Ensure all buttons have proper classes
     html = html.replace(/<button([^>]*?)>/g, (match, attrs) => {
         if (!attrs.includes('class=')) {
@@ -27,13 +27,13 @@ function fixTouchTargets() {
         }
         return match;
     });
-    
+
     // Fix specific interactive elements
     html = html.replace(
         /<a([^>]*?)role="button"([^>]*?)>/g,
         '<a$1role="button"$2 class="touch-optimized">'
     );
-    
+
     fs.writeFileSync(htmlPath, html);
     console.log('✅ Touch targets optimized with CSS classes');
 }
@@ -41,10 +41,10 @@ function fixTouchTargets() {
 // Enhance content hierarchy and meta content
 function enhanceContentQuality() {
     console.log('🔧 Enhancing content quality...');
-    
+
     const htmlPath = 'index.html';
     let html = fs.readFileSync(htmlPath, 'utf8');
-    
+
     // Add content freshness indicators
     const freshnessBadge = `
     <div class="content-freshness" aria-label="Content freshness indicator">
@@ -53,14 +53,14 @@ function enhanceContentQuality() {
             <span class="live-indicator">🟢 Live Data</span>
         </span>
     </div>`;
-    
+
     // Add after the hero section
     html = html.replace(
         '</section>',
         `</section>${freshnessBadge}`,
         1 // Only first occurrence
     );
-    
+
     // Add comprehensive navigation breadcrumbs
     const breadcrumbs = `
     <nav aria-label="Breadcrumb" class="breadcrumb-nav">
@@ -77,13 +77,13 @@ function enhanceContentQuality() {
             </li>
         </ol>
     </nav>`;
-    
+
     // Add breadcrumbs after header
     html = html.replace(
         '</header>',
         `</header>${breadcrumbs}`
     );
-    
+
     // Enhance meta content with more detailed information
     html = html.replace(
         '<meta property="og:description" content="Join the Burni Token community and be part of the future of deflationary cryptocurrencies on XRPL." />',
@@ -93,7 +93,7 @@ function enhanceContentQuality() {
         <meta name="theme-color" content="#f97316" />
         <meta name="color-scheme" content="light dark" />`
     );
-    
+
     fs.writeFileSync(htmlPath, html);
     console.log('✅ Content quality enhanced with freshness indicators and better meta content');
 }
@@ -101,7 +101,7 @@ function enhanceContentQuality() {
 // Create enhanced CSS for touch targets
 function createEnhancedTouchCSS() {
     console.log('🔧 Creating enhanced touch target CSS...');
-    
+
     const touchCSS = `
 /* ENHANCED TOUCH TARGET OPTIMIZATION */
 /* Comprehensive touch target compliance for WCAG 2.1 AA */
@@ -338,10 +338,10 @@ a[role="button"]:focus {
 // Add CSS to HTML
 function addEnhancedCSS() {
     console.log('🔧 Adding enhanced CSS to HTML...');
-    
+
     const htmlPath = 'index.html';
     let html = fs.readFileSync(htmlPath, 'utf8');
-    
+
     // Add the enhanced touch CSS
     if (!html.includes('enhanced-touch-targets.css')) {
         html = html.replace(
@@ -350,7 +350,7 @@ function addEnhancedCSS() {
     <link rel="stylesheet" href="assets/css/enhanced-touch-targets.css">`
         );
     }
-    
+
     fs.writeFileSync(htmlPath, html);
     console.log('✅ Enhanced CSS added to HTML');
 }
@@ -362,12 +362,12 @@ async function runFinalOptimizations() {
         enhanceContentQuality();
         createEnhancedTouchCSS();
         addEnhancedCSS();
-        
+
         console.log('\n🎉 FINAL OPTIMIZATIONS COMPLETE!');
         console.log('✅ Touch targets should now be 100% compliant');
         console.log('✅ Content quality significantly enhanced');
         console.log('✅ Website should achieve 100% audit scores');
-        
+
         return {
             success: true,
             optimizations: [
@@ -378,7 +378,7 @@ async function runFinalOptimizations() {
                 'Enhanced CSS for full compliance'
             ]
         };
-        
+
     } catch (error) {
         console.error('❌ Error during final optimizations:', error.message);
         return { success: false, error: error.message };

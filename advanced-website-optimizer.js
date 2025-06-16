@@ -5,39 +5,39 @@ const fs = require('fs');
 const path = require('path');
 
 class AdvancedWebsiteOptimizer {
-  constructor() {
-    this.optimizations = [];
-    this.errors = [];
-    this.targetScore = 100;
-  }
+    constructor() {
+        this.optimizations = [];
+        this.errors = [];
+        this.targetScore = 100;
+    }
 
-  log(message, type = 'info') {
-    const timestamp = new Date().toISOString();
-    const emoji = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warn' ? '⚠️' : 'ℹ️';
-    console.log(`[${timestamp}] ${emoji} ${message}`);
-  }
+    log(message, type = 'info') {
+        const timestamp = new Date().toISOString();
+        const emoji = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warn' ? '⚠️' : 'ℹ️';
+        console.log(`[${timestamp}] ${emoji} ${message}`);
+    }
 
-  addOptimization(description) {
-    this.optimizations.push(description);
-    this.log(`Optimized: ${description}`, 'success');
-  }
+    addOptimization(description) {
+        this.optimizations.push(description);
+        this.log(`Optimized: ${description}`, 'success');
+    }
 
-  addError(description) {
-    this.errors.push(description);
-    this.log(`Error: ${description}`, 'error');
-  }
+    addError(description) {
+        this.errors.push(description);
+        this.log(`Error: ${description}`, 'error');
+    }
 
-  // OPTIMIZATION 1: Advanced Responsive Design Improvements
-  optimizeResponsiveDesign() {
-    try {
-      this.log('🔧 Optimizing Responsive Design...', 'info');
-      
-      // Enhance proportion-optimization.css
-      const cssPath = 'assets/css/proportion-optimization.css';
-      if (fs.existsSync(cssPath)) {
-        let content = fs.readFileSync(cssPath, 'utf8');
-        
-        const advancedResponsiveCSS = `
+    // OPTIMIZATION 1: Advanced Responsive Design Improvements
+    optimizeResponsiveDesign() {
+        try {
+            this.log('🔧 Optimizing Responsive Design...', 'info');
+
+            // Enhance proportion-optimization.css
+            const cssPath = 'assets/css/proportion-optimization.css';
+            if (fs.existsSync(cssPath)) {
+                let content = fs.readFileSync(cssPath, 'utf8');
+
+                const advancedResponsiveCSS = `
 /* === ADVANCED RESPONSIVE DESIGN OPTIMIZATIONS === */
 
 /* Perfect Touch Targets for All Devices */
@@ -178,28 +178,28 @@ input[type="button"] {
   }
 }`;
 
-        if (!content.includes('ADVANCED RESPONSIVE DESIGN OPTIMIZATIONS')) {
-          content += advancedResponsiveCSS;
-          fs.writeFileSync(cssPath, content);
-          this.addOptimization('Advanced responsive design patterns implemented');
+                if (!content.includes('ADVANCED RESPONSIVE DESIGN OPTIMIZATIONS')) {
+                    content += advancedResponsiveCSS;
+                    fs.writeFileSync(cssPath, content);
+                    this.addOptimization('Advanced responsive design patterns implemented');
+                }
+            }
+        } catch (error) {
+            this.addError(`Failed to optimize responsive design: ${error.message}`);
         }
-      }
-    } catch (error) {
-      this.addError(`Failed to optimize responsive design: ${error.message}`);
     }
-  }
 
-  // OPTIMIZATION 2: Content Quality & Information Architecture
-  optimizeContentQuality() {
-    try {
-      this.log('🔧 Optimizing Content Quality...', 'info');
-      
-      const indexPath = 'index.html';
-      let content = fs.readFileSync(indexPath, 'utf8');
-      
-      // Add missing schema markup for better content structure
-      if (!content.includes('Organization')) {
-        const organizationSchema = `
+    // OPTIMIZATION 2: Content Quality & Information Architecture
+    optimizeContentQuality() {
+        try {
+            this.log('🔧 Optimizing Content Quality...', 'info');
+
+            const indexPath = 'index.html';
+            let content = fs.readFileSync(indexPath, 'utf8');
+
+            // Add missing schema markup for better content structure
+            if (!content.includes('Organization')) {
+                const organizationSchema = `
     <!-- Enhanced Organization Schema -->
     <script type="application/ld+json">
     {
@@ -221,16 +221,16 @@ input[type="button"] {
       ]
     }
     </script>`;
-        
-        content = content.replace(
-          '</head>',
-          organizationSchema + '\n  </head>'
-        );
-      }
-      
-      // Add breadcrumb navigation for better content structure
-      if (!content.includes('breadcrumb')) {
-        const breadcrumbNav = `
+
+                content = content.replace(
+                    '</head>',
+                    organizationSchema + '\n  </head>'
+                );
+            }
+
+            // Add breadcrumb navigation for better content structure
+            if (!content.includes('breadcrumb')) {
+                const breadcrumbNav = `
     <!-- Breadcrumb Navigation -->
     <nav aria-label="Breadcrumb" class="bg-gray-50 py-2">
       <div class="container mx-auto px-6">
@@ -241,16 +241,16 @@ input[type="button"] {
         </ol>
       </div>
     </nav>`;
-        
-        content = content.replace(
-          '</header>',
-          '</header>\n' + breadcrumbNav
-        );
-      }
-      
-      // Add FAQ section for better content depth
-      if (!content.includes('FAQ')) {
-        const faqSection = `
+
+                content = content.replace(
+                    '</header>',
+                    '</header>\n' + breadcrumbNav
+                );
+            }
+
+            // Add FAQ section for better content depth
+            if (!content.includes('FAQ')) {
+                const faqSection = `
       <!-- FAQ Section for Better Content Quality -->
       <section class="py-16 bg-white">
         <div class="container mx-auto px-6">
@@ -271,33 +271,33 @@ input[type="button"] {
           </div>
         </div>
       </section>`;
-        
-        content = content.replace(
-          '<!-- Privacy Policy Section -->',
-          faqSection + '\n      <!-- Privacy Policy Section -->'
-        );
-      }
-      
-      fs.writeFileSync(indexPath, content);
-      this.addOptimization('Content quality enhanced with FAQ, breadcrumbs, and schema markup');
-      
-    } catch (error) {
-      this.addError(`Failed to optimize content quality: ${error.message}`);
-    }
-  }
 
-  // OPTIMIZATION 3: Performance Under Load Enhancements
-  optimizeLoadPerformance() {
-    try {
-      this.log('🔧 Optimizing Performance Under Load...', 'info');
-      
-      // Create advanced service worker with better caching strategies
-      const swPath = 'sw.js';
-      if (fs.existsSync(swPath)) {
-        let content = fs.readFileSync(swPath, 'utf8');
-        
-        // Add advanced caching strategies
-        const advancedCaching = `
+                content = content.replace(
+                    '<!-- Privacy Policy Section -->',
+                    faqSection + '\n      <!-- Privacy Policy Section -->'
+                );
+            }
+
+            fs.writeFileSync(indexPath, content);
+            this.addOptimization('Content quality enhanced with FAQ, breadcrumbs, and schema markup');
+
+        } catch (error) {
+            this.addError(`Failed to optimize content quality: ${error.message}`);
+        }
+    }
+
+    // OPTIMIZATION 3: Performance Under Load Enhancements
+    optimizeLoadPerformance() {
+        try {
+            this.log('🔧 Optimizing Performance Under Load...', 'info');
+
+            // Create advanced service worker with better caching strategies
+            const swPath = 'sw.js';
+            if (fs.existsSync(swPath)) {
+                let content = fs.readFileSync(swPath, 'utf8');
+
+                // Add advanced caching strategies
+                const advancedCaching = `
 // Advanced Performance Optimization Strategies
 const PERFORMANCE_CACHE_NAME = 'burni-performance-v1';
 const DYNAMIC_CACHE_NAME = 'burni-dynamic-v1';
@@ -347,19 +347,19 @@ self.addEventListener('message', event => {
   }
 });`;
 
-        if (!content.includes('Advanced Performance Optimization')) {
-          content += advancedCaching;
-          fs.writeFileSync(swPath, content);
-          this.addOptimization('Advanced performance caching strategies implemented');
-        }
-      }
-      
-      // Optimize main.js for better performance monitoring
-      const mainJsPath = 'main.js';
-      if (fs.existsSync(mainJsPath)) {
-        let jsContent = fs.readFileSync(mainJsPath, 'utf8');
-        
-        const performanceMonitoring = `
+                if (!content.includes('Advanced Performance Optimization')) {
+                    content += advancedCaching;
+                    fs.writeFileSync(swPath, content);
+                    this.addOptimization('Advanced performance caching strategies implemented');
+                }
+            }
+
+            // Optimize main.js for better performance monitoring
+            const mainJsPath = 'main.js';
+            if (fs.existsSync(mainJsPath)) {
+                let jsContent = fs.readFileSync(mainJsPath, 'utf8');
+
+                const performanceMonitoring = `
 // Advanced Performance Monitoring
 class PerformanceMonitor {
   constructor() {
@@ -445,28 +445,28 @@ if (typeof window !== 'undefined') {
   new PerformanceMonitor();
 }`;
 
-        if (!content.includes('PerformanceMonitor')) {
-          jsContent += performanceMonitoring;
-          fs.writeFileSync(mainJsPath, jsContent);
-          this.addOptimization('Advanced performance monitoring system implemented');
-        }
-      }
-      
-    } catch (error) {
-      this.addError(`Failed to optimize load performance: ${error.message}`);
-    }
-  }
+                if (!content.includes('PerformanceMonitor')) {
+                    jsContent += performanceMonitoring;
+                    fs.writeFileSync(mainJsPath, jsContent);
+                    this.addOptimization('Advanced performance monitoring system implemented');
+                }
+            }
 
-  // OPTIMIZATION 4: Advanced SEO & Structured Data
-  optimizeAdvancedSEO() {
-    try {
-      this.log('🔧 Optimizing Advanced SEO...', 'info');
-      
-      const indexPath = 'index.html';
-      let content = fs.readFileSync(indexPath, 'utf8');
-      
-      // Add comprehensive structured data
-      const productSchema = `
+        } catch (error) {
+            this.addError(`Failed to optimize load performance: ${error.message}`);
+        }
+    }
+
+    // OPTIMIZATION 4: Advanced SEO & Structured Data
+    optimizeAdvancedSEO() {
+        try {
+            this.log('🔧 Optimizing Advanced SEO...', 'info');
+
+            const indexPath = 'index.html';
+            let content = fs.readFileSync(indexPath, 'utf8');
+
+            // Add comprehensive structured data
+            const productSchema = `
     <!-- Product Schema for Burni Token -->
     <script type="application/ld+json">
     {
@@ -492,9 +492,9 @@ if (typeof window !== 'undefined') {
       }
     }
     </script>`;
-      
-      // Add FAQ schema
-      const faqSchema = `
+
+            // Add FAQ schema
+            const faqSchema = `
     <!-- FAQ Schema -->
     <script type="application/ld+json">
     {
@@ -520,28 +520,28 @@ if (typeof window !== 'undefined') {
       ]
     }
     </script>`;
-      
-      if (!content.includes('"@type": "Product"')) {
-        content = content.replace(
-          '</head>',
-          productSchema + faqSchema + '\n  </head>'
-        );
-        
-        fs.writeFileSync(indexPath, content);
-        this.addOptimization('Advanced SEO with Product and FAQ schema implemented');
-      }
-      
-    } catch (error) {
-      this.addError(`Failed to optimize advanced SEO: ${error.message}`);
-    }
-  }
 
-  // OPTIMIZATION 5: Create Comprehensive Sitemap
-  createAdvancedSitemap() {
-    try {
-      this.log('🔧 Creating Advanced Sitemap...', 'info');
-      
-      const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+            if (!content.includes('"@type": "Product"')) {
+                content = content.replace(
+                    '</head>',
+                    productSchema + faqSchema + '\n  </head>'
+                );
+
+                fs.writeFileSync(indexPath, content);
+                this.addOptimization('Advanced SEO with Product and FAQ schema implemented');
+            }
+
+        } catch (error) {
+            this.addError(`Failed to optimize advanced SEO: ${error.message}`);
+        }
+    }
+
+    // OPTIMIZATION 5: Create Comprehensive Sitemap
+    createAdvancedSitemap() {
+        try {
+            this.log('🔧 Creating Advanced Sitemap...', 'info');
+
+            const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
@@ -593,21 +593,21 @@ if (typeof window !== 'undefined') {
   </url>
   
 </urlset>`;
-      
-      fs.writeFileSync('sitemap.xml', sitemap);
-      this.addOptimization('Advanced XML sitemap with hreflang and image data created');
-      
-    } catch (error) {
-      this.addError(`Failed to create advanced sitemap: ${error.message}`);
-    }
-  }
 
-  // OPTIMIZATION 6: Enhanced robots.txt
-  createEnhancedRobotsTxt() {
-    try {
-      this.log('🔧 Creating Enhanced Robots.txt...', 'info');
-      
-      const robotsTxt = `User-agent: *
+            fs.writeFileSync('sitemap.xml', sitemap);
+            this.addOptimization('Advanced XML sitemap with hreflang and image data created');
+
+        } catch (error) {
+            this.addError(`Failed to create advanced sitemap: ${error.message}`);
+        }
+    }
+
+    // OPTIMIZATION 6: Enhanced robots.txt
+    createEnhancedRobotsTxt() {
+        try {
+            this.log('🔧 Creating Enhanced Robots.txt...', 'info');
+
+            const robotsTxt = `User-agent: *
 Allow: /
 
 # High-priority content
@@ -644,25 +644,25 @@ Disallow: /
 
 User-agent: MJ12bot
 Disallow: /`;
-      
-      fs.writeFileSync('robots.txt', robotsTxt);
-      this.addOptimization('Enhanced robots.txt with bot-specific rules created');
-      
-    } catch (error) {
-      this.addError(`Failed to create enhanced robots.txt: ${error.message}`);
-    }
-  }
 
-  // OPTIMIZATION 7: Advanced Image Optimization
-  optimizeImages() {
-    try {
-      this.log('🔧 Implementing Advanced Image Optimization...', 'info');
-      
-      const indexPath = 'index.html';
-      let content = fs.readFileSync(indexPath, 'utf8');
-      
-      // Add advanced picture elements with multiple formats
-      const advancedImageOptimization = `
+            fs.writeFileSync('robots.txt', robotsTxt);
+            this.addOptimization('Enhanced robots.txt with bot-specific rules created');
+
+        } catch (error) {
+            this.addError(`Failed to create enhanced robots.txt: ${error.message}`);
+        }
+    }
+
+    // OPTIMIZATION 7: Advanced Image Optimization
+    optimizeImages() {
+        try {
+            this.log('🔧 Implementing Advanced Image Optimization...', 'info');
+
+            const indexPath = 'index.html';
+            let content = fs.readFileSync(indexPath, 'utf8');
+
+            // Add advanced picture elements with multiple formats
+            const advancedImageOptimization = `
 <!-- Advanced Image Optimization with Art Direction -->
 <picture class="burni-mascot-picture">
   <!-- WebP for modern browsers -->
@@ -689,13 +689,13 @@ Disallow: /`;
     height="400"
   />
 </picture>`;
-      
-      // Add to main.js for lazy loading optimization
-      const mainJsPath = 'main.js';
-      if (fs.existsSync(mainJsPath)) {
-        let jsContent = fs.readFileSync(mainJsPath, 'utf8');
-        
-        const lazyLoadingScript = `
+
+            // Add to main.js for lazy loading optimization
+            const mainJsPath = 'main.js';
+            if (fs.existsSync(mainJsPath)) {
+                let jsContent = fs.readFileSync(mainJsPath, 'utf8');
+
+                const lazyLoadingScript = `
 // Advanced Lazy Loading with Intersection Observer
 class AdvancedImageLoader {
   constructor() {
@@ -737,118 +737,118 @@ document.addEventListener('DOMContentLoaded', () => {
   new AdvancedImageLoader();
 });`;
 
-        if (!jsContent.includes('AdvancedImageLoader')) {
-          jsContent += lazyLoadingScript;
-          fs.writeFileSync(mainJsPath, jsContent);
-          this.addOptimization('Advanced image lazy loading system implemented');
+                if (!jsContent.includes('AdvancedImageLoader')) {
+                    jsContent += lazyLoadingScript;
+                    fs.writeFileSync(mainJsPath, jsContent);
+                    this.addOptimization('Advanced image lazy loading system implemented');
+                }
+            }
+
+        } catch (error) {
+            this.addError(`Failed to optimize images: ${error.message}`);
         }
-      }
-      
-    } catch (error) {
-      this.addError(`Failed to optimize images: ${error.message}`);
     }
-  }
 
-  // Execute all optimizations autonomously
-  async executeCompleteOptimization() {
-    this.log('🚀 Starting Complete Website Optimization Process...', 'info');
-    this.log('🎯 Target: 100% audit scores across all categories', 'info');
-    
-    // Execute all optimizations in order of priority
-    this.optimizeResponsiveDesign();
-    this.optimizeContentQuality();
-    this.optimizeLoadPerformance();
-    this.optimizeAdvancedSEO();
-    this.createAdvancedSitemap();
-    this.createEnhancedRobotsTxt();
-    this.optimizeImages();
-    
-    // Build optimized CSS
-    await this.buildOptimizedAssets();
-    
-    // Generate comprehensive report
-    this.generateOptimizationReport();
-    
-    return {
-      optimizations: this.optimizations,
-      errors: this.errors,
-      success: this.errors.length === 0
-    };
-  }
+    // Execute all optimizations autonomously
+    async executeCompleteOptimization() {
+        this.log('🚀 Starting Complete Website Optimization Process...', 'info');
+        this.log('🎯 Target: 100% audit scores across all categories', 'info');
 
-  async buildOptimizedAssets() {
-    try {
-      this.log('🔧 Building Optimized Assets...', 'info');
-      
-      // This would typically run build commands
-      // For demo purposes, we'll just log the action
-      this.addOptimization('CSS and JS assets rebuilt and optimized');
-      
-    } catch (error) {
-      this.addError(`Failed to build optimized assets: ${error.message}`);
-    }
-  }
+        // Execute all optimizations in order of priority
+        this.optimizeResponsiveDesign();
+        this.optimizeContentQuality();
+        this.optimizeLoadPerformance();
+        this.optimizeAdvancedSEO();
+        this.createAdvancedSitemap();
+        this.createEnhancedRobotsTxt();
+        this.optimizeImages();
 
-  generateOptimizationReport() {
-    this.log('\n' + '='.repeat(80), 'info');
-    this.log('🎯 COMPLETE WEBSITE OPTIMIZATION REPORT', 'info');
-    this.log('='.repeat(80), 'info');
-    
-    this.log(`✅ Successfully Applied Optimizations: ${this.optimizations.length}`, 'success');
-    this.log(`❌ Errors Encountered: ${this.errors.length}`, this.errors.length > 0 ? 'error' : 'info');
-    
-    if (this.optimizations.length > 0) {
-      this.log('\n✅ APPLIED OPTIMIZATIONS:', 'success');
-      this.optimizations.forEach((optimization, index) => {
-        this.log(`  ${index + 1}. ${optimization}`, 'success');
-      });
+        // Build optimized CSS
+        await this.buildOptimizedAssets();
+
+        // Generate comprehensive report
+        this.generateOptimizationReport();
+
+        return {
+            optimizations: this.optimizations,
+            errors: this.errors,
+            success: this.errors.length === 0
+        };
     }
-    
-    if (this.errors.length > 0) {
-      this.log('\n❌ ERRORS:', 'error');
-      this.errors.forEach((error, index) => {
-        this.log(`  ${index + 1}. ${error}`, 'error');
-      });
+
+    async buildOptimizedAssets() {
+        try {
+            this.log('🔧 Building Optimized Assets...', 'info');
+
+            // This would typically run build commands
+            // For demo purposes, we'll just log the action
+            this.addOptimization('CSS and JS assets rebuilt and optimized');
+
+        } catch (error) {
+            this.addError(`Failed to build optimized assets: ${error.message}`);
+        }
     }
-    
-    this.log('\n🎯 NEXT STEPS:', 'info');
-    this.log('1. Run comprehensive audit to verify 100% scores', 'info');
-    this.log('2. Test all optimizations in multiple browsers', 'info');
-    this.log('3. Validate performance improvements', 'info');
-    this.log('4. Deploy optimized version to production', 'info');
-    
-    if (this.optimizations.length >= 6) {
-      this.log('\n🏆 OPTIMIZATION COMPLETE! Website should now achieve 100% audit scores.', 'success');
+
+    generateOptimizationReport() {
+        this.log('\n' + '='.repeat(80), 'info');
+        this.log('🎯 COMPLETE WEBSITE OPTIMIZATION REPORT', 'info');
+        this.log('='.repeat(80), 'info');
+
+        this.log(`✅ Successfully Applied Optimizations: ${this.optimizations.length}`, 'success');
+        this.log(`❌ Errors Encountered: ${this.errors.length}`, this.errors.length > 0 ? 'error' : 'info');
+
+        if (this.optimizations.length > 0) {
+            this.log('\n✅ APPLIED OPTIMIZATIONS:', 'success');
+            this.optimizations.forEach((optimization, index) => {
+                this.log(`  ${index + 1}. ${optimization}`, 'success');
+            });
+        }
+
+        if (this.errors.length > 0) {
+            this.log('\n❌ ERRORS:', 'error');
+            this.errors.forEach((error, index) => {
+                this.log(`  ${index + 1}. ${error}`, 'error');
+            });
+        }
+
+        this.log('\n🎯 NEXT STEPS:', 'info');
+        this.log('1. Run comprehensive audit to verify 100% scores', 'info');
+        this.log('2. Test all optimizations in multiple browsers', 'info');
+        this.log('3. Validate performance improvements', 'info');
+        this.log('4. Deploy optimized version to production', 'info');
+
+        if (this.optimizations.length >= 6) {
+            this.log('\n🏆 OPTIMIZATION COMPLETE! Website should now achieve 100% audit scores.', 'success');
+        }
+
+        this.log('\n='.repeat(80), 'info');
+
+        // Save detailed report
+        const report = {
+            timestamp: new Date().toISOString(),
+            targetScore: this.targetScore,
+            appliedOptimizations: this.optimizations,
+            errors: this.errors,
+            summary: {
+                totalOptimizations: this.optimizations.length,
+                totalErrors: this.errors.length,
+                success: this.errors.length === 0,
+                expectedScore: this.errors.length === 0 ? 100 : 95
+            }
+        };
+
+        fs.writeFileSync('complete-optimization-report.json', JSON.stringify(report, null, 2));
+        this.log('📄 Complete optimization report saved to: complete-optimization-report.json', 'info');
     }
-    
-    this.log('\n='.repeat(80), 'info');
-    
-    // Save detailed report
-    const report = {
-      timestamp: new Date().toISOString(),
-      targetScore: this.targetScore,
-      appliedOptimizations: this.optimizations,
-      errors: this.errors,
-      summary: {
-        totalOptimizations: this.optimizations.length,
-        totalErrors: this.errors.length,
-        success: this.errors.length === 0,
-        expectedScore: this.errors.length === 0 ? 100 : 95
-      }
-    };
-    
-    fs.writeFileSync('complete-optimization-report.json', JSON.stringify(report, null, 2));
-    this.log('📄 Complete optimization report saved to: complete-optimization-report.json', 'info');
-  }
 }
 
 // Execute complete optimization
 if (require.main === module) {
-  const optimizer = new AdvancedWebsiteOptimizer();
-  optimizer.executeCompleteOptimization().catch(error => {
-    console.error('❌ Error during complete optimization:', error);
-    process.exit(1);
-  });
+    const optimizer = new AdvancedWebsiteOptimizer();
+    optimizer.executeCompleteOptimization().catch(error => {
+        console.error('❌ Error during complete optimization:', error);
+        process.exit(1);
+    });
 }
 
 module.exports = AdvancedWebsiteOptimizer;
