@@ -1,18 +1,18 @@
 // polyfills.js - Comprehensive browser compatibility polyfills
-(function() {
+(function () {
   'use strict';
 
   // ES6+ Features Polyfills for IE11 and older browsers
-  
+
   // 1. Array Methods
   if (!Array.prototype.includes) {
-    Array.prototype.includes = function(searchElement, fromIndex) {
+    Array.prototype.includes = function (searchElement, fromIndex) {
       return this.indexOf(searchElement, fromIndex) !== -1;
     };
   }
 
   if (!Array.prototype.find) {
-    Array.prototype.find = function(predicate) {
+    Array.prototype.find = function (predicate) {
       if (this == null) {
         throw new TypeError('Array.prototype.find called on null or undefined');
       }
@@ -35,7 +35,7 @@
   }
 
   if (!Array.prototype.findIndex) {
-    Array.prototype.findIndex = function(predicate) {
+    Array.prototype.findIndex = function (predicate) {
       if (this == null) {
         throw new TypeError('Array.prototype.findIndex called on null or undefined');
       }
@@ -58,7 +58,7 @@
   }
 
   if (!Array.from) {
-    Array.from = function(arrayLike, mapFn, thisArg) {
+    Array.from = function (arrayLike, mapFn, thisArg) {
       var C = this;
       var items = Object(arrayLike);
       if (arrayLike == null) {
@@ -89,7 +89,7 @@
 
   // 2. String Methods
   if (!String.prototype.includes) {
-    String.prototype.includes = function(search, start) {
+    String.prototype.includes = function (search, start) {
       if (typeof start !== 'number') {
         start = 0;
       }
@@ -102,14 +102,14 @@
   }
 
   if (!String.prototype.startsWith) {
-    String.prototype.startsWith = function(searchString, position) {
+    String.prototype.startsWith = function (searchString, position) {
       position = position || 0;
       return this.substr(position, searchString.length) === searchString;
     };
   }
 
   if (!String.prototype.endsWith) {
-    String.prototype.endsWith = function(searchString, length) {
+    String.prototype.endsWith = function (searchString, length) {
       if (length === undefined || length > this.length) {
         length = this.length;
       }
@@ -118,9 +118,9 @@
   }
 
   if (!String.prototype.repeat) {
-    String.prototype.repeat = function(count) {
+    String.prototype.repeat = function (count) {
       if (this == null) {
-        throw new TypeError('can\'t convert ' + this + ' to object');
+        throw new TypeError("can't convert " + this + ' to object');
       }
       var str = '' + this;
       count = +count;
@@ -150,7 +150,7 @@
 
   // 3. Object Methods
   if (!Object.assign) {
-    Object.assign = function(target, varArgs) {
+    Object.assign = function (target, varArgs) {
       if (target == null) {
         throw new TypeError('Cannot convert undefined or null to object');
       }
@@ -170,11 +170,12 @@
   }
 
   if (!Object.keys) {
-    Object.keys = function(o) {
+    Object.keys = function (o) {
       if (o !== Object(o)) {
         throw new TypeError('Object.keys called on a non-object');
       }
-      var k = [], p;
+      var k = [],
+        p;
       for (p in o) {
         if (Object.prototype.hasOwnProperty.call(o, p)) {
           k.push(p);
@@ -185,7 +186,7 @@
   }
 
   if (!Object.values) {
-    Object.values = function(o) {
+    Object.values = function (o) {
       if (o !== Object(o)) {
         throw new TypeError('Object.values called on a non-object');
       }
@@ -200,7 +201,7 @@
   }
 
   if (!Object.entries) {
-    Object.entries = function(o) {
+    Object.entries = function (o) {
       if (o !== Object(o)) {
         throw new TypeError('Object.entries called on a non-object');
       }
@@ -216,7 +217,7 @@
 
   // 4. Promise Polyfill (comprehensive)
   if (!window.Promise) {
-    window.Promise = function(executor) {
+    window.Promise = function (executor) {
       var self = this;
       self.state = 'pending';
       self.value = undefined;
@@ -244,7 +245,7 @@
         if (self.state === 'pending') {
           self.handlers.push(handler);
         } else {
-          setTimeout(function() {
+          setTimeout(function () {
             if (self.state === 'fulfilled' && typeof handler.onFulfilled === 'function') {
               try {
                 var x = handler.onFulfilled(self.value);
@@ -268,18 +269,18 @@
         }
       }
 
-      this.then = function(onFulfilled, onRejected) {
-        return new Promise(function(resolve, reject) {
+      this.then = function (onFulfilled, onRejected) {
+        return new Promise(function (resolve, reject) {
           handle({
             onFulfilled: onFulfilled,
             onRejected: onRejected,
             resolve: resolve,
-            reject: reject
+            reject: reject,
           });
         });
       };
 
-      this.catch = function(onRejected) {
+      this.catch = function (onRejected) {
         return this.then(null, onRejected);
       };
 
@@ -292,27 +293,27 @@
       }
     };
 
-    Promise.resolve = function(value) {
-      return new Promise(function(resolve) {
+    Promise.resolve = function (value) {
+      return new Promise(function (resolve) {
         resolve(value);
       });
     };
 
-    Promise.reject = function(reason) {
-      return new Promise(function(resolve, reject) {
+    Promise.reject = function (reason) {
+      return new Promise(function (resolve, reject) {
         reject(reason);
       });
     };
 
-    Promise.all = function(promises) {
-      return new Promise(function(resolve, reject) {
+    Promise.all = function (promises) {
+      return new Promise(function (resolve, reject) {
         var count = 0;
         var result = [];
         if (promises.length === 0) {
           resolve(result);
         } else {
           function resolver(i) {
-            return function(value) {
+            return function (value) {
               result[i] = value;
               count++;
               if (count === promises.length) {
@@ -330,8 +331,8 @@
 
   // 5. Fetch API Polyfill
   if (!window.fetch) {
-    window.fetch = function(url, options) {
-      return new Promise(function(resolve, reject) {
+    window.fetch = function (url, options) {
+      return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest();
         options = options || {};
         var method = options.method || 'GET';
@@ -346,28 +347,28 @@
           }
         }
 
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function () {
           if (xhr.readyState === 4) {
             var response = {
               ok: xhr.status >= 200 && xhr.status < 300,
               status: xhr.status,
               statusText: xhr.statusText,
               headers: {
-                get: function(name) {
+                get: function (name) {
                   return xhr.getResponseHeader(name);
-                }
+                },
               },
-              text: function() {
+              text: function () {
                 return Promise.resolve(xhr.responseText);
               },
-              json: function() {
+              json: function () {
                 return Promise.resolve(JSON.parse(xhr.responseText));
               },
-              blob: function() {
+              blob: function () {
                 return Promise.resolve(new Blob([xhr.response]));
-              }
+              },
             };
-            
+
             if (response.ok) {
               resolve(response);
             } else {
@@ -376,11 +377,11 @@
           }
         };
 
-        xhr.onerror = function() {
+        xhr.onerror = function () {
           reject(new Error('Network error'));
         };
 
-        xhr.ontimeout = function() {
+        xhr.ontimeout = function () {
           reject(new Error('Request timeout'));
         };
 
@@ -394,14 +395,22 @@
   }
 
   // 6. DOM and Event Polyfills
-  
+
   // addEventListener for IE8
   if (!window.addEventListener) {
-    window.addEventListener = function(type, listener, useCapture) {
-      this.attachEvent('on' + type, function(e) {
+    window.addEventListener = function (type, listener, useCapture) {
+      this.attachEvent('on' + type, function (e) {
         e = e || window.event;
-        e.preventDefault = e.preventDefault || function() { e.returnValue = false; };
-        e.stopPropagation = e.stopPropagation || function() { e.cancelBubble = true; };
+        e.preventDefault =
+          e.preventDefault ||
+          function () {
+            e.returnValue = false;
+          };
+        e.stopPropagation =
+          e.stopPropagation ||
+          function () {
+            e.cancelBubble = true;
+          };
         e.target = e.target || e.srcElement;
         listener.call(this, e);
       });
@@ -409,28 +418,29 @@
   }
 
   if (!window.removeEventListener) {
-    window.removeEventListener = function(type, listener, useCapture) {
+    window.removeEventListener = function (type, listener, useCapture) {
       this.detachEvent('on' + type, listener);
     };
   }
 
   // querySelector polyfill for IE7
   if (!document.querySelector) {
-    document.querySelector = function(selector) {
+    document.querySelector = function (selector) {
       var elements = document.querySelectorAll(selector);
       return elements.length ? elements[0] : null;
     };
   }
 
   if (!document.querySelectorAll) {
-    document.querySelectorAll = function(selector) {
+    document.querySelectorAll = function (selector) {
       var style = document.createElement('style');
       var elements = [];
       var element;
       document.documentElement.firstChild.appendChild(style);
       document._qsa = [];
 
-      style.styleSheet.cssText = selector + '{x-qsa:expression(document._qsa && document._qsa.push(this))}';
+      style.styleSheet.cssText =
+        selector + '{x-qsa:expression(document._qsa && document._qsa.push(this))}';
       window.scrollBy(0, 0);
       style.parentNode.removeChild(style);
 
@@ -445,9 +455,9 @@
 
   // classList polyfill for IE9
   if (!('classList' in document.createElement('_'))) {
-    (function(view) {
+    (function (view) {
       var tokens = /\s+/;
-      var ClassList = function(el) {
+      var ClassList = function (el) {
         this.el = el;
         var classes = el.className.replace(/^\s+|\s+$/g, '').split(tokens);
         for (var i = 0; i < classes.length; i++) {
@@ -457,24 +467,26 @@
       };
 
       ClassList.prototype = {
-        add: function(token) {
+        add: function (token) {
           if (!this.contains(token)) {
             this.el.className += (this.el.className ? ' ' : '') + token;
           }
         },
-        contains: function(token) {
+        contains: function (token) {
           return this.el.className.indexOf(token) !== -1;
         },
-        item: function(index) {
+        item: function (index) {
           return this[index] || null;
         },
-        remove: function(token) {
-          this.el.className = this.el.className.replace(new RegExp('\\b' + token + '\\b', 'g'), '').replace(/^\s+|\s+$/g, '');
+        remove: function (token) {
+          this.el.className = this.el.className
+            .replace(new RegExp('\\b' + token + '\\b', 'g'), '')
+            .replace(/^\s+|\s+$/g, '');
         },
-        toString: function() {
+        toString: function () {
           return this.el.className;
         },
-        toggle: function(token) {
+        toggle: function (token) {
           if (this.contains(token)) {
             this.remove(token);
             return false;
@@ -482,14 +494,14 @@
             this.add(token);
             return true;
           }
-        }
+        },
       };
 
       if (view.HTMLElement) {
         Object.defineProperty(view.HTMLElement.prototype, 'classList', {
-          get: function() {
+          get: function () {
             return new ClassList(this);
-          }
+          },
         });
       }
     })(window);
@@ -497,7 +509,7 @@
 
   // 7. CustomEvent polyfill for IE9+
   if (!window.CustomEvent) {
-    window.CustomEvent = function(event, params) {
+    window.CustomEvent = function (event, params) {
       params = params || { bubbles: false, cancelable: false, detail: undefined };
       var evt = document.createEvent('CustomEvent');
       evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
@@ -508,52 +520,54 @@
 
   // 8. IntersectionObserver polyfill
   if (!('IntersectionObserver' in window)) {
-    window.IntersectionObserver = function(callback, options) {
+    window.IntersectionObserver = function (callback, options) {
       this.callback = callback;
       this.options = options || {};
       this.observedElements = [];
       this.isPolyfill = true;
     };
 
-    window.IntersectionObserver.prototype.observe = function(element) {
+    window.IntersectionObserver.prototype.observe = function (element) {
       if (this.observedElements.indexOf(element) === -1) {
         this.observedElements.push(element);
         this._checkIntersections();
       }
     };
 
-    window.IntersectionObserver.prototype.unobserve = function(element) {
+    window.IntersectionObserver.prototype.unobserve = function (element) {
       var index = this.observedElements.indexOf(element);
       if (index > -1) {
         this.observedElements.splice(index, 1);
       }
     };
 
-    window.IntersectionObserver.prototype.disconnect = function() {
+    window.IntersectionObserver.prototype.disconnect = function () {
       this.observedElements = [];
     };
 
-    window.IntersectionObserver.prototype._checkIntersections = function() {
+    window.IntersectionObserver.prototype._checkIntersections = function () {
       var self = this;
-      this.observedElements.forEach(function(element) {
+      this.observedElements.forEach(function (element) {
         var rect = element.getBoundingClientRect();
         var isIntersecting = rect.top < window.innerHeight && rect.bottom > 0;
-        
-        self.callback([{
-          target: element,
-          isIntersecting: isIntersecting,
-          intersectionRatio: isIntersecting ? 1 : 0,
-          boundingClientRect: rect,
-          rootBounds: {
-            top: 0,
-            left: 0,
-            bottom: window.innerHeight,
-            right: window.innerWidth,
-            width: window.innerWidth,
-            height: window.innerHeight
+
+        self.callback([
+          {
+            target: element,
+            isIntersecting: isIntersecting,
+            intersectionRatio: isIntersecting ? 1 : 0,
+            boundingClientRect: rect,
+            rootBounds: {
+              top: 0,
+              left: 0,
+              bottom: window.innerHeight,
+              right: window.innerWidth,
+              width: window.innerWidth,
+              height: window.innerHeight,
+            },
+            time: Date.now(),
           },
-          time: Date.now()
-        }]);
+        ]);
       });
     };
   }
@@ -564,13 +578,13 @@
   }
 
   if (!window.performance.now) {
-    window.performance.now = function() {
+    window.performance.now = function () {
       return Date.now();
     };
   }
 
   if (!window.performance.mark) {
-    window.performance.mark = function(name) {
+    window.performance.mark = function (name) {
       console.log('Performance mark:', name, Date.now());
     };
   }
@@ -581,7 +595,7 @@
   }
 
   if (!window.CSS.supports) {
-    window.CSS.supports = function(property, value) {
+    window.CSS.supports = function (property, value) {
       var element = document.createElement('div');
       element.style.cssText = property + ':' + value;
       return element.style.length > 0;
@@ -590,30 +604,32 @@
 
   // 11. requestAnimationFrame polyfill
   if (!window.requestAnimationFrame) {
-    window.requestAnimationFrame = function(callback) {
+    window.requestAnimationFrame = function (callback) {
       return setTimeout(callback, 16);
     };
   }
 
   if (!window.cancelAnimationFrame) {
-    window.cancelAnimationFrame = function(id) {
+    window.cancelAnimationFrame = function (id) {
       clearTimeout(id);
     };
   }
 
   // 12. getComputedStyle polyfill for IE8
   if (!window.getComputedStyle) {
-    window.getComputedStyle = function(element, pseudoElement) {
+    window.getComputedStyle = function (element, pseudoElement) {
       this.el = element;
-      this.getPropertyValue = function(prop) {
+      this.getPropertyValue = function (prop) {
         var re = /(\-([a-z]){1})/g;
         if (prop === 'float') prop = 'styleFloat';
         if (re.test(prop)) {
-          prop = prop.replace(re, function() {
+          prop = prop.replace(re, function () {
             return arguments[2].toUpperCase();
           });
         }
-        return element.currentStyle && element.currentStyle[prop] ? element.currentStyle[prop] : null;
+        return element.currentStyle && element.currentStyle[prop]
+          ? element.currentStyle[prop]
+          : null;
       };
       return this;
     };
@@ -621,16 +637,16 @@
 
   // 13. matchMedia polyfill
   if (!window.matchMedia) {
-    window.matchMedia = function(media) {
+    window.matchMedia = function (media) {
       return {
         matches: false,
         media: media,
         onchange: null,
-        addListener: function() {},
-        removeListener: function() {},
-        addEventListener: function() {},
-        removeEventListener: function() {},
-        dispatchEvent: function() {}
+        addListener: function () {},
+        removeListener: function () {},
+        addEventListener: function () {},
+        removeEventListener: function () {},
+        dispatchEvent: function () {},
       };
     };
   }
@@ -638,18 +654,18 @@
   // Console polyfill for older browsers
   if (!window.console) {
     window.console = {
-      log: function() {},
-      warn: function() {},
-      error: function() {},
-      info: function() {},
-      debug: function() {},
-      trace: function() {}
+      log: function () {},
+      warn: function () {},
+      error: function () {},
+      info: function () {},
+      debug: function () {},
+      trace: function () {},
     };
   }
 
   // Add feature detection classes
   var html = document.documentElement;
-  
+
   // Test for flexbox
   var flexTest = document.createElement('div');
   flexTest.style.display = 'flex';
@@ -700,10 +716,9 @@
 
   // Log polyfill status
   console.log('Browser compatibility polyfills loaded successfully');
-  
+
   // Notify about legacy browser
   if (!Array.prototype.includes || !Promise || !fetch) {
     console.warn('Legacy browser detected. Some modern features may not work optimally.');
   }
-
 })();

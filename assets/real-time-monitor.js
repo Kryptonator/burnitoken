@@ -4,35 +4,36 @@
  */
 
 class RealTimePriceMonitor {
-    constructor() {
-        this.prices = {
-            burni: { current: 0.0011, change24h: 0, trend: 'stable' },
-            xrp: { current: 0.50, change24h: 0, trend: 'stable' },
-            xpm: { current: 0.02, change24h: 0, trend: 'stable' }
-        };
+  constructor() {
+    this.prices = {
+      burni: { current: 0.0011, change24h: 0, trend: 'stable' },
+      xrp: { current: 0.5, change24h: 0, trend: 'stable' },
+      xpm: { current: 0.02, change24h: 0, trend: 'stable' },
+    };
 
-        this.subscribers = new Set();
-        this.isConnected = false;
-        this.reconnectAttempts = 0;
-        this.maxReconnectAttempts = 5;
-        this.updateInterval = null;
+    this.subscribers = new Set();
+    this.isConnected = false;
+    this.reconnectAttempts = 0;
+    this.maxReconnectAttempts = 5;
+    this.updateInterval = null;
 
-        this.init();
-    }
+    this.init();
+  }
 
-    init() {
-        this.createPriceElements();
-        this.setupWebSocket();
-        this.setupFallbackPolling();
-        this.setupVisibilityHandling();
-        this.startMonitoring();
-    }
+  init() {
+    this.createPriceElements();
+    this.setupWebSocket();
+    this.setupFallbackPolling();
+    this.setupVisibilityHandling();
+    this.startMonitoring();
+  }
 
-    createPriceElements() {
-        // Create dynamic price display elements if they don't exist
-        const priceContainer = document.querySelector('.price-container') || this.createPriceContainer();
+  createPriceElements() {
+    // Create dynamic price display elements if they don't exist
+    const priceContainer =
+      document.querySelector('.price-container') || this.createPriceContainer();
 
-        const priceHTML = `
+    const priceHTML = `
       <div class="real-time-prices">
         <div class="price-header">
           <h3>🔥 Live Prices</h3>
@@ -78,33 +79,33 @@ class RealTimePriceMonitor {
       </div>
     `;
 
-        priceContainer.innerHTML = priceHTML;
-        this.addPriceStyles();
+    priceContainer.innerHTML = priceHTML;
+    this.addPriceStyles();
+  }
+
+  createPriceContainer() {
+    const container = document.createElement('div');
+    container.className = 'price-container';
+
+    // Insert after hero section or at top of main content
+    const heroSection = document.querySelector('#hero');
+    const targetElement = heroSection?.nextElementSibling || document.querySelector('main');
+
+    if (targetElement) {
+      targetElement.insertAdjacentElement('beforebegin', container);
+    } else {
+      document.body.appendChild(container);
     }
 
-    createPriceContainer() {
-        const container = document.createElement('div');
-        container.className = 'price-container';
+    return container;
+  }
 
-        // Insert after hero section or at top of main content
-        const heroSection = document.querySelector('#hero');
-        const targetElement = heroSection?.nextElementSibling || document.querySelector('main');
+  addPriceStyles() {
+    if (document.getElementById('price-monitor-styles')) return;
 
-        if (targetElement) {
-            targetElement.insertAdjacentElement('beforebegin', container);
-        } else {
-            document.body.appendChild(container);
-        }
-
-        return container;
-    }
-
-    addPriceStyles() {
-        if (document.getElementById('price-monitor-styles')) return;
-
-        const styles = document.createElement('style');
-        styles.id = 'price-monitor-styles';
-        styles.textContent = `
+    const styles = document.createElement('style');
+    styles.id = 'price-monitor-styles';
+    styles.textContent = `
       .real-time-prices {
         background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(234, 88, 12, 0.05));
         border: 1px solid rgba(249, 115, 22, 0.2);
@@ -244,251 +245,257 @@ class RealTimePriceMonitor {
       }
     `;
 
-        document.head.appendChild(styles);
-    }
+    document.head.appendChild(styles);
+  }
 
-    setupWebSocket() {
-        // Try to connect to WebSocket for real-time updates
+  setupWebSocket() {
+    // Try to connect to WebSocket for real-time updates
+    try {
+      // Replace with actual WebSocket endpoint when available
+      const wsUrl = 'wss://api.burnitoken.website/ws';
+      this.ws = new WebSocket(wsUrl);
+
+      this.ws.onopen = () => {
+        console.log('🔗 Real-time price connection established');
+        this.isConnected = true;
+        this.reconnectAttempts = 0;
+        this.updateConnectionStatus('connected');
+
+        // Subscribe to price updates
+        this.ws.send(
+          JSON.stringify({
+            type: 'subscribe',
+            channels: ['prices', 'burni', 'xrp', 'xpm'],
+          }),
+        );
+      };
+
+      this.ws.onmessage = (event) => {
         try {
-            // Replace with actual WebSocket endpoint when available
-            const wsUrl = 'wss://api.burnitoken.website/ws';
-            this.ws = new WebSocket(wsUrl);
-
-            this.ws.onopen = () => {
-                console.log('🔗 Real-time price connection established');
-                this.isConnected = true;
-                this.reconnectAttempts = 0;
-                this.updateConnectionStatus('connected');
-
-                // Subscribe to price updates
-                this.ws.send(JSON.stringify({
-                    type: 'subscribe',
-                    channels: ['prices', 'burni', 'xrp', 'xpm']
-                }));
-            };
-
-            this.ws.onmessage = (event) => {
-                try {
-                    const data = JSON.parse(event.data);
-                    this.handlePriceUpdate(data);
-                } catch (error) {
-                    console.log('WebSocket message parsing failed:', error);
-                }
-            };
-
-            this.ws.onclose = () => {
-                console.log('🔌 WebSocket connection closed');
-                this.isConnected = false;
-                this.updateConnectionStatus('disconnected');
-                this.scheduleReconnect();
-            };
-
-            this.ws.onerror = (error) => {
-                console.log('❌ WebSocket error:', error);
-                this.isConnected = false;
-                this.updateConnectionStatus('disconnected');
-            };
-
+          const data = JSON.parse(event.data);
+          this.handlePriceUpdate(data);
         } catch (error) {
-            console.log('WebSocket not available, using polling');
-            this.setupFallbackPolling();
+          console.log('WebSocket message parsing failed:', error);
         }
+      };
+
+      this.ws.onclose = () => {
+        console.log('🔌 WebSocket connection closed');
+        this.isConnected = false;
+        this.updateConnectionStatus('disconnected');
+        this.scheduleReconnect();
+      };
+
+      this.ws.onerror = (error) => {
+        console.log('❌ WebSocket error:', error);
+        this.isConnected = false;
+        this.updateConnectionStatus('disconnected');
+      };
+    } catch (error) {
+      console.log('WebSocket not available, using polling');
+      this.setupFallbackPolling();
     }
+  }
 
-    scheduleReconnect() {
-        if (this.reconnectAttempts < this.maxReconnectAttempts) {
-            const delay = Math.pow(2, this.reconnectAttempts) * 1000; // Exponential backoff
-            this.reconnectAttempts++;
+  scheduleReconnect() {
+    if (this.reconnectAttempts < this.maxReconnectAttempts) {
+      const delay = Math.pow(2, this.reconnectAttempts) * 1000; // Exponential backoff
+      this.reconnectAttempts++;
 
-            setTimeout(() => {
-                console.log(`🔄 Attempting to reconnect (${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
-                this.updateConnectionStatus('connecting');
-                this.setupWebSocket();
-            }, delay);
-        }
+      setTimeout(() => {
+        console.log(
+          `🔄 Attempting to reconnect (${this.reconnectAttempts}/${this.maxReconnectAttempts})`,
+        );
+        this.updateConnectionStatus('connecting');
+        this.setupWebSocket();
+      }, delay);
     }
+  }
 
-    setupFallbackPolling() {
-        // Fallback to polling if WebSocket fails
-        this.updateInterval = setInterval(() => {
-            if (!this.isConnected) {
-                this.fetchPriceData();
-            }
-        }, 30000); // Poll every 30 seconds
-    }
-
-    async fetchPriceData() {
-        try {
-            // Simulate API calls - replace with actual endpoints
-            const responses = await Promise.allSettled([
-                this.fetchTokenPrice('burni'),
-                this.fetchTokenPrice('xrp'),
-                this.fetchTokenPrice('xpm')
-            ]);
-
-            responses.forEach((response, index) => {
-                if (response.status === 'fulfilled') {
-                    const tokens = ['burni', 'xrp', 'xpm'];
-                    this.updatePrice(tokens[index], response.value);
-                }
-            });
-
-            this.updateLastUpdated();
-        } catch (error) {
-            console.log('Price fetch failed:', error);
-            this.showOfflineIndicator();
-        }
-    }
-
-    async fetchTokenPrice(token) {
-        // Mock price data - replace with actual API calls
-        const mockPrices = {
-            burni: 0.0011 + (Math.random() - 0.5) * 0.0002,
-            xrp: 0.50 + (Math.random() - 0.5) * 0.05,
-            xpm: 0.02 + (Math.random() - 0.5) * 0.002
-        };
-
-        // Simulate network delay
-        await new Promise(resolve => setTimeout(resolve, 100 + Math.random() * 200));
-
-        return {
-            price: mockPrices[token],
-            change24h: (Math.random() - 0.5) * 10 // -5% to +5%
-        };
-    }
-
-    handlePriceUpdate(data) {
-        if (data.type === 'price_update') {
-            const { token, price, change24h } = data;
-            this.updatePrice(token, { price, change24h });
-        }
-    }
-
-    updatePrice(token, data) {
-        const priceElement = document.getElementById(`${token}-price`);
-        const changeElement = document.getElementById(`${token}-change`);
-
-        if (priceElement && changeElement) {
-            // Update price with animation
-            priceElement.textContent = `$${data.price.toFixed(token === 'burni' ? 4 : 2)}`;
-            priceElement.classList.add('price-updating');
-            setTimeout(() => priceElement.classList.remove('price-updating'), 500);
-
-            // Update change percentage
-            const changeValue = data.change24h;
-            const changeText = `${changeValue >= 0 ? '+' : ''}${changeValue.toFixed(2)}%`;
-            changeElement.textContent = changeText;
-
-            // Update change styling
-            changeElement.className = 'change';
-            if (changeValue > 0) {
-                changeElement.classList.add('positive');
-            } else if (changeValue < 0) {
-                changeElement.classList.add('negative');
-            } else {
-                changeElement.classList.add('neutral');
-            }
-
-            // Store price data
-            this.prices[token] = {
-                current: data.price,
-                change24h: changeValue,
-                trend: changeValue > 0 ? 'up' : changeValue < 0 ? 'down' : 'stable'
-            };
-
-            // Notify subscribers
-            this.notifySubscribers(token, this.prices[token]);
-        }
-    }
-
-    updateConnectionStatus(status) {
-        const statusElement = document.getElementById('connection-status');
-        if (statusElement) {
-            statusElement.className = `connection-status ${status}`;
-            statusElement.title = status === 'connected' ? 'Live updates active' :
-                status === 'connecting' ? 'Connecting...' :
-                    'Offline mode';
-        }
-    }
-
-    updateLastUpdated() {
-        const lastUpdatedElement = document.getElementById('last-updated');
-        if (lastUpdatedElement) {
-            lastUpdatedElement.textContent = new Date().toLocaleTimeString();
-        }
-    }
-
-    setupVisibilityHandling() {
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                this.pauseUpdates();
-            } else {
-                this.resumeUpdates();
-            }
-        });
-    }
-
-    pauseUpdates() {
-        if (this.updateInterval) {
-            clearInterval(this.updateInterval);
-        }
-    }
-
-    resumeUpdates() {
-        this.setupFallbackPolling();
-        this.fetchPriceData(); // Immediate update when returning to page
-    }
-
-    startMonitoring() {
-        // Initial price fetch
+  setupFallbackPolling() {
+    // Fallback to polling if WebSocket fails
+    this.updateInterval = setInterval(() => {
+      if (!this.isConnected) {
         this.fetchPriceData();
+      }
+    }, 30000); // Poll every 30 seconds
+  }
 
-        // Subscribe to price notifications
-        if ('BurniAnalytics' in window) {
-            window.BurniAnalytics.trackEvent('price_monitor_started');
+  async fetchPriceData() {
+    try {
+      // Simulate API calls - replace with actual endpoints
+      const responses = await Promise.allSettled([
+        this.fetchTokenPrice('burni'),
+        this.fetchTokenPrice('xrp'),
+        this.fetchTokenPrice('xpm'),
+      ]);
+
+      responses.forEach((response, index) => {
+        if (response.status === 'fulfilled') {
+          const tokens = ['burni', 'xrp', 'xpm'];
+          this.updatePrice(tokens[index], response.value);
         }
-    }
+      });
 
-    subscribe(callback) {
-        this.subscribers.add(callback);
-        return () => this.subscribers.delete(callback);
+      this.updateLastUpdated();
+    } catch (error) {
+      console.log('Price fetch failed:', error);
+      this.showOfflineIndicator();
     }
+  }
 
-    notifySubscribers(token, priceData) {
-        this.subscribers.forEach(callback => {
-            try {
-                callback(token, priceData);
-            } catch (error) {
-                console.log('Subscriber notification failed:', error);
-            }
-        });
-    }
+  async fetchTokenPrice(token) {
+    // Mock price data - replace with actual API calls
+    const mockPrices = {
+      burni: 0.0011 + (Math.random() - 0.5) * 0.0002,
+      xrp: 0.5 + (Math.random() - 0.5) * 0.05,
+      xpm: 0.02 + (Math.random() - 0.5) * 0.002,
+    };
 
-    getCurrentPrice(token) {
-        return this.prices[token];
-    }
+    // Simulate network delay
+    await new Promise((resolve) => setTimeout(resolve, 100 + Math.random() * 200));
 
-    destroy() {
-        if (this.ws) {
-            this.ws.close();
-        }
-        if (this.updateInterval) {
-            clearInterval(this.updateInterval);
-        }
-        this.subscribers.clear();
+    return {
+      price: mockPrices[token],
+      change24h: (Math.random() - 0.5) * 10, // -5% to +5%
+    };
+  }
+
+  handlePriceUpdate(data) {
+    if (data.type === 'price_update') {
+      const { token, price, change24h } = data;
+      this.updatePrice(token, { price, change24h });
     }
+  }
+
+  updatePrice(token, data) {
+    const priceElement = document.getElementById(`${token}-price`);
+    const changeElement = document.getElementById(`${token}-change`);
+
+    if (priceElement && changeElement) {
+      // Update price with animation
+      priceElement.textContent = `$${data.price.toFixed(token === 'burni' ? 4 : 2)}`;
+      priceElement.classList.add('price-updating');
+      setTimeout(() => priceElement.classList.remove('price-updating'), 500);
+
+      // Update change percentage
+      const changeValue = data.change24h;
+      const changeText = `${changeValue >= 0 ? '+' : ''}${changeValue.toFixed(2)}%`;
+      changeElement.textContent = changeText;
+
+      // Update change styling
+      changeElement.className = 'change';
+      if (changeValue > 0) {
+        changeElement.classList.add('positive');
+      } else if (changeValue < 0) {
+        changeElement.classList.add('negative');
+      } else {
+        changeElement.classList.add('neutral');
+      }
+
+      // Store price data
+      this.prices[token] = {
+        current: data.price,
+        change24h: changeValue,
+        trend: changeValue > 0 ? 'up' : changeValue < 0 ? 'down' : 'stable',
+      };
+
+      // Notify subscribers
+      this.notifySubscribers(token, this.prices[token]);
+    }
+  }
+
+  updateConnectionStatus(status) {
+    const statusElement = document.getElementById('connection-status');
+    if (statusElement) {
+      statusElement.className = `connection-status ${status}`;
+      statusElement.title =
+        status === 'connected'
+          ? 'Live updates active'
+          : status === 'connecting'
+            ? 'Connecting...'
+            : 'Offline mode';
+    }
+  }
+
+  updateLastUpdated() {
+    const lastUpdatedElement = document.getElementById('last-updated');
+    if (lastUpdatedElement) {
+      lastUpdatedElement.textContent = new Date().toLocaleTimeString();
+    }
+  }
+
+  setupVisibilityHandling() {
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        this.pauseUpdates();
+      } else {
+        this.resumeUpdates();
+      }
+    });
+  }
+
+  pauseUpdates() {
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval);
+    }
+  }
+
+  resumeUpdates() {
+    this.setupFallbackPolling();
+    this.fetchPriceData(); // Immediate update when returning to page
+  }
+
+  startMonitoring() {
+    // Initial price fetch
+    this.fetchPriceData();
+
+    // Subscribe to price notifications
+    if ('BurniAnalytics' in window) {
+      window.BurniAnalytics.trackEvent('price_monitor_started');
+    }
+  }
+
+  subscribe(callback) {
+    this.subscribers.add(callback);
+    return () => this.subscribers.delete(callback);
+  }
+
+  notifySubscribers(token, priceData) {
+    this.subscribers.forEach((callback) => {
+      try {
+        callback(token, priceData);
+      } catch (error) {
+        console.log('Subscriber notification failed:', error);
+      }
+    });
+  }
+
+  getCurrentPrice(token) {
+    return this.prices[token];
+  }
+
+  destroy() {
+    if (this.ws) {
+      this.ws.close();
+    }
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval);
+    }
+    this.subscribers.clear();
+  }
 }
 
 // Initialize real-time price monitor when DOM is ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        window.PriceMonitor = new RealTimePriceMonitor();
-    });
-} else {
+  document.addEventListener('DOMContentLoaded', () => {
     window.PriceMonitor = new RealTimePriceMonitor();
+  });
+} else {
+  window.PriceMonitor = new RealTimePriceMonitor();
 }
 
 // Export for modules
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = RealTimePriceMonitor;
+  module.exports = RealTimePriceMonitor;
 }

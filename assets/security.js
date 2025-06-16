@@ -28,7 +28,8 @@ class SecureDOM {
   static showNotification(message, type = 'info') {
     const notification = this.createSafeElement(
       'div',
-      `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm ${type === 'error' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'
+      `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm ${
+        type === 'error' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'
       }`,
     );
 
@@ -42,7 +43,9 @@ class SecureDOM {
 
     document.body.appendChild(notification);
 
-    setTimeout(function() { notification.remove(); }, 5000);
+    setTimeout(function () {
+      notification.remove();
+    }, 5000);
   }
 
   static createSecureTable(data, headers) {
@@ -58,40 +61,46 @@ class SecureDOM {
       'tr',
       'bg-gradient-to-r from-orange-500 to-orange-600',
     );
-    headers.forEach(function(header) {
-      const th = this.createSafeElement(
-        'th',
-        'border border-orange-300 p-4 text-white font-bold text-left',
-        header,
-      );
-      headerRow.appendChild(th);
-    }.bind(this));
+    headers.forEach(
+      function (header) {
+        const th = this.createSafeElement(
+          'th',
+          'border border-orange-300 p-4 text-white font-bold text-left',
+          header,
+        );
+        headerRow.appendChild(th);
+      }.bind(this),
+    );
     thead.appendChild(headerRow);
 
     // Daten-Rows erstellen mit alternativen Farben
-    data.forEach(function(row, index) {
-      const isEven = index % 2 === 0;
-      const rowClass = isEven ? 'bg-gray-50 hover:bg-gray-100' : 'bg-white hover:bg-gray-50';
-      const tr = this.createSafeElement('tr', rowClass);
+    data.forEach(
+      function (row, index) {
+        const isEven = index % 2 === 0;
+        const rowClass = isEven ? 'bg-gray-50 hover:bg-gray-100' : 'bg-white hover:bg-gray-50';
+        const tr = this.createSafeElement('tr', rowClass);
 
-      Object.values(row).forEach(function(cell, cellIndex) {
-        const cellText = String(cell);
-        let cellClass = 'border border-gray-200 p-4 text-gray-800 font-medium';
+        Object.values(row).forEach(
+          function (cell, cellIndex) {
+            const cellText = String(cell);
+            let cellClass = 'border border-gray-200 p-4 text-gray-800 font-medium';
 
-        // Spezielle Formatierung für bestimmte Spalten
-        if (cellIndex === 0) {
-          // Datum
-          cellClass += ' text-orange-600 font-semibold';
-        } else if (cellIndex === 3) {
-          // Remaining Coins
-          cellClass += ' text-right font-mono text-green-700';
-        }
+            // Spezielle Formatierung für bestimmte Spalten
+            if (cellIndex === 0) {
+              // Datum
+              cellClass += ' text-orange-600 font-semibold';
+            } else if (cellIndex === 3) {
+              // Remaining Coins
+              cellClass += ' text-right font-mono text-green-700';
+            }
 
-        const td = this.createSafeElement('td', cellClass, cellText);
-        tr.appendChild(td);
-      }.bind(this));
-      tbody.appendChild(tr);
-    }.bind(this));
+            const td = this.createSafeElement('td', cellClass, cellText);
+            tr.appendChild(td);
+          }.bind(this),
+        );
+        tbody.appendChild(tr);
+      }.bind(this),
+    );
 
     table.appendChild(thead);
     table.appendChild(tbody);
@@ -110,14 +119,14 @@ window.SecureDOM = SecureDOM;
   var perfMetrics = {
     start: performance.now(),
     domReady: 0,
-    loadComplete: 0
+    loadComplete: 0,
   };
 
   // 1. Core JavaScript Features Polyfills
-  
+
   // Array.from polyfill for IE11
   if (!Array.from) {
-    Array.from = function(arrayLike, mapFn, thisArg) {
+    Array.from = function (arrayLike, mapFn, thisArg) {
       var O = Object(arrayLike);
       var len = parseInt(O.length) || 0;
       var result = Array(len);
@@ -130,7 +139,7 @@ window.SecureDOM = SecureDOM;
 
   // Object.assign polyfill for IE11
   if (!Object.assign) {
-    Object.assign = function(target) {
+    Object.assign = function (target) {
       for (let i = 1; i < arguments.length; i++) {
         const source = arguments[i];
         for (const key in source) {
@@ -145,7 +154,7 @@ window.SecureDOM = SecureDOM;
 
   // Promise polyfill for IE11
   if (!window.Promise) {
-    window.Promise = function(executor) {
+    window.Promise = function (executor) {
       const self = this;
       self.state = 'pending';
       self.value = undefined;
@@ -182,10 +191,10 @@ window.SecureDOM = SecureDOM;
         }
       }
 
-      this.then = function(onFulfilled, onRejected) {
-        return new Promise(function(resolve, reject) {
+      this.then = function (onFulfilled, onRejected) {
+        return new Promise(function (resolve, reject) {
           handle({
-            onFulfilled: function(result) {
+            onFulfilled: function (result) {
               try {
                 const returnValue = onFulfilled ? onFulfilled(result) : result;
                 resolve(returnValue);
@@ -193,14 +202,14 @@ window.SecureDOM = SecureDOM;
                 reject(ex);
               }
             },
-            onRejected: function(error) {
+            onRejected: function (error) {
               try {
                 const returnValue = onRejected ? onRejected(error) : error;
                 reject(returnValue);
               } catch (ex) {
                 reject(ex);
               }
-            }
+            },
           });
         });
       };
@@ -214,17 +223,17 @@ window.SecureDOM = SecureDOM;
   }
 
   // 2. DOM and Event Polyfills
-  
+
   // addEventListener for IE8
   if (!window.addEventListener) {
-    window.addEventListener = function(type, listener) {
+    window.addEventListener = function (type, listener) {
       this.attachEvent('on' + type, listener);
     };
   }
 
   // querySelector for IE7
   if (!document.querySelector) {
-    document.querySelector = function(selector) {
+    document.querySelector = function (selector) {
       const elements = document.querySelectorAll(selector);
       return elements.length ? elements[0] : null;
     };
@@ -232,9 +241,9 @@ window.SecureDOM = SecureDOM;
 
   // classList for IE9
   if (!('classList' in document.createElement('_'))) {
-    (function(view) {
+    (function (view) {
       const tokens = /\s+/;
-      const ClassList = function(el) {
+      const ClassList = function (el) {
         this.el = el;
         const classes = el.className.replace(/^\s+|\s+$/g, '').split(tokens);
         for (let i = 0; i < classes.length; i++) {
@@ -242,21 +251,21 @@ window.SecureDOM = SecureDOM;
         }
         this.length = classes.length;
       };
-      
+
       ClassList.prototype = {
-        add: function(token) {
+        add: function (token) {
           if (!this.contains(token)) {
             this.el.className += (this.el.className ? ' ' : '') + token;
           }
         },
-        contains: function(token) {
+        contains: function (token) {
           return this.el.className.indexOf(token) !== -1;
         },
-        remove: function(token) {
+        remove: function (token) {
           this.el.className = this.el.className.replace(new RegExp('\\b' + token + '\\b', 'g'), '');
-        }
+        },
       };
-      
+
       if (view.HTMLElement) {
         view.HTMLElement.prototype.classList = new ClassList();
       }
@@ -264,45 +273,47 @@ window.SecureDOM = SecureDOM;
   }
 
   // 3. Modern Web APIs Polyfills
-  
+
   // Intersection Observer Polyfill
   if (!('IntersectionObserver' in window)) {
     console.log('Loading IntersectionObserver polyfill');
-    
-    window.IntersectionObserver = function(callback, options) {
+
+    window.IntersectionObserver = function (callback, options) {
       this.callback = callback;
       this.options = options || {};
       this.observedElements = [];
     };
 
-    window.IntersectionObserver.prototype.observe = function(element) {
+    window.IntersectionObserver.prototype.observe = function (element) {
       this.observedElements.push(element);
       // Immediate trigger for fallback
       var self = this;
-      setTimeout(function() {
-        self.callback([{
-          target: element,
-          isIntersecting: true,
-          intersectionRatio: 1
-        }]);
+      setTimeout(function () {
+        self.callback([
+          {
+            target: element,
+            isIntersecting: true,
+            intersectionRatio: 1,
+          },
+        ]);
       }, 100);
     };
 
-    window.IntersectionObserver.prototype.unobserve = function(element) {
+    window.IntersectionObserver.prototype.unobserve = function (element) {
       const index = this.observedElements.indexOf(element);
       if (index > -1) {
         this.observedElements.splice(index, 1);
       }
     };
 
-    window.IntersectionObserver.prototype.disconnect = function() {
+    window.IntersectionObserver.prototype.disconnect = function () {
       this.observedElements = [];
     };
 
     // Fallback lazy loading
     document.addEventListener('DOMContentLoaded', function () {
       const lazyImages = document.querySelectorAll('img[loading="lazy"]');
-      lazyImages.forEach(function(img) {
+      lazyImages.forEach(function (img) {
         if (img.dataset.src) {
           img.src = img.dataset.src;
           img.classList.add('loaded');
@@ -313,43 +324,43 @@ window.SecureDOM = SecureDOM;
 
   // fetch polyfill for IE11
   if (!window.fetch) {
-    window.fetch = function(url, options) {
-      return new Promise(function(resolve, reject) {
+    window.fetch = function (url, options) {
+      return new Promise(function (resolve, reject) {
         const xhr = new XMLHttpRequest();
         options = options || {};
-        
+
         xhr.open(options.method || 'GET', url);
-        
+
         if (options.headers) {
-          Object.keys(options.headers).forEach(function(key) {
+          Object.keys(options.headers).forEach(function (key) {
             xhr.setRequestHeader(key, options.headers[key]);
           });
         }
-        
-        xhr.onload = function() {
+
+        xhr.onload = function () {
           resolve({
             ok: xhr.status >= 200 && xhr.status < 300,
             status: xhr.status,
-            text: function() {
+            text: function () {
               return Promise.resolve(xhr.responseText);
             },
-            json: function() {
+            json: function () {
               return Promise.resolve(JSON.parse(xhr.responseText));
-            }
+            },
           });
         };
-        
-        xhr.onerror = function() {
+
+        xhr.onerror = function () {
           reject(new TypeError('Network request failed'));
         };
-        
+
         xhr.send(options.body);
       });
     };
   }
 
   // 4. CSS and Styling Enhancements
-  
+
   // CSS Custom Properties fallback with comprehensive variable support
   if (!CSS || !CSS.supports || !CSS.supports('color', 'var(--fake-var)')) {
     const cssVars = {
@@ -360,17 +371,17 @@ window.SecureDOM = SecureDOM;
       '--text-color': '#ffffff',
       '--border-radius': '8px',
       '--shadow': '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-      '--transition': 'all 0.3s ease'
+      '--transition': 'all 0.3s ease',
     };
-    
-    Object.keys(cssVars).forEach(function(property) {
+
+    Object.keys(cssVars).forEach(function (property) {
       document.documentElement.style.setProperty(property, cssVars[property]);
     });
 
     // CSS feature detection and fallbacks
     const testDiv = document.createElement('div');
     testDiv.style.cssText = 'display: grid; display: flex; transform: translateZ(0);';
-    
+
     if (!testDiv.style.display.includes('grid')) {
       document.documentElement.classList.add('no-grid');
     }
@@ -383,22 +394,22 @@ window.SecureDOM = SecureDOM;
   }
 
   // 5. Performance Optimizations
-  
+
   // Preload critical resources
   function preloadCriticalResources() {
     const criticalResources = [
       { href: '/assets/css/critical.css', as: 'style' },
       { href: '/assets/images/burni-logo.webp', as: 'image' },
-      { href: '/assets/real-time-monitor.js', as: 'script' }
+      { href: '/assets/real-time-monitor.js', as: 'script' },
     ];
 
-    criticalResources.forEach(function(resource) {
+    criticalResources.forEach(function (resource) {
       const link = document.createElement('link');
       link.rel = 'preload';
       link.href = resource.href;
       link.as = resource.as;
       if (resource.as === 'style') {
-        link.onload = function() {
+        link.onload = function () {
           this.rel = 'stylesheet';
         };
       }
@@ -409,7 +420,7 @@ window.SecureDOM = SecureDOM;
   // Defer non-critical scripts
   function deferNonCriticalScripts() {
     const scripts = document.querySelectorAll('script[data-defer="true"]');
-    scripts.forEach(function(script) {
+    scripts.forEach(function (script) {
       script.setAttribute('defer', '');
     });
   }
@@ -417,46 +428,51 @@ window.SecureDOM = SecureDOM;
   // Image optimization
   function optimizeImages() {
     const images = document.querySelectorAll('img');
-    images.forEach(function(img) {
+    images.forEach(function (img) {
       // Add decode attribute for better rendering
       img.setAttribute('decoding', 'async');
-      
+
       // Add loading attribute if not set
       if (!img.getAttribute('loading')) {
         img.setAttribute('loading', 'lazy');
       }
-      
+
       // WebP fallback
-      if (img.src && img.src.includes('.jpg') || img.src.includes('.png')) {
+      if ((img.src && img.src.includes('.jpg')) || img.src.includes('.png')) {
         const webpSrc = img.src.replace(/\.(jpg|jpeg|png)$/i, '.webp');
-        
+
         // Test WebP support
         const webp = new Image();
-        webp.onload = webp.onerror = function() {
+        webp.onload = webp.onerror = function () {
           if (webp.height === 2) {
             img.src = webpSrc;
           }
         };
-        webp.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
+        webp.src =
+          'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
       }
     });
   }
 
   // 6. Service Worker and PWA
-  
+
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('/sw.js')
+      navigator.serviceWorker
+        .register('/sw.js')
         .then(function (registration) {
           console.log('SW registered: ', registration);
-          
+
           // Update available notification
-          registration.addEventListener('updatefound', function() {
+          registration.addEventListener('updatefound', function () {
             const newWorker = registration.installing;
-            newWorker.addEventListener('statechange', function() {
+            newWorker.addEventListener('statechange', function () {
               if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
                 if (window.SecureDOM) {
-                  window.SecureDOM.showNotification('App update available! Refresh to get the latest version.', 'info');
+                  window.SecureDOM.showNotification(
+                    'App update available! Refresh to get the latest version.',
+                    'info',
+                  );
                 }
               }
             });
@@ -475,21 +491,25 @@ window.SecureDOM = SecureDOM;
   }
 
   // 7. Responsive and Touch Enhancements
-  
+
   // Touch support detection
   const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
   if (hasTouch) {
     document.documentElement.classList.add('touch');
-    
+
     // Prevent zoom on double tap for iOS
     let lastTouchEnd = 0;
-    document.addEventListener('touchend', function (event) {
-      const now = (new Date()).getTime();
-      if (now - lastTouchEnd <= 300) {
-        event.preventDefault();
-      }
-      lastTouchEnd = now;
-    }, false);
+    document.addEventListener(
+      'touchend',
+      function (event) {
+        const now = new Date().getTime();
+        if (now - lastTouchEnd <= 300) {
+          event.preventDefault();
+        }
+        lastTouchEnd = now;
+      },
+      false,
+    );
   } else {
     document.documentElement.classList.add('no-touch');
   }
@@ -498,16 +518,17 @@ window.SecureDOM = SecureDOM;
   if (!document.querySelector('meta[name="viewport"]')) {
     const viewport = document.createElement('meta');
     viewport.name = 'viewport';
-    viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes';
+    viewport.content =
+      'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes';
     document.head.appendChild(viewport);
   }
 
   // 8. Performance Monitoring
-  
+
   function measurePerformance() {
     if ('performance' in window) {
-      window.addEventListener('load', function() {
-        setTimeout(function() {
+      window.addEventListener('load', function () {
+        setTimeout(function () {
           const perfData = performance.getEntriesByType('navigation')[0];
           const metrics = {
             dns: perfData.domainLookupEnd - perfData.domainLookupStart,
@@ -515,16 +536,16 @@ window.SecureDOM = SecureDOM;
             ttfb: perfData.responseStart - perfData.navigationStart,
             download: perfData.responseEnd - perfData.responseStart,
             dom: perfData.domContentLoadedEventEnd - perfData.navigationStart,
-            load: perfData.loadEventEnd - perfData.navigationStart
+            load: perfData.loadEventEnd - perfData.navigationStart,
           };
-          
+
           console.log('Performance Metrics:', metrics);
-          
+
           // Send to analytics if available
           if (window.gtag) {
             window.gtag('event', 'page_performance', {
               custom_map: { metric1: 'load_time' },
-              metric1: metrics.load
+              metric1: metrics.load,
             });
           }
         }, 1000);
@@ -533,10 +554,10 @@ window.SecureDOM = SecureDOM;
   }
 
   // 9. Error Handling and Fallbacks
-  
-  window.addEventListener('error', function(event) {
+
+  window.addEventListener('error', function (event) {
     console.error('Global error:', event.error);
-    
+
     // Fallback for critical functionality
     if (event.filename && event.filename.includes('real-time-monitor.js')) {
       console.log('Real-time monitoring failed, using fallback');
@@ -545,17 +566,20 @@ window.SecureDOM = SecureDOM;
   });
 
   // 10. Initialize all enhancements
-  
+
   function initializeEnhancements() {
     perfMetrics.domReady = performance.now();
-    
+
     preloadCriticalResources();
     deferNonCriticalScripts();
     optimizeImages();
     measurePerformance();
-    
-    console.log('Browser compatibility enhancements loaded in', 
-      Math.round(perfMetrics.domReady - perfMetrics.start), 'ms');
+
+    console.log(
+      'Browser compatibility enhancements loaded in',
+      Math.round(perfMetrics.domReady - perfMetrics.start),
+      'ms',
+    );
   }
 
   // Run initialization
@@ -565,10 +589,12 @@ window.SecureDOM = SecureDOM;
     initializeEnhancements();
   }
 
-  window.addEventListener('load', function() {
+  window.addEventListener('load', function () {
     perfMetrics.loadComplete = performance.now();
-    console.log('Total page load time:', 
-      Math.round(perfMetrics.loadComplete - perfMetrics.start), 'ms');
+    console.log(
+      'Total page load time:',
+      Math.round(perfMetrics.loadComplete - perfMetrics.start),
+      'ms',
+    );
   });
-
 })();

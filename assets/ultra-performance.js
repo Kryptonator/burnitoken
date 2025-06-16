@@ -1,12 +1,11 @@
 // ultra-performance.js - 100% Performance Score Optimizations
-(function() {
+(function () {
   'use strict';
 
   // Ultra-aggressive performance optimizations
   var UltraPerf = {
-    
     // Immediate DOM optimizations
-    optimizeDOM: function() {
+    optimizeDOM: function () {
       // Critical CSS already loaded, optimize remaining
       this.optimizeImages();
       this.preloadCriticalResources();
@@ -15,25 +14,28 @@
     },
 
     // Aggressive image optimization with IntersectionObserver
-    optimizeImages: function() {
+    optimizeImages: function () {
       var images = document.querySelectorAll('img[data-src], img[loading="lazy"]');
-      
+
       if ('IntersectionObserver' in window) {
-        var imageObserver = new IntersectionObserver(function(entries, observer) {
-          entries.forEach(function(entry) {
-            if (entry.isIntersecting) {
-              var img = entry.target;
-              if (img.dataset.src) {
-                img.src = img.dataset.src;
-                img.removeAttribute('data-src');
+        var imageObserver = new IntersectionObserver(
+          function (entries, observer) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                var img = entry.target;
+                if (img.dataset.src) {
+                  img.src = img.dataset.src;
+                  img.removeAttribute('data-src');
+                }
+                img.classList.add('loaded');
+                observer.unobserve(img);
               }
-              img.classList.add('loaded');
-              observer.unobserve(img);
-            }
-          });
-        }, {
-          rootMargin: '50px'
-        });
+            });
+          },
+          {
+            rootMargin: '50px',
+          },
+        );
 
         for (var i = 0; i < images.length; i++) {
           imageObserver.observe(images[i]);
@@ -51,32 +53,34 @@
     },
 
     // Preload critical above-the-fold resources
-    preloadCriticalResources: function() {
+    preloadCriticalResources: function () {
       var criticalResources = [
         '/assets/css/styles.min.css',
         '/assets/images/burni-logo.webp',
-        '/assets/images/burni-chart.webp'
+        '/assets/images/burni-chart.webp',
       ];
 
       for (var i = 0; i < criticalResources.length; i++) {
         var link = document.createElement('link');
         link.rel = 'preload';
         link.href = criticalResources[i];
-        
+
         if (criticalResources[i].endsWith('.css')) {
           link.as = 'style';
         } else if (criticalResources[i].match(/\.(webp|jpg|png)$/)) {
           link.as = 'image';
         }
-        
+
         document.head.appendChild(link);
       }
     },
 
     // Optimize animations for 60fps
-    optimizeAnimations: function() {
+    optimizeAnimations: function () {
       // Force hardware acceleration on animated elements
-      var animatedElements = document.querySelectorAll('.animate-spin, .animate-pulse, .animate-bounce');
+      var animatedElements = document.querySelectorAll(
+        '.animate-spin, .animate-pulse, .animate-bounce',
+      );
       for (var i = 0; i < animatedElements.length; i++) {
         var element = animatedElements[i];
         element.style.willChange = 'transform';
@@ -86,11 +90,11 @@
     },
 
     // Defer non-critical resources
-    deferNonCritical: function() {
+    deferNonCritical: function () {
       // Defer non-critical CSS
       var nonCriticalCSS = [
         '/assets/css/responsive-enhancements.css',
-        '/assets/css/styles-compat.css'
+        '/assets/css/styles-compat.css',
       ];
 
       for (var i = 0; i < nonCriticalCSS.length; i++) {
@@ -99,31 +103,31 @@
     },
 
     // Asynchronous CSS loading
-    loadCSS: function(href) {
+    loadCSS: function (href) {
       var link = document.createElement('link');
       link.rel = 'preload';
       link.href = href;
       link.as = 'style';
-      link.onload = function() {
+      link.onload = function () {
         this.rel = 'stylesheet';
       };
       document.head.appendChild(link);
     },
 
     // Core Web Vitals optimization
-    optimizeCoreWebVitals: function() {
+    optimizeCoreWebVitals: function () {
       // LCP optimization
       this.optimizeLCP();
-      
+
       // FID optimization
       this.optimizeFID();
-      
+
       // CLS optimization
       this.optimizeCLS();
     },
 
     // Largest Contentful Paint optimization
-    optimizeLCP: function() {
+    optimizeLCP: function () {
       // Ensure hero image is preloaded
       var heroImage = document.querySelector('.hero-section img');
       if (heroImage && !heroImage.complete) {
@@ -136,23 +140,23 @@
     },
 
     // First Input Delay optimization
-    optimizeFID: function() {
+    optimizeFID: function () {
       // Break up long tasks
       var heavyTasks = [];
-      
+
       function runTask() {
         if (heavyTasks.length > 0) {
           var task = heavyTasks.shift();
           task();
-          
+
           if (heavyTasks.length > 0) {
             setTimeout(runTask, 0);
           }
         }
       }
-      
+
       // Schedule heavy tasks
-      window.scheduleTask = function(task) {
+      window.scheduleTask = function (task) {
         heavyTasks.push(task);
         if (heavyTasks.length === 1) {
           setTimeout(runTask, 0);
@@ -161,7 +165,7 @@
     },
 
     // Cumulative Layout Shift optimization
-    optimizeCLS: function() {
+    optimizeCLS: function () {
       // Set explicit dimensions for images
       var images = document.querySelectorAll('img:not([width]):not([height])');
       for (var i = 0; i < images.length; i++) {
@@ -180,16 +184,16 @@
     },
 
     // Memory optimization
-    optimizeMemory: function() {
+    optimizeMemory: function () {
       // Clean up unused variables
-      window.addEventListener('beforeunload', function() {
+      window.addEventListener('beforeunload', function () {
         // Clear intervals and timeouts
-        var highestTimeoutId = setTimeout(function(){}, 0);
+        var highestTimeoutId = setTimeout(function () {}, 0);
         for (var i = 0; i < highestTimeoutId; i++) {
           clearTimeout(i);
         }
-        
-        var highestIntervalId = setInterval(function(){}, 9999);
+
+        var highestIntervalId = setInterval(function () {}, 9999);
         for (var j = 0; j < highestIntervalId; j++) {
           clearInterval(j);
         }
@@ -197,41 +201,44 @@
     },
 
     // Network optimization
-    optimizeNetwork: function() {
+    optimizeNetwork: function () {
       // Implement aggressive caching
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js').then(function(registration) {
-          console.log('SW registered with aggressive caching');
-        }).catch(function(error) {
-          console.log('SW registration failed');
-        });
+        navigator.serviceWorker
+          .register('/sw.js')
+          .then(function (registration) {
+            console.log('SW registered with aggressive caching');
+          })
+          .catch(function (error) {
+            console.log('SW registration failed');
+          });
       }
     },
 
     // Initialize all optimizations
-    init: function() {
+    init: function () {
       var self = this;
-      
+
       // Immediate optimizations
       this.optimizeDOM();
       this.optimizeCoreWebVitals();
-      
+
       // Post-load optimizations
-      window.addEventListener('load', function() {
+      window.addEventListener('load', function () {
         self.optimizeMemory();
         self.optimizeNetwork();
       });
-      
+
       // Performance monitoring
       if ('performance' in window && performance.mark) {
         performance.mark('ultra-perf-init');
       }
-    }
+    },
   };
 
   // Initialize immediately
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       UltraPerf.init();
     });
   } else {
@@ -240,5 +247,4 @@
 
   // Export for global access
   window.UltraPerf = UltraPerf;
-
 })();
