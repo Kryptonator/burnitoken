@@ -1,0 +1,793 @@
+/* Browser Compatibility CSS - styles-compat.css */
+/* This file provides comprehensive fallbacks for older browsers */
+
+/* ========================================
+   IE11 AND OLDER BROWSER SUPPORT
+   ======================================== */
+
+/* Flexbox fallbacks for IE10+ */
+.flex {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.flex-col {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.flex-row {
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.items-center {
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.items-start {
+  -webkit-box-align: start;
+  -webkit-align-items: flex-start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+}
+
+.justify-center {
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.justify-between {
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.justify-around {
+  -webkit-justify-content: space-around;
+  -ms-flex-pack: distribute;
+  justify-content: space-around;
+}
+
+.flex-1 {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 0%;
+  -ms-flex: 1 1 0%;
+  flex: 1 1 0%;
+}
+
+.flex-shrink-0 {
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+}
+
+.flex-grow {
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+}
+
+/* Grid fallbacks for IE11 */
+.grid {
+  display: -ms-grid;
+  display: grid;
+}
+
+.grid-cols-1 {
+  -ms-grid-columns: 1fr;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.grid-cols-2 {
+  -ms-grid-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-cols-3 {
+  -ms-grid-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.gap-4 {
+  grid-gap: 1rem;
+  gap: 1rem;
+}
+
+.gap-6 {
+  grid-gap: 1.5rem;
+  gap: 1.5rem;
+}
+
+.gap-8 {
+  grid-gap: 2rem;
+  gap: 2rem;
+}
+
+/* IE11 Grid fallbacks using float */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  .grid-cols-2 > * {
+    width: calc(50% - 0.5rem);
+    float: left;
+    margin-right: 1rem;
+  }
+
+  .grid-cols-2 > *:nth-child(2n) {
+    margin-right: 0;
+  }
+
+  .grid-cols-3 > * {
+    width: calc(33.333% - 0.667rem);
+    float: left;
+    margin-right: 1rem;
+  }
+
+  .grid-cols-3 > *:nth-child(3n) {
+    margin-right: 0;
+  }
+
+  .grid::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+/* Transform fallbacks */
+.transform {
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+.translate-x-1\/2 {
+  -webkit-transform: translateX(50%);
+  -moz-transform: translateX(50%);
+  -ms-transform: translateX(50%);
+  -o-transform: translateX(50%);
+  transform: translateX(50%);
+}
+
+.translate-y-1\/2 {
+  -webkit-transform: translateY(50%);
+  -moz-transform: translateY(50%);
+  -ms-transform: translateY(50%);
+  -o-transform: translateY(50%);
+  transform: translateY(50%);
+}
+
+.-translate-x-1\/2 {
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+
+.-translate-y-1\/2 {
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.scale-105 {
+  -webkit-transform: scale(1.05);
+  -moz-transform: scale(1.05);
+  -ms-transform: scale(1.05);
+  -o-transform: scale(1.05);
+  transform: scale(1.05);
+}
+
+.rotate-45 {
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/* Transition fallbacks */
+.transition {
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.transition-all {
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -ms-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+}
+
+.transition-transform {
+  -webkit-transition-property: -webkit-transform;
+  -moz-transition-property: -moz-transform;
+  -ms-transition-property: -ms-transform;
+  -o-transition-property: -o-transform;
+  transition-property: transform;
+}
+
+.duration-300 {
+  -webkit-transition-duration: 300ms;
+  -moz-transition-duration: 300ms;
+  -ms-transition-duration: 300ms;
+  -o-transition-duration: 300ms;
+  transition-duration: 300ms;
+}
+
+.ease-in-out {
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-timing-function: ease-in-out;
+  -ms-transition-timing-function: ease-in-out;
+  -o-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;
+}
+
+/* Gradient fallbacks */
+.bg-gradient-to-r {
+  background: -webkit-linear-gradient(left, var(--tw-gradient-stops));
+  background: -moz-linear-gradient(left, var(--tw-gradient-stops));
+  background: -ms-linear-gradient(left, var(--tw-gradient-stops));
+  background: -o-linear-gradient(left, var(--tw-gradient-stops));
+  background: linear-gradient(to right, var(--tw-gradient-stops));
+}
+
+.bg-gradient-to-br {
+  background: -webkit-linear-gradient(top left, var(--tw-gradient-stops));
+  background: -moz-linear-gradient(top left, var(--tw-gradient-stops));
+  background: -ms-linear-gradient(top left, var(--tw-gradient-stops));
+  background: -o-linear-gradient(top left, var(--tw-gradient-stops));
+  background: linear-gradient(to bottom right, var(--tw-gradient-stops));
+}
+
+/* Box shadow fallbacks */
+.shadow {
+  -webkit-box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  -moz-box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.shadow-md {
+  -webkit-box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  -moz-box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.shadow-lg {
+  -webkit-box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.shadow-xl {
+  -webkit-box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  -moz-box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Border radius fallbacks */
+.rounded {
+  -webkit-border-radius: 0.25rem;
+  -moz-border-radius: 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.rounded-md {
+  -webkit-border-radius: 0.375rem;
+  -moz-border-radius: 0.375rem;
+  border-radius: 0.375rem;
+}
+
+.rounded-lg {
+  -webkit-border-radius: 0.5rem;
+  -moz-border-radius: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.rounded-xl {
+  -webkit-border-radius: 0.75rem;
+  -moz-border-radius: 0.75rem;
+  border-radius: 0.75rem;
+}
+
+.rounded-full {
+  -webkit-border-radius: 9999px;
+  -moz-border-radius: 9999px;
+  border-radius: 9999px;
+}
+
+/* Backdrop filter fallbacks */
+.backdrop-blur-sm {
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.backdrop-blur-md {
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+/* For browsers without backdrop-filter support */
+@supports not (backdrop-filter: blur(1px)) {
+  .backdrop-blur-sm,
+  .backdrop-blur-md {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+
+  .backdrop-blur-dark {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* CSS Custom Properties fallbacks */
+:root {
+  --primary-color: #f97316;
+  --secondary-color: #ffffff;
+  --accent-color: #1e40af;
+  --background-color: #000000;
+  --text-color: #ffffff;
+  --border-radius: 8px;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+/* Fallback colors for browsers without CSS custom properties */
+.text-orange-500 {
+  color: #f97316;
+  color: var(--primary-color, #f97316);
+}
+
+.bg-orange-500 {
+  background-color: #f97316;
+  background-color: var(--primary-color, #f97316);
+}
+
+.text-white {
+  color: #ffffff;
+  color: var(--secondary-color, #ffffff);
+}
+
+.bg-white {
+  background-color: #ffffff;
+  background-color: var(--secondary-color, #ffffff);
+}
+
+.text-blue-600 {
+  color: #1e40af;
+  color: var(--accent-color, #1e40af);
+}
+
+.bg-blue-600 {
+  background-color: #1e40af;
+  background-color: var(--accent-color, #1e40af);
+}
+
+/* ========================================
+   MOBILE BROWSER OPTIMIZATIONS
+   ======================================== */
+
+/* iOS Safari specific fixes */
+@supports (-webkit-overflow-scrolling: touch) {
+  .overflow-scroll {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Fix iOS viewport issues */
+  body {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Fix iOS button styling */
+  button,
+  input[type='submit'],
+  input[type='button'] {
+    -webkit-appearance: none;
+    border-radius: 0;
+  }
+}
+
+/* Android Chrome fixes */
+@supports (display: -webkit-box) {
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* Fix for older Android browsers */
+.select-none {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ========================================
+   LEGACY BROWSER LAYOUTS
+   ======================================== */
+
+/* IE11 and older: Use table layout as fallback */
+.no-flexbox .flex {
+  display: table;
+  width: 100%;
+}
+
+.no-flexbox .flex > * {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.no-flexbox .flex-col > * {
+  display: block;
+  width: 100%;
+}
+
+.no-flexbox .justify-between > *:last-child {
+  text-align: right;
+}
+
+.no-flexbox .justify-center {
+  text-align: center;
+}
+
+/* Grid fallbacks for very old browsers */
+.no-grid .grid {
+  display: block;
+}
+
+.no-grid .grid-cols-1 > *,
+.no-grid .grid-cols-2 > *,
+.no-grid .grid-cols-3 > * {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .no-grid .grid-cols-2 > * {
+    width: 48%;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 2%;
+  }
+
+  .no-grid .grid-cols-2 > *:nth-child(2n) {
+    margin-right: 0;
+  }
+
+  .no-grid .grid-cols-3 > * {
+    width: 31%;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 2%;
+  }
+
+  .no-grid .grid-cols-3 > *:nth-child(3n) {
+    margin-right: 0;
+  }
+}
+
+/* Transform fallbacks for very old browsers */
+.no-transforms .transform {
+  position: relative;
+}
+
+.no-transforms .translate-x-1\/2 {
+  left: 50%;
+  margin-left: -50%;
+}
+
+.no-transforms .translate-y-1\/2 {
+  top: 50%;
+  margin-top: -50%;
+}
+
+.no-transforms .-translate-x-1\/2 {
+  left: -50%;
+  margin-left: 50%;
+}
+
+.no-transforms .-translate-y-1\/2 {
+  top: -50%;
+  margin-top: 50%;
+}
+
+.no-transforms .scale-105 {
+  zoom: 1.05;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=1.05, M12=0, M21=0, M22=1.05, SizingMethod='auto expand')";
+}
+
+/* ========================================
+   PRINT OPTIMIZATIONS
+   ======================================== */
+
+@media print {
+  *,
+  *:before,
+  *:after {
+    background: transparent !important;
+    color: #000 !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]:after {
+    content: ' (' attr(href) ')';
+  }
+
+  abbr[title]:after {
+    content: ' (' attr(title) ')';
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+
+  .avoid-break {
+    page-break-inside: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    page-break-after: avoid;
+  }
+
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+}
+
+/* ========================================
+   HIGH CONTRAST MODE SUPPORT
+   ======================================== */
+
+@media (prefers-contrast: high) {
+  .text-gray-500 {
+    color: #000000;
+  }
+
+  .bg-gray-100 {
+    background-color: #ffffff;
+    border: 1px solid #000000;
+  }
+
+  .border {
+    border-color: #000000;
+  }
+}
+
+/* Windows High Contrast Mode */
+@media screen and (-ms-high-contrast: active) {
+  .text-gray-500 {
+    color: windowText;
+  }
+
+  .bg-gray-100 {
+    background-color: window;
+    border: 1px solid windowText;
+  }
+
+  .bg-white {
+    background-color: window;
+  }
+
+  .text-white {
+    color: windowText;
+  }
+}
+
+/* ========================================
+   REDUCED MOTION SUPPORT
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    -webkit-animation-duration: 0.01ms !important;
+    -moz-animation-duration: 0.01ms !important;
+    -ms-animation-duration: 0.01ms !important;
+    -o-animation-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    -webkit-animation-iteration-count: 1 !important;
+    -moz-animation-iteration-count: 1 !important;
+    -ms-animation-iteration-count: 1 !important;
+    -o-animation-iteration-count: 1 !important;
+    animation-iteration-count: 1 !important;
+    -webkit-transition-duration: 0.01ms !important;
+    -moz-transition-duration: 0.01ms !important;
+    -ms-transition-duration: 0.01ms !important;
+    -o-transition-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ========================================
+   BROWSER-SPECIFIC FIXES
+   ======================================== */
+
+/* Firefox specific fixes */
+@-moz-document url-prefix() {
+  /* Fix Firefox flexbox bugs */
+  .flex {
+    min-height: 0;
+    min-width: 0;
+  }
+
+  /* Firefox doesn't support backdrop-filter */
+  .backdrop-blur-md {
+    background-color: rgba(255, 255, 255, 0.95);
+  }
+
+  /* Firefox scrollbar styling */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.3) rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* WebKit/Blink specific fixes */
+@supports (-webkit-appearance: none) {
+  /* WebKit specific optimizations */
+  input[type='search'] {
+    -webkit-appearance: none;
+  }
+
+  /* WebKit scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3);
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* Edge specific fixes */
+@supports (-ms-ime-align: auto) {
+  .grid {
+    display: -ms-grid;
+  }
+}
+
+/* ========================================
+   PERFORMANCE OPTIMIZATIONS
+   ======================================== */
+
+/* Hardware acceleration for better performance */
+.gpu-accelerated {
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  -moz-perspective: 1000;
+  -ms-perspective: 1000;
+  perspective: 1000;
+}
+
+/* Optimize repaints */
+.contain-layout {
+  contain: layout;
+}
+
+.contain-paint {
+  contain: paint;
+}
+
+.contain-strict {
+  contain: strict;
+}
+
+/* Image optimization */
+img {
+  -ms-interpolation-mode: bicubic;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* Text rendering optimization */
+.text-optimized {
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (min-resolution: 192dpi) {
+  .text-optimized {
+    text-rendering: optimizeLegibility;
+  }
+}

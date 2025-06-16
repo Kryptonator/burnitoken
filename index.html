@@ -3,25 +3,45 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0, user-scalable=yes" />
+  
+  <!-- Enhanced Performance and Compatibility Meta Tags -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="msapplication-tap-highlight" content="no" />
+  <meta name="theme-color" content="#f97316" />
+  <meta name="color-scheme" content="light dark" />
+  
+  <!-- Core SEO Meta Tags -->
   <meta name="description"
     content="BURNI Token - Revolutionary deflationary cryptocurrency on XRPL with automatic burning mechanism. Every 3 days, 3% of supply is burned, creating scarcity and potential value growth. Join the future of sustainable tokenomics." />
   <meta name="keywords"
     content="BURNI Token, XRPL, cryptocurrency, token burning, deflationary token, blockchain, sustainable tokenomics, automatic deflation, XRP Ledger, crypto investment, digital assets, DeFi" />
+  <meta name="author" content="Burni Token Team" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  
+  <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="Burni Token - Creating Value Through Scarcity" />
   <meta property="og:description"
     content="Join the Burni Token community and be part of the future of deflationary cryptocurrencies on XRPL." />
-  <meta property="og:image" content="https://burnitoken.com/assets/images/burni-social.jpg" />
+  <meta property="og:image" content="https://burnitoken.com/assets/images/burni-social.webp" />
   <meta property="og:url" content="https://burnitoken.com" />
   <meta property="og:site_name" content="Burni Token" />
   <meta property="og:type" content="website" />
+  <meta property="og:locale" content="en_US" />
+  
+  <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Burni Token - Creating Value Through Scarcity" />
   <meta name="twitter:description"
     content="Join the Burni Token community and be part of the future of deflationary cryptocurrencies on XRPL." />
+  <meta name="twitter:image" content="https://burnitoken.com/assets/images/burni-social.webp" />
   <meta name="twitter:creator" content="@burnicoin" />
   <meta name="twitter:site" content="@burnicoin" />
+  
   <title data-i18n="page_title">Burni Token - Innovative Decentralized Cryptocurrency</title>
 
+  <!-- Hreflang Links for International SEO -->
   <link rel="alternate" hreflang="en" href="https://www.burnitoken.website/en" />
   <link rel="alternate" hreflang="de" href="https://www.burnitoken.website/de" />
   <link rel="alternate" hreflang="es" href="https://www.burnitoken.website/es" />
@@ -37,17 +57,40 @@
   <link rel="alternate" hreflang="hi" href="https://www.burnitoken.website/hi" />
   <link rel="alternate" hreflang="it" href="https://www.burnitoken.website/it" />
   <link rel="alternate" hreflang="x-default" href="https://www.burnitoken.website" />
-  <!-- Favicon Links -->
+  
+  <!-- Enhanced Performance Resource Hints -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
+  <link rel="dns-prefetch" href="//unpkg.com" />
+  
+  <!-- Critical Resource Preloads -->
+  <link rel="preload" href="/assets/polyfills.js" as="script" />
+  <link rel="preload" href="/assets/css/critical.css" as="style" />
+  <link rel="preload" href="/assets/images/burni-logo.webp" as="image" type="image/webp" />
+  <link rel="preload" href="/assets/security.js" as="script" />
+  
+  <!-- Critical Polyfills - Load Immediately -->
+  <script src="/assets/polyfills.js"></script>
+  
+  <!-- Favicon and Icons -->
   <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon" />
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png" />
+  <link rel="mask-icon" href="/assets/images/safari-pinned-tab.svg" color="#f97316" />
+  <meta name="msapplication-TileColor" content="#f97316" />
+  <meta name="msapplication-config" content="/assets/browserconfig.xml" />
+  
+  <!-- PWA Manifest -->
   <link rel="manifest" href="/manifest.json" />
 
   <!-- Enhanced Security Headers -->
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta http-equiv="X-Frame-Options" content="DENY" />
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+  <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()" />
   <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
   <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()" />
@@ -64,6 +107,7 @@
                  form-action 'self'; 
                  upgrade-insecure-requests;" />
   <link rel="stylesheet" href="/assets/css/critical.css" />
+  <link rel="stylesheet" href="/assets/css/styles-compat.css" />
   <link rel="stylesheet" href="/assets/css/styles.min.css" />
 
   <!-- Real-time Features & Advanced PWA -->
@@ -516,7 +560,7 @@
   <!-- Page Loader -->
   <div id="pageLoader" class="page-loader">
     <div class="text-center">
-      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-orange-500 mb-4"></div>
+      <div class="w-12 h-12 mb-4 border-t-2 border-orange-500 rounded-full animate-spin"></div>
       <p class="text-gray-600">Loading Burni Token...</p>
     </div>
   </div>
@@ -561,17 +605,17 @@
     })();
   </script>
   <noscript>
-    <div class="text-center p-4 bg-orange-100">
+    <div class="p-4 text-center bg-orange-100">
       Please enable JavaScript to use all features of this site.
     </div>
   </noscript>
   <a href="#main" class="sr-only focus:not-sr-only">Skip to main content</a>
-  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-md py-2">
-    <div class="container mx-auto px-6 flex items-center justify-between">
+  <header class="sticky top-0 z-50 py-2 shadow-md bg-white/80 backdrop-blur-md">
+    <div class="container flex items-center justify-between px-6 mx-auto">
       <a href="#hero" class="flex items-center" aria-label="Burni Token Homepage">
         <img src="/assets/images/favicon-32x32.png"
           srcset="/assets/images/favicon-32x32.png 1x, /assets/images/favicon-32x32-2x.png 2x"
-          loading="lazy" alt="Burni Logo" class="h-6 w-6 mr-2 optimized-image" loading="eager"
+          loading="lazy" alt="Burni Logo" class="w-6 h-6 mr-2 optimized-image" loading="eager"
           decoding="async" />
         <span class="text-2xl font-bold text-orange-600 font-baloo-2">Burni</span>
       </a>
@@ -580,7 +624,7 @@
           <label for="lang-select" class="sr-only" data-i18n="lang_select_label">Select
             language</label>
           <select id="lang-select" hreflang="en" aria-label="Select language"
-            class="text-sm md:text-base bg-white border border-gray-300 py-2 px-4 rounded-lg text-orange-600 appearance-none font-inter lang-select-style">
+            class="px-4 py-2 text-sm text-orange-600 bg-white border border-gray-300 rounded-lg appearance-none md:text-base font-inter lang-select-style">
             <option value="en">English</option>
             <option value="de">Deutsch</option>
             <option value="es">Español</option>
@@ -597,7 +641,7 @@
             <option value="it">Italiano</option>
           </select>
         </div>
-        <nav class="hidden md:flex space-x-1 lg:space-x-2" aria-label="Main navigation">
+        <nav class="hidden space-x-1 md:flex lg:space-x-2" aria-label="Main navigation">
           <a href="#hero" class="nav-link active" data-i18n="nav_home"
             aria-label="Navigate to homepage">Home</a>
           <a href="#about" class="nav-link" data-i18n="nav_about"
@@ -618,7 +662,7 @@
             aria-label="Navigate to XRPL Resources section">XRPL Explorer</a>
         </nav>
         <button type="button" id="mobile-menu-button" aria-controls="mobile-menu"
-          aria-expanded="false" class="pixar-button px-4 py-3 md:hidden font-baloo-2"
+          aria-expanded="false" class="px-4 py-3 pixar-button md:hidden font-baloo-2"
           data-i18n="menu_button" class="touch-optimized">
           Menu
         </button>
@@ -661,8 +705,8 @@
   </nav>
 
   <!-- Breadcrumb Navigation -->
-  <nav aria-label="Breadcrumb" class="bg-gray-50 py-2">
-    <div class="container mx-auto px-6">
+  <nav aria-label="Breadcrumb" class="py-2 bg-gray-50">
+    <div class="container px-6 mx-auto">
       <ol class="flex items-center space-x-2 text-sm text-gray-600">
         <li><a href="/" class="hover:text-orange-500">Home</a></li>
         <li><span class="mx-2">/</span></li>
@@ -671,50 +715,50 @@
     </div>
   </nav>
   <div class="container-wrapper">
-    <main id="main-content" id="main" class="container mx-auto px-6 py-12">
+    <main id="main-content" id="main" class="container px-6 py-12 mx-auto">
       <section id="hero" aria-labelledby="hero-title-h1"
         class="py-12 md:py-20 hero-gradient min-h-[85vh] flex items-center rounded-3xl mb-12 relative overflow-hidden above-fold lcp-optimized">
         <!-- Animated Background Elements -->
         <div class="absolute inset-0 z-0">
           <div
-            class="absolute top-10 left-10 w-20 h-20 bg-orange-400 rounded-full opacity-20 animate-bounce">
+            class="absolute w-20 h-20 bg-orange-400 rounded-full top-10 left-10 opacity-20 animate-bounce">
           </div>
           <div
-            class="absolute bottom-20 right-20 w-16 h-16 bg-yellow-400 rounded-full opacity-30 animation-delay-2s">
+            class="absolute w-16 h-16 bg-yellow-400 rounded-full bottom-20 right-20 opacity-30 animation-delay-2s">
           </div>
           <div
-            class="absolute top-1/2 left-1/4 w-12 h-12 bg-red-400 rounded-full opacity-25 animate-pulse">
+            class="absolute w-12 h-12 bg-red-400 rounded-full opacity-25 top-1/2 left-1/4 animate-pulse">
           </div>
         </div>
 
-        <div class="container mx-auto px-6 text-center relative z-20">
-          <div class="pixar-card max-w-4xl mx-auto p-6 mb-8 bounce-in">
+        <div class="container relative z-20 px-6 mx-auto text-center">
+          <div class="max-w-4xl p-6 mx-auto mb-8 pixar-card bounce-in">
             <picture>
               <source srcset="/assets/images/burniimage.webp" type="image/webp" />
               <img src="/assets/images/burniimage.webp" loading="lazy"
                 srcset="/assets/images/burniimage.jpg 1x, /assets/images/burniimage-2x.jpg 2x"
                 loading="lazy" alt="Burni Token Mascot - Comic Style Character"
-                class="burni-mascot mx-auto mb-6 hover-lift optimized-image fade-in-scale gpu-accelerated"
+                class="mx-auto mb-6 burni-mascot hover-lift optimized-image fade-in-scale gpu-accelerated"
                 loading="eager" decoding="async" />
             </picture>
 
-            <h1 id="hero-title-h1" class="pixar-title mb-4 fade-in" data-i18n="hero_title">
+            <h1 id="hero-title-h1" class="mb-4 pixar-title fade-in" data-i18n="hero_title">
               Burni Token - Creating Value Through Scarcity
             </h1>
 
-            <p class="pixar-subtitle mb-8 max-w-3xl mx-auto fade-in-up" data-i18n="hero_subtitle">
+            <p class="max-w-3xl mx-auto mb-8 pixar-subtitle fade-in-up" data-i18n="hero_subtitle">
               Join the revolutionary deflationary cryptocurrency that burns tokens to increase
               value. Built on XRPL with community-driven innovation.
             </p>
 
-            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center fade-in-up">
-              <button type="button" class="pixar-button text-base px-8 py-4 hover-lift"
+            <div class="flex flex-col items-center justify-center gap-4 sm:flex-row fade-in-up">
+              <button type="button" class="px-8 py-4 text-base pixar-button hover-lift"
                 onclick="scrollToSection('about')" data-i18n="cta_learn_more"
                 aria-label="Learn more about Burni Token" class="touch-optimized">
                 🔥 Discover Burni Magic
               </button>
               <button type="button"
-                class="pixar-button bg-gradient-to-r from-purple-500 to-pink-500 text-base px-8 py-4 hover-lift"
+                class="px-8 py-4 text-base pixar-button bg-gradient-to-r from-purple-500 to-pink-500 hover-lift"
                 onclick="scrollToSection('interact')" data-i18n="cta_get_started"
                 aria-label="Start trading Burni tokens" class="touch-optimized">
                 🚀 Start Trading
@@ -723,7 +767,7 @@
           </div>
 
           <!-- Live Stats Cards -->
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8 fade-in-up">
+          <div class="grid grid-cols-2 gap-3 mt-8 md:grid-cols-4 fade-in-up">
             <div class="kpi-card hover-lift">
               <div class="kpi-value" id="total-supply-hero">1,000,000</div>
               <div class="kpi-label" data-i18n="total_supply">Total Supply</div>
@@ -752,22 +796,22 @@
 
       <!-- About Burni Section -->
       <section id="about" aria-labelledby="about-title-h2" class="py-12">
-        <div class="text-center mb-8">
+        <div class="mb-8 text-center">
           <h2 id="about-title-h2" class="mb-4 font-baloo-2" data-i18n="about_title">
             What is Burni?
           </h2>
-          <p class="text-lg text-gray-700 max-w-xl mx-auto" data-i18n="about_description">
+          <p class="max-w-xl mx-auto text-lg text-gray-700" data-i18n="about_description">
             Burni is more than just a token. It’s a promise for a deflationary future. At Burni’s
             core is a mechanism that permanently removes tokens from circulation to potentially
             increase the value of the remaining tokens.
           </p>
         </div>
-        <div class="grid md:grid-cols-2 gap-8 items-start">
+        <div class="grid items-start gap-8 md:grid-cols-2">
           <div class="section-card">
             <h3 class="mb-4 text-center font-baloo-2" data-i18n="burn_title">
               The Secret of Token Burning
             </h3>
-            <p class="text-gray-600 mb-6" data-i18n="burn_description">
+            <p class="mb-6 text-gray-600" data-i18n="burn_description">
               Imagine tokens being burned like logs in a magical fire. They disappear forever!
               This process, called "token burning," reduces the total supply of Burni tokens.
               Fewer tokens can mean each one becomes more valuable, similar to rare collectibles.
@@ -776,14 +820,14 @@
               <video id="tokenBurnAnimation" preload="metadata"
                 src="/assets/videos/1burni-favicon-im-pixar-comic-sti.mp4"
                 title="Animation: Burni Coin throwing tokens into a black hole" loop muted
-                class="w-full h-auto max-h-56 object-contain rounded-lg aspect-video" loading="lazy"
+                class="object-contain w-full h-auto rounded-lg max-h-56 aspect-video" loading="lazy"
                 aria-label="Token burn animation showing how tokens are removed from circulation"
                 tabindex="0" poster="/assets/images/burni-verbrennt-lagerfeuer.jpg" controls
                 crossorigin="anonymous">
-                <p class="text-center p-4 text-gray-600">
+                <p class="p-4 text-center text-gray-600">
                   Sorry, your browser does not support embedded videos.
                   <a href="/assets/videos/1burni-favicon-im-pixar-comic-sti.mp4"
-                    class="text-orange-600 hover:text-orange-700 underline" download>Download the
+                    class="text-orange-600 underline hover:text-orange-700" download>Download the
                     video</a>
                 </p>
               </video>
@@ -794,28 +838,28 @@
                   srcset="/assets/images/burni-verbrennt-lagerfeuer.jpg 1x, /assets/images/burni-verbrennt-lagerfeuer-2x.jpg 2x"
                   loading="lazy" alt="Burni mascot burning tokens in a campfire"
                   data-i18n-alt="alt_burni_burning_campfire"
-                  class="w-full h-auto max-h-56 object-contain rounded-lg aspect-video mt-4"
+                  class="object-contain w-full h-auto mt-4 rounded-lg max-h-56 aspect-video"
                   loading="lazy" />
               </picture>
             </div>
-            <p class="text-gray-600 mt-4 text-sm" data-i18n="burn_animation_note">
+            <p class="mt-4 text-sm text-gray-600" data-i18n="burn_animation_note">
               This animation illustrates how tokens are symbolically removed from circulation.
             </p>
           </div>
-          <div class="section-card text-center">
+          <div class="text-center section-card">
             <picture>
               <source srcset="/assets/images/burni-versperrt-coins-im-tresor.webp"
                 type="image/webp" />
               <img src="/assets/images/burni-versperrt-coins-im-tresor.webp" loading="lazy"
                 srcset="/assets/images/burni-versperrt-coins-im-tresor.jpg 1x, /assets/images/burni-versperrt-coins-im-tresor-2x.jpg 2x"
                 loading="lazy" alt="Burni mascot locking coins in a vault"
-                class="mx-auto mb-6 h-48 object-contain" loading="lazy"
+                class="object-contain h-48 mx-auto mb-6" loading="lazy"
                 data-i18n-alt="alt_burni_locks_vault" />
             </picture>
             <h3 class="mb-4 font-baloo-2" data-i18n="blackholed_title">
               Burni’s Promise: "Blackholed"
             </h3>
-            <p class="text-gray-600 mb-4" data-i18n="blackholed_description">
+            <p class="mb-4 text-gray-600" data-i18n="blackholed_description">
               Burni is marked as <strong class="text-orange-600">"Blackholed: YES"</strong>. This
               means that the maximum supply of Burni tokens is fixed and no new tokens can ever be
               created. It’s like throwing away the key to the vault! This is a strong signal of
@@ -823,7 +867,7 @@
             </p>
             <div class="tooltip">
               <span
-                class="text-blue-500 font-semibold cursor-default border-b-2 border-blue-500 border-dashed"
+                class="font-semibold text-blue-500 border-b-2 border-blue-500 border-dashed cursor-default"
                 data-i18n="blackholed_tooltip_trigger" tabindex="0"
                 aria-describedby="tooltip-blackholed">What does "Blackholed" mean?</span>
               <span id="tooltip-blackholed" role="tooltip" class="tooltiptext"
@@ -838,18 +882,18 @@
 
       <!-- Use Cases Section -->
       <section id="use-cases" aria-labelledby="use-cases-title-h2"
-        class="py-12 bg-white rounded-3xl shadow-xl mb-12">
-        <div class="text-center mb-8">
+        class="py-12 mb-12 bg-white shadow-xl rounded-3xl">
+        <div class="mb-8 text-center">
           <h2 id="use-cases-title-h2" class="mb-4 font-baloo-2" data-i18n="use_cases_title">
             Use Cases: What Burni Coin Can Be Used For
           </h2>
-          <p class="text-lg text-gray-700 max-w-xl mx-auto" data-i18n="use_cases_description">
+          <p class="max-w-xl mx-auto text-lg text-gray-700" data-i18n="use_cases_description">
             Burni Coin is not just a token, but a versatile digital asset with growing
             applications in the XRPL ecosystem.
           </p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div class="section-card flex flex-col items-center text-center p-6">
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div class="flex flex-col items-center p-6 text-center section-card">
             <picture>
               <source srcset="/assets/images/gamepad.webp" type="image/webp" />
               <img src="/assets/images/gamepad.webp" loading="lazy"
@@ -857,14 +901,14 @@
                 loading="lazy" alt="Gamepad icon representing decentralized gaming"
                 class="w-16 h-16 mb-4" loading="lazy" data-i18n-alt="alt_gamepad_icon" />
             </picture>
-            <h3 class="font-semibold mb-2 font-baloo-2" data-i18n="use_case_gaming_title">
+            <h3 class="mb-2 font-semibold font-baloo-2" data-i18n="use_case_gaming_title">
               Decentralized Gaming
             </h3>
-            <p class="text-gray-600 text-sm" data-i18n="use_case_gaming_desc">
+            <p class="text-sm text-gray-600" data-i18n="use_case_gaming_desc">
               Use Burni as in-game currency or for exclusive in-game assets in future XRPL games.
             </p>
           </div>
-          <div class="section-card flex flex-col items-center text-center p-6">
+          <div class="flex flex-col items-center p-6 text-center section-card">
             <picture>
               <source srcset="/assets/images/palette.webp" type="image/webp" />
               <img src="/assets/images/palette.webp" loading="lazy"
@@ -872,32 +916,32 @@
                 loading="lazy" alt="Palette icon representing NFT integration"
                 class="w-16 h-16 mb-4" loading="lazy" data-i18n-alt="alt_palette_icon" />
             </picture>
-            <h3 class="font-semibold mb-2 font-baloo-2" data-i18n="use_case_nfts_title">
+            <h3 class="mb-2 font-semibold font-baloo-2" data-i18n="use_case_nfts_title">
               NFT Integration
             </h3>
-            <p class="text-gray-600 text-sm" data-i18n="use_case_nfts_desc">
+            <p class="text-sm text-gray-600" data-i18n="use_case_nfts_desc">
               Acquire and trade unique digital artworks and collectibles on NFT marketplaces with
               Burni.
             </p>
           </div>
-          <div class="section-card flex flex-col items-center text-center p-6">
+          <div class="flex flex-col items-center p-6 text-center section-card">
             <picture>
               <source srcset="/assets/images/use-case-rewards.webp" type="image/webp" />
               <img src="/assets/images/use-case-rewards.webp" loading="lazy"
                 srcset="/assets/images/use-case-rewards.jpg 1x, /assets/images/use-case-rewards-2x.jpg 2x"
                 loading="lazy" alt="Burni mascot with trophies surrounded by people"
-                class="w-24 h-24 mb-4 object-contain" loading="lazy"
+                class="object-contain w-24 h-24 mb-4" loading="lazy"
                 data-i18n-alt="alt_use_case_rewards" />
             </picture>
-            <h3 class="font-semibold mb-2 font-baloo-2" data-i18n="use_case_rewards_title">
+            <h3 class="mb-2 font-semibold font-baloo-2" data-i18n="use_case_rewards_title">
               Reward Systems
             </h3>
-            <p class="text-gray-600 text-sm" data-i18n="use_case_rewards_desc">
+            <p class="text-sm text-gray-600" data-i18n="use_case_rewards_desc">
               Earn Burni by participating in community actions, staking programs, or as rewards
               for contributions.
             </p>
           </div>
-          <div class="section-card flex flex-col items-center text-center p-6">
+          <div class="flex flex-col items-center p-6 text-center section-card">
             <picture>
               <source srcset="/assets/images/exchange.webp" type="image/webp" />
               <img src="/assets/images/exchange.webp" loading="lazy"
@@ -905,15 +949,15 @@
                 loading="lazy" alt="Exchange arrows icon representing microtransactions"
                 class="w-16 h-16 mb-4" loading="lazy" data-i18n-alt="alt_exchange_icon" />
             </picture>
-            <h3 class="font-semibold mb-2 font-baloo-2" data-i18n="use_case_microtx_title">
+            <h3 class="mb-2 font-semibold font-baloo-2" data-i18n="use_case_microtx_title">
               Microtransactions
             </h3>
-            <p class="text-gray-600 text-sm" data-i18n="use_case_microtx_desc">
+            <p class="text-sm text-gray-600" data-i18n="use_case_microtx_desc">
               Benefit from the extremely low transaction fees of the XRPL for fast and
               cost-effective payments.
             </p>
           </div>
-          <div class="section-card flex flex-col items-center text-center p-6">
+          <div class="flex flex-col items-center p-6 text-center section-card">
             <picture>
               <source srcset="/assets/images/vote.webp" type="image/webp" />
               <img src="/assets/images/vote.webp" loading="lazy"
@@ -921,10 +965,10 @@
                 alt="Vote icon representing community governance" class="w-16 h-16 mb-4"
                 loading="lazy" data-i18n-alt="alt_vote_icon" />
             </picture>
-            <h3 class="font-semibold mb-2 font-baloo-2" data-i18n="use_case_governance_title">
+            <h3 class="mb-2 font-semibold font-baloo-2" data-i18n="use_case_governance_title">
               Community Governance
             </h3>
-            <p class="text-gray-600 text-sm" data-i18n="use_case_governance_desc">
+            <p class="text-sm text-gray-600" data-i18n="use_case_governance_desc">
               Hold Burni to participate in important decisions about the future of the project and
               have a say.
             </p>
@@ -933,36 +977,36 @@
       </section>
 
       <section id="token-schedule" aria-labelledby="token-schedule-title-h2"
-        class="py-16 bg-orange-50 rounded-3xl mb-12">
-        <div class="text-center mb-12">
+        class="py-16 mb-12 bg-orange-50 rounded-3xl">
+        <div class="mb-12 text-center">
           <h2 id="token-schedule-title-h2" class="mb-4 font-baloo-2"
             data-i18n="token_schedule_title">
             Burni Coin: Deflationary Schedule
           </h2>
-          <p class="text-lg text-gray-700 max-w-xl mx-auto" data-i18n="token_schedule_description">
+          <p class="max-w-xl mx-auto text-lg text-gray-700" data-i18n="token_schedule_description">
             We believe in transparency and the long-term value development of Burni Coin. A key
             component of our ecosystem is the unique deflationary mechanism that continuously
             reduces the total amount of Burni Coins in circulation. This process creates scarcity
             and potentially supports the value of the remaining coins.
           </p>
         </div>
-        <div class="max-w-4xl mx-auto px-4">
-          <div class="flex flex-col md:flex-row items-center justify-around mb-8">
+        <div class="max-w-4xl px-4 mx-auto">
+          <div class="flex flex-col items-center justify-around mb-8 md:flex-row">
             <img src="/assets/images/burni-07.27.2027.jpg"
               srcset="/assets/images/burni-07.27.2027.jpg 1x, /assets/images/burni-07.27.2027-2x.jpg 2x"
               loading="lazy" alt="Burni mascot with calculator and blackboard showing calculations"
-              class="w-48 h-auto md:w-64 object-contain rounded-lg shadow-md mb-6 md:mb-0"
+              class="object-contain w-48 h-auto mb-6 rounded-lg shadow-md md:w-64 md:mb-0"
               loading="lazy" data-i18n-alt="alt_burni_schedule_calculation" />
             <div>
-              <h3 class="font-semibold mb-6 font-baloo-2" data-i18n="key_insights_title">
+              <h3 class="mb-6 font-semibold font-baloo-2" data-i18n="key_insights_title">
                 Key Insights from the Simulation
               </h3>
-              <p class="text-gray-700 leading-relaxed mb-4" data-i18n="key_insights_text">
+              <p class="mb-4 leading-relaxed text-gray-700" data-i18n="key_insights_text">
                 Based on our calculation, starting with <strong>500,000 coins</strong> before the
                 first process, the coins are effectively gone when less than 1 coin remains. This
                 will be the case after <strong>260 processes</strong>.
               </p>
-              <ul class="list-disc list-inside text-gray-700 space-y-2">
+              <ul class="space-y-2 text-gray-700 list-disc list-inside">
                 <li data-i18n="key_insights_start_date">
                   <strong>Start of the first process:</strong> June 1, 2025 (Sunday)
                 </li>
@@ -979,15 +1023,15 @@
               </ul>
             </div>
           </div>
-          <h3 class="font-semibold mb-6 font-baloo-2" data-i18n="process_details_title">
+          <h3 class="mb-6 font-semibold font-baloo-2" data-i18n="process_details_title">
             The Process in Detail
           </h3>
-          <p class="text-gray-700 leading-relaxed mb-4" data-i18n="process_details_text1">
+          <p class="mb-4 leading-relaxed text-gray-700" data-i18n="process_details_text1">
             Starting <strong>June 1, 2025</strong>, a two-step process will be performed every
             three days. The values shown here reflect the state <em>after</em> each respective
             process:
           </p>
-          <ul class="list-disc list-inside text-gray-700 space-y-2 mb-6">
+          <ul class="mb-6 space-y-2 text-gray-700 list-disc list-inside">
             <li data-i18n="process_details_burn">
               <strong>Burn:</strong> First, <strong>3%</strong> of the currently circulating coins
               are permanently removed from circulation and destroyed.
@@ -998,58 +1042,58 @@
               contribute to reducing the circulating supply.
             </li>
           </ul>
-          <p class="text-gray-700 leading-relaxed mb-8" data-i18n="process_details_text2">
+          <p class="mb-8 leading-relaxed text-gray-700" data-i18n="process_details_text2">
             This cycle repeats every three days until the number of coins falls below a whole unit
             (less than 1 coin remains).
           </p>
-          <h3 class="font-semibold mb-6 font-baloo-2" data-i18n="schedule_timeline_title">
+          <h3 class="mb-6 font-semibold font-baloo-2" data-i18n="schedule_timeline_title">
             Coin Reduction Schedule
           </h3>
-          <p class="text-gray-700 leading-relaxed mb-4" data-i18n="schedule_timeline_text">
+          <p class="mb-4 leading-relaxed text-gray-700" data-i18n="schedule_timeline_text">
             The following table shows an example of the remaining coins
             <em>after completion of the respective process</em> on the specified dates. Note that
             the reduction is exponential.
           </p>
-          <div id="scheduleTable" class="overflow-x-auto mb-8 shadow-lg rounded-lg bg-white"></div>
-          <p class="text-sm text-gray-600 mt-4" data-i18n="schedule_disclaimer">
+          <div id="scheduleTable" class="mb-8 overflow-x-auto bg-white rounded-lg shadow-lg"></div>
+          <p class="mt-4 text-sm text-gray-600" data-i18n="schedule_disclaimer">
             <em>Note: Values are rounded to two decimal places. The process stops as soon as the
               value falls below 1.</em>
           </p>
-          <h3 class="font-semibold mb-6 mt-12 font-baloo-2" data-i18n="visual_representation_title">
+          <h3 class="mt-12 mb-6 font-semibold font-baloo-2" data-i18n="visual_representation_title">
             Visual Representation of the Reduction
           </h3>
-          <p class="text-gray-700 leading-relaxed mb-4" data-i18n="visual_representation_text">
+          <p class="mb-4 leading-relaxed text-gray-700" data-i18n="visual_representation_text">
             To better illustrate the development of Burni Coins, we have created an interactive
             chart that visualizes the deflationary process.
           </p>
-          <figure class="chart-container bg-white p-4 rounded-lg shadow-md">
+          <figure class="p-4 bg-white rounded-lg shadow-md chart-container">
             <canvas id="scheduleChart" role="img" data-i18n-aria-label="schedule_chart_aria_label"
               title="Schedule Chart"></canvas>
             <figcaption class="sr-only" data-i18n="schedule_chart_caption"></figcaption>
           </figure>
-          <p class="text-sm text-gray-600 mt-4" data-i18n="visual_representation_note">
+          <p class="mt-4 text-sm text-gray-600" data-i18n="visual_representation_note">
             This chart shows the remaining coin count over the timeline to visually highlight the
             deflationary nature of Burni Coin.
           </p>
         </div>
       </section>
       <section id="tokenomics" aria-labelledby="tokenomics-title-h2"
-        class="py-16 bg-orange-50 rounded-3xl mb-12">
-        <div class="text-center mb-12">
+        class="py-16 mb-12 bg-orange-50 rounded-3xl">
+        <div class="mb-12 text-center">
           <img src="/assets/images/burni-chart.webp" loading="lazy"
             srcset="/assets/images/burni-chart-illustration.jpg 1x, /assets/images/burni-chart-illustration-2x.jpg 2x"
             loading="lazy" alt="Burni mascot in front of a rising chart"
-            class="mx-auto mb-6 h-40 object-contain" loading="lazy"
+            class="object-contain h-40 mx-auto mb-6" loading="lazy"
             data-i18n-alt="alt_burni_chart_illustration" />
           <h2 id="tokenomics-title-h2" class="mb-4 font-baloo-2" data-i18n="tokenomics_title">
             Burni’s World: Facts &amp; Figures
           </h2>
-          <p class="text-lg text-gray-700 max-w-xl mx-auto" data-i18n="tokenomics_description">
+          <p class="max-w-xl mx-auto text-lg text-gray-700" data-i18n="tokenomics_description">
             Here’s a look at the key figures that define Burni. This data gives you insight into
             the economic foundation and potential of the token.
           </p>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12">
+        <div class="grid grid-cols-1 gap-6 mb-12 sm:grid-cols-2 lg:grid-cols-3 md:gap-8">
           <div class="kpi-card">
             <div class="kpi-value">1,000,000</div>
             <div class="kpi-label" data-i18n="kpi_max_supply">Max Supply</div>
@@ -1083,14 +1127,14 @@
             <div class="kpi-label" data-i18n="kpi_issuer_fee">Issuer Fee</div>
           </div>
         </div>
-        <div id="price-error-message" class="hidden text-center text-red-500 mb-4"
+        <div id="price-error-message" class="hidden mb-4 text-center text-red-500"
           data-i18n="price_error_message">
           Price data could not be loaded. Please try again later.
         </div>
-        <p class="text-sm text-gray-600 mt-4 text-center" data-i18n="last_updated_label">
+        <p class="mt-4 text-sm text-center text-gray-600" data-i18n="last_updated_label">
           Last Updated: <span id="lastUpdatedTimestamp">N/A</span>
         </p>
-        <div class="grid md:grid-cols-2 gap-12 items-start mt-8">
+        <div class="grid items-start gap-12 mt-8 md:grid-cols-2">
           <div class="section-card">
             <h3 class="mb-6 text-center font-baloo-2" data-i18n="token_details_title">
               Token Details
@@ -1098,7 +1142,7 @@
             <div class="flex justify-center mb-4">
               <img src="/assets/images/burnicoin.jpg"
                 srcset="/assets/images/burnicoin.jpg 1x, /assets/images/burnicoin-2x.jpg 2x"
-                loading="lazy" alt="Burni Coin with smiling flame face" class="h-20 object-contain"
+                loading="lazy" alt="Burni Coin with smiling flame face" class="object-contain h-20"
                 loading="lazy" data-i18n-alt="alt_burnicoin_image" />
             </div>
             <ul class="space-y-3 text-gray-700">
@@ -1120,14 +1164,14 @@
               <li>
                 <strong data-i18n="issuer_address">Issuer Address:</strong>
                 <span
-                  class="text-xs font-mono bg-gray-100 px-2 py-1 rounded">rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2</span>
+                  class="px-2 py-1 font-mono text-xs bg-gray-100 rounded">rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2</span>
               </li>
               <li>
                 <strong data-i18n="explorer_links">Explorer Links:</strong>
                 <div class="flex flex-wrap gap-2 mt-1">
                   <a href="https://livenet.xrpl.org/accounts/rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2"
                     target="_blank" rel="noopener noreferrer"
-                    class="inline-flex items-center px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition-colors">
+                    class="inline-flex items-center px-3 py-1 text-xs text-blue-700 transition-colors bg-blue-100 rounded-full hover:bg-blue-200">
                     <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd"
                         d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z"
@@ -1137,7 +1181,7 @@
                   </a>
                   <a href="https://bithomp.com/explorer/rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2"
                     target="_blank" rel="noopener noreferrer"
-                    class="inline-flex items-center px-3 py-1 text-xs bg-green-100 text-green-700 rounded-full hover:bg-green-200 transition-colors">
+                    class="inline-flex items-center px-3 py-1 text-xs text-green-700 transition-colors bg-green-100 rounded-full hover:bg-green-200">
                     <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd"
                         d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z"
@@ -1158,16 +1202,16 @@
                 title="Supply Chart"></canvas>
               <figcaption class="sr-only" data-i18n="supply_chart_caption"></figcaption>
             </figure>
-            <p class="text-center text-sm text-gray-600 mt-4" data-i18n="supply_chart_description">
+            <p class="mt-4 text-sm text-center text-gray-600" data-i18n="supply_chart_description">
               This chart visualizes the circulating supply in relation to the maximum supply.
             </p>
           </div>
         </div>
-        <div class="mt-12 text-center section-card max-w-3xl mx-auto">
+        <div class="max-w-3xl mx-auto mt-12 text-center section-card">
           <h3 class="mb-4 font-baloo-2" data-i18n="xrpl_home_title">
             At Home on the XRP Ledger <span aria-hidden="true">🏡</span>
           </h3>
-          <p class="text-gray-600 mb-4" data-i18n="xrpl_home_description">
+          <p class="mb-4 text-gray-600" data-i18n="xrpl_home_description">
             Burni operates on the XRP Ledger (XRPL), known for its speed, low transaction costs,
             and scalability. This means for you: fast and cost-effective transactions! To hold or
             trade Burni, you need to set up a
@@ -1178,18 +1222,18 @@
           <img src="/assets/images/burni-logo.webp"
             srcset="/assets/images/burni-logo.webp 1x, /assets/images/burni-logo.webp 2x"
             loading="lazy" alt="Symbol for the speed and efficiency of the XRP Ledger"
-            class="mx-auto h-20 my-4" data-i18n-alt="alt_xrpl_speed_icon" />
-          <p class="text-gray-600 font-semibold" data-i18n="xrpl_slogan">
+            class="h-20 mx-auto my-4" data-i18n-alt="alt_xrpl_speed_icon" />
+          <p class="font-semibold text-gray-600" data-i18n="xrpl_slogan">
             Fast, efficient, and reliable – that’s the foundation of Burni.
           </p>
         </div>
       </section>
       <section id="interact" aria-labelledby="trade-title-h2" class="py-16">
-        <div class="text-center mb-12">
+        <div class="mb-12 text-center">
           <h2 id="trade-title-h2" class="mb-4 font-baloo-2" data-i18n="trade_title">
             Trading XPM Token
           </h2>
-          <p class="text-lg text-gray-700 max-w-xl mx-auto" data-i18n="trade_description">
+          <p class="max-w-xl mx-auto text-lg text-gray-700" data-i18n="trade_description">
             Ready to dive into the world of XPM? Here you will find the most important links to
             trade and manage the XPM token on XPMarket. Our mascot will show the way!
           </p>
@@ -1200,49 +1244,49 @@
             class="burni-mascot" loading="lazy" data-i18n-alt="alt_trade_mascot"
             alt="Burni mascot showing the way for trading XPM" />
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <a href="https://xpmarket.com/token/XPM-rXPMxBeefHGxx2K7g5qmmWq3gFsgawkoa" target="_blank"
-            class="section-card p-6 text-center hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center justify-center"
+            class="flex flex-col items-center justify-center p-6 text-center transition-shadow duration-300 section-card hover:shadow-2xl"
             rel="noopener noreferrer">
-            <i class="fas fa-coins fa-2x mb-3 text-yellow-500"></i>
+            <i class="mb-3 text-yellow-500 fas fa-coins fa-2x"></i>
             <h3 class="mb-2 text-orange-600 font-baloo-2" data-i18n="token_page_link">
               XPM Token Page
             </h3>
-            <p class="text-gray-600 text-sm" data-i18n="token_page_desc">
+            <p class="text-sm text-gray-600" data-i18n="token_page_desc">
               All info about XPM on XPMarket.
             </p>
           </a>
           <a href="https://xpmarket.com/trustline/XPM-rXPMxBeefHGxx2K7g5qmmWq3gFsgawkoa/set"
             target="_blank"
-            class="section-card p-6 text-center hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center justify-center"
+            class="flex flex-col items-center justify-center p-6 text-center transition-shadow duration-300 section-card hover:shadow-2xl"
             rel="noopener noreferrer">
-            <i class="fas fa-handshake fa-2x mb-3 text-green-500"></i>
+            <i class="mb-3 text-green-500 fas fa-handshake fa-2x"></i>
             <h3 class="mb-2 text-orange-600 font-baloo-2" data-i18n="set_trustline_link">
               Set XPM Trustline
             </h3>
-            <p class="text-gray-600 text-sm" data-i18n="set_trustline_desc">
+            <p class="text-sm text-gray-600" data-i18n="set_trustline_desc">
               Activate XPM in your XRPL wallet.
             </p>
           </a>
           <a href="https://xpmarket.com/dex/XPM-rXPMxBeefHGxx2K7g5qmmWq3gFsgawkoa/XRP?trade=market"
             target="_blank"
-            class="section-card p-6 text-center hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center justify-center"
+            class="flex flex-col items-center justify-center p-6 text-center transition-shadow duration-300 section-card hover:shadow-2xl"
             rel="noopener noreferrer">
-            <i class="fas fa-chart-line fa-2x mb-3 text-blue-500"></i>
+            <i class="mb-3 text-blue-500 fas fa-chart-line fa-2x"></i>
             <h3 class="mb-2 text-orange-600 font-baloo-2" data-i18n="dex_trade_link">
               XPM DEX Trading
             </h3>
-            <p class="text-gray-600 text-sm" data-i18n="dex_trade_desc">
+            <p class="text-sm text-gray-600" data-i18n="dex_trade_desc">
               Buy/Sell XPM on the decentralized exchange.
             </p>
           </a>
           <a href="https://xpmarket.com/swap/XPM-rXPMxBeefHGxx2K7g5qmmWq3gFsgawkoa/XRP/market"
             target="_blank"
-            class="section-card p-6 text-center hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center justify-center"
+            class="flex flex-col items-center justify-center p-6 text-center transition-shadow duration-300 section-card hover:shadow-2xl"
             rel="noopener noreferrer">
-            <i class="fas fa-exchange-alt fa-2x mb-3 text-purple-500"></i>
+            <i class="mb-3 text-purple-500 fas fa-exchange-alt fa-2x"></i>
             <h3 class="mb-2 text-orange-600 font-baloo-2" data-i18n="swap_link">SWAP XPM</h3>
-            <p class="text-gray-600 text-sm" data-i18n="swap_desc">
+            <p class="text-sm text-gray-600" data-i18n="swap_desc">
               Easily exchange XPM for other tokens.
             </p>
           </a>
@@ -1251,7 +1295,7 @@
           <h3 class="mb-6 text-center font-baloo-2" data-i18n="market_data_title">
             Market Data (ATH/ATL Visualization)
           </h3>
-          <p class="text-center text-gray-600 mb-6" data-i18n="market_data_description">
+          <p class="mb-6 text-center text-gray-600" data-i18n="market_data_description">
             This chart shows Burni’s All-Time High (ATH) and All-Time Low (ATL) in XRP, based on
             corrected report data.
           </p>
@@ -1265,13 +1309,13 @@
 
       <!-- XRPL Explorer & Resources Section -->
       <section id="xrpl-resources" class="py-16 bg-gradient-to-br from-blue-50 to-indigo-100">
-        <div class="container mx-auto px-6">
-          <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 font-baloo-2"
+        <div class="container px-6 mx-auto">
+          <div class="mb-12 text-center">
+            <h2 class="mb-4 text-3xl font-bold text-gray-900 md:text-4xl font-baloo-2"
               data-i18n="xrpl_resources_title">
               🌐 XRPL Explorer & Resources
             </h2>
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto" data-i18n="xrpl_resources_subtitle">
+            <p class="max-w-3xl mx-auto text-xl text-gray-600" data-i18n="xrpl_resources_subtitle">
               Explore BURNI Token on the XRP Ledger with official tools and real-time blockchain
               data.
             </p>
@@ -1282,29 +1326,29 @@
               class="burni-mascot" loading="lazy" data-i18n-alt="alt_burni_explorer_mascot"
               alt="Burni mascot exploring the XRPL blockchain" />
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <!-- XRPL Livenet -->
             <a href="https://livenet.xrpl.org" target="_blank"
-              class="section-card p-6 text-center hover:shadow-2xl transition-all duration-300 flex flex-col items-center justify-center bg-gradient-to-br from-blue-400 to-blue-600 text-white hover:scale-105"
+              class="flex flex-col items-center justify-center p-6 text-center text-white transition-all duration-300 section-card hover:shadow-2xl bg-gradient-to-br from-blue-400 to-blue-600 hover:scale-105"
               rel="noopener noreferrer">
-              <i class="fas fa-globe fa-2x mb-3"></i>
-              <h3 class="mb-2 font-baloo-2 font-bold" data-i18n="xrpl_livenet_title">
+              <i class="mb-3 fas fa-globe fa-2x"></i>
+              <h3 class="mb-2 font-bold font-baloo-2" data-i18n="xrpl_livenet_title">
                 🌍 XRPL Livenet
               </h3>
-              <p class="text-blue-100 text-sm font-medium" data-i18n="xrpl_livenet_desc">
+              <p class="text-sm font-medium text-blue-100" data-i18n="xrpl_livenet_desc">
                 Official XRPL Mainnet Explorer
               </p>
             </a>
 
             <!-- Ripple Explorer GitHub -->
             <a href="https://github.com/ripple/explorer" target="_blank"
-              class="section-card p-6 text-center hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center justify-center"
+              class="flex flex-col items-center justify-center p-6 text-center transition-shadow duration-300 section-card hover:shadow-2xl"
               rel="noopener noreferrer">
-              <i class="fab fa-github fa-2x mb-3 text-gray-800"></i>
+              <i class="mb-3 text-gray-800 fab fa-github fa-2x"></i>
               <h3 class="mb-2 text-gray-800 font-baloo-2" data-i18n="ripple_explorer_title">
                 🔧 Ripple Explorer
               </h3>
-              <p class="text-gray-600 text-sm" data-i18n="ripple_explorer_desc">
+              <p class="text-sm text-gray-600" data-i18n="ripple_explorer_desc">
                 Open Source XRPL Explorer Code
               </p>
             </a>
@@ -1312,26 +1356,26 @@
             <!-- BURNI on XRPL -->
             <a href="https://livenet.xrpl.org/accounts/rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2"
               target="_blank"
-              class="section-card p-6 text-center hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center justify-center"
+              class="flex flex-col items-center justify-center p-6 text-center transition-shadow duration-300 section-card hover:shadow-2xl"
               rel="noopener noreferrer">
-              <i class="fas fa-fire fa-2x mb-3 text-orange-500"></i>
+              <i class="mb-3 text-orange-500 fas fa-fire fa-2x"></i>
               <h3 class="mb-2 text-orange-600 font-baloo-2" data-i18n="burni_on_xrpl_title">
                 🔥 BURNI on XRPL
               </h3>
-              <p class="text-gray-600 text-sm" data-i18n="burni_on_xrpl_desc">
+              <p class="text-sm text-gray-600" data-i18n="burni_on_xrpl_desc">
                 View BURNI Token data on XRPL Livenet
               </p>
             </a>
 
             <!-- XRPScan -->
             <a href="https://xrpscan.com/token/rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2" target="_blank"
-              class="section-card p-6 text-center hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center justify-center"
+              class="flex flex-col items-center justify-center p-6 text-center transition-shadow duration-300 section-card hover:shadow-2xl"
               rel="noopener noreferrer">
-              <i class="fas fa-search fa-2x mb-3 text-green-500"></i>
+              <i class="mb-3 text-green-500 fas fa-search fa-2x"></i>
               <h3 class="mb-2 text-green-600 font-baloo-2" data-i18n="xrpscan_title">
                 🔍 XRPScan
               </h3>
-              <p class="text-gray-600 text-sm" data-i18n="xrpscan_desc">
+              <p class="text-sm text-gray-600" data-i18n="xrpscan_desc">
                 Advanced XRPL Token Analytics
               </p>
             </a>
@@ -1339,45 +1383,45 @@
             <!-- Bithomp -->
             <a href="https://bithomp.com/explorer/rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2"
               target="_blank"
-              class="section-card p-6 text-center hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center justify-center"
+              class="flex flex-col items-center justify-center p-6 text-center transition-shadow duration-300 section-card hover:shadow-2xl"
               rel="noopener noreferrer">
-              <i class="fas fa-chart-line fa-2x mb-3 text-purple-500"></i>
+              <i class="mb-3 text-purple-500 fas fa-chart-line fa-2x"></i>
               <h3 class="mb-2 text-purple-600 font-baloo-2" data-i18n="bithomp_title">
                 📊 Bithomp
               </h3>
-              <p class="text-gray-600 text-sm" data-i18n="bithomp_desc">
+              <p class="text-sm text-gray-600" data-i18n="bithomp_desc">
                 XRPL Transaction & Account Explorer
               </p>
             </a>
 
             <!-- XRPL.org Documentation -->
             <a href="https://xrpl.org/tokens.html" target="_blank"
-              class="section-card p-6 text-center hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center justify-center"
+              class="flex flex-col items-center justify-center p-6 text-center transition-shadow duration-300 section-card hover:shadow-2xl"
               rel="noopener noreferrer">
-              <i class="fas fa-book fa-2x mb-3 text-indigo-500"></i>
+              <i class="mb-3 text-indigo-500 fas fa-book fa-2x"></i>
               <h3 class="mb-2 text-indigo-600 font-baloo-2" data-i18n="xrpl_docs_title">
                 📚 XRPL Documentation
               </h3>
-              <p class="text-gray-600 text-sm" data-i18n="xrpl_docs_desc">
+              <p class="text-sm text-gray-600" data-i18n="xrpl_docs_desc">
                 Learn about XRPL Tokens & Technology
               </p>
             </a>
           </div>
 
           <!-- Real-time XRPL Status -->
-          <div class="mt-12 bg-white rounded-xl p-6 shadow-lg">
-            <h3 class="text-xl font-bold text-center mb-6 text-gray-800"
+          <div class="p-6 mt-12 bg-white shadow-lg rounded-xl">
+            <h3 class="mb-6 text-xl font-bold text-center text-gray-800"
               data-i18n="xrpl_status_title">
               📡 Real-time XRPL Network Status
             </h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-              <div class="bg-green-50 rounded-lg p-4">
+            <div class="grid grid-cols-1 gap-6 text-center md:grid-cols-3">
+              <div class="p-4 rounded-lg bg-green-50">
                 <div class="text-2xl font-bold text-green-600" id="xrpl-ledger-index">
                   Loading...
                 </div>
                 <div class="text-sm text-gray-600" data-i18n="current_ledger">Current Ledger</div>
               </div>
-              <div class="bg-blue-50 rounded-lg p-4">
+              <div class="p-4 rounded-lg bg-blue-50">
                 <div class="text-2xl font-bold text-blue-600" id="xrpl-transaction-count">
                   Loading...
                 </div>
@@ -1385,7 +1429,7 @@
                   Total Transactions
                 </div>
               </div>
-              <div class="bg-orange-50 rounded-lg p-4">
+              <div class="p-4 rounded-lg bg-orange-50">
                 <div class="text-2xl font-bold text-orange-600" id="xrpl-account-count">
                   Loading...
                 </div>
@@ -1396,26 +1440,26 @@
 
           <!-- Developer Resources -->
           <div class="mt-12 text-center">
-            <div class="bg-gray-800 rounded-xl p-6 shadow-lg inline-block text-white">
-              <h3 class="text-xl font-bold mb-2">👨‍💻 Developer Resources</h3>
-              <p class="text-gray-300 mb-4">Build on XRPL with BURNI Token integration</p>
+            <div class="inline-block p-6 text-white bg-gray-800 shadow-lg rounded-xl">
+              <h3 class="mb-2 text-xl font-bold">👨‍💻 Developer Resources</h3>
+              <p class="mb-4 text-gray-300">Build on XRPL with BURNI Token integration</p>
               <div class="flex flex-wrap justify-center gap-4">
                 <a href="https://xrpl.org/get-started.html" target="_blank"
-                  class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300"
+                  class="px-4 py-2 text-white transition-colors duration-300 bg-blue-600 rounded-lg hover:bg-blue-700"
                   rel="noopener noreferrer">
-                  <i class="fas fa-code mr-2"></i>
+                  <i class="mr-2 fas fa-code"></i>
                   XRPL Dev Docs
                 </a>
                 <a href="https://github.com/XRPLF" target="_blank"
-                  class="bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors duration-300"
+                  class="px-4 py-2 text-white transition-colors duration-300 bg-gray-700 rounded-lg hover:bg-gray-600"
                   rel="noopener noreferrer">
-                  <i class="fab fa-github mr-2"></i>
+                  <i class="mr-2 fab fa-github"></i>
                   XRPL Foundation
                 </a>
                 <a href="https://xrpl.org/websocket-api.html" target="_blank"
-                  class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-300"
+                  class="px-4 py-2 text-white transition-colors duration-300 bg-green-600 rounded-lg hover:bg-green-700"
                   rel="noopener noreferrer">
-                  <i class="fas fa-plug mr-2"></i>
+                  <i class="mr-2 fas fa-plug"></i>
                   WebSocket API
                 </a>
               </div>
@@ -1425,13 +1469,13 @@
       </section>
       <!-- BURNI Calculator Section -->
       <section id="burni-calculator" class="py-16 bg-gradient-to-br from-purple-50 to-pink-100">
-        <div class="container mx-auto px-6">
-          <div class="text-center mb-12">
-            <h2 class="text-4xl font-bold mb-4 text-gray-800 font-baloo-2"
+        <div class="container px-6 mx-auto">
+          <div class="mb-12 text-center">
+            <h2 class="mb-4 text-4xl font-bold text-gray-800 font-baloo-2"
               data-i18n="calculator_title">
               🧮 BURNI Token Calculator
             </h2>
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto" data-i18n="calculator_description">
+            <p class="max-w-3xl mx-auto text-xl text-gray-600" data-i18n="calculator_description">
               Simulate the BURNI token burn and lock schedule. See how our deflationary mechanism
               creates value through scarcity over time.
             </p>
@@ -1443,32 +1487,32 @@
           </div>
 
           <!-- Calculator Info -->
-          <div class="mt-8 bg-white rounded-xl shadow-lg p-6">
-            <h3 class="text-2xl font-bold mb-4 text-gray-800">📊 How the Calculator Works</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="p-6 mt-8 bg-white shadow-lg rounded-xl">
+            <h3 class="mb-4 text-2xl font-bold text-gray-800">📊 How the Calculator Works</h3>
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
               <div>
-                <h4 class="font-bold text-lg mb-2 text-orange-600">🔥 Burning Process</h4>
+                <h4 class="mb-2 text-lg font-bold text-orange-600">🔥 Burning Process</h4>
                 <p class="text-gray-600">
                   Every 3 days, 3% of the current BURNI token supply is permanently burned,
                   reducing the total supply and creating scarcity.
                 </p>
               </div>
               <div>
-                <h4 class="font-bold text-lg mb-2 text-yellow-600">🔒 Locking Process</h4>
+                <h4 class="mb-2 text-lg font-bold text-yellow-600">🔒 Locking Process</h4>
                 <p class="text-gray-600">
                   After burning, 2% of the remaining supply is locked away for future ecosystem
                   development and community rewards.
                 </p>
               </div>
               <div>
-                <h4 class="font-bold text-lg mb-2 text-blue-600">📈 Value Creation</h4>
+                <h4 class="mb-2 text-lg font-bold text-blue-600">📈 Value Creation</h4>
                 <p class="text-gray-600">
                   This dual mechanism creates immediate scarcity (burning) while ensuring
                   long-term sustainability (locking).
                 </p>
               </div>
               <div>
-                <h4 class="font-bold text-lg mb-2 text-green-600">⏰ Timeline</h4>
+                <h4 class="mb-2 text-lg font-bold text-green-600">⏰ Timeline</h4>
                 <p class="text-gray-600">
                   The process continues for 256 iterations (approximately 2 years), creating a
                   predictable deflationary schedule.
@@ -1479,13 +1523,13 @@
 
           <!-- Interactive Controls -->
           <div class="mt-8 text-center">
-            <div class="bg-gradient-to-r from-orange-500 to-red-500 rounded-xl p-6 text-white">
-              <h3 class="text-xl font-bold mb-4">🚀 Start Your Calculation</h3>
+            <div class="p-6 text-white bg-gradient-to-r from-orange-500 to-red-500 rounded-xl">
+              <h3 class="mb-4 text-xl font-bold">🚀 Start Your Calculation</h3>
               <p class="mb-4">
                 Explore different scenarios and see how BURNI's deflationary mechanics work
               </p>
               <button onclick="initializeCalculator()"
-                class="bg-white text-orange-600 px-6 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors duration-300"
+                class="px-6 py-3 font-bold text-orange-600 transition-colors duration-300 bg-white rounded-lg hover:bg-gray-100"
                 class="touch-optimized">
                 🔥 Launch Calculator
               </button>
@@ -1497,13 +1541,13 @@
       <!-- FAQ Section -->
       <section id="faq" class="py-16 bg-gradient-to-br from-blue-50 to-indigo-100"
         aria-labelledby="faq-title">
-        <div class="container mx-auto px-6">
-          <div class="text-center mb-12">
-            <h2 id="faq-title" class="text-4xl font-bold mb-4 text-gray-800 font-baloo-2"
+        <div class="container px-6 mx-auto">
+          <div class="mb-12 text-center">
+            <h2 id="faq-title" class="mb-4 text-4xl font-bold text-gray-800 font-baloo-2"
               data-i18n="faq_title">
               ❓ Frequently Asked Questions
             </h2>
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto" data-i18n="faq_description">
+            <p class="max-w-3xl mx-auto text-xl text-gray-600" data-i18n="faq_description">
               Everything you need to know about BURNI Token, our deflationary mechanism, and the
               XRPL ecosystem.
             </p>
@@ -1514,21 +1558,21 @@
 
               <!-- FAQ Item 1 -->
               <div
-                class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
+                class="p-6 transition-shadow duration-300 bg-white shadow-lg rounded-xl hover:shadow-xl"
                 itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
                 <h3
-                  class="text-xl font-bold text-gray-800 mb-3 cursor-pointer flex items-center justify-between"
+                  class="flex items-center justify-between mb-3 text-xl font-bold text-gray-800 cursor-pointer"
                   itemprop="name" onclick="toggleFAQ('faq1')" aria-expanded="false"
                   aria-controls="faq1-answer">
                   <span>🔥 What makes BURNI Token unique?</span>
                   <span class="text-2xl" id="faq1-icon">+</span>
                 </h3>
-                <div id="faq1-answer" class="hidden text-gray-600 leading-relaxed" itemscope
+                <div id="faq1-answer" class="hidden leading-relaxed text-gray-600" itemscope
                   itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
                   <div itemprop="text">
                     <p class="mb-4">BURNI Token is a revolutionary deflationary cryptocurrency built
                       on the XRPL (XRP Ledger) that implements an innovative burning mechanism:</p>
-                    <ul class="list-disc pl-6 space-y-2">
+                    <ul class="pl-6 space-y-2 list-disc">
                       <li><strong>Automatic Deflation:</strong> Every 3 days, 3% of the total supply
                         is permanently burned</li>
                       <li><strong>Smart Locking:</strong> Additional 2% is locked for ecosystem
@@ -1546,21 +1590,21 @@
 
               <!-- FAQ Item 2 -->
               <div
-                class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
+                class="p-6 transition-shadow duration-300 bg-white shadow-lg rounded-xl hover:shadow-xl"
                 itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
                 <h3
-                  class="text-xl font-bold text-gray-800 mb-3 cursor-pointer flex items-center justify-between"
+                  class="flex items-center justify-between mb-3 text-xl font-bold text-gray-800 cursor-pointer"
                   itemprop="name" onclick="toggleFAQ('faq2')" aria-expanded="false"
                   aria-controls="faq2-answer">
                   <span>🏦 How can I buy BURNI tokens?</span>
                   <span class="text-2xl" id="faq2-icon">+</span>
                 </h3>
-                <div id="faq2-answer" class="hidden text-gray-600 leading-relaxed" itemscope
+                <div id="faq2-answer" class="hidden leading-relaxed text-gray-600" itemscope
                   itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
                   <div itemprop="text">
                     <p class="mb-4">You can purchase BURNI tokens through several methods on the
                       XRPL:</p>
-                    <ol class="list-decimal pl-6 space-y-2">
+                    <ol class="pl-6 space-y-2 list-decimal">
                       <li><strong>XRPL DEX:</strong> Trade directly on the XRP Ledger's
                         decentralized exchange</li>
                       <li><strong>Supported Wallets:</strong> Use XUMM, Xaman, or other
@@ -1570,7 +1614,7 @@
                       <li><strong>Community Exchanges:</strong> Check our community channels for
                         approved exchanges</li>
                     </ol>
-                    <p class="mt-4 p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-400">
+                    <p class="p-4 mt-4 border-l-4 border-yellow-400 rounded-lg bg-yellow-50">
                       <strong>⚠️ Important:</strong> Always verify the correct token address and
                       only use trusted platforms.
                     </p>
@@ -1580,48 +1624,48 @@
 
               <!-- FAQ Item 3 -->
               <div
-                class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
+                class="p-6 transition-shadow duration-300 bg-white shadow-lg rounded-xl hover:shadow-xl"
                 itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
                 <h3
-                  class="text-xl font-bold text-gray-800 mb-3 cursor-pointer flex items-center justify-between"
+                  class="flex items-center justify-between mb-3 text-xl font-bold text-gray-800 cursor-pointer"
                   itemprop="name" onclick="toggleFAQ('faq3')" aria-expanded="false"
                   aria-controls="faq3-answer">
                   <span>⚡ Why is XRPL the perfect blockchain for BURNI?</span>
                   <span class="text-2xl" id="faq3-icon">+</span>
                 </h3>
-                <div id="faq3-answer" class="hidden text-gray-600 leading-relaxed" itemscope
+                <div id="faq3-answer" class="hidden leading-relaxed text-gray-600" itemscope
                   itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
                   <div itemprop="text">
                     <p class="mb-4">The XRP Ledger provides the ideal foundation for BURNI Token:
                     </p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div class="p-4 bg-green-50 rounded-lg">
-                        <h4 class="font-bold text-green-800 mb-2">⚡ Performance</h4>
-                        <ul class="text-sm space-y-1">
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                      <div class="p-4 rounded-lg bg-green-50">
+                        <h4 class="mb-2 font-bold text-green-800">⚡ Performance</h4>
+                        <ul class="space-y-1 text-sm">
                           <li>• 3-5 second transaction finality</li>
                           <li>• 1,500+ transactions per second</li>
                           <li>• Minimal energy consumption</li>
                         </ul>
                       </div>
-                      <div class="p-4 bg-blue-50 rounded-lg">
-                        <h4 class="font-bold text-blue-800 mb-2">💰 Economics</h4>
-                        <ul class="text-sm space-y-1">
+                      <div class="p-4 rounded-lg bg-blue-50">
+                        <h4 class="mb-2 font-bold text-blue-800">💰 Economics</h4>
+                        <ul class="space-y-1 text-sm">
                           <li>• Ultra-low transaction fees</li>
                           <li>• Built-in DEX functionality</li>
                           <li>• Native token support</li>
                         </ul>
                       </div>
-                      <div class="p-4 bg-purple-50 rounded-lg">
-                        <h4 class="font-bold text-purple-800 mb-2">🔒 Security</h4>
-                        <ul class="text-sm space-y-1">
+                      <div class="p-4 rounded-lg bg-purple-50">
+                        <h4 class="mb-2 font-bold text-purple-800">🔒 Security</h4>
+                        <ul class="space-y-1 text-sm">
                           <li>• Battle-tested since 2012</li>
                           <li>• Validator consensus mechanism</li>
                           <li>• Regulatory clarity</li>
                         </ul>
                       </div>
-                      <div class="p-4 bg-orange-50 rounded-lg">
-                        <h4 class="font-bold text-orange-800 mb-2">🌍 Adoption</h4>
-                        <ul class="text-sm space-y-1">
+                      <div class="p-4 rounded-lg bg-orange-50">
+                        <h4 class="mb-2 font-bold text-orange-800">🌍 Adoption</h4>
+                        <ul class="space-y-1 text-sm">
                           <li>• Global financial institutions</li>
                           <li>• Active developer ecosystem</li>
                           <li>• Cross-border payment focus</li>
@@ -1634,40 +1678,40 @@
 
               <!-- FAQ Item 4 -->
               <div
-                class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
+                class="p-6 transition-shadow duration-300 bg-white shadow-lg rounded-xl hover:shadow-xl"
                 itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
                 <h3
-                  class="text-xl font-bold text-gray-800 mb-3 cursor-pointer flex items-center justify-between"
+                  class="flex items-center justify-between mb-3 text-xl font-bold text-gray-800 cursor-pointer"
                   itemprop="name" onclick="toggleFAQ('faq4')" aria-expanded="false"
                   aria-controls="faq4-answer">
                   <span>📊 How does the token burning mechanism work?</span>
                   <span class="text-2xl" id="faq4-icon">+</span>
                 </h3>
-                <div id="faq4-answer" class="hidden text-gray-600 leading-relaxed" itemscope
+                <div id="faq4-answer" class="hidden leading-relaxed text-gray-600" itemscope
                   itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
                   <div itemprop="text">
                     <p class="mb-4">Our deflationary mechanism follows a precise schedule:</p>
-                    <div class="bg-gradient-to-r from-orange-100 to-red-100 p-6 rounded-lg mb-4">
-                      <h4 class="font-bold text-lg mb-3">🔥 Burning Process</h4>
+                    <div class="p-6 mb-4 rounded-lg bg-gradient-to-r from-orange-100 to-red-100">
+                      <h4 class="mb-3 text-lg font-bold">🔥 Burning Process</h4>
                       <div class="space-y-3">
                         <div class="flex items-center space-x-3">
                           <span
-                            class="bg-orange-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">1</span>
+                            class="flex items-center justify-center w-8 h-8 font-bold text-white bg-orange-500 rounded-full">1</span>
                           <span>Every 3 days, an automated process activates</span>
                         </div>
                         <div class="flex items-center space-x-3">
                           <span
-                            class="bg-orange-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">2</span>
+                            class="flex items-center justify-center w-8 h-8 font-bold text-white bg-orange-500 rounded-full">2</span>
                           <span>3% of current circulating supply is calculated</span>
                         </div>
                         <div class="flex items-center space-x-3">
                           <span
-                            class="bg-orange-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">3</span>
+                            class="flex items-center justify-center w-8 h-8 font-bold text-white bg-orange-500 rounded-full">3</span>
                           <span>Tokens are permanently burned (sent to black hole address)</span>
                         </div>
                         <div class="flex items-center space-x-3">
                           <span
-                            class="bg-orange-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">4</span>
+                            class="flex items-center justify-center w-8 h-8 font-bold text-white bg-orange-500 rounded-full">4</span>
                           <span>Additional 2% is locked for ecosystem development</span>
                         </div>
                       </div>
@@ -1680,38 +1724,38 @@
 
               <!-- FAQ Item 5 -->
               <div
-                class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
+                class="p-6 transition-shadow duration-300 bg-white shadow-lg rounded-xl hover:shadow-xl"
                 itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
                 <h3
-                  class="text-xl font-bold text-gray-800 mb-3 cursor-pointer flex items-center justify-between"
+                  class="flex items-center justify-between mb-3 text-xl font-bold text-gray-800 cursor-pointer"
                   itemprop="name" onclick="toggleFAQ('faq5')" aria-expanded="false"
                   aria-controls="faq5-answer">
                   <span>🔮 What is the long-term vision for BURNI?</span>
                   <span class="text-2xl" id="faq5-icon">+</span>
                 </h3>
-                <div id="faq5-answer" class="hidden text-gray-600 leading-relaxed" itemscope
+                <div id="faq5-answer" class="hidden leading-relaxed text-gray-600" itemscope
                   itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
                   <div itemprop="text">
                     <p class="mb-4">BURNI Token aims to become a leading deflationary asset with
                       multiple use cases:</p>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div class="text-center p-4 bg-blue-50 rounded-lg">
-                        <div class="text-3xl mb-2">🎮</div>
-                        <h4 class="font-bold mb-2">Gaming Integration</h4>
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                      <div class="p-4 text-center rounded-lg bg-blue-50">
+                        <div class="mb-2 text-3xl">🎮</div>
+                        <h4 class="mb-2 font-bold">Gaming Integration</h4>
                         <p class="text-sm">In-game currencies and NFT marketplaces</p>
                       </div>
-                      <div class="text-center p-4 bg-green-50 rounded-lg">
-                        <div class="text-3xl mb-2">🏛️</div>
-                        <h4 class="font-bold mb-2">DeFi Services</h4>
+                      <div class="p-4 text-center rounded-lg bg-green-50">
+                        <div class="mb-2 text-3xl">🏛️</div>
+                        <h4 class="mb-2 font-bold">DeFi Services</h4>
                         <p class="text-sm">Lending, staking, and yield farming protocols</p>
                       </div>
-                      <div class="text-center p-4 bg-purple-50 rounded-lg">
-                        <div class="text-3xl mb-2">🌐</div>
-                        <h4 class="font-bold mb-2">Global Adoption</h4>
+                      <div class="p-4 text-center rounded-lg bg-purple-50">
+                        <div class="mb-2 text-3xl">🌐</div>
+                        <h4 class="mb-2 font-bold">Global Adoption</h4>
                         <p class="text-sm">Cross-border payments and remittances</p>
                       </div>
                     </div>
-                    <p class="mt-4 p-4 bg-blue-50 rounded-lg">
+                    <p class="p-4 mt-4 rounded-lg bg-blue-50">
                       <strong>🚀 Roadmap:</strong> We're constantly evolving based on community
                       feedback and market opportunities.
                       Join our community to influence the future direction of BURNI.
@@ -1729,8 +1773,8 @@
 
   <!-- Privacy Policy Section -->
   <section id="privacy" class="py-16 bg-gray-50">
-    <div class="container mx-auto px-6">
-      <h2 class="text-3xl font-bold text-center mb-8">Datenschutz</h2>
+    <div class="container px-6 mx-auto">
+      <h2 class="mb-8 text-3xl font-bold text-center">Datenschutz</h2>
       <div class="max-w-4xl mx-auto prose prose-lg">
         <p>
           Wir nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Diese Datenschutzerklärung
@@ -1745,18 +1789,18 @@
       </div>
     </div>
   </section>
-  <footer class="bg-gray-900 text-white py-8 mt-12">
-    <div class="container mx-auto px-6">
-      <div class="flex flex-col md:flex-row items-center justify-between mb-8">
+  <footer class="py-8 mt-12 text-white bg-gray-900">
+    <div class="container px-6 mx-auto">
+      <div class="flex flex-col items-center justify-between mb-8 md:flex-row">
         <div class="mb-4 md:mb-0">
           <a href="#hero" class="flex items-center" aria-label="Burni Token Homepage">
             <img src="/assets/images/favicon-32x32.png"
               srcset="/assets/images/favicon-32x32.png 1x, /assets/images/favicon-32x32-2x.png 2x"
-              loading="lazy" alt="Burni Logo" class="h-8 w-8 mr-2" />
+              loading="lazy" alt="Burni Logo" class="w-8 h-8 mr-2" />
             <span class="text-2xl font-bold text-orange-400 font-baloo-2">Burni</span>
           </a>
         </div>
-        <nav class="flex flex-wrap items-center justify-center space-x-4 text-sm md:text-base mb-4"
+        <nav class="flex flex-wrap items-center justify-center mb-4 space-x-4 text-sm md:text-base"
           aria-label="Footer navigation">
           <a href="#hero" class="hover:text-orange-400" data-i18n="nav_home"
             aria-label="Navigate to homepage">Home</a>
@@ -1776,11 +1820,11 @@
             aria-label="Navigate to XRPL Resources section">XRPL Explorer</a>
         </nav>
       </div>
-      <div class="border-t border-gray-700 pt-4 text-center text-sm">
-        <p class="text-gray-400 mb-2" data-i18n="footer_copyright">
+      <div class="pt-4 text-sm text-center border-t border-gray-700">
+        <p class="mb-2 text-gray-400" data-i18n="footer_copyright">
           © <span id="currentYear">2025</span> Burni Token. All rights reserved.
         </p>
-        <div class="flex flex-wrap justify-center items-center space-x-4">
+        <div class="flex flex-wrap items-center justify-center space-x-4">
           <a href="https://x.com/burnicoin" target="_blank"
             class="text-gray-400 hover:text-orange-400" aria-label="Follow us on X (Twitter)"
             rel="noopener noreferrer">
@@ -1858,7 +1902,7 @@
           panel.className =
             'fixed bottom-20 right-4 z-40 w-80 bg-white border rounded-lg shadow-lg p-4 hidden';
           panel.innerHTML = `
-                        <div class="font-semibold mb-3">Accessibility Options</div>
+                        <div class="mb-3 font-semibold">Accessibility Options</div>
                         <label class="flex items-center mb-2">
                             <input type="checkbox" id="high-contrast-toggle" class="mr-2">
                             High Contrast
@@ -1982,7 +2026,7 @@
           widget.className =
             'fixed bottom-4 left-4 z-40 w-80 bg-white border rounded-lg shadow-lg p-4 opacity-100';
           widget.innerHTML =
-            '<div class="font-semibold">Performance Monitor</div><div class="text-xs mt-2">LCP: 600ms</div>';
+            '<div class="font-semibold">Performance Monitor</div><div class="mt-2 text-xs">LCP: 600ms</div>';
           document.body.appendChild(widget);
 
           window.PerformanceMonitor = { metrics: { LCP: 600 } };
@@ -2046,116 +2090,87 @@
     }
   </script>
 
-  <!-- Advanced Feature Scripts -->
-  <script src="/assets/safari-fallback.js"></script>
-  <script src="/assets/analytics.js" defer></script>
-  <script src="/assets/darkmode.js" defer></script>
-  <script src="/assets/accessibility.js" defer></script>
-  <script src="/assets/performance.js" defer></script>
-
-  <!-- Preload new feature assets -->
-  <link rel="preload" href="/assets/analytics.js" as="script" />
-  <link rel="preload" href="/assets/darkmode.js" as="script" />
-  <link rel="preload" href="/assets/accessibility.js" as="script" />
-  <link rel="preload" href="/assets/performance.js" as="script" />
-
-  <!-- Enhanced meta tags for PWA -->
-  <meta name="application-name" content="Burni Token" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Burni Token" />
-  <!-- Enhanced Structured Data for SEO -->
-  <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@graph": [
-          {
-            "@type": "Organization",
-            "@id": "https://burnitoken.com/#organization",
-            "name": "BURNI Token",
-            "url": "https://burnitoken.com",
-            "logo": {
-              "@type": "ImageObject",
-              "url": "https://burnitoken.com/assets/images/burni-logo.png",
-              "width": 512,
-              "height": 512
-            },
-            "description": "Revolutionary deflationary cryptocurrency on XRPL with automatic burning mechanism",
-            "sameAs": ["https://twitter.com/burnicoin", "https://github.com/burnitoken"],
-            "contactPoint": {
-              "@type": "ContactPoint",
-              "contactType": "Customer Support",
-              "email": "support@burnitoken.com"
-            },
-            "foundingDate": "2024",
-            "industry": "Cryptocurrency",
-            "keywords": "BURNI Token, XRPL, cryptocurrency, token burning, deflationary token"
-          },
-          {
-            "@type": "WebSite",
-            "@id": "https://burnitoken.com/#website",
-            "url": "https://burnitoken.com",
-            "name": "BURNI Token - Deflationary Cryptocurrency",
-            "description": "Revolutionary deflationary cryptocurrency on XRPL with automatic burning mechanism",
-            "publisher": {
-              "@id": "https://burnitoken.com/#organization"
-            },
-            "inLanguage": "en-US",
-            "potentialAction": {
-              "@type": "SearchAction",
-              "target": "https://burnitoken.com/?search={search_term_string}",
-              "query-input": "required name=search_term_string"
-            }
-          },
-          {
-            "@type": "FinancialProduct",
-            "name": "BURNI Token",
-            "description": "Deflationary cryptocurrency on XRPL with automatic burning mechanism",
-            "provider": {
-              "@id": "https://burnitoken.com/#organization"
-            },
-            "category": "Cryptocurrency",
-            "feesAndCommissionsSpecification": "No fees for holding, transaction fees apply on XRPL",
-            "interestRate": "Variable based on burning mechanism"
+  <!-- Browser Compatibility and Performance Polyfills -->
+  <script>
+    // Immediate compatibility detection and polyfill loading
+    (function() {
+      'use strict';
+      
+      // Add critical-loaded class to enable CSS transitions
+      document.documentElement.classList.add('critical-loaded');
+      
+      // Browser feature detection
+      const features = {
+        promises: typeof Promise !== 'undefined',
+        fetch: typeof fetch !== 'undefined',
+        intersectionObserver: 'IntersectionObserver' in window,
+        serviceWorker: 'serviceWorker' in navigator,
+        customElements: 'customElements' in window,
+        es6: function() {
+          try {
+            return eval('(x => x)(1)') === 1;
+          } catch (e) {
+            return false;
           }
-        ]
+        }(),
+        flexbox: function() {
+          const test = document.createElement('div');
+          test.style.display = 'flex';
+          return test.style.display === 'flex';
+        }(),
+        grid: function() {
+          const test = document.createElement('div');
+          test.style.display = 'grid';
+          return test.style.display === 'grid';
+        }(),
+        webp: function() {
+          const canvas = document.createElement('canvas');
+          canvas.width = canvas.height = 1;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#000';
+          ctx.fillRect(0, 0, 1, 1);
+          return canvas.toDataURL().indexOf('data:image/webp') === 0;
+        }()
+      };
+      
+      // Add feature classes to HTML element
+      Object.keys(features).forEach(function(feature) {
+        const className = features[feature] ? feature : 'no-' + feature;
+        document.documentElement.classList.add(className);
+      });
+      
+      // Critical polyfills for old browsers
+      if (!features.promises) {
+        console.log('Loading Promise polyfill for older browser');
+        // Promise polyfill will be loaded from security.js
       }
-    </script>
-
-  <!-- FAQ Structured Data -->
-  <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "What makes BURNI Token unique?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "BURNI Token is a revolutionary deflationary cryptocurrency built on the XRPL that implements an innovative burning mechanism. Every 3 days, 3% of the total supply is permanently burned, and an additional 2% is locked for ecosystem development."
-            }
-          },
-          {
-            "@type": "Question", 
-            "name": "How can I buy BURNI tokens?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "You can purchase BURNI tokens through the XRPL DEX using XUMM, Xaman, or other XRPL-compatible wallets. Trading pairs are available in XRP/BURNI and other major pairs."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Why is XRPL the perfect blockchain for BURNI?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "The XRP Ledger provides 3-5 second transaction finality, 1,500+ transactions per second, ultra-low transaction fees, minimal energy consumption, and built-in DEX functionality - perfect for BURNI's deflationary mechanism."
-            }
+      
+      if (!features.fetch) {
+        console.log('Loading fetch polyfill for older browser');
+        // fetch polyfill will be loaded from security.js
+      }
+      
+      // Performance monitoring
+      if ('performance' in window && 'mark' in performance) {
+        performance.mark('polyfills-loaded');
+      }
+      
+      // Legacy browser support notification
+      if (!features.es6 || !features.promises || !features.fetch) {
+        setTimeout(function() {
+          if (window.SecureDOM) {
+            window.SecureDOM.showNotification(
+              'Your browser may have limited functionality. Please consider updating for the best experience.',
+              'info'
+            );
           }
-        ]
+        }, 2000);
       }
-    </script>
+      
+      console.log('Browser compatibility features detected:', features);
+    })();
+  </script>
+
   <!-- DIRECT PRICE WIDGET FOR LIVE PRICES -->
   <div id="direct-price-widget" class="direct-price-widget">
     <button class="direct-price-close" onclick="this.parentElement.style.display='none'"
@@ -2315,10 +2330,10 @@
           } catch (error) {
             console.error('Calculator initialization error:', error);
             container.innerHTML = `
-                <div class="text-center p-8">
-                  <div class="text-red-500 text-lg font-bold mb-2">⚠️ Calculator Loading Error</div>
+                <div class="p-8 text-center">
+                  <div class="mb-2 text-lg font-bold text-red-500">⚠️ Calculator Loading Error</div>
                   <p class="text-gray-600">Please refresh the page or try again later.</p>
-                  <button onclick="initializeCalculator()" class="mt-4 bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600" class="touch-optimized">
+                  <button onclick="initializeCalculator()" class="px-4 py-2 mt-4 text-white bg-orange-500 rounded hover:bg-orange-600" class="touch-optimized">
                     🔄 Retry
                   </button>
                 </div>
@@ -2372,28 +2387,28 @@
       accessPanel.className =
         'fixed top-52 right-4 z-40 w-64 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg p-4 hidden';
       accessPanel.innerHTML = `
-        <div class="font-semibold mb-3 text-gray-800 dark:text-gray-200">🔥 BURNI Features</div>
+        <div class="mb-3 font-semibold text-gray-800 dark:text-gray-200">🔥 BURNI Features</div>
         <div class="space-y-2">
-          <button id="open-dashboard" class="w-full text-left p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" class="touch-optimized">
+          <button id="open-dashboard" class="w-full p-2 text-left text-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300" class="touch-optimized">
             🎛️ Real-Time Dashboard
           </button>
-          <button id="open-calculator" class="w-full text-left p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" class="touch-optimized">
+          <button id="open-calculator" class="w-full p-2 text-left text-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300" class="touch-optimized">
             🧮 Advanced Calculator
           </button>
-          <button id="open-ai-insights" class="w-full text-left p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" class="touch-optimized">
+          <button id="open-ai-insights" class="w-full p-2 text-left text-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300" class="touch-optimized">
             🤖 AI Market Insights
           </button>
-          <button id="open-trading-analysis" class="w-full text-left p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" class="touch-optimized">
+          <button id="open-trading-analysis" class="w-full p-2 text-left text-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300" class="touch-optimized">
             📊 Trading Analysis
           </button>
           <hr class="my-2 border-gray-300 dark:border-gray-600">
-          <button id="accessibility-features" class="w-full text-left p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" class="touch-optimized">
+          <button id="accessibility-features" class="w-full p-2 text-left text-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300" class="touch-optimized">
             ♿ Accessibility Tools
           </button>
-          <button id="language-features" class="w-full text-left p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" class="touch-optimized">
+          <button id="language-features" class="w-full p-2 text-left text-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300" class="touch-optimized">
             🌍 Language Tools
           </button>
-          <button id="performance-monitor" class="w-full text-left p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" class="touch-optimized">
+          <button id="performance-monitor" class="w-full p-2 text-left text-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300" class="touch-optimized">
             ⚡ Performance Monitor
           </button>
         </div>
@@ -2464,16 +2479,16 @@
         'AI Trading Report',
         `
         <div class="space-y-4">
-          <div class="bg-blue-50 p-4 rounded-lg">
+          <div class="p-4 rounded-lg bg-blue-50">
             <h3 class="font-semibold text-blue-800">Market Phase: ${report.marketPhase.phase}</h3>
             <p class="text-blue-600">Confidence: ${(report.marketPhase.confidence * 100).toFixed(0)}%</p>
           </div>
-          <div class="bg-green-50 p-4 rounded-lg">
+          <div class="p-4 rounded-lg bg-green-50">
             <h3 class="font-semibold text-green-800">Top Signals</h3>
             ${report.topSignals
           .map(
             (signal) => `
-              <div class="flex justify-between items-center mt-2">
+              <div class="flex items-center justify-between mt-2">
                 <span>${signal.name}</span>
                 <span class="font-semibold ${signal.direction === 'bullish' ? 'text-green-600' : 'text-red-600'}">
                   ${signal.direction} (${(signal.strength * 100).toFixed(0)}%)
@@ -2483,7 +2498,7 @@
           )
           .join('')}
           </div>
-          <div class="bg-yellow-50 p-4 rounded-lg">
+          <div class="p-4 rounded-lg bg-yellow-50">
             <h3 class="font-semibold text-yellow-800">Risk Level: ${report.riskAssessment.level}</h3>
             <p class="text-yellow-600">Score: ${(report.riskAssessment.score * 100).toFixed(0)}/100</p>
           </div>
@@ -2498,19 +2513,19 @@
         'AI Market Insights',
         `
         <div class="space-y-4">
-          <div class="bg-purple-50 p-4 rounded-lg">
+          <div class="p-4 rounded-lg bg-purple-50">
             <h3 class="font-semibold text-purple-800">${insights.title}</h3>
-            <p class="text-purple-600 mt-2">${insights.summary}</p>
+            <p class="mt-2 text-purple-600">${insights.summary}</p>
           </div>
-          <div class="bg-indigo-50 p-4 rounded-lg">
+          <div class="p-4 rounded-lg bg-indigo-50">
             <h3 class="font-semibold text-indigo-800">Market Health</h3>
-            <div class="flex justify-between items-center mt-2">
+            <div class="flex items-center justify-between mt-2">
               <span>Overall Score:</span>
               <span class="font-semibold text-indigo-600">${insights.health.score}/100</span>
             </div>
-            <div class="text-sm text-indigo-600 mt-1">${insights.health.level}</div>
+            <div class="mt-1 text-sm text-indigo-600">${insights.health.level}</div>
           </div>
-          <div class="bg-gray-50 p-4 rounded-lg">
+          <div class="p-4 rounded-lg bg-gray-50">
             <h3 class="font-semibold text-gray-800">Recommendations</h3>
             ${insights.recommendations
           .map(
@@ -2539,22 +2554,22 @@
         `
         <div class="space-y-4">
           <div class="grid grid-cols-2 gap-4">
-            <div class="bg-gray-50 p-3 rounded">
+            <div class="p-3 rounded bg-gray-50">
               <div class="text-sm text-gray-600">Market Phase</div>
               <div class="font-semibold">${analysis.marketPhase.phase}</div>
             </div>
-            <div class="bg-gray-50 p-3 rounded">
+            <div class="p-3 rounded bg-gray-50">
               <div class="text-sm text-gray-600">Confidence</div>
               <div class="font-semibold">${(analysis.marketPhase.confidence * 100).toFixed(0)}%</div>
             </div>
           </div>
-          <div class="bg-blue-50 p-4 rounded-lg">
+          <div class="p-4 rounded-lg bg-blue-50">
             <h3 class="font-semibold text-blue-800">Active Signals (${analysis.signals.length})</h3>
             ${analysis.signals
           .slice(0, 3)
           .map(
             (signal) => `
-              <div class="flex justify-between items-center mt-2 p-2 bg-white rounded">
+              <div class="flex items-center justify-between p-2 mt-2 bg-white rounded">
                 <div>
                   <div class="font-medium">${signal.name}</div>
                   <div class="text-sm text-gray-600">${signal.description}</div>
@@ -2581,10 +2596,10 @@
       modal.className =
         'fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50';
       modal.innerHTML = `
-        <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-96 overflow-y-auto">
-          <div class="flex justify-between items-center p-4 border-b">
+        <div class="w-full max-w-2xl mx-4 overflow-y-auto bg-white rounded-lg shadow-xl max-h-96">
+          <div class="flex items-center justify-between p-4 border-b">
             <h2 class="text-xl font-semibold">${title}</h2>
-            <button class="close-modal text-gray-400 hover:text-gray-600 text-2xl" class="touch-optimized">&times;</button>
+            <button class="text-2xl text-gray-400 close-modal hover:text-gray-600" class="touch-optimized">&times;</button>
           </div>
           <div class="p-4">
             ${content}

@@ -49,11 +49,16 @@ class WebsiteAuditSuite {
         this.log('🌐 AUDIT 2: Cross-Browser Compatibility', 'info');
 
         const compatibilityChecks = {
-            browserCSS: this.checkFileExists('assets/css/browser-compatibility.css'),
+            polyfillFile: this.checkFileExists('assets/polyfills.js'),
+            compatCSS: this.checkFileExists('assets/css/styles-compat.css'),
             vendorPrefixes: this.checkVendorPrefixes(),
             modernFeatures: this.checkModernFeatures(),
             fallbacks: this.checkFallbacks(),
-            webkitSupport: this.checkWebkitSupport()
+            webkitSupport: this.checkWebkitSupport(),
+            ieSupport: this.checkIESupport(),
+            featureDetection: this.checkFeatureDetection(),
+            gracefulDegradation: this.checkGracefulDegradation(),
+            crossBrowserTesting: this.checkCrossBrowserTesting()
         };
 
         const score = this.calculateScore(compatibilityChecks);
@@ -268,7 +273,7 @@ class WebsiteAuditSuite {
     }
 
     checkWebkitSupport() {
-        return this.checkFileContent('assets/css/browser-compatibility.css', /-webkit-/);
+        return this.checkFileContent('assets/css/styles-compat.css', /-webkit-/);
     }
 
     checkViewportMeta() {
@@ -473,6 +478,59 @@ class WebsiteAuditSuite {
 
     checkCDNUsage() {
         return this.checkFileContent('index.html', /cdn\.|googleapis\.com|cdnjs\./);
+    }
+
+    // Enhanced browser compatibility checks
+    checkIESupport() {
+        try {
+            const cssContent = this.readFile('assets/css/styles-compat.css');
+            const jsContent = this.readFile('assets/polyfills.js');
+            
+            return cssContent.includes('-ms-') && 
+                   cssContent.includes('-webkit-') &&
+                   jsContent.includes('Array.from') &&
+                   jsContent.includes('Object.assign');
+        } catch (e) {
+            return false;
+        }
+    }
+
+    checkFeatureDetection() {
+        try {
+            const jsContent = this.readFile('assets/security.js');
+            const polyfillContent = this.readFile('assets/polyfills.js');
+            
+            return jsContent.includes("'IntersectionObserver' in window") ||
+                   jsContent.includes("'serviceWorker' in navigator") ||
+                   polyfillContent.includes('feature detection');
+        } catch (e) {
+            return false;
+        }
+    }
+
+    checkGracefulDegradation() {
+        try {
+            const htmlContent = this.readFile('index.html');
+            const cssContent = this.readFile('assets/css/styles-compat.css');
+            
+            return htmlContent.includes('noscript') &&
+                   cssContent.includes('.no-flexbox') &&
+                   cssContent.includes('.no-grid');
+        } catch (e) {
+            return false;
+        }
+    }
+
+    checkCrossBrowserTesting() {
+        try {
+            const compatTest = this.checkFileExists('browser-compatibility-test.js');
+            const polyfills = this.checkFileExists('assets/polyfills.js');
+            const compatCSS = this.checkFileExists('assets/css/styles-compat.css');
+            
+            return compatTest && polyfills && compatCSS;
+        } catch (e) {
+            return false;
+        }
     }
 
     checkResourceOptimization() {
