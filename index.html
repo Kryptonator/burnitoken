@@ -63,23 +63,30 @@
                  base-uri 'self'; 
                  form-action 'self'; 
                  upgrade-insecure-requests;" />
-  <link rel="stylesheet" href="/assets/css/styles.min.css" />
   <link rel="stylesheet" href="/assets/css/critical.css" />
-  <link rel="stylesheet" href="/assets/css/price-widget.css" />
-  <link rel="stylesheet" href="/assets/css/schedule-table.css" />
-  <link rel="stylesheet" href="/assets/css/burni-calculator.css" />
-  <link rel="stylesheet" href="/assets/css/proportion-optimization.css" />
-  <link rel="stylesheet" href="/assets/css/browser-compatibility.css" />
-  <link rel="stylesheet" href="/assets/css/performance-optimization.css" />
+  <link rel="stylesheet" href="/assets/css/styles.min.css" />
 
   <!-- Real-time Features & Advanced PWA -->
   <script src="/assets/analytics.js" defer></script>
   <script src="/assets/real-time-monitor.js" defer></script>
+  <script src="/assets/security.js" defer></script>
 
-  <script src="/assets/security.js"></script>
-  <link
+  <!-- Performance Optimization -->
+  <link rel="preload"
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Baloo+2:wght@700&amp;display=swap"
-    rel="stylesheet" />
+    as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Baloo+2:wght@700&amp;display=swap">
+  </noscript>
+
+  <!-- Preload critical resources -->
+  <link rel="preload" href="/assets/images/burni-logo.webp" as="image">
+  <link rel="preload" href="/assets/css/critical.css" as="style">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="//api.xrpl.org">
+  <link rel="dns-prefetch" href="//api.coingecko.com">
   <!-- Fallback fonts for better cross-browser compatibility -->
   <style>
     body {
@@ -127,6 +134,35 @@
   <link rel="preload" href="/assets/scripts.min.js" as="script" />
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/chart.js" as="script" />
 
+  <!-- Additional Performance Optimizations -->
+  <link rel="prefetch" href="/assets/scripts.min.js">
+  <link rel="prefetch" href="/assets/images/burni-chart.webp">
+
+  <!-- Optimize Critical Resource Loading -->
+  <style>
+    /* Inline critical above-the-fold styles */
+    .hero-section {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+    }
+
+    .loading-placeholder {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+    }
+
+    @keyframes loading {
+      0% {
+        background-position: 200% 0;
+      }
+
+      100% {
+        background-position: -200% 0;
+      }
+    }
+  </style>
+
   <!-- Content Freshness Indicator -->
   <meta name="last-modified" content="2025-06-16T06:16:52.904Z" />
   <meta name="revised" content="16.6.2025" />
@@ -134,6 +170,9 @@
   <meta name="robots" content="index, follow" />
   <meta name="revisit-after" content="7 days" />
   <meta name="theme-color" content="#f97316" />
+  <meta name="msapplication-TileColor" content="#f97316" />
+  <meta name="msapplication-navbutton-color" content="#f97316" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <!-- Removed duplicate theme-color meta tag for better browser compatibility -->
   <meta name="msapplication-TileColor" content="#f97316" />
   <meta name="msapplication-config" content="/assets/browserconfig.xml" />
@@ -652,7 +691,7 @@
           <div class="pixar-card max-w-4xl mx-auto p-6 mb-8 bounce-in">
             <picture>
               <source srcset="/assets/images/burniimage.webp" type="image/webp" />
-              <img src="/assets/images/burniimage.jpg"
+              <img src="/assets/images/burniimage.webp" loading="lazy"
                 srcset="/assets/images/burniimage.jpg 1x, /assets/images/burniimage-2x.jpg 2x"
                 loading="lazy" alt="Burni Token Mascot - Comic Style Character"
                 class="burni-mascot mx-auto mb-6 hover-lift optimized-image fade-in-scale gpu-accelerated"
@@ -751,7 +790,7 @@
               <!-- Modernes Bildformat mit Fallback -->
               <picture>
                 <source srcset="/assets/images/burni-verbrennt-lagerfeuer.webp" type="image/webp" />
-                <img src="/assets/images/burni-verbrennt-lagerfeuer.jpg"
+                <img src="/assets/images/burni-verbrennt-lagerfeuer.webp" loading="lazy"
                   srcset="/assets/images/burni-verbrennt-lagerfeuer.jpg 1x, /assets/images/burni-verbrennt-lagerfeuer-2x.jpg 2x"
                   loading="lazy" alt="Burni mascot burning tokens in a campfire"
                   data-i18n-alt="alt_burni_burning_campfire"
@@ -767,7 +806,7 @@
             <picture>
               <source srcset="/assets/images/burni-versperrt-coins-im-tresor.webp"
                 type="image/webp" />
-              <img src="/assets/images/burni-versperrt-coins-im-tresor.jpg"
+              <img src="/assets/images/burni-versperrt-coins-im-tresor.webp" loading="lazy"
                 srcset="/assets/images/burni-versperrt-coins-im-tresor.jpg 1x, /assets/images/burni-versperrt-coins-im-tresor-2x.jpg 2x"
                 loading="lazy" alt="Burni mascot locking coins in a vault"
                 class="mx-auto mb-6 h-48 object-contain" loading="lazy"
@@ -813,7 +852,7 @@
           <div class="section-card flex flex-col items-center text-center p-6">
             <picture>
               <source srcset="/assets/images/gamepad.webp" type="image/webp" />
-              <img src="/assets/images/gamepad.png"
+              <img src="/assets/images/gamepad.webp" loading="lazy"
                 srcset="/assets/images/gamepad.png 1x, /assets/images/gamepad-2x.png 2x"
                 loading="lazy" alt="Gamepad icon representing decentralized gaming"
                 class="w-16 h-16 mb-4" loading="lazy" data-i18n-alt="alt_gamepad_icon" />
@@ -828,7 +867,7 @@
           <div class="section-card flex flex-col items-center text-center p-6">
             <picture>
               <source srcset="/assets/images/palette.webp" type="image/webp" />
-              <img src="/assets/images/palette.png"
+              <img src="/assets/images/palette.webp" loading="lazy"
                 srcset="/assets/images/palette.png 1x, /assets/images/palette-2x.png 2x"
                 loading="lazy" alt="Palette icon representing NFT integration"
                 class="w-16 h-16 mb-4" loading="lazy" data-i18n-alt="alt_palette_icon" />
@@ -844,7 +883,7 @@
           <div class="section-card flex flex-col items-center text-center p-6">
             <picture>
               <source srcset="/assets/images/use-case-rewards.webp" type="image/webp" />
-              <img src="/assets/images/use-case-rewards.jpg"
+              <img src="/assets/images/use-case-rewards.webp" loading="lazy"
                 srcset="/assets/images/use-case-rewards.jpg 1x, /assets/images/use-case-rewards-2x.jpg 2x"
                 loading="lazy" alt="Burni mascot with trophies surrounded by people"
                 class="w-24 h-24 mb-4 object-contain" loading="lazy"
@@ -861,7 +900,7 @@
           <div class="section-card flex flex-col items-center text-center p-6">
             <picture>
               <source srcset="/assets/images/exchange.webp" type="image/webp" />
-              <img src="/assets/images/exchange.png"
+              <img src="/assets/images/exchange.webp" loading="lazy"
                 srcset="/assets/images/exchange.png 1x, /assets/images/exchange-2x.png 2x"
                 loading="lazy" alt="Exchange arrows icon representing microtransactions"
                 class="w-16 h-16 mb-4" loading="lazy" data-i18n-alt="alt_exchange_icon" />
@@ -877,7 +916,7 @@
           <div class="section-card flex flex-col items-center text-center p-6">
             <picture>
               <source srcset="/assets/images/vote.webp" type="image/webp" />
-              <img src="/assets/images/vote.png"
+              <img src="/assets/images/vote.webp" loading="lazy"
                 srcset="/assets/images/vote.png 1x, /assets/images/vote-2x.png 2x" loading="lazy"
                 alt="Vote icon representing community governance" class="w-16 h-16 mb-4"
                 loading="lazy" data-i18n-alt="alt_vote_icon" />
@@ -997,7 +1036,7 @@
       <section id="tokenomics" aria-labelledby="tokenomics-title-h2"
         class="py-16 bg-orange-50 rounded-3xl mb-12">
         <div class="text-center mb-12">
-          <img src="/assets/images/burni-chart-illustration.jpg"
+          <img src="/assets/images/burni-chart.webp" loading="lazy"
             srcset="/assets/images/burni-chart-illustration.jpg 1x, /assets/images/burni-chart-illustration-2x.jpg 2x"
             loading="lazy" alt="Burni mascot in front of a rising chart"
             class="mx-auto mb-6 h-40 object-contain" loading="lazy"
@@ -1136,10 +1175,10 @@
               rel="noopener noreferrer">Trustline</a>
             – a standard procedure on the XRPL.
           </p>
-          <img src="/assets/images/burni.png"
-            srcset="/assets/images/burni.png 1x, /assets/images/burni-2x.png 2x" loading="lazy"
-            alt="Symbol for the speed and efficiency of the XRP Ledger" class="mx-auto h-20 my-4"
-            loading="lazy" data-i18n-alt="alt_xrpl_speed_icon" />
+          <img src="/assets/images/burni-logo.webp"
+            srcset="/assets/images/burni-logo.webp 1x, /assets/images/burni-logo.webp 2x"
+            loading="lazy" alt="Symbol for the speed and efficiency of the XRP Ledger"
+            class="mx-auto h-20 my-4" data-i18n-alt="alt_xrpl_speed_icon" />
           <p class="text-gray-600 font-semibold" data-i18n="xrpl_slogan">
             Fast, efficient, and reliable – that’s the foundation of Burni.
           </p>
@@ -1384,7 +1423,6 @@
           </div>
         </div>
       </section>
-
       <!-- BURNI Calculator Section -->
       <section id="burni-calculator" class="py-16 bg-gradient-to-br from-purple-50 to-pink-100">
         <div class="container mx-auto px-6">
@@ -2610,23 +2648,38 @@
         }
       `;
     document.head.appendChild(faqStyles);
-  </script>
 
-  <!-- Cookie Consent Notice -->
-  <div id="cookie-notice" class="fixed bottom-0 left-0 right-0 bg-gray-900 text-white p-4 z-50"
-    style="display: none;">
-    <div class="container mx-auto flex items-center justify-between">
-      <p class="text-sm">
-        Diese Website verwendet Cookies, um Ihnen die beste Erfahrung zu bieten.
-        <a href="#privacy" class="underline">Mehr erfahren</a>
-      </p>
-      <button onclick="acceptCookies()" class="bg-orange-500 text-white px-4 py-2 rounded text-sm"
-        class="touch-optimized">
-        Akzeptieren
-      </button>
-    </div>
-  </div>
-  <script src="assets/responsive-script.js"></script>
+    // Cookie Consent Notice
+    function showCookieNotice() {
+      const notice = document.getElementById('cookie-notice');
+      if (notice) {
+        notice.style.display = 'flex';
+      }
+    }
+
+    function acceptCookies() {
+      // Set a cookie to remember the user's consent
+      document.cookie = "cookie_consent=true; path=/; max-age=" + 60 * 60 * 24 * 30;
+      const notice = document.getElementById('cookie-notice');
+      if (notice) {
+        notice.style.display = 'none';
+      }
+    }
+
+    // Check for existing cookie consent on page load
+    window.addEventListener('load', () => {
+      if (document.cookie.split(';').some((item) => item.trim().startsWith('cookie_consent='))) {
+        // Consent already given, hide the notice
+        const notice = document.getElementById('cookie-notice');
+        if (notice) {
+          notice.style.display = 'none';
+        }
+      } else {
+        // No consent given, show the notice
+        showCookieNotice();
+      }
+    });
+  </script>
 </body>
 
 </html>

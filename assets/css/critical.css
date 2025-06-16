@@ -25,6 +25,8 @@
 .backdrop-blur-md {
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
+  /* Fallback for browsers without backdrop-filter */
+  background-color: rgba(255, 255, 255, 0.9);
 }
 
 .shadow-md {
@@ -167,4 +169,104 @@
     width: 13rem;
     height: 13rem;
   }
+}
+
+/* Enhanced Responsive Design & Browser Compatibility */
+@media screen and (max-width: 480px) {
+  .container { padding: 0 1rem; }
+  .text-4xl { font-size: 2rem; line-height: 2.5rem; }
+  .text-3xl { font-size: 1.75rem; line-height: 2.25rem; }
+  .px-8 { padding-left: 1rem; padding-right: 1rem; }
+  .py-4 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+}
+
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .lg\:grid-cols-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .container { max-width: 1024px; }
+}
+
+/* Cross-browser compatibility fixes */
+
+/* Touch targets for mobile (min 44px) */
+.btn, button, a[role="button"] {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Enhanced focus states for accessibility */
+.focus\:outline-none:focus {
+  outline: 2px solid #f97316;
+  outline-offset: 2px;
+}
+
+/* Performance optimizations */
+img {
+  will-change: auto;
+}
+
+.lazy-load {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.lazy-load.loaded {
+  opacity: 1;
+}
+
+/* Advanced Browser Compatibility Fixes */
+/* Internet Explorer 11 and Edge Legacy support */
+@supports not (display: grid) {
+  .grid { display: flex; flex-wrap: wrap; }
+  .grid > * { flex: 1; min-width: 250px; }
+}
+
+/* Safari specific fixes */
+@supports (-webkit-appearance: none) {
+  .backdrop-blur-md {
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+}
+
+/* Firefox specific fixes */
+@-moz-document url-prefix() {
+  .backdrop-blur-md {
+    background-color: rgba(255, 255, 255, 0.95);
+  }
+}
+
+/* Chrome and WebKit fixes */
+@supports (backdrop-filter: blur(1px)) {
+  .backdrop-blur-md {
+    backdrop-filter: blur(12px);
+  }
+}
+
+/* Fallback for older browsers without CSS custom properties */
+:root {
+  --primary-color: #f97316;
+  --secondary-color: #ffffff;
+}
+
+.text-orange-500 {
+  color: #f97316;
+  color: var(--primary-color, #f97316);
+}
+
+.bg-orange-500 {
+  background-color: #f97316;
+  background-color: var(--primary-color, #f97316);
+}
+
+/* Microsoft Edge Legacy fixes */
+@supports (-ms-ime-align: auto) {
+  .sticky { position: -ms-device-fixed; position: sticky; }
 }
