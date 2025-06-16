@@ -9,7 +9,7 @@ on:
 
 env:
   NODE_VERSION: '20'
-  SITE_URL: 'https://kryptonator.github.io/burnitoken'
+  SITE_URL: 'https://burnitoken.website'
 
 jobs:
   deploy:
