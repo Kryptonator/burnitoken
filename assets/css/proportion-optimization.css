@@ -211,13 +211,45 @@ section {
 /* === NAVIGATION PROPORTIONS === */
 
 header {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+/* Header logo and title size optimization */
+header .container {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+header img {
+  height: 2.5rem !important; /* Reduced from h-10 (2.5rem) to smaller */
+  max-height: 2.5rem !important;
+}
+
+header .text-3xl {
+  font-size: 1.75rem !important; /* Reduced from 3xl (1.875rem) */
+  line-height: 1.2 !important;
+}
+
+@media (max-width: 768px) {
+  header {
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+  
+  header img {
+    height: 2rem !important;
+    max-height: 2rem !important;
+  }
+  
+  header .text-3xl {
+    font-size: 1.5rem !important;
+  }
 }
 
 .nav-link {
-  padding: 0.75rem 1.25rem !important;
-  font-size: 0.95rem !important;
+  padding: 0.5rem 1rem !important; /* Reduced padding */
+  font-size: 0.9rem !important; /* Slightly smaller font */
 }
 
 /* === VIDEO/IMAGE PROPORTIONS === */
