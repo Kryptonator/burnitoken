@@ -10,7 +10,7 @@ class BURNIRealtimeDashboard {
     this.isActive = false;
     this.lastUpdate = null;
     this.isInitialized = false;
-    
+
     // Safe initialization
     this.safeInit();
   }
@@ -68,10 +68,10 @@ class BURNIRealtimeDashboard {
         </div>
       </div>
     `;
-    
+
     this.addDashboardStyles();
     document.body.appendChild(dashboard);
-    
+
     // Minimal event listeners for error dashboard
     document.getElementById('close-dashboard')?.addEventListener('click', () => {
       this.hide();
@@ -276,12 +276,12 @@ class BURNIRealtimeDashboard {
     try {
       // Wait for dependencies to load
       await this.waitForDependencies();
-      
+
       this.widgets.set('prices', new PriceWidget());
       this.widgets.set('calculator', new CalculatorWidget());
       this.widgets.set('ai', new AIWidget());
       this.widgets.set('performance', new PerformanceWidget());
-      
+
       console.log('✅ All widgets initialized');
     } catch (error) {
       console.error('❌ Widget initialization failed:', error);
@@ -299,12 +299,13 @@ class BURNIRealtimeDashboard {
 
     return new Promise((resolve) => {
       const checkDeps = () => {
-        const hasCalculator = typeof window.burniCalculator !== 'undefined' || 
-                            typeof window.BURNICalculator !== 'undefined';
-        const hasAI = typeof window.burniAI !== 'undefined' || 
-                     typeof window.BURNIAIAnalytics !== 'undefined';
+        const hasCalculator =
+          typeof window.burniCalculator !== 'undefined' ||
+          typeof window.BURNICalculator !== 'undefined';
+        const hasAI =
+          typeof window.burniAI !== 'undefined' || typeof window.BURNIAIAnalytics !== 'undefined';
 
-        if (hasCalculator && hasAI || waited >= maxWait) {
+        if ((hasCalculator && hasAI) || waited >= maxWait) {
           console.log(`🔍 Dependencies check: Calculator(${hasCalculator}), AI(${hasAI})`);
           resolve();
           return;
@@ -326,7 +327,7 @@ class BURNIRealtimeDashboard {
     window.showBurniDashboard = () => this.show();
     window.hideBurniDashboard = () => this.hide();
     window.toggleBurniDashboard = () => this.toggle();
-    
+
     console.log('🌐 Global dashboard methods registered');
   }
 
@@ -437,7 +438,7 @@ class BURNIRealtimeDashboard {
       try {
         this.updateStatus(widgetName.replace('calculator', 'calc'), '🟡');
         const widget = this.widgets.get(widgetName);
-        
+
         if (widget && typeof widget.refresh === 'function') {
           await widget.refresh();
           this.updateStatus(widgetName.replace('calculator', 'calc'), '🟢');
@@ -457,14 +458,13 @@ class BURNIRealtimeDashboard {
     try {
       const results = await Promise.allSettled(refreshPromises);
       console.log('📊 Widget refresh results:', results);
-      
+
       this.lastUpdate = new Date();
       this.updateLastUpdateTime();
-      
+
       // Show summary in console
-      const summary = results.map(r => r.value || r.reason);
+      const summary = results.map((r) => r.value || r.reason);
       console.log('📈 Dashboard refresh complete:', summary);
-      
     } catch (error) {
       console.error('❌ Critical dashboard refresh error:', error);
     }
@@ -514,7 +514,7 @@ class PriceWidget {
 
     try {
       const priceData = await this.fetchPriceData();
-      
+
       content.innerHTML = `
         <div class="price-grid">
           <div class="price-item">
@@ -542,7 +542,6 @@ class PriceWidget {
       `;
 
       this.lastPrices = { ...priceData };
-      
     } catch (error) {
       console.error('💰 Price widget error:', error);
       content.innerHTML = `
@@ -602,10 +601,10 @@ class CalculatorWidget {
     try {
       // Try multiple possible calculator instances
       const calculator = this.findCalculatorInstance();
-      
+
       if (calculator) {
         const stats = this.getCalculatorStats(calculator);
-        
+
         content.innerHTML = `
           <div class="calc-stats">
             <div class="stat-row">
@@ -658,10 +657,12 @@ class CalculatorWidget {
 
   findCalculatorInstance() {
     // Try different possible calculator references
-    return window.burniCalculator || 
-           window.BURNICalculator || 
-           window.calculator ||
-           (typeof burniCalculator !== 'undefined' ? burniCalculator : null);
+    return (
+      window.burniCalculator ||
+      window.BURNICalculator ||
+      window.calculator ||
+      (typeof burniCalculator !== 'undefined' ? burniCalculator : null)
+    );
   }
 
   getCalculatorStats(calculator) {
@@ -669,14 +670,14 @@ class CalculatorWidget {
       if (typeof calculator.getStatistics === 'function') {
         return calculator.getStatistics();
       }
-      
+
       // Fallback to manual property access
       return {
         totalIterations: calculator.totalIterations || calculator.iterations || 0,
         totalBurned: calculator.totalBurned || calculator.burned || 0,
         totalLocked: calculator.totalLocked || calculator.locked || 0,
         duration: calculator.duration || 0,
-        successRate: calculator.successRate || '0%'
+        successRate: calculator.successRate || '0%',
       };
     } catch (error) {
       console.warn('⚠️ Could not get calculator stats:', error);
@@ -688,16 +689,17 @@ class CalculatorWidget {
     if (!num || isNaN(num)) return '0';
     return new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 0,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 2,
     }).format(num);
   }
 
   openCalculator() {
     // Try to scroll to calculator section
-    const calculatorSection = document.getElementById('calculator-section') || 
-                            document.querySelector('[data-section="calculator"]') ||
-                            document.querySelector('.calculator-container');
-    
+    const calculatorSection =
+      document.getElementById('calculator-section') ||
+      document.querySelector('[data-section="calculator"]') ||
+      document.querySelector('.calculator-container');
+
     if (calculatorSection) {
       window.hideBurniDashboard?.();
       calculatorSection.scrollIntoView({ behavior: 'smooth' });
@@ -720,10 +722,10 @@ class AIWidget {
 
     try {
       const aiInstance = this.findAIInstance();
-      
+
       if (aiInstance) {
         const insights = this.getAIInsights(aiInstance);
-        
+
         content.innerHTML = `
           <div class="ai-insights">
             <div class="insight-summary">
@@ -749,12 +751,15 @@ class AIWidget {
               <h4>💡 AI Recommendations:</h4>
               <div class="recommendations-list">
                 ${(insights.recommendations || [])
-                  .map(rec => `
+                  .map(
+                    (rec) => `
                     <div class="recommendation ${rec.type || 'neutral'}">
                       <span class="rec-icon">${this.getRecommendationIcon(rec.type)}</span>
                       <span class="rec-text">${rec.action || rec.text || 'No recommendations available'}</span>
                     </div>
-                  `).join('')}
+                  `,
+                  )
+                  .join('')}
               </div>
             </div>
             
@@ -791,10 +796,12 @@ class AIWidget {
   }
 
   findAIInstance() {
-    return window.burniAI || 
-           window.BURNIAIAnalytics || 
-           window.aiAnalytics ||
-           (typeof burniAI !== 'undefined' ? burniAI : null);
+    return (
+      window.burniAI ||
+      window.BURNIAIAnalytics ||
+      window.aiAnalytics ||
+      (typeof burniAI !== 'undefined' ? burniAI : null)
+    );
   }
 
   getAIInsights(aiInstance) {
@@ -802,11 +809,11 @@ class AIWidget {
       if (typeof aiInstance.generateAIInsights === 'function') {
         return aiInstance.generateAIInsights();
       }
-      
+
       if (typeof aiInstance.getInsights === 'function') {
         return aiInstance.getInsights();
       }
-      
+
       // Fallback mock insights
       return this.generateMockInsights();
     } catch (error) {
@@ -819,20 +826,24 @@ class AIWidget {
     const healthScore = 50 + Math.random() * 40; // 50-90
     const trends = ['bullish', 'bearish', 'neutral'];
     const trend = trends[Math.floor(Math.random() * trends.length)];
-    
+
     return {
       summary: 'Market analysis shows mixed signals with potential for growth in the medium term.',
       health: { score: Math.round(healthScore) },
-      trend: { 
-        direction: trend, 
-        description: trend === 'bullish' ? 'Upward momentum' : 
-                    trend === 'bearish' ? 'Downward pressure' : 'Sideways movement'
+      trend: {
+        direction: trend,
+        description:
+          trend === 'bullish'
+            ? 'Upward momentum'
+            : trend === 'bearish'
+              ? 'Downward pressure'
+              : 'Sideways movement',
       },
       recommendations: [
         { type: 'positive', action: 'Monitor key resistance levels' },
-        { type: 'caution', action: 'Consider risk management' }
+        { type: 'caution', action: 'Consider risk management' },
       ],
-      confidence: healthScore > 70 ? 'High' : healthScore > 50 ? 'Medium' : 'Low'
+      confidence: healthScore > 70 ? 'High' : healthScore > 50 ? 'Medium' : 'Low',
     };
   }
 
@@ -843,20 +854,28 @@ class AIWidget {
   }
 
   getTrendIcon(direction) {
-    switch(direction) {
-      case 'bullish': return '📈';
-      case 'bearish': return '📉';
-      default: return '➡️';
+    switch (direction) {
+      case 'bullish':
+        return '📈';
+      case 'bearish':
+        return '📉';
+      default:
+        return '➡️';
     }
   }
 
   getRecommendationIcon(type) {
-    switch(type) {
-      case 'bullish': return '🟢';
-      case 'positive': return '🔵';
-      case 'caution': return '🟡';
-      case 'bearish': return '🔴';
-      default: return '⚪';
+    switch (type) {
+      case 'bullish':
+        return '🟢';
+      case 'positive':
+        return '🔵';
+      case 'caution':
+        return '🟡';
+      case 'bearish':
+        return '🔴';
+      default:
+        return '⚪';
     }
   }
 }
