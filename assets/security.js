@@ -42,7 +42,7 @@ class SecureDOM {
 
     document.body.appendChild(notification);
 
-    setTimeout(() => notification.remove(), 5000);
+    setTimeout(function() { notification.remove(); }, 5000);
   }
 
   static createSecureTable(data, headers) {
@@ -58,23 +58,23 @@ class SecureDOM {
       'tr',
       'bg-gradient-to-r from-orange-500 to-orange-600',
     );
-    headers.forEach((header) => {
+    headers.forEach(function(header) {
       const th = this.createSafeElement(
         'th',
         'border border-orange-300 p-4 text-white font-bold text-left',
         header,
       );
       headerRow.appendChild(th);
-    });
+    }.bind(this));
     thead.appendChild(headerRow);
 
     // Daten-Rows erstellen mit alternativen Farben
-    data.forEach((row, index) => {
+    data.forEach(function(row, index) {
       const isEven = index % 2 === 0;
       const rowClass = isEven ? 'bg-gray-50 hover:bg-gray-100' : 'bg-white hover:bg-gray-50';
       const tr = this.createSafeElement('tr', rowClass);
 
-      Object.values(row).forEach((cell, cellIndex) => {
+      Object.values(row).forEach(function(cell, cellIndex) {
         const cellText = String(cell);
         let cellClass = 'border border-gray-200 p-4 text-gray-800 font-medium';
 
@@ -89,9 +89,9 @@ class SecureDOM {
 
         const td = this.createSafeElement('td', cellClass, cellText);
         tr.appendChild(td);
-      });
+      }.bind(this));
       tbody.appendChild(tr);
-    });
+    }.bind(this));
 
     table.appendChild(thead);
     table.appendChild(tbody);
@@ -278,8 +278,9 @@ window.SecureDOM = SecureDOM;
     window.IntersectionObserver.prototype.observe = function(element) {
       this.observedElements.push(element);
       // Immediate trigger for fallback
-      setTimeout(() => {
-        this.callback([{
+      var self = this;
+      setTimeout(function() {
+        self.callback([{
           target: element,
           isIntersecting: true,
           intersectionRatio: 1
@@ -301,7 +302,7 @@ window.SecureDOM = SecureDOM;
     // Fallback lazy loading
     document.addEventListener('DOMContentLoaded', function () {
       const lazyImages = document.querySelectorAll('img[loading="lazy"]');
-      lazyImages.forEach(img => {
+      lazyImages.forEach(function(img) {
         if (img.dataset.src) {
           img.src = img.dataset.src;
           img.classList.add('loaded');

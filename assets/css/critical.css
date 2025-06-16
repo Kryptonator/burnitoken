@@ -1,4 +1,56 @@
 /* ========================================
+   ULTRA PERFORMANCE CRITICAL CSS
+   ======================================== */
+
+/* Immediate font-display swap for faster text rendering */
+@font-face {
+  font-family: 'Inter';
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfMZ.woff2')
+    format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Baloo 2';
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/baloo2/v3/wXKrE3kTposypRyd76j0_w.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Critical above-the-fold styles with will-change optimization */
+.hero-section {
+  will-change: transform;
+  contain: layout style paint;
+  transform: translateZ(0);
+}
+
+/* Immediate loading state optimization */
+.pageLoader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all;
+  will-change: opacity;
+}
+
+/* Critical navigation styles for immediate render */
+header {
+  contain: layout style;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* ========================================
    COMPREHENSIVE BROWSER COMPATIBILITY
    ======================================== */
 

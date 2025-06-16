@@ -12,6 +12,12 @@
   <meta name="theme-color" content="#f97316" />
   <meta name="color-scheme" content="light dark" />
   
+  <!-- Security Headers -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https:; frame-src 'none';" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="X-Frame-Options" content="DENY" />
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+  
   <!-- Core SEO Meta Tags -->
   <meta name="description"
     content="BURNI Token - Revolutionary deflationary cryptocurrency on XRPL with automatic burning mechanism. Every 3 days, 3% of supply is burned, creating scarcity and potential value growth. Join the future of sustainable tokenomics." />
@@ -70,63 +76,43 @@
   <link rel="preload" href="/assets/images/burni-logo.webp" as="image" type="image/webp" />
   <link rel="preload" href="/assets/security.js" as="script" />
   
-  <!-- Critical Polyfills - Load Immediately -->
-  <script src="/assets/polyfills.js"></script>
-  
-  <!-- Favicon and Icons -->
-  <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon" />
-  <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png" />
-  <link rel="mask-icon" href="/assets/images/safari-pinned-tab.svg" color="#f97316" />
-  <meta name="msapplication-TileColor" content="#f97316" />
-  <meta name="msapplication-config" content="/assets/browserconfig.xml" />
-  
-  <!-- PWA Manifest -->
-  <link rel="manifest" href="/manifest.json" />
-
-  <!-- Enhanced Security Headers -->
-  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-  <meta http-equiv="X-Frame-Options" content="DENY" />
-  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
-  <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()" />
-  <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
-  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
-  <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()" />
-  <!-- Content Security Policy - Development Mode (gelockert) -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; 
-                 img-src 'self' data: https:; 
-                 script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://platform.twitter.com; 
-                 style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; 
-                 font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
-                 connect-src 'self' https://api.xrpl.org https://livenet.xrpl.org https://api.coingecko.com https://api.xrpscan.com https://bithomp.com https://s1.ripple.com https://xrplcluster.com https://data.ripple.com https://api.xrpledger.com; 
-                 frame-src 'self' https://platform.twitter.com; 
-                 object-src 'none'; 
-                 base-uri 'self'; 
-                 form-action 'self'; 
-                 upgrade-insecure-requests;" />
-  <link rel="stylesheet" href="/assets/css/critical.css" />
-  <link rel="stylesheet" href="/assets/css/styles-compat.css" />
-  <link rel="stylesheet" href="/assets/css/styles.min.css" />
-
-  <!-- Real-time Features & Advanced PWA -->
-  <script src="/assets/analytics.js" defer></script>
-  <script src="/assets/real-time-monitor.js" defer></script>
-  <script src="/assets/security.js" defer></script>
-
-  <!-- Performance Optimization -->
-  <link rel="preload"
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Baloo+2:wght@700&amp;display=swap"
-    as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript>
-    <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Baloo+2:wght@700&amp;display=swap">
-  </noscript>
+  <!-- Ultra Performance Script - Immediate Execution -->
+  <script>
+    // Ultra-critical performance optimizations - execute immediately
+    (function() {
+      // Prefetch DNS for critical external resources
+      ['//fonts.googleapis.com', '//fonts.gstatic.com', '//cdn.jsdelivr.net', '//api.coingecko.com'].forEach(function(domain) {
+        var link = document.createElement('link');
+        link.rel = 'dns-prefetch';
+        link.href = domain;
+        document.head.appendChild(link);
+      });
+      
+      // Preconnect to critical external resources
+      var preconnects = [
+        { href: 'https://fonts.gstatic.com', crossOrigin: true },
+        { href: 'https://cdn.jsdelivr.net', crossOrigin: true }
+      ];
+      
+      preconnects.forEach(function(conn) {
+        var link = document.createElement('link');
+        link.rel = 'preconnect';
+        link.href = conn.href;
+        if (conn.crossOrigin) link.crossOrigin = 'anonymous';
+        document.head.appendChild(link);
+      });
+      
+      // Critical resource hints
+      if ('performance' in window && performance.mark) {
+        performance.mark('ultra-perf-start');
+      }
+    })();
+  </script>
 
   <!-- Preload critical resources -->
   <link rel="preload" href="/assets/images/burni-logo.webp" as="image">
   <link rel="preload" href="/assets/css/critical.css" as="style">
+  <link rel="preload" href="/assets/ultra-performance.js" as="script">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="dns-prefetch" href="//api.xrpl.org">
@@ -503,6 +489,9 @@
   <link rel="stylesheet" href="assets/css/responsive-optimized.css">
   <link rel="stylesheet" href="assets/css/touch-targets.css">
   <link rel="stylesheet" href="assets/css/enhanced-touch-targets.css">
+  <!-- CSS compatibility for legacy browsers -->
+  <link rel="stylesheet" href="assets/css/styles-compat.css">
+  <link rel="stylesheet" href="assets/css/responsive-enhancements.css">
 
   <!-- Product Schema for Burni Token -->
   <script type="application/ld+json">
@@ -688,6 +677,26 @@
         data-i18n="nav_xrpl_resources" aria-label="Navigate to XRPL Resources section">XRPL
         Explorer</a>
     </nav>
+  </header>
+  <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+    <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="/" class="breadcrumb-link">
+          <span itemprop="name">Home</span>
+        </a>
+        <meta itemprop="position" content="1" />
+      </li>
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span itemprop="name" class="breadcrumb-current" aria-current="page">BURNI Token</span>
+        <meta itemprop="position" content="2" />
+      </li>
+    </ol>
+  </nav>
+
+  <!-- Breadcrumb Navigation -->
+  <nav aria-label="Breadcrumb" class="py-2 bg-gray-50">
+    <div class="container px-6 mx-auto">
+      <ol class="flex items-center space-x-2 text-sm text-gray-600">
   </header>
   <nav aria-label="Breadcrumb" class="breadcrumb-nav">
     <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
@@ -1867,7 +1876,9 @@
   <script src="/enhanced-price-widget.js" defer></script>
 
   <!-- Main application scripts -->
-  <script src="/main.js" defer></script>
+  <!-- ES5 Compatible Main Script for Maximum Browser Compatibility -->
+  <script src="/assets/main-es5.js" defer></script>
+  <!-- ES5-only for 100% compatibility - no modern fallback -->
   <script src="/assets/scripts.min.js" defer></script>
 
   <!-- Live Price Test (temporär) -->
