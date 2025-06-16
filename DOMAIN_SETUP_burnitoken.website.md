@@ -1,6 +1,7 @@
 # 🌐 BURNITOKEN.WEBSITE - CUSTOM DOMAIN SETUP
 
 ## 📅 Setup Date: June 16, 2025
+
 ## 🎯 Domain: burnitoken.website
 
 ---
@@ -8,6 +9,7 @@
 ## ✅ GITHUB CONFIGURATION - COMPLETED
 
 ### **CNAME File Created:**
+
 - ✅ File: `/CNAME`
 - ✅ Content: `burnitoken.website`
 - ✅ Ready for GitHub Pages
@@ -25,7 +27,7 @@ Type: A
 Name: @
 Value: 185.199.108.153
 
-Type: A  
+Type: A
 Name: @
 Value: 185.199.109.153
 
@@ -43,13 +45,14 @@ Value: kryptonator.github.io
 ```
 
 #### **ALTERNATIVE (Einfacher):**
+
 ```dns
 Type: CNAME
 Name: @
 Value: kryptonator.github.io
 
 Type: CNAME
-Name: www  
+Name: www
 Value: kryptonator.github.io
 ```
 
@@ -58,18 +61,21 @@ Value: kryptonator.github.io
 ## 🚀 ACTIVATION STEPS
 
 ### **SCHRITT 1: DNS bei Domain-Anbieter konfigurieren**
+
 1. Domain-Panel öffnen (Namecheap, GoDaddy, etc.)
 2. DNS-Einstellungen aufrufen
 3. Obige DNS-Records hinzufügen
 4. Speichern
 
 ### **SCHRITT 2: GitHub Pages Custom Domain aktivieren**
+
 1. GitHub Repository: https://github.com/Kryptonator/burnitoken/settings/pages
 2. Custom Domain: `burnitoken.website` eingeben
 3. "Enforce HTTPS" aktivieren
 4. Speichern
 
 ### **SCHRITT 3: Warten (24-48 Stunden)**
+
 - DNS-Propagation weltweit
 - SSL-Zertifikat Erstellung
 - Domain-Verifikation
@@ -79,6 +85,7 @@ Value: kryptonator.github.io
 ## 🌐 FINALE URLS
 
 ### **Nach DNS-Aktivierung:**
+
 - **Haupt-URL:** https://burnitoken.website
 - **WWW-URL:** https://www.burnitoken.website
 - **Fallback:** https://kryptonator.github.io/burnitoken
@@ -88,7 +95,7 @@ Value: kryptonator.github.io
 ## 📊 VORTEILE CUSTOM DOMAIN
 
 ✅ **Professionelle Branding**
-✅ **Bessere SEO-Rankings** 
+✅ **Bessere SEO-Rankings**
 ✅ **Memorizable URL**
 ✅ **Enterprise Appearance**
 ✅ **Marketing Friendly**
@@ -99,18 +106,21 @@ Value: kryptonator.github.io
 ## ⚡ SOFORTIGE VERFÜGBARKEIT
 
 ### **Während DNS-Propagation:**
+
 **Backup-URL:** https://kryptonator.github.io/burnitoken
-*(Sofort verfügbar nach GitHub Pages Aktivierung)*
+_(Sofort verfügbar nach GitHub Pages Aktivierung)_
 
 ### **Nach DNS-Setup:**
+
 **Premium-URL:** https://burnitoken.website
-*(24-48h für vollständige Aktivierung)*
+_(24-48h für vollständige Aktivierung)_
 
 ---
 
 ## 🔍 DNS PROPAGATION PRÜFEN
 
 ### **Tools zum Testen:**
+
 - https://dnschecker.org
 - https://whatsmydns.net
 - `nslookup burnitoken.website`
@@ -131,6 +141,7 @@ Value: kryptonator.github.io
 ## 🎉 ERFOLGS-BESTÄTIGUNG
 
 ### **Domain funktioniert wenn:**
+
 - ✅ https://burnitoken.website lädt
 - ✅ HTTPS-Zertifikat aktiv
 - ✅ Weiterleitung von www funktioniert
@@ -138,4 +149,4 @@ Value: kryptonator.github.io
 
 ---
 
-*Professional domain setup for burnitoken.website - Ready for enterprise deployment! 🌟*
+_Professional domain setup for burnitoken.website - Ready for enterprise deployment! 🌟_
