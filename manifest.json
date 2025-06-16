@@ -30,7 +30,7 @@
         },
         {
             "src": "/assets/images/burni-logo.webp",
-            "sizes": "512x512", 
+            "sizes": "512x512",
             "type": "image/webp",
             "purpose": "any maskable"
         }
@@ -39,11 +39,18 @@
     "scope": "/",
     "id": "burni-token-app",
     "display": "standalone",
-    "display_override": ["standalone", "minimal-ui"],
+    "display_override": [
+        "standalone",
+        "minimal-ui"
+    ],
     "theme_color": "#f97316",
     "background_color": "#ffffff",
     "orientation": "portrait-primary",
-    "categories": ["finance", "business", "productivity"],
+    "categories": [
+        "finance",
+        "business",
+        "productivity"
+    ],
     "shortcuts": [
         {
             "name": "View Token Schedule",

@@ -1,7 +1,8 @@
 {
   "name": "burni-website",
   "version": "1.0.0",
-  "scripts": {    "dev": "cross-env NODE_ENV=development tailwindcss -i ./assets/css/critical.css -o ./assets/css/styles.min.css --watch",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development tailwindcss -i ./assets/css/critical.css -o ./assets/css/styles.min.css --watch",
     "build:css": "cross-env NODE_ENV=production tailwindcss -i ./assets/css/critical.css -o ./assets/css/styles.min.css --minify",
     "serve": "http-server . -p 8080 --config http-server.config.json",
     "build": "npm run build:css && echo Build erfolgreich abgeschlossen!",
