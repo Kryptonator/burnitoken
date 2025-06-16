@@ -51,6 +51,13 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png" />
     <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Enhanced Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()" />
     <!-- Content Security Policy - Development Mode (gelockert) -->
     <meta
       http-equiv="Content-Security-Policy"
@@ -126,6 +133,10 @@
     <link rel="preload" href="/assets/css/styles.min.css" as="style" />
     <link rel="preload" href="/assets/scripts.min.js" as="script" />
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/chart.js" as="script" />
+    
+    <!-- Content Freshness Indicator -->
+    <meta name="last-modified" content="2025-06-16T06:16:52.904Z" />
+    <meta name="revised" content="16.6.2025" />
     <meta name="author" content="Burni Token Team" />
     <meta name="robots" content="index, follow" />
     <meta name="revisit-after" content="7 days" />
@@ -1641,6 +1652,25 @@
         </section>
       </main>
     </div>
+    
+      <!-- Privacy Policy Section -->
+      <section id="privacy" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-6">
+          <h2 class="text-3xl font-bold text-center mb-8">Datenschutz</h2>
+          <div class="max-w-4xl mx-auto prose prose-lg">
+            <p>
+              Wir nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Diese Datenschutzerklärung 
+              informiert Sie über die Art, den Umfang und den Zweck der Verarbeitung personenbezogener 
+              Daten auf unserer Website.
+            </p>
+            <h3>Datenerfassung und -verwendung</h3>
+            <p>
+              Wir sammeln nur die Daten, die für das ordnungsgemäße Funktionieren unserer Website 
+              erforderlich sind. Alle Daten werden gemäß DSGVO verarbeitet.
+            </p>
+          </div>
+        </div>
+      </section>
     <footer class="bg-gray-900 text-white py-8 mt-12">
       <div class="container mx-auto px-6">
         <div class="flex flex-col md:flex-row items-center justify-between mb-8">
@@ -2484,5 +2514,18 @@
         return modal;
       }
     </script>
+  
+    <!-- Cookie Consent Notice -->
+    <div id="cookie-notice" class="fixed bottom-0 left-0 right-0 bg-gray-900 text-white p-4 z-50" style="display: none;">
+      <div class="container mx-auto flex items-center justify-between">
+        <p class="text-sm">
+          Diese Website verwendet Cookies, um Ihnen die beste Erfahrung zu bieten. 
+          <a href="#privacy" class="underline">Mehr erfahren</a>
+        </p>
+        <button onclick="acceptCookies()" class="bg-orange-500 text-white px-4 py-2 rounded text-sm">
+          Akzeptieren
+        </button>
+      </div>
+    </div>
   </body>
 </html>

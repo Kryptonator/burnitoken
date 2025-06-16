@@ -3355,3 +3355,38 @@ async function initializeOptimizedFeatures() {
 
 // Start optimized features initialization
 initializeOptimizedFeatures();
+
+// Enhanced Error Monitoring and Reporting
+window.onerror = function(message, source, lineno, colno, error) {
+  console.error('Global Error:', {
+    message,
+    source,
+    line: lineno,
+    column: colno,
+    error: error?.stack
+  });
+  
+  // Optional: Send to monitoring service
+  // sendErrorToMonitoring({ message, source, lineno, colno, stack: error?.stack });
+  
+  return false;
+};
+
+window.addEventListener('unhandledrejection', function(event) {
+  console.error('Unhandled Promise Rejection:', event.reason);
+  
+  // Optional: Send to monitoring service
+  // sendErrorToMonitoring({ type: 'unhandledrejection', reason: event.reason });
+});
+
+// Performance monitoring
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    const perfData = performance.getEntriesByType('navigation')[0];
+    console.log('Performance Metrics:', {
+      loadTime: perfData.loadEventEnd - perfData.loadEventStart,
+      domContentLoaded: perfData.domContentLoadedEventEnd - perfData.domContentLoadedEventStart,
+      firstPaint: performance.getEntriesByType('paint').find(entry => entry.name === 'first-paint')?.startTime
+    });
+  }, 0);
+});

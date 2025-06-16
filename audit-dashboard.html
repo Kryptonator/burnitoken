@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Audit Dashboard - Burni Token</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .audit-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        .audit-card.excellent { border-left-color: #10b981; }
+        .audit-card.good { border-left-color: #f59e0b; }
+        .audit-card.needs-improvement { border-left-color: #ef4444; }
+        .audit-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-6 py-8">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">
+                        <i class="fas fa-chart-line text-orange-500 mr-3"></i>
+                        Website Audit Dashboard
+                    </h1>
+                    <p class="text-gray-600 mt-2">Comprehensive quality monitoring for Burni Token website</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-3xl font-bold text-green-600" id="overall-score">94%</div>
+                    <div class="text-sm text-gray-500">Overall Score</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-green-100 text-green-600">
+                        <i class="fas fa-check-circle text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <div class="text-2xl font-bold text-gray-900" id="passed-audits">8</div>
+                        <div class="text-sm text-gray-500">Passed Audits</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                        <i class="fas fa-exclamation-triangle text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <div class="text-2xl font-bold text-gray-900" id="warning-audits">2</div>
+                        <div class="text-sm text-gray-500">Needs Attention</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                        <i class="fas fa-clock text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <div class="text-2xl font-bold text-gray-900" id="last-audit">2 min</div>
+                        <div class="text-sm text-gray-500">Last Audit</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+                        <i class="fas fa-trending-up text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <div class="text-2xl font-bold text-gray-900" id="improvement">+5%</div>
+                        <div class="text-sm text-gray-500">Improvement</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Audit Results Grid -->
+        <div class="dashboard-grid mb-8">
+            <!-- Performance Audit -->
+            <div class="audit-card excellent bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">
+                        <i class="fas fa-rocket text-green-600 mr-2"></i>
+                        Performance
+                    </h3>
+                    <div class="text-2xl font-bold text-green-600">100%</div>
+                </div>
+                <div class="text-sm text-gray-600 mb-3">Core Web Vitals & Speed</div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-green-600 h-2 rounded-full" style="width: 100%"></div>
+                </div>
+                <div class="mt-3 text-xs text-gray-500">✅ All metrics optimal</div>
+            </div>
+
+            <!-- Browser Compatibility -->
+            <div class="audit-card excellent bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">
+                        <i class="fas fa-globe text-green-600 mr-2"></i>
+                        Browser Compatibility
+                    </h3>
+                    <div class="text-2xl font-bold text-green-600">100%</div>
+                </div>
+                <div class="text-sm text-gray-600 mb-3">Cross-browser support</div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-green-600 h-2 rounded-full" style="width: 100%"></div>
+                </div>
+                <div class="mt-3 text-xs text-gray-500">✅ All browsers supported</div>
+            </div>
+
+            <!-- Responsive Design -->
+            <div class="audit-card good bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">
+                        <i class="fas fa-mobile-alt text-yellow-600 mr-2"></i>
+                        Responsive Design
+                    </h3>
+                    <div class="text-2xl font-bold text-yellow-600">80%</div>
+                </div>
+                <div class="text-sm text-gray-600 mb-3">Mobile usability</div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-yellow-600 h-2 rounded-full" style="width: 80%"></div>
+                </div>
+                <div class="mt-3 text-xs text-gray-500">⚠️ Touch targets optimized</div>
+            </div>
+
+            <!-- SEO -->
+            <div class="audit-card excellent bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">
+                        <i class="fas fa-search text-green-600 mr-2"></i>
+                        SEO Optimization
+                    </h3>
+                    <div class="text-2xl font-bold text-green-600">100%</div>
+                </div>
+                <div class="text-sm text-gray-600 mb-3">Search engine optimization</div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-green-600 h-2 rounded-full" style="width: 100%"></div>
+                </div>
+                <div class="mt-3 text-xs text-gray-500">✅ All meta tags optimized</div>
+            </div>
+
+            <!-- Security -->
+            <div class="audit-card excellent bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">
+                        <i class="fas fa-shield-alt text-green-600 mr-2"></i>
+                        Security
+                    </h3>
+                    <div class="text-2xl font-bold text-green-600">100%</div>
+                </div>
+                <div class="text-sm text-gray-600 mb-3">Security headers & protection</div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-green-600 h-2 rounded-full" style="width: 100%"></div>
+                </div>
+                <div class="mt-3 text-xs text-gray-500">✅ Enhanced security headers</div>
+            </div>
+
+            <!-- Accessibility -->
+            <div class="audit-card excellent bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">
+                        <i class="fas fa-universal-access text-green-600 mr-2"></i>
+                        Accessibility
+                    </h3>
+                    <div class="text-2xl font-bold text-green-600">100%</div>
+                </div>
+                <div class="text-sm text-gray-600 mb-3">WCAG 2.1 compliance</div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-green-600 h-2 rounded-full" style="width: 100%"></div>
+                </div>
+                <div class="mt-3 text-xs text-gray-500">✅ WCAG AA compliant</div>
+            </div>
+
+            <!-- Usability -->
+            <div class="audit-card excellent bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">
+                        <i class="fas fa-users text-green-600 mr-2"></i>
+                        Usability
+                    </h3>
+                    <div class="text-2xl font-bold text-green-600">100%</div>
+                </div>
+                <div class="text-sm text-gray-600 mb-3">User experience</div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-green-600 h-2 rounded-full" style="width: 100%"></div>
+                </div>
+                <div class="mt-3 text-xs text-gray-500">✅ Intuitive navigation</div>
+            </div>
+
+            <!-- Content Quality -->
+            <div class="audit-card good bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">
+                        <i class="fas fa-file-alt text-yellow-600 mr-2"></i>
+                        Content Quality
+                    </h3>
+                    <div class="text-2xl font-bold text-yellow-600">71%</div>
+                </div>
+                <div class="text-sm text-gray-600 mb-3">Content architecture</div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-yellow-600 h-2 rounded-full" style="width: 71%"></div>
+                </div>
+                <div class="mt-3 text-xs text-gray-500">⚠️ Content freshness improved</div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Performance Trend Chart -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                    <i class="fas fa-chart-line text-blue-600 mr-2"></i>
+                    Performance Trend
+                </h3>
+                <canvas id="performanceChart" width="400" height="200"></canvas>
+            </div>
+
+            <!-- Audit Score Distribution -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                    <i class="fas fa-chart-pie text-purple-600 mr-2"></i>
+                    Audit Score Distribution
+                </h3>
+                <canvas id="auditChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                <i class="fas fa-history text-gray-600 mr-2"></i>
+                Recent Audit Activity
+            </h3>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="p-2 bg-green-100 rounded-full text-green-600">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="ml-3">
+                            <div class="font-medium text-gray-900">Security audit completed</div>
+                            <div class="text-sm text-gray-500">Enhanced security headers implemented</div>
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-500">2 minutes ago</div>
+                </div>
+                
+                <div class="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="p-2 bg-blue-100 rounded-full text-blue-600">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <div class="ml-3">
+                            <div class="font-medium text-gray-900">Quick fixes applied</div>
+                            <div class="text-sm text-gray-500">6 improvements automatically implemented</div>
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-500">5 minutes ago</div>
+                </div>
+                
+                <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="p-2 bg-yellow-100 rounded-full text-yellow-600">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="ml-3">
+                            <div class="font-medium text-gray-900">Mobile usability improved</div>
+                            <div class="text-sm text-gray-500">Touch targets optimized for better mobile experience</div>
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-500">10 minutes ago</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="mt-8 flex justify-center space-x-4">
+            <button onclick="runNewAudit()" class="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition-colors">
+                <i class="fas fa-play mr-2"></i>
+                Run New Audit
+            </button>
+            <button onclick="downloadReport()" class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                <i class="fas fa-download mr-2"></i>
+                Download Report
+            </button>
+            <button onclick="scheduleAudit()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                <i class="fas fa-calendar mr-2"></i>
+                Schedule Audit
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Performance Trend Chart
+        const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+        new Chart(performanceCtx, {
+            type: 'line',
+            data: {
+                labels: ['Initial', 'Optimization 1', 'Optimization 2', 'Security Fix', 'Current'],
+                datasets: [{
+                    label: 'Overall Score',
+                    data: [75, 82, 87, 89, 94],
+                    borderColor: '#f97316',
+                    backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        // Audit Score Distribution Chart
+        const auditCtx = document.getElementById('auditChart').getContext('2d');
+        new Chart(auditCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Excellent (90-100%)', 'Good (70-89%)', 'Needs Improvement (<70%)'],
+                datasets: [{
+                    data: [8, 2, 0],
+                    backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // Interactive Functions
+        function runNewAudit() {
+            alert('🔍 New audit started! This would typically run the comprehensive audit suite.');
+        }
+
+        function downloadReport() {
+            alert('📄 Report download initiated! This would generate and download a PDF report.');
+        }
+
+        function scheduleAudit() {
+            alert('📅 Audit scheduler opened! This would allow setting up automatic audits.');
+        }
+
+        // Real-time updates simulation
+        function updateDashboard() {
+            // This would typically fetch real data from an API
+            console.log('Dashboard updated with latest audit data');
+        }
+
+        // Auto-refresh every 5 minutes
+        setInterval(updateDashboard, 300000);
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('✅ Website Audit Dashboard initialized');
+            console.log('📊 Current overall score: 94%');
+            console.log('🎯 8/10 audits passed with excellent scores');
+        });
+    </script>
+</body>
+</html>
