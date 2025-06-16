@@ -45,7 +45,7 @@
   }
 
   .burni-mascot {
-    @apply w-40 h-40 object-contain md:w-52 md:h-52;
+    @apply w-24 h-24 object-contain md:w-32 md:h-32;
   }
 
   .chart-container {

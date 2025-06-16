@@ -362,6 +362,18 @@ class BURNIInternationalization {
    * Create enhanced language switcher
    */
   createLanguageSwitcher() {
+    // Check if there's already a language switcher and replace it
+    const existingSwitcher = document.getElementById('language-switcher');
+    if (existingSwitcher) {
+      // Update the existing select element instead of creating a new one
+      const existingSelect = existingSwitcher.querySelector('#lang-select');
+      if (existingSelect) {
+        // Just enhance the existing select functionality
+        this.setupLanguageSwitcherEvents(existingSwitcher);
+        return;
+      }
+    }
+
     const switcher = document.createElement('div');
     switcher.className = 'language-switcher';
     switcher.innerHTML = `
@@ -391,12 +403,16 @@ class BURNIInternationalization {
     this.styleLanguageSwitcher();
     this.setupLanguageSwitcherEvents(switcher);
 
-    // Add to navigation
-    const nav = document.querySelector('nav');
-    if (nav) {
-      nav.appendChild(switcher);
+    // Replace existing switcher if found, otherwise add to navigation
+    if (existingSwitcher) {
+      existingSwitcher.replaceWith(switcher);
     } else {
-      document.body.appendChild(switcher);
+      const nav = document.querySelector('nav');
+      if (nav) {
+        nav.appendChild(switcher);
+      } else {
+        document.body.appendChild(switcher);
+      }
     }
   }
 

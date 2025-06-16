@@ -115,7 +115,7 @@
 
   /* KPI Cards with Comic Style */
   .kpi-card {
-    @apply rounded-2xl p-6 text-center transform transition-all duration-400;
+    @apply rounded-2xl p-6 text-center transform transition-all duration-500;
     background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
     -webkit-backdrop-filter: blur(15px);
     backdrop-filter: blur(15px);
