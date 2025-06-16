@@ -3390,3 +3390,44 @@ window.addEventListener('load', function() {
     });
   }, 0);
 });
+
+// Advanced Lazy Loading with Intersection Observer
+class AdvancedImageLoader {
+  constructor() {
+    this.images = document.querySelectorAll('img[loading="lazy"]');
+    this.imageObserver = null;
+    this.init();
+  }
+
+  init() {
+    if ('IntersectionObserver' in window) {
+      this.imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            this.loadImage(img);
+            observer.unobserve(img);
+          }
+        });
+      }, {
+        rootMargin: '50px 0px',
+        threshold: 0.01
+      });
+
+      this.images.forEach(img => this.imageObserver.observe(img));
+    }
+  }
+
+  loadImage(img) {
+    const src = img.getAttribute('data-src') || img.src;
+    if (src) {
+      img.src = src;
+      img.classList.add('loaded');
+    }
+  }
+}
+
+// Initialize advanced image loading
+document.addEventListener('DOMContentLoaded', () => {
+  new AdvancedImageLoader();
+});

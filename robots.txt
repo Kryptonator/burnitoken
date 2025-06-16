@@ -1,21 +1,37 @@
-# Burni Token Website Robots Configuration
-# https://www.robotstxt.org/robotstxt.html
-
 User-agent: *
 Allow: /
-Disallow: /assets/private/
-Disallow: /.git/
-Disallow: /.github/
-Disallow: /node_modules/
-Disallow: /src/
-Disallow: /public/
-Disallow: /.vscode/
 
-# Crawler Einstellungen
-Crawl-delay: 10
+# High-priority content
+Allow: /assets/css/
+Allow: /assets/js/
+Allow: /assets/images/
 
-# Sitemap
+# Block test and temporary files
+Disallow: /test-*
+Disallow: /debug-*
+Disallow: /*.json$
+Disallow: /audit-*
+Disallow: /comprehensive-*
+
+# Sitemap location
 Sitemap: https://burnitoken.com/sitemap.xml
 
-# Bevorzugte Domain
-Host: burnitoken.com
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Specific bot instructions
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Block unwanted bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /

@@ -294,3 +294,52 @@ async function storePriceData(data) {
   // Implementation would store in IndexedDB
   console.log('Price data stored:', data);
 }
+
+// Advanced Performance Optimization Strategies
+const PERFORMANCE_CACHE_NAME = 'burni-performance-v1';
+const DYNAMIC_CACHE_NAME = 'burni-dynamic-v1';
+
+// Cache performance-critical resources with network-first strategy
+const performanceCriticalUrls = [
+  '/assets/css/styles.min.css',
+  '/assets/css/critical.css',
+  '/assets/scripts.min.js',
+  '/assets/images/burni-logo.webp'
+];
+
+// Implement Stale-While-Revalidate for dynamic content
+self.addEventListener('fetch', event => {
+  if (performanceCriticalUrls.some(url => event.request.url.includes(url))) {
+    event.respondWith(
+      caches.open(PERFORMANCE_CACHE_NAME).then(cache => {
+        return cache.match(event.request).then(response => {
+          const fetchPromise = fetch(event.request).then(networkResponse => {
+            cache.put(event.request, networkResponse.clone());
+            return networkResponse;
+          });
+          return response || fetchPromise;
+        });
+      })
+    );
+  }
+});
+
+// Background sync for offline actions
+self.addEventListener('sync', event => {
+  if (event.tag === 'background-sync') {
+    event.waitUntil(doBackgroundSync());
+  }
+});
+
+function doBackgroundSync() {
+  // Implement background synchronization logic
+  console.log('Background sync performed');
+}
+
+// Performance monitoring
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'PERFORMANCE_MEASURE') {
+    // Log performance metrics
+    console.log('Performance metrics:', event.data.metrics);
+  }
+});

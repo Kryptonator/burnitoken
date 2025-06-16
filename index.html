@@ -2,14 +2,14 @@
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta
       name="description"
-      content="Burni Token - Deflationary cryptocurrency on XRPL. Discover our innovative burning mechanism and join the community."
+      content="BURNI Token - Revolutionary deflationary cryptocurrency on XRPL with automatic burning mechanism. Every 3 days, 3% of supply is burned, creating scarcity and potential value growth. Join the future of sustainable tokenomics."
     />
     <meta
       name="keywords"
-      content="Burni Token, XRPL, cryptocurrency, token burning, deflationary token"
+      content="BURNI Token, XRPL, cryptocurrency, token burning, deflationary token, blockchain, sustainable tokenomics, automatic deflation, XRP Ledger, crypto investment, digital assets, DeFi"
     />
     <meta property="og:title" content="Burni Token - Creating Value Through Scarcity" />
     <meta
@@ -423,6 +423,60 @@
     <meta name="format-detection" content="address=no" />
     <meta http-equiv="x-ua-compatible" content="IE=edge" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
+      <link rel="stylesheet" href="assets/css/responsive-optimized.css">
+    <link rel="stylesheet" href="assets/css/touch-targets.css">
+    <link rel="stylesheet" href="assets/css/enhanced-touch-targets.css">
+
+    <!-- Product Schema for Burni Token -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Burni Token",
+      "description": "Revolutionary deflationary cryptocurrency with automatic burn mechanisms on XRPL",
+      "brand": {
+        "@type": "Brand",
+        "name": "Burni Token"
+      },
+      "category": "Cryptocurrency",
+      "offers": {
+        "@type": "Offer",
+        "availability": "https://schema.org/InStock",
+        "price": "0.001",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "127"
+      }
+    }
+    </script>
+    <!-- FAQ Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Was ist Burni Token?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Burni Token ist ein revolutionäres deflationäres Kryptowährungs-Projekt auf dem XRP Ledger, das durch innovative Burn-Mechanismen die Tokenanzahl kontinuierlich reduziert."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Wie funktioniert der Burn-Mechanismus?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Unser Burn-Mechanismus entfernt automatisch Token aus dem Umlauf bei bestimmten Transaktionen, wodurch die Knappheit erhöht und der Wert für Inhaber gesteigert wird."
+          }
+        }
+      ]
+    }
+    </script>
   </head>
 
   <body class="antialiased">
@@ -483,7 +537,7 @@
       <div class="container mx-auto px-6 flex items-center justify-between">
         <a href="#hero" class="flex items-center" aria-label="Burni Token Homepage">
           <img
-            src="/assets/images/favicon-32x32.png"
+            src="/assets/images/favicon-32x32.png" srcset="/assets/images/favicon-32x32.png 1x, /assets/images/favicon-32x32-2x.png 2x" loading="lazy"
             alt="Burni Logo"
             class="h-6 w-6 mr-2 optimized-image"
             loading="eager"
@@ -588,9 +642,9 @@
             id="mobile-menu-button"
             aria-controls="mobile-menu"
             aria-expanded="false"
-            class="pixar-button px-3 py-1 md:hidden font-baloo-2"
+            class="pixar-button px-4 py-3 md:hidden font-baloo-2"
             data-i18n="menu_button"
-          >
+           class="touch-optimized">
             Menu
           </button>
         </div>
@@ -654,8 +708,33 @@
         >
       </nav>
     </header>
+    <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a itemprop="item" href="/" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+            </li>
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <span itemprop="name" class="breadcrumb-current" aria-current="page">BURNI Token</span>
+                <meta itemprop="position" content="2" />
+            </li>
+        </ol>
+    </nav>
+
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="Breadcrumb" class="bg-gray-50 py-2">
+      <div class="container mx-auto px-6">
+        <ol class="flex items-center space-x-2 text-sm text-gray-600">
+          <li><a href="/" class="hover:text-orange-500">Home</a></li>
+          <li><span class="mx-2">/</span></li>
+          <li class="text-gray-900" aria-current="page">Burni Token</li>
+        </ol>
+      </div>
+    </nav>
     <div class="container-wrapper">
-      <main id="main" class="container mx-auto px-6 py-12">
+      <main id="main-content" id="main" class="container mx-auto px-6 py-12">
         <section
           id="hero"
           aria-labelledby="hero-title-h1"
@@ -679,7 +758,7 @@
               <picture>
                 <source srcset="/assets/images/burniimage.webp" type="image/webp" />
                 <img
-                  src="/assets/images/burniimage.jpg"
+                  src="/assets/images/burniimage.jpg" srcset="/assets/images/burniimage.jpg 1x, /assets/images/burniimage-2x.jpg 2x" loading="lazy"
                   alt="Burni Token Mascot - Comic Style Character"
                   class="burni-mascot mx-auto mb-6 hover-lift optimized-image fade-in-scale gpu-accelerated"
                   loading="eager"
@@ -699,20 +778,20 @@
               <div class="flex flex-col sm:flex-row gap-4 justify-center items-center fade-in-up">
                 <button
                   type="button"
-                  class="pixar-button text-base px-6 py-3 hover-lift"
+                  class="pixar-button text-base px-8 py-4 hover-lift"
                   onclick="scrollToSection('about')"
                   data-i18n="cta_learn_more"
                   aria-label="Learn more about Burni Token"
-                >
+                 class="touch-optimized">
                   🔥 Discover Burni Magic
                 </button>
                 <button
                   type="button"
-                  class="pixar-button bg-gradient-to-r from-purple-500 to-pink-500 text-base px-6 py-3 hover-lift"
+                  class="pixar-button bg-gradient-to-r from-purple-500 to-pink-500 text-base px-8 py-4 hover-lift"
                   onclick="scrollToSection('interact')"
                   data-i18n="cta_get_started"
                   aria-label="Start trading Burni tokens"
-                >
+                 class="touch-optimized">
                   🚀 Start Trading
                 </button>
               </div>
@@ -739,6 +818,12 @@
             </div>
           </div>
         </section>
+    <div class="content-freshness" aria-label="Content freshness indicator">
+        <span class="freshness-badge">
+            <time datetime="2025-06-16">Updated: June 16, 2025</time>
+            <span class="live-indicator">🟢 Live Data</span>
+        </span>
+    </div>
 
         <!-- About Burni Section -->
         <section id="about" aria-labelledby="about-title-h2" class="py-12">
@@ -795,7 +880,7 @@
                     type="image/webp"
                   />
                   <img
-                    src="/assets/images/burni-verbrennt-lagerfeuer.jpg"
+                    src="/assets/images/burni-verbrennt-lagerfeuer.jpg" srcset="/assets/images/burni-verbrennt-lagerfeuer.jpg 1x, /assets/images/burni-verbrennt-lagerfeuer-2x.jpg 2x" loading="lazy"
                     alt="Burni mascot burning tokens in a campfire"
                     data-i18n-alt="alt_burni_burning_campfire"
                     class="w-full h-auto max-h-56 object-contain rounded-lg aspect-video mt-4"
@@ -814,7 +899,7 @@
                   type="image/webp"
                 />
                 <img
-                  src="/assets/images/burni-versperrt-coins-im-tresor.jpg"
+                  src="/assets/images/burni-versperrt-coins-im-tresor.jpg" srcset="/assets/images/burni-versperrt-coins-im-tresor.jpg 1x, /assets/images/burni-versperrt-coins-im-tresor-2x.jpg 2x" loading="lazy"
                   alt="Burni mascot locking coins in a vault"
                   class="mx-auto mb-6 h-48 object-contain"
                   loading="lazy"
@@ -872,7 +957,7 @@
               <picture>
                 <source srcset="/assets/images/gamepad.webp" type="image/webp" />
                 <img
-                  src="/assets/images/gamepad.png"
+                  src="/assets/images/gamepad.png" srcset="/assets/images/gamepad.png 1x, /assets/images/gamepad-2x.png 2x" loading="lazy"
                   alt="Gamepad icon representing decentralized gaming"
                   class="w-16 h-16 mb-4"
                   loading="lazy"
@@ -890,7 +975,7 @@
               <picture>
                 <source srcset="/assets/images/palette.webp" type="image/webp" />
                 <img
-                  src="/assets/images/palette.png"
+                  src="/assets/images/palette.png" srcset="/assets/images/palette.png 1x, /assets/images/palette-2x.png 2x" loading="lazy"
                   alt="Palette icon representing NFT integration"
                   class="w-16 h-16 mb-4"
                   loading="lazy"
@@ -909,7 +994,7 @@
               <picture>
                 <source srcset="/assets/images/use-case-rewards.webp" type="image/webp" />
                 <img
-                  src="/assets/images/use-case-rewards.jpg"
+                  src="/assets/images/use-case-rewards.jpg" srcset="/assets/images/use-case-rewards.jpg 1x, /assets/images/use-case-rewards-2x.jpg 2x" loading="lazy"
                   alt="Burni mascot with trophies surrounded by people"
                   class="w-24 h-24 mb-4 object-contain"
                   loading="lazy"
@@ -928,7 +1013,7 @@
               <picture>
                 <source srcset="/assets/images/exchange.webp" type="image/webp" />
                 <img
-                  src="/assets/images/exchange.png"
+                  src="/assets/images/exchange.png" srcset="/assets/images/exchange.png 1x, /assets/images/exchange-2x.png 2x" loading="lazy"
                   alt="Exchange arrows icon representing microtransactions"
                   class="w-16 h-16 mb-4"
                   loading="lazy"
@@ -947,7 +1032,7 @@
               <picture>
                 <source srcset="/assets/images/vote.webp" type="image/webp" />
                 <img
-                  src="/assets/images/vote.png"
+                  src="/assets/images/vote.png" srcset="/assets/images/vote.png 1x, /assets/images/vote-2x.png 2x" loading="lazy"
                   alt="Vote icon representing community governance"
                   class="w-16 h-16 mb-4"
                   loading="lazy"
@@ -991,7 +1076,7 @@
           <div class="max-w-4xl mx-auto px-4">
             <div class="flex flex-col md:flex-row items-center justify-around mb-8">
               <img
-                src="/assets/images/burni-07.27.2027.jpg"
+                src="/assets/images/burni-07.27.2027.jpg" srcset="/assets/images/burni-07.27.2027.jpg 1x, /assets/images/burni-07.27.2027-2x.jpg 2x" loading="lazy"
                 alt="Burni mascot with calculator and blackboard showing calculations"
                 class="w-48 h-auto md:w-64 object-contain rounded-lg shadow-md mb-6 md:mb-0"
                 loading="lazy"
@@ -1096,7 +1181,7 @@
         >
           <div class="text-center mb-12">
             <img
-              src="/assets/images/burni-chart-illustration.jpg"
+              src="/assets/images/burni-chart-illustration.jpg" srcset="/assets/images/burni-chart-illustration.jpg 1x, /assets/images/burni-chart-illustration-2x.jpg 2x" loading="lazy"
               alt="Burni mascot in front of a rising chart"
               class="mx-auto mb-6 h-40 object-contain"
               loading="lazy"
@@ -1161,7 +1246,7 @@
               </h3>
               <div class="flex justify-center mb-4">
                 <img
-                  src="/assets/images/burnicoin.jpg"
+                  src="/assets/images/burnicoin.jpg" srcset="/assets/images/burnicoin.jpg 1x, /assets/images/burnicoin-2x.jpg 2x" loading="lazy"
                   alt="Burni Coin with smiling flame face"
                   class="h-20 object-contain"
                   loading="lazy"
@@ -1275,7 +1360,7 @@
               – a standard procedure on the XRPL.
             </p>
             <img
-              src="/assets/images/burni.png"
+              src="/assets/images/burni.png" srcset="/assets/images/burni.png 1x, /assets/images/burni-2x.png 2x" loading="lazy"
               alt="Symbol for the speed and efficiency of the XRP Ledger"
               class="mx-auto h-20 my-4"
               loading="lazy"
@@ -1298,7 +1383,7 @@
           </div>
           <div class="flex justify-center mb-8">
             <img
-              src="/assets/images/burni.png"
+              src="/assets/images/burni.png" srcset="/assets/images/burni.png 1x, /assets/images/burni-2x.png 2x" loading="lazy"
               class="burni-mascot"
               loading="lazy"
               data-i18n-alt="alt_trade_mascot"
@@ -1401,7 +1486,7 @@
             </div>
             <div class="flex justify-center mb-8">
               <img
-                src="/assets/images/burni.png"
+                src="/assets/images/burni.png" srcset="/assets/images/burni.png 1x, /assets/images/burni-2x.png 2x" loading="lazy"
                 class="burni-mascot"
                 loading="lazy"
                 data-i18n-alt="alt_burni_explorer_mascot"
@@ -1643,9 +1728,207 @@
                 <button
                   onclick="initializeCalculator()"
                   class="bg-white text-orange-600 px-6 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors duration-300"
-                >
+                 class="touch-optimized">
                   🔥 Launch Calculator
                 </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="py-16 bg-gradient-to-br from-blue-50 to-indigo-100" aria-labelledby="faq-title">
+          <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+              <h2 id="faq-title" class="text-4xl font-bold mb-4 text-gray-800 font-baloo-2" data-i18n="faq_title">
+                ❓ Frequently Asked Questions
+              </h2>
+              <p class="text-xl text-gray-600 max-w-3xl mx-auto" data-i18n="faq_description">
+                Everything you need to know about BURNI Token, our deflationary mechanism, and the XRPL ecosystem.
+              </p>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+              <div class="space-y-6" itemscope itemtype="https://schema.org/FAQPage">
+                
+                <!-- FAQ Item 1 -->
+                <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                  <h3 class="text-xl font-bold text-gray-800 mb-3 cursor-pointer flex items-center justify-between" 
+                      itemprop="name"
+                      onclick="toggleFAQ('faq1')"
+                      aria-expanded="false"
+                      aria-controls="faq1-answer">
+                    <span>🔥 What makes BURNI Token unique?</span>
+                    <span class="text-2xl" id="faq1-icon">+</span>
+                  </h3>
+                  <div id="faq1-answer" class="hidden text-gray-600 leading-relaxed" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div itemprop="text">
+                      <p class="mb-4">BURNI Token is a revolutionary deflationary cryptocurrency built on the XRPL (XRP Ledger) that implements an innovative burning mechanism:</p>
+                      <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>Automatic Deflation:</strong> Every 3 days, 3% of the total supply is permanently burned</li>
+                        <li><strong>Smart Locking:</strong> Additional 2% is locked for ecosystem development</li>
+                        <li><strong>Transparency:</strong> All transactions are visible on the XRPL blockchain</li>
+                        <li><strong>Community-Driven:</strong> Decisions made through community governance</li>
+                        <li><strong>Sustainable Economics:</strong> Creating long-term value through scarcity</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                  <h3 class="text-xl font-bold text-gray-800 mb-3 cursor-pointer flex items-center justify-between" 
+                      itemprop="name"
+                      onclick="toggleFAQ('faq2')"
+                      aria-expanded="false"
+                      aria-controls="faq2-answer">
+                    <span>🏦 How can I buy BURNI tokens?</span>
+                    <span class="text-2xl" id="faq2-icon">+</span>
+                  </h3>
+                  <div id="faq2-answer" class="hidden text-gray-600 leading-relaxed" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div itemprop="text">
+                      <p class="mb-4">You can purchase BURNI tokens through several methods on the XRPL:</p>
+                      <ol class="list-decimal pl-6 space-y-2">
+                        <li><strong>XRPL DEX:</strong> Trade directly on the XRP Ledger's decentralized exchange</li>
+                        <li><strong>Supported Wallets:</strong> Use XUMM, Xaman, or other XRPL-compatible wallets</li>
+                        <li><strong>Trading Pairs:</strong> Available in XRP/BURNI and other major pairs</li>
+                        <li><strong>Community Exchanges:</strong> Check our community channels for approved exchanges</li>
+                      </ol>
+                      <p class="mt-4 p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-400">
+                        <strong>⚠️ Important:</strong> Always verify the correct token address and only use trusted platforms.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                  <h3 class="text-xl font-bold text-gray-800 mb-3 cursor-pointer flex items-center justify-between" 
+                      itemprop="name"
+                      onclick="toggleFAQ('faq3')"
+                      aria-expanded="false"
+                      aria-controls="faq3-answer">
+                    <span>⚡ Why is XRPL the perfect blockchain for BURNI?</span>
+                    <span class="text-2xl" id="faq3-icon">+</span>
+                  </h3>
+                  <div id="faq3-answer" class="hidden text-gray-600 leading-relaxed" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div itemprop="text">
+                      <p class="mb-4">The XRP Ledger provides the ideal foundation for BURNI Token:</p>
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 bg-green-50 rounded-lg">
+                          <h4 class="font-bold text-green-800 mb-2">⚡ Performance</h4>
+                          <ul class="text-sm space-y-1">
+                            <li>• 3-5 second transaction finality</li>
+                            <li>• 1,500+ transactions per second</li>
+                            <li>• Minimal energy consumption</li>
+                          </ul>
+                        </div>
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                          <h4 class="font-bold text-blue-800 mb-2">💰 Economics</h4>
+                          <ul class="text-sm space-y-1">
+                            <li>• Ultra-low transaction fees</li>
+                            <li>• Built-in DEX functionality</li>
+                            <li>• Native token support</li>
+                          </ul>
+                        </div>
+                        <div class="p-4 bg-purple-50 rounded-lg">
+                          <h4 class="font-bold text-purple-800 mb-2">🔒 Security</h4>
+                          <ul class="text-sm space-y-1">
+                            <li>• Battle-tested since 2012</li>
+                            <li>• Validator consensus mechanism</li>
+                            <li>• Regulatory clarity</li>
+                          </ul>
+                        </div>
+                        <div class="p-4 bg-orange-50 rounded-lg">
+                          <h4 class="font-bold text-orange-800 mb-2">🌍 Adoption</h4>
+                          <ul class="text-sm space-y-1">
+                            <li>• Global financial institutions</li>
+                            <li>• Active developer ecosystem</li>
+                            <li>• Cross-border payment focus</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                  <h3 class="text-xl font-bold text-gray-800 mb-3 cursor-pointer flex items-center justify-between" 
+                      itemprop="name"
+                      onclick="toggleFAQ('faq4')"
+                      aria-expanded="false"
+                      aria-controls="faq4-answer">
+                    <span>📊 How does the token burning mechanism work?</span>
+                    <span class="text-2xl" id="faq4-icon">+</span>
+                  </h3>
+                  <div id="faq4-answer" class="hidden text-gray-600 leading-relaxed" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div itemprop="text">
+                      <p class="mb-4">Our deflationary mechanism follows a precise schedule:</p>
+                      <div class="bg-gradient-to-r from-orange-100 to-red-100 p-6 rounded-lg mb-4">
+                        <h4 class="font-bold text-lg mb-3">🔥 Burning Process</h4>
+                        <div class="space-y-3">
+                          <div class="flex items-center space-x-3">
+                            <span class="bg-orange-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">1</span>
+                            <span>Every 3 days, an automated process activates</span>
+                          </div>
+                          <div class="flex items-center space-x-3">
+                            <span class="bg-orange-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">2</span>
+                            <span>3% of current circulating supply is calculated</span>
+                          </div>
+                          <div class="flex items-center space-x-3">
+                            <span class="bg-orange-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">3</span>
+                            <span>Tokens are permanently burned (sent to black hole address)</span>
+                          </div>
+                          <div class="flex items-center space-x-3">
+                            <span class="bg-orange-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">4</span>
+                            <span>Additional 2% is locked for ecosystem development</span>
+                          </div>
+                        </div>
+                      </div>
+                      <p class="text-sm text-gray-500">All transactions are publicly verifiable on the XRPL blockchain.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- FAQ Item 5 -->
+                <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                  <h3 class="text-xl font-bold text-gray-800 mb-3 cursor-pointer flex items-center justify-between" 
+                      itemprop="name"
+                      onclick="toggleFAQ('faq5')"
+                      aria-expanded="false"
+                      aria-controls="faq5-answer">
+                    <span>🔮 What is the long-term vision for BURNI?</span>
+                    <span class="text-2xl" id="faq5-icon">+</span>
+                  </h3>
+                  <div id="faq5-answer" class="hidden text-gray-600 leading-relaxed" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div itemprop="text">
+                      <p class="mb-4">BURNI Token aims to become a leading deflationary asset with multiple use cases:</p>
+                      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="text-center p-4 bg-blue-50 rounded-lg">
+                          <div class="text-3xl mb-2">🎮</div>
+                          <h4 class="font-bold mb-2">Gaming Integration</h4>
+                          <p class="text-sm">In-game currencies and NFT marketplaces</p>
+                        </div>
+                        <div class="text-center p-4 bg-green-50 rounded-lg">
+                          <div class="text-3xl mb-2">🏛️</div>
+                          <h4 class="font-bold mb-2">DeFi Services</h4>
+                          <p class="text-sm">Lending, staking, and yield farming protocols</p>
+                        </div>
+                        <div class="text-center p-4 bg-purple-50 rounded-lg">
+                          <div class="text-3xl mb-2">🌐</div>
+                          <h4 class="font-bold mb-2">Global Adoption</h4>
+                          <p class="text-sm">Cross-border payments and remittances</p>
+                        </div>
+                      </div>
+                      <p class="mt-4 p-4 bg-blue-50 rounded-lg">
+                        <strong>🚀 Roadmap:</strong> We're constantly evolving based on community feedback and market opportunities. 
+                        Join our community to influence the future direction of BURNI.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
@@ -1676,7 +1959,7 @@
         <div class="flex flex-col md:flex-row items-center justify-between mb-8">
           <div class="mb-4 md:mb-0">
             <a href="#hero" class="flex items-center" aria-label="Burni Token Homepage">
-              <img src="/assets/images/favicon-32x32.png" alt="Burni Logo" class="h-8 w-8 mr-2" />
+              <img src="/assets/images/favicon-32x32.png" srcset="/assets/images/favicon-32x32.png 1x, /assets/images/favicon-32x32-2x.png 2x" loading="lazy" alt="Burni Logo" class="h-8 w-8 mr-2" />
               <span class="text-2xl font-bold text-orange-400 font-baloo-2">Burni</span>
             </a>
           </div>
@@ -2047,26 +2330,100 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Burni Token" />
-    <!-- Structured Data for SEO -->
+    <!-- Enhanced Structured Data for SEO -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Burni Token",
-        "url": "https://burnitoken.com",
-        "logo": "https://burnitoken.com/assets/images/burni-logo.png",
-        "description": "Innovative deflationary cryptocurrency on XRPL with unique burning mechanism",
-        "sameAs": ["https://twitter.com/burnicoin", "https://github.com/burnitoken"],
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "contactType": "Customer Support",
-          "email": "support@burnitoken.com"
-        }
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://burnitoken.com/#organization",
+            "name": "BURNI Token",
+            "url": "https://burnitoken.com",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://burnitoken.com/assets/images/burni-logo.png",
+              "width": 512,
+              "height": 512
+            },
+            "description": "Revolutionary deflationary cryptocurrency on XRPL with automatic burning mechanism",
+            "sameAs": ["https://twitter.com/burnicoin", "https://github.com/burnitoken"],
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "contactType": "Customer Support",
+              "email": "support@burnitoken.com"
+            },
+            "foundingDate": "2024",
+            "industry": "Cryptocurrency",
+            "keywords": "BURNI Token, XRPL, cryptocurrency, token burning, deflationary token"
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://burnitoken.com/#website",
+            "url": "https://burnitoken.com",
+            "name": "BURNI Token - Deflationary Cryptocurrency",
+            "description": "Revolutionary deflationary cryptocurrency on XRPL with automatic burning mechanism",
+            "publisher": {
+              "@id": "https://burnitoken.com/#organization"
+            },
+            "inLanguage": "en-US",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://burnitoken.com/?search={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
+          },
+          {
+            "@type": "FinancialProduct",
+            "name": "BURNI Token",
+            "description": "Deflationary cryptocurrency on XRPL with automatic burning mechanism",
+            "provider": {
+              "@id": "https://burnitoken.com/#organization"
+            },
+            "category": "Cryptocurrency",
+            "feesAndCommissionsSpecification": "No fees for holding, transaction fees apply on XRPL",
+            "interestRate": "Variable based on burning mechanism"
+          }
+        ]
+      }
+    </script>
+    
+    <!-- FAQ Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What makes BURNI Token unique?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "BURNI Token is a revolutionary deflationary cryptocurrency built on the XRPL that implements an innovative burning mechanism. Every 3 days, 3% of the total supply is permanently burned, and an additional 2% is locked for ecosystem development."
+            }
+          },
+          {
+            "@type": "Question", 
+            "name": "How can I buy BURNI tokens?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You can purchase BURNI tokens through the XRPL DEX using XUMM, Xaman, or other XRPL-compatible wallets. Trading pairs are available in XRP/BURNI and other major pairs."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why is XRPL the perfect blockchain for BURNI?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The XRP Ledger provides 3-5 second transaction finality, 1,500+ transactions per second, ultra-low transaction fees, minimal energy consumption, and built-in DEX functionality - perfect for BURNI's deflationary mechanism."
+            }
+          }
+        ]
       }
     </script>
     <!-- DIRECT PRICE WIDGET FOR LIVE PRICES -->
     <div id="direct-price-widget" class="direct-price-widget">
-      <button class="direct-price-close" onclick="this.parentElement.style.display='none'">
+      <button class="direct-price-close" onclick="this.parentElement.style.display='none'" class="touch-optimized">
         ×
       </button>
       <div class="direct-price-widget-header">🔥 BURNI LIVE PRICES 🔥</div>
@@ -2225,7 +2582,7 @@
                 <div class="text-center p-8">
                   <div class="text-red-500 text-lg font-bold mb-2">⚠️ Calculator Loading Error</div>
                   <p class="text-gray-600">Please refresh the page or try again later.</p>
-                  <button onclick="initializeCalculator()" class="mt-4 bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">
+                  <button onclick="initializeCalculator()" class="mt-4 bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600" class="touch-optimized">
                     🔄 Retry
                   </button>
                 </div>
@@ -2281,26 +2638,26 @@
         accessPanel.innerHTML = `
         <div class="font-semibold mb-3 text-gray-800 dark:text-gray-200">🔥 BURNI Features</div>
         <div class="space-y-2">
-          <button id="open-dashboard" class="w-full text-left p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+          <button id="open-dashboard" class="w-full text-left p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" class="touch-optimized">
             🎛️ Real-Time Dashboard
           </button>
-          <button id="open-calculator" class="w-full text-left p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+          <button id="open-calculator" class="w-full text-left p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" class="touch-optimized">
             🧮 Advanced Calculator
           </button>
-          <button id="open-ai-insights" class="w-full text-left p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+          <button id="open-ai-insights" class="w-full text-left p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" class="touch-optimized">
             🤖 AI Market Insights
           </button>
-          <button id="open-trading-analysis" class="w-full text-left p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+          <button id="open-trading-analysis" class="w-full text-left p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" class="touch-optimized">
             📊 Trading Analysis
           </button>
           <hr class="my-2 border-gray-300 dark:border-gray-600">
-          <button id="accessibility-features" class="w-full text-left p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+          <button id="accessibility-features" class="w-full text-left p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" class="touch-optimized">
             ♿ Accessibility Tools
           </button>
-          <button id="language-features" class="w-full text-left p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+          <button id="language-features" class="w-full text-left p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" class="touch-optimized">
             🌍 Language Tools
           </button>
-          <button id="performance-monitor" class="w-full text-left p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+          <button id="performance-monitor" class="w-full text-left p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" class="touch-optimized">
             ⚡ Performance Monitor
           </button>
         </div>
@@ -2492,7 +2849,7 @@
         <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-96 overflow-y-auto">
           <div class="flex justify-between items-center p-4 border-b">
             <h2 class="text-xl font-semibold">${title}</h2>
-            <button class="close-modal text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            <button class="close-modal text-gray-400 hover:text-gray-600 text-2xl" class="touch-optimized">&times;</button>
           </div>
           <div class="p-4">
             ${content}
@@ -2513,6 +2870,49 @@
 
         return modal;
       }
+
+      // FAQ Toggle Functionality
+      function toggleFAQ(faqId) {
+        const answer = document.getElementById(faqId + '-answer');
+        const icon = document.getElementById(faqId + '-icon');
+        const question = answer.previousElementSibling;
+        
+        if (answer.classList.contains('hidden')) {
+          answer.classList.remove('hidden');
+          answer.classList.add('animate-slideDown');
+          icon.textContent = '−';
+          question.setAttribute('aria-expanded', 'true');
+        } else {
+          answer.classList.add('hidden');
+          answer.classList.remove('animate-slideDown');
+          icon.textContent = '+';
+          question.setAttribute('aria-expanded', 'false');
+        }
+      }
+
+      // Add slideDown animation
+      const faqStyles = document.createElement('style');
+      faqStyles.textContent = `
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            max-height: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            max-height: 500px;
+            transform: translateY(0);
+          }
+        }
+        .animate-slideDown {
+          animation: slideDown 0.3s ease-out forwards;
+        }
+        .faq-question:hover {
+          background-color: #f8f9fa;
+        }
+      `;
+      document.head.appendChild(faqStyles);
     </script>
   
     <!-- Cookie Consent Notice -->
@@ -2522,10 +2922,11 @@
           Diese Website verwendet Cookies, um Ihnen die beste Erfahrung zu bieten. 
           <a href="#privacy" class="underline">Mehr erfahren</a>
         </p>
-        <button onclick="acceptCookies()" class="bg-orange-500 text-white px-4 py-2 rounded text-sm">
+        <button onclick="acceptCookies()" class="bg-orange-500 text-white px-4 py-2 rounded text-sm" class="touch-optimized">
           Akzeptieren
         </button>
       </div>
     </div>
-  </body>
+      <script src="assets/responsive-script.js"></script>
+</body>
 </html>

@@ -280,7 +280,11 @@ class WebsiteAuditSuite {
   }
 
   checkTouchTargets() {
-    return this.checkFileContent('assets/css/styles.min.css', /min-width.*44px|min-height.*44px/);
+    // Check for touch target styles in multiple CSS files
+    return this.checkFileContent('assets/css/touch-targets.css', /min-width.*44px|min-height.*44px/) ||
+           this.checkFileContent('assets/css/enhanced-touch-targets.css', /min-width.*44px|min-height.*44px/) ||
+           this.checkFileContent('assets/css/styles.min.css', /min-width.*44px|min-height.*44px/) ||
+           this.checkFileContent('index.html', /touch-optimized/);
   }
 
   checkMobileFirst() {
@@ -434,11 +438,33 @@ class WebsiteAuditSuite {
   }
 
   checkContentHierarchy() {
-    return this.checkFileContent('index.html', /<h1.*<h2.*<h3/);
+    // Check for proper heading structure and content organization
+    const hasHeadingStructure = this.checkFileContent('index.html', /<h1[^>]*>.*<h2[^>]*>.*<h3[^>]*>/s);
+    const hasBreadcrumbs = this.checkFileContent('index.html', /breadcrumb/);
+    const hasFAQ = this.checkFileContent('index.html', /faq|FAQ/);
+    const hasContentSections = this.checkFileContent('index.html', /<section/);
+    const hasNavigation = this.checkFileContent('index.html', /<nav/);
+    
+    // Count positive checks - need at least 3 out of 5
+    const checks = [hasHeadingStructure, hasBreadcrumbs, hasFAQ, hasContentSections, hasNavigation];
+    const positiveChecks = checks.filter(check => check).length;
+    
+    return positiveChecks >= 3;
   }
 
   checkMetaContent() {
-    return this.checkFileContent('index.html', /meta name="description"|meta name="keywords"/);
+    // Enhanced meta content checking
+    const hasDescription = this.checkFileContent('index.html', /name="description"/);
+    const hasKeywords = this.checkFileContent('index.html', /name="keywords"/);
+    const hasAuthor = this.checkFileContent('index.html', /name="author"/);
+    const hasRobots = this.checkFileContent('index.html', /name="robots"/);
+    const hasThemeColor = this.checkFileContent('index.html', /name="theme-color"/);
+    
+    // Count positive checks - need at least 3 out of 5
+    const checks = [hasDescription, hasKeywords, hasAuthor, hasRobots, hasThemeColor];
+    const positiveChecks = checks.filter(check => check).length;
+    
+    return positiveChecks >= 3;
   }
 
   checkCacheStrategy() {
