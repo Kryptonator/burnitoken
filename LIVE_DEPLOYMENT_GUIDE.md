@@ -1,6 +1,7 @@
 # 🚀 BURNITOKEN - LIVE DEPLOYMENT GUIDE
 
 ## 📅 Deployment Date: June 16, 2025
+
 ## 🎯 Status: READY FOR IMMEDIATE DEPLOYMENT
 
 ---
@@ -20,10 +21,12 @@
 ## 🌐 GITHUB PAGES ACTIVATION STEPS
 
 ### STEP 1: Access Repository Settings
+
 1. Go to: https://github.com/Kryptonator/burnitoken/settings
 2. Scroll down to "Pages" section (left sidebar)
 
 ### STEP 2: Configure GitHub Pages
+
 ```
 Source: Deploy from a branch
 Branch: master / (root)
@@ -31,10 +34,12 @@ Custom domain: (optional) burnitoken.com
 ```
 
 ### STEP 3: Enable HTTPS
+
 - ✅ Enforce HTTPS (automatically enabled)
 - ✅ SSL Certificate (auto-generated)
 
 ### STEP 4: DNS Configuration (If using custom domain)
+
 ```dns
 Type: CNAME
 Name: www
@@ -53,9 +58,11 @@ Value: 185.199.108.153
 ## 🎯 IMMEDIATE LIVE URLs
 
 ### GitHub Pages URL (Instant):
+
 **https://kryptonator.github.io/burnitoken/**
 
 ### Custom Domain URL (After DNS):
+
 **https://burnitoken.com** (if configured)
 
 ---
@@ -63,7 +70,7 @@ Value: 185.199.108.153
 ## ⚡ EXPECTED DEPLOYMENT TIME
 
 - **GitHub Pages Activation:** 2-5 minutes
-- **Initial Deployment:** 5-10 minutes  
+- **Initial Deployment:** 5-10 minutes
 - **Global CDN Propagation:** 10-15 minutes
 - **Custom Domain (optional):** 24-48 hours
 
@@ -72,6 +79,7 @@ Value: 185.199.108.153
 ## 📊 POST-DEPLOYMENT VERIFICATION
 
 ### 1. FUNCTIONALITY CHECK
+
 - [ ] Homepage loads correctly
 - [ ] All navigation works
 - [ ] Images display properly
@@ -80,12 +88,14 @@ Value: 185.199.108.153
 - [ ] Cross-browser compatibility
 
 ### 2. PERFORMANCE CHECK
+
 - [ ] Page load speed < 3 seconds
 - [ ] Lighthouse score > 90
 - [ ] Mobile performance optimized
 - [ ] SEO metrics green
 
 ### 3. SECURITY CHECK
+
 - [ ] HTTPS working
 - [ ] Security headers active
 - [ ] No mixed content warnings
@@ -108,6 +118,7 @@ Value: 185.199.108.153
 ## 🎉 SUCCESS INDICATORS
 
 ### ✅ Deployment Successful When:
+
 - Green checkmark in repository
 - Live URL accessible
 - All features working
@@ -115,6 +126,7 @@ Value: 185.199.108.153
 - Security headers active
 
 ### 🔧 If Issues Occur:
+
 - Check Actions tab for build logs
 - Verify branch permissions
 - Review deployment history
@@ -125,11 +137,14 @@ Value: 185.199.108.153
 ## 📈 MONITORING SETUP (Post-Deployment)
 
 ### Immediate Setup:
+
 1. **Google Search Console**
+
    - Add property: https://kryptonator.github.io/burnitoken/
    - Submit sitemap: /sitemap.xml
 
 2. **Google Analytics**
+
    - Create GA4 property
    - Add tracking code (already implemented)
    - Set up conversion goals
@@ -162,4 +177,4 @@ Value: 185.199.108.153
 
 ---
 
-*Deployment prepared on June 16, 2025 - All systems GO! 🚀*
+_Deployment prepared on June 16, 2025 - All systems GO! 🚀_
