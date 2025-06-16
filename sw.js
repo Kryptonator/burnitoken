@@ -1,4 +1,4 @@
-const CACHE_NAME = 'burni-cache-v6'; // Increased version to force cache refresh
+const CACHE_NAME = 'burni-cache-v7'; // Updated for performance optimizations
 const API_CACHE_NAME = 'burni-api-cache-v1';
 const ASSETS_TO_CACHE = [
   '/',
@@ -6,6 +6,9 @@ const ASSETS_TO_CACHE = [
   '/404.html',
   '/manifest.json',
   '/assets/css/styles.min.css',
+  '/assets/css/proportion-optimization.css',
+  '/assets/css/browser-compatibility.css',
+  '/assets/css/performance-optimization.css',
   '/assets/scripts.min.js',
   '/assets/scripts.js',
   '/assets/config.js',
@@ -50,6 +53,8 @@ const ASSETS_TO_CACHE = [
   '/assets/images/vote.png',
   '/assets/images/vote.webp',
   '/assets/images/burni-07.27.2027.jpg',
+  '/clear-cache.html',
+  '/test-minimal.html',
 ];
 
 // API URLs that should be cached

@@ -2913,8 +2913,8 @@ function showInstallPrompt() {
   }, 10000);
 }
 
-// Service Worker registration with enhanced error handling - TEMPORARILY DISABLED FOR DEBUGGING
-if (false && 'serviceWorker' in navigator) {
+// Service Worker registration with enhanced error handling - RE-ENABLED WITH OPTIMIZATIONS
+if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
       .register('/sw.js')
