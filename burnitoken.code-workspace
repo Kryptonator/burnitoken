@@ -15,9 +15,24 @@
     },
     "extensions": {
         "recommendations": [
-            "ms-vscode.vscode-typescript-next",
+            "esbenp.prettier-vscode",
             "bradlc.vscode-tailwindcss",
-            "esbenp.prettier-vscode"
+            "ritwickdey.liveserver",
+            "ecmel.vscode-html-css",
+            "formulahendry.auto-rename-tag",
+            "formulahendry.auto-close-tag",
+            "eamodio.gitlens",
+            "github.vscode-pull-request-github",
+            "redhat.vscode-yaml",
+            "mhutchie.git-graph",
+            "xabikos.javascriptsnippets",
+            "zignd.html-css-class-completion",
+            "pranaygp.vscode-css-peek",
+            "heybourn.headwind",
+            "austenc.tailwind-docs",
+            "github.copilot",
+            "github.copilot-chat",
+            "ms-edgedevtools.vscode-edge-devtools"
         ]
     }
 }

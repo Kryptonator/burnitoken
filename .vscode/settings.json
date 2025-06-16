@@ -48,5 +48,34 @@
   },
   "css.lint.unknownAtRules": "ignore",
   "scss.lint.unknownAtRules": "ignore",
-  "chat.sendElementsToChat.attachCSS": false
+  "chat.sendElementsToChat.attachCSS": false,
+  
+  // Extension Configuration
+  "prettier.configPath": ".prettierrc",
+  "prettier.enable": true,
+  "liveServer.settings.donotShowInfoMsg": true,
+  "liveServer.settings.port": 3000,
+  "liveServer.settings.CustomBrowser": "chrome",
+  "auto-close-tag.activationOnLanguage": [
+    "xml", "php", "blade", "ejs", "jinja", "javascript", 
+    "javascriptreact", "typescript", "typescriptreact", 
+    "plaintext", "markdown", "vue", "liquid", "erb", "html"
+  ],
+  "auto-rename-tag.activationOnLanguage": [
+    "html", "xml", "php", "javascript", "javascriptreact", 
+    "typescript", "typescriptreact"
+  ],
+  "headwind.runOnSave": true,
+  "headwind.sortTailwindClasses": true,
+  "gitlens.codeLens.enabled": true,
+  "gitlens.currentLine.enabled": true,
+  "gitlens.hovers.enabled": true,
+  "gitlens.statusBar.enabled": true,
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "git.autofetch": true,
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact",
+    "plaintext": "html"
+  }
 }
