@@ -28,8 +28,7 @@ class SecureDOM {
   static showNotification(message, type = 'info') {
     const notification = this.createSafeElement(
       'div',
-      `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm ${
-        type === 'error' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'
+      `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm ${type === 'error' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'
       }`,
     );
 
@@ -102,3 +101,53 @@ class SecureDOM {
 
 // Globale sichere Funktionen
 window.SecureDOM = SecureDOM;
+
+// Browser Compatibility Polyfills and Enhancements
+(function () {
+  'use strict';
+
+  // Intersection Observer Polyfill for lazy loading
+  if (!('IntersectionObserver' in window)) {
+    console.log('Loading IntersectionObserver polyfill');
+    // Simple fallback - load all images immediately
+    document.addEventListener('DOMContentLoaded', function () {
+      const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+      lazyImages.forEach(img => {
+        if (img.dataset.src) {
+          img.src = img.dataset.src;
+          img.classList.add('loaded');
+        }
+      });
+    });
+  }
+
+  // Service Worker support detection
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/sw.js')
+        .then(function (registration) {
+          console.log('SW registered: ', registration);
+        })
+        .catch(function (registrationError) {
+          console.log('SW registration failed: ', registrationError);
+        });
+    });
+  }
+
+  // Web App Manifest support for older browsers
+  if (!('serviceWorker' in navigator)) {
+    // Fallback for browsers without service worker support
+    const link = document.createElement('link');
+    link.rel = 'shortcut icon';
+    link.href = '/assets/images/favicon.ico';
+    document.head.appendChild(link);
+  }
+
+  // CSS Custom Properties fallback
+  if (!CSS.supports('color', 'var(--fake-var)')) {
+    document.documentElement.style.setProperty('--primary-color', '#f97316');
+    document.documentElement.style.setProperty('--secondary-color', '#ffffff');
+  }
+
+  // ...existing code... */
+})();
