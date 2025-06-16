@@ -66,6 +66,12 @@
 
       // Always mark ready immediately for tests
       markReady();
+
+      // Setup real-time features
+      this.setupRealTimeFeatures();
+
+      // Initialize advanced PWA features
+      this.initAdvancedPWA();
     }
 
     trackPageLoad() {
@@ -306,6 +312,255 @@
       window.addEventListener('beforeunload', () => {
         this.sendQueuedData();
       });
+    }
+
+    setupRealTimeFeatures() {
+      // Real-time price monitoring
+      this.initPriceMonitoring();
+
+      // WebSocket connection for live data
+      this.initWebSocketConnection();
+
+      // Background sync for offline actions
+      this.initBackgroundSync();
+
+      // Push notifications setup
+      this.initPushNotifications();
+    }
+
+    initPriceMonitoring() {
+      // Monitor BURNI, XRP, XPM prices in real-time
+      setInterval(() => {
+        this.fetchPriceData();
+      }, 30000); // Every 30 seconds
+    }
+
+    async fetchPriceData() {
+      try {
+        // Simulate API call - replace with actual endpoints
+        const response = await fetch('/api/prices', {
+          method: 'GET',
+          headers: {
+            'Cache-Control': 'no-cache',
+          },
+        });
+
+        if (response.ok) {
+          const priceData = await response.json();
+          this.updatePriceDisplay(priceData);
+          this.trackEvent('price_update', { timestamp: Date.now(), ...priceData });
+        }
+      } catch (error) {
+        console.log('Price fetch failed, using cached data');
+        this.handleOfflinePrice();
+      }
+    }
+
+    updatePriceDisplay(priceData) {
+      // Update price elements with real-time data
+      const priceElements = {
+        'burni-price': priceData.burni || '$0.0011',
+        'xrp-price': priceData.xrp || '$0.50',
+        'xpm-price': priceData.xpm || '$0.02',
+      };
+
+      Object.entries(priceElements).forEach(([id, price]) => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.textContent = price;
+          element.style.animation = 'priceUpdate 0.5s ease-in-out';
+        }
+      });
+    }
+
+    initWebSocketConnection() {
+      if (typeof WebSocket !== 'undefined') {
+        try {
+          // Replace with actual WebSocket endpoint
+          this.ws = new WebSocket('wss://api.burnitoken.website/ws');
+
+          this.ws.onopen = () => {
+            console.log('🔗 Real-time connection established');
+            this.trackEvent('websocket_connected');
+          };
+
+          this.ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            this.handleRealTimeData(data);
+          };
+
+          this.ws.onerror = () => {
+            console.log('⚠️ WebSocket connection failed, using polling');
+            this.fallbackToPolling();
+          };
+        } catch (error) {
+          this.fallbackToPolling();
+        }
+      }
+    }
+
+    handleRealTimeData(data) {
+      switch (data.type) {
+        case 'price_update':
+          this.updatePriceDisplay(data.payload);
+          break;
+        case 'burn_event':
+          this.showBurnNotification(data.payload);
+          break;
+        case 'community_update':
+          this.updateCommunityStats(data.payload);
+          break;
+      }
+    }
+
+    initBackgroundSync() {
+      if ('serviceWorker' in navigator && 'sync' in window.ServiceWorkerRegistration.prototype) {
+        navigator.serviceWorker.ready.then((registration) => {
+          // Register background sync for offline actions
+          registration.sync.register('background-sync');
+          this.trackEvent('background_sync_registered');
+        });
+      }
+    }
+
+    initPushNotifications() {
+      if ('Notification' in window && 'serviceWorker' in navigator) {
+        // Request notification permission
+        Notification.requestPermission().then((permission) => {
+          if (permission === 'granted') {
+            this.setupPushSubscription();
+            this.trackEvent('notifications_enabled');
+          }
+        });
+      }
+    }
+
+    async setupPushSubscription() {
+      try {
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: this.urlBase64ToUint8Array('your-vapid-public-key'), // Replace with actual key
+        });
+
+        // Send subscription to server
+        await this.sendSubscriptionToServer(subscription);
+      } catch (error) {
+        console.log('Push subscription failed:', error);
+      }
+    }
+
+    urlBase64ToUint8Array(base64String) {
+      const padding = '='.repeat((4 - base64String.length % 4) % 4);
+      const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+      const rawData = window.atob(base64);
+      const outputArray = new Uint8Array(rawData.length);
+      for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+      }
+      return outputArray;
+    }
+
+    // Advanced PWA Features
+    initAdvancedPWA() {
+      this.setupAppInstallPrompt();
+      this.initAppShortcuts();
+      this.setupShareAPI();
+      this.initAppBadging();
+    }
+
+    setupAppInstallPrompt() {
+      let deferredPrompt;
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        this.showInstallButton(deferredPrompt);
+      });
+    }
+
+    showInstallButton(deferredPrompt) {
+      const installButton = document.createElement('button');
+      installButton.textContent = '📱 Install App';
+      installButton.className = 'install-btn';
+      installButton.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 25px;
+        font-weight: bold;
+        cursor: pointer;
+        z-index: 1000;
+        box-shadow: 0 4px 15px rgba(238,90,36,0.4);
+      `;
+
+      installButton.addEventListener('click', async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          this.trackEvent('app_install_prompt', { outcome });
+          deferredPrompt = null;
+          installButton.remove();
+        }
+      });
+
+      document.body.appendChild(installButton);
+    }
+
+    initAppShortcuts() {
+      // App shortcuts are defined in manifest.json
+      // Track shortcut usage
+      const urlParams = new URLSearchParams(window.location.search);
+      const shortcut = urlParams.get('shortcut');
+      if (shortcut) {
+        this.trackEvent('app_shortcut_used', { shortcut });
+      }
+    }
+
+    setupShareAPI() {
+      if (navigator.share) {
+        // Add share buttons where needed
+        document.addEventListener('click', (e) => {
+          if (e.target.classList.contains('share-btn')) {
+            this.shareContent(e.target.dataset.url, e.target.dataset.title);
+          }
+        });
+      }
+    }
+
+    async shareContent(url, title) {
+      try {
+        await navigator.share({
+          title: title || 'Burni Token - Deflationary XRPL Token',
+          text: 'Check out Burni Token - the deflationary token creating value through scarcity!',
+          url: url || window.location.href,
+        });
+        this.trackEvent('content_shared', { url, title });
+      } catch (error) {
+        // Fallback to clipboard
+        this.copyToClipboard(url || window.location.href);
+      }
+    }
+
+    initAppBadging() {
+      if ('setAppBadge' in navigator) {
+        // Update app badge with unread notifications count
+        this.updateAppBadge(0);
+      }
+    }
+
+    updateAppBadge(count) {
+      if ('setAppBadge' in navigator) {
+        if (count > 0) {
+          navigator.setAppBadge(count);
+        } else {
+          navigator.clearAppBadge();
+        }
+      }
     }
 
     trackInteraction(type, data) {
