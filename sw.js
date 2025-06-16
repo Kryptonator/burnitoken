@@ -1,5 +1,8 @@
-const CACHE_NAME = 'burni-cache-v8'; // Updated after cleanup
-const API_CACHE_NAME = 'burni-api-cache-v2';
+const CACHE_NAME = 'burni-cache-v9'; // Updated for enhanced compatibility
+const API_CACHE_NAME = 'burni-api-cache-v3';
+const RUNTIME_CACHE_NAME = 'burni-runtime-cache-v1';
+
+// Enhanced asset caching with compression detection
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -37,148 +40,338 @@ const ASSETS_TO_CACHE = [
   '/assets/images/exchange.webp',
   '/assets/images/vote.png',
   '/assets/images/vote.webp',
-  '/assets/images/burni-07.27.2027.jpg',
-  '/clear-cache.html',
-  '/test-minimal.html',
 ];
 
-// API URLs that should be cached
-const API_URLS = [
-  'https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd',
-  'https://api.xrpl.org/v1/accounts/*/balance',
-];
+// Performance monitoring
+const performanceMetrics = {
+  cacheHits: 0,
+  cacheMisses: 0,
+  networkRequests: 0,
+  errors: 0
+};
 
-// Improved install event with error handling
+// API URLs with caching strategies
+const API_CONFIG = {
+  realtime: {
+    urls: [
+      'https://api.coingecko.com/api/v3/simple/price',
+      'https://api.xrpl.org',
+      'https://livenet.xrpl.org'
+    ],
+    maxAge: 60000, // 1 minute
+    strategy: 'network-first'
+  },
+  static: {
+    urls: [
+      'https://fonts.googleapis.com',
+      'https://fonts.gstatic.com',
+      'https://cdn.jsdelivr.net'
+    ],
+    maxAge: 86400000, // 24 hours
+    strategy: 'cache-first'
+  }
+};
+
+// Enhanced install event with progressive caching
 self.addEventListener('install', (event) => {
-  console.log('Service Worker installing...');
+  console.log('Service Worker installing with enhanced features...');
+  
   event.waitUntil(
-    caches
-      .open(CACHE_NAME)
-      .then((cache) => {
-        console.log('Caching app shell assets');
-        return cache.addAll(ASSETS_TO_CACHE);
-      })
-      .then(() => {
-        console.log('Service Worker installation complete');
-        return self.skipWaiting();
-      })
-      .catch((error) => {
-        console.error('Service Worker installation failed:', error);
+    Promise.all([
+      // Cache critical assets first
+      caches.open(CACHE_NAME).then((cache) => {
+        console.log('Caching critical assets');
+        const criticalAssets = ASSETS_TO_CACHE.filter(asset => 
+          asset.includes('critical.css') || 
+          asset.includes('security.js') || 
+          asset === '/' || 
+          asset === '/index.html'
+        );
+        return cache.addAll(criticalAssets);
       }),
+      
+      // Cache remaining assets
+      caches.open(CACHE_NAME).then((cache) => {
+        console.log('Caching remaining assets');
+        const remainingAssets = ASSETS_TO_CACHE.filter(asset => 
+          !asset.includes('critical.css') && 
+          !asset.includes('security.js') && 
+          asset !== '/' && 
+          asset !== '/index.html'
+        );
+        
+        return Promise.allSettled(
+          remainingAssets.map(asset => cache.add(asset).catch(err => {
+            console.warn(`Failed to cache ${asset}:`, err);
+            return null;
+          }))
+        );
+      }),
+      
+      // Initialize runtime cache
+      caches.open(RUNTIME_CACHE_NAME)
+    ])
+    .then(() => {
+      console.log('Service Worker installation complete with enhanced features');
+      
+      // Performance mark
+      if ('performance' in self && 'mark' in self.performance) {
+        self.performance.mark('sw-install-complete');
+      }
+      
+      return self.skipWaiting();
+    })
+    .catch((error) => {
+      console.error('Service Worker installation failed:', error);
+      performanceMetrics.errors++;
+    })
   );
 });
 
-// Enhanced activate event with cache cleanup
+// Enhanced activate event with intelligent cache management
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker activating...');
+  console.log('Service Worker activating with enhanced cleanup...');
+  
   event.waitUntil(
-    caches
-      .keys()
-      .then((cacheNames) => {
+    Promise.all([
+      // Clean up old caches
+      caches.keys().then((cacheNames) => {
+        const validCaches = [CACHE_NAME, API_CACHE_NAME, RUNTIME_CACHE_NAME];
         return Promise.all(
           cacheNames.map((cacheName) => {
-            if (cacheName !== CACHE_NAME && cacheName !== API_CACHE_NAME) {
+            if (!validCaches.includes(cacheName)) {
               console.log('Deleting old cache:', cacheName);
               return caches.delete(cacheName);
             }
-          }),
+          })
         );
-      })
-      .then(() => {
-        console.log('Service Worker activated');
-        return self.clients.claim();
       }),
+      
+      // Clear runtime cache if it's too large
+      caches.open(RUNTIME_CACHE_NAME).then((cache) => {
+        return cache.keys().then((keys) => {
+          if (keys.length > 100) { // Limit runtime cache size
+            console.log('Cleaning runtime cache (too many entries)');
+            const oldEntries = keys.slice(0, keys.length - 50);
+            return Promise.all(oldEntries.map(key => cache.delete(key)));
+          }
+        });
+      })
+    ])
+    .then(() => {
+      console.log('Service Worker activated with enhanced features');
+      
+      // Performance mark
+      if ('performance' in self && 'mark' in self.performance) {
+        self.performance.mark('sw-activate-complete');
+      }
+      
+      return self.clients.claim();
+    })
+    .catch((error) => {
+      console.error('Service Worker activation failed:', error);
+      performanceMetrics.errors++;
+    })
   );
 });
 
-// Enhanced fetch event with network-first strategy for API calls and cache-first for assets
+// Enhanced fetch event with intelligent caching strategies
 self.addEventListener('fetch', (event) => {
   const requestUrl = new URL(event.request.url);
-
-  // Handle API requests with network-first strategy
-  if (API_URLS.some((url) => event.request.url.includes(url.split('?')[0]))) {
-    event.respondWith(networkFirstStrategy(event.request, API_CACHE_NAME));
+  const request = event.request;
+  
+  // Skip non-HTTP requests
+  if (!request.url.startsWith('http')) {
     return;
   }
-
-  // Handle navigation requests
-  if (event.request.mode === 'navigate') {
-    event.respondWith(
-      fetch(event.request).catch(() => {
-        return caches.match('/index.html');
-      }),
-    );
+  
+  // Skip POST requests
+  if (request.method !== 'GET') {
     return;
   }
-
-  // Handle asset requests with cache-first strategy
-  if (
-    event.request.destination === 'image' ||
-    event.request.destination === 'style' ||
-    event.request.destination === 'script'
-  ) {
-    event.respondWith(cacheFirstStrategy(event.request, CACHE_NAME));
-    return;
+  
+  // Determine caching strategy based on request type
+  let strategy = 'cache-first';
+  let cacheName = CACHE_NAME;
+  let maxAge = null;
+  
+  // API requests
+  if (isApiRequest(request.url)) {
+    const apiConfig = getApiConfig(request.url);
+    strategy = apiConfig.strategy;
+    cacheName = API_CACHE_NAME;
+    maxAge = apiConfig.maxAge;
   }
-
-  // Default strategy for other requests
+  
+  // Runtime assets (not in main cache)
+  else if (!ASSETS_TO_CACHE.includes(requestUrl.pathname)) {
+    strategy = 'network-first';
+    cacheName = RUNTIME_CACHE_NAME;
+    maxAge = 3600000; // 1 hour
+  }
+  
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    }),
+    executeStrategy(strategy, request, cacheName, maxAge)
+      .catch((error) => {
+        console.error(`Fetch failed for ${request.url}:`, error);
+        performanceMetrics.errors++;
+        
+        // Fallback to offline page for navigation requests
+        if (request.mode === 'navigate') {
+          return caches.match('/404.html') || new Response('Offline', {
+            status: 503,
+            statusText: 'Service Unavailable'
+          });
+        }
+        
+        return new Response('Network error', {
+          status: 503,
+          statusText: 'Service Unavailable'
+        });
+      })
   );
 });
 
-// Cache-first strategy for static assets
-async function cacheFirstStrategy(request, cacheName) {
-  const cachedResponse = await caches.match(request);
-  if (cachedResponse) {
-    return cachedResponse;
-  }
-
-  try {
-    const response = await fetch(request);
-    if (response.status === 200) {
-      const cache = await caches.open(cacheName);
-      cache.put(request, response.clone());
-    }
-    return response;
-  } catch (error) {
-    console.error('Fetch failed for:', request.url, error);
-    throw error;
+// Enhanced strategy implementations
+function executeStrategy(strategy, request, cacheName, maxAge) {
+  switch (strategy) {
+    case 'cache-first':
+      return cacheFirstStrategy(request, cacheName, maxAge);
+    case 'network-first':
+      return networkFirstStrategy(request, cacheName, maxAge);
+    case 'stale-while-revalidate':
+      return staleWhileRevalidateStrategy(request, cacheName, maxAge);
+    default:
+      return cacheFirstStrategy(request, cacheName, maxAge);
   }
 }
 
-// Network-first strategy for API calls
-async function networkFirstStrategy(request, cacheName) {
-  try {
-    const response = await fetch(request);
-    if (response.status === 200) {
-      const cache = await caches.open(cacheName);
-      cache.put(request, response.clone());
+// Cache-first strategy with staleness check
+function cacheFirstStrategy(request, cacheName, maxAge) {
+  return caches.open(cacheName).then((cache) => {
+    return cache.match(request).then((cachedResponse) => {
+      if (cachedResponse) {
+        // Check if cached response is stale
+        if (maxAge && isCacheStale(cachedResponse, maxAge)) {
+          // Return cached response but update in background
+          fetchAndCache(request, cache);
+          performanceMetrics.cacheHits++;
+          return cachedResponse;
+        }
+        
+        performanceMetrics.cacheHits++;
+        return cachedResponse;
+      }
+      
+      // Not in cache, fetch from network
+      performanceMetrics.cacheMisses++;
+      return fetchAndCache(request, cache);
+    });
+  });
+}
+
+// Network-first strategy with timeout
+function networkFirstStrategy(request, cacheName, maxAge, timeout = 3000) {
+  performanceMetrics.networkRequests++;
+  
+  return caches.open(cacheName).then((cache) => {
+    const networkPromise = fetchWithTimeout(request, timeout)
+      .then((response) => {
+        if (response.ok) {
+          cache.put(request.clone(), response.clone());
+        }
+        return response;
+      });
+    
+    const cachePromise = cache.match(request);
+    
+    return Promise.race([
+      networkPromise,
+      new Promise((resolve) => {
+        setTimeout(() => {
+          cachePromise.then((cachedResponse) => {
+            if (cachedResponse) {
+              performanceMetrics.cacheHits++;
+              resolve(cachedResponse);
+            }
+          });
+        }, timeout);
+      })
+    ]).catch(() => {
+      // Network failed, try cache
+      return cachePromise.then((cachedResponse) => {
+        if (cachedResponse) {
+          performanceMetrics.cacheHits++;
+          return cachedResponse;
+        }
+        throw new Error('No cache available');
+      });
+    });
+  });
+}
+
+// Stale-while-revalidate strategy
+function staleWhileRevalidateStrategy(request, cacheName, maxAge) {
+  return caches.open(cacheName).then((cache) => {
+    return cache.match(request).then((cachedResponse) => {
+      const fetchPromise = fetchAndCache(request, cache);
+      
+      if (cachedResponse) {
+        performanceMetrics.cacheHits++;
+        return cachedResponse;
+      }
+      
+      performanceMetrics.cacheMisses++;
+      return fetchPromise;
+    });
+  });
+}
+
+// Helper functions
+function fetchAndCache(request, cache) {
+  return fetch(request).then((response) => {
+    if (response.ok) {
+      cache.put(request.clone(), response.clone());
     }
     return response;
-  } catch (error) {
-    console.warn('Network request failed, trying cache:', request.url, error);
-    const cachedResponse = await caches.match(request);
-    if (cachedResponse) {
-      return cachedResponse;
+  });
+}
+
+function fetchWithTimeout(request, timeout) {
+  return Promise.race([
+    fetch(request),
+    new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Fetch timeout')), timeout);
+    })
+  ]);
+}
+
+function isCacheStale(response, maxAge) {
+  const dateHeader = response.headers.get('date');
+  if (!dateHeader) return false;
+  
+  const date = new Date(dateHeader);
+  return Date.now() - date.getTime() > maxAge;
+}
+
+function isApiRequest(url) {
+  return Object.values(API_CONFIG).some(config =>
+    config.urls.some(apiUrl => url.includes(apiUrl))
+  );
+}
+
+function getApiConfig(url) {
+  for (const [key, config] of Object.entries(API_CONFIG)) {
+    if (config.urls.some(apiUrl => url.includes(apiUrl))) {
+      return config;
     }
-    throw error;
   }
+  return API_CONFIG.static; // Default
 }
 
 // Real-Time Features and Advanced PWA Support
 const REALTIME_CACHE_NAME = 'burni-realtime-v1';
 const BACKGROUND_SYNC_TAG = 'background-sync';
-
-// Advanced caching strategies
-const cacheStrategies = {
-  static: 'cache-first',
-  api: 'network-first',
-  realtime: 'network-only',
-  fallback: 'stale-while-revalidate',
-};
 
 // Push notification handling
 self.addEventListener('push', function (event) {

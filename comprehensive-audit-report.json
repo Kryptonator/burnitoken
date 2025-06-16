@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-16T11:34:05.004Z",
+  "timestamp": "2025-06-16T12:38:13.247Z",
   "audits": {
     "performance": {
       "score": 80,
@@ -12,13 +12,18 @@
       }
     },
     "browserCompatibility": {
-      "score": 40,
+      "score": 60,
       "checks": {
-        "browserCSS": false,
+        "polyfillFile": true,
+        "compatCSS": true,
         "vendorPrefixes": true,
         "modernFeatures": true,
         "fallbacks": false,
-        "webkitSupport": false
+        "webkitSupport": true,
+        "ieSupport": false,
+        "featureDetection": false,
+        "gracefulDegradation": false,
+        "crossBrowserTesting": true
       }
     },
     "responsiveDesign": {
@@ -119,7 +124,7 @@
       }
     }
   },
-  "overallScore": 89,
+  "overallScore": 91,
   "criticalIssues": [],
   "recommendations": [
     {
