@@ -1,0 +1,229 @@
+/* BURNI TOKEN - DARK MODE CSS VARIABLES */
+/* Einheitliche Farb-Variablen für Light/Dark Mode */
+
+:root {
+  /* Light Mode Colors (Default) */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+
+  /* Brand Colors (unchanged in both modes) */
+  --burni-orange: #f97316;
+  --burni-orange-light: #fb923c;
+  --burni-orange-dark: #ea580c;
+  --burni-red: #ef4444;
+  --burni-yellow: #fbbf24;
+
+  /* Interactive Colors */
+  --button-bg: var(--burni-orange);
+  --button-hover: var(--burni-orange-dark);
+  --link-color: var(--burni-orange);
+  --link-hover: var(--burni-orange-dark);
+}
+
+/* Dark Mode Colors */
+.dark,
+[data-theme='dark'],
+html.dark {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border-color: #475569;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Body Dark Mode Classes */
+body.dark-mode,
+body[data-theme='dark'] {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* Component Styles Using Variables */
+.bg-primary {
+  background-color: var(--bg-primary);
+}
+.bg-secondary {
+  background-color: var(--bg-secondary);
+}
+.bg-tertiary {
+  background-color: var(--bg-tertiary);
+}
+
+.text-primary {
+  color: var(--text-primary);
+}
+.text-secondary {
+  color: var(--text-secondary);
+}
+.text-muted {
+  color: var(--text-muted);
+}
+
+.border-default {
+  border-color: var(--border-color);
+}
+
+/* Cards and Containers */
+.card-dark-mode {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 6px var(--shadow-color);
+  transition: all 0.3s ease;
+}
+
+/* Navigation Dark Mode */
+nav.dark-mode {
+  background-color: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+/* Buttons Dark Mode */
+.btn-dark-mode {
+  background-color: var(--button-bg);
+  color: white;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-dark-mode:hover {
+  background-color: var(--button-hover);
+}
+
+/* Forms Dark Mode */
+.form-input-dark {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.form-input-dark:focus {
+  border-color: var(--burni-orange);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+/* Tables Dark Mode */
+.table-dark th {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.table-dark td {
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Footer Dark Mode */
+footer.dark-mode {
+  background-color: var(--bg-primary);
+  border-top: 1px solid var(--border-color);
+}
+
+/* Price Widget Dark Mode */
+.price-widget-dark {
+  background-color: rgba(15, 23, 42, 0.95);
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(10px);
+}
+
+/* Modal Dark Mode */
+.modal-dark {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.modal-dark .modal-header {
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Code Blocks Dark Mode */
+.code-dark {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+/* Scrollbar Dark Mode */
+.dark ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Auto-apply dark mode classes to existing elements */
+.dark .bg-white {
+  background-color: var(--bg-primary) !important;
+}
+.dark .bg-gray-50 {
+  background-color: var(--bg-secondary) !important;
+}
+.dark .bg-gray-100 {
+  background-color: var(--bg-tertiary) !important;
+}
+.dark .text-gray-900 {
+  color: var(--text-primary) !important;
+}
+.dark .text-gray-600 {
+  color: var(--text-secondary) !important;
+}
+.dark .text-gray-500 {
+  color: var(--text-muted) !important;
+}
+.dark .border-gray-200 {
+  border-color: var(--border-color) !important;
+}
+.dark .border-gray-300 {
+  border-color: var(--border-color) !important;
+}
+
+/* Accessibility: Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .card-dark-mode,
+  .btn-dark-mode,
+  .form-input-dark,
+  body.dark-mode {
+    transition: none !important;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .dark {
+    --border-color: #94a3b8;
+    --text-muted: #cbd5e1;
+  }
+}
+
+/* Print Mode - Always Light */
+@media print {
+  * {
+    background-color: white !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+}
