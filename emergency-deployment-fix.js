@@ -20,7 +20,7 @@ async function diagnoseAndFix() {
     const testUrls = [
         'https://burnitoken.website',
         'https://kryptonator.github.io/burnitoken',
-        'https://kryptonator.github.io/burnitoken.com'
+        'https://kryptonator.github.io/burnitoken'
     ];
     
     console.log('\n🔍 Teste alle möglichen URLs:');
