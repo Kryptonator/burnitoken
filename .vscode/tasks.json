@@ -48,6 +48,90 @@
         "panel": "shared"
       },
       "problemMatcher": []
+    },
+    {
+      "label": "🚀 Live Server: Start Development",
+      "type": "shell",
+      "command": "echo",
+      "args": ["Live Server activated - use Ctrl+Shift+P > Live Server: Open with Live Server"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔤 Spell Check: Crypto Dictionary",
+      "type": "shell",
+      "command": "echo",
+      "args": ["Spell checker configured with crypto terminology - check PROBLEMS panel"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🎨 Tailwind: IntelliSense Active",
+      "type": "shell",
+      "command": "echo",
+      "args": ["Tailwind CSS IntelliSense activated - start typing class names for autocomplete"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "♿ Accessibility: WCAG Check",
+      "type": "shell",
+      "command": "echo",
+      "args": ["Web Accessibility extension active - check for WCAG compliance indicators"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "⚡ Thunder Client: API Testing",
+      "type": "shell",
+      "command": "echo",
+      "args": ["Thunder Client ready - use sidebar or Ctrl+Shift+P > Thunder Client"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "📊 GitLens: Enhanced Git",
+      "type": "shell",
+      "command": "echo",
+      "args": ["GitLens activated - see enhanced Git info in editor and sidebar"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new"
+      },
+      "problemMatcher": []
     }
   ]
 }
