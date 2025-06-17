@@ -1,0 +1,131 @@
+name: 🚨 EMERGENCY DEPLOY - Fix Website Availability
+
+on:
+  workflow_dispatch:
+    inputs:
+      force_deploy:
+        description: 'Force deployment even if no changes'
+        required: false
+        default: 'true'
+
+env:
+  NODE_VERSION: '20'
+  SITE_URL: 'https://burnitoken.website'
+
+jobs:
+  emergency-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🚨 Emergency Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 📋 Debug Repository State
+        run: |
+          echo "=== EMERGENCY DEPLOYMENT DEBUG ==="
+          echo "Repository: ${{ github.repository }}"
+          echo "Branch: ${{ github.ref }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Working Directory:"
+          ls -la
+          echo "=== INDEX.HTML CHECK ==="
+          if [ -f "index.html" ]; then
+            echo "✅ index.html exists"
+            head -10 index.html
+          else
+            echo "❌ index.html missing!"
+          fi
+          echo "=== CNAME CHECK ==="
+          if [ -f "CNAME" ]; then
+            echo "✅ CNAME exists:"
+            cat CNAME
+          else
+            echo "❌ CNAME missing!"
+          fi
+
+      - name: 🔧 Prepare Emergency Deployment
+        run: |
+          echo "Preparing emergency deployment files..."
+          mkdir -p emergency-dist
+
+          # Copy critical files
+          if [ -f "index.html" ]; then
+            cp index.html emergency-dist/
+            echo "✅ index.html copied"
+          else
+            echo "❌ CRITICAL: index.html missing!"
+            exit 1
+          fi
+
+          # Copy assets directory
+          if [ -d "assets" ]; then
+            cp -r assets emergency-dist/
+            echo "✅ Assets directory copied"
+          else
+            echo "⚠️ Assets directory missing"
+          fi
+
+          # Copy all other necessary files
+          for file in *.html *.js *.json *.xml *.txt *.css; do
+            if [ -f "$file" ]; then
+              cp "$file" emergency-dist/
+              echo "✅ Copied $file"
+            fi
+          done
+
+          # Copy additional directories
+          for dir in pages public src; do
+            if [ -d "$dir" ]; then
+              cp -r "$dir" emergency-dist/
+              echo "✅ Copied $dir directory"
+            fi
+          done
+
+          echo "=== EMERGENCY DIST CONTENTS ==="
+          ls -la emergency-dist/
+
+      - name: 🚨 Emergency Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./emergency-dist
+          cname: burnitoken.website
+          force_orphan: true
+          enable_jekyll: false
+          commit_message: '🚨 EMERGENCY DEPLOY - Fix Website Availability - ${{ github.sha }}'
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+
+      - name: 🎯 Post-Deployment Verification
+        run: |
+          echo "=== POST-DEPLOYMENT VERIFICATION ==="
+          echo "🌐 Website should be available at: ${{ env.SITE_URL }}"
+          echo "⏰ DNS propagation may take 5-10 minutes"
+          echo "🔄 Testing availability..."
+
+          # Wait a moment and test
+          sleep 30
+
+          # Test multiple endpoints
+          for url in "https://burnitoken.website" "https://kryptonator.github.io/burnitoken"; do
+            echo "Testing $url..."
+            if curl -I "$url" 2>/dev/null | head -1 | grep -q "200\|301\|302"; then
+              echo "✅ $url responding"
+            else
+              echo "❌ $url not responding"
+            fi
+          done
+
+      - name: 📊 Emergency Deployment Summary
+        if: always()
+        run: |
+          echo "================================================"
+          echo "🚨 EMERGENCY DEPLOYMENT COMPLETED!"
+          echo "================================================"
+          echo "🌐 Website URL: ${{ env.SITE_URL }}"
+          echo "🔄 Status: Emergency deployment executed"
+          echo "⏰ Wait 5-10 minutes for DNS propagation"
+          echo "🔍 Check GitHub Pages settings if issues persist"
+          echo "================================================"

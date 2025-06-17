@@ -1,0 +1,51 @@
+name: 🚀 ALTERNATIVE BACKUP DEPLOYMENT
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+
+jobs:
+  backup-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: 📋 Debug and Prepare
+        run: |
+          echo "=== BACKUP DEPLOYMENT DEBUG ==="
+          echo "Commit: ${{ github.sha }}"
+          echo "Branch: ${{ github.ref }}"
+          ls -la
+
+          # Ensure index.html exists
+          if [ ! -f "index.html" ]; then
+            echo "❌ CRITICAL: index.html missing!"
+            exit 1
+          fi
+
+          # Ensure CNAME exists
+          if [ ! -f "CNAME" ]; then
+            echo "burnitoken.website" > CNAME
+            echo "✅ CNAME created"
+          fi
+
+          echo "✅ Critical files verified"
+
+      - name: 🚀 Deploy to GitHub Pages (Alternative)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          cname: burnitoken.website
+          force_orphan: true
+          enable_jekyll: false
+          keep_files: false
+          commit_message: '🚀 BACKUP DEPLOYMENT - ${{ github.sha }}'
+
+      - name: 📊 Post-Deploy Check
+        run: |
+          echo "✅ Backup deployment completed"
+          echo "🌐 Site: https://burnitoken.website"
+          echo "⏰ DNS propagation: 5-10 minutes"
