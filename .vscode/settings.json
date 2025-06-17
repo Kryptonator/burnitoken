@@ -1,81 +1,38 @@
 {
-  "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit"
-  },  "files.exclude": {
-    "**/node_modules": true,
-    "**/coverage": true,
-    "**/test-results": true,
-    "**/playwright-report": true,
-    "**/.git": false,
-    "**/.DS_Store": true,
-    "**/*.md": false,
-    "**/comprehensive-audit-*": true,
-    "**/.lighthouseci": true,
-    "**/.github": true
-  },
-  "search.exclude": {
-    "**/node_modules": true,
-    "**/coverage": true,
-    "**/.git": true,
-    "**/.DS_Store": true
-  },
-  "explorer.sortOrder": "type",
-  "explorer.excludeGitIgnore": true,
-  "workbench.startupEditor": "welcomePage",
-  "html.format.wrapLineLength": 100,
-  "files.eol": "\n",
-  "css.validate": false,
-  "scss.validate": false,
-  "less.validate": false,
-  "postcss.validate": false,
   "tailwindCSS.includeLanguages": {
     "html": "html",
     "javascript": "javascript",
     "css": "css"
   },
-  "tailwindCSS.emmetCompletions": true,
-  "tailwindCSS.classAttributes": [
-    "class",
-    "className",
-    "ngClass"
+  "tailwindCSS.experimental.classRegex": [
+    "class=\"([^\"]*)"
   ],
-  "files.associations": {
-    "*.css": "tailwindcss"
-  },
-  "editor.quickSuggestions": {
-    "strings": true
-  },
-  "css.lint.unknownAtRules": "ignore",
-  "scss.lint.unknownAtRules": "ignore",
-  "chat.sendElementsToChat.attachCSS": false,
-  
-  // Extension Configuration
-  "prettier.configPath": ".prettierrc",
   "prettier.enable": true,
+  "prettier.singleQuote": true,
+  "prettier.semi": true,
+  "prettier.tabWidth": 2,
   "liveServer.settings.donotShowInfoMsg": true,
-  "liveServer.settings.port": 3000,
-  "liveServer.settings.CustomBrowser": "chrome",
-  "auto-close-tag.activationOnLanguage": [
-    "xml", "php", "blade", "ejs", "jinja", "javascript", 
-    "javascriptreact", "typescript", "typescriptreact", 
-    "plaintext", "markdown", "vue", "liquid", "erb", "html"
-  ],
-  "auto-rename-tag.activationOnLanguage": [
-    "html", "xml", "php", "javascript", "javascriptreact", 
-    "typescript", "typescriptreact"
-  ],
-  "headwind.runOnSave": true,
-  "headwind.sortTailwindClasses": true,
-  "gitlens.codeLens.enabled": true,
-  "gitlens.currentLine.enabled": true,
-  "gitlens.hovers.enabled": true,
-  "gitlens.statusBar.enabled": true,
+  "liveServer.settings.donotVerifyTags": true,
+  "liveServer.settings.port": 5500,
+  "html.validate.scripts": true,
+  "html.validate.styles": true,
+  "css.validate": true,
+  "accessibility.focusVisible": true,
+  "accessibility.reduceMotion": "auto",
   "git.enableSmartCommit": true,
-  "git.confirmSync": false,
   "git.autofetch": true,
-  "emmet.includeLanguages": {
-    "javascript": "javascriptreact",
-    "plaintext": "html"
+  "git.confirmSync": false,
+  "github.copilot.enable": {
+    "*": true,
+    "yaml": false,
+    "plaintext": false
+  },
+  "markdown.preview.fontSize": 14,
+  "markdown.preview.lineHeight": 1.6,
+  "extensions.autoUpdate": false,
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true
   }
 }
