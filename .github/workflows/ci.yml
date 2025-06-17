@@ -77,3 +77,54 @@ jobs:
       - run: npm run build
       - name: Run Lighthouse CI
         run: npx lhci autorun || true
+
+  security:
+    name: [31mSecurity & Dependency Check[0m
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - name: 📥 Install dependencies
+        run: npm ci
+      - name: 🔒 Snyk Security Scan
+        uses: snyk/actions/node@v3
+        with:
+          command: test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: 🛡️ SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
+        with:
+          projectBaseDir: .
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+  accessibility:
+    name: ♿ Accessibility Check (axe-core)
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - name: 📥 Install dependencies
+        run: npm ci
+      - name: ♿ Run axe-core accessibility tests
+        run: |
+          npx axe ./index.html --save --reporter json --output axe-report.json || true
+      - name: 📎 Upload Accessibility Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: axe-accessibility-report
+          path: axe-report.json
