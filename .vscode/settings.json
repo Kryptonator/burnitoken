@@ -58,10 +58,6 @@
   
   // Web Accessibility
   "accessibility.voice.enabled": true,
-  "accessibility.signalOptions": {
-    "volume": 70,
-    "debouncePositionChanges": true
-  },
   
   // GitLens Enhanced
   "gitlens.defaultDateFormat": "DD.MM.YYYY HH:mm",
@@ -84,5 +80,7 @@
   // Enhanced Markdown
   "markdown.preview.fontSize": 16,
   "markdown.preview.lineHeight": 1.8,
-  "markdown.preview.markEditorSelection": true
+  "markdown.preview.markEditorSelection": true,
+  "accessibility.signalOptions.volume": 70,
+  "accessibility.signalOptions.debouncePositionChanges": true
 }
