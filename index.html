@@ -78,6 +78,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin >
     <link rel="dns-prefetch" href="//cdn.jsdelivr.net" >
     <link rel="dns-prefetch" href="//unpkg.com" >
+    
+    <!-- Theme Color Meta Tags -->
+    <meta name="theme-color" content="#f97316" media="(prefers-color-scheme: light)" >
+    <meta name="theme-color" content="#fb923c" media="(prefers-color-scheme: dark)" >
 
     <!-- Critical Resource Preloads -->
     <link rel="preload" href="/assets/enhanced-polyfills.js" as="script" >
@@ -177,8 +181,6 @@
           Arial,
           sans-serif;
       }
-    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; } 
-
     <!-- FontAwesome Icons -->
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -186,40 +188,54 @@
       integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
       crossorigin="anonymous"
     >
-    <!-- Font wird von Google Fonts geladen, preload entfernt -->
     
     <!-- Preload critical assets -->
     <link rel="preload" href="/assets/images/burniimage.webp" as="image" type="image/webp" >
     <link rel="preload" href="/assets/images/burniimage.jpg" as="image" type="image/jpeg" >
     <link rel="preload" href="/assets/css/styles.min.css" as="style" >
-    <!-- EMERGENCY: Disable preload of broken scripts.min.js -->
-    
-    <!-- Preload fixed scripts -->
     <link rel="preload" href="/assets/scripts-fixed.min.js" as="script" >
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/chart.js" as="script" >
-
-    <!-- Additional Performance Optimizations -->
-    <!-- EMERGENCY: Disable prefetch of broken scripts.min.js -->
-    
     <link rel="prefetch" href="/assets/images/burni-chart.webp" >
 
-    <!-- Optimize Critical Resource Loading -->
-    
-:root {
-  --theme-color: #f97316;
-  color-scheme: light dark;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --theme-color: #fb923c;
-  }
-}
-@supports (color: color(display-p3 1 0 0)) {
-  :root {
-    --theme-color: color(display-p3 0.976 0.451 0.086);
-  }
-}
-      /* Inline critical above-the-fold styles */
+    <!-- Critical CSS -->
+    <style>
+      .sr-only { 
+        position: absolute; 
+        width: 1px; 
+        height: 1px; 
+        padding: 0; 
+        margin: -1px; 
+        overflow: hidden; 
+        clip: rect(0, 0, 0, 0); 
+        white-space: nowrap; 
+        border: 0; 
+      }
+
+      :root {
+        --theme-color: #f97316;
+        color-scheme: light dark;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --theme-color: #fb923c;
+        }
+      }
+
+      @supports (color: color(display-p3 1 0 0)) {
+        :root {
+          --theme-color: color(display-p3 0.976 0.451 0.086);
+        }
+      }
+
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', Arial, sans-serif;
+      }
+
+      .font-display {
+        font-family: 'Baloo 2', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', Arial, sans-serif;
+      }
+
       .hero-section {
         min-height: 100vh;
         background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
@@ -232,15 +248,10 @@
       }
 
       @keyframes loading {
-        0% {
-          background-position: 200% 0;
-        }
-
-        100% {
-          background-position: -200% 0;
-        }
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
       }
-    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; } 
+    </style>
 
 
     <!-- Content Freshness Indicator -->
@@ -253,21 +264,6 @@
     <meta name="msapplication-navbutton-color" content="#f97316" >
     <meta name="apple-mobile-web-app-status-bar-style" content="default" >
     <meta name="msapplication-config" content="/assets/browserconfig.xml" >
-    
-:root {
-  --theme-color: #f97316;
-  color-scheme: light dark;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --theme-color: #fb923c;
-  }
-}
-@supports (color: color(display-p3 1 0 0)) {
-  :root {
-    --theme-color: color(display-p3 0.976 0.451 0.086);
-  }
-}
       .loading-skeleton {
         animation: pulse 1.5s infinite;
         background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
@@ -540,7 +536,7 @@
           height: 13rem;
         }
       }
-    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; } 
+    </style>
 
     <!-- Performance and compatibility meta tags -->
     <meta http-equiv="x-ua-compatible" content="IE=edge" >
@@ -1070,15 +1066,13 @@
                 our commitment to a truly deflationary and secure ecosystem from the start.
               </p>
               <div class="tooltip">
-                <span
-                  class="font-semibold text-blue-500 border-b-2 border-blue-500 border-dashed cursor-default"
+                <button
+                  type="button"
+                  class="font-semibold text-blue-500 border-b-2 border-blue-500 border-dashed cursor-default bg-transparent border-0 p-0"
                   data-i18n="blackholed_tooltip_trigger"
-                  role="button"
-                  tabindex="0"
-                  onkeydown="if(event.key==='Enter'||event.key===' ') showTooltip(this);"
+                  onclick="showTooltip(this);"
                   aria-describedby="tooltip-blackholed"
-                  >What does "Blackholed" mean?</span
-                >
+                  >What does "Blackholed" mean?</button>
                 <span
                   id="tooltip-blackholed"
                   role="tooltip"
@@ -1931,19 +1925,17 @@
                   itemprop="mainEntity"
                   itemtype="https://schema.org/Question"
                 >
-                  <h3
-                    class="flex items-center justify-between mb-3 text-xl font-bold text-gray-800 cursor-pointer"
-                    itemprop="name"
+                  <button
+                    type="button"
+                    class="flex items-center justify-between mb-3 text-xl font-bold text-gray-800 cursor-pointer w-full text-left bg-transparent border-0 p-0"
                     onclick="toggleFAQ('faq1')"
-                    onkeydown="if(event.key==='Enter'||event.key===' ') { event.preventDefault(); this.click(); }"
                     aria-expanded="false"
                     aria-controls="faq1-answer"
-                    role="button"
                     tabindex="0"
                   >
-                    <span> What makes BURNI Token unique?</span>
+                    <span itemprop="name">What makes BURNI Token unique?</span>
                     <span class="text-2xl" id="faq1-icon">+</span>
-                  </h3>
+                  </button>
                   <div
                     id="faq1-answer"
                     class="hidden leading-relaxed text-gray-600"
@@ -1989,19 +1981,17 @@
                   itemprop="mainEntity"
                   itemtype="https://schema.org/Question"
                 >
-                  <h3
-                    class="flex items-center justify-between mb-3 text-xl font-bold text-gray-800 cursor-pointer"
-                    itemprop="name"
+                  <button
+                    type="button"
+                    class="flex items-center justify-between mb-3 text-xl font-bold text-gray-800 cursor-pointer w-full text-left bg-transparent border-0 p-0"
                     onclick="toggleFAQ('faq2')"
-                    onkeydown="if(event.key==='Enter'||event.key===' ') { event.preventDefault(); this.click(); }"
                     aria-expanded="false"
                     aria-controls="faq2-answer"
-                    role="button"
                     tabindex="0"
                   >
-                    <span> How can I buy BURNI tokens?</span>
+                    <span itemprop="name">How can I buy BURNI tokens?</span>
                     <span class="text-2xl" id="faq2-icon">+</span>
-                  </h3>
+                  </button>
                   <div
                     id="faq2-answer"
                     class="hidden leading-relaxed text-gray-600"
@@ -2046,19 +2036,17 @@
                   itemprop="mainEntity"
                   itemtype="https://schema.org/Question"
                 >
-                  <h3
-                    class="flex items-center justify-between mb-3 text-xl font-bold text-gray-800 cursor-pointer"
-                    itemprop="name"
+                  <button
+                    type="button"
+                    class="flex items-center justify-between mb-3 text-xl font-bold text-gray-800 cursor-pointer w-full text-left bg-transparent border-0 p-0"
                     onclick="toggleFAQ('faq3')"
-                    onkeydown="if(event.key==='Enter'||event.key===' ') { event.preventDefault(); this.click(); }"
                     aria-expanded="false"
                     aria-controls="faq3-answer"
-                    role="button"
                     tabindex="0"
                   >
-                    <span> Why is XRPL the perfect blockchain for BURNI?</span>
+                    <span itemprop="name">Why is XRPL the perfect blockchain for BURNI?</span>
                     <span class="text-2xl" id="faq3-icon">+</span>
-                  </h3>
+                  </button>
                   <div
                     id="faq3-answer"
                     class="hidden leading-relaxed text-gray-600"
@@ -2115,19 +2103,17 @@
                   itemprop="mainEntity"
                   itemtype="https://schema.org/Question"
                 >
-                  <h3
-                    class="flex items-center justify-between mb-3 text-xl font-bold text-gray-800 cursor-pointer"
-                    itemprop="name"
+                  <button
+                    type="button"
+                    class="flex items-center justify-between mb-3 text-xl font-bold text-gray-800 cursor-pointer w-full text-left bg-transparent border-0 p-0"
                     onclick="toggleFAQ('faq4')"
-                    onkeydown="if(event.key==='Enter'||event.key===' ') { event.preventDefault(); this.click(); }"
                     aria-expanded="false"
                     aria-controls="faq4-answer"
-                    role="button"
                     tabindex="0"
                   >
-                    <span> How does the token burning mechanism work?</span>
+                    <span itemprop="name">How does the token burning mechanism work?</span>
                     <span class="text-2xl" id="faq4-icon">+</span>
-                  </h3>
+                  </button>
                   <div
                     id="faq4-answer"
                     class="hidden leading-relaxed text-gray-600"
@@ -2184,19 +2170,17 @@
                   itemprop="mainEntity"
                   itemtype="https://schema.org/Question"
                 >
-                  <h3
-                    class="flex items-center justify-between mb-3 text-xl font-bold text-gray-800 cursor-pointer"
-                    itemprop="name"
+                  <button
+                    type="button"
+                    class="flex items-center justify-between mb-3 text-xl font-bold text-gray-800 cursor-pointer w-full text-left bg-transparent border-0 p-0"
                     onclick="toggleFAQ('faq5')"
-                    onkeydown="if(event.key==='Enter'||event.key===' ') { event.preventDefault(); this.click(); }"
                     aria-expanded="false"
                     aria-controls="faq5-answer"
-                    role="button"
                     tabindex="0"
                   >
-                    <span> What is the long-term vision for BURNI?</span>
+                    <span itemprop="name">What is the long-term vision for BURNI?</span>
                     <span class="text-2xl" id="faq5-icon">+</span>
-                  </h3>
+                  </button>
                   <div
                     id="faq5-answer"
                     class="hidden leading-relaxed text-gray-600"
@@ -2847,9 +2831,9 @@
     <div id="direct-price-widget" class="direct-price-widget">
       <button type="button" class="direct-price-close touch-optimized"
         onclick="this.parentElement.style.display='none'"
-
-      >
-        
+        aria-label="Close price widget"
+        title="Close price widget">
+        <span aria-hidden="true">&times;</span>
       </button>
       <div class="direct-price-widget-header"> BURNI LIVE PRICES </div>
       <div class="direct-price-item xrp">
