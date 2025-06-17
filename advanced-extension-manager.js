@@ -47,7 +47,6 @@ class AdvancedExtensionManager {
             quality: {
                 name: 'Code Quality & Testing',
                 extensions: [
-                    'trunk.io',
                     'maxvanderschee.web-accessibility',
                     'html-validate.vscode-html-validate',
                     'ms-playwright.playwright',
@@ -295,7 +294,6 @@ class AdvancedExtensionManager {
             'github.copilot': { status: 'healthy', message: 'Active and configured' },
             'bradlc.vscode-tailwindcss': { status: 'healthy', message: 'Detecting Tailwind classes' },
             'ritwickdey.liveserver': { status: 'healthy', message: 'Ready for live development' },
-            'trunk.io': { status: 'healthy', message: 'Code quality monitoring active' },
             'esbenp.prettier-vscode': { status: 'healthy', message: 'Code formatting ready' }
         };
         

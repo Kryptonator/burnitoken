@@ -1,106 +1,106 @@
 <!doctype html>
 <html lang="en" class="scroll-smooth">
   <head>
-    <meta charset="UTF-8" >
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- SEO Meta Tags - KRITISCH FÜR SUCHMASCHINEN -->
     <title>🔥 BurniToken - XRPL Deflation Token | Crypto Investment</title>
-    <meta name="description" content="🔥 BurniToken - Die erste deflationäre XRPL-basierte Kryptowährung mit automatischem Token-Burning-Mechanismus. Investieren Sie in die Zukunft der Blockchain-Technologie mit über 2 Milliarden verbrannten Tokens!" >
-    <meta name="keywords" content="BurniToken, XRPL, Token Burning, Kryptowährung, Blockchain, Deflationär, Investment, Crypto, XRP Ledger" >
-    <meta name="author" content="BurniToken Team" >
-    <meta name="robots" content="index, follow" >
-
+    <meta name="description" content="🔥 BurniToken - Die erste deflationäre XRPL-basierte Kryptowährung mit automatischem Token-Burning-Mechanismus. Investieren Sie in die Zukunft der Blockchain-Technologie mit über 2 Milliarden verbrannten Tokens!" />
+    <meta name="keywords" content="BurniToken, XRPL, Token Burning, Kryptowährung, Blockchain, Deflationär, Investment, Crypto, XRP Ledger" />
+    <meta name="author" content="BurniToken Team" />
+    <meta name="robots" content="index, follow" />
+    
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://burnitoken.website/" >
+    <link rel="canonical" href="https://burnitoken.website/" />
 
     <!-- Enhanced Performance and Compatibility Meta Tags -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-    <meta name="format-detection" content="telephone=no" >
-    <meta name="msapplication-tap-highlight" content="no" >
-    <meta name="theme-color" content="#f97316" >
-    <meta name="color-scheme" content="light dark" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="theme-color" content="#f97316" />
+    <meta name="color-scheme" content="light dark" />
 
     <!-- Security Headers -->
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https:; frame-src 'none';"
-    >
-    <meta http-equiv="X-Content-Type-Options" content="nosniff" >
-    <meta http-equiv="X-Frame-Options" content="DENY" >
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" >
+    />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
 
     <!-- Duplicate Meta Tags Removed - Using Primary SEO Meta Tags Above -->
 
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Burni Token - Deflationäres Krypto-Projekt für 2025 | XRPL Blockchain" >
+    <meta property="og:title" content="Burni Token - Deflationäres Krypto-Projekt für 2025 | XRPL Blockchain" />
     <meta
       property="og:description"
       content="Revolutionäres deflationäres Token auf XRPL: Alle 3 Tage werden 3% der Token-Supply verbrannt. Schaffe Wert durch Knappheit. Jetzt der Burni Community beitreten!"
-    >
+    />
     <meta
       property="og:image"
       content="https://burnitoken.website/assets/images/burni-social.webp"
-    >
-    <meta property="og:url" content="https://burnitoken.website" >
-    <meta property="og:site_name" content="Burni Token" >
-    <meta property="og:type" content="website" >
-    <meta property="og:locale" content="en_US" >
+    />
+    <meta property="og:url" content="https://burnitoken.website" />
+    <meta property="og:site_name" content="Burni Token" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image" >
-    <meta name="twitter:title" content="Burni Token - Creating Value Through Scarcity" >
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Burni Token - Creating Value Through Scarcity" />
     <meta
       name="twitter:description"
       content="Join the Burni Token community and be part of the future of deflationary cryptocurrencies on XRPL."
-    >
+    />
     <meta
       name="twitter:image"
       content="https://burnitoken.website/assets/images/burni-social.webp"
-    >
-    <meta name="twitter:creator" content="@burnicoin" >
-    <meta name="twitter:site" content="@burnicoin" >
+    />
+    <meta name="twitter:creator" content="@burnicoin" />
+    <meta name="twitter:site" content="@burnicoin" />
 
     <!-- PWA Manifest -->
-    <link rel="manifest" href="./manifest.json" >
-
+    <link rel="manifest" href="./manifest.json" />
+    
     <!-- Apple PWA Meta Tags -->
-    <meta name="apple-mobile-web-app-capable" content="yes" >
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" >
-    <meta name="apple-mobile-web-app-title" content="BurniToken" >
-    <link rel="apple-touch-icon" href="./assets/images/apple-touch-icon.png" >
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="BurniToken" />
+    <link rel="apple-touch-icon" href="./assets/images/apple-touch-icon.png" />
 
     <!-- Hreflang Links for International SEO -->
-    <link rel="alternate" hreflang="en" href="https://www.burnitoken.website/en" >
-    <link rel="alternate" hreflang="de" href="https://www.burnitoken.website/de" >
-    <link rel="alternate" hreflang="es" href="https://www.burnitoken.website/es" >
-    <link rel="alternate" hreflang="fr" href="https://www.burnitoken.website/fr" >
-    <link rel="alternate" hreflang="ar" href="https://www.burnitoken.website/ar" >
-    <link rel="alternate" hreflang="bn" href="https://www.burnitoken.website/bn" >
-    <link rel="alternate" hreflang="ja" href="https://www.burnitoken.website/ja" >
-    <link rel="alternate" hreflang="pt" href="https://www.burnitoken.website/pt" >
-    <link rel="alternate" hreflang="ko" href="https://www.burnitoken.website/ko" >
-    <link rel="alternate" hreflang="ru" href="https://www.burnitoken.website/ru" >
-    <link rel="alternate" hreflang="tr" href="https://www.burnitoken.website/tr" >
-    <link rel="alternate" hreflang="zh" href="https://www.burnitoken.website/zh" >
-    <link rel="alternate" hreflang="hi" href="https://www.burnitoken.website/hi" >
-    <link rel="alternate" hreflang="it" href="https://www.burnitoken.website/it" >
-    <link rel="alternate" hreflang="x-default" href="https://www.burnitoken.website" >
+    <link rel="alternate" hreflang="en" href="https://www.burnitoken.website/en" />
+    <link rel="alternate" hreflang="de" href="https://www.burnitoken.website/de" />
+    <link rel="alternate" hreflang="es" href="https://www.burnitoken.website/es" />
+    <link rel="alternate" hreflang="fr" href="https://www.burnitoken.website/fr" />
+    <link rel="alternate" hreflang="ar" href="https://www.burnitoken.website/ar" />
+    <link rel="alternate" hreflang="bn" href="https://www.burnitoken.website/bn" />
+    <link rel="alternate" hreflang="ja" href="https://www.burnitoken.website/ja" />
+    <link rel="alternate" hreflang="pt" href="https://www.burnitoken.website/pt" />
+    <link rel="alternate" hreflang="ko" href="https://www.burnitoken.website/ko" />
+    <link rel="alternate" hreflang="ru" href="https://www.burnitoken.website/ru" />
+    <link rel="alternate" hreflang="tr" href="https://www.burnitoken.website/tr" />
+    <link rel="alternate" hreflang="zh" href="https://www.burnitoken.website/zh" />
+    <link rel="alternate" hreflang="hi" href="https://www.burnitoken.website/hi" />
+    <link rel="alternate" hreflang="it" href="https://www.burnitoken.website/it" />
+    <link rel="alternate" hreflang="x-default" href="https://www.burnitoken.website" />
 
     <!-- Enhanced Performance Resource Hints -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin >
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin >
-    <link rel="dns-prefetch" href="//cdn.jsdelivr.net" >
-    <link rel="dns-prefetch" href="//unpkg.com" >
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
+    <link rel="dns-prefetch" href="//unpkg.com" />
 
     <!-- Critical Resource Preloads -->
-    <link rel="preload" href="/assets/polyfills.js" as="script" >
-    <link rel="preload" href="/assets/enhanced-polyfills.js" as="script" >
-    <link rel="preload" href="/assets/css/critical.css" as="style" >
-    <link rel="preload" href="/assets/css/enhanced-mobile-optimization.css" as="style" >
-    <link rel="preload" href="/assets/images/burni-logo.webp" as="image" type="image/webp" >
-    <link rel="preload" href="/assets/security.js" as="script" >
-    <link rel="preload" href="/assets/enhanced-functionality.js" as="script" >
+    <link rel="preload" href="/assets/polyfills.js" as="script" />
+    <link rel="preload" href="/assets/enhanced-polyfills.js" as="script" />
+    <link rel="preload" href="/assets/css/critical.css" as="style" />
+    <link rel="preload" href="/assets/css/enhanced-mobile-optimization.css" as="style" />
+    <link rel="preload" href="/assets/images/burni-logo.webp" as="image" type="image/webp" />
+    <link rel="preload" href="/assets/security.js" as="script" />
+    <link rel="preload" href="/assets/enhanced-functionality.js" as="script" />
 
     <!-- Ultra Performance Script - Immediate Execution -->
     <script>
@@ -141,13 +141,13 @@
     </script>
 
     <!-- Preload critical resources -->
-    <link rel="preload" href="/assets/images/burni-logo.webp" as="image" >
-    <link rel="preload" href="/assets/css/critical.css" as="style" >
-    <link rel="preload" href="/assets/ultra-performance.js" as="script" >
-    <link rel="preconnect" href="https://fonts.googleapis.com" >
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin >
-    <link rel="dns-prefetch" href="//api.xrpl.org" >
-    <link rel="dns-prefetch" href="//api.coingecko.com" >
+    <link rel="preload" href="/assets/images/burni-logo.webp" as="image" />
+    <link rel="preload" href="/assets/css/critical.css" as="style" />
+    <link rel="preload" href="/assets/ultra-performance.js" as="script" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="//api.xrpl.org" />
+    <link rel="dns-prefetch" href="//api.coingecko.com" />
     <!-- Fallback fonts for better cross-browser compatibility -->
     <style>
       body {
@@ -186,24 +186,24 @@
       rel="stylesheet"
       integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
       crossorigin="anonymous"
-    >
+    />
     <!-- Font wird von Google Fonts geladen, preload entfernt -->
     <!--<link rel="preload" href="/assets/fonts/Baloo2-Bold.woff2" as="font" type="font/woff2"
-        crossorigin >-->
+        crossorigin />-->
     <!-- Preload critical assets -->
-    <link rel="preload" href="/assets/images/burniimage.webp" as="image" type="image/webp" >
-    <link rel="preload" href="/assets/images/burniimage.jpg" as="image" type="image/jpeg" >
-    <link rel="preload" href="/assets/css/styles.min.css" as="style" >
+    <link rel="preload" href="/assets/images/burniimage.webp" as="image" type="image/webp" />
+    <link rel="preload" href="/assets/images/burniimage.jpg" as="image" type="image/jpeg" />
+    <link rel="preload" href="/assets/css/styles.min.css" as="style" />
     <!-- EMERGENCY: Disable preload of broken scripts.min.js -->
-    <!-- <link rel="preload" href="/assets/scripts.min.js" as="script" > -->
+    <!-- <link rel="preload" href="/assets/scripts.min.js" as="script" /> -->
     <!-- Preload fixed scripts -->
-    <link rel="preload" href="/assets/scripts-fixed.min.js" as="script" >
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/chart.js" as="script" >
+    <link rel="preload" href="/assets/scripts-fixed.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/chart.js" as="script" />
 
     <!-- Additional Performance Optimizations -->
     <!-- EMERGENCY: Disable prefetch of broken scripts.min.js -->
     <!-- <link rel="prefetch" href="/assets/scripts.min.js"> -->
-    <link rel="prefetch" href="/assets/images/burni-chart.webp" >
+    <link rel="prefetch" href="/assets/images/burni-chart.webp" />
 
     <!-- Optimize Critical Resource Loading -->
     <style>
@@ -231,15 +231,15 @@
     </style>
 
     <!-- Content Freshness Indicator -->
-    <meta name="last-modified" content="2025-06-16T06:16:52.904Z" >
-    <meta name="revised" content="16.6.2025" >
-    <meta name="author" content="Burni Token Team" >
-    <meta name="robots" content="index, follow" >
-    <meta name="revisit-after" content="7 days" >
-    <meta name="msapplication-TileColor" content="#f97316" >
-    <meta name="msapplication-navbutton-color" content="#f97316" >
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" >
-    <meta name="msapplication-config" content="/assets/browserconfig.xml" >
+    <meta name="last-modified" content="2025-06-16T06:16:52.904Z" />
+    <meta name="revised" content="16.6.2025" />
+    <meta name="author" content="Burni Token Team" />
+    <meta name="robots" content="index, follow" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="msapplication-TileColor" content="#f97316" />
+    <meta name="msapplication-navbutton-color" content="#f97316" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="msapplication-config" content="/assets/browserconfig.xml" />
     <style>
       .loading-skeleton {
         animation: pulse 1.5s infinite;
@@ -515,23 +515,23 @@
       }
     </style>
     <!-- Performance and compatibility meta tags -->
-    <meta name="format-detection" content="telephone=no" >
-    <meta name="format-detection" content="address=no" >
-    <meta http-equiv="x-ua-compatible" content="IE=edge" >
-    <meta name="referrer" content="strict-origin-when-cross-origin" >
-    <link rel="stylesheet" href="assets/css/responsive-optimized.css" >
-    <link rel="stylesheet" href="assets/css/touch-targets.css" >
-    <link rel="stylesheet" href="assets/css/enhanced-touch-targets.css" >
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="format-detection" content="address=no" />
+    <meta http-equiv="x-ua-compatible" content="IE=edge" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <link rel="stylesheet" href="assets/css/responsive-optimized.css" />
+    <link rel="stylesheet" href="assets/css/touch-targets.css" />
+    <link rel="stylesheet" href="assets/css/enhanced-touch-targets.css" />
     <!-- CSS compatibility for legacy browsers -->
-    <link rel="stylesheet" href="assets/css/styles-compat.css" >
-    <link rel="stylesheet" href="assets/css/responsive-enhancements.css" >
-    <link rel="stylesheet" href="assets/css/enhanced-mobile-optimization.css" >
+    <link rel="stylesheet" href="assets/css/styles-compat.css" />
+    <link rel="stylesheet" href="assets/css/responsive-enhancements.css" />
+    <link rel="stylesheet" href="assets/css/enhanced-mobile-optimization.css" />
     <!-- Enhanced contrast and readability for better accessibility -->
-    <link rel="stylesheet" href="assets/css/enhanced-contrast.css" >
+    <link rel="stylesheet" href="assets/css/enhanced-contrast.css" />
     <!-- Dark Mode Variables CSS -->
-    <link rel="stylesheet" href="assets/css/dark-mode-variables.css" >
+    <link rel="stylesheet" href="assets/css/dark-mode-variables.css" />
     <!-- Enhanced form styles and notifications -->
-    <link rel="stylesheet" href="assets/css/forms-enhanced.css" >
+    <link rel="stylesheet" href="assets/css/forms-enhanced.css" />
 
     <!-- Product Schema for Burni Token -->
     <script type="application/ld+json">
@@ -656,7 +656,10 @@
             <label for="lang-select" class="sr-only" data-i18n="lang_select_label"
               >Select language</label
             >
-            <select id="lang-select"
+            <select
+              id="lang-select"
+              hreflang="en"
+              aria-label="Select language"
               class="px-4 py-2 text-sm text-orange-600 bg-white border border-gray-300 rounded-lg appearance-none md:text-base font-inter lang-select-style"
             >
               <option value="en">English</option>
@@ -745,9 +748,9 @@
             id="mobile-menu-button"
             aria-controls="mobile-menu"
             aria-expanded="false"
-            class="px-4 py-3 pixar-button md:hidden font-baloo-2 touch-optimized"
+            class="px-4 py-3 pixar-button md:hidden font-baloo-2"
             data-i18n="menu_button"
-
+            class="touch-optimized"
           >
             Menu
           </button>
@@ -812,23 +815,23 @@
         >
       </nav>
     </header>
-    <nav aria-label="Main Breadcrumb" class="breadcrumb-nav">
+    <nav aria-label="Breadcrumb" class="breadcrumb-nav">
       <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
         <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
           <a itemprop="item" href="/" class="breadcrumb-link">
             <span itemprop="name">Home</span>
           </a>
-          <meta itemprop="position" content="1" >
+          <meta itemprop="position" content="1" />
         </li>
         <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
           <span itemprop="name" class="breadcrumb-current" aria-current="page">BURNI Token</span>
-          <meta itemprop="position" content="2" >
+          <meta itemprop="position" content="2" />
         </li>
       </ol>
     </nav>
 
     <!-- Main Breadcrumb Navigation -->
-    <nav aria-label="Secondary Breadcrumb" class="py-2 bg-gray-50">
+    <nav aria-label="Breadcrumb" class="py-2 bg-gray-50">
       <div class="container px-6 mx-auto">
         <ol class="flex items-center space-x-2 text-sm text-gray-600">
           <li><a href="/" class="hover:text-orange-500">Home</a></li>
@@ -860,16 +863,17 @@
           <div class="container relative z-20 px-6 mx-auto text-center">
             <div class="max-w-4xl p-6 mx-auto mb-8 pixar-card bounce-in">
               <picture>
-                <source srcset="/assets/images/burniimage.webp" type="image/webp" >
+                <source srcset="/assets/images/burniimage.webp" type="image/webp" />
                 <img
                   src="/assets/images/burniimage.webp"
-                  loading="lazy" srcset="/assets/images/burniimage.jpg 1x, /assets/images/burniimage-2x.jpg 2x"
-
+                  loading="lazy"
+                  srcset="/assets/images/burniimage.jpg 1x, /assets/images/burniimage-2x.jpg 2x"
+                  loading="lazy"
                   alt="Burni Token Mascot - Comic Style Character"
                   class="mx-auto mb-6 burni-mascot hover-lift optimized-image fade-in-scale gpu-accelerated"
-
+                  loading="eager"
                   decoding="async"
-                >
+                />
               </picture>
 
               <h1 id="hero-title-h1" class="mb-4 pixar-title fade-in" data-i18n="hero_title">
@@ -884,21 +888,21 @@
               <div class="flex flex-col items-center justify-center gap-4 sm:flex-row fade-in-up">
                 <button
                   type="button"
-                  class="px-8 py-4 text-base pixar-button hover-lift touch-optimized"
+                  class="px-8 py-4 text-base pixar-button hover-lift"
                   onclick="scrollToSection('about')"
                   data-i18n="cta_learn_more"
                   aria-label="Learn more about Burni Token"
-
+                  class="touch-optimized"
                 >
                   🔥 Discover Burni Magic
                 </button>
                 <button
                   type="button"
-                  class="px-8 py-4 text-base pixar-button bg-gradient-to-r from-purple-500 to-pink-500 hover-lift touch-optimized"
+                  class="px-8 py-4 text-base pixar-button bg-gradient-to-r from-purple-500 to-pink-500 hover-lift"
                   onclick="scrollToSection('interact')"
                   data-i18n="cta_get_started"
                   aria-label="Start trading Burni tokens"
-
+                  class="touch-optimized"
                 >
                   🚀 Start Trading
                 </button>
@@ -926,7 +930,7 @@
             </div>
           </div>
         </section>
-        <div class="content-freshness" >
+        <div class="content-freshness" aria-label="Content freshness indicator">
           <span class="freshness-badge">
             <time datetime="2025-06-16">Updated: June 16, 2025</time>
             <span class="live-indicator">🟢 Live Data</span>
@@ -986,7 +990,7 @@
                   <source
                     srcset="/assets/images/burni-verbrennt-lagerfeuer.webp"
                     type="image/webp"
-                  >
+                  />
                   <img
                     src="/assets/images/burni-verbrennt-lagerfeuer.webp"
                     loading="lazy"
@@ -999,7 +1003,7 @@
                     data-i18n-alt="alt_burni_burning_campfire"
                     class="object-contain w-full h-auto mt-4 rounded-lg max-h-56 aspect-video"
                     loading="lazy"
-                  >
+                  />
                 </picture>
               </div>
               <p class="mt-4 text-sm text-gray-600" data-i18n="burn_animation_note">
@@ -1011,7 +1015,7 @@
                 <source
                   srcset="/assets/images/burni-versperrt-coins-im-tresor.webp"
                   type="image/webp"
-                >
+                />
                 <img
                   src="/assets/images/burni-versperrt-coins-im-tresor.webp"
                   loading="lazy"
@@ -1024,7 +1028,7 @@
                   class="object-contain h-48 mx-auto mb-6"
                   loading="lazy"
                   data-i18n-alt="alt_burni_locks_vault"
-                >
+                />
               </picture>
               <h3 class="mb-4 font-baloo-2" data-i18n="blackholed_title">
                 Burni’s Promise: "Blackholed"
@@ -1075,7 +1079,7 @@
           <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             <div class="flex flex-col items-center p-6 text-center section-card">
               <picture>
-                <source srcset="/assets/images/gamepad.webp" type="image/webp" >
+                <source srcset="/assets/images/gamepad.webp" type="image/webp" />
                 <img
                   src="/assets/images/gamepad.webp"
                   loading="lazy"
@@ -1085,7 +1089,7 @@
                   class="w-16 h-16 mb-4"
                   loading="lazy"
                   data-i18n-alt="alt_gamepad_icon"
-                >
+                />
               </picture>
               <h3 class="mb-2 font-semibold font-baloo-2" data-i18n="use_case_gaming_title">
                 Decentralized Gaming
@@ -1096,7 +1100,7 @@
             </div>
             <div class="flex flex-col items-center p-6 text-center section-card">
               <picture>
-                <source srcset="/assets/images/palette.webp" type="image/webp" >
+                <source srcset="/assets/images/palette.webp" type="image/webp" />
                 <img
                   src="/assets/images/palette.webp"
                   loading="lazy"
@@ -1106,7 +1110,7 @@
                   class="w-16 h-16 mb-4"
                   loading="lazy"
                   data-i18n-alt="alt_palette_icon"
-                >
+                />
               </picture>
               <h3 class="mb-2 font-semibold font-baloo-2" data-i18n="use_case_nfts_title">
                 NFT Integration
@@ -1118,7 +1122,7 @@
             </div>
             <div class="flex flex-col items-center p-6 text-center section-card">
               <picture>
-                <source srcset="/assets/images/use-case-rewards.webp" type="image/webp" >
+                <source srcset="/assets/images/use-case-rewards.webp" type="image/webp" />
                 <img
                   src="/assets/images/use-case-rewards.webp"
                   loading="lazy"
@@ -1131,7 +1135,7 @@
                   class="object-contain w-24 h-24 mb-4"
                   loading="lazy"
                   data-i18n-alt="alt_use_case_rewards"
-                >
+                />
               </picture>
               <h3 class="mb-2 font-semibold font-baloo-2" data-i18n="use_case_rewards_title">
                 Reward Systems
@@ -1143,7 +1147,7 @@
             </div>
             <div class="flex flex-col items-center p-6 text-center section-card">
               <picture>
-                <source srcset="/assets/images/exchange.webp" type="image/webp" >
+                <source srcset="/assets/images/exchange.webp" type="image/webp" />
                 <img
                   src="/assets/images/exchange.webp"
                   loading="lazy"
@@ -1153,7 +1157,7 @@
                   class="w-16 h-16 mb-4"
                   loading="lazy"
                   data-i18n-alt="alt_exchange_icon"
-                >
+                />
               </picture>
               <h3 class="mb-2 font-semibold font-baloo-2" data-i18n="use_case_microtx_title">
                 Microtransactions
@@ -1165,7 +1169,7 @@
             </div>
             <div class="flex flex-col items-center p-6 text-center section-card">
               <picture>
-                <source srcset="/assets/images/vote.webp" type="image/webp" >
+                <source srcset="/assets/images/vote.webp" type="image/webp" />
                 <img
                   src="/assets/images/vote.webp"
                   loading="lazy"
@@ -1175,7 +1179,7 @@
                   class="w-16 h-16 mb-4"
                   loading="lazy"
                   data-i18n-alt="alt_vote_icon"
-                >
+                />
               </picture>
               <h3 class="mb-2 font-semibold font-baloo-2" data-i18n="use_case_governance_title">
                 Community Governance
@@ -1224,7 +1228,7 @@
                 class="object-contain w-48 h-auto mb-6 rounded-lg shadow-md md:w-64 md:mb-0"
                 loading="lazy"
                 data-i18n-alt="alt_burni_schedule_calculation"
-              >
+              />
               <div>
                 <h3 class="mb-6 font-semibold font-baloo-2" data-i18n="key_insights_title">
                   Key Insights from the Simulation
@@ -1335,7 +1339,7 @@
               class="object-contain h-40 mx-auto mb-6"
               loading="lazy"
               data-i18n-alt="alt_burni_chart_illustration"
-            >
+            />
             <h2 id="tokenomics-title-h2" class="mb-4 font-baloo-2" data-i18n="tokenomics_title">
               Burni’s World: Facts &amp; Figures
             </h2>
@@ -1402,7 +1406,7 @@
                   class="object-contain h-20"
                   loading="lazy"
                   data-i18n-alt="alt_burnicoin_image"
-                >
+                />
               </div>
               <ul class="space-y-3 text-gray-700">
                 <li><strong data-i18n="created_on">Created on:</strong> May 17, 2025</li>
@@ -1517,7 +1521,7 @@
               alt="Symbol for the speed and efficiency of the XRP Ledger"
               class="h-20 mx-auto my-4"
               data-i18n-alt="alt_xrpl_speed_icon"
-            >
+            />
             <p class="font-semibold text-gray-600" data-i18n="xrpl_slogan">
               Fast, efficient, and reliable – that’s the foundation of Burni.
             </p>
@@ -1542,7 +1546,7 @@
               loading="lazy"
               data-i18n-alt="alt_trade_mascot"
               alt="Burni mascot showing the way for trading XPM"
-            >
+            />
           </div>
           <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <a
@@ -1647,7 +1651,7 @@
                 loading="lazy"
                 data-i18n-alt="alt_burni_explorer_mascot"
                 alt="Burni mascot exploring the XRPL blockchain"
-              >
+              />
             </div>
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               <!-- XRPL Livenet -->
@@ -1882,8 +1886,8 @@
                 </p>
                 <button
                   onclick="initializeCalculator()"
-                  class="px-6 py-3 font-bold text-orange-600 transition-colors duration-300 bg-white rounded-lg hover:bg-gray-100 touch-optimized"
-
+                  class="px-6 py-3 font-bold text-orange-600 transition-colors duration-300 bg-white rounded-lg hover:bg-gray-100"
+                  class="touch-optimized"
                 >
                   🔥 Launch Calculator
                 </button>
@@ -2225,15 +2229,15 @@
           Erhalten Sie die neuesten Updates über Burni Token, Burn-Events und Community-News direkt in Ihr Postfach.
         </p>
         <form id="newsletter-form" class="newsletter-form">
-          <input
-            type="email"
-            name="email"
-            class="newsletter-input"
-            placeholder="Ihre E-Mail-Adresse"
-            required
+          <input 
+            type="email" 
+            name="email" 
+            class="newsletter-input" 
+            placeholder="Ihre E-Mail-Adresse" 
+            required 
             aria-label="E-Mail-Adresse für Newsletter"
             data-field-name="E-Mail"
-          >
+          />
           <button type="submit" class="newsletter-button">
             📧 Anmelden
           </button>
@@ -2261,7 +2265,7 @@
           <div class="space-y-6">
             <h3 class="text-2xl font-bold text-gray-900 mb-6">🌐 Social Media</h3>
             <div class="space-y-4">
-              <a href="https://x.com/burnicoin"
+              <a href="https://x.com/burnicoin" 
                  class="flex items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 group">
                 <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mr-4 group-hover:scale-110 transition-transform">
                   <span class="text-white text-xl">𝕏</span>
@@ -2272,7 +2276,7 @@
                 </div>
               </a>
 
-              <a href="https://t.me/burnicoin"
+              <a href="https://t.me/burnicoin" 
                  class="flex items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 group">
                 <div class="w-12 h-12 bg-blue-400 rounded-lg flex items-center justify-center mr-4 group-hover:scale-110 transition-transform">
                   <span class="text-white text-xl">📱</span>
@@ -2283,7 +2287,7 @@
                 </div>
               </a>
 
-              <a href="https://discord.gg/burnicoin"
+              <a href="https://discord.gg/burnicoin" 
                  class="flex items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 group">
                 <div class="w-12 h-12 bg-indigo-500 rounded-lg flex items-center justify-center mr-4 group-hover:scale-110 transition-transform">
                   <span class="text-white text-xl">💬</span>
@@ -2294,7 +2298,7 @@
                 </div>
               </a>
 
-              <a href="https://github.com/burnitoken/project"
+              <a href="https://github.com/burnitoken/project" 
                  class="flex items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 group">
                 <div class="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center mr-4 group-hover:scale-110 transition-transform">
                   <span class="text-white text-xl">⚡</span>
@@ -2314,59 +2318,59 @@
               <div class="form-row">
                 <div class="form-group">
                   <label for="contact-name" class="form-label">Name *</label>
-                  <input
-                    type="text"
-                    id="contact-name"
-                    name="name"
-                    class="form-input"
-                    required
+                  <input 
+                    type="text" 
+                    id="contact-name" 
+                    name="name" 
+                    class="form-input" 
+                    required 
                     data-field-name="Name"
                     data-min-length="2"
-                  >
+                  />
                 </div>
                 <div class="form-group">
                   <label for="contact-email" class="form-label">E-Mail *</label>
-                  <input
-                    type="email"
-                    id="contact-email"
-                    name="email"
-                    class="form-input"
-                    required
+                  <input 
+                    type="email" 
+                    id="contact-email" 
+                    name="email" 
+                    class="form-input" 
+                    required 
                     data-field-name="E-Mail"
-                  >
+                  />
                 </div>
               </div>
-
+              
               <div class="form-group">
                 <label for="contact-subject" class="form-label">Betreff</label>
-                <input
-                  type="text"
-                  id="contact-subject"
-                  name="subject"
+                <input 
+                  type="text" 
+                  id="contact-subject" 
+                  name="subject" 
                   class="form-input"
                   data-field-name="Betreff"
-                >
+                />
               </div>
-
+              
               <div class="form-group">
                 <label for="contact-message" class="form-label">Nachricht *</label>
-                <textarea
-                  id="contact-message"
-                  name="message"
-                  class="form-input form-textarea"
-                  rows="5"
-                  required
+                <textarea 
+                  id="contact-message" 
+                  name="message" 
+                  class="form-input form-textarea" 
+                  rows="5" 
+                  required 
                   data-field-name="Nachricht"
                   data-min-length="10"
                   data-max-length="1000"
                   placeholder="Teilen Sie uns Ihre Fragen, Feedback oder Vorschläge mit..."
                 ></textarea>
               </div>
-
+              
               <button type="submit" class="btn-primary w-full">
                 ✉️ Nachricht senden
               </button>
-
+              
               <p class="text-sm text-gray-600 mt-4">
                 💡 Tipp: Drücken Sie Strg+Enter in der Nachricht, um schnell zu senden.
               </p>
@@ -2421,11 +2425,11 @@
             <a href="#hero" class="flex items-center" aria-label="Burni Token Homepage">
               <img
                 src="/assets/images/favicon-32x32.png"
-
+                srcset="/assets/images/favicon-32x32.png 1x, /assets/images/favicon-32x32-2x.png 2x"
                 loading="lazy"
                 alt="Burni Logo"
                 class="w-8 h-8 mr-2"
-              >
+              />
               <span class="text-2xl font-bold text-orange-400 font-baloo-2">Burni</span>
             </a>
           </div>
@@ -2537,13 +2541,13 @@
       </div>
     </footer>    <!-- Error monitoring script -->
     <script src="/sentry.client.js" defer></script>
-
+    
     <!-- BURNI UNIFIED DARK MODE MANAGER -->
     <script src="/assets/burni-dark-mode.js"></script>
-
+    
     <!-- Dark Mode Test Script (Development) -->
     <script src="/assets/test-dark-mode.js"></script>
-
+    
     <!-- Advanced Features -->
     <script src="/assets/analytics-dashboard.js" defer></script>
     <script src="/assets/price-tracker.js" defer></script>
@@ -2822,9 +2826,9 @@
     <!-- DIRECT PRICE WIDGET FOR LIVE PRICES -->
     <div id="direct-price-widget" class="direct-price-widget">
       <button
-        class="direct-price-close touch-optimized"
+        class="direct-price-close"
         onclick="this.parentElement.style.display='none'"
-
+        class="touch-optimized"
       >
         ×
       </button>
@@ -2984,7 +2988,7 @@
                 <div class="p-8 text-center">
                   <div class="mb-2 text-lg font-bold text-red-500">⚠️ Calculator Loading Error</div>
                   <p class="text-gray-600">Please refresh the page or try again later.</p>
-                  <button onclick="initializeCalculator()" class="px-4 py-2 mt-4 text-white bg-orange-500 rounded hover:bg-orange-600 touch-optimized" >
+                  <button onclick="initializeCalculator()" class="px-4 py-2 mt-4 text-white bg-orange-500 rounded hover:bg-orange-600" class="touch-optimized">
                     🔄 Retry
                   </button>
                 </div>
@@ -3040,26 +3044,26 @@
         accessPanel.innerHTML = `
         <div class="mb-3 font-semibold text-gray-800 dark:text-gray-200">🔥 BURNI Features</div>
         <div class="space-y-2">
-          <button id="open-dashboard" class="w-full p-2 text-left text-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300 touch-optimized" >
+          <button id="open-dashboard" class="w-full p-2 text-left text-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300" class="touch-optimized">
             🎛️ Real-Time Dashboard
           </button>
-          <button id="open-calculator" class="w-full p-2 text-left text-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300 touch-optimized" >
+          <button id="open-calculator" class="w-full p-2 text-left text-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300" class="touch-optimized">
             🧮 Advanced Calculator
           </button>
-          <button id="open-ai-insights" class="w-full p-2 text-left text-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300 touch-optimized" >
+          <button id="open-ai-insights" class="w-full p-2 text-left text-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300" class="touch-optimized">
             🤖 AI Market Insights
           </button>
-          <button id="open-trading-analysis" class="w-full p-2 text-left text-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300 touch-optimized" >
+          <button id="open-trading-analysis" class="w-full p-2 text-left text-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300" class="touch-optimized">
             📊 Trading Analysis
           </button>
           <hr class="my-2 border-gray-300 dark:border-gray-600">
-          <button id="accessibility-features" class="w-full p-2 text-left text-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300 touch-optimized" >
+          <button id="accessibility-features" class="w-full p-2 text-left text-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300" class="touch-optimized">
             ♿ Accessibility Tools
           </button>
-          <button id="language-features" class="w-full p-2 text-left text-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300 touch-optimized" >
+          <button id="language-features" class="w-full p-2 text-left text-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300" class="touch-optimized">
             🌍 Language Tools
           </button>
-          <button id="performance-monitor" class="w-full p-2 text-left text-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300 touch-optimized" >
+          <button id="performance-monitor" class="w-full p-2 text-left text-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300" class="touch-optimized">
             ⚡ Performance Monitor
           </button>
         </div>
@@ -3251,7 +3255,7 @@
         <div class="w-full max-w-2xl mx-4 overflow-y-auto bg-white rounded-lg shadow-xl max-h-96">
           <div class="flex items-center justify-between p-4 border-b">
             <h2 class="text-xl font-semibold">${title}</h2>
-            <button class="text-2xl text-gray-400 close-modal hover:text-gray-600 touch-optimized" >&times;</button>
+            <button class="text-2xl text-gray-400 close-modal hover:text-gray-600" class="touch-optimized">&times;</button>
           </div>
           <div class="p-4">
             ${content}

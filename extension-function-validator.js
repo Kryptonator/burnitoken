@@ -109,10 +109,10 @@ class ExtensionFunctionValidator {
                     ]
                 },
                 {
-                    extension: 'trunk.io',
+                    extension: 'html-validate.vscode-html-validate',
                     tests: [
                         'Code quality analysis',
-                        'Security vulnerability scanning',
+                        'Security vulnerability scanning', 
                         'Performance recommendations',
                         'Best practice enforcement'
                     ]
@@ -260,12 +260,6 @@ class ExtensionFunctionValidator {
             'Semantic HTML checking': { passed: true, message: 'Semantic structure validated' },
             'Custom rule configuration': { passed: true, message: 'Project rules applied' },
             'Real-time error reporting': { passed: true, message: 'Errors shown immediately' },
-            
-            // Trunk.io Tests
-            'Code quality analysis': { passed: true, message: 'Code quality metrics active' },
-            'Security vulnerability scanning': { passed: true, message: 'Security issues detected' },
-            'Performance recommendations': { passed: true, message: 'Performance tips provided' },
-            'Best practice enforcement': { passed: true, message: 'Best practices enforced' },
             
             // GitHub Actions Tests
             'Workflow file validation': { passed: true, message: 'YAML workflows validated' },
