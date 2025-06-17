@@ -197,6 +197,72 @@
         "panel": "shared"
       },
       "problemMatcher": []
+    },
+    {
+      "label": "🦊 Start Firefox Debug Session",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '🦊 Starting Firefox Debug Session...' -ForegroundColor Green; Start-Process firefox -ArgumentList '--start-debugger-server=6000', 'https://burnitoken.website'"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "📊 Performance Bundle Analysis",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '📊 Analyzing Bundle Performance...' -ForegroundColor Cyan; curl -s 'https://burnitoken.website' | Select-String -Pattern 'src=|href=' | Measure-Object | Write-Host 'Assets found: ' -NoNewline; Write-Host $_.Count -ForegroundColor Green"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "📱 Mobile Responsive Test",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '📱 Testing Mobile Responsiveness...' -ForegroundColor Yellow; Start-Process chrome -ArgumentList '--device-scale-factor=2', '--user-agent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)\"', 'https://burnitoken.website'"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Start Live Preview Server",
+      "type": "shell",
+      "command": "npx",
+      "args": ["live-server", "--port=3000", "--open=false"],
+      "group": "build",
+      "isBackground": true,
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
     }
   ]
 }

@@ -66,6 +66,40 @@
                 "--enable-logging",
                 "--log-level=0"
             ]
+        },
+        {
+            "name": "🦊 Debug with Firefox",
+            "type": "firefox",
+            "request": "launch",
+            "url": "https://burnitoken.website",
+            "webRoot": "${workspaceFolder}",
+            "firefoxExecutable": "firefox"
+        },
+        {
+            "name": "🦊 Debug Local HTML (Firefox)",
+            "type": "firefox",
+            "request": "launch",
+            "file": "${workspaceFolder}/index.html",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
+            "name": "📱 Debug Mobile Simulation",
+            "type": "chrome",
+            "request": "launch",
+            "url": "https://burnitoken.website",
+            "webRoot": "${workspaceFolder}",
+            "runtimeArgs": [
+                "--device-scale-factor=2",
+                "--mobile"
+            ]
+        },
+        {
+            "name": "⚡ Debug with Live Preview",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}",
+            "preLaunchTask": "Start Live Preview Server"
         }
     ]
 }
