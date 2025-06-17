@@ -85,9 +85,9 @@
             "url": "/?shortcut=community#community",
             "icons": [
                 {
-                    "src": "/assets/images/burni.png",
+                    "src": "/assets/images/burni-logo.webp",
                     "sizes": "96x96",
-                    "type": "image/png"
+                    "type": "image/webp"
                 }
             ]
         },
