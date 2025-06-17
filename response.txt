@@ -78,8 +78,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin >
     <link rel="dns-prefetch" href="//cdn.jsdelivr.net" >
     <link rel="dns-prefetch" href="//unpkg.com" >
+    
     <!-- Theme Color Meta Tags -->
-    <meta name="msapplication-TileColor" content="#f97316">
+    <meta name="theme-color" content="#f97316" media="(prefers-color-scheme: light)" >
+    <meta name="theme-color" content="#fb923c" media="(prefers-color-scheme: dark)" >
 
     <!-- Critical Resource Preloads -->
     <link rel="preload" href="/assets/enhanced-polyfills.js" as="script" >
@@ -186,7 +188,7 @@
       integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
       crossorigin="anonymous"
     >
-
+    
     <!-- Preload critical assets -->
     <link rel="preload" href="/assets/images/burniimage.webp" as="image" type="image/webp" >
     <link rel="preload" href="/assets/images/burniimage.jpg" as="image" type="image/jpeg" >
@@ -534,6 +536,7 @@
           height: 13rem;
         }
       }
+    </style>
 
     <!-- Performance and compatibility meta tags -->
     <meta http-equiv="x-ua-compatible" content="IE=edge" >

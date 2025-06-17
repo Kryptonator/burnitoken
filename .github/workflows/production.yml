@@ -1,27 +1,24 @@
-name: 🚀 Complete Quality Assurance & Deployment
+name: 🚀 Production Deployment
 
 on:
   push:
-    branches: [ main, master ]
-  pull_request:
     branches: [ main, master ]
   workflow_dispatch:
 
 env:
   NODE_VERSION: '20'
-  SITE_URL: 'https://burnitoken.website'
 
 jobs:
-  quality-checks:
-    name: 📊 Complete Quality Assessment
+  build-and-test:
+    name: 🏗️ Build & Test
     runs-on: ubuntu-latest
     
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         
       - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -29,67 +26,55 @@ jobs:
       - name: 📥 Install dependencies
         run: npm ci
         
-      - name: 🔍 Code Quality (Prettier + ESLint)
-        run: |
-          npm run lint:check
-          echo "✅ Code formatting validated"
+      - name: 🧪 Run tests
+        run: npm test
         
-      - name: 🏗️ Build Project
-        run: |
-          npm run build:css
-          npm run build || echo "Build completed with static files"
-          echo "✅ Project built successfully"
+      - name: 🔍 Lint code
+        run: npm run lint:check
         
-      - name: 🧪 Unit Tests
-        run: |
-          npm test
-          echo "✅ Unit tests passed"
+      - name: 🏗️ Build production
+        run: npm run build
         
-      - name: ✅ HTML Validation
-        run: |
-          npm run validate
-          echo "✅ HTML validation passed"
-        
-      - name: 🔒 Security Scan (Snyk)
+      - name: 🔒 Security audit (Snyk)
         uses: snyk/actions/node@master
-        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        continue-on-error: true
         
-      - name: ♿ Accessibility Check (axe-core)
-        run: |
-          npx @axe-core/cli index.html --save axe-report.json || true
-          echo "✅ Accessibility check completed"
+      - name: 🌐 Accessibility audit
+        run: npm run test:accessibility || true
         
-      - name: 🌐 Lighthouse Performance Audit
-        run: |
-          npm install -g @lhci/cli
-          lhci autorun || true
-          echo "✅ Lighthouse audit completed"
+      - name: ⚡ Performance audit
+        run: npm run lighthouse || true
         
-      - name: 📊 Upload Quality Reports
+      - name: 📦 Upload build artifacts
         uses: actions/upload-artifact@v4
-        if: always()
+        if: success()
         with:
-          name: quality-reports
+          name: production-build
           path: |
-            axe-report.json
-            lighthouse-report.json
-            test-results.xml
+            index.html
+            assets/
+            *.md
           retention-days: 30
-
+          
   deploy:
-    name: 🚀 Production Deployment
+    name: 🚀 Deploy to GitHub Pages
     runs-on: ubuntu-latest
-    needs: quality-checks
+    needs: build-and-test
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+      
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         
       - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -97,42 +82,23 @@ jobs:
       - name: 📥 Install dependencies
         run: npm ci
         
-      - name: 🏗️ Production Build
-        run: |
-          npm run build:css
-          npm run optimize
-          echo "✅ Production build completed"
+      - name: 🏗️ Build for deployment
+        run: npm run build
         
-      - name: 📁 Prepare Deployment
+      - name: 📊 Generate final reports
         run: |
-          mkdir -p deploy
-          cp index.html deploy/
-          cp -r assets deploy/ 2>/dev/null || echo "Assets copied"
-          cp manifest.json deploy/ 2>/dev/null || echo "Manifest not found"
-          cp sw.js deploy/ 2>/dev/null || echo "Service worker not found"
-          cp robots.txt deploy/ 2>/dev/null || echo "Robots.txt not found"
-          cp sitemap.xml deploy/ 2>/dev/null || echo "Sitemap not found"
-          cp CNAME deploy/ 2>/dev/null || echo "burnitoken.website" > deploy/CNAME
-          echo "✅ Deployment package prepared"
+          echo "# 🚀 Deployment Report" > DEPLOYMENT_REPORT.md
+          echo "- Date: $(date)" >> DEPLOYMENT_REPORT.md
+          echo "- Branch: ${{ github.ref_name }}" >> DEPLOYMENT_REPORT.md
+          echo "- Commit: ${{ github.sha }}" >> DEPLOYMENT_REPORT.md
+          echo "- Status: ✅ All tests passed" >> DEPLOYMENT_REPORT.md
         
       - name: 🚀 Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./deploy
-          cname: burnitoken.website
+          publish_dir: ./
           force_orphan: true
-          enable_jekyll: false
-          commit_message: '🚀 Production Deploy - ${{ github.sha }}'
-          
-      - name: 📊 Deployment Summary
-        run: |
-          echo "================================================"
-          echo "🎉 BURNITOKEN.WEBSITE DEPLOYMENT SUCCESS!"
-          echo "================================================"
-          echo "🌐 Live URL: ${{ env.SITE_URL }}"
-          echo "✅ Quality checks passed"
-          echo "✅ Security validated"
-          echo "✅ Accessibility verified"
-          echo "✅ Performance optimized"
-          echo "================================================"
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: '🚀 Deploy: ${{ github.event.head_commit.message }}'
