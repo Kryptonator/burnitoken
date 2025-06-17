@@ -23,8 +23,6 @@ class AutonomousExtensionManager {
             // QUALITY & ACCESSIBILITY
             'maxvanderschee.web-accessibility',
             'html-validate.vscode-html-validate',
-            'trunk.io',
-            
             // DOCUMENTATION
             'yzhang.markdown-all-in-one',
             

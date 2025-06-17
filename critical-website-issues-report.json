@@ -1,0 +1,72 @@
+{
+  "timestamp": "2025-06-17T04:23:07.518Z",
+  "website": "burnitoken.com",
+  "analysisType": "Critical Issues Detection",
+  "summary": {
+    "totalIssues": 5,
+    "criticalIssues": 3,
+    "warningIssues": 2,
+    "missingAssets": 2
+  },
+  "issues": [
+    {
+      "type": "CRITICAL",
+      "category": "Duplicate Meta Tags",
+      "issue": "2 duplicate description meta tags",
+      "impact": "SEO damage, search engine confusion",
+      "solution": "Remove duplicate meta description tags"
+    },
+    {
+      "type": "CRITICAL",
+      "category": "Duplicate Meta Tags",
+      "issue": "2 duplicate keywords meta tags",
+      "impact": "SEO damage",
+      "solution": "Remove duplicate meta keywords tags"
+    },
+    {
+      "type": "WARNING",
+      "category": "Duplicate Meta Tags",
+      "issue": "3 duplicate author meta tags",
+      "impact": "Minor SEO issue",
+      "solution": "Remove duplicate meta author tags"
+    },
+    {
+      "type": "WARNING",
+      "category": "Multiple Navigation",
+      "issue": "5 navigation elements",
+      "impact": "Potential layout confusion",
+      "solution": "Review navigation structure"
+    },
+    {
+      "type": "CRITICAL",
+      "category": "Missing Assets",
+      "issue": "2 missing image files",
+      "impact": "Broken layout, poor user experience",
+      "solution": "Add missing image files or fix image paths"
+    }
+  ],
+  "missingAssets": [
+    {
+      "type": "image",
+      "path": "/assets/images/burni.png",
+      "fullPath": "C:\\Users\\micha\\OneDrive\\Dokumente\\burnitoken.com\\assets\\images\\burni.png"
+    },
+    {
+      "type": "image",
+      "path": "/assets/images/burni.png",
+      "fullPath": "C:\\Users\\micha\\OneDrive\\Dokumente\\burnitoken.com\\assets\\images\\burni.png"
+    }
+  ],
+  "recommendations": [
+    "🚨 URGENT: Fix all critical issues immediately",
+    "🔧 Clean up duplicate meta tags and headers",
+    "🖼️  Add missing image files or fix paths",
+    "⚡ Fix duplicate HTML IDs",
+    "🎯 Optimize CSS and JavaScript structure",
+    "📦 Consolidate multiple CSS/JS files",
+    "🔄 Review Tailwind + Custom CSS integration",
+    "🧪 Test website thoroughly after fixes",
+    "📊 Monitor website performance",
+    "✅ Validate HTML and CSS"
+  ]
+}
