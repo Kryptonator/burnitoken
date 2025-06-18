@@ -195,53 +195,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     it: 'it-IT',
   };
 
-  // Quick i18n system setup for testing - SOFORT nach DOMContentLoaded
-  console.log('Setting up quick i18n test...');
-  try {
-    const langSelect = document.getElementById('lang-select');
-    console.log('Language selector found:', !!langSelect);
-    if (langSelect) {
-      console.log('Quick i18n event listener attached');
-
-      // Safari compatibility - use both change and input events
-      const handleLanguageChange = (e) => {
-        const newLang = e.target.value;
-        console.log(`Quick i18n: Language change to ${newLang}`);
-
-        // Safari-specific timing adjustment
-        const updateElements = () => {
-          const homeElements = document.querySelectorAll('[data-i18n="nav_home"]');
-          console.log(`Found ${homeElements.length} nav_home elements`);
-          homeElements.forEach((el, index) => {
-            if (newLang === 'de') {
-              el.textContent = 'Startseite';
-            } else if (newLang === 'es') {
-              el.textContent = 'Inicio';
-            } else if (newLang === 'fr') {
-              el.textContent = 'Accueil';
-            } else {
-              el.textContent = 'Home';
-            }
-            console.log(`Updated element ${index} to: "${el.textContent}"`);
-          });
-          console.log(`Updated ${homeElements.length} nav_home elements`);
-        };
-
-        // Safari needs a small delay
-        if (/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)) {
-          setTimeout(updateElements, 50);
-        } else {
-          updateElements();
-        }
-      };
-
-      langSelect.addEventListener('change', handleLanguageChange);
-      langSelect.addEventListener('input', handleLanguageChange); // Safari fallback
-    }
-  } catch (error) {
-    console.error('Error in quick i18n setup:', error);
-  }
-
   const priceErrorMessageElement = document.getElementById('price-error-message');
 
   function generateSchedule(startDate, initialCoins, processes, locale, currentTranslations) {
