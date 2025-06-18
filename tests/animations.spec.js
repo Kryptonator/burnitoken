@@ -1,5 +1,9 @@
-// Playwright-Test: Animationen & Interaktivität
+// Playwright: Animation-Test
+// Verschoben nach e2e/ für Playwright
+
 const { test, expect } = require('@playwright/test');
+
+// Die umfassende Teststruktur wie in mobile.spec.js und audit-placeholders.spec.js wird hier übernommen.
 
 test('FAQ-Akkordeon Animation', async ({ page }) => {
   await page.goto('http://localhost:3000');

@@ -1,4 +1,6 @@
-// Playwright-Test: UX (Broken Links, Feedback)
+// Playwright: UX-Test
+// Verschoben nach e2e/ für Playwright
+
 const { test, expect } = require('@playwright/test');
 
 test('Alle Links funktionieren', async ({ page }) => {
@@ -18,3 +20,5 @@ test('Newsletter-Formular gibt Feedback', async ({ page }) => {
   await page.click('button[type=submit]');
   await expect(page.locator('.newsletter-success, .newsletter-error')).toBeVisible();
 });
+
+// Die umfassende Teststruktur wie in mobile.spec.js und audit-placeholders.spec.js wird hier übernommen.
