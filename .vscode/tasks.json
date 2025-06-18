@@ -233,21 +233,58 @@
       "problemMatcher": []
     },
     {
+      "label": "🌍 Test I18N",
+      "type": "shell",
+      "command": "npx",
+      "args": ["playwright", "test", "tests/i18n.spec.js"]
+    },
+    {
+      "label": "🎬 Test Animationen",
+      "type": "shell",
+      "command": "npx",
+      "args": ["playwright", "test", "tests/animations.spec.js"]
+    },
+    {
+      "label": "🔗 Test API",
+      "type": "shell",
+      "command": "npx",
+      "args": ["playwright", "test", "tests/api.spec.js"]
+    },
+    {
+      "label": "♿ Accessibility Check",
+      "type": "shell",
+      "command": "npx",
+      "args": ["playwright", "test", "tests/accessibility.spec.js"]
+    },
+    {
       "label": "📱 Mobile Responsive Test",
       "type": "shell",
-      "command": "powershell",
-      "args": [
-        "-Command",
-        "Write-Host '📱 Testing Mobile Responsiveness...' -ForegroundColor Yellow; Start-Process chrome -ArgumentList '--device-scale-factor=2', '--user-agent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)\"', 'https://burnitoken.website'"
-      ],
-      "group": "test",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared"
-      },
-      "problemMatcher": []
+      "command": "npx",
+      "args": ["playwright", "test", "tests/mobile.spec.js"]
+    },
+    {
+      "label": "🧑‍💻 UX Test",
+      "type": "shell",
+      "command": "npx",
+      "args": ["playwright", "test", "tests/ux.spec.js"]
+    },
+    {
+      "label": "⚡ Lighthouse Performance",
+      "type": "shell",
+      "command": "npx",
+      "args": ["lhci", "autorun", "--config=./lighthouserc-performance.js"]
+    },
+    {
+      "label": "🔍 Lighthouse SEO",
+      "type": "shell",
+      "command": "npx",
+      "args": ["lhci", "autorun", "--config=./lighthouserc-seo.js"]
+    },
+    {
+      "label": "♿ Lighthouse Accessibility",
+      "type": "shell",
+      "command": "npx",
+      "args": ["lhci", "autorun", "--config=./lighthouserc-accessibility.js"]
     },
     {
       "label": "Start Live Preview Server",
