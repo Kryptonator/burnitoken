@@ -22,8 +22,22 @@ beforeAll(() => {
     warn: jest.fn(),
     log: jest.fn(),
   };
+
+  // Mock window.matchMedia globally for all tests
+  if (!window.matchMedia) {
+    window.matchMedia = jest.fn().mockImplementation((query) => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+      dispatchEvent: jest.fn(),
+    }));
+  }
 });
 
 afterAll(() => {
-  global.fetch.mockRestore && global.fetch.mockRestore();
+  global.fetch.mockRestore?.();
 });
