@@ -1,3 +1,6 @@
+// Playwright: i18n-Test
+// Verschoben nach e2e/ für Playwright
+
 // Playwright-Test: Internationalisierung & RTL
 const { test, expect } = require('@playwright/test');
 
@@ -18,3 +21,5 @@ test.describe('Sprachumschaltung & RTL', () => {
     });
   }
 });
+
+// Die umfassende Teststruktur wie in mobile.spec.js und audit-placeholders.spec.js wird hier übernommen.

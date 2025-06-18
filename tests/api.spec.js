@@ -1,6 +1,8 @@
-// Playwright-Test: API & Fallback
+// Playwright: API-Test
+// Verschoben nach e2e/ für Playwright
 const { test, expect } = require('@playwright/test');
 
+// Die umfassende Teststruktur wie in mobile.spec.js und audit-placeholders.spec.js wird hier übernommen.
 test('Preis-Widget lädt Daten und zeigt Fallback bei Ausfall', async ({ page }) => {
   await page.goto('http://localhost:3000');
   // Simuliere API-Ausfall
