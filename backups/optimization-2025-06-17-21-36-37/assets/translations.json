@@ -1,7 +1,0 @@
-{
-  "en": { "translation": { "nav_home": "Home", "hero_title": "Burni Token - Creating Value Through Scarcity" } },
-  "de": { "translation": { "nav_home": "Startseite", "hero_title": "Burni Token - Wert durch Knappheit schaffen" } },
-  "es": { "translation": { "nav_home": "Inicio", "hero_title": "Burni Token - Creando valor a través de la escasez" } },
-  "fr": { "translation": { "nav_home": "Accueil", "hero_title": "Burni Token - Créer de la valeur par la rareté" } },
-  "ar": { "translation": { "nav_home": "الرئيسية", "hero_title": "Burni Token - خلق القيمة من خلال النقص" } }
-}

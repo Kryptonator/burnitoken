@@ -1,0 +1,486 @@
+# Page snapshot
+
+```yaml
+- text: ".loading-skeleton { animation: pulse 1.5s infinite; background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%); background-size: 200% 100%; } @keyframes pulse { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } } .loading-spinner { display: flex; justify-content: center; align-items: center; padding: 1rem; } [data-loading='true'] { position: relative; min-height: 100px; } [data-loading='true']::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 10; } .page-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.3s; } .page-loader.hidden { opacity: 0; pointer-events: none; } /* Fr Tests - Page Loader komplett deaktivieren */ body[data-test-mode='true'] .page-loader, body[data-playwright='true'] .page-loader { display: none !important; z-index: -9999 !important; pointer-events: none !important; visibility: hidden !important; opacity: 0 !important; } /* WebKit/Safari spezifische Deaktivierung fr Tests */ @media screen and (-webkit-min-device-pixel-ratio: 0) { body[data-test-mode='true'] .page-loader, body[data-playwright='true'] .page-loader { position: absolute !important; top: -9999px !important; left: -9999px !important; width: 0 !important; height: 0 !important; } } /* Emergency WebKit test loader removal - load order independent */ @supports (-webkit-appearance: none) { .page-loader { position: absolute !important; top: -9999px !important; left: -9999px !important; width: 0 !important; height: 0 !important; display: none !important; pointer-events: none !important; visibility: hidden !important; opacity: 0 !important; z-index: -9999 !important; } } @media print { .no-print { display: none; } } /* Critical CSS fr Above-the-Fold */ .container { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; } .sticky { position: sticky; } .top-0 { top: 0; } .z-50 { z-index: 50; } .bg-white\\/80 { background-color: rgba(255, 255, 255, 0.8); } .backdrop-blur-md { -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); } .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); } .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; } .flex { display: flex; } .items-center { align-items: center; } .justify-between { justify-content: space-between; } .text-3xl { font-size: 1.875rem; line-height: 2.25rem; } .font-bold { font-weight: 700; } .text-orange-600 { color: rgb(234 88 12); } .font-baloo-2 { font-family: 'Baloo 2', cursive; } .bg-gradient-to-br { background-image: linear-gradient(to bottom right, var(--tw-gradient-stops)); } .from-orange-300 { --tw-gradient-from: #fdba74; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(253, 186, 116, 0)); } .via-red-300 { --tw-gradient-stops: var(--tw-gradient-from), #fca5a5, var(--tw-gradient-to, rgba(252, 165, 165, 0)); } .to-yellow-300 { --tw-gradient-to: #fde047; } .min-h-\\[70vh\\] { min-height: 70vh; } .rounded-3xl { border-radius: 1.5rem; } .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); } .mb-12 { margin-bottom: 3rem; } .py-16 { padding-top: 4rem; padding-bottom: 4rem; } .text-center { text-align: center; } .text-5xl { font-size: 3rem; line-height: 1; } .mb-6 { margin-bottom: 1.5rem; } .leading-tight { line-height: 1.25; } .text-xl { font-size: 1.25rem; line-height: 1.75rem; } .mb-10 { margin-bottom: 2.5rem; } .max-w-2xl { max-width: 42rem; } .mx-auto { margin-left: auto; margin-right: auto; } .burni-mascot { width: 10rem; height: 10rem; object-fit: contain; } @media (min-width: 768px) { .md\\:text-7xl { font-size: 4.5rem; line-height: 1; } .md\\:text-2xl { font-size: 1.5rem; line-height: 2rem; } .md\\:py-24 { padding-top: 6rem; padding-bottom: 6rem; } .burni-mascot { width: 13rem; height: 13rem; } }"
+- paragraph: Loading Burni Token...
+- link "Skip to main content":
+  - /url: "#main"
+- banner:
+  - link "Burni Token Homepage":
+    - /url: "#hero"
+    - img "Burni Logo"
+    - text: Burni
+  - text: Select language
+  - combobox "Select language":
+    - option "English"
+    - option "Deutsch"
+    - option "Espaol" [selected]
+    - option "Franais"
+    - option
+    - option
+    - option
+    - option "Portugus"
+    - option
+    - option
+    - option "Trke"
+    - option
+    - option
+    - option "Italiano"
+  - navigation "Main navigation":
+    - link "Navigate to homepage":
+      - /url: "#hero"
+      - text: Home
+    - link "Navigate to About Burni section":
+      - /url: "#about"
+      - text: About Burni
+    - link "Navigate to Tokenomics section":
+      - /url: "#tokenomics"
+      - text: Tokenomics
+    - link "Navigate to Use Cases section":
+      - /url: "#use-cases"
+      - text: Use Cases
+    - link "Navigate to Token Schedule section":
+      - /url: "#token-schedule"
+      - text: Token Schedule
+    - link "Navigate to Trade section":
+      - /url: "#interact"
+      - text: Trade Tokens
+    - link "Navigate to BURNI Calculator section":
+      - /url: "#burni-calculator"
+      - text: Calculator
+    - link "Navigate to Community section":
+      - /url: "#community"
+      - text: Community
+    - link "Navigate to XRPL Resources section":
+      - /url: "#xrpl-resources"
+      - text: XRPL Explorer
+  - button "Menu"
+  - navigation "Mobile navigation":
+    - link "Navigate to homepage":
+      - /url: "#hero"
+      - text: Home
+    - link "Navigate to About Burni section":
+      - /url: "#about"
+      - text: About Burni
+    - link "Navigate to Tokenomics section":
+      - /url: "#tokenomics"
+      - text: Tokenomics
+    - link "Navigate to Use Cases section":
+      - /url: "#use-cases"
+      - text: Use Cases
+    - link "Navigate to Token Schedule section":
+      - /url: "#token-schedule"
+      - text: Token Schedule
+    - link "Navigate to Trade section":
+      - /url: "#interact"
+      - text: Trade Tokens
+    - link "Navigate to Community section":
+      - /url: "#community"
+      - text: Community
+    - link "Navigate to XRPL Resources section":
+      - /url: "#xrpl-resources"
+      - text: XRPL Explorer
+- navigation "Main Breadcrumb":
+  - list:
+    - listitem:
+      - link "Home":
+        - /url: /
+    - listitem: BURNI Token
+- navigation "Secondary Breadcrumb":
+  - list:
+    - listitem:
+      - link "Home":
+        - /url: /
+    - listitem: /
+    - listitem: Burni Token
+- main:
+  - region "Burni Token - Creating Value Through Scarcity":
+    - img "Burni Token Mascot - Comic Style Character"
+    - heading "Burni Token - Creating Value Through Scarcity" [level=1]
+    - paragraph: Join the revolutionary deflationary cryptocurrency that burns tokens to increase value. Built on XRPL with community-driven innovation.
+    - button "Learn more about Burni Token": Discover Burni Magic
+    - button "Start trading Burni tokens": Start Trading
+    - text: 1,000,000 Total Supply 0 Burned $0.00 Price $0 Market Cap
+  - time: "Updated: June 16, 2025"
+  - text: Live Data
+  - region "What is Burni?":
+    - heading "What is Burni?" [level=2]
+    - paragraph: Burni is more than just a token. Its a promise for a deflationary future. At Burnis core is a mechanism that permanently removes tokens from circulation to potentially increase the value of the remaining tokens.
+    - heading "The Secret of Token Burning" [level=3]
+    - paragraph: Imagine tokens being burned like logs in a magical fire. They disappear forever! This process, called "token burning," reduces the total supply of Burni tokens. Fewer tokens can mean each one becomes more valuable, similar to rare collectibles.
+    - paragraph:
+      - text: Sorry, your browser does not support embedded videos.
+      - link "Download the video":
+        - /url: /assets/videos/1burni-favicon-im-pixar-comic-sti.mp4
+    - img "Burni mascot burning tokens in a campfire"
+    - paragraph: This animation illustrates how tokens are symbolically removed from circulation.
+    - img "Burni mascot locking coins in a vault"
+    - 'heading "Burnis Promise: \"Blackholed\"" [level=3]'
+    - paragraph:
+      - text: Burni is marked as
+      - strong: "\"Blackholed: YES\""
+      - text: . This means that the maximum supply of Burni tokens is fixed and no new tokens can ever be created. Its like throwing away the key to the vault! This is a strong signal of our commitment to a truly deflationary and secure ecosystem from the start.
+    - button "What does \"Blackholed\" mean?"
+    - tooltip "When a token issuer is \"blackholed\", it means the issuing address has renounced its rights to mint new tokens or change token properties. This makes the maximum supply truly fixed."
+  - 'region "Use Cases: What Burni Coin Can Be Used For"':
+    - 'heading "Use Cases: What Burni Coin Can Be Used For" [level=2]'
+    - paragraph: Burni Coin is not just a token, but a versatile digital asset with growing applications in the XRPL ecosystem.
+    - img "Gamepad icon representing decentralized gaming"
+    - heading "Decentralized Gaming" [level=3]
+    - paragraph: Use Burni as in-game currency or for exclusive in-game assets in future XRPL games.
+    - img "Palette icon representing NFT integration"
+    - heading "NFT Integration" [level=3]
+    - paragraph: Acquire and trade unique digital artworks and collectibles on NFT marketplaces with Burni.
+    - img "Burni mascot with trophies surrounded by people"
+    - heading "Reward Systems" [level=3]
+    - paragraph: Earn Burni by participating in community actions, staking programs, or as rewards for contributions.
+    - img "Exchange arrows icon representing microtransactions"
+    - heading "Microtransactions" [level=3]
+    - paragraph: Benefit from the extremely low transaction fees of the XRPL for fast and cost-effective payments.
+    - img "Vote icon representing community governance"
+    - heading "Community Governance" [level=3]
+    - paragraph: Hold Burni to participate in important decisions about the future of the project and have a say.
+  - 'region "Burni Coin: Deflationary Schedule"':
+    - 'heading "Burni Coin: Deflationary Schedule" [level=2]'
+    - paragraph: We believe in transparency and the long-term value development of Burni Coin. A key component of our ecosystem is the unique deflationary mechanism that continuously reduces the total amount of Burni Coins in circulation. This process creates scarcity and potentially supports the value of the remaining coins.
+    - img "Burni mascot with calculator and blackboard showing calculations"
+    - heading "Key Insights from the Simulation" [level=3]
+    - paragraph:
+      - text: Based on our calculation, starting with
+      - strong: 500,000 coins
+      - text: before the first process, the coins are effectively gone when less than 1 coin remains. This will be the case after
+      - strong: 260 processes
+      - text: .
+    - list:
+      - listitem:
+        - strong: "Start of the first process:"
+        - text: June 1, 2025 (Sunday)
+      - listitem:
+        - strong: "End date (after 260 processes, Coins < 1):"
+        - text: July 21, 2027 (Wednesday)
+      - listitem:
+        - strong: "Total Processes:"
+        - text: "260"
+      - listitem:
+        - strong: "Days elapsed until end:"
+        - text: 780 days
+    - heading "The Process in Detail" [level=3]
+    - paragraph:
+      - text: Starting
+      - strong: June 1, 2025
+      - text: ", a two-step process will be performed every three days. The values shown here reflect the state"
+      - emphasis: after
+      - text: "each respective process:"
+    - list:
+      - listitem:
+        - strong: "Burn:"
+        - text: First,
+        - strong: 3%
+        - text: of the currently circulating coins are permanently removed from circulation and destroyed.
+      - listitem:
+        - strong: "Lock:"
+        - text: Then,
+        - strong: 2%
+        - text: of the coins remaining after burning are locked. These locked coins are also no longer in active circulation and contribute to reducing the circulating supply.
+    - paragraph: This cycle repeats every three days until the number of coins falls below a whole unit (less than 1 coin remains).
+    - heading "Coin Reduction Schedule" [level=3]
+    - paragraph:
+      - text: The following table shows an example of the remaining coins
+      - emphasis: after completion of the respective process
+      - text: on the specified dates. Note that the reduction is exponential.
+    - paragraph:
+      - emphasis: "Note: Values are rounded to two decimal places. The process stops as soon as the value falls below 1."
+    - heading "Visual Representation of the Reduction" [level=3]
+    - paragraph: To better illustrate the development of Burni Coins, we have created an interactive chart that visualizes the deflationary process.
+    - figure: A visual representation of the BurniToken burning schedule over time
+    - paragraph: This chart shows the remaining coin count over the timeline to visually highlight the deflationary nature of Burni Coin.
+  - 'region "Burnis World: Facts & Figures"':
+    - img "Burni mascot in front of a rising chart"
+    - 'heading "Burnis World: Facts & Figures" [level=2]'
+    - paragraph: Heres a look at the key figures that define Burni. This data gives you insight into the economic foundation and potential of the token.
+    - text: 1,000,000 Max Supply N/A Circulating Supply N/A Current Burni Price N/A Current XRP Price N/A Current XPM Price N/A Number of Holders N/A Number of Trustlines 0% Issuer Fee Price data could not be loaded. Please try again later.
+    - paragraph: "Last Updated: N/A"
+    - heading "Token Details" [level=3]
+    - img "Burni Coin with smiling flame face"
+    - list:
+      - listitem:
+        - strong: "Created on:"
+        - text: May 17, 2025
+      - listitem:
+        - strong: "All-Time High (ATH):"
+        - text: 0.0528 XRP (May 19, 2025)
+        - 'tooltip "ATH: All-Time High"'
+      - listitem:
+        - strong: "All-Time Low (ATL):"
+        - text: 0.0011 XRP (May 17, 2025)
+        - 'tooltip "ATL: All-Time Low"'
+      - listitem:
+        - strong: "Total Supply:"
+        - text: 967.9 Thousand Tokens
+      - listitem:
+        - strong: "Platform:"
+        - text: XRP Ledger (XRPL)
+      - listitem:
+        - strong: "Issuer Address:"
+        - text: rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2
+      - listitem:
+        - strong: "Explorer Links:"
+        - link "XRPL Explorer":
+          - /url: https://livenet.xrpl.org/accounts/rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2
+          - img
+          - text: XRPL Explorer
+        - link "Bithomp":
+          - /url: https://bithomp.com/explorer/rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2
+          - img
+          - text: Bithomp
+    - heading "Supply Overview" [level=3]
+    - figure: A chart displaying how the token supply decreases through burning
+    - paragraph: This chart visualizes the circulating supply in relation to the maximum supply.
+    - heading "At Home on the XRP Ledger" [level=3]
+    - paragraph:
+      - text: "Burni operates on the XRP Ledger (XRPL), known for its speed, low transaction costs, and scalability. This means for you: fast and cost-effective transactions! To hold or trade Burni, you need to set up a"
+      - link "Trustline":
+        - /url: https://xrpl.org/docs/concepts/tokens/trustlines
+      - text: a standard procedure on the XRPL.
+    - img "Symbol for the speed and efficiency of the XRP Ledger"
+    - paragraph: Fast, efficient, and reliable thats the foundation of Burni.
+  - region "Trading XPM Token":
+    - heading "Trading XPM Token" [level=2]
+    - paragraph: Ready to dive into the world of XPM? Here you will find the most important links to trade and manage the XPM token on XPMarket. Our mascot will show the way!
+    - img "Burni mascot showing the way for trading XPM"
+    - link "XPM Token Page All info about XPM on XPMarket.":
+      - /url: https://xpmarket.com/token/XPM-rXPMxBeefHGxx2K7g5qmmWq3gFsgawkoa
+      - heading "XPM Token Page" [level=3]
+      - paragraph: All info about XPM on XPMarket.
+    - link "Set XPM Trustline Activate XPM in your XRPL wallet.":
+      - /url: https://xpmarket.com/trustline/XPM-rXPMxBeefHGxx2K7g5qmmWq3gFsgawkoa/set
+      - heading "Set XPM Trustline" [level=3]
+      - paragraph: Activate XPM in your XRPL wallet.
+    - link "XPM DEX Trading Buy/Sell XPM on the decentralized exchange.":
+      - /url: https://xpmarket.com/dex/XPM-rXPMxBeefHGxx2K7g5qmmWq3gFsgawkoa/XRP?trade=market
+      - heading "XPM DEX Trading" [level=3]
+      - paragraph: Buy/Sell XPM on the decentralized exchange.
+    - link "SWAP XPM Easily exchange XPM for other tokens.":
+      - /url: https://xpmarket.com/swap/XPM-rXPMxBeefHGxx2K7g5qmmWq3gFsgawkoa/XRP/market
+      - heading "SWAP XPM" [level=3]
+      - paragraph: Easily exchange XPM for other tokens.
+    - heading "Market Data (ATH/ATL Visualization)" [level=3]
+    - paragraph: This chart shows Burnis All-Time High (ATH) and All-Time Low (ATL) in XRP, based on corrected report data.
+    - figure: Chart showing all-time high and all-time low price movements
+  - heading "XRPL Explorer & Resources" [level=2]
+  - paragraph: Explore BURNI Token on the XRP Ledger with official tools and real-time blockchain data.
+  - img "Burni mascot exploring the XRPL blockchain"
+  - link "XRPL Livenet Official XRPL Mainnet Explorer":
+    - /url: https://livenet.xrpl.org
+    - heading "XRPL Livenet" [level=3]
+    - paragraph: Official XRPL Mainnet Explorer
+  - link "Ripple Explorer Open Source XRPL Explorer Code":
+    - /url: https://github.com/ripple/explorer
+    - heading "Ripple Explorer" [level=3]
+    - paragraph: Open Source XRPL Explorer Code
+  - link "BURNI on XRPL View BURNI Token data on XRPL Livenet":
+    - /url: https://livenet.xrpl.org/accounts/rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2
+    - heading "BURNI on XRPL" [level=3]
+    - paragraph: View BURNI Token data on XRPL Livenet
+  - link "XRPScan Advanced XRPL Token Analytics":
+    - /url: https://xrpscan.com/token/rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2
+    - heading "XRPScan" [level=3]
+    - paragraph: Advanced XRPL Token Analytics
+  - link "Bithomp XRPL Transaction & Account Explorer":
+    - /url: https://bithomp.com/explorer/rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2
+    - heading "Bithomp" [level=3]
+    - paragraph: XRPL Transaction & Account Explorer
+  - link "XRPL Documentation Learn about XRPL Tokens & Technology":
+    - /url: https://xrpl.org/tokens.html
+    - heading "XRPL Documentation" [level=3]
+    - paragraph: Learn about XRPL Tokens & Technology
+  - heading "Real-time XRPL Network Status" [level=3]
+  - text: Loading... Current Ledger Loading... Total Transactions Loading... Total Accounts
+  - heading "Developer Resources" [level=3]
+  - paragraph: Build on XRPL with BURNI Token integration
+  - link "XRPL Dev Docs":
+    - /url: https://xrpl.org/get-started.html
+  - link "XRPL Foundation":
+    - /url: https://github.com/XRPLF
+  - link "WebSocket API":
+    - /url: https://xrpl.org/websocket-api.html
+  - heading "BURNI Token Calculator" [level=2]
+  - paragraph: Simulate the BURNI token burn and lock schedule. See how our deflationary mechanism creates value through scarcity over time.
+  - text: Loading calculator...
+  - heading "How the Calculator Works" [level=3]
+  - heading "Burning Process" [level=4]
+  - paragraph: Every 3 days, 3% of the current BURNI token supply is permanently burned, reducing the total supply and creating scarcity.
+  - heading "Locking Process" [level=4]
+  - paragraph: After burning, 2% of the remaining supply is locked away for future ecosystem development and community rewards.
+  - heading "Value Creation" [level=4]
+  - paragraph: This dual mechanism creates immediate scarcity (burning) while ensuring long-term sustainability (locking).
+  - heading "Timeline" [level=4]
+  - paragraph: The process continues for 256 iterations (approximately 2 years), creating a predictable deflationary schedule.
+  - heading "Start Your Calculation" [level=3]
+  - paragraph: Explore different scenarios and see how BURNI's deflationary mechanics work
+  - button "Launch Calculator"
+  - region "Frequently Asked Questions":
+    - heading "Frequently Asked Questions" [level=2]
+    - paragraph: Everything you need to know about BURNI Token, our deflationary mechanism, and the XRPL ecosystem.
+    - button "What makes BURNI Token unique? +"
+    - paragraph: "BURNI Token is a revolutionary deflationary cryptocurrency built on the XRPL (XRP Ledger) that implements an innovative burning mechanism:"
+    - list:
+      - listitem:
+        - strong: "Automatic Deflation:"
+        - text: Every 3 days, 3% of the total supply is permanently burned
+      - listitem:
+        - strong: "Smart Locking:"
+        - text: Additional 2% is locked for ecosystem development
+      - listitem:
+        - strong: "Transparency:"
+        - text: All transactions are visible on the XRPL blockchain
+      - listitem:
+        - strong: "Community-Driven:"
+        - text: Decisions made through community governance
+      - listitem:
+        - strong: "Sustainable Economics:"
+        - text: Creating long-term value through scarcity
+    - button "How can I buy BURNI tokens? +"
+    - paragraph: "You can purchase BURNI tokens through several methods on the XRPL:"
+    - list:
+      - listitem:
+        - strong: "XRPL DEX:"
+        - text: Trade directly on the XRP Ledger's decentralized exchange
+      - listitem:
+        - strong: "Supported Wallets:"
+        - text: Use XUMM, Xaman, or other XRPL-compatible wallets
+      - listitem:
+        - strong: "Trading Pairs:"
+        - text: Available in XRP/BURNI and other major pairs
+      - listitem:
+        - strong: "Community Exchanges:"
+        - text: Check our community channels for approved exchanges
+    - paragraph:
+      - strong: "Important:"
+      - text: Always verify the correct token address and only use trusted platforms.
+    - button "Why is XRPL the perfect blockchain for BURNI? +"
+    - paragraph: "The XRP Ledger provides the ideal foundation for BURNI Token:"
+    - heading "Performance" [level=4]
+    - list:
+      - listitem: 3-5 second transaction finality
+      - listitem: 1,500+ transactions per second
+      - listitem: Minimal energy consumption
+    - heading "Economics" [level=4]
+    - list:
+      - listitem: Ultra-low transaction fees
+      - listitem: Built-in DEX functionality
+      - listitem: Native token support
+    - heading "Security" [level=4]
+    - list:
+      - listitem: Battle-tested since 2012
+      - listitem: Validator consensus mechanism
+      - listitem: Regulatory clarity
+    - heading "Adoption" [level=4]
+    - list:
+      - listitem: Global financial institutions
+      - listitem: Active developer ecosystem
+      - listitem: Cross-border payment focus
+    - button "How does the token burning mechanism work? +"
+    - paragraph: "Our deflationary mechanism follows a precise schedule:"
+    - heading "Burning Process" [level=4]
+    - text: 1 Every 3 days, an automated process activates 2 3% of current circulating supply is calculated 3 Tokens are permanently burned (sent to black hole address) 4 Additional 2% is locked for ecosystem development
+    - paragraph: All transactions are publicly verifiable on the XRPL blockchain.
+    - button "What is the long-term vision for BURNI? +"
+    - paragraph: "BURNI Token aims to become a leading deflationary asset with multiple use cases:"
+    - heading "Gaming Integration" [level=4]
+    - paragraph: In-game currencies and NFT marketplaces
+    - heading "DeFi Services" [level=4]
+    - paragraph: Lending, staking, and yield farming protocols
+    - heading "Global Adoption" [level=4]
+    - paragraph: Cross-border payments and remittances
+    - paragraph:
+      - strong: "Roadmap:"
+      - text: We're constantly evolving based on community feedback and market opportunities. Join our community to influence the future direction of BURNI.
+- heading "Bleiben Sie informiert!" [level=2]
+- paragraph: Erhalten Sie die neuesten Updates ber Burni Token, Burn-Events und Community-News direkt in Ihr Postfach.
+- textbox "E-Mail-Adresse fr Newsletter"
+- button "Anmelden"
+- paragraph: Ihre Daten sind sicher. Wir teilen Ihre E-Mail niemals mit Dritten.
+- heading "Treten Sie der Burni Community bei" [level=2]
+- paragraph: Verbinden Sie sich mit anderen Burni-Enthusiasten, bleiben Sie ber die neuesten Entwicklungen auf dem Laufenden und gestalten Sie die Zukunft von Burni Token mit.
+- heading "Social Media" [level=3]
+- link "Twitter / X Folgen Sie uns fr tgliche Updates":
+  - /url: https://x.com/burnicoin
+  - heading "Twitter / X" [level=4]
+  - paragraph: Folgen Sie uns fr tgliche Updates
+- link "Telegram Treten Sie unserer Telegram-Gruppe bei":
+  - /url: https://t.me/burnicoin
+  - heading "Telegram" [level=4]
+  - paragraph: Treten Sie unserer Telegram-Gruppe bei
+- link "Discord Chatten Sie mit der Community":
+  - /url: https://discord.gg/burnicoin
+  - heading "Discord" [level=4]
+  - paragraph: Chatten Sie mit der Community
+- link "GitHub Erkunden Sie den Code":
+  - /url: https://github.com/burnitoken/project
+  - heading "GitHub" [level=4]
+  - paragraph: Erkunden Sie den Code
+- heading "Kontaktieren Sie uns" [level=3]
+- text: Name *
+- textbox "Name *"
+- text: E-Mail *
+- textbox "E-Mail *"
+- text: Betreff
+- textbox "Betreff"
+- text: Nachricht *
+- textbox "Nachricht *"
+- button "Nachricht senden"
+- paragraph: "Tipp: Drcken Sie Strg+Enter in der Nachricht, um schnell zu senden."
+- text: 500+ Community-Mitglieder 24/7 Community-Support 100% Open Source Deflationres Potenzial
+- heading "Datenschutz" [level=2]
+- paragraph: Wir nehmen den Schutz Ihrer persnlichen Daten sehr ernst. Diese Datenschutzerklrung informiert Sie ber die Art, den Umfang und den Zweck der Verarbeitung personenbezogener Daten auf unserer Website.
+- heading "Datenerfassung und -verwendung" [level=3]
+- paragraph: Wir sammeln nur die Daten, die fr das ordnungsgeme Funktionieren unserer Website erforderlich sind. Alle Daten werden gem DSGVO verarbeitet.
+- contentinfo:
+  - link "Burni Token Homepage":
+    - /url: "#hero"
+    - img "Burni Logo"
+    - text: Burni
+  - navigation "Footer navigation":
+    - link "Navigate to homepage":
+      - /url: "#hero"
+      - text: Home
+    - link "Navigate to About Burni section":
+      - /url: "#about"
+      - text: About Burni
+    - link "Navigate to Tokenomics section":
+      - /url: "#tokenomics"
+      - text: Tokenomics
+    - link "Navigate to Use Cases section":
+      - /url: "#use-cases"
+      - text: Use Cases
+    - link "Navigate to Token Schedule section":
+      - /url: "#token-schedule"
+      - text: Token Schedule
+    - link "Navigate to Trade section":
+      - /url: "#interact"
+      - text: Trade Tokens
+    - link "Navigate to Community section":
+      - /url: "#community"
+      - text: Community
+    - link "Navigate to XRPL Resources section":
+      - /url: "#xrpl-resources"
+      - text: XRPL Explorer
+  - paragraph: 2025 Burni Token. All rights reserved.
+  - link "Follow us on X (Twitter)":
+    - /url: https://x.com/burnicoin
+  - link "Join our Telegram group":
+    - /url: https://t.me/burnicoin
+  - link "Join our Discord server":
+    - /url: https://discord.gg/burnicoin
+  - link "Visit our GitHub repository":
+    - /url: https://github.com/burnitoken/project
+- button "Close price widget"
+- text: BURNI LIVE PRICES
+- strong: "XRP:"
+- text: Loading...
+- strong: "BURNI:"
+- text: $0.000001
+- strong: "XPM:"
+- text: "Loading... Last update: Starting..."
+```
