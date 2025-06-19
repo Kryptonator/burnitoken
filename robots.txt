@@ -14,7 +14,7 @@ Disallow: /audit-*
 Disallow: /comprehensive-*
 
 # Sitemap location
-Sitemap: https://burnitoken.com/sitemap.xml
+Sitemap: https://burnitoken.website/sitemap.xml
 
 # Crawl-delay for respectful crawling
 Crawl-delay: 1
