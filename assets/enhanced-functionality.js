@@ -356,7 +356,7 @@
           'click',
           function (e) {
             e.preventDefault();
-            var targetId = this.getAttribute('href').substring(1);
+            var targetId = e.currentTarget.getAttribute('href').substring(1);
             var targetElement = document.getElementById(targetId);
 
             if (targetElement) {
