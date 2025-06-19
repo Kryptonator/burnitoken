@@ -1,0 +1,45 @@
+{
+  "status": "PRODUCTION_READY",
+  "performance": {
+    "LazyLoadingImages": 16,
+    "PreloadLinks": 5,
+    "DeferScripts": 16,
+    "AsyncScripts": 3
+  },
+  "overallScore": 91.0,
+  "timestamp": "2025-06-19 14:19:17",
+  "i18n": {
+    "LangSwitcher": true,
+    "DataI18nElements": 145
+  },
+  "scores": {
+    "SEO": 100,
+    "Performance": 95,
+    "Accessibility": 75.0,
+    "I18n": 100.0,
+    "HTML": 83.0
+  },
+  "seo": {
+    "ImagesWithAlt": 16,
+    "Images": 16,
+    "H1Headings": 1,
+    "MetaTags": 24,
+    "H3Headings": 39,
+    "H2Headings": 12
+  },
+  "criticalIssues": [],
+  "validation": {
+    "DuplicateLoadingAttrs": 0,
+    "HasMetaDescription": true,
+    "HasTitle": true,
+    "HasMetaCharset": true,
+    "HasDoctype": true,
+    "HasMetaViewport": true
+  },
+  "accessibility": {
+    "LangAttribute": true,
+    "AriaDescribedBy": 2,
+    "AriaLabels": 44,
+    "SkipLinks": false
+  }
+}
