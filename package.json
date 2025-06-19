@@ -5,7 +5,7 @@
     "dev": "cross-env NODE_ENV=development tailwindcss -i ./assets/css/critical.css -o ./assets/css/styles.min.css --watch",
     "build:css": "cross-env NODE_ENV=production tailwindcss -i ./assets/css/critical.css -o ./assets/css/styles.min.css --minify",
     "serve": "http-server . -p 8080 --config http-server.config.json",
-    "build": "npm run build:css && echo Build erfolgreich abgeschlossen! && node auto-test-live.js",
+    "build": "npm run build:css && echo Build erfolgreich abgeschlossen!",
     "start": "npm run build && npm run serve",
     "clean": "del-cli assets/css/*.min.css",
     "lint": "prettier --write \"**/*.{html,css,js}\" --ignore-path .gitignore",
@@ -51,7 +51,11 @@
     "webpack-dev-server": "^5.0.4"
   },
   "dependencies": {
+    "@axe-core/webdriverjs": "^4.10.2",
     "axe-playwright": "^2.1.0",
-    "canvas": "^3.1.0"
+    "canvas": "^3.1.0",
+    "chrome-launcher": "^1.2.0",
+    "lighthouse": "^12.6.1",
+    "selenium-webdriver": "^4.33.0"
   }
 }

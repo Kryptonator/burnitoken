@@ -27,60 +27,12 @@
     "yaml": false,
     "plaintext": false
   },
-  "editor.inlineSuggest.enabled": false,
-  "editor.suggest.preview": false,
-  "editor.hover.enabled": false,
+  "markdown.preview.fontSize": 14,
+  "markdown.preview.lineHeight": 1.6,
   "extensions.autoUpdate": false,
   "files.watcherExclude": {
     "**/node_modules/**": true,
     "**/.git/objects/**": true,
     "**/.git/subtree-cache/**": true
-  },
-  
-  // Enhanced Extension Configuration
-  "cSpell.enabled": true,
-  "cSpell.showStatus": true,
-  "cSpell.diagnosticLevel": "Hint",
-  
-  // Tailwind CSS IntelliSense
-  "tailwindCSS.emmetCompletions": true,
-  "tailwindCSS.showPixelEquivalents": true,
-  "tailwindCSS.validate": true,
-  
-  // Live Server Configuration
-  "liveServer.settings.CustomBrowser": "chrome",
-  "liveServer.settings.fullReload": true,
-  "liveServer.settings.useLocalIp": false,
-  
-  // HTML Validation
-  "html-validate.enable": true,
-  "html-validate.extends": ["html-validate:recommended"],
-  
-  // Web Accessibility
-  "accessibility.voice.enabled": true,
-  
-  // GitLens Enhanced
-  "gitlens.defaultDateFormat": "DD.MM.YYYY HH:mm",
-  "gitlens.blame.enabled": true,
-  "gitlens.codeLens.enabled": true,
-  "gitlens.currentLine.enabled": true,
-  
-  // Thunder Client
-  "thunder-client.saveToWorkspace": true,
-  "thunder-client.showActivityFromSidebar": true,
-  
-  // Playwright
-  "playwright.showTrace": true,
-  "playwright.reuseBrowser": true,
-  
-  // Material Theme & Icons
-  "workbench.iconTheme": "material-icon-theme",
-  "workbench.colorTheme": "Material Theme High Contrast",
-  
-  // Enhanced Markdown
-  "markdown.preview.fontSize": 16,
-  "markdown.preview.lineHeight": 1.8,
-  "markdown.preview.markEditorSelection": true,
-  "accessibility.signalOptions.volume": 70,
-  "accessibility.signalOptions.debouncePositionChanges": true
+  }
 }

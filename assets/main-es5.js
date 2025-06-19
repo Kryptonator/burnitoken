@@ -126,25 +126,23 @@
     // Chart.js Loader - ES5 compatible
     var chartJsLoaded = false;
 
-    // Chart.js dynamisch laden (ES5)
+    // Chart.js dynamisch laden (nur noch lokal!)
     function loadChartJs() {
       return createPromise(function (resolve, reject) {
-        // Prüfen, ob Chart.js bereits geladen ist
         if (typeof Chart !== 'undefined') {
           chartJsLoaded = true;
           resolve();
           return;
         }
-
         var script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+        script.src = '/assets/vendor/chart.min.js';
         script.onload = function () {
           chartJsLoaded = true;
-          console.log('Chart.js erfolgreich geladen');
+          console.log('Chart.js erfolgreich lokal geladen');
           resolve();
         };
         script.onerror = function () {
-          console.warn('Chart.js konnte nicht geladen werden');
+          console.warn('Lokales Chart.js konnte nicht geladen werden');
           reject(new Error('Chart.js loading failed'));
         };
         document.head.appendChild(script);
@@ -293,3 +291,6 @@
     console.log('Main ES5 initialization completed');
   });
 })();
+
+// chart.min.js ist jetzt im assets/vendor/-Verzeichnis vorhanden und wird lokal geladen.
+// Keine Platzhalter mehr im Code.
