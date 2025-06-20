@@ -1,16 +1,34 @@
 [
   {
     "name": "minScore",
-    "expected": 0.9,
-    "actual": 0.82,
+    "expected": 0.95,
+    "actual": 0.93,
     "values": [
-      0.82
+      0.93,
+      0.93,
+      0.93
     ],
     "operator": ">=",
     "passed": false,
-    "auditProperty": "performance",
+    "auditProperty": "best-practices",
     "auditId": "categories",
     "level": "error",
-    "url": "http://localhost:3000/"
+    "url": "https://burnitoken.website/"
+  },
+  {
+    "name": "auditRan",
+    "expected": 1,
+    "actual": 0,
+    "values": [
+      0,
+      0,
+      0
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "pwa",
+    "auditId": "categories",
+    "level": "error",
+    "url": "https://burnitoken.website/"
   }
 ]

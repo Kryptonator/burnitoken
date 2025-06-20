@@ -43,6 +43,23 @@ jobs:
       - name: 🚀 Run Lighthouse CI
         run: npx lhci autorun || true
 
+      - name: 🧪 Run Playwright E2E tests
+        run: npm run test:e2e
+      - name: 🔒 Run npm audit
+        run: npm run audit
+      - name: 🛡️ Run Snyk test (optional)
+        run: npm run snyk:test || true
+      - name: 📤 Upload Lighthouse Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: .lighthouseci
+      - name: 📤 Upload Audit Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-report
+          path: audit.json
+
   security:
     name: 🔒 Security & Dependency Check
     runs-on: ubuntu-latest

@@ -1,0 +1,20 @@
+{
+  "timestamp": "2025-06-19T12:25:29.244Z",
+  "deploymentStatus": "PARTIAL_SUCCESS",
+  "checks": [
+    {
+      "name": "Custom Domain (burnitoken.website)",
+      "url": "https://burnitoken.website",
+      "status": 200,
+      "success": true,
+      "timestamp": "2025-06-19T12:25:29.620Z"
+    },
+    {
+      "name": "GitHub Pages",
+      "url": "https://kryptonator.github.io/burnitoken",
+      "status": 301,
+      "success": false,
+      "timestamp": "2025-06-19T12:25:29.828Z"
+    }
+  ]
+}
