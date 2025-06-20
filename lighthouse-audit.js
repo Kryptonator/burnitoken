@@ -8,7 +8,12 @@ const { Builder } = require('selenium-webdriver');
 (async () => {
   // Lighthouse-Report
   const chrome = await chromeLauncher.launch({ chromeFlags: ['--headless'] });
-  const options = { logLevel: 'info', output: 'html', onlyCategories: ['performance','accessibility','best-practices','seo','pwa'], port: chrome.port };
+  const options = {
+    logLevel: 'info',
+    output: 'html',
+    onlyCategories: ['performance', 'accessibility', 'best-practices', 'seo', 'pwa'],
+    port: chrome.port,
+  };
   const runnerResult = await lighthouse('https://burnitoken.com', options);
   writeFileSync('lighthouse-report.html', runnerResult.report);
   console.log('Lighthouse-Report gespeichert: lighthouse-report.html');

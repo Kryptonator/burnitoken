@@ -42,7 +42,8 @@ describe('Browser Compatibility Suite', () => {
     test('ES6 Arrow Functions', () => {
       const arrow = () => 'test';
       expect(arrow()).toBe('test');
-    });    test('ES6 Template Literals', () => {
+    });
+    test('ES6 Template Literals', () => {
       const name = 'BURNI';
       expect(`Hello ${name}`).toBe('Hello BURNI');
     });

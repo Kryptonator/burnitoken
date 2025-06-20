@@ -1,4 +1,12 @@
-// ...existing code before setupSmoothScrolling...
+/**
+ * Enhanced Functionality v2 - BurniToken
+ * Smooth scrolling and enhanced user interactions
+ */
+
+(function () {
+  'use strict';
+
+  const EnhancedFunctionality = {
     setupSmoothScrolling: function () {
       var links = document.querySelectorAll('a[href^="#"]');
       for (var i = 0; i < links.length; i++) {
@@ -40,4 +48,32 @@
         );
       }
     },
-// ...existing code after setupSmoothScrolling...
+
+    updateActiveNavigation: function (targetId) {
+      // Remove active class from all nav links
+      var navLinks = document.querySelectorAll('.nav-link');
+      for (var i = 0; i < navLinks.length; i++) {
+        navLinks[i].classList.remove('active');
+      }
+
+      // Add active class to current link
+      var currentLink = document.querySelector('a[href="#' + targetId + '"]');
+      if (currentLink) {
+        currentLink.classList.add('active');
+      }
+    },
+
+    init: function () {
+      this.setupSmoothScrolling();
+    },
+  };
+
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      EnhancedFunctionality.init();
+    });
+  } else {
+    EnhancedFunctionality.init();
+  }
+})();

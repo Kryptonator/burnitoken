@@ -8,7 +8,7 @@ test.describe('Sprachumschaltung & RTL', () => {
   const languages = [
     { code: 'en', dir: 'ltr', text: 'Burni Token - Creating Value Through Scarcity' },
     { code: 'de', dir: 'ltr', text: 'Burni Token - Wert durch Knappheit' },
-    { code: 'ar', dir: 'rtl', text: 'بيرني توكن - خلق القيمة من خلال الندرة' }
+    { code: 'ar', dir: 'rtl', text: 'بيرني توكن - خلق القيمة من خلال الندرة' },
   ];
 
   for (const lang of languages) {

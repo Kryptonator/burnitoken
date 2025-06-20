@@ -28,11 +28,11 @@ class FormHandler {
 
   async handleNewsletterSubmit(e) {
     e.preventDefault();
-    
+
     const form = e.target;
     const email = form.querySelector('input[type="email"]').value;
     const button = form.querySelector('button');
-    
+
     // Validation
     if (!this.isValidEmail(email)) {
       this.showNotification('Bitte geben Sie eine gültige E-Mail-Adresse ein.', 'error');
@@ -45,21 +45,26 @@ class FormHandler {
     try {
       // Simulate API call (replace with real endpoint)
       await this.simulateAPICall();
-      
+
       // Success
-      this.showNotification('🎉 Erfolgreich angemeldet! Willkommen in der Burni Community!', 'success');
+      this.showNotification(
+        '🎉 Erfolgreich angemeldet! Willkommen in der Burni Community!',
+        'success',
+      );
       form.reset();
-      
+
       // Track event (if analytics available)
       if (typeof gtag !== 'undefined') {
         gtag('event', 'newsletter_signup', {
-          'event_category': 'engagement',
-          'event_label': 'email_signup'
+          event_category: 'engagement',
+          event_label: 'email_signup',
         });
       }
-      
     } catch (error) {
-      this.showNotification('⚠️ Fehler beim Anmelden. Bitte versuchen Sie es später erneut.', 'error');
+      this.showNotification(
+        '⚠️ Fehler beim Anmelden. Bitte versuchen Sie es später erneut.',
+        'error',
+      );
     } finally {
       this.setLoadingState(button, false);
     }
@@ -67,22 +72,25 @@ class FormHandler {
 
   async handleContactSubmit(e) {
     e.preventDefault();
-    
+
     const form = e.target;
     const formData = new FormData(form);
     const button = form.querySelector('button[type="submit"]');
-    
+
     // Basic validation
     const email = formData.get('email');
     const message = formData.get('message');
-    
+
     if (!this.isValidEmail(email)) {
       this.showNotification('Bitte geben Sie eine gültige E-Mail-Adresse ein.', 'error');
       return;
     }
-    
+
     if (!message || message.trim().length < 10) {
-      this.showNotification('Bitte geben Sie eine Nachricht mit mindestens 10 Zeichen ein.', 'error');
+      this.showNotification(
+        'Bitte geben Sie eine Nachricht mit mindestens 10 Zeichen ein.',
+        'error',
+      );
       return;
     }
 
@@ -92,21 +100,26 @@ class FormHandler {
     try {
       // Simulate API call (replace with real endpoint)
       await this.simulateAPICall(2000);
-      
+
       // Success
-      this.showNotification('✅ Ihre Nachricht wurde erfolgreich gesendet! Wir melden uns bald bei Ihnen.', 'success');
+      this.showNotification(
+        '✅ Ihre Nachricht wurde erfolgreich gesendet! Wir melden uns bald bei Ihnen.',
+        'success',
+      );
       form.reset();
-      
+
       // Track event
       if (typeof gtag !== 'undefined') {
         gtag('event', 'contact_form_submit', {
-          'event_category': 'engagement',
-          'event_label': 'contact_message'
+          event_category: 'engagement',
+          event_label: 'contact_message',
         });
       }
-      
     } catch (error) {
-      this.showNotification('⚠️ Fehler beim Senden der Nachricht. Bitte versuchen Sie es später erneut.', 'error');
+      this.showNotification(
+        '⚠️ Fehler beim Senden der Nachricht. Bitte versuchen Sie es später erneut.',
+        'error',
+      );
     } finally {
       this.setLoadingState(button, false);
     }
@@ -134,15 +147,15 @@ class FormHandler {
 
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
-    
+
     // Icon based on type
     const icons = {
       success: '✅',
       error: '❌',
       warning: '⚠️',
-      info: 'ℹ️'
+      info: 'ℹ️',
     };
-    
+
     notification.innerHTML = `
       <span class="notification-icon">${icons[type] || icons.info}</span>
       <span class="notification-message">${message}</span>
@@ -171,10 +184,10 @@ class FormHandler {
 
   removeNotification(notification) {
     if (!notification || !notification.parentNode) return;
-    
+
     notification.style.opacity = '0';
     notification.style.transform = 'translateX(100%)';
-    
+
     setTimeout(() => {
       if (notification.parentNode) {
         notification.parentNode.removeChild(notification);
@@ -184,7 +197,7 @@ class FormHandler {
 
   setLoadingState(button, isLoading) {
     if (!button) return;
-    
+
     if (isLoading) {
       button.disabled = true;
       button.dataset.originalText = button.textContent;
@@ -249,18 +262,18 @@ class FormValidator {
 }
 
 // Enhanced form interactions
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   // Initialize form handler
   new FormHandler();
-  
+
   // Add real-time validation
   const inputs = document.querySelectorAll('.form-input');
-  inputs.forEach(input => {
-    input.addEventListener('blur', function() {
+  inputs.forEach((input) => {
+    input.addEventListener('blur', function () {
       validateField(this);
     });
-    
-    input.addEventListener('input', function() {
+
+    input.addEventListener('input', function () {
       clearFieldError(this);
     });
   });
@@ -304,9 +317,9 @@ function validateField(field) {
 
 function showFieldError(field, message) {
   clearFieldError(field);
-  
+
   field.classList.add('form-input-error');
-  
+
   const errorDiv = document.createElement('div');
   errorDiv.className = 'form-error-message';
   errorDiv.textContent = message;
@@ -317,13 +330,13 @@ function showFieldError(field, message) {
     display: flex;
     align-items: center;
   `;
-  
+
   field.parentNode.appendChild(errorDiv);
 }
 
 function clearFieldError(field) {
   field.classList.remove('form-input-error');
-  
+
   const errorMessage = field.parentNode.querySelector('.form-error-message');
   if (errorMessage) {
     errorMessage.remove();
@@ -331,7 +344,7 @@ function clearFieldError(field) {
 }
 
 // Enhanced accessibility
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', function (e) {
   // Allow form submission with Ctrl+Enter in textareas
   if (e.ctrlKey && e.key === 'Enter') {
     const activeElement = document.activeElement;

@@ -8,19 +8,19 @@
   --primary-orange: #ea6100;
   --primary-orange-light: #ff7a1a;
   --primary-orange-dark: #cc5500;
-  
+
   /* Bessere Hintergrundfarben */
   --bg-light: #ffffff;
   --bg-light-alt: #fafafa;
   --bg-dark: #1a1a1a;
   --bg-dark-alt: #2d2d2d;
-  
+
   /* Optimierte Textfarben für maximalen Kontrast */
   --text-primary: #1a1a1a;
   --text-secondary: #4a4a4a;
   --text-light: #ffffff;
   --text-muted: #6b7280;
-  
+
   /* Verbesserte Akzentfarben */
   --accent-blue: #1d4ed8;
   --accent-green: #059669;
@@ -35,7 +35,7 @@
     --bg-light-alt: #2d2d2d;
     --bg-dark: #ffffff;
     --bg-dark-alt: #f5f5f5;
-    
+
     --text-primary: #ffffff;
     --text-secondary: #e5e5e5;
     --text-light: #1a1a1a;
@@ -45,10 +45,12 @@
 
 /* Verbesserte Hero-Section mit besserem Kontrast */
 .hero-section {
-  background: linear-gradient(135deg, 
-    var(--primary-orange-dark) 0%, 
-    var(--primary-orange) 50%, 
-    var(--primary-orange-light) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary-orange-dark) 0%,
+    var(--primary-orange) 50%,
+    var(--primary-orange-light) 100%
+  );
   color: var(--text-light) !important;
   position: relative;
 }
@@ -166,9 +168,7 @@
 
 /* Verbesserte Tokenomics Section */
 .tokenomics-section {
-  background: linear-gradient(135deg, 
-    #f8fafc 0%, 
-    #e2e8f0 100%);
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   color: var(--text-primary);
 }
 
@@ -183,9 +183,7 @@
 
 /* Enhanced Use Cases Section */
 .use-cases-section {
-  background: linear-gradient(135deg, 
-    #fef3c7 0%, 
-    #fcd34d 100%);
+  background: linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%);
   color: var(--text-primary);
 }
 
@@ -204,9 +202,7 @@
 
 /* Enhanced Token Schedule Section */
 .token-schedule-section {
-  background: linear-gradient(135deg, 
-    #dbeafe 0%, 
-    #93c5fd 100%);
+  background: linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%);
   color: var(--text-primary);
 }
 
@@ -235,25 +231,19 @@
 
 /* Enhanced Trading Section */
 .trading-section {
-  background: linear-gradient(135deg, 
-    #f0fdf4 0%, 
-    #86efac 100%);
+  background: linear-gradient(135deg, #f0fdf4 0%, #86efac 100%);
   color: var(--text-primary);
 }
 
 /* Enhanced XRPL Resources Section */
 .xrpl-section {
-  background: linear-gradient(135deg, 
-    #fdf2f8 0%, 
-    #f9a8d4 100%);
+  background: linear-gradient(135deg, #fdf2f8 0%, #f9a8d4 100%);
   color: var(--text-primary);
 }
 
 /* Enhanced Calculator Section */
 .calculator-section {
-  background: linear-gradient(135deg, 
-    #f0f9ff 0%, 
-    #7dd3fc 100%);
+  background: linear-gradient(135deg, #f0f9ff 0%, #7dd3fc 100%);
   color: var(--text-primary);
 }
 
@@ -266,9 +256,7 @@
 
 /* Enhanced FAQ Section */
 .faq-section {
-  background: linear-gradient(135deg, 
-    #fefce8 0%, 
-    #fef08a 100%);
+  background: linear-gradient(135deg, #fefce8 0%, #fef08a 100%);
   color: var(--text-primary);
 }
 
@@ -324,15 +312,15 @@
     --bg-light: #ffffff;
     --bg-dark: #000000;
   }
-  
+
   .btn-primary {
     border-width: 3px;
   }
-  
+
   .nav-link {
     border: 2px solid transparent;
   }
-  
+
   .nav-link:hover,
   .nav-link.active {
     border-color: var(--text-light);
@@ -361,7 +349,7 @@
     background: #ffffff !important;
     color: #000000 !important;
   }
-  
+
   .btn-primary,
   .btn-secondary {
     border: 2px solid #000000 !important;

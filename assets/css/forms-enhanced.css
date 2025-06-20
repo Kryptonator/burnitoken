@@ -241,15 +241,15 @@
   .newsletter-form {
     flex-direction: column;
   }
-  
+
   .newsletter-input {
     min-width: 100%;
   }
-  
+
   .contact-form .form-row {
     flex-direction: column;
   }
-  
+
   .form-container {
     padding: 24px;
   }
@@ -261,22 +261,22 @@
     background: var(--bg-dark-alt);
     color: var(--text-light);
   }
-  
+
   .form-input {
     background: var(--bg-dark);
     color: var(--text-light);
     border-color: rgba(255, 255, 255, 0.2);
   }
-  
+
   .form-input:focus {
     border-color: var(--primary-orange-light);
   }
-  
+
   .newsletter-input {
     background: rgba(255, 255, 255, 0.1);
     color: var(--text-light);
   }
-  
+
   .newsletter-input::placeholder {
     color: rgba(255, 255, 255, 0.6);
   }

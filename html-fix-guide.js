@@ -8,36 +8,37 @@ console.log('🔧 STARTING COMPREHENSIVE HTML FIXES...\n');
 // This would be the comprehensive fix approach:
 
 const fixes = [
-    {
-        name: 'Remove duplicate loading attributes',
-        pattern: /(<img[^>]*?loading="lazy"[^>]*?)loading="lazy"([^>]*?>)/g,
-        replacement: '$1$2',
-        description: 'Removes duplicate loading="lazy" attributes from img tags'
-    },
-    {
-        name: 'Encode unescaped ampersands',
-        pattern: /([^&])&([^a][^m][^p];|[^l][^t];|[^g][^t];|[^q][^u][^o][^t];)/g,
-        replacement: '$1&amp;$2',
-        description: 'Encodes raw & characters that are not part of HTML entities'
-    },
-    {
-        name: 'Add type attributes to buttons',
-        pattern: /<button(\s[^>]*?)?(?!\s+type=)([^>]*>)/g,
-        replacement: '<button type="button"$1$2',
-        description: 'Adds type="button" to buttons missing type attribute'
-    },
-    {
-        name: 'Remove non-existent hreflang links',
-        pattern: /\s*<link rel="alternate" hreflang="(?!x-default)[^"]*" href="[^"]*\/(en|de|es|fr|ar|bn|ja|pt|ko|ru|tr|zh|hi|it)" >\s*/g,
-        replacement: '',
-        description: 'Removes hreflang links for non-existent language pages'
-    }
+  {
+    name: 'Remove duplicate loading attributes',
+    pattern: /(<img[^>]*?loading="lazy"[^>]*?)loading="lazy"([^>]*?>)/g,
+    replacement: '$1$2',
+    description: 'Removes duplicate loading="lazy" attributes from img tags',
+  },
+  {
+    name: 'Encode unescaped ampersands',
+    pattern: /([^&])&([^a][^m][^p];|[^l][^t];|[^g][^t];|[^q][^u][^o][^t];)/g,
+    replacement: '$1&amp;$2',
+    description: 'Encodes raw & characters that are not part of HTML entities',
+  },
+  {
+    name: 'Add type attributes to buttons',
+    pattern: /<button(\s[^>]*?)?(?!\s+type=)([^>]*>)/g,
+    replacement: '<button type="button"$1$2',
+    description: 'Adds type="button" to buttons missing type attribute',
+  },
+  {
+    name: 'Remove non-existent hreflang links',
+    pattern:
+      /\s*<link rel="alternate" hreflang="(?!x-default)[^"]*" href="[^"]*\/(en|de|es|fr|ar|bn|ja|pt|ko|ru|tr|zh|hi|it)" >\s*/g,
+    replacement: '',
+    description: 'Removes hreflang links for non-existent language pages',
+  },
 ];
 
 console.log('📋 FIXES TO APPLY:');
 fixes.forEach((fix, index) => {
-    console.log(`${index + 1}. ${fix.name}`);
-    console.log(`   📝 ${fix.description}`);
+  console.log(`${index + 1}. ${fix.name}`);
+  console.log(`   📝 ${fix.description}`);
 });
 
 console.log('\n⚠️ MANUAL FIXES REQUIRED:');

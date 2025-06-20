@@ -13,9 +13,9 @@ module.exports = {
           cpuSlowdownMultiplier: 1,
           requestLatencyMs: 0,
           downloadThroughputKbps: 0,
-          uploadThroughputKbps: 0
-        }
-      }
+          uploadThroughputKbps: 0,
+        },
+      },
     },
     assert: {
       assertions: {
@@ -23,11 +23,11 @@ module.exports = {
         'categories:accessibility': ['error', { minScore: 0.95 }],
         'categories:best-practices': ['error', { minScore: 0.95 }],
         'categories:seo': ['error', { minScore: 0.95 }],
-        'categories:pwa': ['error', { minScore: 0.80 }]
-      }
+        'categories:pwa': ['error', { minScore: 0.8 }],
+      },
     },
     upload: {
-      target: 'temporary-public-storage'
-    }
-  }
+      target: 'temporary-public-storage',
+    },
+  },
 };
