@@ -20,7 +20,11 @@
     "ci": "npm run lint:check && npm run test:unit && npm run build && npm run lighthouse && npm run test:e2e",
     "build:webpack": "webpack --mode production",
     "start:webpack": "webpack serve --open",
-    "qa:watch": "node scripts/qa-watch.js"
+    "qa:watch": "node scripts/qa-watch.js",
+    "audit": "npm audit --audit-level=moderate || true",
+    "snyk:test": "snyk test || true",
+    "lighthouse:ci": "lhci autorun",
+    "ci:full": "npm run lint:check && npm run test:unit && npm run build && npm run lighthouse:ci && npm run test:e2e && npm run audit"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",

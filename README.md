@@ -137,7 +137,64 @@ npm start
 
 ---
 
-**🎖️ ZERTIFIZIERT:** Diese Website erfüllt alle Anforderungen einer professionellen, produktionsreifen Web-Präsenz.
+## 📡 Monitoring & Uptime
 
-**Letzte Verifikation:** 18.06.2025,  
-**Status:** MISSION ERFÜLLT ✅
+- **Live-Status:** [burnitoken.website](https://burnitoken.website)
+- **UptimeRobot:** [Status Dashboard (Beispiel)](https://uptimerobot.com/dashboard?monitors=YOUR_MONITOR_ID)
+- **Lighthouse Report:** [Lighthouse Live Audit](https://googlechrome.github.io/lighthouse/viewer/)
+- **Netlify Status:** [Netlify Status](https://www.netlifystatus.com/)
+- **Sentry Monitoring:** Aktiv (siehe SECURITY-DEPENDENCY.md)
+
+> **Tipp:** Für automatisches Uptime-Monitoring UptimeRobot oder BetterUptime nutzen und API-Key im Monitoring-Dashboard hinterlegen.
+
+## 🔒 Security & Dependency Management
+
+- **npm audit:** Regelmäßig ausführen (`npm audit`)
+- **Dependabot:** GitHub Actions Workflow empfohlen
+- **Snyk/JFrog:** Optional für tiefergehende Security-Scans
+- **CSP & SRI:** Aktiv, alle externen Ressourcen minimiert
+
+> **Beispiel-Workflow:** Siehe unten für GitHub Actions Security-Check
+
+## 📊 Analytics & Datenschutz
+
+- **Plausible Analytics:** DSGVO-konform, empfohlen ([plausible.io](https://plausible.io/))
+- **Matomo:** Optional, selbst gehostet ([matomo.org](https://matomo.org/))
+- **Hinweis:** Analytics-Snippet nur produktiv einbinden, Datenschutzhinweis beachten
+
+## 💬 Feedback & Kontakt
+
+- **Feedback-Formular:** Auf der Website integriert
+- **Discord:** [Discord Community (Beispiel)](https://discord.gg/YOUR_INVITE)
+- **GitHub Issues:** [burnitoken.com Issues](https://github.com/YOUR_REPO/issues)
+- **E-Mail:** kontakt@burnitoken.website
+
+## 🛡️ Beispiel: GitHub Actions Workflow (Security)
+
+```yaml
+name: Security & Dependency Check
+on:
+  schedule:
+    - cron: '0 3 * * 1'
+  workflow_dispatch:
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: npm audit --audit-level=moderate || true
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-report
+          path: audit.json
+```
+
+---
+
+> Letzte Aktualisierung: 19.06.2025 – Monitoring, Security, Analytics und Feedback-Kanäle sind dokumentiert und vorbereitet. Für produktive Nutzung API-Keys und Links anpassen!
