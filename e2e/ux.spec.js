@@ -5,7 +5,7 @@ const { test, expect } = require('@playwright/test');
 
 test('Alle Links funktionieren', async ({ page }) => {
   await page.goto('http://localhost:3000');
-  const links = await page.$$eval('a[href]', as => as.map(a => a.href));
+  const links = await page.$$eval('a[href]', (as) => as.map((a) => a.href));
   for (const link of links) {
     if (!link.startsWith('mailto:') && !link.startsWith('tel:')) {
       const res = await page.request.get(link);

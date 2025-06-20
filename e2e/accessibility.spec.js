@@ -8,6 +8,6 @@ test('Accessibility-Check auf Startseite', async ({ page }) => {
   await injectAxe(page);
   await checkA11y(page, null, {
     detailedReport: true,
-    detailedReportOptions: { html: true }
+    detailedReportOptions: { html: true },
   });
 });

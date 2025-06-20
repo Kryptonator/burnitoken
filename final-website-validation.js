@@ -13,61 +13,61 @@ const htmlContent = fs.readFileSync(htmlPath, 'utf8');
 
 // Validation checks
 const validationResults = {
-    html: {
-        hasDoctype: htmlContent.includes('<!DOCTYPE html>'),
-        hasTitle: htmlContent.includes('<title>'),
-        hasMetaCharset: htmlContent.includes('charset='),
-        hasMetaViewport: htmlContent.includes('name="viewport"'),
-        hasMetaDescription: htmlContent.includes('name="description"'),
-        duplicateLoadingAttrs: (htmlContent.match(/loading="lazy"[^>]*loading="lazy"/g) || []).length
+  html: {
+    hasDoctype: htmlContent.includes('<!DOCTYPE html>'),
+    hasTitle: htmlContent.includes('<title>'),
+    hasMetaCharset: htmlContent.includes('charset='),
+    hasMetaViewport: htmlContent.includes('name="viewport"'),
+    hasMetaDescription: htmlContent.includes('name="description"'),
+    duplicateLoadingAttrs: (htmlContent.match(/loading="lazy"[^>]*loading="lazy"/g) || []).length,
+  },
+  seo: {
+    metaTags: (htmlContent.match(/<meta/g) || []).length,
+    headings: {
+      h1: (htmlContent.match(/<h1/g) || []).length,
+      h2: (htmlContent.match(/<h2/g) || []).length,
+      h3: (htmlContent.match(/<h3/g) || []).length,
     },
-    seo: {
-        metaTags: (htmlContent.match(/<meta/g) || []).length,
-        headings: {
-            h1: (htmlContent.match(/<h1/g) || []).length,
-            h2: (htmlContent.match(/<h2/g) || []).length,
-            h3: (htmlContent.match(/<h3/g) || []).length
-        },
-        images: (htmlContent.match(/<img/g) || []).length,
-        imagesWithAlt: (htmlContent.match(/<img[^>]+alt=/g) || []).length
-    },
-    accessibility: {
-        ariaLabels: (htmlContent.match(/aria-label=/g) || []).length,
-        ariaDescribedBy: (htmlContent.match(/aria-describedby=/g) || []).length,
-        langAttribute: htmlContent.includes('lang='),
-        skipLinks: htmlContent.includes('skip-link') || htmlContent.includes('#main-content')
-    },
-    performance: {
-        lazyLoadingImages: (htmlContent.match(/loading="lazy"/g) || []).length,
-        preloadLinks: (htmlContent.match(/<link[^>]+preload/g) || []).length,
-        asyncScripts: (htmlContent.match(/async/g) || []).length,
-        deferScripts: (htmlContent.match(/defer/g) || []).length
-    },
-    i18n: {
-        dataI18nElements: (htmlContent.match(/data-i18n=/g) || []).length,
-        langSwitcher: htmlContent.includes('language-switcher') || htmlContent.includes('lang-switch')
-    }
+    images: (htmlContent.match(/<img/g) || []).length,
+    imagesWithAlt: (htmlContent.match(/<img[^>]+alt=/g) || []).length,
+  },
+  accessibility: {
+    ariaLabels: (htmlContent.match(/aria-label=/g) || []).length,
+    ariaDescribedBy: (htmlContent.match(/aria-describedby=/g) || []).length,
+    langAttribute: htmlContent.includes('lang='),
+    skipLinks: htmlContent.includes('skip-link') || htmlContent.includes('#main-content'),
+  },
+  performance: {
+    lazyLoadingImages: (htmlContent.match(/loading="lazy"/g) || []).length,
+    preloadLinks: (htmlContent.match(/<link[^>]+preload/g) || []).length,
+    asyncScripts: (htmlContent.match(/async/g) || []).length,
+    deferScripts: (htmlContent.match(/defer/g) || []).length,
+  },
+  i18n: {
+    dataI18nElements: (htmlContent.match(/data-i18n=/g) || []).length,
+    langSwitcher: htmlContent.includes('language-switcher') || htmlContent.includes('lang-switch'),
+  },
 };
 
 // Calculate scores
 function calculateScore(category) {
-    const checks = validationResults[category];
-    let passed = 0;
-    let total = 0;
-    
-    for (const [key, value] of Object.entries(checks)) {
+  const checks = validationResults[category];
+  let passed = 0;
+  let total = 0;
+
+  for (const [key, value] of Object.entries(checks)) {
+    total++;
+    if (typeof value === 'boolean' && value) passed++;
+    else if (typeof value === 'number' && value > 0) passed++;
+    else if (typeof value === 'object') {
+      for (const [subKey, subValue] of Object.entries(value)) {
         total++;
-        if (typeof value === 'boolean' && value) passed++;
-        else if (typeof value === 'number' && value > 0) passed++;
-        else if (typeof value === 'object') {
-            for (const [subKey, subValue] of Object.entries(value)) {
-                total++;
-                if (subValue > 0) passed++;
-            }
-        }
+        if (subValue > 0) passed++;
+      }
     }
-    
-    return Math.round((passed / total) * 100);
+  }
+
+  return Math.round((passed / total) * 100);
 }
 
 // Display results
@@ -80,7 +80,9 @@ console.log(`✅ Has Title: ${validationResults.html.hasTitle}`);
 console.log(`✅ Has Meta Charset: ${validationResults.html.hasMetaCharset}`);
 console.log(`✅ Has Meta Viewport: ${validationResults.html.hasMetaViewport}`);
 console.log(`✅ Has Meta Description: ${validationResults.html.hasMetaDescription}`);
-console.log(`✅ Duplicate loading attrs: ${validationResults.html.duplicateLoadingAttrs} (should be 0)`);
+console.log(
+  `✅ Duplicate loading attrs: ${validationResults.html.duplicateLoadingAttrs} (should be 0)`,
+);
 
 console.log('\n🔍 SEO Optimization');
 console.log(`📊 Meta tags: ${validationResults.seo.metaTags}`);
@@ -108,14 +110,16 @@ console.log(`✅ Language switcher: ${validationResults.i18n.langSwitcher}`);
 
 // Calculate overall scores
 const scores = {
-    html: calculateScore('html'),
-    seo: calculateScore('seo'),
-    accessibility: calculateScore('accessibility'),
-    performance: calculateScore('performance'),
-    i18n: calculateScore('i18n')
+  html: calculateScore('html'),
+  seo: calculateScore('seo'),
+  accessibility: calculateScore('accessibility'),
+  performance: calculateScore('performance'),
+  i18n: calculateScore('i18n'),
 };
 
-const overallScore = Math.round(Object.values(scores).reduce((a, b) => a + b, 0) / Object.keys(scores).length);
+const overallScore = Math.round(
+  Object.values(scores).reduce((a, b) => a + b, 0) / Object.keys(scores).length,
+);
 
 console.log('\n📈 QUALITY SCORES');
 console.log('-'.repeat(30));
@@ -128,42 +132,46 @@ console.log(`\n🎯 OVERALL SCORE: ${overallScore}%`);
 
 // Final assessment
 if (overallScore >= 90) {
-    console.log('\n🎉 EXCELLENT! Website is production-ready!');
+  console.log('\n🎉 EXCELLENT! Website is production-ready!');
 } else if (overallScore >= 80) {
-    console.log('\n✅ GOOD! Website is mostly optimized with minor improvements possible.');
+  console.log('\n✅ GOOD! Website is mostly optimized with minor improvements possible.');
 } else if (overallScore >= 70) {
-    console.log('\n⚠️  FAIR! Website needs some optimization work.');
+  console.log('\n⚠️  FAIR! Website needs some optimization work.');
 } else {
-    console.log('\n❌ NEEDS WORK! Website requires significant improvements.');
+  console.log('\n❌ NEEDS WORK! Website requires significant improvements.');
 }
 
 // Check for critical issues
 const criticalIssues = [];
 if (validationResults.html.duplicateLoadingAttrs > 0) {
-    criticalIssues.push(`${validationResults.html.duplicateLoadingAttrs} duplicate loading attributes`);
+  criticalIssues.push(
+    `${validationResults.html.duplicateLoadingAttrs} duplicate loading attributes`,
+  );
 }
 if (!validationResults.html.hasDoctype) {
-    criticalIssues.push('Missing DOCTYPE declaration');
+  criticalIssues.push('Missing DOCTYPE declaration');
 }
 if (validationResults.seo.imagesWithAlt < validationResults.seo.images) {
-    criticalIssues.push(`${validationResults.seo.images - validationResults.seo.imagesWithAlt} images missing alt text`);
+  criticalIssues.push(
+    `${validationResults.seo.images - validationResults.seo.imagesWithAlt} images missing alt text`,
+  );
 }
 
 if (criticalIssues.length > 0) {
-    console.log('\n🚨 CRITICAL ISSUES:');
-    criticalIssues.forEach(issue => console.log(`   ❌ ${issue}`));
+  console.log('\n🚨 CRITICAL ISSUES:');
+  criticalIssues.forEach((issue) => console.log(`   ❌ ${issue}`));
 } else {
-    console.log('\n✅ NO CRITICAL ISSUES FOUND!');
+  console.log('\n✅ NO CRITICAL ISSUES FOUND!');
 }
 
 // Save report
 const report = {
-    timestamp: new Date().toISOString(),
-    validationResults,
-    scores,
-    overallScore,
-    criticalIssues,
-    status: overallScore >= 80 ? 'PRODUCTION_READY' : 'NEEDS_IMPROVEMENT'
+  timestamp: new Date().toISOString(),
+  validationResults,
+  scores,
+  overallScore,
+  criticalIssues,
+  status: overallScore >= 80 ? 'PRODUCTION_READY' : 'NEEDS_IMPROVEMENT',
 };
 
 fs.writeFileSync('final-validation-report.json', JSON.stringify(report, null, 2));
@@ -180,5 +188,5 @@ console.log(`✅ Performance features preserved`);
 console.log(`✅ Internationalization support active`);
 
 if (overallScore >= 85) {
-    console.log('\n🚀 READY FOR PRODUCTION DEPLOYMENT! 🚀');
+  console.log('\n🚀 READY FOR PRODUCTION DEPLOYMENT! 🚀');
 }

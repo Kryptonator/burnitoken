@@ -29,9 +29,7 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' }),
-  ],
+  plugins: [new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' })],
   optimization: {
     splitChunks: { chunks: 'all' },
   },

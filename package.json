@@ -13,20 +13,29 @@
     "test": "jest",
     "test:unit": "jest",
     "test:e2e": "start-server-and-test start http://localhost:8080 playwright test e2e/",
-    "test:e2e:install": "playwright install",
+    "test:e2e:install": "node install-playwright.js",
     "lighthouse": "lhci autorun",
     "validate": "html-validate index.html 404.html",
     "optimize": "npm run clean && npm run build && npm run lint",
     "ci": "npm run lint:check && npm run test:unit && npm run build && npm run lighthouse && npm run test:e2e",
+    "deploy:netlify": "netlify deploy --prod",
+    "deploy:preview": "netlify deploy",
+    "build:production": "npm run build && npm run test:unit",
+    "build:preview": "npm run build",
+    "build:branch": "npm run build",
     "build:webpack": "webpack --mode production",
     "start:webpack": "webpack serve --open",
     "qa:watch": "node scripts/qa-watch.js",
     "audit": "npm audit --audit-level=moderate || true",
     "snyk:test": "snyk test || true",
     "lighthouse:ci": "lhci autorun",
-    "ci:full": "npm run lint:check && npm run test:unit && npm run build && npm run lighthouse:ci && npm run test:e2e && npm run audit"
+    "ci:full": "npm run lint:check && npm run test:unit && npm run build && npm run lighthouse:ci && npm run test:e2e && npm run audit",
+    "setup": "npm install && node install-playwright.js",
+    "setup:basic": "npm install",
+    "validate:setup": "node validate-setup.js"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
     "@babel/core": "^7.24.0",
     "@babel/preset-env": "^7.24.0",
     "@lhci/cli": "^0.15.0",
@@ -43,6 +52,7 @@
     "jest": "^30.0.0",
     "jest-environment-jsdom": "^30.0.0",
     "jsdom": "^26.1.0",
+    "lighthouse": "^12.6.1",
     "mini-css-extract-plugin": "^2.7.6",
     "postcss": "^8.5.5",
     "prettier": "^3.2.0",
@@ -59,7 +69,6 @@
     "axe-playwright": "^2.1.0",
     "canvas": "^3.1.0",
     "chrome-launcher": "^1.2.0",
-    "lighthouse": "^12.6.1",
     "selenium-webdriver": "^4.33.0"
   }
 }

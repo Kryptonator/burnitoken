@@ -3,9 +3,9 @@ module.exports = {
     collect: {
       url: ['http://localhost:3000'],
       numberOfRuns: 1,
-      settings: { onlyCategories: ['seo'] }
+      settings: { onlyCategories: ['seo'] },
     },
     assert: { assertions: { 'categories:seo': ['error', { minScore: 0.9 }] } },
-    upload: { target: 'temporary-public-storage' }
-  }
+    upload: { target: 'temporary-public-storage' },
+  },
 };

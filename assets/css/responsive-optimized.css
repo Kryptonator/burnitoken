@@ -5,32 +5,32 @@
   .container {
     padding: 0 1rem;
   }
-  
+
   .hero-section {
     min-height: 70vh;
     padding: 2rem 0;
   }
-  
+
   .pixar-title {
     font-size: 2rem;
     line-height: 1.2;
   }
-  
+
   .pixar-subtitle {
     font-size: 1.1rem;
     line-height: 1.4;
   }
-  
+
   .grid-cols-4 {
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
-  
+
   .kpi-card {
     padding: 1rem;
     text-align: center;
   }
-  
+
   .section-card {
     margin-bottom: 1.5rem;
     padding: 1.5rem;
@@ -42,11 +42,11 @@
   .container {
     padding: 0 2rem;
   }
-  
+
   .hero-section {
     min-height: 80vh;
   }
-  
+
   .grid-cols-4 {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -59,15 +59,15 @@
     margin: 0 auto;
     padding: 0 2rem;
   }
-  
+
   .hero-section {
     min-height: 85vh;
   }
-  
+
   .pixar-title {
     font-size: 4.5rem;
   }
-  
+
   .grid-cols-4 {
     grid-template-columns: repeat(4, 1fr);
   }
@@ -98,7 +98,7 @@
   .desktop-nav {
     display: none;
   }
-  
+
   .mobile-nav {
     display: block;
   }
@@ -108,7 +108,7 @@
   .desktop-nav {
     display: flex;
   }
-  
+
   .mobile-nav {
     display: none;
   }

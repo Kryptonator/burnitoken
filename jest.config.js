@@ -4,7 +4,8 @@ module.exports = {
   roots: ['<rootDir>/tests'],
   moduleFileExtensions: ['js', 'json'],
   setupFilesAfterEnv: ['<rootDir>/tests/setupTests.js'],
-  testPathIgnorePatterns: ['<rootDir>/tests/e2e/'],
+  testMatch: ['**/*.test.js'], // Nur .test.js Dateien, nicht .spec.js
+  testPathIgnorePatterns: ['/tests/e2e/', '/.*\\.spec\\.js$/'],
   collectCoverage: true,
   coverageDirectory: 'coverage',
   collectCoverageFrom: ['main.js', 'assets/scripts.js', '!**/node_modules/**'],

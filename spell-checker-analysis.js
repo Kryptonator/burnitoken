@@ -9,105 +9,105 @@ console.log('🔤 STARTING SPELL CHECK ANALYSIS...\n');
 
 // Häufige Rechtschreibfehler in der Krypto-Welt
 const commonCryptoTypos = {
-    // Deutsche Begriffe
-    'deflationäres': 'deflationär',
-    'revolutionäres': 'revolutionär',
-    'Kryptowährungen': 'Kryptowährung',
-    'automatisches': 'automatisch',
-    'schaffe': 'schaffen',
-    'verbrannt': 'verbrannte',
-    
-    // Englische Begriffe
-    'tokennomics': 'tokenomics',
-    'burnitoken': 'BurniToken',
-    'xrpl': 'XRPL',
-    'blockchain': 'Blockchain',
-    'cryptocurrency': 'cryptocurrency',
-    'deflationary': 'deflationary',
-    
-    // Technische Begriffe
-    'githubpages': 'GitHub Pages',
-    'javascript': 'JavaScript',
-    'typescript': 'TypeScript',
-    'nodejs': 'Node.js',
-    'vscode': 'VS Code'
+  // Deutsche Begriffe
+  deflationäres: 'deflationär',
+  revolutionäres: 'revolutionär',
+  Kryptowährungen: 'Kryptowährung',
+  automatisches: 'automatisch',
+  schaffe: 'schaffen',
+  verbrannt: 'verbrannte',
+
+  // Englische Begriffe
+  tokennomics: 'tokenomics',
+  burnitoken: 'BurniToken',
+  xrpl: 'XRPL',
+  blockchain: 'Blockchain',
+  cryptocurrency: 'cryptocurrency',
+  deflationary: 'deflationary',
+
+  // Technische Begriffe
+  githubpages: 'GitHub Pages',
+  javascript: 'JavaScript',
+  typescript: 'TypeScript',
+  nodejs: 'Node.js',
+  vscode: 'VS Code',
 };
 
 // Meta-Tags und Content-Bereiche zum Prüfen
 const spellCheckAreas = [
-    {
-        name: 'Meta Description',
-        priority: 'CRITICAL',
-        impact: 'SEO & First Impression'
-    },
-    {
-        name: 'Page Titles (H1, H2, H3)',
-        priority: 'HIGH',
-        impact: 'SEO & User Experience'
-    },
-    {
-        name: 'Navigation Labels',
-        priority: 'HIGH',
-        impact: 'User Experience'
-    },
-    {
-        name: 'Button Texts',
-        priority: 'MEDIUM',
-        impact: 'User Actions'
-    },
-    {
-        name: 'Alt Tags',
-        priority: 'MEDIUM',
-        impact: 'Accessibility & SEO'
-    },
-    {
-        name: 'i18n Keys',
-        priority: 'LOW',
-        impact: 'Internationalization'
-    }
+  {
+    name: 'Meta Description',
+    priority: 'CRITICAL',
+    impact: 'SEO & First Impression',
+  },
+  {
+    name: 'Page Titles (H1, H2, H3)',
+    priority: 'HIGH',
+    impact: 'SEO & User Experience',
+  },
+  {
+    name: 'Navigation Labels',
+    priority: 'HIGH',
+    impact: 'User Experience',
+  },
+  {
+    name: 'Button Texts',
+    priority: 'MEDIUM',
+    impact: 'User Actions',
+  },
+  {
+    name: 'Alt Tags',
+    priority: 'MEDIUM',
+    impact: 'Accessibility & SEO',
+  },
+  {
+    name: 'i18n Keys',
+    priority: 'LOW',
+    impact: 'Internationalization',
+  },
 ];
 
 console.log('📊 SPELL CHECK AREAS TO ANALYZE:');
 spellCheckAreas.forEach((area, index) => {
-    console.log(`${index + 1}. ${area.name}`);
-    console.log(`   🎯 Priority: ${area.priority}`);
-    console.log(`   📈 Impact: ${area.impact}`);
+  console.log(`${index + 1}. ${area.name}`);
+  console.log(`   🎯 Priority: ${area.priority}`);
+  console.log(`   📈 Impact: ${area.impact}`);
 });
 
 console.log('\n🔍 COMMON TYPOS TO LOOK FOR:');
 Object.entries(commonCryptoTypos).forEach(([wrong, correct]) => {
-    console.log(`❌ "${wrong}" → ✅ "${correct}"`);
+  console.log(`❌ "${wrong}" → ✅ "${correct}"`);
 });
 
 // Spezielle BurniToken Begriffe
 const burniTokenTerminology = {
-    correct: [
-        'BurniToken',
-        'Burni Token',
-        'XRPL',
-        'XRP Ledger',
-        'Token Burning',
-        'Deflationär',
-        'burnitoken.website',
-        'Kryptonator'
-    ],
-    checkFor: [
-        'Correct capitalization',
-        'Consistent naming',
-        'Proper German/English usage',
-        'Technical accuracy'
-    ]
+  correct: [
+    'BurniToken',
+    'Burni Token',
+    'XRPL',
+    'XRP Ledger',
+    'Token Burning',
+    'Deflationär',
+    'burnitoken.website',
+    'Kryptonator',
+  ],
+  checkFor: [
+    'Correct capitalization',
+    'Consistent naming',
+    'Proper German/English usage',
+    'Technical accuracy',
+  ],
 };
 
 console.log('\n🎯 BURNITOKEN TERMINOLOGY:');
 console.log('✅ CORRECT TERMS:');
-burniTokenTerminology.correct.forEach(term => {
-    console.log(`   • ${term}`);
+burniTokenTerminology.correct.forEach((term) => {
+  console.log(`   • ${term}`);
 });
 
 console.log('\n📝 CHECK FOR:');
-burniTokenTerminology.checkFor.forEach(check => {
-    console.log(`   🔍 ${check}`);
+burniTokenTerminology.checkFor.forEach((check) => {
+  console.log(`   🔍 ${check}`);
 });
 
 // Multilingual considerations
@@ -130,11 +130,11 @@ console.log('Due to complex crypto terminology and mixed German/English');
 console.log('content, manual spell check is recommended for accuracy.');
 
 const report = {
-    timestamp: new Date().toISOString(),
-    areas: spellCheckAreas,
-    commonTypos: commonCryptoTypos,
-    terminology: burniTokenTerminology,
-    status: 'MANUAL_REVIEW_NEEDED'
+  timestamp: new Date().toISOString(),
+  areas: spellCheckAreas,
+  commonTypos: commonCryptoTypos,
+  terminology: burniTokenTerminology,
+  status: 'MANUAL_REVIEW_NEEDED',
 };
 
 console.log('\n💾 Spell check analysis prepared for manual review.');
