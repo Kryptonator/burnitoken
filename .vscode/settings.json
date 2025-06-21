@@ -29,10 +29,12 @@
   },
   "markdown.preview.fontSize": 14,
   "markdown.preview.lineHeight": 1.6,
-  "extensions.autoUpdate": false,
+  "extensions.autoUpdate": true,
   "files.watcherExclude": {
     "**/node_modules/**": true,
     "**/.git/objects/**": true,
     "**/.git/subtree-cache/**": true
-  }
+  },
+  "extensions.ignoreRecommendations": false,
+  "extensions.closeExtensionDetailsOnViewChange": true
 }
