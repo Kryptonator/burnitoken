@@ -38,6 +38,8 @@ burnitoken.com/
 ├── docs/             # Konsolidierte Dokumentation
 │   ├── ci-cd/        # CI/CD-Dokumentation
 │   ├── deployment/   # Deployment-Anleitungen
+│   ├── NETLIFY_OPTIMIZATION.md  # Netlify-Optimierungsanleitung
+│   ├── JFROG_NETLIFY_INTEGRATION.md  # JFrog-Netlify-Integration
 │   ├── development/  # Entwicklerdokumentation
 │   └── reports/      # Statusberichte
 ├── src/              # Quellcode
@@ -51,6 +53,9 @@ burnitoken.com/
 ├── e2e/              # E2E-Test Suites (Playwright)
 ├── tests/            # Unit-/Integrationstests (Jest)
 ├── config/           # Konfigurationsdateien
+├── netlify/          # Netlify-Funktionen und -Konfiguration
+│   ├── functions/    # Serverlose Funktionen
+│   └── plugin-config.toml  # Plugin-Konfiguration
 ├── index.html        # Hauptwebseite
 └── README.md         # Hauptdokumentation
 ```
@@ -95,8 +100,9 @@ burnitoken.com/
 
 - Automated Backup System
 - Error Tracking (Sentry)
-- Performance Monitoring
+- Performance Monitoring (Netlify + Lighthouse)
 - Asset Integrity Checks
+- Serverlose API-Funktionen via Netlify
 
 ## 🛠️ Entwicklung
 
