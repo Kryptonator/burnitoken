@@ -6,6 +6,8 @@
     "build:css": "cross-env NODE_ENV=production tailwindcss -i ./assets/css/critical.css -o ./assets/css/styles.min.css --minify",
     "serve": "http-server . -p 8080 --config http-server.config.json",
     "build": "npm run build:css && echo Build erfolgreich abgeschlossen!",
+    "build:prod": "npm run build:css && npm run optimize:assets && npm run validate",
+    "build:feature": "npm run build:css && echo Feature-Branch-Build abgeschlossen!",
     "start": "npm run build && npm run serve",
     "clean": "del-cli assets/css/*.min.css",
     "lint": "prettier --write \"**/*.{html,css,js}\" --ignore-path .gitignore",
@@ -17,6 +19,7 @@
     "lighthouse": "lhci autorun",
     "validate": "html-validate index.html 404.html",
     "optimize": "npm run clean && npm run build && npm run lint",
+    "optimize:assets": "node tools/optimize-assets.js",
     "ci": "npm run lint:check && npm run test:unit && npm run build && npm run lighthouse && npm run test:e2e",
     "build:webpack": "webpack --mode production",
     "start:webpack": "webpack serve --open",
@@ -28,6 +31,7 @@
     "test:alert": "node tools/test-email-alert.js",
     "test:alert:dry": "node tools/test-email-alert.js --use-ethereal",
     "cloud:sync": "node tools/update-cloud-settings.js",
+    "dev:functions": "netlify functions:serve",
     "prepare": "husky install"
   },
   "devDependencies": {
@@ -63,10 +67,13 @@
   },
   "dependencies": {
     "@axe-core/webdriverjs": "^4.10.2",
+    "@netlify/functions": "^2.5.1",
     "axe-playwright": "^2.1.0",
     "canvas": "^3.1.0",
     "chrome-launcher": "^1.2.0",
     "lighthouse": "^12.6.1",
+    "netlify-cli": "^17.15.6",
+    "node-fetch": "^3.3.2",
     "selenium-webdriver": "^4.33.0"
   }
 }
