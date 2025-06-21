@@ -1,98 +1,24 @@
 [build]
   publish = "."
-  command = "echo 'BurniToken Static Site Deployment - All Features Ready'"
-  functions = "netlify/functions"
+  command = "echo 'Static site deployment'"
 
 [build.environment]
   NODE_VERSION = "20"
-  NPM_VERSION = "10"
 
-# Page redirects
-[[redirects]]
-  from = "/pages/*"
-  to = "/pages/:splat"
-  status = 200
-
-[[redirects]]
-  from = "/docs/*"  
-  to = "/pages/docs/:splat"
-  status = 200
-
-[[redirects]]
-  from = "/community/*"
-  to = "/pages/community/:splat"
-  status = 200
-
-[[redirects]]
-  from = "/token/*"
-  to = "/pages/token/:splat"
-  status = 200
-
-# Dashboard and live features
-[[redirects]]
-  from = "/dashboard"
-  to = "/live-dashboard.html"
-  status = 200
-
-[[redirects]]
-  from = "/calculator"
-  to = "/index.html#calculator"
-  status = 200
-
-# API endpoints for future XRPL integration
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
-
-# Domain redirects for SEO (WICHTIG: vor Main fallback)
-[[redirects]]
-  from = "https://www.burnitoken.website/*"
-  to = "https://burnitoken.website/:splat"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "https://endearing-mandazi-d7b985.netlify.app/*"
-  to = "https://burnitoken.website/:splat"
-  status = 301
-  force = true
-
-# Main fallback (ZULETZT)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  force = false
 
-# Security Headers (EINMALIG & KORREKT)
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options = "SAMEORIGIN"
-    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
-    X-Robots-Tag = "index, follow"
+    X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.xrpldata.com https://s1.ripple.com https://s2.ripple.com"
     Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "*.html"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-
-[[headers]]
-  for = "/sitemap.xml"
-  [headers.values]
-    Content-Type = "application/xml"
-    Cache-Control = "public, max-age=3600"
-
-[[headers]]
-  for = "/robots.txt"
-  [headers.values]
-    Content-Type = "text/plain"
-    Cache-Control = "public, max-age=3600"
 
 [[headers]]
   for = "*.js"

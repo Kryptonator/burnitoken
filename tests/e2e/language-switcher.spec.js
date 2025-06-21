@@ -13,9 +13,7 @@ test.describe('Language Switcher E2E Tests', () => {
       document.body.setAttribute('data-playwright', 'true');
     });
     // Initialisierung der Navigation und Language Switcher für Teststabilität
-    await page.evaluate(
-      () => window.initNavigationAndLanguage && window.initNavigationAndLanguage(),
-    );
+    await page.evaluate(() => window.initNavigationAndLanguage && window.initNavigationAndLanguage());
     // Warte für WebKit explizit länger, damit das JS garantiert initialisiert ist
     if (browserName === 'webkit') {
       await page.waitForTimeout(1000);
