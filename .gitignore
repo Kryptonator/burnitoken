@@ -88,3 +88,11 @@ axe-*.json
 *-simple.html
 *-simple-*.html
 temp_*.html
+# Local Netlify folder
+.netlify
+
+# Google API Schlüssel und Service Accounts
+tools/gsc-service-account.json
+*-service-account.json
+*-api-key.json
+credentials.json
