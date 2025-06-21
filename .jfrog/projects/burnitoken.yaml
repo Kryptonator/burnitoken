@@ -1,0 +1,11 @@
+version: 1
+type: npm
+resolver:
+  repo: npm-remote
+  serverId: burnitoken
+deployer:
+  repo: npm-local
+  serverId: burnitoken
+useNpmrcConfig: true
+npmRegistryConfig:
+  registry: https://registry.npmjs.org/
