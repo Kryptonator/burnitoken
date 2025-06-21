@@ -6,7 +6,7 @@
       "type": "shell",
       "command": "node",
       "args": [
-        "extension-function-validator.js"
+        "tools/extension-management/extension-function-validator.js"
       ],
       "group": "test",
       "presentation": {
@@ -22,7 +22,7 @@
       "type": "shell",
       "command": "node",
       "args": [
-        "master-extension-orchestrator.js"
+        "tools/extension-management/master-extension-orchestrator.js"
       ],
       "group": "build",
       "presentation": {
@@ -38,7 +38,7 @@
       "type": "shell",
       "command": "node",
       "args": [
-        "advanced-extension-manager.js"
+        "tools/extension-management/advanced-extension-manager.js"
       ],
       "group": "build",
       "presentation": {
@@ -48,6 +48,39 @@
         "panel": "shared"
       },
       "problemMatcher": []
+    },
+    {
+      "label": "⚡ Quick Asset Check",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "scripts/quick-asset-check.ps1"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "🧹 Repository Cleanup Report",
+      "type": "shell",
+      "command": "cat",
+      "args": [
+        "docs/REPOSITORY_CLEANUP_SUMMARY.md"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
     }
   ]
 }
