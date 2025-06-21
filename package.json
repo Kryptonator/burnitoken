@@ -1,7 +1,6 @@
 {
   "name": "burni-website",
-  "version": "1.0.0",
-  "scripts": {
+  "version": "1.0.0",  "scripts": {
     "dev": "cross-env NODE_ENV=development tailwindcss -i ./assets/css/critical.css -o ./assets/css/styles.min.css --watch",
     "build:css": "cross-env NODE_ENV=production tailwindcss -i ./assets/css/critical.css -o ./assets/css/styles.min.css --minify",
     "serve": "http-server . -p 8080 --config http-server.config.json",
@@ -26,7 +25,8 @@
     "lighthouse:ci": "lhci autorun",
     "ci:full": "npm run lint:check && npm run test:unit && npm run build && npm run lighthouse:ci && npm run test:e2e && npm run audit",
     "test:alert": "node tools/test-email-alert.js",
-    "test:alert:dry": "node tools/test-email-alert.js --use-ethereal"
+    "test:alert:dry": "node tools/test-email-alert.js --use-ethereal",
+    "cloud:sync": "node tools/update-cloud-settings.js"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",
