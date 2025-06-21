@@ -13,9 +13,7 @@ test.describe('Navigation Tests', () => {
     });
 
     // Initialisierung der Navigation und Language Switcher für Teststabilität
-    await page.evaluate(
-      () => window.initNavigationAndLanguage && window.initNavigationAndLanguage(),
-    );
+    await page.evaluate(() => window.initNavigationAndLanguage && window.initNavigationAndLanguage());
 
     // Warte für WebKit explizit länger, damit das JS garantiert initialisiert ist
     if (browserName === 'webkit') {
@@ -70,9 +68,7 @@ test.describe('Navigation Tests', () => {
     await page.waitForSelector('header', { state: 'visible', timeout: 30000 });
 
     // Warte, bis die Navigation im Testmodus sichtbar ist (per .test-visible)
-    await page.waitForSelector('nav[aria-label="Main navigation"].test-visible', {
-      timeout: 10000,
-    });
+    await page.waitForSelector('nav[aria-label="Main navigation"].test-visible', { timeout: 10000 });
     await page.waitForTimeout(500);
 
     // Double-check that page loader is gone and no elements are blocking
@@ -85,7 +81,7 @@ test.describe('Navigation Tests', () => {
         return parseInt(style.zIndex) > 9000;
       });
       if (highZElements.length > 0) {
-        highZElements.forEach((el) => {
+        highZElements.forEach(el => {
           if (
             el.style.display !== 'none' &&
             el.style.visibility !== 'hidden' &&
@@ -213,9 +209,7 @@ test.describe('Navigation Tests', () => {
 
   test('Smooth scrolling to sections works', async ({ page }) => {
     // Wait for page loader to be removed
-    await page
-      .waitForSelector('#pageLoader', { state: 'detached', timeout: 10000 })
-      .catch(() => {});
+    await page.waitForSelector('#pageLoader', { state: 'detached', timeout: 10000 }).catch(() => {});
 
     // Test navigation to multiple sections
     const sections = ['#about', '#use-cases', '#token-schedule'];
@@ -235,9 +229,7 @@ test.describe('Navigation Tests', () => {
 
   test('Active navigation state updates on scroll', async ({ page }) => {
     // Wait for page loader to be removed
-    await page
-      .waitForSelector('#pageLoader', { state: 'detached', timeout: 10000 })
-      .catch(() => {});
+    await page.waitForSelector('#pageLoader', { state: 'detached', timeout: 10000 }).catch(() => {});
 
     // First scroll to top to ensure we start from hero section
     await page.evaluate(() => window.scrollTo(0, 0));

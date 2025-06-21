@@ -14,6 +14,8 @@
 - ✅ CI-Pipeline: Test + Lint + Security + Performance
 - ✅ Production-Pipeline: Build + Test + Deploy
 - ✅ Fehlerbehandlung und Artefakt-Management optimiert
+- ✅ E-Mail-Alert-System für CI/CD-Fehler (burn.coin@yahoo.com)
+- ✅ Automatische Tests für Accessibility (WCAG-AA)
 
 ### 3. Live-Website Status (100% funktional)
 - ✅ Website erreichbar: https://burnitoken.website (HTTP 200)
@@ -27,6 +29,14 @@
 - **HTML**: 0 Fehler, vollständig valid
 - **Workflows**: Moderne v4 Actions, strukturierte Pipelines
 - **Deployment**: Automatisiert und stabil
+- **Alerts**: E-Mail + Discord Benachrichtigungen bei Fehlern
+
+### CI/CD-Pipeline (21.06.2025)
+- **Workflows**: 2 spezialisierte Workflows (ci.yml, ci-cd.yml)
+- **Test-Suites**: Unit, E2E, Performance, Security, Accessibility
+- **Monitoring**: Real-time Failure Alerts via E-Mail
+- **Reports**: Automatisierte Lighthouse, Accessibility und Security Reports
+- **Badges**: Status-Badges in README für leichte Überwachung
 
 ### Browser-Kompatibilität
 - Theme-Color Problem für Firefox/Opera behoben

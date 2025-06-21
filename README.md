@@ -4,6 +4,10 @@
 [![Performance](https://img.shields.io/badge/Performance-A-green)](https://burnitoken.website)
 [![Security](https://img.shields.io/badge/Security-HTTPS-green)](https://burnitoken.website)
 [![Mobile](https://img.shields.io/badge/Mobile-Optimized-green)](https://burnitoken.website)
+[![CI Tests](https://github.com/burnitoken/burnitoken.com/actions/workflows/ci.yml/badge.svg)](https://github.com/burnitoken/burnitoken.com/actions/workflows/ci.yml)
+[![CI/CD Pipeline](https://github.com/burnitoken/burnitoken.com/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/burnitoken/burnitoken.com/actions/workflows/ci-cd.yml)
+[![Lighthouse](https://img.shields.io/badge/Lighthouse-Optimized-brightgreen)](https://github.com/burnitoken/burnitoken.com/actions)
+[![Accessibility](https://img.shields.io/badge/WCAG-AA-brightgreen)](https://github.com/burnitoken/burnitoken.com/actions)
 
 ## 🎯 Status: 100% ERFOLGREICH ABGESICHERT
 

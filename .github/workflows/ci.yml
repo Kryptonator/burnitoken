@@ -121,3 +121,34 @@ jobs:
           name: axe-accessibility-report
           path: axe-report.json
         if: always()
+
+  notify-on-failure:
+    name: 📧 Send Failure Notification
+    runs-on: ubuntu-latest
+    needs: [test, security, accessibility]
+    if: failure()
+    steps:
+      - name: 📧 Send E-Mail Alert
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.mail.yahoo.com
+          server_port: 465
+          username: burn.coin@yahoo.com
+          password: ${{ secrets.YAHOO_APP_PASSWORD }}
+          subject: "[BurniToken CI] Tests Failed - Immediate Attention Required"
+          to: burn.coin@yahoo.com
+          from: BurniToken CI <burn.coin@yahoo.com>
+          body: |
+            🚨 **BurniToken CI Tests Failed**
+
+            One or more tests in the CI pipeline failed and require your attention.
+
+            **Commit**: ${{ github.sha }}
+            **Branch**: ${{ github.ref_name }}
+            **Triggered by**: ${{ github.actor }}
+            **Workflow**: ${{ github.workflow }}
+            
+            For details, see the workflow run: 
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            
+            Please fix this issue as soon as possible.
