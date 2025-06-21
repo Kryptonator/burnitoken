@@ -1,6 +1,7 @@
 {
   "name": "burni-website",
-  "version": "1.0.0",  "scripts": {
+  "version": "1.0.0",
+  "scripts": {
     "dev": "cross-env NODE_ENV=development tailwindcss -i ./assets/css/critical.css -o ./assets/css/styles.min.css --watch",
     "build:css": "cross-env NODE_ENV=production tailwindcss -i ./assets/css/critical.css -o ./assets/css/styles.min.css --minify",
     "serve": "http-server . -p 8080 --config http-server.config.json",
@@ -26,7 +27,8 @@
     "ci:full": "npm run lint:check && npm run test:unit && npm run build && npm run lighthouse:ci && npm run test:e2e && npm run audit",
     "test:alert": "node tools/test-email-alert.js",
     "test:alert:dry": "node tools/test-email-alert.js --use-ethereal",
-    "cloud:sync": "node tools/update-cloud-settings.js"
+    "cloud:sync": "node tools/update-cloud-settings.js",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",
@@ -43,6 +45,7 @@
     "dotenv": "^16.5.0",
     "html-validate": "^9.6.1",
     "http-server": "^14.1.1",
+    "husky": "^8.0.0",
     "jest": "^30.0.0",
     "jest-environment-jsdom": "^30.0.0",
     "jsdom": "^26.1.0",
