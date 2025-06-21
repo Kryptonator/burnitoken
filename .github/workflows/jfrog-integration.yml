@@ -1,0 +1,42 @@
+name: JFrog Security & Dependency Scan
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  schedule:
+    - cron: '0 8 * * 1'  # Weekly scan on Monday at 8 AM
+
+jobs:
+  scan-dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          
+      - name: Setup JFrog CLI
+        uses: jfrog/setup-jfrog-cli@v3
+        with:
+          version: 2.77.0
+          
+      - name: Install Dependencies
+        run: npm ci
+        
+      - name: Run Security Scan with JFrog Xray
+        run: |
+          jf audit --fail=false
+          
+      - name: Generate Security Report
+        run: |
+          jf audit --licenses --fail=false > security-report.txt
+          
+      - name: Upload Security Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: security-report
+          path: security-report.txt

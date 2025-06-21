@@ -1,0 +1,6 @@
+{
+  "user": "_internal",
+  "password": "dummy_password",
+  "url": "http://localhost:8082/artifactory/",
+  "serverId": "burnitoken"
+}

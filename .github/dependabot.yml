@@ -18,6 +18,12 @@ updates:
     labels:
       - "dependencies"
       - "javascript"
+        # JFrog Artifactory registry configuration
+    registries:
+      npm-jfrog:
+        type: npm-registry
+        url: https://burnitoken.jfrog.io/artifactory/api/npm/npm-virtual/
+        token: ${{secrets.JFROG_NPM_TOKEN}}
     groups:
       dev-dependencies:
         patterns:
@@ -62,3 +68,4 @@ updates:
       include: "scope"
     automerge: true
     automergeable-types: ["security:patch"]
+
