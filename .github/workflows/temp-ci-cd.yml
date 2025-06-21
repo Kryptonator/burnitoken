@@ -1,0 +1,65 @@
+name: BurniToken CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-lint-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint code
+        run: npm run lint:check
+      - name: Run unit tests
+        run: npm run test:unit
+      - name: Build CSS
+        run: npm run build:css
+      - name: Run Lighthouse CI
+        run: npm run lighthouse:ci
+      - name: Run OnPage SEO Check
+        run: node tools/onpage-seo-check.js
+      - name: Run E2E tests
+        run: npm run test:e2e:install && npm run test:e2e
+
+  notify-on-failure:
+    needs: build-lint-test
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send alert to Discord
+        uses: Ilshidur/action-discord@v2
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          message: |
+            🚨 BurniToken CI/CD Build/Test failed!
+            Commit: ${{ github.sha }}
+            Author: ${{ github.actor }}
+            Workflow: ${{ github.workflow }}
+            See details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      
+      - name: Send E-Mail Alert
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.mail.yahoo.com
+          server_port: 465
+          username: burn.coin@yahoo.com
+          password: ${{ secrets.github }}
+          subject: "[BurniToken CI/CD] Build/Test failed!"
+          to: burn.coin@yahoo.com
+          from: BurniToken CI/CD <burn.coin@yahoo.com>
+          body: |
+            🚨 BurniToken CI/CD Build/Test failed!
+            Commit: ${{ github.sha }}
+            Author: ${{ github.actor }}
+            Workflow: ${{ github.workflow }}
+            See details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
