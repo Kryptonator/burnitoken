@@ -38,6 +38,21 @@
 
 # Redirects
 [[redirects]]
+  from = "/sitemap.xml"
+  to = "/sitemap.xml"
+  status = 200
+  
+[[redirects]]
+  from = "/sitemap-basic.xml"
+  to = "/sitemap-basic.xml"
+  status = 200
+  
+[[redirects]]
+  from = "/sitemapindex.xml"
+  to = "/sitemapindex.xml"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
@@ -49,11 +64,11 @@
   [plugins.inputs]
     output_path = "reports/lighthouse.html"
 
-# JFrog Integration Plugin
-[[plugins]]
-  package = "@netlify/plugin-run-build-command"
-  [plugins.inputs]
-    command = "node tools/jfrog-netlify-integration.js"
+# JFrog Integration (commented out until plugin is available)
+# [[plugins]]
+#   package = "@netlify/plugin-run-build-command"
+#   [plugins.inputs]
+#     command = "node tools/jfrog-netlify-integration.js"
 
 # Headers
 [[headers]]
