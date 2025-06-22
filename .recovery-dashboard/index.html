@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VS Code Recovery Dashboard</title>
+    <style>
+        :root {
+            --bg-color: #1e1e1e;
+            --text-color: #d4d4d4;
+            --header-color: #0078d4;
+            --border-color: #3c3c3c;
+            --success-color: #4ec9b0;
+            --warning-color: #ce9178;
+            --error-color: #f44747;
+            --info-color: #569cd6;
+            --section-bg: #252526;
+            --card-bg: #2d2d2d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        h1, h2, h3 {
+            color: var(--header-color);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .header-icon {
+            font-size: 36px;
+            margin-right: 15px;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .section {
+            background-color: var(--section-bg);
+            border-radius: 6px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .screenshots {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .screenshot-item {
+            background-color: var(--card-bg);
+            border-radius: 4px;
+            padding: 10px;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+
+        .screenshot-item:hover {
+            transform: scale(1.03);
+        }
+
+        .screenshot-img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 3px;
+            margin-bottom: 5px;
+        }
+
+        .status-label {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            margin-right: 5px;
+            font-size: 0.85em;
+        }
+
+        .status-ok {
+            background-color: var(--success-color);
+            color: #000;
+        }
+
+        .status-warning {
+            background-color: var(--warning-color);
+            color: #000;
+        }
+
+        .status-error {
+            background-color: var(--error-color);
+            color: white;
+        }
+
+        .status-info {
+            background-color: var(--info-color);
+            color: #000;
+        }
+
+        .actions {
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: var(--header-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-right: 10px;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #106ebe;
+        }
+
+        .crash-info {
+            font-size: 0.9em;
+            color: var(--error-color);
+            margin-top: 5px;
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .loader {
+            border: 3px solid var(--border-color);
+            border-radius: 50%;
+            border-top: 3px solid var(--header-color);
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-icon">🚀</div>
+        <div>
+            <h1>VS Code Recovery Dashboard</h1>
+            <p>Status und Wiederherstellung für burnitoken.com</p>
+            <div id="crash-status"></div>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <div class="section">
+            <h2>📸 Recovery Screenshots</h2>
+            <p>Letzte verfügbare Bildschirmaufnahmen vor dem Absturz:</p>
+            <div class="screenshots" id="screenshots-container">
+                <div class="card">
+                    <div class="loader"></div> Screenshots werden geladen...
+                </div>
+            </div>
+            <div class="actions">
+                <button onclick="takeNewScreenshot()">Neuen Screenshot erstellen</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📊 Systemstatus</h2>
+            <div class="card">
+                <h3>Dependabot Status</h3>
+                <div id="dependabot-status">
+                    <div class="loader"></div> Status wird geladen...
+                </div>
+            </div>
+            <div class="card">
+                <h3>Extensions</h3>
+                <div id="extensions-status">
+                    <div class="loader"></div> Status wird geladen...
+                </div>
+            </div>
+            <div class="card">
+                <h3>Recovery System</h3>
+                <div id="recovery-status">Aktiv seit <span id="recovery-uptime">0</span> Minuten</div>
+                <div id="screenshot-count"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔄 Recovery Aktionen</h2>
+            <div class="card">
+                <h3>Schnelle Aktionen</h3>
+                <button onclick="openRecoveryCenter()">Recovery Center öffnen</button>
+                <button onclick="toggleAutomatedRecovery()" id="auto-recovery-btn">Automatisierten Recovery-Modus aktivieren</button>
+            </div>
+            <div class="card">
+                <h3>Abhängigkeiten</h3>
+                <button onclick="checkDependencies()">Abhängigkeiten analysieren</button>
+                <button onclick="updateDependencies()">Sicherheitsupdates installieren</button>
+            </div>
+            <div class="card">
+                <h3>Recovery Optionen</h3>
+                <button onclick="startVSCode()">VS Code neu starten</button>
+                <button onclick="resetWorkspace()">Arbeitsbereich zurücksetzen</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dashboard-Funktionen würden hier implementiert
+        function takeNewScreenshot() {
+            // Implementierung
+            alert('Neuer Screenshot wird erstellt...');
+        }
+        
+        function openRecoveryCenter() {
+            // Implementierung
+            alert('Recovery Center wird geöffnet...');
+        }
+        
+        function toggleAutomatedRecovery() {
+            // Implementierung
+            let btn = document.getElementById('auto-recovery-btn');
+            if(btn.textContent.includes('aktivieren')) {
+                btn.textContent = 'Automatisierten Recovery-Modus deaktivieren';
+                alert('Automatischer Recovery-Modus wurde aktiviert!');
+            } else {
+                btn.textContent = 'Automatisierten Recovery-Modus aktivieren';
+                alert('Automatischer Recovery-Modus wurde deaktiviert!');
+            }
+        }
+        
+        function checkDependencies() {
+            // Implementierung
+            alert('Abhängigkeiten werden analysiert...');
+        }
+        
+        function updateDependencies() {
+            // Implementierung
+            alert('Sicherheitsupdates werden installiert...');
+        }
+        
+        function startVSCode() {
+            // Implementierung
+            alert('VS Code wird neu gestartet...');
+        }
+        
+        function resetWorkspace() {
+            // Implementierung
+            if(confirm('Möchten Sie den Arbeitsbereich wirklich zurücksetzen? Alle nicht gespeicherten Änderungen gehen verloren!')) {
+                alert('Arbeitsbereich wird zurückgesetzt...');
+            }
+        }
+        
+        // Anzeigen von Demo-Crash-Informationen
+        document.getElementById('crash-status').innerHTML = `
+            <div class="crash-info">
+                <span class="status-label status-warning">Wiederhergestellt</span>
+                VS Code wurde nach einem Absturz am 22.06.2025, 21:56 Uhr wiederhergestellt.
+            </div>
+        `;
+        
+        // Anzeigen von Demo-Recovery-Informationen
+        document.getElementById('recovery-status').innerHTML = `
+            <div>
+                <span class="status-label status-ok">Aktiv</span>
+                Recovery-System läuft seit 5 Minuten
+            </div>
+        `;
+        
+        document.getElementById('screenshot-count').textContent = '8 Recovery-Screenshots verfügbar';
+        
+        // Anzeigen von Demo-Dependabot-Status
+        document.getElementById('dependabot-status').innerHTML = `
+            <div>
+                <span class="status-label status-error">15 Sicherheitslücken</span>
+                <span class="status-label status-warning">14 veraltete Pakete</span>
+            </div>
+            <div class="list-item">
+                <span>googleapis</span>
+                <span>129.0.0 → 150.0.1</span>
+            </div>
+            <div class="list-item">
+                <span>netlify-cli</span>
+                <span>17.38.1 → 22.1.3</span>
+            </div>
+        `;
+        
+        // Anzeigen von Demo-Extensions-Status
+        document.getElementById('extensions-status').innerHTML = `
+            <div>
+                <span class="status-label status-ok">Alle aktiv</span>
+            </div>
+            <div class="list-item">
+                <span>Tailwind CSS IntelliSense</span>
+                <span>✓</span>
+            </div>
+            <div class="list-item">
+                <span>GitLens</span>
+                <span>✓</span>
+            </div>
+        `;
+        
+        // Demo-Screenshots anzeigen
+        document.getElementById('screenshots-container').innerHTML = `
+            <div class="screenshot-item">
+                <div class="screenshot-img" style="background-color: #2d2d2d; display: flex; justify-content: center; align-items: center;">
+                    <span style="font-size: 24px;">📸</span>
+                </div>
+                <div>vscode_recovery_22.06.2025_21-56-37.png</div>
+                <small>21:56 Uhr, 856 KB</small>
+            </div>
+            <div class="screenshot-item">
+                <div class="screenshot-img" style="background-color: #2d2d2d; display: flex; justify-content: center; align-items: center;">
+                    <span style="font-size: 24px;">📸</span>
+                </div>
+                <div>vscode_recovery_22.06.2025_21-51-32.png</div>
+                <small>21:51 Uhr, 842 KB</small>
+            </div>
+            <div class="screenshot-item">
+                <div class="screenshot-img" style="background-color: #2d2d2d; display: flex; justify-content: center; align-items: center;">
+                    <span style="font-size: 24px;">📸</span>
+                </div>
+                <div>vscode_recovery_22.06.2025_21-46-31.png</div>
+                <small>21:46 Uhr, 851 KB</small>
+            </div>
+        `;
+        
+        // Recovery-Timer simulieren
+        let recoveryTime = 5;
+        setInterval(() => {
+            recoveryTime++;
+            document.getElementById('recovery-uptime').textContent = recoveryTime;
+        }, 60000);
+    </script>
+</body>
+</html>
