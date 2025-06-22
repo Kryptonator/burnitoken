@@ -460,6 +460,298 @@
       },
       "isBackground": true,
       "problemMatcher": []
+    },
+    {
+      "label": "📦 Dependabot Status Check",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/dependabot-status-monitor.js"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 Auto Dependabot Monitor",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/dependabot-status-monitor.js",
+        "--silent",
+        "--background"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "📸 Start Auto Screenshot Recovery (5s)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/auto-screenshot-manager.js"
+      ],
+      "presentation": {
+        "reveal": "never",
+        "close": true,
+        "echo": false,
+        "focus": false,
+        "panel": "dedicated"
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "📸 Take Recovery Screenshot Now",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '📸 Erstelle Recovery-Screenshot...' -ForegroundColor Cyan; node tools/auto-screenshot-manager.js --now; Write-Host '✅ Recovery-Screenshot erstellt!' -ForegroundColor Green"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔍 View Recovery Screenshots",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '🔍 Verfügbare Recovery-Screenshots:' -ForegroundColor Cyan; Get-ChildItem -Path '.recovery-screenshots' -Filter 'vscode_recovery_*.png' | Sort-Object -Property LastWriteTime -Descending | Format-Table Name,@{Name='Time';Expression={$_.LastWriteTime}},@{Name='Size (KB)';Expression={[int]($_.Length / 1KB)}} -AutoSize; Write-Host '💡 Um einen Screenshot zu öffnen, doppelklicken Sie darauf im Explorer.' -ForegroundColor Green"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔒 Sicherheitsrelevante Updates installieren",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/dependency-security-updater.js"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "new",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔍 Analyse der Abhängigkeiten (ohne Update)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/dependency-security-updater.js",
+        "--test"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 VS Code Recovery Center",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '🔍 VS Code Recovery Center wird gestartet...' -ForegroundColor Cyan; Write-Host ''; Write-Host '📸 Recovery-Screenshots:' -ForegroundColor Yellow; Get-ChildItem -Path '.recovery-screenshots' -Filter 'vscode_recovery_*.png' -ErrorAction SilentlyContinue | Sort-Object -Property LastWriteTime -Descending | Select-Object -First 5 | Format-Table Name,@{Name='Zeit';Expression={$_.LastWriteTime.ToString('dd.MM HH:mm')}},@{Name='KB';Expression={[int]($_.Length / 1KB)}} -AutoSize; Write-Host ''; Write-Host '📦 Abhängigkeits-Backups:' -ForegroundColor Yellow; Get-ChildItem -Path '.dependency-backups' -Directory -ErrorAction SilentlyContinue | Sort-Object -Property LastWriteTime -Descending | Select-Object -First 5 | Format-Table Name,@{Name='Zeitpunkt';Expression={$_.LastWriteTime.ToString('dd.MM HH:mm')}} -AutoSize; Write-Host ''; Write-Host '🛠️ Wiederherstellungs-Optionen:' -ForegroundColor Green; Write-Host ' - Task \"📸 Take Recovery Screenshot Now\" für sofortigen Screenshot' -ForegroundColor Cyan; Write-Host ' - Task \"🔒 Sicherheitsrelevante Updates installieren\" für Abhängigkeits-Updates' -ForegroundColor Cyan; Write-Host ' - Task \"🔄 Auto Dependabot Monitor\" für automatisches Monitoring' -ForegroundColor Cyan; Write-Host ''; Write-Host '💡 Tipp: Nutzen Sie den VS Code Explorer, um Screenshots direkt zu öffnen!' -ForegroundColor Magenta;"
+      ],
+      "group": {
+        "kind": "none",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🚨 Automatischer Recovery-Modus",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '🚨 Automatischer Recovery-Modus gestartet...' -ForegroundColor Red; Write-Host 'Screenshots werden alle 2 Minuten erstellt!' -ForegroundColor Yellow; node tools/auto-screenshot-manager.js --interval=2"
+      ],
+      "group": "none",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 Auto Recovery Manager starten",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/auto-recovery-manager.js",
+        "--silent"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "📸 Ultra High-Frequency Screenshots (1s)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/auto-screenshot-manager.js",
+        "--high-freq"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "📸 Standard-Frequency Screenshots (5s)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/auto-screenshot-manager.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "📸 Low-Frequency Screenshots (30s)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/auto-screenshot-manager.js",
+        "--low-freq"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "🗑️ Alte Screenshots aufräumen",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '🔍 Screenshots werden aufgeräumt...' -ForegroundColor Yellow; $count = (Get-ChildItem -Path '.recovery-screenshots' -Filter 'vscode_recovery_*.png' -ErrorAction SilentlyContinue).Count; node tools/auto-screenshot-manager.js --now; Write-Host \"✅ Screenshot-Aufräumen abgeschlossen! Vorher: $count Screenshots\" -ForegroundColor Green"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🚨 Fehler-Report erstellen",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/error-collector.js"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 Auto Fehler-Monitoring",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '🔄 Starte automatisches Fehler-Monitoring...' -ForegroundColor Blue; node tools/error-collector.js > $null; Write-Host '✅ Fehler-Report wurde erstellt: ERROR_REPORT.md' -ForegroundColor Green"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": []
     }
   ]
 }
