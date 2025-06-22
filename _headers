@@ -22,3 +22,19 @@
 
 /*.html
   Cache-Control: public, max-age=3600
+
+# Verbesserte Header für Sitemap-Dateien
+/sitemap.xml
+  Content-Type: application/xml; charset=UTF-8
+  Cache-Control: public, max-age=3600
+  X-Robots-Tag: noarchive
+
+/sitemap-basic.xml
+  Content-Type: application/xml; charset=UTF-8
+  Cache-Control: public, max-age=3600
+  X-Robots-Tag: noarchive
+
+/sitemapindex.xml
+  Content-Type: application/xml; charset=UTF-8
+  Cache-Control: public, max-age=3600
+  X-Robots-Tag: noarchive

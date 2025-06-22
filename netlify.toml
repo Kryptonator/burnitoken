@@ -37,21 +37,26 @@
   compress = true
 
 # Redirects
+# Sitemap-spezifische Regeln mit höherer Priorität
 [[redirects]]
   from = "/sitemap.xml"
   to = "/sitemap.xml"
   status = 200
+  force = true
   
 [[redirects]]
   from = "/sitemap-basic.xml"
   to = "/sitemap-basic.xml"
   status = 200
+  force = true
   
 [[redirects]]
   from = "/sitemapindex.xml"
   to = "/sitemapindex.xml"
   status = 200
+  force = true
 
+# ACHTUNG: Diese Regel gilt erst für alles, was nicht durch die obigen Regeln abgedeckt ist
 [[redirects]]
   from = "/*"
   to = "/index.html"
