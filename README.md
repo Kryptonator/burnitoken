@@ -192,8 +192,18 @@ node ./tools/extension-management/extension-function-validator.js
 
 - **Feedback-Formular:** Auf der Website integriert
 - **Discord:** [Discord Community (Beispiel)](https://discord.gg/YOUR_INVITE)
-- **GitHub Issues:** [burnitoken.com Issues](https://github.com/YOUR_REPO/issues)
+- **GitHub Issues:** [burnitoken.com Issues](https://github.com/Kryptonator/burnitoken/issues)
 - **E-Mail:** kontakt@burnitoken.website
+
+## 🚀 Deployment
+
+Das Projekt unterstützt automatische Deployments über GitHub Actions:
+
+- **GitHub Pages:** Automatisches Deployment bei Push auf den Main/Master Branch
+- **Netlify:** Paralleles Deployment auf Netlify (optional)
+- **CI/CD Pipeline:** Tests, Linting, und Security Scans vor dem Deployment
+
+Detaillierte Informationen zur Konfiguration findest du in der [GitHub Actions Anleitung](./GITHUB-ACTIONS-GUIDE.md).
 
 ## 🛡️ Beispiel: GitHub Actions Workflow (Security)
 
