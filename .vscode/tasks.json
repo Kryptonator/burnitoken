@@ -37,7 +37,7 @@
       "problemMatcher": []
     },
     {
-      "label": "Extension Health Check",
+      "label": "🔧 Extension Health Check",
       "type": "shell",
       "command": "node",
       "args": [
@@ -47,8 +47,9 @@
       "presentation": {
         "echo": true,
         "reveal": "always",
-        "focus": false,
-        "panel": "shared"
+        "focus": true,
+        "panel": "shared",
+        "clear": true
       },
       "problemMatcher": []
     },
@@ -280,6 +281,97 @@
         "runOn": "folderOpen"
       },
       "problemMatcher": []
+    },
+    {
+      "label": "🚨 GSC Indexierungsprüfung",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/gsc-startup-check.js"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared"
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🚨 Fix GSC Indexierung (noindex entfernen)",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '🔍 Suche nach noindex-Tags...' -ForegroundColor Yellow; Get-ChildItem -Path . -Recurse -Include *.html,*.htm | Select-String -Pattern '<meta.*noindex' | ForEach-Object { Write-Host ('⚠️ In ' + $_.Path + ': ' + $_.Line) -ForegroundColor Red }; Write-Host '🛠️ Starte Reparatur...' -ForegroundColor Cyan; Get-ChildItem -Path . -Recurse -Include *.html,*.htm | ForEach-Object { $content = Get-Content $_.FullName -Raw; if ($content -match '<meta.*noindex') { $updated = $content -replace '<meta.*noindex.*?>', '<!-- INDEXIERUNG AKTIVIERT -->'; Set-Content -Path $_.FullName -Value $updated -Encoding UTF8; Write-Host ('✅ Korrigiert: ' + $_.FullName) -ForegroundColor Green } }; Write-Host '✓ Indexierungs-Fix abgeschlossen!' -ForegroundColor Green"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "new",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔧 Extension Health Check (Worker)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "extension-function-validator.js"
+      ],
+      "group": "test",
+      "isBackground": true,
+      "presentation": {
+        "echo": false,
+        "reveal": "never",
+        "focus": false,
+        "panel": "dedicated",
+        "close": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔍 GSC Indexierungsmonitor (Worker)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/gsc-indexing-monitor.js"
+      ],
+      "isBackground": true,
+      "presentation": {
+        "echo": false,
+        "reveal": "never",
+        "focus": false,
+        "panel": "dedicated",
+        "close": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🚨 GSC Indexierungsprüfung (Worker)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/gsc-startup-check.js"
+      ],
+      "isBackground": true,
+      "presentation": {
+        "echo": false,
+        "reveal": "never",
+        "focus": false,
+        "panel": "dedicated",
+        "close": true
+      },
+      "problemMatcher": []
     }
   ]
 }
+
