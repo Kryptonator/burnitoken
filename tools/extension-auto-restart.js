@@ -14,6 +14,28 @@ const { execSync, spawn } = require('child_process');
 // Abhängigkeiten
 const statusDashboard = require('./extension-status-dashboard');
 
+// Alternative implementierung falls statusDashboard.getStartupStatus nicht vorhanden ist
+if (!statusDashboard.getStartupStatus) {
+  statusDashboard.getStartupStatus = async function() {
+    // Fallback-Implementierung
+    try {
+      return statusDashboard.checkStatus ? await statusDashboard.checkStatus() : {
+        services: [
+          { name: 'session-saver', status: 'unknown' },
+          { name: 'ai-conversation-bridge', status: 'unknown' },
+          { name: 'gsc-integration', status: 'unknown' }
+        ]
+      };
+    } catch (error) {
+      console.error('Fehler beim Abrufen des Status:', error);
+      return {
+        services: [],
+        error: error.message
+      };
+    }
+  };
+}
+
 // Konfiguration
 const LOG_FILE = path.join(__dirname, 'extension-auto-restart.log');
 
