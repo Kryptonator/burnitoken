@@ -371,6 +371,40 @@
         "close": true
       },
       "problemMatcher": []
+    },
+    {
+      "label": "🔍 GSC Indexierungs-Watcher starten",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/gsc-indexing-watch.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "📊 GSC Indexierungsbericht erstellen",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/gsc-indexing-report.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
     }
   ]
 }

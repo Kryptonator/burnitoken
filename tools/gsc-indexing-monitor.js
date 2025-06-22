@@ -6,9 +6,8 @@
 const fs = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
-const chalk = require('chalk'); // Falls nicht installiert: npm install chalk
 
-console.log(chalk.blue('🔍 Google Search Console - Indexierungsmonitor startet'));
+console.log('🔍 Google Search Console - Indexierungsmonitor startet');
 
 // Konfiguration
 const websiteUrl = 'https://burnitoken.website';
@@ -16,8 +15,7 @@ const htmlFiles = [];
 const indexingIssues = [];
 
 // HTML-Dateien im Projekt finden
-function scanForHtmlFiles(dir) {
-  try {
+function scanForHtmlFiles(dir) {  try {
     const files = fs.readdirSync(dir);
     
     files.forEach(file => {
@@ -30,13 +28,13 @@ function scanForHtmlFiles(dir) {
       }
     });
   } catch (err) {
-    console.error(chalk.red(`Fehler beim Scannen von ${dir}:`), err);
+    console.error(`Fehler beim Scannen von ${dir}:`, err);
   }
 }
 
 // Nach Indexierungsproblemen suchen
 function checkForIndexingIssues() {
-  console.log(chalk.yellow(`Überprüfe ${htmlFiles.length} HTML-Dateien auf Indexierungsprobleme...`));
+  console.log(`Überprüfe ${htmlFiles.length} HTML-Dateien auf Indexierungsprobleme...`);
   
   htmlFiles.forEach(file => {
     try {
@@ -60,7 +58,7 @@ function checkForIndexingIssues() {
         });
       }
     } catch (err) {
-      console.error(chalk.red(`Fehler beim Überprüfen von ${file}:`), err);
+      console.error(`Fehler beim Überprüfen von ${file}:`, err);
     }
   });
 }
@@ -68,14 +66,14 @@ function checkForIndexingIssues() {
 // Indexierungsprobleme melden und beheben
 function fixIndexingIssues() {
   if (indexingIssues.length === 0) {
-    console.log(chalk.green('✓ Keine Indexierungsprobleme gefunden!'));
+    console.log('✓ Keine Indexierungsprobleme gefunden!');
     return;
   }
   
-  console.log(chalk.red(`⚠️  ${indexingIssues.length} Indexierungsprobleme gefunden:`));
+  console.log(`⚠️  ${indexingIssues.length} Indexierungsprobleme gefunden:`);
   
   indexingIssues.forEach((issue, index) => {
-    console.log(chalk.yellow(`\nProblem ${index+1}:`));
+    console.log(`\nProblem ${index+1}:`);
     console.log(`Datei: ${issue.file}`);
     console.log(`Typ: ${issue.type}`);
     console.log(`Problematischer Inhalt: ${issue.content}`);
@@ -91,34 +89,34 @@ function fixIndexingIssues() {
       }
       
       fs.writeFileSync(issue.file, content, 'utf8');
-      console.log(chalk.green('✓ Problem automatisch behoben!'));
+      console.log('✓ Problem automatisch behoben!');
     } catch (err) {
-      console.error(chalk.red('Fehler bei der automatischen Behebung:'), err);
+      console.error('Fehler bei der automatischen Behebung:', err);
     }
   });
 }
 
 // Hauptfunktion
 async function main() {
-  console.log(chalk.blue(`🌐 Überprüfe Website: ${websiteUrl}`));
+  console.log(`🌐 Überprüfe Website: ${websiteUrl}`);
   
   // Arbeitsverzeichnis scannen
   scanForHtmlFiles('.');
-  console.log(chalk.blue(`🗂️ ${htmlFiles.length} HTML-Dateien gefunden`));
+  console.log(`🗂️ ${htmlFiles.length} HTML-Dateien gefunden`);
   
   // Nach Problemen suchen und beheben
   checkForIndexingIssues();
   fixIndexingIssues();
   
-  console.log(chalk.green('\n✅ GSC Indexierungsmonitor abgeschlossen'));
+  console.log('\n✅ GSC Indexierungsmonitor abgeschlossen');
   
   // Status
   if (indexingIssues.length > 0) {
-    console.log(chalk.yellow(`\n⚠️ Es wurden ${indexingIssues.length} Probleme gefunden und behoben.`));
-    console.log(chalk.yellow('Bitte prüfen Sie die Google Search Console, um den Indexierungsstatus zu überwachen.'));
-    console.log(chalk.blue('https://search.google.com/search-console'));
+    console.log(`\n⚠️ Es wurden ${indexingIssues.length} Probleme gefunden und behoben.`);
+    console.log('Bitte prüfen Sie die Google Search Console, um den Indexierungsstatus zu überwachen.');
+    console.log('https://search.google.com/search-console');
   } else {
-    console.log(chalk.green('\n🎉 Alle Dateien sind für die Indexierung optimiert!'));
+    console.log('\n🎉 Alle Dateien sind für die Indexierung optimiert!');
   }
 }
 
