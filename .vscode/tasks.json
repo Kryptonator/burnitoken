@@ -20,6 +20,23 @@
       "problemMatcher": []
     },
     {
+      "label": "🔄 Automatic Extension Recovery",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/extension-auto-restart.js",
+        "--on-startup"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "Extension Health Check",
       "type": "shell",
       "command": "node",
@@ -213,6 +230,55 @@
         "clear": true
       },
       "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "📊 Extension Status Dashboard",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/extension-status-dashboard.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "🔍 Unified Status Check",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/unified-status-manager.js"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 Auto Start Unified Manager",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/unified-status-manager.js",
+        "--silent"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
       "problemMatcher": []
     }
   ]

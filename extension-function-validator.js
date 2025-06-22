@@ -210,7 +210,7 @@ checkGSCIntegration();
  * Prüft auf Konflikte und redundante Extensions
  */
 function checkForExtensionConflicts(installedExtensions) {
-  // Prüfe auf bekannte Konflikte und redundante Extensions
+  // Prüfe auf bekannte Konflikte und redundante
   const formatters = installedExtensions.filter(ext => 
     ext.includes('prettier') || 
     ext.includes('formatter') || 
@@ -482,6 +482,45 @@ function checkAutoStartTasks() {
       console.warn('⚠️ Automatic Extension Check hat keinen automatischen Start');
       extensionStatus.recommendations.push('Extension Check Auto-Start fehlt');
     }
+  }
+}
+
+/**
+ * Prüft, ob die AI-Status-Tools vorhanden und korrekt konfiguriert sind
+ */
+function checkAIStatusTools() {
+  // Prüfe, ob AI-Status-Tools existieren
+  const statusToolsExist = fileExists('tools/ai-status.js') && 
+                          fileExists('tools/ai-services-manager.js');
+  
+  if (statusToolsExist) {
+    log('✅ AI-Status-Tools vorhanden');
+    
+    // Prüfe, ob entsprechende Tasks existieren
+    if (fileExists(path.join('.vscode', 'tasks.json'))) {
+      const tasksConfig = readJsonFile(path.join('.vscode', 'tasks.json'));
+      
+      if (tasksConfig && Array.isArray(tasksConfig.tasks)) {
+        const hasStatusTask = tasksConfig.tasks.some(task => 
+          task.label && task.label.includes('Show AI Status'));
+        
+        const hasRestartTask = tasksConfig.tasks.some(task => 
+          task.label && task.label.includes('Restart All AI Services'));
+        
+        if (!hasStatusTask) {
+          log('⚠️ Kein Task für AI-Status gefunden');
+          extensionStatus.recommendations.push('AI Status Task fehlt');
+        }
+        
+        if (!hasRestartTask) {
+          log('⚠️ Kein Task für AI-Service-Neustarts gefunden');
+          extensionStatus.recommendations.push('AI Service Restart Task fehlt');
+        }
+      }
+    }
+  } else {
+    log('⚠️ AI-Status-Tools fehlen oder sind unvollständig');
+    extensionStatus.recommendations.push('AI-Status-Tools fehlen oder sind unvollständig');
   }
 }
 
