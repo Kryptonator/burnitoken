@@ -1,0 +1,119 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "🚀 Start Parallel Worker System",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/master-worker-system.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔍 Start Worker Monitor",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/worker-monitor.js"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "⚡ Execute Tasks Parallel",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/parallel-task-manager.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "📊 Generate Worker Status Report",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/master-worker-system.js",
+        "--report"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "📊 Generate Parallelization Report",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/parallel-task-manager.js",
+        "--report"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 Restart Worker System",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '🔄 Restarting Worker System...' -ForegroundColor Yellow; Get-Process -Name node -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -like '*worker*' } | ForEach-Object { Stop-Process -Id $_.Id -Force; Write-Host \"Stopped process $($_.Id)\" -ForegroundColor Cyan }; Start-Sleep -Seconds 1; node tools/worker-monitor.js; Start-Sleep -Seconds 1; node tools/master-worker-system.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "build",
+      "problemMatcher": []
+    }
+  ]
+}
