@@ -8,7 +8,7 @@
       "args": [
         "-NoProfile",
         "-Command",
-        "Write-Host '🔍 Performing automatic extension check...' -ForegroundColor Blue; node extension-function-validator.js > $null; Write-Host '✅ Extensions ready!' -ForegroundColor Green"
+        "Write-Host '🔍 Performing automatic extension check...' -ForegroundColor Blue; if (Test-Path 'extension-function-validator.js') { node extension-function-validator.js > $null }; Write-Host '✅ Extensions ready!' -ForegroundColor Green"
       ],
       "presentation": {
         "reveal": "silent",
@@ -105,6 +105,81 @@
         "Web Accessibility extension active - check for WCAG compliance indicators"
       ],
       "group": "test"
+    },
+    {
+      "label": "🔄 Start Session-Saver",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/session-saver.js"
+      ],
+      "presentation": {
+        "reveal": "never",
+        "echo": false,
+        "focus": false,
+        "panel": "dedicated",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "🧠 Start AI Conversation Bridge",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/start-ai-bridge.js"
+      ],
+      "presentation": {
+        "reveal": "never",
+        "echo": false,
+        "focus": false,
+        "panel": "dedicated",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "🔍 Show AI Status",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/ai-status.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 Restart All AI Services",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/ai-services-manager.js",
+        "restart"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
     }
   ]
 }

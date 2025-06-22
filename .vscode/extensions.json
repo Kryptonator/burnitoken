@@ -36,7 +36,11 @@
     "ms-edgedevtools.vscode-edge-devtools",
     "ms-vscode.vscode-json",
     "redhat.vscode-yaml",
-    "ms-vscode.powershell"
+    "ms-vscode.powershell",
+    "dbaeumer.vscode-eslint",
+    "austenc.tailwind-docs",
+    "mhutchie.git-graph",
+    "ms-vscode.vscode-copilot-vision"
   ],
   "unwantedRecommendations": [
     "ms-vscode.vscode-typescript",
