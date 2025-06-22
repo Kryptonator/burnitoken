@@ -82,6 +82,10 @@ audit.json
 lighthouse-*.json
 axe-*.json
 *.log
+gsc-integration.log
+gsc-integration-status.json
+tools/gsc-integration.log
+tools/gsc-integration-status.json
 
 # Redundante Backups und alte Versionen
 *-backup-*.html
@@ -96,3 +100,4 @@ tools/gsc-service-account.json
 *-service-account.json
 *-api-key.json
 credentials.json
+tools/toolsgsc-service-account1.json

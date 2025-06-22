@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * AI Status Checker
+ * AI Status Checker (Vereinfacht)
  * Zeigt Statusinformationen über die aktiven KI-Integrationssysteme an
  */
 
@@ -9,9 +9,6 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const { execSync } = require('child_process');
-
-// Debug-Option über Befehlszeilenparameter
-const DEBUG = process.argv.includes('--debug');
 
 // Konfiguration
 const CONFIG = {
@@ -31,13 +28,6 @@ const CONFIG = {
   ]
 };
 
-// Hilfsfunktion für Debug-Logging
-function debugLog(message) {
-  if (DEBUG) {
-    console.log(`[DEBUG] ${message}`);
-  }
-}
-
 /**
  * Überprüft, ob eine Datei existiert
  */
@@ -45,8 +35,53 @@ function fileExists(filePath) {
   try {
     return fs.existsSync(filePath);
   } catch (err) {
-    debugLog(`Fehler beim Prüfen, ob Datei existiert (${filePath}): ${err.message}`);
+    console.log(`Fehler beim Prüfen von Datei ${filePath}: ${err.message}`);
     return false;
+  }
+}
+
+/**
+ * Vereinfachte Prozess-Erkennung
+ */
+function checkProcesses() {
+  try {
+    console.log("\n💻 Prozessstatus:");
+    
+    if (process.platform === 'win32') {
+      // Unter Windows können wir nur eine einfache Ausgabe der laufenden Node-Prozesse machen
+      console.log("Node-Prozesse auf Windows (manuell prüfen):");
+      try {
+        const output = execSync('powershell -Command "Get-Process node -ErrorAction SilentlyContinue | Select-Object Id,CPU,PM,Path"', {
+          encoding: 'utf8'
+        });
+        console.log(output);
+      } catch (err) {
+        console.log("Keine Node-Prozesse aktiv oder keine Berechtigung für Prozessliste");
+      }
+    } else {
+      // Unix-basierte Systeme
+      try {
+        console.log("AI Bridge Prozesse:");
+        const bridgeOutput = execSync('ps -ef | grep -i "ai-conversation-bridge\|start-ai-bridge" | grep -v grep', {
+          encoding: 'utf8'
+        });
+        console.log(bridgeOutput || "Keine AI Bridge-Prozesse gefunden");
+      } catch (err) {
+        console.log("Keine AI Bridge-Prozesse gefunden");
+      }
+      
+      try {
+        console.log("\nSession-Saver Prozesse:");
+        const saverOutput = execSync('ps -ef | grep -i "session-saver" | grep -v grep', {
+          encoding: 'utf8'
+        });
+        console.log(saverOutput || "Keine Session-Saver-Prozesse gefunden");
+      } catch (err) {
+        console.log("Keine Session-Saver-Prozesse gefunden");
+      }
+    }
+  } catch (err) {
+    console.log("Fehler bei der Prozessprüfung");
   }
 }
 
@@ -55,18 +90,13 @@ function fileExists(filePath) {
  */
 function getActiveModel() {
   try {
-    debugLog(`Suche aktive Session in ${CONFIG.conversationDir}`);
-    
     // Prüfe, ob die AI Bridge aktiv ist
     const sessionFile = path.join(CONFIG.conversationDir, 'active-session.json');
     
     if (fileExists(sessionFile)) {
-      debugLog(`Session-Datei gefunden: ${sessionFile}`);
       try {
         const sessionData = JSON.parse(fs.readFileSync(sessionFile, 'utf8'));
         const sessionId = sessionData.sessionId;
-        
-        debugLog(`Aktive Session-ID: ${sessionId}`);
         
         // Prüfe die Modell-spezifischen Dateien für das neueste Update
         let latestModel = null;
@@ -80,66 +110,30 @@ function getActiveModel() {
           
           if (fileExists(modelFile)) {
             try {
-              debugLog(`Modell-Datei gefunden für ${model.id}: ${modelFile}`);
               const modelData = JSON.parse(fs.readFileSync(modelFile, 'utf8'));
               const timestamp = new Date(modelData.timestamp).getTime();
-              
-              debugLog(`${model.id} Zeitstempel: ${modelData.timestamp}`);
               
               if (timestamp > latestTimestamp) {
                 latestTimestamp = timestamp;
                 latestModel = model;
-                debugLog(`Neues letztes aktives Modell: ${model.id}`);
               }
-            } catch (err) {
-              // Ignoriere Parsing-Fehler für diese Datei
-              debugLog(`Fehler beim Lesen von Modell-Datei ${model.id}: ${err.message}`);
+            } catch (error) {
+              console.log(`Fehler beim Lesen von ${modelFile}`);
             }
-          } else {
-            debugLog(`Keine Modelldatei für ${model.id}`);
           }
         }
         
-        if (latestModel) {
-          return latestModel;
-        } else {
-          debugLog('Kein aktives Modell in den Dateien gefunden, verwende Standard');
-        }
-      } catch (err) {
-        debugLog(`Fehler beim Lesen der Session-Datei: ${err.message}`);
+        if (latestModel) return latestModel;
+      } catch (error) {
+        console.log(`Fehler beim Lesen von ${sessionFile}`);
       }
-    } else {
-      debugLog('Keine aktive Session-Datei gefunden');
     }
   } catch (err) {
-    debugLog(`Fehler bei der Modell-Erkennung: ${err.message}`);
+    console.log('Fehler bei der Modell-Erkennung');
   }
   
-  return CONFIG.supportedModels[0]; // Default zu Copilot
-}
-
-/**
- * Prüft, ob ein Prozess läuft
- */
-function isProcessRunning(scriptName) {
-  try {
-    let command = '';
-    
-    // Unterschiedliche Befehle je nach Betriebssystem
-    if (process.platform === 'win32') {
-      // In Windows suchen wir nach dem Prozess anhand des Skriptnamens
-      command = `powershell -Command "Get-WmiObject Win32_Process | Where-Object { $_.CommandLine -like '*${scriptName}*' -and $_.Name -like '*node*' } | ForEach-Object { $_.ProcessId }"`;
-    } else {
-      // In Unix/Linux verwenden wir pgrep mit dem vollständigen Pfad
-      command = `pgrep -f "${scriptName}"`;
-    }
-    
-    const output = execSync(command, { encoding: 'utf8' }).trim();
-    return output.length > 0;
-  } catch (err) {
-    console.log(`DEBUG: Prozessprüfung für ${scriptName} fehlgeschlagen: ${err.message}`);
-    return false;
-  }
+  // Default zu Copilot, falls kein anderes Modell erkannt wurde
+  return CONFIG.supportedModels[0];
 }
 
 /**
@@ -149,9 +143,6 @@ function showAIStatus() {
   console.log('🧠 AI Integration Status');
   console.log('=======================');
   
-  // Prüfe Verzeichnisse
-  debugLog(`Prüfe Verzeichnisse: ${CONFIG.conversationDir} und ${CONFIG.backupDir}`);
-  
   // Prüfe, ob die Verzeichnisse existieren
   const aiDirExists = fileExists(CONFIG.conversationDir);
   const backupDirExists = fileExists(CONFIG.backupDir);
@@ -160,31 +151,20 @@ function showAIStatus() {
   console.log(`Session Backups Verzeichnis: ${backupDirExists ? '✅ Vorhanden' : '❌ Fehlt'}`);
   
   // Prüfe laufende Prozesse
-  debugLog('Prüfe laufende Prozesse');
-  
-  // Prüfe, ob die AI Bridge und Session-Saver aktiv sind
-  const aiBridgeRunning = isProcessRunning('ai-conversation-bridge.js');
-  const aiBridgeStarterRunning = isProcessRunning('start-ai-bridge.js');
-  const sessionSaverRunning = isProcessRunning('session-saver.js');
-  
-  const aiBridgeStatus = aiBridgeRunning || aiBridgeStarterRunning;
-  
-  console.log(`AI Conversation Bridge: ${aiBridgeStatus ? '✅ Aktiv' : '❌ Inaktiv'}`);
-  console.log(`Session-Saver: ${sessionSaverRunning ? '✅ Aktiv' : '❌ Inaktiv'}`);
+  checkProcesses();
   
   // Zeige das aktuell verwendete Modell
-  debugLog('Ermittle aktives KI-Modell');
   const activeModel = getActiveModel();
   console.log(`\nAktives AI-Modell: ${activeModel.emoji} ${activeModel.name}`);
   
   // Überprüfe die Verfügbarkeit der KI-Dateien
-  debugLog('Prüfe KI-Dateien');
   const aiFiles = [
     'tools/ai-conversation-bridge.js',
     'tools/start-ai-bridge.js',
     'tools/model-switch.js',
     'tools/session-saver.js',
-    'tools/recover-session.js'
+    'tools/recover-session.js',
+    'tools/ai-services-manager.js'
   ];
   
   console.log('\nKI-Dateien:');
@@ -199,23 +179,30 @@ function showAIStatus() {
     console.log(`${model.emoji} ${model.name}${isActive ? ' (Aktiv)' : ''}`);
   }
   
+  // Zeige Verzeichnisinhalte
+  if (aiDirExists) {
+    try {
+      console.log('\nInhalt des AI Conversations Verzeichnisses:');
+      const files = fs.readdirSync(CONFIG.conversationDir);
+      if (files.length === 0) {
+        console.log('(leer)');
+      } else {
+        files.forEach(file => {
+          const stats = fs.statSync(path.join(CONFIG.conversationDir, file));
+          console.log(`- ${file} (${stats.size} Bytes, ${stats.mtime.toLocaleString()})`);
+        });
+      }
+    } catch (err) {
+      console.log(`Fehler beim Lesen des Verzeichnisses: ${err.message}`);
+    }
+  }
+  
   console.log('\n💡 TIP: Um das Modell zu wechseln, führe aus:');
   console.log('node tools/model-switch.js --model=<modellname>');
   console.log('Unterstützte Modelle: copilot, chatgpt, claude, gemini, llama');
   
-  // Debug-Hinweis
-  if (!DEBUG) {
-    console.log('\nℹ️ Für detailliertere Informationen: node tools/ai-status.js --debug');
-  }
-}
-
-// Verarbeite Befehlszeilenargumente
-if (process.argv.includes('--help') || process.argv.includes('-h')) {
-  console.log('AI Status Checker - Zeigt den Status der KI-Integration an');
-  console.log('\nOptionen:');
-  console.log('  --debug    Zeigt detaillierte Debug-Informationen an');
-  console.log('  --help, -h Zeigt diese Hilfeinformationen an');
-  process.exit(0);
+  console.log('\n💡 TIP: Um alle KI-Services zu starten oder neu zu starten:');
+  console.log('node tools/ai-services-manager.js restart');
 }
 
 // Führe die Hauptfunktion aus
@@ -223,8 +210,4 @@ try {
   showAIStatus();
 } catch (error) {
   console.error(`❌ Unerwarteter Fehler: ${error.message}`);
-  if (DEBUG) {
-    console.error(error.stack);
-  }
-  process.exit(1);
 }

@@ -1,5 +1,6 @@
 // Schneller GSC API-Test
 // Führt einen grundlegenden Test mit Fehlerberichterstattung durch
+// Unterstützt --test Flag für automatisierte Tests
 
 const { google } = require('googleapis');
 const fs = require('fs');
@@ -8,6 +9,9 @@ const path = require('path');
 // Absolute Pfadangabe zur Service-Account-Datei
 const SERVICE_ACCOUNT_FILE = path.resolve(__dirname, 'gsc-service-account.json');
 const GSC_PROPERTY = 'sc-domain:burnitoken.website';
+
+// Check for --test flag for automated testing
+const isTestMode = process.argv.includes('--test');
 
 async function testGSCAPI() {
   console.log('====================================================');
@@ -83,20 +87,34 @@ async function testGSCAPI() {
           rowLimit: 7,
         },
       });
-      
-      if (performanceResponse.data && performanceResponse.data.rows) {
+        if (performanceResponse.data && performanceResponse.data.rows) {
         console.log(`✅ ${performanceResponse.data.rows.length} Datenzeilen erhalten`);
         console.log('====================================================');
         console.log('🏆 GSC API-TEST ERFOLGREICH!');
         console.log('====================================================');
+        
+        if (isTestMode) {
+          console.log('success'); // Spezieller Output für automated testing
+          process.exit(0);
+        }
       } else {
         console.log('⚠️ Keine Datenzeilen erhalten (möglicherweise normal für neue Domains)');
         console.log('✅ API-Anfrage erfolgreich, aber keine Daten vorhanden');
+        
+        if (isTestMode) {
+          console.log('success'); // Counts as success when no data but API works
+          process.exit(0);
+        }
       }
     } catch (siteError) {
       console.error(`❌ Site-Zugriff fehlgeschlagen: ${siteError.message}`);
       if (siteError.errors) {
         console.error('Details:', JSON.stringify(siteError.errors, null, 2));
+      }
+      
+      if (isTestMode) {
+        console.error('failed: site-access-error');
+        process.exit(1);
       }
     }
   } catch (apiError) {
@@ -104,10 +122,16 @@ async function testGSCAPI() {
     if (apiError.errors) {
       console.error('Details:', JSON.stringify(apiError.errors, null, 2));
     }
+    
+    if (isTestMode) {
+      console.error('failed: api-error');
+      process.exit(1);
+    }
   }
 }
 
 // Test ausführen
+testGSCAPI();
 testGSCAPI().catch(error => {
   console.error('❌ Unbehandelter Fehler im Test:', error.message);
 });
