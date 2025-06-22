@@ -1,6 +1,7 @@
 {
   "name": "burni-website",
-  "version": "1.0.0",  "scripts": {
+  "version": "1.0.0",
+  "scripts": {
     "dev": "cross-env NODE_ENV=development tailwindcss -i ./assets/css/critical.css -o ./assets/css/styles.min.css --watch",
     "build:css": "cross-env NODE_ENV=production tailwindcss -i ./assets/css/critical.css -o ./assets/css/styles.min.css --minify",
     "serve": "http-server . -p 8080 --config http-server.config.json",
@@ -100,6 +101,7 @@
     "@netlify/functions": "^2.5.1",
     "axe-playwright": "^2.1.0",
     "canvas": "^3.1.0",
+    "chalk": "^5.4.1",
     "chrome-launcher": "^1.2.0",
     "googleapis": "^129.0.0",
     "lighthouse": "^12.6.1",
