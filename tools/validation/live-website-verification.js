@@ -2,17 +2,33 @@
  * 🌐 LIVE WEBSITE FINAL VERIFICATION
  * Comprehensive check of burnitoken.com after fixes
  * Verifies graphics, layout, and functionality
+ * Now with GSC API Integration
  */
 
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
+const { google } = require('googleapis');
+
+// GSC API Integrationskonstanten
+const SERVICE_ACCOUNT_FILE = path.resolve(__dirname, '../../tools/gsc-service-account.json');
+const GSC_PROPERTY = 'sc-domain:burnitoken.website';
 
 class LiveWebsiteVerification {
   constructor() {
     this.workspaceRoot = process.cwd();
     this.websiteUrl = 'https://burnitoken.website';
     this.verificationResults = [];
+    
+    // GSC Auth Client initialisieren, falls Service Account verfügbar
+    if (fs.existsSync(SERVICE_ACCOUNT_FILE)) {
+      this.gscAuthClient = new google.auth.GoogleAuth({
+        keyFile: SERVICE_ACCOUNT_FILE,
+        scopes: ['https://www.googleapis.com/auth/webmasters.readonly'],
+      });
+    } else {
+      this.gscAuthClient = null;
+    }
   }
 
   async runFinalVerification() {
@@ -39,6 +55,9 @@ class LiveWebsiteVerification {
 
     // Performance-Check
     await this.checkPerformance();
+    
+    // Google Search Console Status prüfen
+    await this.checkGoogleSearchConsoleStatus();
 
     // Zusammenfassung
     await this.generateVerificationReport();
@@ -325,6 +344,145 @@ class LiveWebsiteVerification {
     console.log(
       `📊 Performance Score: ${performanceScore}/${performanceChecks.length} optimizations active`,
     );
+  }
+
+  async checkGoogleSearchConsoleStatus() {
+    console.log('🔍 CHECKING GOOGLE SEARCH CONSOLE STATUS...');
+    console.log('=========================================');
+
+    if (!fs.existsSync(SERVICE_ACCOUNT_FILE)) {
+      console.log(`⚠️ GSC Service Account Datei nicht gefunden: ${SERVICE_ACCOUNT_FILE}`);
+      this.verificationResults.push({
+        category: 'Google Search Console',
+        status: 'Not Available',
+        message: 'Service Account Datei nicht gefunden',
+        details: `Datei nicht gefunden: ${SERVICE_ACCOUNT_FILE}`
+      });
+      return;
+    }
+    
+    // Überprüfe die Gültigkeit der Service-Account-Datei
+    try {
+      const serviceAccountContent = JSON.parse(fs.readFileSync(SERVICE_ACCOUNT_FILE, 'utf8'));
+      if (!serviceAccountContent.client_email || !serviceAccountContent.private_key) {
+        console.log('⚠️ GSC Service Account Datei ist ungültig oder beschädigt.');
+        this.verificationResults.push({
+          category: 'Google Search Console',
+          status: 'Error',
+          message: 'Service Account Datei ist ungültig',
+          details: 'Die Datei enthält nicht die erforderlichen Informationen'
+        });
+        return;
+      }
+    } catch (err) {
+      console.log('⚠️ GSC Service Account konnte nicht gelesen werden:', err.message);
+      this.verificationResults.push({
+        category: 'Google Search Console',
+        status: 'Error',
+        message: 'Service Account Datei konnte nicht gelesen werden',
+        details: err.message
+      });
+      return;
+    }
+    
+    if (!this.gscAuthClient) {
+      console.log('⚠️ Google Search Console Auth Client konnte nicht initialisiert werden');
+      this.verificationResults.push({
+        category: 'Google Search Console',
+        status: 'Not Available',
+        message: 'Auth Client nicht initialisiert',
+        details: 'Die GSC API-Integration wurde übersprungen'
+      });
+      return;
+    }
+
+    try {
+      // Auth Client initialisieren und Search Console API instanziieren
+      const authClient = await this.gscAuthClient.getClient();
+      const searchconsole = google.searchconsole({ version: 'v1', auth: authClient });
+
+      // 1. Überprüfe die Verfügbarkeit der GSC API für die Domain
+      console.log('🔄 Überprüfe GSC API-Zugriff...');
+      const siteVerificationResult = await searchconsole.sites.get({
+        siteUrl: GSC_PROPERTY
+      });
+
+      if (siteVerificationResult.data) {
+        console.log(`✅ GSC API-Zugriff erfolgreich für ${GSC_PROPERTY}`);
+        
+        // Erfolgreiches Resultat speichern
+        this.verificationResults.push({
+          category: 'Google Search Console',
+          status: 'Connected',
+          message: `Verbindung mit ${GSC_PROPERTY} hergestellt`,
+          details: `Permission Level: ${siteVerificationResult.data.permissionLevel || 'Unknown'}`
+        });
+        
+        // 2. Aktuelle GSC-Performance-Daten abfragen (letzte 7 Tage)
+        const endDate = new Date();
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - 7);
+        
+        // Formatieren als YYYY-MM-DD
+        const startDateStr = startDate.toISOString().split('T')[0];
+        const endDateStr = endDate.toISOString().split('T')[0];
+        
+        console.log(`🔄 Rufe Performance-Daten für ${startDateStr} bis ${endDateStr} ab...`);
+        
+        const performanceResponse = await searchconsole.searchanalytics.query({
+          siteUrl: GSC_PROPERTY,
+          requestBody: {
+            startDate: startDateStr,
+            endDate: endDateStr,
+            dimensions: ['date'],
+            rowLimit: 7, // Tägliche Daten für die letzten 7 Tage
+          },
+        });
+        
+        if (performanceResponse.data && performanceResponse.data.rows && performanceResponse.data.rows.length > 0) {
+          // Gesamtzahlen berechnen
+          const totalClicks = performanceResponse.data.rows.reduce((sum, row) => sum + row.clicks, 0);
+          const totalImpressions = performanceResponse.data.rows.reduce((sum, row) => sum + row.impressions, 0);
+          const avgCtr = ((totalClicks / totalImpressions) * 100).toFixed(2);
+          const avgPosition = performanceResponse.data.rows.reduce((sum, row) => sum + row.position, 0) / 
+                              performanceResponse.data.rows.length;
+          
+          console.log(`✅ Performance-Daten: ${totalClicks} Klicks, ${totalImpressions} Impressions`);
+          
+          // GSC Performance-Daten speichern
+          this.verificationResults.push({
+            category: 'GSC Performance (7 days)',
+            status: 'Data Available',
+            message: `${totalClicks} Klicks, ${totalImpressions} Impressions`,
+            details: `CTR: ${avgCtr}%, Avg Position: ${avgPosition.toFixed(1)}`
+          });
+        } else {
+          console.log('⚠️ Keine Performance-Daten für die letzten 7 Tage gefunden');
+          this.verificationResults.push({
+            category: 'GSC Performance',
+            status: 'No Data',
+            message: 'Keine Performance-Daten für die letzten 7 Tage gefunden',
+            details: 'Möglicherweise ist die Website noch zu neu in der GSC'
+          });
+        }
+      } else {
+        console.log('⚠️ GSC-Verification Problem - Keine Daten erhalten');
+        this.verificationResults.push({
+          category: 'Google Search Console',
+          status: 'Error',
+          message: 'Konnte keine GSC-Daten abrufen',
+          details: 'Bitte prüfen Sie die GSC-Berechtigungen und -Konfiguration'
+        });
+      }
+    } catch (error) {
+      console.error('❌ GSC API-Fehler:', error.message);
+      this.verificationResults.push({
+        category: 'Google Search Console',
+        status: 'Error',
+        message: 'GSC API-Fehler aufgetreten',
+        details: error.message
+      });
+    }
   }
 
   async generateVerificationReport() {
