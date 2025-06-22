@@ -405,6 +405,61 @@
       },
       "group": "test",
       "problemMatcher": []
+    },
+    {
+      "label": "📊 Unified Status Report erstellen",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/unified-status-report.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 Auto-Recovery nach Absturz",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/auto-recovery.js"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "🌐 GSC Integration starten",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/gsc-integration.js",
+        "--watch"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "isBackground": true,
+      "problemMatcher": []
     }
   ]
 }
