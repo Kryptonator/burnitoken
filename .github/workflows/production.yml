@@ -2,7 +2,7 @@ name: 🚀 Production Deployment
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, temp-merge-master ]
   workflow_dispatch:
 
 env:
@@ -13,7 +13,8 @@ jobs:
     name: 🏗️ Build & Test
     runs-on: ubuntu-latest
     
-    steps:      - name: 📥 Checkout code
+    steps:
+      - name: 📥 Checkout code
         uses: actions/checkout@v3
         
       - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
@@ -30,7 +31,8 @@ jobs:
         
       - name: 🔍 Run linting
         run: npm run lint:check || true
-          - name: 🏗️ Build for production
+        
+      - name: 🏗️ Build for production
         run: npm run build:css && echo Build erfolgreich abgeschlossen!
         
       - name: 🔒 Security audit

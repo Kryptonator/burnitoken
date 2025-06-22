@@ -75,6 +75,7 @@ updates:
           - "patch"
     # Automatisches Mergen für Sicherheits-Updates und kleinere Patches
     automerge: true
+    ignore-workflow-files: false
     automergeable-types: 
       - "security:patch"
       - "version-update:semver-patch"
