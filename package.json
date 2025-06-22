@@ -36,6 +36,7 @@
     "gsc:test": "node tools/gsc-quick-test.js --test",    "gsc:performance": "node tools/gsc-performance-data.js",
     "gsc:keywords": "node tools/gsc-keywords-report.js",    "gsc:crawl": "node tools/gsc-crawl-stats.js",
     "gsc:fix": "node tools/gsc-tools-fixer.js",
+    "gsc:fix:v2": "node tools/gsc-tools-fixer-v2.js",
     "gsc:sitemap:fix": "node tools/fix-sitemap-gsc-issue.js",
     "gsc:sitemap:monitor": "node tools/gsc-status-check.js --monitor-sitemap",
     "test:alert": "node tools/test-email-alert.js",

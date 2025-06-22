@@ -14,6 +14,9 @@ const { google } = require('googleapis');
 // Konfiguration
 const SERVICE_ACCOUNT_FILE = path.join(__dirname, 'gsc-service-account.json');
 const SITE_URL = 'sc-domain:burnitoken.website'; // Domain-Property-Format
+
+// Test-Modus-Flag
+const TEST_MODE = process.argv.includes('--test');
 const GSC_TOOLS = [
   'gsc-status-check.js',
   'gsc-performance-data.js',
@@ -572,3 +575,7 @@ main()
   .catch((err) => {
     console.error(`Fehler bei der Ausführung des GSC Integration Monitors: ${err.message}`);
   });
+
+
+// Für Tests exportieren
+module.exports = {};
