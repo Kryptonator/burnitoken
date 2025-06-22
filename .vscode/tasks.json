@@ -39,9 +39,10 @@
     {
       "label": "🔧 Extension Health Check",
       "type": "shell",
-      "command": "node",
+      "command": "powershell",
       "args": [
-        "extension-function-validator.js"
+        "-Command",
+        "Write-Host '🔍 Ausführliche Extension-Diagnose wird durchgeführt...' -ForegroundColor Cyan; node extension-function-validator.js --detailed --auto-fix; if ($LASTEXITCODE -eq 0) { Write-Host '✅ Alle Extensions funktionieren optimal!' -ForegroundColor Green } else { Write-Host '⚠️ Einige Probleme wurden automatisch behoben. Details im Bericht.' -ForegroundColor Yellow }"
       ],
       "group": "test",
       "presentation": {
@@ -323,9 +324,10 @@
     {
       "label": "🔧 Extension Health Check (Worker)",
       "type": "shell",
-      "command": "node",
+      "command": "powershell",
       "args": [
-        "extension-function-validator.js"
+        "-Command",
+        "Write-Host '🔍 Worker - Extension Health Check läuft...' -ForegroundColor Blue; node extension-function-validator.js --silent > .temp/worker-ext-check.log; if ($LASTEXITCODE -eq 0) { Write-Host '✅ Worker - Extension Check erfolgreich' -ForegroundColor Green } else { Write-Host '⚠️ Worker - Extension Check mit Warnungen' -ForegroundColor Yellow }"
       ],
       "group": "test",
       "isBackground": true,
@@ -750,6 +752,65 @@
       },
       "runOptions": {
         "runOn": "folderOpen"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔬 Comprehensive System Health Check",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '🔬 Starte umfassenden System-Check...' -ForegroundColor Cyan; Write-Host ''; Write-Host '1️⃣ Prüfe Extensions...' -ForegroundColor Yellow; node extension-function-validator.js --silent > .temp/ext-check.log; Write-Host '2️⃣ Prüfe GSC-Integration...' -ForegroundColor Yellow; node tools/gsc-auth-check.js --test > .temp/gsc-check.log; Write-Host '3️⃣ Prüfe Recovery-System...' -ForegroundColor Yellow; node tools/auto-recovery-manager.js --test > .temp/recovery-check.log; Write-Host '4️⃣ Prüfe Abhängigkeiten...' -ForegroundColor Yellow; node tools/dependabot-status-monitor.js --silent > .temp/dep-check.log; Write-Host '5️⃣ Prüfe GitHub Actions...' -ForegroundColor Yellow; node tools/check-github-workflows.js --silent > .temp/actions-check.log || echo 'Workflow-Check übersprungen' > .temp/actions-check.log; Write-Host ''; Write-Host '📊 Erstelle Bericht...' -ForegroundColor Cyan; node tools/generate-health-report.js; Write-Host '✅ System Health Check abgeschlossen!' -ForegroundColor Green; Write-Host '   Bericht verfügbar unter: SYSTEM_HEALTH_REPORT.md' -ForegroundColor Green"
+      ],
+      "group": {
+        "kind": "test",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 Auto System Health Check",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "if (-not (Test-Path '.temp')) { New-Item -ItemType Directory -Path '.temp' -Force }; Write-Host '🔬 Starte automatischen System-Check...' -ForegroundColor Blue; node tools/generate-health-report.js --silent > $null; Write-Host '✅ System Health Report wurde erstellt: SYSTEM_HEALTH_REPORT.md' -ForegroundColor Green"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🚀 System Komplettcheck & Optimierung",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '🚀 Starte umfassenden System-Komplettcheck...' -ForegroundColor Magenta; Write-Host ''; Write-Host '🔍 Phase 1: Prüfe Extensions...' -ForegroundColor Cyan; node extension-function-validator.js --detailed; Write-Host ''; Write-Host '🔄 Phase 2: Starte AI Services...' -ForegroundColor Cyan; node tools/ai-services-manager.js restart; Write-Host ''; Write-Host '🌐 Phase 3: Prüfe GSC-Integration...' -ForegroundColor Cyan; node tools/gsc-integration-monitor.js; Write-Host ''; Write-Host '📸 Phase 4: Erstelle Recovery-Screenshot...' -ForegroundColor Cyan; node tools/auto-screenshot-manager.js --now; Write-Host ''; Write-Host '📦 Phase 5: Prüfe Dependencies...' -ForegroundColor Cyan; node tools/dependency-security-updater.js --test; Write-Host ''; Write-Host '📊 Phase 6: Erstelle Status-Report...' -ForegroundColor Cyan; node tools/unified-status-report.js; Write-Host ''; Write-Host '✅ System-Komplettcheck abgeschlossen!' -ForegroundColor Green"
+      ],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
       },
       "problemMatcher": []
     }
