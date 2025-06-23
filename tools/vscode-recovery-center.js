@@ -107,7 +107,9 @@ function showRecoveryOptions() {
   printColored('  2. Sofortigen Recovery-Screenshot erstellen: "node tools/auto-screenshot-manager.js --now"', '\x1b[32m');
   printColored('  3. Google Search Console Status prüfen: "node tools/gsc-status-check.js"', '\x1b[32m');
   printColored('  4. Google Search Console Setup Guide: "node tools/gsc-setup-guide.js"', '\x1b[32m');
-  printColored('  5. Alle Dienste prüfen: "npm run validate"', '\x1b[32m');
+  printColored('  5. Core Web Vitals prüfen: "node tools/core-web-vitals-monitor.js"', '\x1b[32m');
+  printColored('  6. Meta-Tags & Social Cards validieren: "node tools/meta-tags-validator.js"', '\x1b[32m');
+  printColored('  7. Alle Dienste prüfen: "npm run validate"', '\x1b[32m');
 }
 
 /**
@@ -124,12 +126,12 @@ function main() {
   checkRecoveryManagerStatus();
   listRecoveryScreenshots();
   showRecoveryOptions();
-  
-  printColored(`\n${divider}`, '\x1b[1;36m');
+    printColored(`\n${divider}`, '\x1b[1;36m');
   printColored(' Prioritätenliste nach Absturz:', '\x1b[1;33m');
-  printColored(' 1. Google Search Console & SEO Monitoring', '\x1b[33m');
-  printColored(' 2. CI/CD-Qualität & Live-Überwachung', '\x1b[33m');
-  printColored(' 3. Developer Experience & VS Code Optimierung', '\x1b[33m');
+  printColored(' 1. Meta-Tags & Social Media Cards optimieren', '\x1b[33m');
+  printColored(' 2. Core Web Vitals verbessern (insb. LCP und CLS)', '\x1b[33m');
+  printColored(' 3. Fehlerseiten optimieren (404, 500)', '\x1b[33m');
+  printColored(' 4. Schema.org strukturierte Daten implementieren', '\x1b[33m');
   printColored(`${divider}\n`, '\x1b[1;36m');
 }
 

@@ -77,7 +77,13 @@
     "auto:commit": "node tools/auto-commit-push.js",
     "monitor:full": "node tools/comprehensive-monitor-dashboard.js",
     "dev:functions": "netlify functions:serve",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "web-vitals": "node tools/core-web-vitals-monitor.js",
+    "web-vitals:ci": "node tools/core-web-vitals-monitor.js --ci",
+    "web-vitals:full": "node tools/core-web-vitals-monitor.js --full",
+    "web-vitals:errors": "node tools/core-web-vitals-monitor.js --error-pages",
+    "meta-tags": "node tools/meta-tags-validator.js",
+    "meta-tags:ci": "node tools/meta-tags-validator.js --ci"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",

@@ -1,0 +1,71 @@
+name: Web Vitals & Meta Tags Check
+
+on:
+  schedule:
+    # Runs every Wednesday at 8:00 AM UTC
+    - cron: '0 8 * * 3'
+  workflow_dispatch:
+    # Allows manual triggering
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  web-vitals-check:
+    name: 📊 Core Web Vitals Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 📥 Install dependencies
+        run: npm ci
+      
+      - name: 🔍 Run Web Vitals Check
+        id: web-vitals
+        run: npm run web-vitals:ci
+        continue-on-error: true
+      
+      - name: 📤 Upload Web Vitals Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-vitals-report
+          path: tools/.web-vitals-reports
+          
+  meta-tags-check:
+    name: 🏷️ Meta Tags Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 📥 Install dependencies
+        run: npm ci
+      
+      - name: 🔍 Install additional dependencies
+        run: npm install jsdom
+      
+      - name: 🔍 Run Meta Tags Check
+        id: meta-tags
+        run: npm run meta-tags:ci
+        continue-on-error: true
+      
+      - name: 📤 Upload Meta Tags Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: meta-tags-report
+          path: tools/.meta-reports
