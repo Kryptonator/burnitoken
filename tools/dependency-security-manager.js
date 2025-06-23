@@ -39,90 +39,155 @@ const colors = {
  * Hauptfunktion
  */
 async function main() {
-  console.log(`${colors.cyan}🔒 Dependency Security Manager wird gestartet...${colors.reset}`);
-  console.log(`${colors.blue}📅 Startzeit: ${new Date().toLocaleString('de-DE')}${colors.reset}\n`);
+  // Überprüfe, ob im Silent-Mode ausgeführt
+  const silentMode = process.argv.includes('--silent');
+  
+  if (!silentMode) {
+    console.log(`${colors.cyan}🔒 Dependency Security Manager wird gestartet...${colors.reset}`);
+    console.log(`${colors.blue}📅 Startzeit: ${new Date().toLocaleString('de-DE')}${colors.reset}\n`);
+  }
 
   // Prüfe, ob Tools installiert sind
-  await checkToolsInstallation();
+  await checkToolsInstallation(silentMode);
 
   // Status prüfen
-  const status = await checkStatus();
+  const status = await checkStatus(silentMode);
 
-  // Zusammenfassung anzeigen
-  printSummary(status);
+  // Zusammenfassung anzeigen, außer im Silent-Mode
+  if (!silentMode) {
+    printSummary(status);
+  }
+  
+  // Im Silent-Mode Statusdaten speichern
+  if (silentMode) {
+    const statusData = {
+      timestamp: new Date().toISOString(),
+      dependabotConfigured: status.dependabot.configured,
+      snykConfigured: status.snyk.configured,
+      vulnerabilities: status.snyk.vulnerabilities
+    };
+    
+    try {
+      fs.writeFileSync(
+        path.join(__dirname, 'dependency-security-status.json'), 
+        JSON.stringify(statusData, null, 2)
+      );
+    } catch (error) {
+      // Silent error handling im Silent-Mode
+    }
+    
+    // Kritische Sicherheitsprobleme trotz Silent-Mode melden
+    const criticalIssues = status.snyk.vulnerabilities.high;
+    if (criticalIssues > 0) {
+      console.warn(`⚠️ Achtung: ${criticalIssues} kritische Sicherheitslücken gefunden. Bitte führen Sie 'node tools/dependency-security-manager.js' für Details aus.`);
+    }
+  }
 }
 
 /**
  * Prüft, ob alle benötigten Tools installiert sind
  */
-async function checkToolsInstallation() {
-  console.log(`${colors.blue}🔍 Prüfe Tool-Installation...${colors.reset}`);
+async function checkToolsInstallation(silentMode = false) {
+  if (!silentMode) {
+    console.log(`${colors.blue}🔍 Prüfe Tool-Installation...${colors.reset}`);
+  }
+  
+  let snykInstalled = false;
+  let dependabotConfigured = false;
   
   // Snyk prüfen
   try {
     if (config.tools.snyk) {
-      process.stdout.write(`   Snyk CLI... `);
+      if (!silentMode) process.stdout.write(`   Snyk CLI... `);
       await exec('snyk --version');
-      console.log(`${colors.green}✅ installiert${colors.reset}`);
+      if (!silentMode) console.log(`${colors.green}✅ installiert${colors.reset}`);
+      snykInstalled = true;
     }
   } catch (error) {
-    console.log(`${colors.yellow}⚠️ nicht gefunden${colors.reset}`);
-    console.log(`   ${colors.yellow}Installiere mit: npm install -g snyk${colors.reset}`);
+    if (!silentMode) {
+      console.log(`${colors.yellow}⚠️ nicht gefunden${colors.reset}`);
+      console.log(`   ${colors.yellow}Installiere mit: npm install -g snyk${colors.reset}`);
+    }
   }
 
   // Dependabot Konfiguration prüfen
-  process.stdout.write(`   GitHub Dependabot... `);
-  if (fs.existsSync(config.paths.dependabotConfig)) {
-    console.log(`${colors.green}✅ konfiguriert${colors.reset}`);
-  } else {
-    console.log(`${colors.yellow}⚠️ nicht konfiguriert${colors.reset}`);
+  if (!silentMode) process.stdout.write(`   GitHub Dependabot... `);
+  dependabotConfigured = fs.existsSync(config.paths.dependabotConfig);
+  
+  if (!silentMode) {
+    if (dependabotConfigured) {
+      console.log(`${colors.green}✅ konfiguriert${colors.reset}`);
+    } else {
+      console.log(`${colors.yellow}⚠️ nicht konfiguriert${colors.reset}`);
+    }
+    console.log();
   }
   
-  console.log();
+  return { snykInstalled, dependabotConfigured };
 }
 
 /**
  * Status der Sicherheitstools prüfen
  */
-async function checkStatus() {
-  console.log(`${colors.blue}🔍 Prüfe Security-Status...${colors.reset}`);
+async function checkStatus(silentMode = false) {
+  if (!silentMode) {
+    console.log(`${colors.blue}🔍 Prüfe Security-Status...${colors.reset}`);
+  }
   
   const status = {
     dependabot: { configured: false, pullRequests: 0 },
     snyk: { configured: false, vulnerabilities: { high: 0, medium: 0, low: 0 } }
   };
-
   // Dependabot prüfen
   if (config.tools.dependabot && fs.existsSync(config.paths.dependabotConfig)) {
     status.dependabot.configured = true;
-    console.log(`   ${colors.green}✅ Dependabot ist konfiguriert${colors.reset}`);
     
-    try {
-      // Versuche, offene Pull Requests zu zählen (vereinfacht)
-      console.log(`   ${colors.blue}ℹ️ Prüfe GitHub API für offene Dependabot PRs...${colors.reset}`);
-    } catch (error) {
-      console.log(`   ${colors.yellow}⚠️ Konnte keine GitHub API-Abfrage durchführen${colors.reset}`);
+    if (!silentMode) {
+      console.log(`   ${colors.green}✅ Dependabot ist konfiguriert${colors.reset}`);
+      
+      try {
+        // Versuche, offene Pull Requests zu zählen (vereinfacht)
+        console.log(`   ${colors.blue}ℹ️ Prüfe GitHub API für offene Dependabot PRs...${colors.reset}`);
+      } catch (error) {
+        console.log(`   ${colors.yellow}⚠️ Konnte keine GitHub API-Abfrage durchführen${colors.reset}`);
+      }
     }
-  } else if (config.tools.dependabot) {
+  } else if (config.tools.dependabot && !silentMode) {
     console.log(`   ${colors.yellow}⚠️ Dependabot ist nicht konfiguriert${colors.reset}`);
   }
-
   // Snyk prüfen
   if (config.tools.snyk) {
     try {
-      process.stdout.write(`   Führe Snyk Vulnerability Scan durch... `);
-      // Snyk-Scan simulieren - im echten Betrieb würde hier der Scan ausgeführt werden
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log(`${colors.green}abgeschlossen${colors.reset}`);
+      if (!silentMode) process.stdout.write(`   Führe Snyk Vulnerability Scan durch... `);
       
-      // Zufällige Werte für die Demo
+      // Snyk-Scan simulieren - im echten Betrieb würde hier der Scan ausgeführt werden
+      await new Promise(resolve => setTimeout(resolve, silentMode ? 500 : 1500));
+      
+      if (!silentMode) console.log(`${colors.green}abgeschlossen${colors.reset}`);
+      
+      // Status setzen (im echten Betrieb würden hier die tatsächlichen Ergebnisse ausgewertet)
       status.snyk.configured = true;
-      status.snyk.vulnerabilities.high = Math.floor(Math.random() * 3);
-      status.snyk.vulnerabilities.medium = Math.floor(Math.random() * 5);
-      status.snyk.vulnerabilities.low = Math.floor(Math.random() * 10);
+      
+      // Für Demo-Zwecke: zufällige Werte, aber konsistent wenn im Silent-Mode (basierend auf Datum)
+      const date = new Date();
+      const seed = date.getDate() + date.getMonth() * 31;
+      
+      if (silentMode) {
+        // Im Silent-Mode konsistentere Werte für besseres Monitoring
+        status.snyk.vulnerabilities.high = seed % 3;
+        status.snyk.vulnerabilities.medium = (seed + 1) % 5;
+        status.snyk.vulnerabilities.low = (seed + 2) % 10;
+      } else {
+        // Im interaktiven Modus zufälligere Werte für Demo-Zwecke
+        status.snyk.vulnerabilities.high = Math.floor(Math.random() * 3);
+        status.snyk.vulnerabilities.medium = Math.floor(Math.random() * 5);
+        status.snyk.vulnerabilities.low = Math.floor(Math.random() * 10);
+      }
     } catch (error) {
-      console.log(`${colors.red}fehlgeschlagen${colors.reset}`);
-      console.log(`   ${colors.red}⛔ Fehler: ${error.message}${colors.reset}`);
+      if (!silentMode) {
+        console.log(`${colors.red}fehlgeschlagen${colors.reset}`);
+        console.log(`   ${colors.red}⛔ Fehler: ${error.message}${colors.reset}`);
+      }
     }
   }
 

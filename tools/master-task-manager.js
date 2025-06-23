@@ -53,13 +53,19 @@ const CRITICAL_SERVICES = [
     priority: 'medium',
     args: [],
     background: false
-  },
-  {
+  },  {
     name: 'unified-status-manager',
     script: 'unified-status-manager.js', 
     priority: 'medium',
     args: ['--silent'],
     background: true
+  },
+  {
+    name: 'dependency-security-manager',
+    script: 'dependency-security-manager.js', 
+    priority: 'medium',
+    args: ['--silent'],
+    background: false
   }
 ];
 
