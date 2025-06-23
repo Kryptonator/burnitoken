@@ -1,11 +1,11 @@
 {
   "isActive": true,
-  "lastCheck": "2025-06-23T10:15:00Z",
+  "lastCheck": "2025-06-23T16:30:00Z",
   "services": {
     "gsc": {
       "name": "Google Search Console Monitor",
       "status": "running",
-      "lastCheck": "2025-06-23T10:15:00Z"
+      "lastCheck": "2025-06-23T16:25:00Z"
     },
     "netlify": {
       "name": "Netlify Deployment",
@@ -16,6 +16,16 @@
       "name": "Website Monitoring",
       "status": "running",
       "lastCheck": "2025-06-23T10:14:00Z"
+    },
+    "webVitals": {
+      "name": "Core Web Vitals Monitor",
+      "status": "running",
+      "lastCheck": "2025-06-23T16:28:00Z"
+    },
+    "metaTags": {
+      "name": "Meta-Tags Validator",
+      "status": "running",
+      "lastCheck": "2025-06-23T16:29:00Z"
     }
   }
 }
