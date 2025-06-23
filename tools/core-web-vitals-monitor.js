@@ -241,10 +241,8 @@ async function runPlaywrightTest(url, testType = 'navigation') {
   }
   
   ConsoleUI.info(`🎭 Starte Playwright-Test für ${url}...`);
-  
-  return new Promise((resolve, reject) => {
-    const command = `npx playwright test ${testFile} --headed=false`;
-    
+    return new Promise((resolve, reject) => {
+    const command = `npx playwright test ${testFile} --headed false`;
     exec(command, (error, stdout, stderr) => {
       if (error) {
         ConsoleUI.error(`❌ Playwright-Test fehlgeschlagen: ${error.message}`);
