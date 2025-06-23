@@ -96,7 +96,6 @@ temp_*.html
 .netlify
 
 # Google API Schlüssel und Service Accounts
-tools/gsc-service-account.json
 *-service-account.json
 *-api-key.json
 credentials.json

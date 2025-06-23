@@ -121,8 +121,80 @@ async function testSitemapAccess() {
   }
 }
 
-// Prüfe, ob Service Account vorhanden ist oder Diagnose-Modus gefordert ist
-if (process.argv.includes('--diagnose') || !fs.existsSync(SERVICE_ACCOUNT_FILE)) {
+// Add a simple test function to check API connectivity
+async function testAPIConnectivity() {
+  console.log('====================================================');
+  console.log('🧪 GOOGLE SEARCH CONSOLE API VERBINDUNGSTEST');
+  console.log('====================================================');
+
+  if (!fs.existsSync(SERVICE_ACCOUNT_FILE)) {
+    console.error('❌ Service Account Datei nicht gefunden:', SERVICE_ACCOUNT_FILE);
+    process.exit(1);
+  }
+
+  try {
+    console.log('🔑 Authentifiziere mit Service Account...');
+
+    // Lade das Service Account Credentials
+    const auth = new google.auth.GoogleAuth({
+      keyFile: SERVICE_ACCOUNT_FILE,
+      scopes: ['https://www.googleapis.com/auth/webmasters.readonly'],
+    });
+
+    const client = await auth.getClient();
+    const searchconsole = google.searchconsole({
+      version: 'v1',
+      auth: client,
+    });
+
+    console.log('📋 Rufe Search Console Sites ab...');
+    const response = await searchconsole.sites.list();
+
+    // Prüfe, ob die Domain in der Liste verfügbar ist
+    const sites = response.data.siteEntry || [];
+    const siteFounded = sites.some((site) => site.siteUrl === SITE_URL);
+
+    if (siteFounded) {
+      console.log(`\n✅ Verbindung erfolgreich hergestellt!`);
+      console.log(`✅ Property "${SITE_URL}" wurde gefunden und ist zugänglich.`);
+      console.log('\nℹ️ Der Service Account ist korrekt eingerichtet und hat Zugriff auf die GSC.');
+      return true;
+    } else {
+      console.log('\n⚠️ Verbindung erfolgreich, aber die Property wurde nicht gefunden:');
+      console.log(`   "${SITE_URL}" ist nicht in der Liste der zugänglichen Properties.`);
+      console.log('\nℹ️ Stellen Sie sicher, dass:');
+      console.log('   1. Der Service Account die richtige E-Mail-Adresse verwendet');
+      console.log('   2. Die Berechtigung in der Search Console erteilt wurde');
+      console.log('   3. Sie ausreichend gewartet haben (bis zu 30 Minuten)');
+
+      console.log('\n📋 Verfügbare Properties:');
+      sites.forEach((site) => {
+        console.log(`   - ${site.siteUrl}`);
+      });
+      return false;
+    }
+  } catch (error) {
+    console.error('\n❌ Fehler bei der API-Verbindung:');
+    console.error(`   ${error.message}`);
+
+    if (error.message.includes('invalid_grant')) {
+      console.log('\nℹ️ Mögliche Ursache: Ungültige oder abgelaufene Anmeldedaten');
+      console.log('   Bitte überprüfen Sie die Service Account JSON-Datei.');
+    } else if (error.message.includes('permission_denied')) {
+      console.log('\nℹ️ Mögliche Ursache: Fehlende Berechtigungen');
+      console.log('   Bitte stellen Sie sicher, dass der Service Account berechtigt ist.');
+    }
+
+    return false;
+  }
+}
+
+// Prüfe, ob Service Account vorhanden ist oder spezielle Modi gefordert sind
+if (process.argv.includes('--test')) {
+  // Test-Modus: Einfacher API-Verbindungstest
+  testAPIConnectivity();
+} else if (process.argv.includes('--diagnose') || !fs.existsSync(SERVICE_ACCOUNT_FILE)) {
+  // Diagnose-Modus: Hilfestellung bei Problemen
   runDiagnosis();
 } else {
   // API-basierter Check, falls Service Account vorhanden

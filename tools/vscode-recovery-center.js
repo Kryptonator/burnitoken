@@ -106,7 +106,8 @@ function showRecoveryOptions() {
   printColored('  1. Recovery Manager neu starten: "node tools/vscode-recovery-manager.js --force-restart"', '\x1b[32m');
   printColored('  2. Sofortigen Recovery-Screenshot erstellen: "node tools/auto-screenshot-manager.js --now"', '\x1b[32m');
   printColored('  3. Google Search Console Status prüfen: "node tools/gsc-status-check.js"', '\x1b[32m');
-  printColored('  4. Alle Dienste prüfen: "npm run validate"', '\x1b[32m');
+  printColored('  4. Google Search Console Setup Guide: "node tools/gsc-setup-guide.js"', '\x1b[32m');
+  printColored('  5. Alle Dienste prüfen: "npm run validate"', '\x1b[32m');
 }
 
 /**

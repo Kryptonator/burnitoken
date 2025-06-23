@@ -152,3 +152,38 @@ jobs:
             ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
             
             Please fix this issue as soon as possible.
+
+  gsc-status:
+    name: 🔍 GSC Status Check
+    runs-on: ubuntu-latest
+    # Nur bei Pushes auf den main/master-Branch oder bei manueller Ausführung
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') || github.event_name == 'workflow_dispatch'
+    needs: test
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 📥 Install dependencies
+        run: npm ci
+      
+      # Erstelle die Service Account Datei aus dem GitHub Secret
+      - name: 📝 Create GSC service account file
+        run: echo '${{ secrets.GSC_SERVICE_ACCOUNT }}' > ./tools/gsc-service-account.json
+        
+      # Führe den GSC Status Check aus
+      - name: 🔍 Run GSC status check
+        id: gsc-check
+        run: node ./tools/gsc-status-check.js
+        continue-on-error: true
+      
+      # Lösche die Service Account Datei vor dem Ende des Workflows
+      - name: 🗑️ Remove service account file
+        if: always()
+        run: rm -f ./tools/gsc-service-account.json

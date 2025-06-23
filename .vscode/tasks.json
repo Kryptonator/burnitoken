@@ -368,6 +368,58 @@
       },
       "isBackground": true,
       "problemMatcher": []
+    },
+    {
+      "label": "🔍 GSC: Status Check",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/gsc-status-check.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "🔍 GSC: Diagnose Mode",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/gsc-status-check.js",
+        "--diagnose"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "🔧 GSC: Setup Guide",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/gsc-setup-guide.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
     }
   ]
 }
