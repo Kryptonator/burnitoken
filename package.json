@@ -60,7 +60,7 @@
     "http-server": "^14.1.1",
     "husky": "^8.0.0",
     "jest": "^30.0.0",
-    "jest-environment-jsdom": "^30.0.0",
+    "jest-environment-jsdom": "^30.0.2",
     "jsdom": "^26.1.0",
     "mini-css-extract-plugin": "^2.7.6",
     "nodemailer": "^7.0.3",
