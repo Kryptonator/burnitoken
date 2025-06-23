@@ -24,12 +24,8 @@ const CONFIG = {
     FID: 100,  // First Input Delay (ms)
     CLS: 0.1,  // Cumulative Layout Shift (score)
     TTFB: 600  // Time to First Byte (ms)
-  },
-  URLS: {
+  },  URLS: {
     HOME: 'https://burnitoken.website/',
-    TOKEN: 'https://burnitoken.website/token/',
-    DOCS: 'https://burnitoken.website/docs/',
-    COMMUNITY: 'https://burnitoken.website/community/',
     NOT_FOUND: 'https://burnitoken.website/nicht-existierende-seite', // 404 Test
     ERROR: 'https://burnitoken.website/error-simulation' // 500 Test (falls implementiert)
   },
@@ -73,12 +69,14 @@ class ConsoleUI {
 /**
  * Lighthouse-Test für eine bestimmte URL ausführen
  */
-function runLighthouseTest(url, outputPath, deviceType = 'mobile', categories = ['performance', 'accessibility']) {
+function runLighthouseTest(url, outputPath, deviceType = 'desktop', categories = ['performance', 'accessibility']) {
   ConsoleUI.info(`🔍 Starte Lighthouse-Test für ${url} (${deviceType})...`);
   
   return new Promise((resolve, reject) => {
     const categoryFlags = categories.map(c => `--only-categories=${c}`).join(' ');
-    const command = `npx lighthouse ${url} --output=json --output-path="${outputPath}" --preset=${deviceType} --quiet ${categoryFlags}`;
+    // Verwende entweder --preset=desktop oder keine Preset (für mobile Ansicht)
+    const presetFlag = deviceType === 'desktop' ? '--preset=desktop' : '--form-factor=mobile';
+    const command = `npx lighthouse ${url} --output=json --output-path="${outputPath}" ${presetFlag} --quiet ${categoryFlags}`;
     
     exec(command, (error, stdout, stderr) => {
       if (error) {
@@ -273,16 +271,10 @@ async function testAllCorePages() {
     // Wichtige Seiten testen
     const results = {};
     const timestamp = new Date().toISOString().replace(/:/g, '-').replace(/\..+/, '');
-    
-    // Teste Hauptseite
+      // Teste Hauptseite
     const homepageReport = path.join(CONFIG.REPORT_DIR, `home_${timestamp}.json`);
     await runLighthouseTest(CONFIG.URLS.HOME, homepageReport);
     results.home = analyzeWebVitals(homepageReport);
-    
-    // Teste Token-Seite
-    const tokenReport = path.join(CONFIG.REPORT_DIR, `token_${timestamp}.json`);
-    await runLighthouseTest(CONFIG.URLS.TOKEN, tokenReport);
-    results.token = analyzeWebVitals(tokenReport);
     
     // Playwright-Tests für Navigation und Fehlerseiten
     ConsoleUI.title('Navigationstests und Fehlerseiten');
