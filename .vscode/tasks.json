@@ -2,7 +2,27 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "🚀 Master Task Manager (Auto-Start)",
+      "label": "� Dependency Security Manager",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/dependency-security-manager.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "�🚀 Master Task Manager (Auto-Start)",
       "type": "shell",
       "command": "node",
       "args": [
