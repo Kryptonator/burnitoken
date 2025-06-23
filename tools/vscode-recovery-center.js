@@ -126,11 +126,11 @@ function main() {
   checkRecoveryManagerStatus();
   listRecoveryScreenshots();
   showRecoveryOptions();
-    printColored(`\n${divider}`, '\x1b[1;36m');
+  printColored(`\n${divider}`, '\x1b[1;36m');
   printColored(' Prioritätenliste nach Absturz:', '\x1b[1;33m');
-  printColored(' 1. Meta-Tags & Social Media Cards optimieren', '\x1b[33m');
-  printColored(' 2. Core Web Vitals verbessern (insb. LCP und CLS)', '\x1b[33m');
-  printColored(' 3. Fehlerseiten optimieren (404, 500)', '\x1b[33m');
+  printColored(' 1. ✅ Meta-Tags & Social Media Cards optimieren', '\x1b[32m');
+  printColored(' 2. ✅ Core Web Vitals verbessern (insb. LCP und CLS)', '\x1b[32m');
+  printColored(' 3. ✅ Fehlerseiten optimieren (404, 500)', '\x1b[32m');
   printColored(' 4. Schema.org strukturierte Daten implementieren', '\x1b[33m');
   printColored(`${divider}\n`, '\x1b[1;36m');
 }
