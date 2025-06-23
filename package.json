@@ -79,7 +79,7 @@
     "@axe-core/webdriverjs": "^4.10.2",
     "@netlify/functions": "^2.5.1",
     "axe-playwright": "^2.1.0",
-    "canvas": "^3.1.0",
+    "canvas": "^3.1.1",
     "chrome-launcher": "^1.2.0",
     "googleapis": "^129.0.0",
     "lighthouse": "^12.6.1",
