@@ -1,18 +1,18 @@
 {
-  "timestamp": "2025-06-22T21:23:00.732Z",
-  "status": "critical",
-  "statusMessage": "15 Sicherheitslücken gefunden",
+  "timestamp": "2025-06-23T03:26:36.028Z",
+  "status": "warning",
+  "statusMessage": "15 veraltete Abhängigkeiten gefunden",
   "packageJson": {
     "name": "burni-website",
     "version": "1.0.0",
-    "totalDependencies": 42,
+    "totalDependencies": 43,
     "dependencies": 11,
-    "devDependencies": 31,
-    "hash": "121090afbad8dd00ffaca6135e9cb622"
+    "devDependencies": 32,
+    "hash": "0256b639a970a325d871852ac4f80dc1"
   },
   "packageLock": {
     "exists": true,
-    "hash": "84016adf65faeea38aa3c84b2a1ae968"
+    "hash": "57971ebc3aa28aaacee1fd9db6dda87d"
   },
   "dependabot": {
     "configExists": true,
@@ -22,7 +22,7 @@
     "hasAutoMerge": true
   },
   "outdated": {
-    "total": 14,
+    "total": 15,
     "topOutdated": [
       {
         "name": "googleapis",
@@ -62,12 +62,33 @@
     ]
   },
   "security": {
-    "vulnerabilitiesCount": 15,
+    "vulnerabilitiesCount": 0,
     "hasCritical": false,
-    "hasHigh": true,
-    "hasModerate": true
+    "hasHigh": false,
+    "hasModerate": false
   },
   "history": [
+    {
+      "timestamp": "2025-06-23T03:26:36.028Z",
+      "status": "warning",
+      "outdatedCount": 15,
+      "vulnerabilitiesCount": 0,
+      "packageJsonHash": "0256b639a970a325d871852ac4f80dc1"
+    },
+    {
+      "timestamp": "2025-06-23T03:02:35.280Z",
+      "status": "critical",
+      "outdatedCount": 12,
+      "vulnerabilitiesCount": 15,
+      "packageJsonHash": "f1f95eba7384dcb7596c35e3856e43ff"
+    },
+    {
+      "timestamp": "2025-06-23T02:39:49.482Z",
+      "status": "critical",
+      "outdatedCount": 15,
+      "vulnerabilitiesCount": 15,
+      "packageJsonHash": "0256b639a970a325d871852ac4f80dc1"
+    },
     {
       "timestamp": "2025-06-22T19:55:01.496Z",
       "status": "critical",

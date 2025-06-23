@@ -1,14 +1,14 @@
 # Dependabot Status Report
 
-Erstellt am: 22.6.2025, 23:23:15
+Erstellt am: 23.6.2025, 05:26:48
 
-## Gesamtstatus: 🔴 15 Sicherheitslücken gefunden
+## Gesamtstatus: 🚨 15 veraltete Abhängigkeiten gefunden
 
 ### Projekt-Informationen
 
 - **Name:** burni-website
 - **Version:** 1.0.0
-- **Dependencies:** 11 Prod, 31 Dev
+- **Dependencies:** 11 Prod, 32 Dev
 
 ### Dependabot-Konfiguration
 
@@ -17,7 +17,7 @@ Erstellt am: 22.6.2025, 23:23:15
 - ✅ Automatisches Mergen aktiviert
 ### Paket-Status
 
-- ⚠️ 14 veraltete Pakete gefunden
+- ⚠️ 15 veraltete Pakete gefunden
 
 **Top 5 veraltete Pakete:**
 
@@ -31,19 +31,17 @@ Erstellt am: 22.6.2025, 23:23:15
 
 ### Sicherheitsstatus
 
-- 🔴 15 Sicherheitslücken gefunden
-- 🚨 Hohe Sicherheitslücken gefunden
-- ⚠️ Mittlere Sicherheitslücken gefunden
-
-**Empfehlung:** Führe `npm audit fix` aus oder überprüfe die Sicherheitslücken manuell mit `npm audit`
+- ✅ Keine Sicherheitslücken gefunden
 
 ### Verlauf
 
 | Datum | Status | Veraltete Pakete | Sicherheitslücken |
 |-------|--------|-----------------|-------------------|
+| 23.06.2025, 05:26 | 🚨 | 15 | 0 |
+| 23.06.2025, 05:02 | 🔴 | 12 | 15 |
+| 23.06.2025, 04:39 | 🔴 | 15 | 15 |
 | 22.06.2025, 21:55 | 🔴 | 14 | 15 |
 
 ## Empfehlungen
 
-- 🔴 **DRINGEND:** Behebe Sicherheitslücken mit `npm audit fix`
 - 🚨 Aktualisiere veraltete Abhängigkeiten mit `npm update`

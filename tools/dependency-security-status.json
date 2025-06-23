@@ -1,0 +1,10 @@
+{
+  "timestamp": "2025-06-23T16:44:23.692Z",
+  "dependabotConfigured": true,
+  "snykConfigured": true,
+  "vulnerabilities": {
+    "high": 1,
+    "medium": 4,
+    "low": 0
+  }
+}

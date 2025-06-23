@@ -1,0 +1,10 @@
+{
+  "lastCheckTime": 1750649196093,
+  "recoveryAttempts": 7,
+  "servicesStarted": {
+    "session-saver": true,
+    "ai-bridge": true,
+    "gsc-indexing-watch": true
+  },
+  "extensionsActivated": true
+}

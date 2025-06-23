@@ -1,0 +1,21 @@
+{
+  "isActive": true,
+  "lastCheck": "2025-06-23T10:15:00Z",
+  "services": {
+    "gsc": {
+      "name": "Google Search Console Monitor",
+      "status": "running",
+      "lastCheck": "2025-06-23T10:15:00Z"
+    },
+    "netlify": {
+      "name": "Netlify Deployment",
+      "status": "running",
+      "lastCheck": "2025-06-23T10:14:30Z"
+    },
+    "monitoring": {
+      "name": "Website Monitoring",
+      "status": "running",
+      "lastCheck": "2025-06-23T10:14:00Z"
+    }
+  }
+}

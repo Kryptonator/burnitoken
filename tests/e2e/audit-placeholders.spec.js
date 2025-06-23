@@ -58,8 +58,7 @@ test.describe('Audit: Platzhalter, Dummy-Inhalte, UI, Security, SEO, PWA', () =>
 
       // Platzhaltertexte prüfen
       const bodyText = await page.locator('body').innerText();
-      const placeholderPattern =
-        /(lorem ipsum|platzhalter|dummy|to be filled|your text here|sample text|image coming soon|testbild|testtext)/i;
+      const placeholderPattern = /(lorem ipsum|platzhalter|dummy|to be filled|your text here|sample text|image coming soon|testbild|testtext)/i;
       expect(bodyText).not.toMatch(placeholderPattern);
 
       // Dummy-Bilder prüfen
@@ -116,7 +115,9 @@ test.describe('Audit: Platzhalter, Dummy-Inhalte, UI, Security, SEO, PWA', () =>
       // SEO-Checks
       const title = await page.title();
       expect(title.length).toBeGreaterThan(0);
-      const metaDesc = await page.locator('meta[name="description"]').getAttribute('content');
+      const metaDesc = await page
+        .locator('meta[name="description"]')
+        .getAttribute('content');
       expect(metaDesc).not.toMatch(/lorem|platzhalter|dummy/i);
       const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
       expect(canonical).toContain('http');

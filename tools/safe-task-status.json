@@ -1,0 +1,30 @@
+{
+  "timestamp": "2025-06-23T14:44:04.776Z",
+  "lastRun": "2025-06-23T14:43:53.521Z",
+  "runningTasks": [],
+  "completedTasks": [
+    {
+      "id": "1750689833523_master-task-manager.js",
+      "script": "master-task-manager.js",
+      "args": [
+        "--silent"
+      ],
+      "startTime": "2025-06-23T14:44:04.528Z",
+      "endTime": "2025-06-23T14:44:04.528Z",
+      "success": true,
+      "exitCode": 0
+    },
+    {
+      "id": "1750689844531_powerfix-monitoring.js",
+      "script": "powerfix-monitoring.js",
+      "args": [
+        "--single"
+      ],
+      "startTime": "2025-06-23T14:44:04.774Z",
+      "endTime": "2025-06-23T14:44:04.774Z",
+      "success": true,
+      "exitCode": 0
+    }
+  ],
+  "errors": []
+}

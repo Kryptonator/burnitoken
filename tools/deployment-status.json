@@ -1,0 +1,49 @@
+{
+  "timestamp": "2025-06-23T16:44:19.041Z",
+  "summary": {
+    "status": "failed",
+    "criticalFilesFound": 0,
+    "criticalFilesMissing": [
+      "index.html",
+      "styles.css",
+      "main.js",
+      "manifest.json",
+      "favicon.ico",
+      "robots.txt"
+    ],
+    "elementsFound": 0,
+    "elementsMissing": []
+  },
+  "details": {
+    "websiteActive": false,
+    "statusCode": 0,
+    "contentChecked": false,
+    "filesChecked": {
+      "index.html": {
+        "exists": false,
+        "error": "getaddrinfo ENOTFOUND burnitoken.com"
+      },
+      "styles.css": {
+        "exists": false,
+        "error": "getaddrinfo ENOTFOUND burnitoken.com"
+      },
+      "main.js": {
+        "exists": false,
+        "error": "getaddrinfo ENOTFOUND burnitoken.com"
+      },
+      "manifest.json": {
+        "exists": false,
+        "error": "getaddrinfo ENOTFOUND burnitoken.com"
+      },
+      "favicon.ico": {
+        "exists": false,
+        "error": "getaddrinfo ENOTFOUND burnitoken.com"
+      },
+      "robots.txt": {
+        "exists": false,
+        "error": "getaddrinfo ENOTFOUND burnitoken.com"
+      }
+    },
+    "responseTime": 0
+  }
+}

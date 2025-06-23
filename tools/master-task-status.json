@@ -1,37 +1,42 @@
 {
-  "timestamp": "2025-06-23T14:43:59.505Z",
-  "startTime": "2025-06-23T14:43:53.595Z",
+  "timestamp": "2025-06-23T16:44:24.016Z",
+  "startTime": "2025-06-23T16:44:10.053Z",
   "services": {
     "extension-validator": {
       "status": "completed",
       "exitCode": 0,
-      "lastRun": "2025-06-23T14:43:55.691Z"
+      "lastRun": "2025-06-23T16:44:15.553Z"
     },
     "powerfix-recovery": {
       "status": "completed",
       "exitCode": 0,
-      "lastRun": "2025-06-23T14:43:56.314Z"
+      "lastRun": "2025-06-23T16:44:16.131Z"
     },
     "powerfix-monitoring": {
       "status": "completed",
       "exitCode": 0,
-      "lastRun": "2025-06-23T14:43:57.143Z"
+      "lastRun": "2025-06-23T16:44:17.671Z"
     },
     "website-health-check": {
       "status": "completed",
       "exitCode": 0,
-      "lastRun": "2025-06-23T14:43:58.402Z"
+      "lastRun": "2025-06-23T16:44:18.615Z"
     },
     "deployment-checker": {
       "status": "completed",
       "exitCode": 0,
-      "lastRun": "2025-06-23T14:43:58.869Z"
+      "lastRun": "2025-06-23T16:44:19.145Z"
     },
     "unified-status-manager": {
       "status": "running",
-      "pid": 4620,
+      "pid": 42856,
       "background": true,
-      "lastRun": "2025-06-23T14:43:59.196Z"
+      "lastRun": "2025-06-23T16:44:19.674Z"
+    },
+    "dependency-security-manager": {
+      "status": "completed",
+      "exitCode": 0,
+      "lastRun": "2025-06-23T16:44:23.714Z"
     }
   },
   "activeProcesses": 1,

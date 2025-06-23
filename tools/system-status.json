@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-22T21:23:16.123Z",
+  "timestamp": "2025-06-23T16:44:19.725Z",
   "services": {
     "Session Saver": "active",
     "AI Conversation Bridge": "active",
@@ -7,7 +7,7 @@
     "Extension Health Validator": "active"
   },
   "extensions": {
-    "total": 66,
+    "total": 64,
     "recommended": [
       "github.copilot",
       "github.copilot-chat",
@@ -58,12 +58,15 @@
     ]
   },
   "tasks": {
-    "total": 43,
-    "autoStart": [
-      "🔄 Start Session-Saver",
-      "🔄 Auto Start Unified Manager"
-    ]
+    "total": 20,
+    "autoStart": []
   },
-  "issues": [],
+  "issues": [
+    {
+      "component": "tasks",
+      "message": "Keine Auto-Start Tasks konfiguriert",
+      "timestamp": "2025-06-23T16:44:26.546Z"
+    }
+  ],
   "actionsTaken": []
 }
