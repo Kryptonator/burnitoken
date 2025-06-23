@@ -1,0 +1,39 @@
+{
+  "timestamp": "2025-06-23T14:43:59.505Z",
+  "startTime": "2025-06-23T14:43:53.595Z",
+  "services": {
+    "extension-validator": {
+      "status": "completed",
+      "exitCode": 0,
+      "lastRun": "2025-06-23T14:43:55.691Z"
+    },
+    "powerfix-recovery": {
+      "status": "completed",
+      "exitCode": 0,
+      "lastRun": "2025-06-23T14:43:56.314Z"
+    },
+    "powerfix-monitoring": {
+      "status": "completed",
+      "exitCode": 0,
+      "lastRun": "2025-06-23T14:43:57.143Z"
+    },
+    "website-health-check": {
+      "status": "completed",
+      "exitCode": 0,
+      "lastRun": "2025-06-23T14:43:58.402Z"
+    },
+    "deployment-checker": {
+      "status": "completed",
+      "exitCode": 0,
+      "lastRun": "2025-06-23T14:43:58.869Z"
+    },
+    "unified-status-manager": {
+      "status": "running",
+      "pid": 4620,
+      "background": true,
+      "lastRun": "2025-06-23T14:43:59.196Z"
+    }
+  },
+  "activeProcesses": 1,
+  "errors": []
+}
