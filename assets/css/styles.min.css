@@ -498,6 +498,13 @@ select:focus {
 }
 
 /* Layout utilities */
+.w-45 {
+  width: 45%;
+}
+
+.w-70 {
+  width: 70%;
+}
 
 .clearfix::after {
   content: '';

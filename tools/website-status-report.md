@@ -1,6 +1,6 @@
 # BurniToken Website Status Report
 
-**Zeitpunkt:** 24.6.2025, 18:27:04
+**Zeitpunkt:** 24.6.2025, 21:26:19
 **Gesamtstatus:** ⚠️ DEGRADED
 
 ## Zusammenfassung
@@ -13,10 +13,10 @@
 
 | URL | Status | Verfügbar | Antwortzeit | Letzte Prüfung |
 | --- | ------ | --------- | ----------- | -------------- |
-| https://burnitoken.com | 0 | ❌ | 0ms | 24.6.2025, 18:27:03 |
-| https://www.burnitoken.com | 0 | ❌ | 0ms | 24.6.2025, 18:27:03 |
-| https://burnitoken.website | 200 | ✅ | 242ms | 24.6.2025, 18:27:04 |
+| https://burnitoken.com | 0 | ❌ | 0ms | 24.6.2025, 21:26:19 |
+| https://www.burnitoken.com | 0 | ❌ | 0ms | 24.6.2025, 21:26:19 |
+| https://burnitoken.website | 200 | ✅ | 131ms | 24.6.2025, 21:26:19 |
 
 ---
 
-Bericht generiert am 24.6.2025, 18:27:04
+Bericht generiert am 24.6.2025, 21:26:19

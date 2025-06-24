@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-24T16:27:03.741Z",
+  "timestamp": "2025-06-24T19:26:19.196Z",
   "summary": {
     "overallStatus": "degraded",
     "availableUrls": 1,
@@ -15,7 +15,7 @@
       "responseTime": 0,
       "loadTime": 0,
       "error": "getaddrinfo ENOTFOUND burnitoken.com",
-      "lastChecked": "2025-06-24T16:27:03.810Z"
+      "lastChecked": "2025-06-24T19:26:19.245Z"
     },
     "https://www.burnitoken.com": {
       "status": 0,
@@ -24,16 +24,16 @@
       "responseTime": 0,
       "loadTime": 0,
       "error": "getaddrinfo ENOTFOUND www.burnitoken.com",
-      "lastChecked": "2025-06-24T16:27:03.844Z"
+      "lastChecked": "2025-06-24T19:26:19.251Z"
     },
     "https://burnitoken.website": {
       "status": 200,
       "statusText": "OK",
       "available": true,
-      "responseTime": 242,
-      "loadTime": 299,
+      "responseTime": 131,
+      "loadTime": 179,
       "contentType": "text/html; charset=UTF-8",
-      "lastChecked": "2025-06-24T16:27:04.144Z"
+      "lastChecked": "2025-06-24T19:26:19.432Z"
     }
   },
   "ssl": {
@@ -43,7 +43,7 @@
     "issuer": null
   },
   "performance": {
-    "ttfb": 242,
-    "loadTime": 299
+    "ttfb": 131,
+    "loadTime": 179
   }
 }

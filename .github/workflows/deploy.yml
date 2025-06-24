@@ -1,3 +1,7 @@
+
+
+
+
 name: Deploy Website
 
 on:
@@ -32,6 +36,7 @@ jobs:
           exclude_assets: '.github'
         
       - name: Setze Git-Tag nach erfolgreichem Deploy
+        id: set_tag
         if: success()
         run: |
           TAG="v$(date +'%Y.%m.%d-%H%M')"
@@ -39,3 +44,44 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git tag $TAG
           git push origin $TAG
+          echo "tag=$TAG" >> $GITHUB_ENV
+      
+      - name: Automatisches GitHub Release mit Release-Notes
+        if: success()
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.tag }}
+          name: "Release ${{ env.tag }}"
+          body: |
+            Automatisches Release nach Deployment.
+            Siehe Changelog und Commits für Details.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Status-Webhook nach erfolgreichem Deploy
+        if: success()
+        env:
+          STATUS_WEBHOOK_URL: ${{ secrets.STATUS_WEBHOOK_URL }}
+        run: |
+          if [ -n "$STATUS_WEBHOOK_URL" ]; then
+            curl -X POST -H "Content-Type: application/json" \
+              -d '{"text":"✅ Deploy erfolgreich: ${{ github.repository }} (${{ github.ref }})\nTag: ${{ env.tag }}\nCommit: ${{ github.sha }}"}' \
+              "$STATUS_WEBHOOK_URL"
+            echo "Status-Webhook gesendet."
+          else
+            echo "Kein STATUS_WEBHOOK_URL Secret gesetzt, kein Webhook gesendet."
+          fi
+      
+      - name: Fehler-Webhook bei fehlgeschlagenem Deploy
+        if: failure()
+        env:
+          ALERT_WEBHOOK_URL: ${{ secrets.ALERT_WEBHOOK_URL }}
+        run: |
+          if [ -n "$ALERT_WEBHOOK_URL" ]; then
+            curl -X POST -H "Content-Type: application/json" \
+              -d '{"text":"❌ Deploy FEHLGESCHLAGEN: ${{ github.repository }} (${{ github.ref }})\nCommit: ${{ github.sha }}\nBitte prüfen!"}' \
+              "$ALERT_WEBHOOK_URL"
+            echo "Fehler-Webhook gesendet."
+          else
+            echo "Kein ALERT_WEBHOOK_URL Secret gesetzt, kein Fehler-Webhook gesendet."
+          fi
