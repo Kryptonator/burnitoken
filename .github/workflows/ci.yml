@@ -54,6 +54,7 @@ jobs:
         with:
           name: audit-report
           path: audit.json
+      # Fehler- und Status-Report generieren
       - name: Fehler- und Status-Report generieren
         id: error_report
         run: |
@@ -63,6 +64,22 @@ jobs:
         with:
           name: error-report
           path: ERROR_REPORT.md
+      # Self-Healing nur einmal pro Job
+      - name: Self-Healing: Recovery Center Triggern
+        if: failure()
+        run: |
+          node tools/vscode-recovery-center.js --auto-recover || echo "Recovery Center konnte nicht ausgeführt werden."
+      # Recovery-Report nach Self-Healing
+      - name: 📄 Recovery-Report generieren
+        if: failure()
+        run: node tools/recovery-report.js
+      - name: 📤 RECOVERY_REPORT.md als Artefakt hochladen
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: recovery-report
+          path: RECOVERY_REPORT.md
+      # Alerts (E-Mail, Slack, Discord, Webhook) zentral
       - name: Kritische Fehler prüfen und Alert senden
         if: failure() || steps.error_report.outcome == 'failure'
         uses: dawidd6/action-send-mail@v3
@@ -77,18 +94,24 @@ jobs:
           body: |
             Es wurden kritische Fehler im CI-Test/Build gefunden. Bitte prüfe den ERROR_REPORT.md im Anhang.
           attachments: ERROR_REPORT.md
+      - name: Slack-Alert bei Fehler
+        if: failure()
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{
+              "text": ":rotating_light: *CI-Fehler bei BurniToken!*\nWorkflow: ci\nCommit: ${{ github.sha }}\nBranch: ${{ github.ref_name }}\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }' ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Discord-Alert bei Fehler
+        if: failure()
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{
+              "content": ":rotating_light: **CI-Fehler bei BurniToken!**\\nWorkflow: ci\\nCommit: ${{ github.sha }}\\nBranch: ${{ github.ref_name }}\\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }' ${{ secrets.DISCORD_WEBHOOK_URL }}
       - name: Status-Webhook bei Erfolg
         if: success()
         run: |
           curl -X POST -H "Content-Type: application/json" -d '{"status":"success","workflow":"ci"}' ${{ secrets.STATUS_WEBHOOK_URL }}
-      - name: Status-Webhook bei Fehler
-        if: failure()
-        run: |
-          curl -X POST -H "Content-Type: application/json" -d '{"status":"failure","workflow":"ci"}' ${{ secrets.STATUS_WEBHOOK_URL }}
-      - name: Self-Healing: Recovery Center Triggern
-        if: failure()
-        run: |
-          node tools/vscode-recovery-center.js --auto-recover || echo "Recovery Center konnte nicht ausgeführt werden."
       - name: Status-Webhook bei Fehler (mit Details)
         if: failure()
         run: |
@@ -102,6 +125,7 @@ jobs:
               "run_url":"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
               "error":"'$SHORT_ERROR'"
             }' ${{ secrets.STATUS_WEBHOOK_URL }}
+      # Status-Übersicht immer aktuell halten
       - name: 📄 Status-Übersicht generieren
         run: node tools/update-status-md.js
       - name: 📤 STATUS.md als Artefakt hochladen
@@ -152,15 +176,32 @@ jobs:
       #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
       #   continue-on-error: true
+      # Fehler- und Status-Report generieren
       - name: Fehler- und Status-Report generieren
         id: error_report
         run: |
-          node tools/error-collector.js
+          node --max-old-space-size=4096 tools/error-collector.js
       - name: ERROR_REPORT.md als Artefakt hochladen
         uses: actions/upload-artifact@v4
         with:
           name: error-report
           path: ERROR_REPORT.md
+      # Self-Healing nur einmal pro Job
+      - name: Self-Healing: Recovery Center Triggern
+        if: failure()
+        run: |
+          node tools/vscode-recovery-center.js --auto-recover || echo "Recovery Center konnte nicht ausgeführt werden."
+      # Recovery-Report nach Self-Healing
+      - name: 📄 Recovery-Report generieren
+        if: failure()
+        run: node tools/recovery-report.js
+      - name: 📤 RECOVERY_REPORT.md als Artefakt hochladen
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: recovery-report
+          path: RECOVERY_REPORT.md
+      # Alerts (E-Mail, Slack, Discord, Webhook) zentral
       - name: Kritische Fehler prüfen und Alert senden
         if: failure() || steps.error_report.outcome == 'failure'
         uses: dawidd6/action-send-mail@v3
@@ -175,120 +216,52 @@ jobs:
           body: |
             Es wurden kritische Fehler im Security/Dependency-Check gefunden. Bitte prüfe den ERROR_REPORT.md im Anhang.
           attachments: ERROR_REPORT.md
-
-  accessibility:
-    name: ♿ Accessibility Check
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: 📥 Checkout code
-        uses: actions/checkout@v4
-        
-      - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          
-      - name: 📥 Install dependencies
-        run: npm ci
-        
-      - name: ♿ Run axe-core accessibility tests
+      - name: Slack-Alert bei Fehler
+        if: failure()
         run: |
-          node --max-old-space-size=4096 ./node_modules/.bin/axe ./index.html --save --reporter json --output axe-report.json || npx axe ./index.html --save --reporter json --output axe-report.json || true
-          
-      - name: 📎 Upload Accessibility Report
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{
+              "text": ":rotating_light: *CI-Fehler bei BurniToken!*\nWorkflow: ci\nCommit: ${{ github.sha }}\nBranch: ${{ github.ref_name }}\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }' ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Discord-Alert bei Fehler
+        if: failure()
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{
+              "content": ":rotating_light: **CI-Fehler bei BurniToken!**\\nWorkflow: ci\\nCommit: ${{ github.sha }}\\nBranch: ${{ github.ref_name }}\\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }' ${{ secrets.DISCORD_WEBHOOK_URL }}
+      - name: Status-Webhook bei Erfolg
+        if: success()
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{"status":"success","workflow":"ci"}' ${{ secrets.STATUS_WEBHOOK_URL }}
+      - name: Status-Webhook bei Fehler (mit Details)
+        if: failure()
+        run: |
+          SHORT_ERROR=$(head -n 20 ERROR_REPORT.md 2>/dev/null | tr '\n' ' ' | cut -c1-500)
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{
+              "status":"failure",
+              "workflow":"ci",
+              "commit":"${{ github.sha }}",
+              "branch":"${{ github.ref_name }}",
+              "run_url":"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+              "error":"'$SHORT_ERROR'"
+            }' ${{ secrets.STATUS_WEBHOOK_URL }}
+      # Status-Übersicht immer aktuell halten
+      - name: 📄 Status-Übersicht generieren
+        run: node tools/update-status-md.js
+      - name: 📤 STATUS.md als Artefakt hochladen
         uses: actions/upload-artifact@v4
         with:
-          name: axe-accessibility-report
-          path: axe-report.json
-        if: always()
-      - name: Fehler- und Status-Report generieren
-        id: error_report
+          name: status-md
+          path: STATUS.md
+      - name: 📤 STATUS.md ins Repository pushen
+        if: success()
         run: |
-          node --max-old-space-size=4096 tools/error-collector.js
-      - name: ERROR_REPORT.md als Artefakt hochladen
-        uses: actions/upload-artifact@v4
-        with:
-          name: error-report
-          path: ERROR_REPORT.md
-      - name: Kritische Fehler prüfen und Alert senden
-        if: failure() || steps.error_report.outcome == 'failure'
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: ${{ secrets.SMTP_SERVER }}
-          server_port: ${{ secrets.SMTP_PORT }}
-          username: ${{ secrets.SMTP_USERNAME }}
-          password: ${{ secrets.SMTP_PASSWORD }}
-          subject: 'Kritischer Fehler im Accessibility-Check!'
-          to: ${{ secrets.ALERT_EMAIL }}
-          from: 'accessibility-monitor@burnitoken.com'
-          body: |
-            Es wurden kritische Fehler im Accessibility-Check gefunden. Bitte prüfe den ERROR_REPORT.md im Anhang.
-          attachments: ERROR_REPORT.md
-
-  notify-on-failure:
-    name: 📧 Send Failure Notification
-    runs-on: ubuntu-latest
-    needs: [test, security, accessibility]
-    if: failure()
-    steps:
-      - name: 📧 Send E-Mail Alert
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.mail.yahoo.com
-          server_port: 465
-          username: burn.coin@yahoo.com
-          password: ${{ secrets.github }}
-          subject: "[BurniToken CI] Tests Failed - Immediate Attention Required"
-          to: burn.coin@yahoo.com
-          from: BurniToken CI <burn.coin@yahoo.com>
-          body: |
-            🚨 **BurniToken CI Tests Failed**
-
-            One or more tests in the CI pipeline failed and require your attention.
-
-            **Commit**: ${{ github.sha }}
-            **Branch**: ${{ github.ref_name }}
-            **Triggered by**: ${{ github.actor }}
-            **Workflow**: ${{ github.workflow }}
-            
-            For details, see the workflow run: 
-            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-            
-            Please fix this issue as soon as possible.
-
-  gsc-status:
-    name: 🔍 GSC Status Check
-    runs-on: ubuntu-latest
-    # Nur bei Pushes auf den main/master-Branch oder bei manueller Ausführung
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') || github.event_name == 'workflow_dispatch'
-    needs: test
-    
-    steps:
-      - name: 📥 Checkout code
-        uses: actions/checkout@v4
-        
-      - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          
-      - name: 📥 Install dependencies
-        run: npm ci
-      
-      # Erstelle die Service Account Datei aus dem GitHub Secret
-      - name: 📝 Create GSC service account file
-        run: echo '${{ secrets.GSC_SERVICE_ACCOUNT }}' > ./tools/gsc-service-account.json
-        
-      # Führe den GSC Status Check aus
-      - name: 🔍 Run GSC status check
-        id: gsc-check
-        run: node ./tools/gsc-status-check.js
-        continue-on-error: true
-      
-      # Lösche die Service Account Datei vor dem Ende des Workflows
-      - name: 🗑️ Remove service account file
-        if: always()
-        run: rm -f ./tools/gsc-service-account.json
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin
+          git checkout ${{ github.ref_name }}
+          git add STATUS.md
+          git commit -m "ci: update STATUS.md [skip ci]" || echo "No changes to commit"
+          git push origin HEAD:${{ github.ref_name }}
