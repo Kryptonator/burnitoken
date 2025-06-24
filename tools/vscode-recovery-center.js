@@ -15,6 +15,8 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const { execSync } = require('child_process');
+const https = require('https');
+const { sendAlert } = require('./alert-service');
 
 // Konfiguration
 const CONFIG = {
@@ -64,18 +66,46 @@ function checkRecoveryManagerStatus() {
   }
 }
 
+// Hilfsfunktion für sicheres Lesen von Dateien
+function safeReadFileSync(filePath, encoding = 'utf8') {
+  try {
+    return fs.readFileSync(filePath, encoding);
+  } catch (e) {
+    printColored(`❌ Fehler beim Lesen von ${filePath}: ${e.message}`, '\x1b[31m');
+    return null;
+  }
+}
+// Hilfsfunktion für sicheres Stat
+function safeStatSync(filePath) {
+  try {
+    return fs.statSync(filePath);
+  } catch (e) {
+    printColored(`❌ Fehler bei stat für ${filePath}: ${e.message}`, '\x1b[31m');
+    return null;
+  }
+}
+// Hilfsfunktion für sicheres readdir
+function safeReaddirSync(dirPath) {
+  try {
+    return fs.readdirSync(dirPath);
+  } catch (e) {
+    printColored(`❌ Fehler beim Lesen von Verzeichnis ${dirPath}: ${e.message}`, '\x1b[31m');
+    return [];
+  }
+}
+
 /**
  * Listet die neuesten Recovery-Screenshots auf
  */
 function listRecoveryScreenshots() {
   try {
     if (fs.existsSync(CONFIG.RECOVERY_SCREENSHOT_DIR)) {
-      const files = fs.readdirSync(CONFIG.RECOVERY_SCREENSHOT_DIR)
+      const files = safeReaddirSync(CONFIG.RECOVERY_SCREENSHOT_DIR)
         .filter(file => file.endsWith('.png'))
         .sort((a, b) => {
-          const statA = fs.statSync(path.join(CONFIG.RECOVERY_SCREENSHOT_DIR, a));
-          const statB = fs.statSync(path.join(CONFIG.RECOVERY_SCREENSHOT_DIR, b));
-          return statB.mtime.getTime() - statA.mtime.getTime();
+          const statA = safeStatSync(path.join(CONFIG.RECOVERY_SCREENSHOT_DIR, a)) || {mtime:0};
+          const statB = safeStatSync(path.join(CONFIG.RECOVERY_SCREENSHOT_DIR, b)) || {mtime:0};
+          return (statB.mtime?.getTime?.()||0) - (statA.mtime?.getTime?.()||0);
         })
         .slice(0, CONFIG.MAX_SCREENSHOTS_TO_DISPLAY);
       
@@ -83,9 +113,10 @@ function listRecoveryScreenshots() {
         printColored('\n📸 Verfügbare Recovery-Screenshots:', '\x1b[1;36m');
         files.forEach(file => {
           const filePath = path.join(CONFIG.RECOVERY_SCREENSHOT_DIR, file);
-          const stats = fs.statSync(filePath);
-          const fileSizeKB = Math.round(stats.size / 1024);
-          printColored(`  ${file} (${stats.mtime.toLocaleString('de-DE')}, ${fileSizeKB} KB)`, '\x1b[32m');
+          const stats = safeStatSync(filePath);
+          const fileSizeKB = stats ? Math.round(stats.size / 1024) : '?';
+          const mtime = stats ? stats.mtime.toLocaleString('de-DE') : '?';
+          printColored(`  ${file} (${mtime}, ${fileSizeKB} KB)`, '\x1b[32m');
         });
       } else {
         printColored('\n⚠️ Keine Recovery-Screenshots verfügbar', '\x1b[33m');
@@ -108,8 +139,8 @@ function runLiveReadinessChecks() {
   // 1. Sitemap vorhanden und valide
   const sitemapPath = path.join(__dirname, '../sitemap.xml');
   if (fs.existsSync(sitemapPath)) {
-    const sitemapContent = fs.readFileSync(sitemapPath, 'utf8');
-    if (sitemapContent.includes('<urlset')) {
+    const sitemapContent = safeReadFileSync(sitemapPath, 'utf8');
+    if (sitemapContent && sitemapContent.includes('<urlset')) {
       printColored('✅ Sitemap vorhanden und valide', '\x1b[32m');
     } else {
       printColored('❌ Sitemap fehlerhaft (kein <urlset> gefunden)', '\x1b[31m');
@@ -125,7 +156,8 @@ function runLiveReadinessChecks() {
   let translationsOk = true;
   if (fs.existsSync(translationsPath)) {
     try {
-      const translations = JSON.parse(fs.readFileSync(translationsPath, 'utf8'));
+      const translationsContent = safeReadFileSync(translationsPath, 'utf8');
+      const translations = translationsContent ? JSON.parse(translationsContent) : {};
       const requiredLangs = ['de','en','es','fr','pt','ar','bn','hi','ja','ko','ru','tr','zh','it'];
       const requiredKeys = [
         'alt_logo','alt_burn_chart','alt_burni_lagerfeuer','alt_burni_tresor','alt_exchange','alt_gamepad','alt_vote','alt_rewards','table_rank','table_wallet','table_burned','table_locked','table_rewards','table_total','table_action','btn_connect_aria_label','btn_disconnect_aria_label','btn_language_aria_label','btn_theme_aria_label','btn_menu_aria_label','btn_close_aria_label','btn_recover_aria_label','btn_copy_aria_label'
@@ -162,11 +194,10 @@ function runLiveReadinessChecks() {
   printColored('ℹ️ SEO-Test: npm run test (Lighthouse, Meta-Validator)', '\x1b[36m');
 
   // 5. API-Integration (XRPL)
-  // Hier nur Check auf fetchLivePrices.js oder main.js mit fetchLivePrices
   const mainJsPath = path.join(__dirname, '../main.js');
   if (fs.existsSync(mainJsPath)) {
-    const mainJs = fs.readFileSync(mainJsPath, 'utf8');
-    if (mainJs.includes('fetchLivePrices')) {
+    const mainJs = safeReadFileSync(mainJsPath, 'utf8');
+    if (mainJs && mainJs.includes('fetchLivePrices')) {
       printColored('✅ API-Integration (fetchLivePrices) vorhanden', '\x1b[32m');
     } else {
       printColored('❌ API-Integration (fetchLivePrices) fehlt!', '\x1b[31m');
@@ -177,7 +208,7 @@ function runLiveReadinessChecks() {
     allOk = false;
   }
 
-  // 6. Asset-Bereitstellung (Bilder, Videos, Whitepaper, Favicon, OG-Image)
+  // 6. Asset-Bereitstellung
   const assetChecks = [
     '../assets/burni-logo.png',
     '../assets/burni-social.jpg',
@@ -193,7 +224,6 @@ function runLiveReadinessChecks() {
   for (const relPath of assetChecks) {
     const absPath = path.join(__dirname, relPath);
     if (!fs.existsSync(absPath)) {
-      // Erweiterung: Prüfe auf alternative Formate (.webp, .svg, .ico, .jpg, .png)
       const dir = path.dirname(absPath);
       const base = path.basename(absPath, path.extname(absPath));
       const altExts = ['.webp', '.png', '.jpg', '.jpeg', '.svg', '.ico'];
@@ -238,6 +268,10 @@ function runLiveReadinessChecks() {
     printColored('\n🎉 ALLE KRITERIEN FÜR DEN LIVE-GANG SIND ERFÜLLT!\n', '\x1b[1;42m');
   } else {
     printColored('\n❗ Es fehlen noch Kriterien für den Live-Gang! Siehe Hinweise oben.\n', '\x1b[1;41m');
+    sendAlert({
+      message: '[Recovery Center] Live-Readiness-Check fehlgeschlagen! Siehe Recovery Center für Details.',
+      level: 'error'
+    });
   }
 }
 
@@ -371,13 +405,16 @@ function showToolAndCloudStatus() {
  */
 function showRecentErrorsAndSecurity() {
   printColored('\n🚨 Letzte Fehler & Security-Status:', '\x1b[1;31m');
+  let criticalErrorFound = false;
   // Sentry-Log
   const sentryLog = path.join(__dirname, '../logs/sentry.log');
   if (fs.existsSync(sentryLog)) {
-    const lines = fs.readFileSync(sentryLog, 'utf8').trim().split('\n');
+    const content = safeReadFileSync(sentryLog, 'utf8');
+    const lines = content ? content.trim().split('\n') : [];
     const lastError = lines.reverse().find(l => l.toLowerCase().includes('error') || l.toLowerCase().includes('exception'));
     if (lastError) {
       printColored('  Sentry: ' + lastError, '\x1b[31m');
+      criticalErrorFound = true;
     } else {
       printColored('  Sentry: Keine kritischen Fehler gefunden', '\x1b[32m');
     }
@@ -387,10 +424,12 @@ function showRecentErrorsAndSecurity() {
   // Playwright-Log
   const pwLog = path.join(__dirname, '../test-results/playwright.log');
   if (fs.existsSync(pwLog)) {
-    const lines = fs.readFileSync(pwLog, 'utf8').trim().split('\n');
+    const content = safeReadFileSync(pwLog, 'utf8');
+    const lines = content ? content.trim().split('\n') : [];
     const lastFail = lines.reverse().find(l => l.toLowerCase().includes('fail'));
     if (lastFail) {
       printColored('  Playwright: ' + lastFail, '\x1b[31m');
+      criticalErrorFound = true;
     } else {
       printColored('  Playwright: Alle Tests grün', '\x1b[32m');
     }
@@ -400,10 +439,12 @@ function showRecentErrorsAndSecurity() {
   // CI-Log
   const ciLog = path.join(__dirname, '../.github/workflows/ci.log');
   if (fs.existsSync(ciLog)) {
-    const lines = fs.readFileSync(ciLog, 'utf8').trim().split('\n');
+    const content = safeReadFileSync(ciLog, 'utf8');
+    const lines = content ? content.trim().split('\n') : [];
     const lastFail = lines.reverse().find(l => l.toLowerCase().includes('fail') || l.toLowerCase().includes('error'));
     if (lastFail) {
       printColored('  CI/CD: ' + lastFail, '\x1b[31m');
+      criticalErrorFound = true;
     } else {
       printColored('  CI/CD: Letzter Run erfolgreich', '\x1b[32m');
     }
@@ -413,28 +454,43 @@ function showRecentErrorsAndSecurity() {
   // Snyk-Log
   const snykLog = path.join(__dirname, '../test-results/snyk.log');
   if (fs.existsSync(snykLog)) {
-    const lines = fs.readFileSync(snykLog, 'utf8').trim().split('\n');
+    const content = safeReadFileSync(snykLog, 'utf8');
+    const lines = content ? content.trim().split('\n') : [];
     const lastVuln = lines.reverse().find(l => l.toLowerCase().includes('vuln') || l.toLowerCase().includes('critical'));
     if (lastVuln) {
       printColored('  Snyk: ' + lastVuln, '\x1b[31m');
+      criticalErrorFound = true;
     } else {
       printColored('  Snyk: Keine kritischen Schwachstellen', '\x1b[32m');
     }
   } else {
     printColored('  Snyk: Kein Log gefunden', '\x1b[33m');
   }
-  // Dependabot Alerts (GitHub Advisory Database)
+  // Dependabot Alerts
   const dependabotAlerts = path.join(__dirname, '../.github/dependabot-alerts.json');
   if (fs.existsSync(dependabotAlerts)) {
-    const alerts = JSON.parse(fs.readFileSync(dependabotAlerts, 'utf8'));
+    const content = safeReadFileSync(dependabotAlerts, 'utf8');
+    let alerts = [];
+    try {
+      alerts = content ? JSON.parse(content) : [];
+    } catch (e) {
+      printColored('  Dependabot: Fehler beim Parsen!', '\x1b[33m');
+    }
     if (alerts.length > 0) {
       printColored(`  Dependabot: ${alerts.length} offene Alerts`, '\x1b[31m');
       alerts.slice(0, 3).forEach(a => printColored('    - ' + a.summary, '\x1b[33m'));
+      criticalErrorFound = true;
     } else {
       printColored('  Dependabot: Keine offenen Alerts', '\x1b[32m');
     }
   } else {
     printColored('  Dependabot: Kein Alert-Export gefunden', '\x1b[33m');
+  }
+  if (criticalErrorFound) {
+    sendAlert({
+      message: '[Recovery Center] Kritische Fehler oder Security-Probleme erkannt! Siehe Recovery Center für Details.',
+      level: 'error'
+    });
   }
 }
 
@@ -447,7 +503,7 @@ function runSelfChecks() {
   try {
     const gscScript = path.join(__dirname, 'gsc-status-check.js');
     if (fs.existsSync(gscScript)) {
-      const result = execSync(`node ${gscScript} --diagnose`, { encoding: 'utf8', timeout: 10000 });
+      const result = safeExecSync(`node ${gscScript} --diagnose`);
       if (result.toLowerCase().includes('ok') || result.toLowerCase().includes('success')) {
         printColored('  ✅ Google Search Console API erreichbar', '\x1b[32m');
       } else {
@@ -463,7 +519,6 @@ function runSelfChecks() {
   try {
     const sentryClient = path.join(__dirname, '../sentry.client.js');
     if (fs.existsSync(sentryClient)) {
-      // Hier könnte ein echter Sentry-API-Call stehen, Platzhalter:
       printColored('  ✅ Sentry-Client vorhanden (Status siehe Log)', '\x1b[32m');
     } else {
       printColored('  ❌ Sentry-Client fehlt', '\x1b[31m');
@@ -475,7 +530,7 @@ function runSelfChecks() {
   try {
     const pwConfig = path.join(__dirname, '../playwright.config.js');
     if (fs.existsSync(pwConfig)) {
-      const result = execSync('npx playwright test --list', { encoding: 'utf8', timeout: 10000 });
+      const result = safeExecSync('npx playwright test --list');
       if (result.toLowerCase().includes('test')) {
         printColored('  ✅ Playwright-Tests erkannt', '\x1b[32m');
       } else {
@@ -511,6 +566,142 @@ function runSelfChecks() {
   }
 }
 
+// Hilfsfunktion für sichere execSync-Aufrufe
+function safeExecSync(cmd, opts = {}) {
+  try {
+    return execSync(cmd, { encoding: 'utf8', timeout: 8000, ...opts });
+  } catch (e) {
+    printColored(`❌ Fehler bei execSync (${cmd}): ${e.message}`, '\x1b[31m');
+    return '';
+  }
+}
+
+/**
+ * Prüft, ob README, CHANGELOG und Onboarding-Doku aktuell sind
+ */
+function checkDocumentationStatus() {
+  printColored('\n📚 Dokumentations-Check:', '\x1b[1;36m');
+  const docs = [
+    { name: 'README.md', path: '../README.md' },
+    { name: 'CHANGELOG.md', path: '../CHANGELOG.md' },
+    { name: 'Onboarding (docs/)', path: '../pages/docs/' }
+  ];
+  docs.forEach(doc => {
+    const abs = path.join(__dirname, doc.path);
+    if (fs.existsSync(abs)) {
+      const stats = safeStatSync(abs);
+      const modified = stats ? stats.mtime.toLocaleString('de-DE') : '?';
+      printColored(`  ✅ ${doc.name} vorhanden (letzte Änderung: ${modified})`, '\x1b[32m');
+    } else {
+      printColored(`  ❌ ${doc.name} fehlt!`, '\x1b[31m');
+    }
+  });
+}
+
+/**
+ * Exportiert den aktuellen Recovery/Projektstatus als Markdown
+ */
+function exportStatusMarkdown() {
+  const mdPath = path.join(__dirname, '../RECOVERY_STATUS.md');
+  let md = '# Burnitoken Recovery/Projektstatus\n\n';
+  md += '## Stand: ' + new Date().toLocaleString('de-DE') + '\n\n';
+  md += '### Kernbereiche\n';
+  const bereiche = [
+    { name: 'Accessibility', ok: fs.existsSync(path.join(__dirname, '../test-results/playwright.log')) },
+    { name: 'SEO', ok: fs.existsSync(path.join(__dirname, '../sitemap.xml')) },
+    { name: 'Security', ok: fs.existsSync(path.join(__dirname, '../test-results/snyk.log')) },
+    { name: 'DX', ok: fs.existsSync(path.join(__dirname, '../.github/workflows/ci.yml')) },
+    { name: 'Monitoring', ok: fs.existsSync(path.join(__dirname, '../sentry.client.js')) },
+    { name: 'Recovery', ok: fs.existsSync(path.join(__dirname, 'vscode-recovery-center.js')) }
+  ];
+  bereiche.forEach(b => {
+    md += `- ${b.ok ? '✅' : '❌'} ${b.name}\n`;
+  });
+  md += '\n### Hinweise\n';
+  if (!fs.existsSync(path.join(__dirname, '../test-results/playwright.log'))) md += '- Accessibility-Tests fehlen oder zu alt\n';
+  if (!fs.existsSync(path.join(__dirname, '../sitemap.xml'))) md += '- SEO: Sitemap fehlt\n';
+  if (!fs.existsSync(path.join(__dirname, '../test-results/snyk.log'))) md += '- Security: Snyk-Scan fehlt\n';
+  if (!fs.existsSync(path.join(__dirname, '../.github/workflows/ci.yml'))) md += '- DX: CI/CD-Workflow fehlt\n';
+  if (!fs.existsSync(path.join(__dirname, '../sentry.client.js'))) md += '- Monitoring: Sentry fehlt\n';
+  if (!fs.existsSync(path.join(__dirname, 'vscode-recovery-center.js'))) md += '- Recovery Center fehlt\n';
+  try {
+    fs.writeFileSync(mdPath, md, 'utf8');
+    printColored(`\n📝 Status-Export als Markdown: RECOVERY_STATUS.md aktualisiert`, '\x1b[36m');
+  } catch (e) {
+    printColored(`\n❌ Fehler beim Schreiben von RECOVERY_STATUS.md: ${e.message}`, '\x1b[31m');
+  }
+}
+
+/**
+ * Exportiert die recovery-history.json als Markdown (RECOVERY_HISTORY.md)
+ */
+function exportHistoryMarkdown() {
+  const historyPath = path.join(__dirname, '../recovery-history.json');
+  const mdPath = path.join(__dirname, '../RECOVERY_HISTORY.md');
+  let history = [];
+  try {
+    if (fs.existsSync(historyPath)) {
+      const content = safeReadFileSync(historyPath, 'utf8');
+      history = content ? JSON.parse(content) : [];
+    }
+  } catch (e) {
+    printColored('❌ Fehler beim Lesen der History: ' + e.message, '\x1b[31m');
+  }
+  let md = '# Recovery Center Verlauf\n\n| Datum | Status | Fehler | ToDos |\n|---|---|---|---|\n';
+  history.slice(-50).reverse().forEach(entry => {
+    const date = new Date(entry.timestamp).toLocaleString('de-DE');
+    const status = entry.status === 'OK' ? '✅' : '❌';
+    const errors = (entry.errors && entry.errors.length) ? entry.errors.join('<br>') : '-';
+    const todos = (entry.todos && entry.todos.length) ? entry.todos.join('<br>') : '-';
+    md += `| ${date} | ${status} | ${errors} | ${todos} |\n`;
+  });
+  try {
+    fs.writeFileSync(mdPath, md, 'utf8');
+    printColored('📄 Verlauf als Markdown exportiert (RECOVERY_HISTORY.md)', '\x1b[36m');
+  } catch (e) {
+    printColored('❌ Fehler beim Schreiben von RECOVERY_HISTORY.md: ' + e.message, '\x1b[31m');
+  }
+}
+
+/**
+ * Zeigt Fortschrittsbalken und Reminder/Alerts für alle Kernbereiche
+ */
+function showProgressAndReminders() {
+  printColored('\n📈 Fortschritt & Reminder:', '\x1b[1;36m');
+  // Fortschritt pro Bereich (Beispielwerte, dynamisch anpassbar)
+  const bereiche = [
+    { name: 'Accessibility', done: fs.existsSync(path.join(__dirname, '../test-results/playwright.log')), todo: false },
+    { name: 'SEO', done: fs.existsSync(path.join(__dirname, '../sitemap.xml')), todo: false },
+    { name: 'Security', done: fs.existsSync(path.join(__dirname, '../test-results/snyk.log')), todo: false },
+    { name: 'DX', done: fs.existsSync(path.join(__dirname, '../.github/workflows/ci.yml')), todo: false },
+    { name: 'Monitoring', done: fs.existsSync(path.join(__dirname, '../sentry.client.js')), todo: false },
+    { name: 'Recovery', done: fs.existsSync(path.join(__dirname, 'vscode-recovery-center.js')), todo: false }
+  ];
+  bereiche.forEach(b => {
+    const status = b.done ? '✅' : '❌';
+    printColored(`  ${status} ${b.name}`, b.done ? '\x1b[32m' : '\x1b[31m');
+  });
+  // Reminder/Alerts (wenn Bereich fehlt oder Problem erkannt)
+  if (!fs.existsSync(path.join(__dirname, '../test-results/playwright.log'))) {
+    printColored('  ⚠️  Accessibility-Tests fehlen oder wurden zu lange nicht ausgeführt!', '\x1b[33m');
+  }
+  if (!fs.existsSync(path.join(__dirname, '../sitemap.xml'))) {
+    printColored('  ⚠️  SEO: Sitemap fehlt!', '\x1b[33m');
+  }
+  if (!fs.existsSync(path.join(__dirname, '../test-results/snyk.log'))) {
+    printColored('  ⚠️  Security: Snyk-Scan fehlt!', '\x1b[33m');
+  }
+  if (!fs.existsSync(path.join(__dirname, '../.github/workflows/ci.yml'))) {
+    printColored('  ⚠️  DX: CI/CD-Workflow fehlt!', '\x1b[33m');
+  }
+  if (!fs.existsSync(path.join(__dirname, '../sentry.client.js'))) {
+    printColored('  ⚠️  Monitoring: Sentry fehlt!', '\x1b[33m');
+  }
+  if (!fs.existsSync(path.join(__dirname, 'vscode-recovery-center.js'))) {
+    printColored('  ⚠️  Recovery Center fehlt!', '\x1b[33m');
+  }
+}
+
 /**
  * Hauptfunktion
  */
@@ -527,6 +718,19 @@ function main() {
   showToolAndCloudStatus();
   // Letzte Fehler & Security-Status anzeigen
   showRecentErrorsAndSecurity();
+  // Fortschritt & Reminder anzeigen
+  showProgressAndReminders();
+  // Dokumentations-Check
+  checkDocumentationStatus();
+  // Status als Markdown exportieren
+  exportStatusMarkdown();
+
+  // Safe-Mode: keine Self-Checks, keine execSync
+  if (process.argv.includes('--safe')) {
+    printColored('\n[SAFE MODE] Nur Basis-Checks ausgeführt. Für vollständige Prüfung ohne --safe starten.', '\x1b[33m');
+    return;
+  }
+
   // Self-Checks für alle Kern-Tools durchführen
   runSelfChecks();
 
@@ -552,6 +756,61 @@ function main() {
   printColored('\n[Auto-Check] Starte Live-Readiness-Check ...', '\x1b[36m');
   runLiveReadinessChecks();
   printColored('\n[Auto-Check] Live-Readiness-Check abgeschlossen.', '\x1b[36m');
+
+  // Status-Snapshot für Verlauf speichern
+  // Sammle Fehler und ToDos (vereinfachtes Beispiel)
+  const errors = [];
+  const todos = [];
+  // Beispiel: Sammle Fehler aus Logs (kann weiter ausgebaut werden)
+  const sentryLog = path.join(__dirname, '../logs/sentry.log');
+  if (fs.existsSync(sentryLog)) {
+    const content = safeReadFileSync(sentryLog, 'utf8');
+    const lines = content ? content.trim().split('\n') : [];
+    const lastError = lines.reverse().find(l => l.toLowerCase().includes('error') || l.toLowerCase().includes('exception'));
+    if (lastError) errors.push('Sentry: ' + lastError);
+  }
+  // Beispiel: ToDos aus statischer Liste
+  todos.push(...[
+    'Alerts & Monitoring für alle Checks aktivieren',
+    'Social Cards & strukturierte Daten finalisieren',
+    'Regelmäßige Live-Readiness-Checks automatisieren',
+    'README & Dokumentation aktuell halten',
+    'DX-Verbesserungen (Prettier, ESLint, Onboarding) umsetzen',
+    'Recovery- und Health-Checks weiter ausbauen'
+  ]);
+  // allOk: true, wenn keine Fehler gefunden wurden
+  const allOk = errors.length === 0;
+  appendRecoveryHistory({ allOk, errors, todos });
+  exportHistoryMarkdown();
+}
+
+/**
+ * Speichert den aktuellen Status in recovery-history.json
+ */
+function appendRecoveryHistory({ allOk, errors, todos }) {
+  const historyPath = path.join(__dirname, '../recovery-history.json');
+  let history = [];
+  try {
+    if (fs.existsSync(historyPath)) {
+      const content = safeReadFileSync(historyPath, 'utf8');
+      history = content ? JSON.parse(content) : [];
+    }
+  } catch (e) {
+    printColored('❌ Fehler beim Lesen der History: ' + e.message, '\x1b[31m');
+  }
+  const entry = {
+    timestamp: new Date().toISOString(),
+    status: allOk ? 'OK' : 'ERROR',
+    errors: errors || [],
+    todos: todos || []
+  };
+  history.push(entry);
+  try {
+    fs.writeFileSync(historyPath, JSON.stringify(history, null, 2), 'utf8');
+    printColored('📊 Status-History aktualisiert (recovery-history.json)', '\x1b[36m');
+  } catch (e) {
+    printColored('❌ Fehler beim Schreiben der History: ' + e.message, '\x1b[31m');
+  }
 }
 
 // Programm ausführen

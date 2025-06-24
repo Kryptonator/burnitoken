@@ -1,10 +1,10 @@
 {
-  "timestamp": "2025-06-23T16:44:23.692Z",
+  "timestamp": "2025-06-24T13:03:10.641Z",
   "dependabotConfigured": true,
   "snykConfigured": true,
   "vulnerabilities": {
-    "high": 1,
-    "medium": 4,
-    "low": 0
+    "high": 2,
+    "medium": 0,
+    "low": 1
   }
 }

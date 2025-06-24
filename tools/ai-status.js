@@ -9,6 +9,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const { execSync } = require('child_process');
+const { sendAlert } = require('./alert-service');
 
 // Debug-Option über Befehlszeilenparameter
 const DEBUG = process.argv.includes('--debug');
@@ -156,6 +157,13 @@ function showAIStatus() {
   const aiDirExists = fileExists(CONFIG.conversationDir);
   const backupDirExists = fileExists(CONFIG.backupDir);
   
+  if (!aiDirExists || !backupDirExists) {
+    sendAlert({
+      message: `AI Status: Kritisches Verzeichnis fehlt! Conversations: ${aiDirExists}, Backups: ${backupDirExists}`,
+      level: 'error',
+      // webhookUrl: 'https://hooks.slack.com/services/xxx/yyy/zzz' // Optional: Slack/Webhook eintragen
+    });
+  }
   console.log(`AI Conversations Verzeichnis: ${aiDirExists ? '✅ Vorhanden' : '❌ Fehlt'}`);
   console.log(`Session Backups Verzeichnis: ${backupDirExists ? '✅ Vorhanden' : '❌ Fehlt'}`);
   
@@ -168,7 +176,13 @@ function showAIStatus() {
   const sessionSaverRunning = isProcessRunning('session-saver.js');
   
   const aiBridgeStatus = aiBridgeRunning || aiBridgeStarterRunning;
-  
+  if (!aiBridgeStatus || !sessionSaverRunning) {
+    sendAlert({
+      message: `AI Status: Kritischer Prozess inaktiv! AI Bridge: ${aiBridgeStatus}, Session-Saver: ${sessionSaverRunning}`,
+      level: 'error',
+      // webhookUrl: 'https://hooks.slack.com/services/xxx/yyy/zzz'
+    });
+  }
   console.log(`AI Conversation Bridge: ${aiBridgeStatus ? '✅ Aktiv' : '❌ Inaktiv'}`);
   console.log(`Session-Saver: ${sessionSaverRunning ? '✅ Aktiv' : '❌ Inaktiv'}`);
   
@@ -186,10 +200,19 @@ function showAIStatus() {
     'tools/session-saver.js',
     'tools/recover-session.js'
   ];
-  
+  let missingFiles = [];
   console.log('\nKI-Dateien:');
   for (const file of aiFiles) {
-    console.log(`${file}: ${fileExists(file) ? '✅' : '❌'}`);
+    const exists = fileExists(file);
+    if (!exists) missingFiles.push(file);
+    console.log(`${file}: ${exists ? '✅' : '❌'}`);
+  }
+  if (missingFiles.length > 0) {
+    sendAlert({
+      message: `AI Status: Kritische KI-Dateien fehlen: ${missingFiles.join(', ')}`,
+      level: 'error',
+      // webhookUrl: 'https://hooks.slack.com/services/xxx/yyy/zzz'
+    });
   }
   
   // Anzeige der verfügbaren Modelle

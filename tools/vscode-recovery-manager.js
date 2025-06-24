@@ -17,6 +17,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const { execSync, spawn } = require('child_process');
+const { sendAlert } = require('../alerts/alert-service');
 
 // Konfiguration
 const CONFIG = {
@@ -259,9 +260,9 @@ async function checkServiceStatus(service) {
   try {
     // Status-Check-Befehl ausführen
     const result = execSync(service.statusCheck, { encoding: 'utf8' });
-    
     // Wenn der Befehl erfolgreich war, ist der Service aktiv
     recoveryStatus.services[service.id].status = 'running';
+    recoveryStatus.services[service.id].lastCheck = new Date().toISOString();
     return true;
   } catch (err) {
     // Fehler beim Ausführen des Status-Checks
@@ -276,7 +277,6 @@ async function checkServiceStatus(service) {
  */
 async function restartService(service) {
   log(`Starte Service neu: ${service.name}`, 'info');
-  
   try {
     // Process starten
     const child = spawn(service.restartCommand, {
@@ -284,18 +284,11 @@ async function restartService(service) {
       detached: true,
       stdio: 'ignore'
     });
-    
-    // Process vom Parent entkoppeln
     child.unref();
-    
-    // Status aktualisieren
     recoveryStatus.services[service.id].lastRestart = new Date().toISOString();
     recoveryStatus.services[service.id].restartCount++;
     recoveryStatus.services[service.id].status = 'restarting';
-    
     log(`Service ${service.name} neu gestartet`, 'success');
-    
-    // Kurz warten und dann Status prüfen
     setTimeout(() => {
       checkServiceStatus(service)
         .then(isRunning => {
@@ -303,15 +296,26 @@ async function restartService(service) {
             log(`Service ${service.name} läuft nach Neustart`, 'success');
           } else {
             log(`Service ${service.name} läuft nach Neustart nicht`, 'warn');
+            // Alert bei Fehlschlag
+            sendAlert({
+              message: `[Recovery Manager] Service ${service.name} konnte nach Recovery nicht gestartet werden!`,
+              level: 'error',
+              // webhookUrl: 'https://hooks.slack.com/services/xxx/yyy/zzz'
+            });
           }
           saveStatus();
         });
     }, 5000);
-    
     return true;
   } catch (err) {
     log(`Fehler beim Neustart von ${service.name}: ${err.message}`, 'error');
     recoveryStatus.services[service.id].status = 'error';
+    // Alert bei schwerem Fehler
+    sendAlert({
+      message: `[Recovery Manager] Schwerer Fehler beim Neustart von ${service.name}: ${err.message}`,
+      level: 'error',
+      // webhookUrl: 'https://hooks.slack.com/services/xxx/yyy/zzz'
+    });
     return false;
   }
 }
@@ -392,6 +396,38 @@ async function checkAllServices() {
   
   saveStatus();
   log('Status-Überprüfung abgeschlossen', 'success');
+}
+
+// Fortschrittsanzeige und Zeit seit letztem erfolgreichen Check
+function showServiceProgress() {
+  try {
+    if (fs.existsSync(CONFIG.STATUS_FILE)) {
+      const statusData = JSON.parse(fs.readFileSync(CONFIG.STATUS_FILE, 'utf8'));
+      const now = new Date();
+      let running = 0;
+      let total = 0;
+      if (statusData.services) {
+        console.log('\n📈 Service-Fortschritt & Zeit seit letztem erfolgreichen Check:');
+        Object.entries(statusData.services).forEach(([id, service]) => {
+          total++;
+          const lastCheck = service.lastCheck ? new Date(service.lastCheck) : null;
+          let ago = '-';
+          if (lastCheck) {
+            const diffMin = Math.round((now - lastCheck) / 60000);
+            ago = diffMin < 60 ? `${diffMin} min` : `${Math.round(diffMin/60)} h`;
+          }
+          const status = service.status === 'running' ? '✅' : (service.status === 'error' ? '❌' : '⚠️');
+          if (service.status === 'running') running++;
+          console.log(`  ${status} ${service.name.padEnd(28)} | Letzter erfolgreicher Check: ${service.lastCheck || '-'} | Vor: ${ago}`);
+        });
+        // Prozentanzeige
+        const percent = total > 0 ? Math.round((running/total)*100) : 0;
+        console.log(`\n${running}/${total} Services laufen (${percent}%)`);
+      }
+    }
+  } catch (e) {
+    log('Fehler bei Fortschrittsanzeige: ' + e.message, 'error');
+  }
 }
 
 /**
