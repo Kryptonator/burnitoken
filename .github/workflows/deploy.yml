@@ -30,3 +30,12 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./
           exclude_assets: '.github'
+        
+      - name: Setze Git-Tag nach erfolgreichem Deploy
+        if: success()
+        run: |
+          TAG="v$(date +'%Y.%m.%d-%H%M')"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git tag $TAG
+          git push origin $TAG
