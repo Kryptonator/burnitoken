@@ -16,7 +16,6 @@ const path = require('path');
 const os = require('os');
 const { execSync } = require('child_process');
 const https = require('https');
-const { sendAlert } = require('./alert-service');
 
 // Konfiguration
 const CONFIG = {
@@ -268,10 +267,27 @@ function runLiveReadinessChecks() {
     printColored('\n🎉 ALLE KRITERIEN FÜR DEN LIVE-GANG SIND ERFÜLLT!\n', '\x1b[1;42m');
   } else {
     printColored('\n❗ Es fehlen noch Kriterien für den Live-Gang! Siehe Hinweise oben.\n', '\x1b[1;41m');
-    sendAlert({
-      message: '[Recovery Center] Live-Readiness-Check fehlgeschlagen! Siehe Recovery Center für Details.',
-      level: 'error'
-    });
+    sendAlert('[Recovery Center] Live-Readiness-Check fehlgeschlagen! Siehe Recovery Center für Details.');
+  }
+}
+
+function sendAlert(message) {
+  if (!ALERT_WEBHOOK_URL) return;
+  try {
+    const url = new URL(ALERT_WEBHOOK_URL);
+    const data = JSON.stringify({ text: message });
+    const options = {
+      hostname: url.hostname,
+      path: url.pathname + url.search,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Content-Length': data.length }
+    };
+    const req = https.request(options, res => {});
+    req.on('error', error => printColored('❌ Fehler beim Senden des Alerts: ' + error.message, '\x1b[31m'));
+    req.write(data);
+    req.end();
+  } catch (e) {
+    printColored('❌ Fehler beim Senden des Alerts: ' + e.message, '\x1b[31m');
   }
 }
 
@@ -487,10 +503,7 @@ function showRecentErrorsAndSecurity() {
     printColored('  Dependabot: Kein Alert-Export gefunden', '\x1b[33m');
   }
   if (criticalErrorFound) {
-    sendAlert({
-      message: '[Recovery Center] Kritische Fehler oder Security-Probleme erkannt! Siehe Recovery Center für Details.',
-      level: 'error'
-    });
+    sendAlert('[Recovery Center] Kritische Fehler oder Security-Probleme erkannt! Siehe Recovery Center für Details.');
   }
 }
 
@@ -703,6 +716,27 @@ function showProgressAndReminders() {
 }
 
 /**
+ * Zeigt die wichtigsten Fehler und Status aus ERROR_REPORT.md
+ */
+function showErrorReportSummary() {
+  const errorReportPath = path.join(__dirname, '../ERROR_REPORT.md');
+  if (fs.existsSync(errorReportPath)) {
+    printColored('\n🛑 Fehler- und Status-Report:', '\x1b[1;31m');
+    const lines = fs.readFileSync(errorReportPath, 'utf8').split('\n');
+    // Zeige die ersten 15 Zeilen oder bis zur ersten Leerzeile nach Fehlern
+    let count = 0;
+    for (const line of lines) {
+      if (line.trim() === '' && count > 5) break;
+      printColored('  ' + line, '\x1b[31m');
+      count++;
+      if (count >= 15) break;
+    }
+  } else {
+    printColored('\nℹ️ Kein ERROR_REPORT.md gefunden.', '\x1b[33m');
+  }
+}
+
+/**
  * Hauptfunktion
  */
 function main() {
@@ -714,25 +748,9 @@ function main() {
 
   // Projektübersicht immer am Anfang anzeigen
   showProjectOverview();
-  // Dynamische Tool- & Cloud-Überwachung anzeigen
-  showToolAndCloudStatus();
-  // Letzte Fehler & Security-Status anzeigen
-  showRecentErrorsAndSecurity();
-  // Fortschritt & Reminder anzeigen
-  showProgressAndReminders();
-  // Dokumentations-Check
-  checkDocumentationStatus();
-  // Status als Markdown exportieren
-  exportStatusMarkdown();
 
-  // Safe-Mode: keine Self-Checks, keine execSync
-  if (process.argv.includes('--safe')) {
-    printColored('\n[SAFE MODE] Nur Basis-Checks ausgeführt. Für vollständige Prüfung ohne --safe starten.', '\x1b[33m');
-    return;
-  }
-
-  // Self-Checks für alle Kern-Tools durchführen
-  runSelfChecks();
+  // Fehler- und Status-Report anzeigen
+  showErrorReportSummary();
 
   if (process.argv.includes('--live-check')) {
     runLiveReadinessChecks();

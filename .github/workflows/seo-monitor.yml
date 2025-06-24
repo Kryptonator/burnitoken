@@ -72,3 +72,24 @@ jobs:
         if: success()
         run: |
           curl -X POST -H "Content-Type: application/json" -d '{"status":"success","workflow":"seo-monitor"}' ${{ secrets.STATUS_WEBHOOK_URL }}
+      - name: Status-Webhook bei Fehler
+        if: failure()
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{"status":"failure","workflow":"seo-monitor"}' ${{ secrets.STATUS_WEBHOOK_URL }}
+      - name: 📄 Status-Übersicht generieren
+        run: node tools/update-status-md.js
+      - name: 📤 STATUS.md als Artefakt hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: status-md
+          path: STATUS.md
+      - name: 📤 STATUS.md ins Repository pushen
+        if: success()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin
+          git checkout ${{ github.ref_name }}
+          git add STATUS.md
+          git commit -m "ci: update STATUS.md [skip ci]" || echo "No changes to commit"
+          git push origin HEAD:${{ github.ref_name }}

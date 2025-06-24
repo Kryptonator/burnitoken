@@ -77,7 +77,48 @@ jobs:
           body: |
             Es wurden kritische Fehler im CI-Test/Build gefunden. Bitte prüfe den ERROR_REPORT.md im Anhang.
           attachments: ERROR_REPORT.md
-
+      - name: Status-Webhook bei Erfolg
+        if: success()
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{"status":"success","workflow":"ci"}' ${{ secrets.STATUS_WEBHOOK_URL }}
+      - name: Status-Webhook bei Fehler
+        if: failure()
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{"status":"failure","workflow":"ci"}' ${{ secrets.STATUS_WEBHOOK_URL }}
+      - name: Self-Healing: Recovery Center Triggern
+        if: failure()
+        run: |
+          node tools/vscode-recovery-center.js --auto-recover || echo "Recovery Center konnte nicht ausgeführt werden."
+      - name: Status-Webhook bei Fehler (mit Details)
+        if: failure()
+        run: |
+          SHORT_ERROR=$(head -n 20 ERROR_REPORT.md 2>/dev/null | tr '\n' ' ' | cut -c1-500)
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{
+              "status":"failure",
+              "workflow":"ci",
+              "commit":"${{ github.sha }}",
+              "branch":"${{ github.ref_name }}",
+              "run_url":"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+              "error":"'$SHORT_ERROR'"
+            }' ${{ secrets.STATUS_WEBHOOK_URL }}
+      - name: 📄 Status-Übersicht generieren
+        run: node tools/update-status-md.js
+      - name: 📤 STATUS.md als Artefakt hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: status-md
+          path: STATUS.md
+      - name: 📤 STATUS.md ins Repository pushen
+        if: success()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin
+          git checkout ${{ github.ref_name }}
+          git add STATUS.md
+          git commit -m "ci: update STATUS.md [skip ci]" || echo "No changes to commit"
+          git push origin HEAD:${{ github.ref_name }}
   security:
     name: 🔒 Security & Dependency Check
     runs-on: ubuntu-latest
