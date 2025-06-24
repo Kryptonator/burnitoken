@@ -47,3 +47,10 @@ jobs:
         if: failure()
         run: |
           curl -X POST -H "Content-Type: application/json" -d '{"status":"failure","workflow":"health-check"}' ${{ secrets.STATUS_WEBHOOK_URL }}
+      - name: GitHub Issue bei kritischem Fehler
+        if: failure()
+        uses: peter-evans/create-issue-from-file@v4
+        with:
+          title: "🚨 Health-Check-Fehler: ${{ github.workflow }} @ ${{ github.sha }}"
+          content-filepath: HEALTH_REPORT.md
+          labels: bug, automated, health-check

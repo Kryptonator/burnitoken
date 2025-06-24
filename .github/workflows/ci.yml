@@ -64,6 +64,13 @@ jobs:
         with:
           name: error-report
           path: ERROR_REPORT.md
+      - name: GitHub Issue bei kritischem Fehler
+        if: failure()
+        uses: peter-evans/create-issue-from-file@v4
+        with:
+          title: "🚨 CI-Fehler: ${{ github.workflow }} @ ${{ github.sha }}"
+          content-filepath: ERROR_REPORT.md
+          labels: bug, automated, ci
       # Self-Healing nur einmal pro Job
       - name: Self-Healing: Recovery Center Triggern
         if: failure()
@@ -186,6 +193,13 @@ jobs:
         with:
           name: error-report
           path: ERROR_REPORT.md
+      - name: GitHub Issue bei kritischem Fehler
+        if: failure()
+        uses: peter-evans/create-issue-from-file@v4
+        with:
+          title: "🚨 CI-Fehler: ${{ github.workflow }} @ ${{ github.sha }}"
+          content-filepath: ERROR_REPORT.md
+          labels: bug, automated, ci
       # Self-Healing nur einmal pro Job
       - name: Self-Healing: Recovery Center Triggern
         if: failure()
