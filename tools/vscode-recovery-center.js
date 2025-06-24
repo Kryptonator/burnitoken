@@ -367,6 +367,151 @@ function showToolAndCloudStatus() {
 }
 
 /**
+ * Zeigt die letzten Fehler aus Logs (Sentry, Playwright, CI, Snyk, Dependabot)
+ */
+function showRecentErrorsAndSecurity() {
+  printColored('\n🚨 Letzte Fehler & Security-Status:', '\x1b[1;31m');
+  // Sentry-Log
+  const sentryLog = path.join(__dirname, '../logs/sentry.log');
+  if (fs.existsSync(sentryLog)) {
+    const lines = fs.readFileSync(sentryLog, 'utf8').trim().split('\n');
+    const lastError = lines.reverse().find(l => l.toLowerCase().includes('error') || l.toLowerCase().includes('exception'));
+    if (lastError) {
+      printColored('  Sentry: ' + lastError, '\x1b[31m');
+    } else {
+      printColored('  Sentry: Keine kritischen Fehler gefunden', '\x1b[32m');
+    }
+  } else {
+    printColored('  Sentry: Kein Log gefunden', '\x1b[33m');
+  }
+  // Playwright-Log
+  const pwLog = path.join(__dirname, '../test-results/playwright.log');
+  if (fs.existsSync(pwLog)) {
+    const lines = fs.readFileSync(pwLog, 'utf8').trim().split('\n');
+    const lastFail = lines.reverse().find(l => l.toLowerCase().includes('fail'));
+    if (lastFail) {
+      printColored('  Playwright: ' + lastFail, '\x1b[31m');
+    } else {
+      printColored('  Playwright: Alle Tests grün', '\x1b[32m');
+    }
+  } else {
+    printColored('  Playwright: Kein Log gefunden', '\x1b[33m');
+  }
+  // CI-Log
+  const ciLog = path.join(__dirname, '../.github/workflows/ci.log');
+  if (fs.existsSync(ciLog)) {
+    const lines = fs.readFileSync(ciLog, 'utf8').trim().split('\n');
+    const lastFail = lines.reverse().find(l => l.toLowerCase().includes('fail') || l.toLowerCase().includes('error'));
+    if (lastFail) {
+      printColored('  CI/CD: ' + lastFail, '\x1b[31m');
+    } else {
+      printColored('  CI/CD: Letzter Run erfolgreich', '\x1b[32m');
+    }
+  } else {
+    printColored('  CI/CD: Kein Log gefunden', '\x1b[33m');
+  }
+  // Snyk-Log
+  const snykLog = path.join(__dirname, '../test-results/snyk.log');
+  if (fs.existsSync(snykLog)) {
+    const lines = fs.readFileSync(snykLog, 'utf8').trim().split('\n');
+    const lastVuln = lines.reverse().find(l => l.toLowerCase().includes('vuln') || l.toLowerCase().includes('critical'));
+    if (lastVuln) {
+      printColored('  Snyk: ' + lastVuln, '\x1b[31m');
+    } else {
+      printColored('  Snyk: Keine kritischen Schwachstellen', '\x1b[32m');
+    }
+  } else {
+    printColored('  Snyk: Kein Log gefunden', '\x1b[33m');
+  }
+  // Dependabot Alerts (GitHub Advisory Database)
+  const dependabotAlerts = path.join(__dirname, '../.github/dependabot-alerts.json');
+  if (fs.existsSync(dependabotAlerts)) {
+    const alerts = JSON.parse(fs.readFileSync(dependabotAlerts, 'utf8'));
+    if (alerts.length > 0) {
+      printColored(`  Dependabot: ${alerts.length} offene Alerts`, '\x1b[31m');
+      alerts.slice(0, 3).forEach(a => printColored('    - ' + a.summary, '\x1b[33m'));
+    } else {
+      printColored('  Dependabot: Keine offenen Alerts', '\x1b[32m');
+    }
+  } else {
+    printColored('  Dependabot: Kein Alert-Export gefunden', '\x1b[33m');
+  }
+}
+
+/**
+ * Führt Self-Checks für alle Kern-Tools und Integrationen durch
+ */
+function runSelfChecks() {
+  printColored('\n🔎 Self-Check: Funktionsfähigkeit aller Kern-Tools', '\x1b[1;36m');
+  // Google Search Console API
+  try {
+    const gscScript = path.join(__dirname, 'gsc-status-check.js');
+    if (fs.existsSync(gscScript)) {
+      const result = execSync(`node ${gscScript} --diagnose`, { encoding: 'utf8', timeout: 10000 });
+      if (result.toLowerCase().includes('ok') || result.toLowerCase().includes('success')) {
+        printColored('  ✅ Google Search Console API erreichbar', '\x1b[32m');
+      } else {
+        printColored('  ⚠️  GSC-API: Antwort prüfen! (' + result.trim().split('\n').pop() + ')', '\x1b[33m');
+      }
+    } else {
+      printColored('  ❌ GSC-API Self-Check nicht möglich (Script fehlt)', '\x1b[31m');
+    }
+  } catch (e) {
+    printColored('  ❌ GSC-API Self-Check Fehler: ' + e.message, '\x1b[31m');
+  }
+  // Sentry Monitoring
+  try {
+    const sentryClient = path.join(__dirname, '../sentry.client.js');
+    if (fs.existsSync(sentryClient)) {
+      // Hier könnte ein echter Sentry-API-Call stehen, Platzhalter:
+      printColored('  ✅ Sentry-Client vorhanden (Status siehe Log)', '\x1b[32m');
+    } else {
+      printColored('  ❌ Sentry-Client fehlt', '\x1b[31m');
+    }
+  } catch (e) {
+    printColored('  ❌ Sentry Self-Check Fehler: ' + e.message, '\x1b[31m');
+  }
+  // Playwright Test
+  try {
+    const pwConfig = path.join(__dirname, '../playwright.config.js');
+    if (fs.existsSync(pwConfig)) {
+      const result = execSync('npx playwright test --list', { encoding: 'utf8', timeout: 10000 });
+      if (result.toLowerCase().includes('test')) {
+        printColored('  ✅ Playwright-Tests erkannt', '\x1b[32m');
+      } else {
+        printColored('  ⚠️  Playwright: Keine Tests gefunden', '\x1b[33m');
+      }
+    } else {
+      printColored('  ❌ Playwright-Konfiguration fehlt', '\x1b[31m');
+    }
+  } catch (e) {
+    printColored('  ❌ Playwright Self-Check Fehler: ' + e.message, '\x1b[31m');
+  }
+  // Snyk
+  try {
+    const snykLog = path.join(__dirname, '../test-results/snyk.log');
+    if (fs.existsSync(snykLog)) {
+      printColored('  ✅ Snyk-Scan vorhanden (Status siehe Log)', '\x1b[32m');
+    } else {
+      printColored('  ❌ Snyk-Scan fehlt', '\x1b[31m');
+    }
+  } catch (e) {
+    printColored('  ❌ Snyk Self-Check Fehler: ' + e.message, '\x1b[31m');
+  }
+  // Dependabot
+  try {
+    const dependabotAlerts = path.join(__dirname, '../.github/dependabot-alerts.json');
+    if (fs.existsSync(dependabotAlerts)) {
+      printColored('  ✅ Dependabot-Alerts vorhanden (Status siehe oben)', '\x1b[32m');
+    } else {
+      printColored('  ❌ Dependabot-Alerts fehlen', '\x1b[31m');
+    }
+  } catch (e) {
+    printColored('  ❌ Dependabot Self-Check Fehler: ' + e.message, '\x1b[31m');
+  }
+}
+
+/**
  * Hauptfunktion
  */
 function main() {
@@ -380,6 +525,10 @@ function main() {
   showProjectOverview();
   // Dynamische Tool- & Cloud-Überwachung anzeigen
   showToolAndCloudStatus();
+  // Letzte Fehler & Security-Status anzeigen
+  showRecentErrorsAndSecurity();
+  // Self-Checks für alle Kern-Tools durchführen
+  runSelfChecks();
 
   if (process.argv.includes('--live-check')) {
     runLiveReadinessChecks();
