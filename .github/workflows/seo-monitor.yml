@@ -46,6 +46,7 @@ jobs:
             Der SEO/Indexierungs-Check ist fehlgeschlagen. Bitte prüfe den Report im Anhang.
           attachments: seo-report.log
       - name: Fehler- und Status-Report generieren
+        id: error_report
         run: |
           node tools/error-collector.js
       - name: ERROR_REPORT.md als Artefakt hochladen
@@ -54,7 +55,7 @@ jobs:
           name: error-report
           path: ERROR_REPORT.md
       - name: Kritische Fehler prüfen und Alert senden
-        if: failure() || steps['Fehler- und Status-Report generieren'].outcome == 'failure'
+        if: failure() || steps.error_report.outcome == 'failure'
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: ${{ secrets.SMTP_SERVER }}
