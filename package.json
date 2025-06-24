@@ -83,7 +83,7 @@
     "chrome-launcher": "^1.2.0",
     "googleapis": "^129.0.0",
     "lighthouse": "^12.6.1",
-    "netlify-cli": "^17.15.6",
+    "netlify-cli": "^22.1.2",
     "node-fetch": "^3.3.2",
     "selenium-webdriver": "^4.33.0"
   }
