@@ -30,7 +30,7 @@ jobs:
       
       - name: 🔍 Run Web Vitals Check
         id: web-vitals
-        run: npm run web-vitals:ci
+        run: node --max-old-space-size=4096 ./node_modules/.bin/web-vitals || npm run web-vitals:ci
         continue-on-error: true
       
       - name: 📤 Upload Web Vitals Report
@@ -38,6 +38,30 @@ jobs:
         with:
           name: web-vitals-report
           path: tools/.web-vitals-reports
+          
+      - name: Fehler- und Status-Report generieren
+        id: error_report
+        run: |
+          node --max-old-space-size=4096 tools/error-collector.js
+      - name: ERROR_REPORT.md als Artefakt hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: error-report
+          path: ERROR_REPORT.md
+      - name: Kritische Fehler prüfen und Alert senden
+        if: failure() || steps.error_report.outcome == 'failure'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port: ${{ secrets.SMTP_PORT }}
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: 'Kritischer Fehler im Web Vitals/Meta-Check!'
+          to: ${{ secrets.ALERT_EMAIL }}
+          from: 'performance-monitor@burnitoken.com'
+          body: |
+            Es wurden kritische Fehler im Web Vitals/Meta-Check gefunden. Bitte prüfe den ERROR_REPORT.md im Anhang.
+          attachments: ERROR_REPORT.md
           
   meta-tags-check:
     name: 🏷️ Meta Tags Check
@@ -61,7 +85,7 @@ jobs:
       
       - name: 🔍 Run Meta Tags Check
         id: meta-tags
-        run: npm run meta-tags:ci
+        run: node --max-old-space-size=4096 ./node_modules/.bin/meta-tags || npm run meta-tags:ci
         continue-on-error: true
       
       - name: 📤 Upload Meta Tags Report
