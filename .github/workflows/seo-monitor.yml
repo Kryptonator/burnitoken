@@ -1,0 +1,47 @@
+name: SEO & Indexierungs-Monitor
+
+on:
+  schedule:
+    - cron: '0 6 * * *' # täglich um 6 Uhr UTC
+  workflow_dispatch:
+
+jobs:
+  seo-monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Dependencies
+        run: npm ci
+      - name: SEO/Indexierungs-Check
+        env:
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+        run: |
+          node tools/seo-monitor.js > seo-report.log || echo "SEO-Check Fehler!" > seo-report.log
+      - name: SEO-Report als Artefakt hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-report
+          path: seo-report.log
+      - name: Fehler-Report (bei Problemen)
+        if: failure()
+        run: |
+          echo 'SEO/Indexierungs-Check fehlgeschlagen! Bitte prüfen.'
+      - name: E-Mail-Benachrichtigung bei Fehlern
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port: ${{ secrets.SMTP_PORT }}
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: 'SEO/Indexierungs-Check fehlgeschlagen!'
+          to: ${{ secrets.ALERT_EMAIL }}
+          from: 'seo-monitor@burnitoken.com'
+          body: |
+            Der SEO/Indexierungs-Check ist fehlgeschlagen. Bitte prüfe den Report im Anhang.
+          attachments: seo-report.log
