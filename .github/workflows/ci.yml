@@ -154,7 +154,7 @@ jobs:
         
       - name: ♿ Run axe-core accessibility tests
         run: |
-          npx axe ./index.html --save --reporter json --output axe-report.json || true
+          node --max-old-space-size=4096 ./node_modules/.bin/axe ./index.html --save --reporter json --output axe-report.json || npx axe ./index.html --save --reporter json --output axe-report.json || true
           
       - name: 📎 Upload Accessibility Report
         uses: actions/upload-artifact@v4
@@ -162,6 +162,29 @@ jobs:
           name: axe-accessibility-report
           path: axe-report.json
         if: always()
+      - name: Fehler- und Status-Report generieren
+        id: error_report
+        run: |
+          node --max-old-space-size=4096 tools/error-collector.js
+      - name: ERROR_REPORT.md als Artefakt hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: error-report
+          path: ERROR_REPORT.md
+      - name: Kritische Fehler prüfen und Alert senden
+        if: failure() || steps.error_report.outcome == 'failure'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port: ${{ secrets.SMTP_PORT }}
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: 'Kritischer Fehler im Accessibility-Check!'
+          to: ${{ secrets.ALERT_EMAIL }}
+          from: 'accessibility-monitor@burnitoken.com'
+          body: |
+            Es wurden kritische Fehler im Accessibility-Check gefunden. Bitte prüfe den ERROR_REPORT.md im Anhang.
+          attachments: ERROR_REPORT.md
 
   notify-on-failure:
     name: 📧 Send Failure Notification
