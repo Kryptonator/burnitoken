@@ -68,3 +68,7 @@ jobs:
           body: |
             Es wurden kritische Fehler im SEO/Indexierungs- oder System-Check gefunden. Bitte prüfe den ERROR_REPORT.md im Anhang.
           attachments: ERROR_REPORT.md
+      - name: Status-Webhook bei Erfolg
+        if: success()
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{"status":"success","workflow":"seo-monitor"}' ${{ secrets.STATUS_WEBHOOK_URL }}
