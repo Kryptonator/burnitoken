@@ -8,6 +8,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const { createTodo } = require('./todo-manager');
 
 // Farben für die Konsolenausgabe
 const COLORS = {
@@ -503,6 +504,11 @@ function validateExtensions(extensionKey = null) {
         } else {
           console.log(`${COLORS.red}❌ Fehler: ${checkResult.message}${COLORS.reset}`);
           allPassed = false;
+          createTodo(
+            `Fehler bei Extension: ${extension.name}`,
+            `Die Überprüfung der Extension "${extension.name}" hat einen Fehler ergeben: ${checkResult.message}`,
+            'Extension Validator'
+          );
         }
         
         results[key] = checkResult;

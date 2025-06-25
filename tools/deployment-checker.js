@@ -10,6 +10,7 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const { createTodo } = require('./todo-manager');
 
 // Konfiguration
 const CONFIG = {
@@ -173,6 +174,13 @@ function checkWebsiteContent() {
               foundElements.push(element);
             } else {
               missingElements.push(element);
+              log(`Kritisches Element fehlt: ${element}`, 'error');
+              deploymentStatus.summary.elementsMissing.push(element);
+              createTodo(
+                `Kritisches Element fehlt: ${element}`,
+                `Das kritische Element oder der Text "${element}" wurde im HTML der Startseite (${CONFIG.liveUrl}) nicht gefunden. Dies beeinträchtigt SEO und die grundlegende Funktionalität.`,
+                'Deployment Checker'
+              );
             }
           }
           
@@ -314,6 +322,7 @@ async function checkDeployment() {
       deploymentStatus.summary.status === 'deployed' ? 'success' : 
       deploymentStatus.summary.status === 'partial' ? 'warn' : 'error');
       
+    log('Deployment-Check abgeschlossen.', 'success');
     return deploymentStatus.summary.status;
   } catch (err) {
     log(`Unerwarteter Fehler beim Deployment-Check: ${err.message}`, 'error');

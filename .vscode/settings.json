@@ -35,7 +35,7 @@
     "**/.git/objects/**": true,
     "**/.git/subtree-cache/**": true
   },
-  "task.allowAutomaticTasks": "on",
+  "task.allowAutomaticTasks": "off",
   "extensions.ignoreRecommendations": false,
   "prettier.requireConfig": false,
   "prettier.htmlWhitespaceSensitivity": "css",

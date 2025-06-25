@@ -1,7 +1,3 @@
-
-
-
-
 name: Deploy Website
 
 on:
@@ -57,31 +53,13 @@ jobs:
             Siehe Changelog und Commits für Details.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Status-Webhook nach erfolgreichem Deploy
+
+      - name: Status-Webhook bei Erfolg
         if: success()
-        env:
-          STATUS_WEBHOOK_URL: ${{ secrets.STATUS_WEBHOOK_URL }}
         run: |
-          if [ -n "$STATUS_WEBHOOK_URL" ]; then
-            curl -X POST -H "Content-Type: application/json" \
-              -d '{"text":"✅ Deploy erfolgreich: ${{ github.repository }} (${{ github.ref }})\nTag: ${{ env.tag }}\nCommit: ${{ github.sha }}"}' \
-              "$STATUS_WEBHOOK_URL"
-            echo "Status-Webhook gesendet."
-          else
-            echo "Kein STATUS_WEBHOOK_URL Secret gesetzt, kein Webhook gesendet."
-          fi
-      
-      - name: Fehler-Webhook bei fehlgeschlagenem Deploy
+          curl -X POST -H "Content-Type: application/json" -d '{"status":"success","workflow":"Deploy Website"}' ${{ secrets.STATUS_WEBHOOK_URL }}
+
+      - name: Status-Webhook bei Fehler
         if: failure()
-        env:
-          ALERT_WEBHOOK_URL: ${{ secrets.ALERT_WEBHOOK_URL }}
         run: |
-          if [ -n "$ALERT_WEBHOOK_URL" ]; then
-            curl -X POST -H "Content-Type: application/json" \
-              -d '{"text":"❌ Deploy FEHLGESCHLAGEN: ${{ github.repository }} (${{ github.ref }})\nCommit: ${{ github.sha }}\nBitte prüfen!"}' \
-              "$ALERT_WEBHOOK_URL"
-            echo "Fehler-Webhook gesendet."
-          else
-            echo "Kein ALERT_WEBHOOK_URL Secret gesetzt, kein Fehler-Webhook gesendet."
-          fi
+          curl -X POST -H "Content-Type: application/json" -d '{"status":"failure","workflow":"Deploy Website"}' ${{ secrets.STATUS_WEBHOOK_URL }}

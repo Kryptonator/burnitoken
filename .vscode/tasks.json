@@ -297,6 +297,23 @@
       "problemMatcher": []
     },
     {
+      "label": "👀 [Überwachung] Dependabot PRs prüfen",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/dependabot-monitor.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
       "label": "🔧 Start Auto-Recovery System",
       "type": "shell",
       "command": "node",
@@ -353,6 +370,23 @@
       "problemMatcher": []
     },
     {
+      "label": "📊 Status-Report generieren",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/generate-status-report.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
       "label": "💻 Start PowerShell-Safe Monitoring",
       "type": "shell",
       "command": "node",
@@ -367,128 +401,6 @@
         "clear": true
       },
       "isBackground": true,
-      "problemMatcher": []
-    },
-    {
-      "label": "🔍 GSC: Status Check",
-      "type": "shell",
-      "command": "node",
-      "args": [
-        "tools/gsc-status-check.js"
-      ],
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": true,
-        "panel": "shared",
-        "clear": true
-      },
-      "group": "test",
-      "problemMatcher": []
-    },
-    {
-      "label": "🔍 GSC: Diagnose Mode",
-      "type": "shell",
-      "command": "node",
-      "args": [
-        "tools/gsc-status-check.js",
-        "--diagnose"
-      ],
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": true,
-        "panel": "shared",
-        "clear": true
-      },
-      "group": "test",
-      "problemMatcher": []
-    },
-    {
-      "label": "🔧 GSC: Setup Guide",
-      "type": "shell",
-      "command": "node",
-      "args": [
-        "tools/gsc-setup-guide.js"
-      ],
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": true,
-        "panel": "shared",
-        "clear": true
-      },
-      "group": "test",
-      "problemMatcher": []
-    },
-    {
-      "label": "📊 Core Web Vitals Check",
-      "type": "shell",
-      "command": "node",
-      "args": [
-        "tools/core-web-vitals-monitor.js"
-      ],
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": true,
-        "panel": "shared",
-        "clear": true
-      },
-      "group": "test",
-      "problemMatcher": []
-    },
-    {
-      "label": "📊 Core Web Vitals: Ausführlicher Check",
-      "type": "shell",
-      "command": "node",
-      "args": [
-        "tools/core-web-vitals-monitor.js",
-        "--full"
-      ],
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": true,
-        "panel": "shared",
-        "clear": true
-      },
-      "group": "test",
-      "problemMatcher": []
-    },
-    {
-      "label": "📊 Fehlerseiten-Check",
-      "type": "shell",
-      "command": "node",
-      "args": [
-        "tools/core-web-vitals-monitor.js",
-        "--error-pages"
-      ],
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": true,
-        "panel": "shared",
-        "clear": true
-      },
-      "group": "test",
-      "problemMatcher": []
-    },
-    {
-      "label": "🏷️ Meta-Tags Validator",
-      "type": "shell",
-      "command": "node",
-      "args": [
-        "tools/meta-tags-validator.js"
-      ],
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": true,
-        "panel": "shared",
-        "clear": true
-      },
-      "group": "test",
       "problemMatcher": []
     }
   ]

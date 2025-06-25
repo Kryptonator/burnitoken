@@ -1,10 +1,10 @@
 {
-  "timestamp": "2025-06-22T13:26:40.604Z",
+  "timestamp": "2025-06-24T21:32:13.824Z",
   "summary": {
     "extensions": {
-      "total": 66,
-      "active": 38,
-      "inactive": 3,
+      "total": 62,
+      "active": 37,
+      "inactive": 4,
       "required": 8,
       "requiredActive": 8
     },
@@ -15,13 +15,13 @@
     },
     "integrations": {
       "gscConnected": true,
-      "aiServicesActive": false,
-      "tailwindActive": true,
-      "playwrightActive": false
+      "aiServicesActive": true,
+      "tailwindActive": false,
+      "playwrightActive": true
     },
     "tasks": {
       "autoStartConfigured": true,
-      "extensionHealthCheck": true,
+      "extensionHealthCheck": false,
       "gscMonitor": true
     }
   },
@@ -251,7 +251,7 @@
     {
       "id": "dbaeumer.vscode-eslint",
       "name": "vscode-eslint",
-      "isActive": true,
+      "isActive": false,
       "isRequired": false
     },
     {
@@ -311,7 +311,7 @@
       "status": "active",
       "connected": true,
       "authValid": true,
-      "lastCheck": "2025-06-22T12:30:14.947Z"
+      "lastCheck": "2025-06-22T16:14:41.031Z"
     },
     {
       "name": "gsc-auth",
@@ -338,11 +338,5 @@
       "status": "active"
     }
   ],
-  "recommendations": [
-    {
-      "priority": "medium",
-      "message": "KI-Services (Session-Saver und AI Bridge) laufen nicht. Führe \"npm run ai:restart\" aus, um sie neu zu starten.",
-      "action": "ai-restart"
-    }
-  ]
+  "recommendations": []
 }

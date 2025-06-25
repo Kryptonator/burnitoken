@@ -1,98 +1,153 @@
 /**
- * @file price-oracle.js
- * @description Ein robustes Preis-Orakel für Kryptowährungen mit API-Fallback und Timeout.
- *              Exportiert eine einzige Funktion: fetchPrice(tokenId, currency).
- * @author GitHub Copilot (als technischer Visionär)
- * @version 1.0.0 - 2025-06-24
+ * Price Oracle Module
+ * 
+ * Kapselt die Logik zum Abrufen von Preisdaten von mehreren APIs,
+ * implementiert einen Fallback-Mechanismus und verwaltet Lade-, Erfolgs- und Fehlerzustände.
+ * 
+ * @version 1.1.0
+ * @date 2025-06-25
  */
 
 const PriceOracle = (() => {
-    // Konfiguration der Endpunkte und Timeouts. Leicht erweiterbar.
-    const CONFIG = {
-        TIMEOUT_MS: 5000, // 5 Sekunden Timeout pro API-Anfrage
-        PRIMARY_API: {
-            // CoinGecko: tokenId ist z.B. 'ripple'
-            url: (tokenId, currency) => `https://api.coingecko.com/api/v3/simple/price?ids=${tokenId}&vs_currencies=${currency}`,
-            parser: (data, tokenId, currency) => data[tokenId]?.[currency]
+    // Konfiguration der API-Endpunkte (primär, sekundär, etc.)
+    const API_ENDPOINTS = [
+        {
+            name: 'CoinGecko',
+            url: 'https://api.coingecko.com/api/v3/simple/price?ids=burnitoken&vs_currencies=usd',
+            parser: (data) => data?.burnitoken?.usd
         },
-        FALLBACK_API: {
-            // CoinCap: tokenId ist z.B. 'xrp'
-            url: (tokenId, currency) => `https://api.coincap.io/v2/assets/${tokenId}`,
-            parser: (data) => parseFloat(data.data?.priceUsd) // CoinCap gibt nur USD zurück, ggf. Umrechnung nötig
+        {
+            name: 'CoinCap',
+            url: 'https://api.coincap.io/v2/assets/burnitoken',
+            parser: (data) => parseFloat(data?.data?.priceUsd)
         }
+        // Weitere Fallback-APIs können hier einfach hinzugefügt werden
+    ];
+
+    // Zustand des Moduls, um den aktuellen Status zu verfolgen
+    let state = {
+        price: null,
+        status: 'idle', // idle, loading, success, error
+        lastUpdated: null,
+        source: null,
+        error: null
     };
 
     /**
-     * Führt einen Fetch-Request mit einem Timeout durch.
-     * @param {string} url - Die URL zum Abrufen.
-     * @param {number} timeout - Timeout in Millisekunden.
-     * @returns {Promise<Response>}
+     * Aktualisiert alle UI-Elemente, die den Preis anzeigen.
+     * Verwendet data-Attribute für eine saubere Trennung von HTML und JS.
+     * @param {string} status - Der aktuelle Ladezustand ('loading', 'success', 'error')
      */
-    async function fetchWithTimeout(url, timeout) {
-        const controller = new AbortController();
-        const id = setTimeout(() => controller.abort(), timeout);
+    function updateUI(status) {
+        const priceElements = document.querySelectorAll('[data-price-display]');
+        priceElements.forEach(el => {
+            el.classList.remove('loading', 'error', 'success', 'idle');
+            el.classList.add(status);
 
-        const response = await fetch(url, {
-            signal: controller.signal
+            const valueEl = el.querySelector('[data-price-value]');
+            const statusEl = el.querySelector('[data-price-status]');
+
+            switch (status) {
+                case 'loading':
+                    if (valueEl) valueEl.textContent = '...';
+                    if (statusEl) statusEl.textContent = 'Updating...';
+                    break;
+                case 'success':
+                    if (valueEl) valueEl.textContent = `$${state.price.toFixed(4)}`;
+                    if (statusEl) statusEl.textContent = `Live from ${state.source}`;
+                    break;
+                case 'error':
+                    if (valueEl) valueEl.textContent = 'N/A';
+                    if (statusEl) statusEl.textContent = 'Data unavailable';
+                    break;
+                default:
+                    if (valueEl) valueEl.textContent = '-';
+                    if (statusEl) statusEl.textContent = 'Idle';
+                    break;
+            }
         });
-
-        clearTimeout(id);
-        return response;
     }
 
     /**
-     * Ruft den Preis von einer einzelnen API-Quelle ab.
-     * @param {object} api - Das API-Konfigurationsobjekt.
-     * @param {string} tokenId - Die ID des Tokens für die jeweilige API.
-     * @param {string} currency - Die Zielwährung (z.B. 'usd').
-     * @returns {Promise<number|null>}
+     * Versucht, den Preis von einer einzelnen API abzurufen.
+     * Implementiert einen robusten Timeout und eine Fehlerbehandlung.
+     * @param {object} api - Das API-Objekt mit URL und Parser-Funktion.
+     * @returns {Promise<number|null>} - Der Preis oder null bei einem Fehler.
      */
-    async function fetchFromSource(api, tokenId, currency) {
+    async function fetchFromAPI(api) {
         try {
-            const response = await fetchWithTimeout(api.url(tokenId, currency), CONFIG.TIMEOUT_MS);
+            // AbortController für Timeout-Management
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000); // 5-Sekunden-Timeout
+
+            const response = await fetch(api.url, { signal: controller.signal });
+            clearTimeout(timeoutId);
+
             if (!response.ok) {
-                throw new Error(`API response not OK: ${response.status}`);
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const data = await response.json();
-            const price = api.parser(data, tokenId, currency);
-            if (typeof price !== 'number' || isNaN(price)) {
-                throw new Error('Failed to parse price from API response.');
+            const price = api.parser(data);
+
+            if (typeof price !== 'number' || !isFinite(price)) {
+                throw new Error('Parsed price is not a valid number.');
             }
             return price;
         } catch (error) {
-            console.warn(`PriceOracle: Failed to fetch from ${api.url(tokenId, currency)}. Reason:`, error.message);
+            console.error(`[PriceOracle] Error fetching from ${api.name}:`, error.message);
             return null;
         }
     }
 
     /**
-     * Ruft den Preis für einen Token ab. Versucht zuerst die primäre API,
-     * bei einem Fehler wird die Fallback-API verwendet.
-     *
-     * @param {object} tokenIds - Ein Objekt mit den IDs für die APIs. z.B. { coingecko: 'ripple', coincap: 'xrp' }
-     * @param {string} [currency='usd'] - Die gewünschte Währung.
-     * @returns {Promise<number|null>} Der Preis als Zahl oder null bei komplettem Fehlschlag.
+     * Ruft den Preis ab, indem die konfigurierten APIs nacheinander versucht werden,
+     * bis ein erfolgreiches Ergebnis erzielt wird.
      */
-    async function fetchPrice(tokenIds, currency = 'usd') {
-        // 1. Versuch: Primäre API (CoinGecko)
-        let price = await fetchFromSource(CONFIG.PRIMARY_API, tokenIds.coingecko, currency);
-        if (price !== null) {
-            return price;
+    async function fetchPrice() {
+        state.status = 'loading';
+        updateUI('loading');
+
+        for (const api of API_ENDPOINTS) {
+            const price = await fetchFromAPI(api);
+            if (price !== null) {
+                state.price = price;
+                state.status = 'success';
+                state.lastUpdated = new Date();
+                state.source = api.name;
+                state.error = null;
+                updateUI('success');
+                console.log(`[PriceOracle] Price updated from ${api.name}: $${price}`);
+                return; // Erfolg, Schleife beenden
+            }
         }
 
-        // 2. Versuch: Fallback-API (CoinCap)
-        console.warn('PriceOracle: Primary API failed. Trying fallback...');
-        price = await fetchFromSource(CONFIG.FALLBACK_API, tokenIds.coincap, currency);
-        if (price !== null) {
-            return price;
-        }
-
-        console.error('PriceOracle: All API sources failed. Could not retrieve price.');
-        return null;
+        // Wenn alle APIs fehlschlagen
+        state.status = 'error';
+        state.error = 'All API endpoints failed to provide a valid price.';
+        updateUI('error');
+        console.error('[PriceOracle] All API endpoints failed.');
     }
 
-    // Exportiert nur die öffentliche fetchPrice-Funktion.
+    /**
+     * Gibt eine Kopie des aktuellen Zustands des Orakels zurück.
+     * @returns {object}
+     */
+    function getState() {
+        return { ...state };
+    }
+
+    // Öffentliches Interface des Moduls
     return {
-        fetchPrice
+        fetchPrice,
+        getState
     };
 })();
+
+// Initialer Aufruf, um die Preise beim Laden der Seite zu holen.
+// Stellt sicher, dass das DOM vollständig geladen ist.
+document.addEventListener('DOMContentLoaded', () => {
+    PriceOracle.fetchPrice();
+
+    // Optional: Preise alle 60 Sekunden automatisch aktualisieren
+    setInterval(PriceOracle.fetchPrice, 60000);
+});

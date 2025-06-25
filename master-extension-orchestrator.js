@@ -7,6 +7,7 @@ const fs = require('fs');
 const path = require('path');
 const { execSync, spawn } = require('child_process');
 const validator = require('./extension-function-validator');
+const { sendAlert } = require('./tools/alert-service'); // Importiere den Alert-Service
 
 // Pfade für Konfigurations- und Statusdateien
 const SETTINGS_PATH = path.join('.vscode', 'settings.json');
@@ -51,6 +52,11 @@ function readJsonFile(filePath) {
     return null;
   } catch (err) {
     console.error(`Fehler beim Lesen von ${filePath}:`, err.message);
+    sendAlert({
+      message: `Fehler beim Lesen der Konfigurationsdatei: ${filePath}`,
+      level: 'error',
+      extra: { error: err.message }
+    });
     return null;
   }
 }
@@ -68,6 +74,11 @@ function writeJsonFile(filePath, data) {
     return true;
   } catch (err) {
     console.error(`Fehler beim Schreiben von ${filePath}:`, err.message);
+    sendAlert({
+      message: `Fehler beim Schreiben der Konfigurationsdatei: ${filePath}`,
+      level: 'error',
+      extra: { error: err.message }
+    });
     return false;
   }
 }
@@ -266,6 +277,33 @@ function orchestrateExtensions() {
   generateReport();
   
   console.log('🎉 Extension-Orchestrierung abgeschlossen!');
+}
+
+/**
+ * Hauptfunktion des Orchestrators
+ */
+async function runOrchestrator() {
+  console.log('🚀 Starte Master Extension Orchestrator...');
+  try {
+    await validator.runValidation();
+    analyzeExtensions();
+    checkRecommendations();
+    updateStatusFile();
+    console.log('✅ Master Extension Orchestrator erfolgreich durchgelaufen.');
+    sendAlert({
+      message: 'Master Extension Orchestrator erfolgreich ausgeführt.',
+      level: 'info'
+    });
+  } catch (error) {
+    console.error('🔥 Kritischer Fehler im Master Extension Orchestrator:', error.message);
+    orchestratorStatus.extensions.failed++;
+    updateStatusFile();
+    sendAlert({
+      message: 'KRITISCHER FEHLER im Master Extension Orchestrator!',
+      level: 'error',
+      extra: { error: error.message, stack: error.stack }
+    });
+  }
 }
 
 // Führe die Orchestrierungsfunktion aus

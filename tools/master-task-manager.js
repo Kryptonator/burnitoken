@@ -10,6 +10,8 @@
 const fs = require('fs');
 const path = require('path');
 const { spawn, execSync } = require('child_process');
+const { sendAlert } = require('./alert-service'); // Importiere den Alert-Service
+const { createTodo } = require('./todo-manager'); // Importiere den ToDo-Manager
 
 // Konfiguration
 const LOG_FILE = path.join(__dirname, 'master-task-manager.log');
@@ -54,6 +56,13 @@ const CRITICAL_SERVICES = [
     args: [],
     background: false
   },  {
+    name: 'dependabot-monitor',
+    script: 'dependabot-monitor.js',
+    priority: 'low',
+    args: [],
+    background: false
+  },
+  {
     name: 'unified-status-manager',
     script: 'unified-status-manager.js', 
     priority: 'medium',
@@ -235,25 +244,32 @@ async function runScript(service) {
           };
           resolve(true);
         } else {
-          log(`Service mit Fehler beendet: ${service.name} (Code: ${code})`, 'error');
-          managerStatus.services[service.name] = {
-            status: 'error',
-            exitCode: code,
-            error: errorOutput || 'Unknown error',
-            lastRun: new Date().toISOString()
-          };
+          const errorMessage = `Service "${service.name}" wurde mit Fehlercode ${code} beendet.`;
+          log(errorMessage, 'error');
+          managerStatus.services[service.name] = { status: 'failed', message: `Exit-Code: ${code}`, timestamp: new Date().toISOString() };
+          managerStatus.errors.push({ service: service.name, error: `Exit-Code: ${code}`, timestamp: new Date().toISOString() });
+          updateStatusFile();
+          sendAlert(`Kritischer Fehler im Master Task Manager: Service "${service.name}" wurde unerwartet beendet.`, `Exit-Code: ${code}`);
+          createTodo(
+              `Service unerwartet beendet: ${service.name}`,
+              `Der Service "${service.name}" wurde mit dem Fehlercode ${code} beendet.\nScript: ${service.script}`,
+              'Master Task Manager'
+          );
           resolve(false);
         }
       });
       
       child.on('error', (err) => {
-        managerStatus.activeProcesses--;
-        log(`Fehler beim Ausführen von ${service.name}: ${err.message}`, 'error');
-        managerStatus.services[service.name] = {
-          status: 'error',
-          error: err.message,
-          lastRun: new Date().toISOString()
-        };
+        log(`Fehler beim Starten des Service "${service.name}": ${err.message}`, 'error');
+        managerStatus.services[service.name] = { status: 'failed', message: err.message, timestamp: new Date().toISOString() };
+        managerStatus.errors.push({ service: service.name, error: err.message, timestamp: new Date().toISOString() });
+        updateStatusFile();
+        sendAlert(`Kritischer Fehler im Master Task Manager: Service "${service.name}" konnte nicht gestartet werden.`, `Fehler: ${err.message}`);
+        createTodo(
+          `Service konnte nicht gestartet werden: ${service.name}`,
+          `Der Service "${service.name}" konnte nicht gestartet werden.\nFehler: ${err.message}\nScript: ${service.script}`,
+          'Master Task Manager'
+        );
         resolve(false);
       });
     }

@@ -1,0 +1,28 @@
+name: Automated Project Monitoring
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Jede Stunde ausführen
+  workflow_dispatch: # Manueller Start
+
+jobs:
+  run-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Unified Status Check
+        run: node tools/unified-status-manager.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Hier weitere Secrets für Webhooks etc. einfügen, falls nötig
+          # SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

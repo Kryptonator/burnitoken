@@ -11,6 +11,7 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const { execSync } = require('child_process');
+const { createTodo } = require('./todo-manager');
 
 // Konfiguration
 const CONFIG = {
@@ -95,6 +96,11 @@ async function checkSSL(url) {
           if (!cert || Object.keys(cert).length === 0) {
             log(`Kein SSL-Zertifikat für ${url} gefunden`, 'error');
             healthStatus.ssl.valid = false;
+            createTodo(
+                `Kein SSL-Zertifikat gefunden: ${url}`,
+                `Für die URL ${url} wurde kein SSL-Zertifikat gefunden. Dies ist ein kritisches Sicherheitsproblem.`,
+                'Website Health Check'
+            );
             resolve(false);
             return;
           }
@@ -119,6 +125,18 @@ async function checkSSL(url) {
             log(`SSL-Zertifikat für ${url} ist ungültig oder abgelaufen`, 'error');
           }
           
+          if (daysRemaining < 14) {
+            log(`SSL-Zertifikat für ${url} läuft bald ab (${daysRemaining} Tage)`, 'warn');
+            healthStatus.ssl.valid = true; // Es ist noch gültig
+            createTodo(
+                `SSL-Zertifikat läuft bald ab: ${url}`,
+                `Das SSL-Zertifikat für ${url} läuft in ${daysRemaining} Tagen ab. Bitte erneuern Sie es rechtzeitig.`,
+                'Website Health Check'
+            );
+          } else {
+            log(`SSL-Zertifikat für ${url} ist gültig`, 'success');
+          }
+          
           resolve(isValid);
         } catch (certErr) {
           log(`SSL-Zertifikatsfehler für ${url}: ${certErr.message}`, 'error');
@@ -128,8 +146,13 @@ async function checkSSL(url) {
       });
       
       req.on('error', (err) => {
-        log(`SSL-Verbindungsfehler für ${url}: ${err.message}`, 'error');
+        log(`Fehler bei der SSL-Prüfung für ${url}: ${err.message}`, 'error');
         healthStatus.ssl.valid = false;
+        createTodo(
+          `SSL-Prüfung fehlgeschlagen: ${url}`,
+          `Die SSL-Prüfung für ${url} ist fehlgeschlagen.\nFehler: ${err.message}`,
+          'Website Health Check'
+        );
         resolve(false);
       });
       
@@ -206,6 +229,12 @@ async function checkURL(url) {
           error: err.message,
           lastChecked: new Date().toISOString()
         };
+        
+        createTodo(
+          `URL nicht erreichbar: ${url.href}`,
+          `Die URL ${url.href} konnte nicht erreicht werden.\nFehler: ${err.message}`,
+          'Website Health Check'
+        );
         
         resolve(false);
       });

@@ -1,6 +1,6 @@
 # BurniToken Website Deployment Status
 
-**Zeitpunkt:** 24.6.2025, 21:26:19
+**Zeitpunkt:** 25.6.2025, 09:08:24
 **Status:** ❌ FAILED
 
 ## Zusammenfassung
@@ -33,4 +33,4 @@
 
 ---
 
-Bericht generiert am 24.6.2025, 21:26:19
+Bericht generiert am 25.6.2025, 09:08:24
