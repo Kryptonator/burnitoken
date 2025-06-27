@@ -2,82 +2,79 @@ name: BurniToken CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, master ]
 
 jobs:
   build-lint-test:
+    name: 🔬 Build, Lint & Test
     runs-on: ubuntu-latest
     env:
       CI: true
-      NODE_OPTIONS: --max-old-space-size=4096
+      NODE_VERSION: '20'
     steps:
-      - name: Checkout code
+      - name: 📥 Checkout code
         uses: actions/checkout@v4
       
-      - name: Set up Node.js
+      - name: 📦 Set up Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
       
-      - name: Install dependencies
+      - name: 📥 Install dependencies
         run: npm ci
       
-      - name: Lint code
+      - name: 🎨 Lint code
         run: npm run lint:check
       
-      - name: Run unit tests
-        run: npm run test:unit
-        continue-on-error: false
+      - name: 🧪 Run unit tests
+        run: npm test
       
-      - name: Build CSS
+      - name: 🏗️ Build CSS
         run: npm run build:css
       
-      - name: Check Extensions and Services
-        run: node tools/comprehensive-monitor-dashboard.js --ci-mode
-        # Automatisches Monitoring für die CI-Pipeline
-      
-      - name: Run Lighthouse CI
-        run: npm run lighthouse:ci
-      
-      - name: Run OnPage SEO Check
-        run: node tools/onpage-seo-check.js
-      
-      - name: Run E2E tests
-        run: npm run test:e2e:install && npm run test:e2e
-        # Optional, kann bei Bedarf deaktiviert werden
-        continue-on-error: true
-      
-      - name: Upload test artifacts
+      - name: 🩺 Run Health Checks
+        run: node tools/unified-monitoring-service.js --silent
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🚀 Run E2E tests
+        run: npx playwright install --with-deps && npx playwright test
+
+      - name: 📊 Upload test artifacts
+        if: always()
         uses: actions/upload-artifact@v4
-        if: success() || failure()
         with:
           name: test-reports
           path: |
             coverage/
-            reports/
+            playwright-report/
             .lighthouseci/
 
   notify-on-failure:
+    name: 🔔 Notify on Failure
     needs: build-lint-test
     if: failure()
     runs-on: ubuntu-latest
     steps:
-      - name: Send E-Mail Alert
+      - name: 📧 Send E-Mail Alert
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.mail.yahoo.com
           server_port: 465
-          username: burn.coin@yahoo.com
-          password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: "[BurniToken CI/CD] Build/Test failed!"
-          to: burn.coin@yahoo.com
-          from: BurniToken CI/CD <burn.coin@yahoo.com>
+          username: ${{ secrets.ALERT_EMAIL_USER }}
+          password: ${{ secrets.ALERT_EMAIL_PASS }}
+          subject: "[BurniToken CI/CD] Build failed on ${{ github.ref_name }}"
+          to: ${{ secrets.ALERT_EMAIL_USER }}
+          from: BurniToken CI <${{ secrets.ALERT_EMAIL_USER }}>
           body: |
-            🚨 BurniToken CI/CD Build/Test failed!
-            Commit: ${{ github.sha }}
-            Author: ${{ github.actor }}
-            Workflow: ${{ github.workflow }}
-            See details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            🚨 The CI/CD pipeline for the branch **${{ github.ref_name }}** has failed.
+
+            - **Commit:** `${{ github.sha }}`
+            - **Author:** `${{ github.actor }}`
+            - **Workflow:** `${{ github.workflow }}`
+
+            Please check the details here:
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

@@ -2,11 +2,11 @@ name: 🚀 Production Deployment
 
 on:
   push:
-    branches: [ main, master, temp-merge-master ]
+    branches: [ main, master ]
   workflow_dispatch:
 
 env:
-  NODE_VERSION: '18'
+  NODE_VERSION: '20'
 
 jobs:
   build-and-test:
@@ -15,10 +15,10 @@ jobs:
     
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         
       - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -27,22 +27,19 @@ jobs:
         run: npm ci
         
       - name: 🧪 Run tests
-        run: npm test || true
+        run: npm test
         
       - name: 🔍 Run linting
-        run: npm run lint:check || true
+        run: npm run lint:check
         
       - name: 🏗️ Build for production
-        run: npm run build:css && echo Build erfolgreich abgeschlossen!
+        run: npm run build:css
         
       - name: 🔒 Security audit
-        run: npm audit || echo "Security audit completed"
-        
-      - name: 🎯 Performance check
-        run: echo "Skipping performance check in CI"
+        run: npm audit
         
       - name: 📊 Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: production-build
           path: |
@@ -51,7 +48,8 @@ jobs:
             _headers
             CNAME
             404.html
-            *.md
+            manifest.json
+            netlify.toml
 
   deploy:
     name: 🚀 Deploy to GitHub Pages
@@ -67,7 +65,7 @@ jobs:
         uses: actions/checkout@v4
         
       - name: 📦 Download build artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: production-build
           path: ./
@@ -91,19 +89,18 @@ jobs:
         uses: actions/checkout@v4
         
       - name: 📦 Download build artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: production-build
           path: ./
-            - name: 🚀 Deploy to Netlify
-        uses: nwtgck/actions-netlify@v1.2
+
+      - name: 🚀 Deploy to Netlify
+        uses: nwtgck/actions-netlify@v2.0
         with:
           publish-dir: './'
-          production-branch: master
+          production-branch: main
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          deploy-message: 'Deploy from GitHub Actions'
+          deploy-message: "Deploy from GitHub Actions"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        timeout-minutes: 5
-        continue-on-error: true
