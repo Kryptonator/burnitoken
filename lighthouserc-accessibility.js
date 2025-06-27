@@ -22,7 +22,7 @@ module.exports = {
     collect: {
       url: ['http://localhost:3000'],
       numberOfRuns: 1,
-      settings: { 
+      settings: {
         onlyCategories: ['accessibility'],
         // GSC Service Account Datei verwenden, wenn vorhanden
         gatherMode: GSC_ENABLED ? 'navigation-and-lighthouse' : 'navigation',
@@ -30,8 +30,8 @@ module.exports = {
         throttling: {
           cpuSlowdownMultiplier: 1,
           downloadThroughputKbps: 1024,
-          uploadThroughputKbps: 512
-        }
+          uploadThroughputKbps: 512,
+        },
       },
     },
     assert: { assertions: { 'categories:accessibility': ['error', { minScore: 0.9 }] } },

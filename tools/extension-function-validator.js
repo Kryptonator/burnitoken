@@ -1,6 +1,6 @@
 /**
  * EXTENSION FUNCTION VALIDATOR
- * 
+ *
  * Dieses Skript prüft den Status und die Funktionalität von VS Code Extensions
  * und gibt detaillierte Informationen über deren Zustand zurück.
  */
@@ -27,20 +27,16 @@ const EXTENSIONS = {
   'session-saver': {
     id: 'nicoespeon.session-saver',
     name: 'Session Saver',
-    requiredFiles: [
-      '.vscode/session-saver.json',
-    ],
+    requiredFiles: ['.vscode/session-saver.json'],
     checkFunction: checkSessionSaver,
   },
   'ai-conversation-bridge': {
     id: 'ai-conversation-bridge',
     name: 'AI Conversation Bridge',
-    requiredFiles: [
-      '.vscode/ai-conversation-settings.json',
-    ],
+    requiredFiles: ['.vscode/ai-conversation-settings.json'],
     checkFunction: checkAIConversationBridge,
   },
-  'gitlens': {
+  gitlens: {
     id: 'eamodio.gitlens',
     name: 'GitLens',
     checkFunction: checkGitLens,
@@ -53,17 +49,13 @@ const EXTENSIONS = {
   'tailwindcss-intellisense': {
     id: 'bradlc.vscode-tailwindcss',
     name: 'Tailwind CSS IntelliSense',
-    requiredFiles: [
-      'tailwind.config.js',
-    ],
+    requiredFiles: ['tailwind.config.js'],
     checkFunction: checkTailwindIntellisense,
   },
   'thunder-client': {
     id: 'rangav.vscode-thunder-client',
     name: 'Thunder Client',
-    requiredFiles: [
-      '.vscode/thunder-client',
-    ],
+    requiredFiles: ['.vscode/thunder-client'],
     checkFunction: checkThunderClient,
   },
   'web-accessibility': {
@@ -80,31 +72,31 @@ const EXTENSIONS = {
 function checkSessionSaver() {
   try {
     const configPath = path.join(process.cwd(), '.vscode', 'session-saver.json');
-    
+
     if (!fs.existsSync(configPath)) {
-      return { 
-        status: 'FEHLER', 
-        message: 'Konfigurationsdatei nicht gefunden' 
+      return {
+        status: 'FEHLER',
+        message: 'Konfigurationsdatei nicht gefunden',
       };
     }
-    
+
     const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-    
+
     if (!config.autoSave) {
-      return { 
-        status: 'WARNUNG', 
-        message: 'Auto-Save ist deaktiviert' 
+      return {
+        status: 'WARNUNG',
+        message: 'Auto-Save ist deaktiviert',
       };
     }
-    
-    return { 
-      status: 'OK', 
-      message: 'Session Saver ist korrekt konfiguriert' 
+
+    return {
+      status: 'OK',
+      message: 'Session Saver ist korrekt konfiguriert',
     };
   } catch (error) {
-    return { 
-      status: 'FEHLER', 
-      message: `Fehler beim Prüfen: ${error.message}` 
+    return {
+      status: 'FEHLER',
+      message: `Fehler beim Prüfen: ${error.message}`,
     };
   }
 }
@@ -116,38 +108,38 @@ function checkSessionSaver() {
 function checkAIConversationBridge() {
   try {
     const configPath = path.join(process.cwd(), '.vscode', 'ai-conversation-settings.json');
-    
+
     if (!fs.existsSync(configPath)) {
-      return { 
-        status: 'FEHLER', 
-        message: 'Konfigurationsdatei nicht gefunden' 
+      return {
+        status: 'FEHLER',
+        message: 'Konfigurationsdatei nicht gefunden',
       };
     }
-    
+
     try {
       const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-      
+
       if (!config.enabled) {
-        return { 
-          status: 'WARNUNG', 
-          message: 'AI Conversation Bridge ist deaktiviert' 
+        return {
+          status: 'WARNUNG',
+          message: 'AI Conversation Bridge ist deaktiviert',
         };
       }
-      
-      return { 
-        status: 'OK', 
-        message: 'AI Conversation Bridge ist korrekt konfiguriert' 
+
+      return {
+        status: 'OK',
+        message: 'AI Conversation Bridge ist korrekt konfiguriert',
       };
     } catch (jsonError) {
-      return { 
-        status: 'FEHLER', 
-        message: `Ungültige Konfigurationsdatei: ${jsonError.message}` 
+      return {
+        status: 'FEHLER',
+        message: `Ungültige Konfigurationsdatei: ${jsonError.message}`,
       };
     }
   } catch (error) {
-    return { 
-      status: 'FEHLER', 
-      message: `Fehler beim Prüfen: ${error.message}` 
+    return {
+      status: 'FEHLER',
+      message: `Fehler beim Prüfen: ${error.message}`,
     };
   }
 }
@@ -162,48 +154,48 @@ function checkGitLens() {
     try {
       execSync('git status', { stdio: 'pipe' });
     } catch (gitError) {
-      return { 
-        status: 'WARNUNG', 
-        message: 'Kein gültiges Git-Repository gefunden' 
+      return {
+        status: 'WARNUNG',
+        message: 'Kein gültiges Git-Repository gefunden',
       };
     }
-    
+
     const configPath = path.join(process.cwd(), '.vscode', 'settings.json');
-    
+
     if (fs.existsSync(configPath)) {
       try {
         const settings = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-        
+
         // Prüfe GitLens-Einstellungen
-        const gitLensKeys = Object.keys(settings).filter(key => key.startsWith('gitlens.'));
-        
+        const gitLensKeys = Object.keys(settings).filter((key) => key.startsWith('gitlens.'));
+
         if (gitLensKeys.length === 0) {
-          return { 
-            status: 'OK', 
-            message: 'GitLens verwendet Standardeinstellungen' 
+          return {
+            status: 'OK',
+            message: 'GitLens verwendet Standardeinstellungen',
           };
         }
-        
-        return { 
-          status: 'OK', 
-          message: `GitLens mit ${gitLensKeys.length} angepassten Einstellungen` 
+
+        return {
+          status: 'OK',
+          message: `GitLens mit ${gitLensKeys.length} angepassten Einstellungen`,
         };
       } catch (jsonError) {
-        return { 
-          status: 'WARNUNG', 
-          message: `Konnte VS Code Einstellungen nicht lesen: ${jsonError.message}` 
+        return {
+          status: 'WARNUNG',
+          message: `Konnte VS Code Einstellungen nicht lesen: ${jsonError.message}`,
         };
       }
     }
-    
-    return { 
-      status: 'OK', 
-      message: 'GitLens verwendet Standardeinstellungen' 
+
+    return {
+      status: 'OK',
+      message: 'GitLens verwendet Standardeinstellungen',
     };
   } catch (error) {
-    return { 
-      status: 'FEHLER', 
-      message: `Fehler beim Prüfen: ${error.message}` 
+    return {
+      status: 'FEHLER',
+      message: `Fehler beim Prüfen: ${error.message}`,
     };
   }
 }
@@ -215,44 +207,44 @@ function checkGitLens() {
 function checkLiveServer() {
   try {
     const configPath = path.join(process.cwd(), '.vscode', 'settings.json');
-    
+
     if (fs.existsSync(configPath)) {
       try {
         const settings = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-        
+
         const port = settings['liveServer.settings.port'];
         const browser = settings['liveServer.settings.CustomBrowser'];
-        
+
         let message = 'Live Server ist einsatzbereit';
-        
+
         if (port) {
           message += ` (Port: ${port})`;
         }
-        
+
         if (browser) {
           message += ` (Browser: ${browser})`;
         }
-        
-        return { 
-          status: 'OK', 
-          message 
+
+        return {
+          status: 'OK',
+          message,
         };
       } catch (jsonError) {
-        return { 
-          status: 'WARNUNG', 
-          message: `Konnte VS Code Einstellungen nicht lesen: ${jsonError.message}` 
+        return {
+          status: 'WARNUNG',
+          message: `Konnte VS Code Einstellungen nicht lesen: ${jsonError.message}`,
         };
       }
     }
-    
-    return { 
-      status: 'OK', 
-      message: 'Live Server verwendet Standardeinstellungen' 
+
+    return {
+      status: 'OK',
+      message: 'Live Server verwendet Standardeinstellungen',
     };
   } catch (error) {
-    return { 
-      status: 'FEHLER', 
-      message: `Fehler beim Prüfen: ${error.message}` 
+    return {
+      status: 'FEHLER',
+      message: `Fehler beim Prüfen: ${error.message}`,
     };
   }
 }
@@ -264,48 +256,48 @@ function checkLiveServer() {
 function checkTailwindIntellisense() {
   try {
     const configPath = path.join(process.cwd(), 'tailwind.config.js');
-    
+
     if (!fs.existsSync(configPath)) {
-      return { 
-        status: 'WARNUNG', 
-        message: 'Keine Tailwind-Konfigurationsdatei gefunden' 
+      return {
+        status: 'WARNUNG',
+        message: 'Keine Tailwind-Konfigurationsdatei gefunden',
       };
     }
-    
+
     const configContent = fs.readFileSync(configPath, 'utf8');
-    
+
     if (!configContent.includes('module.exports')) {
-      return { 
-        status: 'FEHLER', 
-        message: 'Ungültige Tailwind-Konfiguration' 
+      return {
+        status: 'FEHLER',
+        message: 'Ungültige Tailwind-Konfiguration',
       };
     }
-    
+
     const packageJsonPath = path.join(process.cwd(), 'package.json');
-    
+
     if (fs.existsSync(packageJsonPath)) {
       try {
         const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-        
+
         if (!packageJson.dependencies?.tailwindcss && !packageJson.devDependencies?.tailwindcss) {
-          return { 
-            status: 'WARNUNG', 
-            message: 'Tailwind CSS ist nicht als Abhängigkeit installiert' 
+          return {
+            status: 'WARNUNG',
+            message: 'Tailwind CSS ist nicht als Abhängigkeit installiert',
           };
         }
       } catch (jsonError) {
         // Ignorieren, falls package.json nicht gelesen werden kann
       }
     }
-    
-    return { 
-      status: 'OK', 
-      message: 'Tailwind CSS IntelliSense ist korrekt konfiguriert' 
+
+    return {
+      status: 'OK',
+      message: 'Tailwind CSS IntelliSense ist korrekt konfiguriert',
     };
   } catch (error) {
-    return { 
-      status: 'FEHLER', 
-      message: `Fehler beim Prüfen: ${error.message}` 
+    return {
+      status: 'FEHLER',
+      message: `Fehler beim Prüfen: ${error.message}`,
     };
   }
 }
@@ -317,43 +309,43 @@ function checkTailwindIntellisense() {
 function checkThunderClient() {
   try {
     const thunderDir = path.join(process.cwd(), '.vscode', 'thunder-client');
-    
+
     if (!fs.existsSync(thunderDir)) {
-      return { 
-        status: 'WARNUNG', 
-        message: 'Keine Thunder Client Datenverzeichnis gefunden' 
+      return {
+        status: 'WARNUNG',
+        message: 'Keine Thunder Client Datenverzeichnis gefunden',
       };
     }
-    
+
     try {
       const files = fs.readdirSync(thunderDir);
-      const collectionsFound = files.some(file => file.includes('thunder-collection'));
-      const environmentsFound = files.some(file => file.includes('thunder-environment'));
-      
+      const collectionsFound = files.some((file) => file.includes('thunder-collection'));
+      const environmentsFound = files.some((file) => file.includes('thunder-environment'));
+
       let message = 'Thunder Client ist konfiguriert';
-      
+
       if (collectionsFound) {
         message += ' (Collections gefunden)';
       }
-      
+
       if (environmentsFound) {
         message += ' (Environments gefunden)';
       }
-      
-      return { 
-        status: 'OK', 
-        message 
+
+      return {
+        status: 'OK',
+        message,
       };
     } catch (fsError) {
-      return { 
-        status: 'FEHLER', 
-        message: `Konnte Thunder Client Verzeichnis nicht lesen: ${fsError.message}` 
+      return {
+        status: 'FEHLER',
+        message: `Konnte Thunder Client Verzeichnis nicht lesen: ${fsError.message}`,
       };
     }
   } catch (error) {
-    return { 
-      status: 'FEHLER', 
-      message: `Fehler beim Prüfen: ${error.message}` 
+    return {
+      status: 'FEHLER',
+      message: `Fehler beim Prüfen: ${error.message}`,
     };
   }
 }
@@ -365,59 +357,59 @@ function checkThunderClient() {
 function checkWebAccessibility() {
   try {
     const configPath = path.join(process.cwd(), '.vscode', 'settings.json');
-    
+
     if (fs.existsSync(configPath)) {
       try {
         const settings = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-        
-        const accessibilityKeys = Object.keys(settings).filter(key => 
-          key.startsWith('axe-linter.') || 
-          key.startsWith('accessibility.')
+
+        const accessibilityKeys = Object.keys(settings).filter(
+          (key) => key.startsWith('axe-linter.') || key.startsWith('accessibility.'),
         );
-        
+
         if (accessibilityKeys.length > 0) {
-          return { 
-            status: 'OK', 
-            message: `Web Accessibility mit ${accessibilityKeys.length} angepassten Einstellungen` 
+          return {
+            status: 'OK',
+            message: `Web Accessibility mit ${accessibilityKeys.length} angepassten Einstellungen`,
           };
         }
       } catch (jsonError) {
         // Ignorieren, falls settings.json nicht gelesen werden kann
       }
     }
-    
+
     // Prüfe HTML-Dateien auf Accessibility-relevante Tags
     try {
       const htmlFiles = findHtmlFiles(process.cwd());
       let accessibilityTagsFound = false;
-      
-      for (const htmlFile of htmlFiles.slice(0, 5)) { // Prüfe max. 5 Dateien
+
+      for (const htmlFile of htmlFiles.slice(0, 5)) {
+        // Prüfe max. 5 Dateien
         const content = fs.readFileSync(htmlFile, 'utf8');
-        
+
         if (content.includes('aria-') || content.includes('role=')) {
           accessibilityTagsFound = true;
           break;
         }
       }
-      
+
       if (accessibilityTagsFound) {
-        return { 
-          status: 'OK', 
-          message: 'Web Accessibility Tags wurden in HTML-Dateien gefunden' 
+        return {
+          status: 'OK',
+          message: 'Web Accessibility Tags wurden in HTML-Dateien gefunden',
         };
       }
     } catch (fsError) {
       // Ignorieren, falls HTML-Dateien nicht gelesen werden können
     }
-    
-    return { 
-      status: 'OK', 
-      message: 'Web Accessibility Extension ist einsatzbereit' 
+
+    return {
+      status: 'OK',
+      message: 'Web Accessibility Extension ist einsatzbereit',
     };
   } catch (error) {
-    return { 
-      status: 'FEHLER', 
-      message: `Fehler beim Prüfen: ${error.message}` 
+    return {
+      status: 'FEHLER',
+      message: `Fehler beim Prüfen: ${error.message}`,
     };
   }
 }
@@ -429,14 +421,14 @@ function checkWebAccessibility() {
  */
 function findHtmlFiles(dir) {
   let results = [];
-  
+
   try {
     const list = fs.readdirSync(dir);
-    
+
     for (const file of list) {
       const filePath = path.join(dir, file);
       const stat = fs.statSync(filePath);
-      
+
       if (stat.isDirectory() && !filePath.includes('node_modules') && !filePath.includes('.git')) {
         results = results.concat(findHtmlFiles(filePath));
       } else if (file.endsWith('.html')) {
@@ -446,7 +438,7 @@ function findHtmlFiles(dir) {
   } catch (error) {
     console.error(`Fehler beim Durchsuchen von ${dir}: ${error.message}`);
   }
-  
+
   return results;
 }
 
@@ -455,34 +447,40 @@ function findHtmlFiles(dir) {
  * @param {string} extensionKey - Optional: Schlüssel der zu prüfenden Extension
  */
 function validateExtensions(extensionKey = null) {
-  console.log(`${COLORS.bright}${COLORS.blue}=== 🔍 EXTENSION FUNCTION VALIDATOR ====${COLORS.reset}`);
+  console.log(
+    `${COLORS.bright}${COLORS.blue}=== 🔍 EXTENSION FUNCTION VALIDATOR ====${COLORS.reset}`,
+  );
   console.log(`${COLORS.blue}Gestartet: ${new Date().toLocaleString('de-DE')}${COLORS.reset}\n`);
-  
-  const extensionsToCheck = extensionKey ? 
-    (EXTENSIONS[extensionKey] ? { [extensionKey]: EXTENSIONS[extensionKey] } : {}) : 
-    EXTENSIONS;
-  
+
+  const extensionsToCheck = extensionKey
+    ? EXTENSIONS[extensionKey]
+      ? { [extensionKey]: EXTENSIONS[extensionKey] }
+      : {}
+    : EXTENSIONS;
+
   if (extensionKey && !EXTENSIONS[extensionKey]) {
-    console.log(`${COLORS.red}❌ Die angegebene Extension "${extensionKey}" wurde nicht gefunden!${COLORS.reset}`);
+    console.log(
+      `${COLORS.red}❌ Die angegebene Extension "${extensionKey}" wurde nicht gefunden!${COLORS.reset}`,
+    );
     process.exit(1);
   }
-  
+
   if (Object.keys(extensionsToCheck).length === 0) {
     console.log(`${COLORS.yellow}⚠️ Keine Extensions zum Prüfen gefunden!${COLORS.reset}`);
     process.exit(1);
   }
-  
+
   const results = {};
   let allPassed = true;
-  
+
   for (const [key, extension] of Object.entries(extensionsToCheck)) {
     console.log(`${COLORS.magenta}=== ${extension.name} (${key}) ===${COLORS.reset}`);
-    
+
     // Prüfe benötigte Dateien
     if (extension.requiredFiles) {
       for (const requiredFile of extension.requiredFiles) {
         const filePath = path.join(process.cwd(), requiredFile);
-        
+
         if (fs.existsSync(filePath)) {
           console.log(`${COLORS.green}✅ Datei gefunden: ${requiredFile}${COLORS.reset}`);
         } else {
@@ -491,12 +489,12 @@ function validateExtensions(extensionKey = null) {
         }
       }
     }
-    
+
     // Führe spezifische Check-Funktion aus
     if (extension.checkFunction) {
       try {
         const checkResult = extension.checkFunction();
-        
+
         if (checkResult.status === 'OK') {
           console.log(`${COLORS.green}✅ Status: ${checkResult.message}${COLORS.reset}`);
         } else if (checkResult.status === 'WARNUNG') {
@@ -507,52 +505,59 @@ function validateExtensions(extensionKey = null) {
           createTodo(
             `Fehler bei Extension: ${extension.name}`,
             `Die Überprüfung der Extension "${extension.name}" hat einen Fehler ergeben: ${checkResult.message}`,
-            'Extension Validator'
+            'Extension Validator',
           );
         }
-        
+
         results[key] = checkResult;
       } catch (error) {
         console.log(`${COLORS.red}❌ Fehler bei der Prüfung: ${error.message}${COLORS.reset}`);
-        results[key] = { 
-          status: 'FEHLER', 
-          message: `Fehler bei der Prüfung: ${error.message}` 
+        results[key] = {
+          status: 'FEHLER',
+          message: `Fehler bei der Prüfung: ${error.message}`,
         };
         allPassed = false;
       }
     } else {
       console.log(`${COLORS.yellow}⚠️ Keine Check-Funktion definiert${COLORS.reset}`);
-      results[key] = { 
-        status: 'WARNUNG', 
-        message: 'Keine Check-Funktion definiert' 
+      results[key] = {
+        status: 'WARNUNG',
+        message: 'Keine Check-Funktion definiert',
       };
     }
-    
+
     console.log(''); // Leerzeile für bessere Lesbarkeit
   }
-  
+
   console.log(`${COLORS.bright}${COLORS.blue}=== 📋 ZUSAMMENFASSUNG ====${COLORS.reset}`);
-  
+
   if (allPassed) {
     console.log(`${COLORS.green}✅ Alle Prüfungen erfolgreich abgeschlossen!${COLORS.reset}`);
   } else {
     console.log(`${COLORS.red}❌ Es wurden Probleme bei der Prüfung festgestellt!${COLORS.reset}`);
   }
-  
+
   // Status-Datei speichern
   const statusFile = path.join(process.cwd(), 'EXTENSION_STATUS.json');
-  
-  fs.writeFileSync(statusFile, JSON.stringify({
-    timestamp: new Date().toISOString(),
-    results,
-    allPassed
-  }, null, 2));
-  
+
+  fs.writeFileSync(
+    statusFile,
+    JSON.stringify(
+      {
+        timestamp: new Date().toISOString(),
+        results,
+        allPassed,
+      },
+      null,
+      2,
+    ),
+  );
+
   console.log(`${COLORS.cyan}📄 Status in EXTENSION_STATUS.json gespeichert${COLORS.reset}`);
-  
+
   return {
     results,
-    allPassed
+    allPassed,
   };
 }
 
@@ -560,16 +565,16 @@ function validateExtensions(extensionKey = null) {
 if (require.main === module) {
   const args = process.argv.slice(2);
   let extensionKey = null;
-  
+
   // Argument-Parsing
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
-    
+
     if (arg.startsWith('--extension=')) {
       extensionKey = arg.split('=')[1];
     }
   }
-  
+
   validateExtensions(extensionKey);
 }
 

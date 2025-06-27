@@ -17,8 +17,8 @@ describe('Alert System', () => {
   let transporter = {
     sendMail: jest.fn().mockResolvedValue({
       messageId: 'mock-message-id',
-      response: 'mock-response'
-    })
+      response: 'mock-response',
+    }),
   };
   let testAccount;
 
@@ -32,7 +32,7 @@ describe('Alert System', () => {
     try {
       // Erstelle einen Test-Account für Ethereal (kein realer E-Mail-Versand)
       testAccount = await nodemailer.createTestAccount();
-      
+
       // Erstelle einen Transporter mit Ethereal Test-Account
       transporter = nodemailer.createTransport({
         host: 'smtp.ethereal.email',
