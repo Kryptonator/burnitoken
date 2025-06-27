@@ -66,15 +66,15 @@ jobs:
           server_port: 465
           username: ${{ secrets.ALERT_EMAIL_USER }}
           password: ${{ secrets.ALERT_EMAIL_PASS }}
-          subject: "[BurniToken CI/CD] Build failed on ${{ github.ref_name }}"
+          subject: "🚨 CI/CD Failure: Build failed on ${{ github.ref_name }}"
           to: ${{ secrets.ALERT_EMAIL_USER }}
-          from: BurniToken CI <${{ secrets.ALERT_EMAIL_USER }}>
+          from: BurniToken CI Notifier <${{ secrets.ALERT_EMAIL_USER }}>
           body: |
-            🚨 The CI/CD pipeline for the branch **${{ github.ref_name }}** has failed.
+            🚨 The CI/CD pipeline for branch **${{ github.ref_name }}** has failed.
 
+            - **Workflow:** `${{ github.workflow }}`
             - **Commit:** `${{ github.sha }}`
             - **Author:** `${{ github.actor }}`
-            - **Workflow:** `${{ github.workflow }}`
-
-            Please check the details here:
+            
+            Please check the failed run details here:
             ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
