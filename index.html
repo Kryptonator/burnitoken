@@ -2329,24 +2329,6 @@
                   }
                 });
               }
-              panel.classList.toggle('hidden');
-            });
-
-            // Add functionality to accessibility toggles
-            setTimeout(() => {
-              const highContrastToggle = document.getElementById('high-contrast-toggle');
-              const largeTextToggle = document.getElementById('large-text-toggle');
-              const reduceMotionToggle = document.getElementById('reduce-motion-toggle');
-
-              if (highContrastToggle) {
-                highContrastToggle.addEventListener('change', (e) => {
-                  if (e.target.checked) {
-                    document.body.classList.add('high-contrast');
-                  } else {
-                    document.body.classList.remove('high-contrast');
-                  }
-                });
-              }
 
               if (largeTextToggle) {
                 largeTextToggle.addEventListener('change', (e) => {
@@ -3084,8 +3066,5 @@
     <!-- External Event Handlers for Better Performance and Security -->
     <script src="./assets/event-handlers.js" defer></script>
     <script src="/assets/navigation-language.js"></script>
-
-    <!-- Test-Commit zur Validierung der CI/CD-Pipeline -->
-    <section id="updates" class="updates-section py-5"></section>
   </body>
 </html>

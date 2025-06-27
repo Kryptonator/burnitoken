@@ -1,32 +1,32 @@
 {
   "extension-health-check": {
     "status": "success",
-    "lastSuccess": "2025-06-27T09:29:07.904Z"
+    "lastSuccess": "2025-06-27T18:01:01.524Z"
   },
   "website-health-check": {
     "status": "success",
-    "lastSuccess": "2025-06-27T16:53:37.287Z"
+    "lastSuccess": "2025-06-27T18:01:02.133Z"
   },
   "snyk-security-scan": {
     "status": "success",
-    "lastSuccess": "2025-06-27T09:30:12.565Z"
+    "lastSuccess": "2025-06-27T18:02:37.091Z"
   },
   "deployment-check": {
     "status": "success",
-    "lastSuccess": "2025-06-27T16:53:48.095Z"
+    "lastSuccess": "2025-06-27T18:01:50.100Z"
   },
   "gsc-integration-monitor": {
     "status": "success",
-    "lastSuccess": "2025-06-27T09:29:34.467Z"
+    "lastSuccess": "2025-06-27T18:01:48.193Z"
   },
   "ai-auth": {
     "name": "KI Authentifizierungs-Check",
     "status": "success",
     "message": "Alle erforderlichen KI-API-Schlüssel sind in der .env-Datei konfiguriert.",
-    "lastCheck": "2025-06-27T16:13:04.114Z"
+    "lastCheck": "2025-06-27T18:00:59.225Z"
   },
   "dependabot-monitor": {
     "status": "success",
-    "lastSuccess": "2025-06-27T09:29:57.622Z"
+    "lastSuccess": "2025-06-27T18:02:14.654Z"
   }
 }

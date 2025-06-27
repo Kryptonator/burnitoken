@@ -391,26 +391,109 @@ async function main() {
   }
 }
 
+/**
+ * Zeigt eine deutsche Benachrichtigung an
+ */
+function showNotification(message, type = 'info') {
+  try {
+    // Verwende die VS Code Notification API über einen temporären Node-Prozess
+    const notificationScript = `
+      const vscode = require('vscode');
+      vscode.window.showInformationMessage("${message.replace(/"/g, '\\"')}");
+    `;
+
+    const notificationType =
+      type === 'error'
+        ? 'showErrorMessage'
+        : type === 'warn'
+          ? 'showWarningMessage'
+          : 'showInformationMessage';
+
+    const tempScriptPath = path.join(__dirname, '.temp-notification.js');
+    fs.writeFileSync(
+      tempScriptPath,
+      `
+      const vscode = require('vscode');
+      vscode.window.${notificationType}("${message.replace(/"/g, '\\"')}");
+    `,
+    );
+
+    try {
+      execSync(`code --execute "require('${tempScriptPath.replace(/\\/g, '\\\\')}')"`, {
+        stdio: 'ignore',
+      });
+    } catch (e) {
+      // Fehler ignorieren - VS Code notification API könnte fehlschlagen
+    }
+
+    // Lösche temporäre Datei nach kurzer Verzögerung
+    setTimeout(() => {
+      try {
+        fs.unlinkSync(tempScriptPath);
+      } catch (e) {}
+    }, 5000);
+  } catch (err) {
+    // Fallback zu Desktop-Benachrichtigung, wenn VS Code API nicht verfügbar ist
+    try {
+      const { execSync } = require('child_process');
+      execSync(
+        `powershell -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('${message.replace(/'/g, "''")}', 'Master Task Manager', 'OK', '${
+          type === 'error' ? 'Error' : type === 'warn' ? 'Warning' : 'Information'
+        }')"`,
+        { stdio: 'ignore' },
+      );
+    } catch (notificationErr) {
+      // Keine Desktop-Benachrichtigung möglich
+      console.log(`Konnte Benachrichtigung nicht anzeigen: ${message}`);
+    }
+  }
+}
+
 // Führe Hauptfunktion aus, wenn direkt aufgerufen
 if (require.main === module) {
   const args = process.argv.slice(2);
   const silentMode = args.includes('--silent');
 
+  // Zeige Startbenachrichtigung, wenn nicht im Silent-Modus
+  if (!silentMode) {
+    showNotification('🚀 Master Task Manager wird gestartet...', 'info');
+  }
+
   if (silentMode) {
-    // Im Silent-Modus alle Konsolenausgaben unterdrücken
     console.log = () => {};
     console.warn = () => {};
     console.error = () => {};
   }
 
-  main().catch((err) => {
-    log(`❌ Kritischer Fehler im Task Manager: ${err.message}`, 'error');
-    fs.appendFileSync(
-      LOG_FILE,
-      `[${new Date().toISOString()}] [CRITICAL] ${err.message}\n${err.stack}\n`,
-      'utf8',
-    );
-  });
+  main()
+    .then(() => {
+      if (!silentMode) {
+        const servicesStarted = Object.keys(managerStatus.services).length;
+        const servicesError = Object.values(managerStatus.services).filter(
+          (s) => s.status === 'error',
+        ).length;
+
+        if (servicesError > 0) {
+          showNotification(
+            `⚠️ Task Manager: ${servicesError} von ${servicesStarted} Services haben Fehler`,
+            'warn',
+          );
+        } else {
+          showNotification(
+            `✅ Task Manager: Alle ${servicesStarted} Services erfolgreich gestartet`,
+            'info',
+          );
+        }
+      }
+    })
+    .catch((err) => {
+      fs.appendFileSync(
+        LOG_FILE,
+        `[${new Date().toISOString()}] [CRITICAL] ${err.message}\n${err.stack}\n`,
+        'utf8',
+      );
+      showNotification(`❌ Kritischer Fehler im Task Manager: ${err.message}`, 'error');
+    });
 }
 
 module.exports = { main };
