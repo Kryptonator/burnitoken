@@ -100,15 +100,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 📧 Send E-Mail Alert
+        # This action sends an email notification when a workflow fails.
+        # IMPORTANT: You must configure the following secrets in your GitHub repository settings:
+        # - MAIL_USERNAME: The username for your SMTP server (e.g., your Yahoo email address).
+        # - MAIL_PASSWORD: The application-specific password for your email account.
+        # - MAIL_RECIPIENT: The email address where the notification should be sent.
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.mail.yahoo.com
           server_port: 465
-          username: ${{ secrets.ALERT_EMAIL_USER }}
-          password: ${{ secrets.ALERT_EMAIL_PASS }}
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
           subject: "🚨 CI Failure: Workflow failed for ${{ github.repository }}"
-          to: ${{ secrets.ALERT_EMAIL_USER }}
-          from: BurniToken Notifier <github-actions-no-reply@burnitoken.com>
+          to: ${{ secrets.MAIL_RECIPIENT }}
+          from: BurniToken Notifier <github-actions@burnitoken.com>
           body: |
             A workflow run for **${{ github.repository }}** failed.
 
