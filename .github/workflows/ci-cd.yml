@@ -1,14 +1,14 @@
-name: BurniToken CI/CD
+name: CI - Test and Validate
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, feature/add-new-button ]
   pull_request:
     branches: [ main, master ]
 
 jobs:
-  build-lint-test:
-    name: 🔬 Build, Lint & Test
+  test-suite:
+    name: 🧪 Test Suite
     runs-on: ubuntu-latest
     env:
       CI: true
@@ -29,18 +29,13 @@ jobs:
       - name: 🎨 Lint code
         run: npm run lint:check
       
-      - name: 🧪 Run unit tests
-        run: npm test
+      - name: 🧪 Run unit & integration tests
+        run: npm test -- --verbose
       
-      - name: 🏗️ Build CSS
+      - name: 🏗️ Build CSS for Playwright
         run: npm run build:css
-      
-      - name: 🩺 Run Health Checks
-        run: node tools/unified-monitoring-service.js --silent
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 🚀 Run E2E tests
+        
+      - name: 🚀 Run E2E tests with Playwright
         run: npx playwright install --with-deps && npx playwright test
 
       - name: 📊 Upload test artifacts
@@ -51,11 +46,56 @@ jobs:
           path: |
             coverage/
             playwright-report/
-            .lighthouseci/
 
-  notify-on-failure:
-    name: 🔔 Notify on Failure
-    needs: build-lint-test
+  security-check:
+    name: 🔒 Security & Dependency Check
+    needs: test-suite
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: 📦 Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: 📥 Install dependencies
+        run: npm ci
+        
+      - name: 🛡️ Run security audit
+        run: npm audit --audit-level=high
+
+  accessibility-check:
+    name: ♿ Accessibility Check
+    needs: test-suite
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: 📦 Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: 📥 Install dependencies
+        run: npm ci
+
+      - name: 🏗️ Build Project
+        run: npm run build:css
+        
+      - name: ♿ Run Lighthouse accessibility audit
+        run: npx lhci autorun --config=./lighthouserc-accessibility.js
+        env:
+          LHCI_SERVER_URL: ${{ secrets.LHCI_SERVER_URL }}
+          LHCI_TOKEN: ${{ secrets.LHCI_TOKEN }}
+
+  send-failure-notification:
+    name: ✉️ Send Failure Notification
+    needs: [test-suite, security-check, accessibility-check]
     if: failure()
     runs-on: ubuntu-latest
     steps:
@@ -66,15 +106,15 @@ jobs:
           server_port: 465
           username: ${{ secrets.ALERT_EMAIL_USER }}
           password: ${{ secrets.ALERT_EMAIL_PASS }}
-          subject: "🚨 CI/CD Failure: Build failed on ${{ github.ref_name }}"
+          subject: "🚨 CI Failure: Workflow failed for ${{ github.repository }}"
           to: ${{ secrets.ALERT_EMAIL_USER }}
-          from: BurniToken CI Notifier <${{ secrets.ALERT_EMAIL_USER }}>
+          from: BurniToken Notifier <github-actions-no-reply@burnitoken.com>
           body: |
-            🚨 The CI/CD pipeline for branch **${{ github.ref_name }}** has failed.
+            A workflow run for **${{ github.repository }}** failed.
 
             - **Workflow:** `${{ github.workflow }}`
+            - **Branch:** `${{ github.ref_name }}`
             - **Commit:** `${{ github.sha }}`
-            - **Author:** `${{ github.actor }}`
             
-            Please check the failed run details here:
+            Please review the failed run for details:
             ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

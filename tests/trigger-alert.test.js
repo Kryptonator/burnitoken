@@ -3,8 +3,8 @@
  */
 
 describe('Alert System Test', () => {
-  test('Dieser Test sollte jetzt erfolgreich sein', () => {
-    // Der Test wird vorübergehend auf Erfolg gesetzt, um die Pipeline nicht zu blockieren.
-    expect(true).toBe(true); // Dies wird immer erfolgreich sein.
+  test('Dieser Test sollte fehlschlagen, um das Alert-System auszulösen', () => {
+    // Dieser Test wird absichtlich fehlschlagen, um die CI-Pipeline und die Benachrichtigungen zu testen.
+    expect(true).toBe(false); // Dies wird immer fehlschlagen.
   });
 });
