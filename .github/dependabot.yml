@@ -1,6 +1,8 @@
 version: 2
 updates:
-  # npm Pakete aktualisieren (optimiert für das burnitoken-Projekt)
+  # ===================================================================
+  # NPM: Produktions-Abhängigkeiten (Sicherheitsfokus)
+  # ===================================================================
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
@@ -8,82 +10,91 @@ updates:
       day: "monday"
       time: "09:00"
       timezone: "Europe/Berlin"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 5 # Reduziert, da Dev-Deps separat laufen
     reviewers:
       - "Kryptonator"
     assignees:
       - "Kryptonator"
     commit-message:
       prefix: "📦"
-      prefix-development: "🔧"
       include: "scope"
     labels:
       - "dependencies"
-      - "javascript"
-      - "security-review" 
-    versioning-strategy: "auto"
+      - "production"
+      - "security-review"
+    # Schließe Entwicklungs-Abhängigkeiten aus, diese werden separat behandelt
+    exclude-patterns:
+      - "*-loader"
+      - "eslint*"
+      - "*-plugin"
+      - "test-*"
+      - "prettier*"
+      - "webpack*"
+      - "babel*"
+      - "jest*"
+      - "postcss*"
+      - "@playwright*"
+      - "selenium*"
+      - "cssnano" # Gehört eher zu Dev/Build
+    # Gruppiere verwandte Pakete
     groups:
-      # Entwicklungs-Tools gemeinsam aktualisieren
-      dev-tools:
-        patterns:
-          - "*-loader"
-          - "eslint*"
-          - "*-plugin"
-          - "test-*"
-          - "prettier*"
-          - "webpack*"
-          - "babel*"
-          - "jest*"
-          - "postcss*"
-        update-types:
-          - "minor"
-          - "patch"
-      # Tailwind Abhängigkeiten zusammen aktualisieren
       tailwind-ecosystem:
         patterns:
           - "tailwindcss"
           - "autoprefixer"
-          - "cssnano"
-          - "postcss*"
-        update-types:
-          - "minor"
-          - "patch"
-      # Test-Framework gemeinsam aktualisieren
-      test-ecosystem:
-        patterns:
-          - "jest*"
-          - "@playwright*"
-          - "selenium*"
-        update-types:
-          - "minor"
-          - "patch"
-      # Übrige kleinere Dependencies für schnelles Update
-      minor-dependencies:
-        patterns:
-          - "*"
-        exclude-patterns:
-          - "*-loader"
-          - "eslint*"
-          - "*-plugin"
-          - "test-*"
-          - "prettier*"
-          - "webpack*"
-          - "tailwindcss"
-          - "jest*"
-          - "@playwright*"
-        update-types:
-          - "patch"
-    # Automatisches Mergen für Sicherheits-Updates und kleinere Patches
+    # Automatisches Mergen nur für Patches, um Stabilität zu gewährleisten
     automerge: true
-    ignore-workflow-files: false
-    automergeable-types: 
+    automergeable-types:
       - "security:patch"
       - "version-update:semver-patch"
-    # Priorisiere sicherheitsrelevante Pakete
-    security-updates-only: false
     rebase-strategy: "auto"
 
-  # GitHub Actions aktualisieren (optimiert für CI/CD-Pipeline)
+  # ===================================================================
+  # NPM: Entwicklungs-Abhängigkeiten (Automatisierungsfokus)
+  # ===================================================================
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "tuesday" # An einem anderen Tag, um Konflikte zu vermeiden
+      time: "10:00"
+      timezone: "Europe/Berlin"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "Kryptonator"
+    assignees:
+      - "Kryptonator"
+    commit-message:
+      prefix: "🔧"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "dev-dependencies"
+    # Schließe nur Entwicklungs-Abhängigkeiten ein
+    include-patterns:
+      - "*-loader"
+      - "eslint*"
+      - "*-plugin"
+      - "test-*"
+      - "prettier*"
+      - "webpack*"
+      - "babel*"
+      - "jest*"
+      - "postcss*"
+      - "@playwright*"
+      - "selenium*"
+      - "cssnano"
+    # Aggressiveres Auto-Merging für Dev-Tools, inkl. Minor-Updates
+    automerge: true
+    automergeable-types:
+      - "security:patch"
+      - "version-update:semver-patch"
+      - "version-update:semver-minor"
+    rebase-strategy: "auto"
+
+  # ===================================================================
+  # GitHub Actions (CI/CD)
+  # ===================================================================
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -102,9 +113,27 @@ updates:
       prefix: "👷"
       include: "scope"
     automerge: true
-    automergeable-types: 
+    automergeable-types:
       - "security:patch"
       - "version-update:semver-patch"
+
+  # ===================================================================
+  # Docker-Container
+  # ===================================================================
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "10:00"
+      timezone: "Europe/Berlin"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+      - "docker"
+    commit-message:
+      prefix: "🐳"
+      include: "scope"
 
 # Globale Einstellungen für alle Ecosystems
 registries:

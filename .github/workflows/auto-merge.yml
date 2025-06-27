@@ -1,0 +1,48 @@
+name: Auto Merge & Cleanup
+
+on:
+  # Diese Trigger stellen sicher, dass die Action bei jeder relevanten Änderung am PR-Status erneut läuft.
+  pull_request:
+    types:
+      - labeled
+      - unlabeled
+      - synchronize
+      - opened
+      - edited
+      - ready_for_review
+      - reopened
+      - unlocked
+  pull_request_review:
+    types:
+      - submitted
+  check_suite:
+    types:
+      - completed
+  status: {}
+
+jobs:
+  automerge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto-Merge Pull Request
+        id: automerge
+        uses: "pascalgn/automerge-action@v0.16.3"
+        env:
+          # Das GITHUB_TOKEN wird für die API-Anfragen benötigt.
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          
+          # === KONFIGURATION ===
+          # Das Label, das den Auto-Merge-Prozess auslöst.
+          MERGE_LABELS: "automerge"
+          
+          # Wir verwenden "squash", um die gesamte Arbeit in einen einzigen, sauberen Commit im Main-Branch zu packen.
+          MERGE_METHOD: "squash"
+          
+          # Die Commit-Nachricht wird aus dem Titel und der Beschreibung des Pull Requests generiert.
+          MERGE_COMMIT_MESSAGE: "pull-request-title-and-description"
+          
+          # Löscht den Branch automatisch nach dem erfolgreichen Merge.
+          MERGE_DELETE_BRANCH: "true"
+          
+          # Hält den Branch aktuell mit dem Main-Branch, um Konflikte zu minimieren.
+          UPDATE_METHOD: "rebase"

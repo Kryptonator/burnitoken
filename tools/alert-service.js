@@ -5,7 +5,6 @@
 const https = require('https');
 const url = require('url');
 const { createGitHubIssue } = require('./github-issue-creator'); // Importiert den Issue Creator
-const nodemailer = require('nodemailer');
 
 /**
  * Sende einen Alert an einen Webhook und/oder erstelle ein GitHub Issue.
@@ -15,17 +14,13 @@ const nodemailer = require('nodemailer');
  * @param {string} [options.level] - z.B. 'error', 'warning', 'info'
  * @param {Object} [options.extra] - Zusätzliche Daten (optional)
  * @param {boolean} [options.createIssue] - Ob ein GitHub Issue erstellt werden soll (Standard: true für Fehler)
- * @param {Object} [options.email] - E-Mail-Konfiguration (optional)
- * @param {string} options.email.to - Empfänger-E-Mail-Adresse
- * @param {string} options.email.subject - Betreff der E-Mail
  */
-async function sendAlert({
+function sendAlert({
   message,
   webhookUrl,
   level = 'error',
   extra = {},
   createIssue = level === 'error' || level === 'critical',
-  email,
 }) {
   if (!message) return;
 
@@ -57,47 +52,10 @@ async function sendAlert({
     req.end();
   }
 
-  // E-Mail senden
-  if (email && email.to) {
-    try {
-      // Transporter-Konfiguration - passe dies für deinen E-Mail-Provider an
-      const transporter = nodemailer.createTransport({
-        // Beispiel für Gmail. Für andere Provider (z.B. SendGrid, Mailgun) anpassen.
-        // In einer echten Anwendung sollten diese Werte aus Umgebungsvariablen geladen werden.
-        host: process.env.SMTP_HOST || 'smtp.example.com',
-        port: process.env.SMTP_PORT || 587,
-        secure: false, // true für 465, false für andere Ports
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS,
-        },
-      });
-
-      const mailOptions = {
-        from: `"System Alert" <${process.env.SMTP_USER}>`,
-        to: email.to,
-        subject:
-          email.subject || `[${level.toUpperCase()}] System Alert: ${message.substring(0, 50)}`,
-        text: `Ein System-Alert wurde ausgelöst:\n\nLevel: ${level.toUpperCase()}\nNachricht: ${message}\n\nZusätzliche Daten:\n${JSON.stringify(extra, null, 2)}`,
-        html: `<h1>System Alert</h1>
-               <p><b>Level:</b> ${level.toUpperCase()}</p>
-               <p><b>Nachricht:</b> ${message}</p>
-               <hr>
-               <h3>Zusätzliche Daten:</h3>
-               <pre>${JSON.stringify(extra, null, 2)}</pre>`,
-      };
-
-      const info = await transporter.sendMail(mailOptions);
-      console.log('E-Mail-Benachrichtigung gesendet:', info.messageId);
-    } catch (error) {
-      console.error('Fehler beim Senden der E-Mail-Benachrichtigung:', error);
-    }
-  }
-
   // GitHub Issue erstellen (nur bei Fehlern und wenn aktiviert)
   if (createIssue) {
     try {
-      const issueTitle = `[${level.toUpperCase()}] ${message}`;
+      const issueTitle = message;
       const issueBody = `**Fehlerdetails:**\n\n\`\`\`json\n${JSON.stringify(extra, null, 2)}\n\`\`\`\n\n**Kontext:**\n\nDieser Fehler wurde vom automatisierten System-Monitoring erkannt. Bitte untersuchen Sie die Ursache und beheben Sie das Problem.`;
 
       // Labels je nach Dringlichkeit anpassen
@@ -115,7 +73,7 @@ async function sendAlert({
     }
   }
 
-  if (!webhookUrl && !createIssue && !email) {
+  if (!webhookUrl && !createIssue) {
     // Fallback: Logge Alert lokal, wenn keine Benachrichtigungsmethode konfiguriert ist
     console.error('ALERT:', payload);
   }

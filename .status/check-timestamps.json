@@ -5,7 +5,7 @@
   },
   "website-health-check": {
     "status": "success",
-    "lastSuccess": "2025-06-27T09:29:08.466Z"
+    "lastSuccess": "2025-06-27T16:53:37.287Z"
   },
   "snyk-security-scan": {
     "status": "success",
@@ -13,7 +13,7 @@
   },
   "deployment-check": {
     "status": "success",
-    "lastSuccess": "2025-06-27T09:29:35.553Z"
+    "lastSuccess": "2025-06-27T16:53:48.095Z"
   },
   "gsc-integration-monitor": {
     "status": "success",
@@ -23,7 +23,7 @@
     "name": "KI Authentifizierungs-Check",
     "status": "success",
     "message": "Alle erforderlichen KI-API-Schlüssel sind in der .env-Datei konfiguriert.",
-    "lastCheck": "2025-06-27T09:29:05.870Z"
+    "lastCheck": "2025-06-27T16:13:04.114Z"
   },
   "dependabot-monitor": {
     "status": "success",

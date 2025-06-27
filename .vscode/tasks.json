@@ -34,16 +34,13 @@
       "problemMatcher": []
     },
     {
-      "label": "🤖 Unified Monitoring (Auto-Start)",
+      "label": "🤖 Unified Monitoring",
       "type": "shell",
       "command": "node",
       "args": ["tools/unified-monitoring-service.js", "--silent"],
       "presentation": {
         "reveal": "silent",
         "close": true
-      },
-      "runOptions": {
-        "runOn": "folderOpen"
       },
       "problemMatcher": []
     },
@@ -472,9 +469,6 @@
         "reveal": "silent",
         "close": true
       },
-      "runOptions": {
-        "runOn": "folderOpen"
-      },
       "isBackground": true,
       "problemMatcher": []
     },
@@ -508,7 +502,7 @@
       "group": "build"
     },
     {
-      "label": "🤖 AI Conversation Bridge starten",
+      "label": "🤖 AI Conversation Bridge",
       "type": "shell",
       "command": "node",
       "args": ["tools/ai-conversation-bridge.js"],
@@ -520,22 +514,7 @@
       "group": "build"
     },
     {
-      "label": "🔑 GSC Auth Check (Auto-Start)",
-      "type": "shell",
-      "command": "node",
-      "args": ["tools/gsc-auth-check.js"],
-      "presentation": {
-        "reveal": "silent",
-        "close": true
-      },
-      "runOptions": {
-        "runOn": "folderOpen"
-      },
-      "isBackground": true,
-      "problemMatcher": []
-    },
-    {
-      "label": "🤖 KI Auth Check (Auto-Start)",
+      "label": "🤖 KI Auth Check",
       "type": "shell",
       "command": "node",
       "args": ["tools/ai-auth-check.js"],
@@ -543,26 +522,8 @@
         "reveal": "silent",
         "close": true
       },
-      "runOptions": {
-        "runOn": "folderOpen"
-      },
       "isBackground": true,
       "problemMatcher": []
-    },
-    {
-      "label": "🤖 AI Conversation Bridge (Auto-Start)",
-      "type": "shell",
-      "command": "node",
-      "args": ["tools/ai-conversation-bridge.js"],
-      "isBackground": true,
-      "presentation": {
-        "reveal": "silent",
-        "close": true
-      },
-      "runOptions": {
-        "runOn": "folderOpen"
-      },
-      "group": "build"
     },
     {
       "label": "🧠 AI-Status anzeigen",
