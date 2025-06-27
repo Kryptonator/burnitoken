@@ -1,49 +1,48 @@
 {
-  "timestamp": "2025-06-25T07:08:24.192Z",
+  "timestamp": "2025-06-27T09:29:34.814Z",
   "summary": {
-    "status": "failed",
-    "criticalFilesFound": 0,
-    "criticalFilesMissing": [
-      "index.html",
-      "styles.css",
-      "main.js",
-      "manifest.json",
-      "favicon.ico",
-      "robots.txt"
-    ],
-    "elementsFound": 0,
+    "status": "deployed",
+    "criticalFilesFound": 6,
+    "criticalFilesMissing": [],
+    "elementsFound": 5,
     "elementsMissing": []
   },
   "details": {
-    "websiteActive": false,
-    "statusCode": 0,
-    "contentChecked": false,
+    "websiteActive": true,
+    "statusCode": 200,
+    "contentChecked": true,
     "filesChecked": {
       "index.html": {
-        "exists": false,
-        "error": "getaddrinfo ENOTFOUND burnitoken.com"
+        "exists": true,
+        "statusCode": 200,
+        "contentType": "text/html; charset=UTF-8"
       },
       "styles.css": {
-        "exists": false,
-        "error": "getaddrinfo ENOTFOUND burnitoken.com"
+        "exists": true,
+        "statusCode": 200,
+        "contentType": "text/html; charset=UTF-8"
       },
       "main.js": {
-        "exists": false,
-        "error": "getaddrinfo ENOTFOUND burnitoken.com"
+        "exists": true,
+        "statusCode": 200,
+        "contentType": "application/javascript; charset=UTF-8"
       },
       "manifest.json": {
-        "exists": false,
-        "error": "getaddrinfo ENOTFOUND burnitoken.com"
+        "exists": true,
+        "statusCode": 200,
+        "contentType": "application/json"
       },
       "favicon.ico": {
-        "exists": false,
-        "error": "getaddrinfo ENOTFOUND burnitoken.com"
+        "exists": true,
+        "statusCode": 200,
+        "contentType": "text/html; charset=UTF-8"
       },
       "robots.txt": {
-        "exists": false,
-        "error": "getaddrinfo ENOTFOUND burnitoken.com"
+        "exists": true,
+        "statusCode": 200,
+        "contentType": "text/plain; charset=UTF-8"
       }
     },
-    "responseTime": 0
+    "responseTime": 173
   }
 }

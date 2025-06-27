@@ -1,22 +1,26 @@
 # BurniToken Website Status Report
 
-**Zeitpunkt:** 25.6.2025, 09:08:23
-**Gesamtstatus:** ⚠️ DEGRADED
+**Zeitpunkt:** 27.6.2025, 11:29:08
+**Gesamtstatus:** ✅ HEALTHY
 
 ## Zusammenfassung
 
-- **Verfügbare URLs:** 1/3
-- **SSL-Zertifikat:** ❌ Ungültig
-- **Performance-Score:** 75/100
+- **Verfügbare URLs:** 1/1
+- **SSL-Zertifikat:** ✅ Gültig
+- **Performance-Score:** 100/100
 
 ## URL-Status
 
-| URL | Status | Verfügbar | Antwortzeit | Letzte Prüfung |
-| --- | ------ | --------- | ----------- | -------------- |
-| https://burnitoken.com | 0 | ❌ | 0ms | 25.6.2025, 09:08:22 |
-| https://www.burnitoken.com | 0 | ❌ | 0ms | 25.6.2025, 09:08:22 |
-| https://burnitoken.website | 200 | ✅ | 752ms | 25.6.2025, 09:08:23 |
+| URL                        | Status | Verfügbar | Antwortzeit | Letzte Prüfung      |
+| -------------------------- | ------ | --------- | ----------- | ------------------- |
+| https://burnitoken.website | 200    | ✅        | 80ms        | 27.6.2025, 11:29:08 |
+
+## SSL-Zertifikat
+
+- **Aussteller:** Let's Encrypt
+- **Gültig bis:** 18.9.2025, 15:46:12
+- **Verbleibende Tage:** 83
 
 ---
 
-Bericht generiert am 25.6.2025, 09:08:23
+Bericht generiert am 27.6.2025, 11:29:08

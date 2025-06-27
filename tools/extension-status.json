@@ -1,10 +1,10 @@
 {
-  "timestamp": "2025-06-24T21:32:13.824Z",
+  "timestamp": "2025-06-25T16:40:00.252Z",
   "summary": {
     "extensions": {
-      "total": 62,
-      "active": 37,
-      "inactive": 4,
+      "total": 63,
+      "active": 38,
+      "inactive": 3,
       "required": 8,
       "requiredActive": 8
     },
@@ -251,7 +251,7 @@
     {
       "id": "dbaeumer.vscode-eslint",
       "name": "vscode-eslint",
-      "isActive": false,
+      "isActive": true,
       "isRequired": false
     },
     {

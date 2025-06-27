@@ -1,49 +1,31 @@
 {
-  "timestamp": "2025-06-25T07:08:22.529Z",
+  "timestamp": "2025-06-27T09:29:08.146Z",
   "summary": {
-    "overallStatus": "degraded",
+    "overallStatus": "healthy",
     "availableUrls": 1,
-    "totalUrls": 3,
-    "sslValid": false,
-    "performanceScore": 75
+    "totalUrls": 1,
+    "sslValid": true,
+    "performanceScore": 100
   },
   "urls": {
-    "https://burnitoken.com": {
-      "status": 0,
-      "statusText": "getaddrinfo ENOTFOUND burnitoken.com",
-      "available": false,
-      "responseTime": 0,
-      "loadTime": 0,
-      "error": "getaddrinfo ENOTFOUND burnitoken.com",
-      "lastChecked": "2025-06-25T07:08:22.613Z"
-    },
-    "https://www.burnitoken.com": {
-      "status": 0,
-      "statusText": "getaddrinfo ENOTFOUND www.burnitoken.com",
-      "available": false,
-      "responseTime": 0,
-      "loadTime": 0,
-      "error": "getaddrinfo ENOTFOUND www.burnitoken.com",
-      "lastChecked": "2025-06-25T07:08:22.653Z"
-    },
     "https://burnitoken.website": {
       "status": 200,
       "statusText": "OK",
       "available": true,
-      "responseTime": 752,
-      "loadTime": 795,
+      "responseTime": 80,
+      "loadTime": 121,
       "contentType": "text/html; charset=UTF-8",
-      "lastChecked": "2025-06-25T07:08:23.451Z"
+      "lastChecked": "2025-06-27T09:29:08.425Z"
     }
   },
   "ssl": {
-    "valid": false,
-    "expiry": null,
-    "daysRemaining": 0,
-    "issuer": null
+    "valid": true,
+    "expiry": "2025-09-18T13:46:12.000Z",
+    "daysRemaining": 83,
+    "issuer": "Let's Encrypt"
   },
   "performance": {
-    "ttfb": 752,
-    "loadTime": 795
+    "ttfb": 80,
+    "loadTime": 121
   }
 }

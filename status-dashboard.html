@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Status Dashboard</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 2em;
+        background-color: #f4f4f9;
+        color: #333;
+      }
+      h1 {
+        color: #444;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      th,
+      td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+      th {
+        background-color: #007bff;
+        color: white;
+      }
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+      tr:hover {
+        background-color: #e9ecef;
+      }
+      footer {
+        margin-top: 2em;
+        font-size: 0.8em;
+        color: #777;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>System Status Dashboard</h1>
+    <p>Zuletzt aktualisiert: 27.6.2025, 11:30:12</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Überprüfung</th>
+          <th>Zuletzt erfolgreich</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>extension-health-check</td>
+          <td style="background-color: #ccffcc">vor 1 Minuten</td>
+        </tr>
+        <tr>
+          <td>ki-services-health-check</td>
+          <td style="background-color: #ffcccc">nie</td>
+        </tr>
+        <tr>
+          <td>gsc-auth-check</td>
+          <td style="background-color: #ffcccc">nie</td>
+        </tr>
+        <tr>
+          <td>gsc-integration-monitor</td>
+          <td style="background-color: #ccffcc">vor 38 Sekunden</td>
+        </tr>
+        <tr>
+          <td>website-health-check</td>
+          <td style="background-color: #ccffcc">vor 1 Minuten</td>
+        </tr>
+        <tr>
+          <td>deployment-check</td>
+          <td style="background-color: #ccffcc">vor 37 Sekunden</td>
+        </tr>
+        <tr>
+          <td>dependabot-monitor</td>
+          <td style="background-color: #ccffcc">vor 15 Sekunden</td>
+        </tr>
+        <tr>
+          <td>snyk-security-scan</td>
+          <td style="background-color: #ccffcc">vor 0 Sekunden</td>
+        </tr>
+      </tbody>
+    </table>
+    <footer>Automatisch generierter Bericht.</footer>
+  </body>
+</html>

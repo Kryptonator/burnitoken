@@ -4,9 +4,7 @@
     "javascript": "javascript",
     "css": "css"
   },
-  "tailwindCSS.experimental.classRegex": [
-    "class=\"([^\"]*)"
-  ],
+  "tailwindCSS.experimental.classRegex": ["class=\"([^\"]*)"],
   "prettier.enable": true,
   "prettier.singleQuote": true,
   "prettier.semi": true,
@@ -39,17 +37,5 @@
   "extensions.ignoreRecommendations": false,
   "prettier.requireConfig": false,
   "prettier.htmlWhitespaceSensitivity": "css",
-  "eslint.rules.max-len": "off",
-  
-  // Snyk + GitHub Dependabot Integration
-  "snyk.advanced.organization": "burnitoken",
-  "snyk.scanningMode": "manual",
-  "snyk.additionalParameters": "--all-projects --detection-depth=3",
-  "snyk.snykCodeSecurity": true,
-  "snyk.snykCodeQuality": true,
-  "snyk.features.showcaseFilesWithAnyVulnerability": true,
-  "snyk.severity": "medium",
-  "snyk.autoScan.enabled": false,
-  "github.gitAuthentication": true,
-  "github.dependabot.webview": true
+  "eslint.rules.max-len": "off"
 }

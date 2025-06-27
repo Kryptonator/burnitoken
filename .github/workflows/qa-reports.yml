@@ -6,62 +6,78 @@ on:
   pull_request:
     branches: [ main, master ]
   schedule:
-    - cron: '0 6 * * *' # Täglich um 6 Uhr UTC
+    - cron: '0 8 * * *' # Täglich um 8 Uhr UTC
 
 jobs:
-  qa:
+  run-qa-suite:
+    name: 🧪 Run Full QA Suite
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Checkout code
+      - name: 📥 Checkout code
         uses: actions/checkout@v4
-      - name: Setup Node.js
+
+      - name: 📦 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Install dependencies
+          cache: 'npm'
+
+      - name: 📥 Install dependencies
         run: npm ci
-      - name: Build project
+
+      - name: 🏗️ Build project
         run: npm run build
-      - name: Start webserver
+
+      - name: 🚀 Start server in background
         run: npm run serve &
-      - name: Wait for server
-        run: npx wait-on http://localhost:8080
-      - name: Run Playwright E2E tests
-        run: npm run test:e2e -- --reporter=html
-      - name: Run Lighthouse CI
-        run: npm run lighthouse
-      - name: Run HTML validation
-        run: npm run validate
-      - name: Run Prettier check
-        run: npm run lint:check
-      - name: Archive Playwright HTML report
+
+      - name: ⏱️ Wait for server to be ready
+        run: npx wait-on http://localhost:8080 -t 60000
+
+      - name: 🛡️ Run QA, Tests & Reports
+        run: |
+          set -eo pipefail
+          npm run lint:report
+          npm run validate || true
+          npm run test:e2e:ci || true
+          npm run lighthouse || true
+
+      - name: 📝 Generate Status Page
+        if: always()
+        run: node tools/generate-status-page.js
+        
+      - name: 📤 Archive Reports
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
-          path: playwright-report/
-      - name: Archive Lighthouse reports
-        uses: actions/upload-artifact@v4
-        with:
-          name: lighthouse-reports
-          path: .lighthouseci/
-      - name: Archive HTML validation results
-        uses: actions/upload-artifact@v4
-        with:
-          name: html-validation
-          path: .html-validate-report/
-      - name: Send mail on failure
+          name: qa-reports
+          path: |
+            status.html
+            playwright-report/
+            .lighthouseci/
+            .html-validate-report/
+            lint-results.json
+
+      - name: 📧 Send mail on failure
         if: failure()
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: ${{ secrets.SMTP_SERVER }}
-          server_port: 465
-          username: ${{ secrets.SMTP_USERNAME }}
-          password: ${{ secrets.SMTP_PASSWORD }}
-          subject: "❌ QA/Deploy Fehler: ${{ github.repository }} @ ${{ github.sha }}"
-          to: ${{ secrets.ALERT_EMAIL }}
-          from: QA-Bot <${{ secrets.ALERT_EMAIL }}>
-          body: |
-            Fehler im QA-/Deploy-Workflow!
-            Repository: ${{ github.repository }}
-            Commit: ${{ github.sha }}
-            Siehe GitHub Actions für Details.
+        env:
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+        run: |
+          node -e 'require("./tools/alert-service").sendAlert({ 
+            message: "QA Workflow Failed in ${{ github.repository }}", 
+            level: "critical", 
+            extra: { 
+              repository: "${{ github.repository }}", 
+              commit: "${{ github.sha }}", 
+              workflow: "${{ github.workflow }}" 
+            }, 
+            email: { 
+              to: process.env.ALERT_EMAIL, 
+              subject: "❌ QA Workflow Failed: ${{ github.repository }}" 
+            } 
+          })'

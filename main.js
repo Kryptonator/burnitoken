@@ -72,6 +72,52 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
+  // --- NEU: Zentrales i18n-Statusmanagement & Event-Handling ---
+  let i18nState = {
+    lang: 'en', // Standard-Sprache
+    locales: {
+      // Behält die Locale-Mappings für Intl-Formatierung bei
+      en: 'en-US',
+      de: 'de-DE',
+      es: 'es-ES',
+      fr: 'fr-FR',
+      ar: 'ar-SA',
+      bn: 'bn-BD',
+      pt: 'pt-BR',
+      ru: 'ru-RU',
+      ko: 'ko-KR',
+      tr: 'tr-TR',
+      zh: 'zh-CN',
+      hi: 'hi-IN',
+      ja: 'ja-JP',
+      it: 'it-IT',
+    },
+    translations: {}, // Wird durch das globale Event gefüllt
+  };
+
+  // Lauscht auf das globale Sprachwechsel-Event von navigation-language.js
+  document.addEventListener('languageSwitched', async (e) => {
+    console.log(`Main.js hat Sprachwechsel zu ${e.detail.lang} erkannt.`);
+    i18nState.lang = e.detail.lang;
+
+    // Greift auf die global gecachten Übersetzungen zu
+    const allTranslations = window.burni_translations || (await loadTranslations());
+    i18nState.translations = allTranslations[e.detail.lang]?.translation || {};
+
+    // Alle sprachabhängigen UI-Teile neu rendern/aktualisieren
+    await rerenderDynamicContent();
+  });
+
+  // Bündelt alle Funktionen, die bei Sprachwechsel neu ausgeführt werden müssen
+  async function rerenderDynamicContent() {
+    console.log('Rerendering dynamic content for new language:', i18nState.lang);
+    await updateLivePrices();
+    const schedule = generateSchedule(new Date('2024-07-20'), 1000000, 365);
+    renderScheduleTable(schedule);
+    // Zukünftige sprachabhängige Updates können hier hinzugefügt werden
+  }
+  // --- Ende des neuen i18n-Blocks ---
+
   const currentYearElement = document.getElementById('currentYear');
   if (currentYearElement) currentYearElement.textContent = new Date().getFullYear();
 
@@ -173,46 +219,29 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   let supplyChartInstance, athAtlChartInstance, scheduleChartInstance;
-  let currentLang = 'en';
 
-  console.log('About to start i18n system (moved up)...');
-  // ===== INTERNATIONALIZATION (i18n) SYSTEM (MOVED TO TOP) =====
-
-  const locales = {
-    en: 'en-US',
-    de: 'de-DE',
-    es: 'es-ES',
-    fr: 'fr-FR',
-    ar: 'ar-SA',
-    bn: 'bn-BD',
-    pt: 'pt-BR',
-    ru: 'ru-RU',
-    ko: 'ko-KR',
-    tr: 'tr-TR',
-    zh: 'zh-CN',
-    hi: 'hi-IN',
-    ja: 'ja-JP',
-    it: 'it-IT',
-  };
+  // ===== ENTFERNT: Veraltetes, lokales i18n-System =====
+  // Die Objekte 'locales' und 'translations' wurden in den neuen i18nState-Block oben verschoben oder entfernt.
 
   const priceErrorMessageElement = document.getElementById('price-error-message');
 
-  function generateSchedule(startDate, initialCoins, processes, locale, currentTranslations) {
+  function generateSchedule(startDate, initialCoins, processes) {
     const schedule = [];
     let coins = initialCoins;
     let date = new Date(startDate);
+    const locale = i18nState.locales[i18nState.lang] || 'en-US'; // NEU: aus i18nState
 
     for (let i = 1; i <= processes; i++) {
       coins = coins * (1 - 0.03) * (1 - 0.02); // Burn 3%, lock 2%
       schedule.push({
-        date: date.toLocaleDateString(locales[locale] || 'en-US', {
+        date: date.toLocaleDateString(locale, {
           day: '2-digit',
           month: '2-digit',
           year: 'numeric',
         }),
-        day: date.toLocaleDateString(locales[locale] || 'en-US', { weekday: 'long' }),
+        day: date.toLocaleDateString(locale, { weekday: 'long' }),
         process: i,
-        coins: new Intl.NumberFormat(locales[locale] || 'en-US', {
+        coins: new Intl.NumberFormat(locale, {
           minimumFractionDigits: 2,
           maximumFractionDigits: 2,
         }).format(coins),
@@ -222,11 +251,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     return schedule;
   }
 
-  function renderScheduleTable(schedule, lang) {
+  function renderScheduleTable(schedule) {
     const tableContainer = document.getElementById('scheduleTable');
     if (!tableContainer) return;
 
-    const currentTranslations = translations[lang] || translations.en;
+    const currentTranslations = i18nState.translations; // NEU: aus i18nState
 
     let displaySchedule = [];
     if (schedule.length <= 7) {
@@ -266,25 +295,42 @@ document.addEventListener('DOMContentLoaded', async () => {
    * Diese Funktion ersetzt die alte fetchLivePrices-Logik.
    */
   async function updateLivePrices() {
-    const currentLocale = locales[currentLang] || 'en-US';
+    const currentLocale = i18nState.locales[i18nState.lang] || 'en-US'; // NEU: aus i18nState
 
     // Alle Preis-Elemente und ihre Konfigurationen
     const priceElements = {
       burniPrice: {
         element: document.getElementById('burniPriceValue'),
         tokenIds: { coingecko: 'burni', coincap: 'burni' }, // Annahme, dass 'burni' die ID ist
-        formatter: (price) => new Intl.NumberFormat(currentLocale, { style: 'currency', currency: 'USD', minimumFractionDigits: 6, maximumFractionDigits: 8 }).format(price)
+        formatter: (price) =>
+          new Intl.NumberFormat(currentLocale, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 6,
+            maximumFractionDigits: 8,
+          }).format(price),
       },
       xrpPrice: {
         element: document.getElementById('xrpPriceValue'),
         tokenIds: { coingecko: 'ripple', coincap: 'xrp' },
-        formatter: (price) => new Intl.NumberFormat(currentLocale, { style: 'currency', currency: 'USD', minimumFractionDigits: 4 }).format(price)
+        formatter: (price) =>
+          new Intl.NumberFormat(currentLocale, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 4,
+          }).format(price),
       },
       xpmPrice: {
         element: document.getElementById('xpmPriceValue'),
         tokenIds: { coingecko: 'xpm', coincap: 'xpm' }, // Annahme, dass 'xpm' die ID ist
-        formatter: (price) => new Intl.NumberFormat(currentLocale, { style: 'currency', currency: 'USD', minimumFractionDigits: 10, maximumFractionDigits: 12 }).format(price)
-      }
+        formatter: (price) =>
+          new Intl.NumberFormat(currentLocale, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 10,
+            maximumFractionDigits: 12,
+          }).format(price),
+      },
     };
 
     // Setze alle Elemente in den Ladezustand
@@ -294,7 +340,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         element.textContent = '...';
       }
     });
-    
+
     let allPricesFetched = true;
 
     // Rufe Preise für jedes Element ab
@@ -315,28 +361,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         allPricesFetched = false;
       }
     }
-    
+
     // Update von Metriken, die von Preisen abhängen (z.B. Supply Chart)
     // HINWEIS: Die Logik für `fetchBurniMetrics` etc. sollte hier ebenfalls integriert werden.
     // Der Einfachheit halber wird dies hier übersprungen, aber in einem realen Szenario
     // würden die Daten hier an die Charts weitergegeben.
-    
+
     const lastUpdatedTimestampElement = document.getElementById('lastUpdatedTimestamp');
     if (lastUpdatedTimestampElement) {
-        lastUpdatedTimestampElement.textContent = new Date().toLocaleString(currentLocale);
+      lastUpdatedTimestampElement.textContent = new Date().toLocaleString(currentLocale);
     }
-    
+
     if (priceErrorMessageElement) {
-        if (allPricesFetched) {
-            priceErrorMessageElement.classList.add('hidden');
-        } else {
-            const errorMsgKey = translations[currentLang]?.price_error_message || translations.en.price_error_message;
-            priceErrorMessageElement.textContent = errorMsgKey;
-            priceErrorMessageElement.classList.remove('hidden');
-        }
+      if (allPricesFetched) {
+        priceErrorMessageElement.classList.add('hidden');
+      } else {
+        const errorMsgKey =
+          i18nState.translations.price_error_message || 'Price data currently unavailable.'; // NEU: aus i18nState
+        priceErrorMessageElement.textContent = errorMsgKey;
+        priceErrorMessageElement.classList.remove('hidden');
+      }
     }
   }
-
 
   async function fetchBurniMetrics() {
     const burniIssuerAddress = 'rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2';
@@ -374,1069 +420,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  /* 
-   * [Veraltet] Die folgende Funktion `fetchLivePrices` wird durch `updateLivePrices`
-   * und das `PriceOracle` ersetzt. Sie wird auskommentiert und kann später entfernt werden.
-   */
   /*
-  async function fetchLivePrices() {
-    let prices;
-    const fallbackPrices = {
-      burni: { priceXRP: 0.0025, circulatingSupply: 450000, holders: 102, trustlines: 115 },
-      xrp: { priceUSD: 0.5234 },
-      xpm: { priceXRP: 0.000000229 },
-    };
-    const currentLocale = locales[currentLang] || 'en-US';
-
-    // In Testumgebungen keine externen API-Calls
-    const isTestEnvironment =
-      navigator.userAgent.includes('Playwright') ||
-      navigator.userAgent.includes('HeadlessChrome') ||
-      window.location.search.includes('test');
-
-    if (isTestEnvironment) {
-      console.log('Test environment detected - using fallback prices');
-      return fallbackPrices;
-    }
-
-    try {
-      let xrpUsdPrice = fallbackPrices.xrp.priceUSD;
-      try {
-        const xrpPriceResponse = await fetch(
-          'https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd',
-        );
-        if (xrpPriceResponse.ok) {
-          const xrpPriceData = await xrpPriceResponse.json();
-          xrpUsdPrice = xrpPriceData.ripple?.usd || fallbackPrices.xrp.priceUSD;
-        } else {
-          console.warn(`CoinGecko API request for XRP price failed: ${xrpPriceResponse.status}`);
-        }
-      } catch (e) {
-        console.warn('Could not fetch XRP price from CoinGecko, using fallback.', e);
-      }
-
-      const burniMetrics = await fetchBurniMetrics();
-      const burniPriceXRP = await fetchBurniPriceXRP();
-      const xpmMetrics = await fetchXPMMetrics(xrpUsdPrice);
-
-      prices = {
-        burni: {
-          priceUSD: burniPriceXRP * xrpUsdPrice,
-          priceXRP: burniPriceXRP,
-          circulatingSupply: burniMetrics.circulatingSupply,
-          holders: burniMetrics.holders,
-          trustlines: burniMetrics.trustlines,
-        },
-        xrp: { priceUSD: xrpUsdPrice },
-        xpm: {
-          priceUSD: xpmMetrics.priceUSD,
-        },
-      };
-
-      if (priceErrorMessageElement) priceErrorMessageElement.classList.add('hidden');
-    } catch (error) {
-      console.error('Error fetching live prices:', error);
-      prices = {
-        burni: {
-          priceUSD: fallbackPrices.burni.priceXRP * fallbackPrices.xrp.priceUSD,
-          priceXRP: fallbackPrices.burni.priceXRP,
-          circulatingSupply: fallbackPrices.burni.circulatingSupply,
-          holders: fallbackPrices.burni.holders,
-          trustlines: fallbackPrices.burni.trustlines,
-        },
-        xrp: { priceUSD: fallbackPrices.xrp.priceUSD },
-        xpm: { priceUSD: fallbackPrices.xpm.priceXRP * fallbackPrices.xrp.priceUSD },
-      };
-
-      if (priceErrorMessageElement && translations[currentLang]) {
-        const errorMsgKey =
-          translations[currentLang].price_error_message || translations.en.price_error_message;
-        priceErrorMessageElement.textContent = errorMsgKey;
-        priceErrorMessageElement.classList.remove('hidden');
-      }
-    }
-
-    // DOM Updates
-    const burniPriceElement = document.getElementById('burniPriceValue');
-    const circulatingSupplyElement = document.getElementById('circulatingSupplyValue');
-    const holdersElement = document.getElementById('kpi_holders_value');
-    const trustlinesElement = document.getElementById('kpi_trustlines_value');
-
-    if (burniPriceElement)
-      burniPriceElement.textContent = new Intl.NumberFormat(currentLocale, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 6,
-        maximumFractionDigits: 8,
-      }).format(prices.burni.priceUSD);
-    if (circulatingSupplyElement)
-      circulatingSupplyElement.textContent = `${new Intl.NumberFormat(currentLocale, { maximumFractionDigits: 1 }).format(prices.burni.circulatingSupply / 1000)}K`;
-    if (holdersElement)
-      holdersElement.textContent = new Intl.NumberFormat(currentLocale).format(
-        prices.burni.holders,
-      );
-    if (trustlinesElement)
-      trustlinesElement.textContent = new Intl.NumberFormat(currentLocale).format(
-        prices.burni.trustlines,
-      );
-
-    const xrpPriceElement = document.getElementById('xrpPriceValue');
-    if (xrpPriceElement)
-      xrpPriceElement.textContent = new Intl.NumberFormat(currentLocale, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 4,
-      }).format(prices.xrp.priceUSD);
-
-    const xpmPriceElement = document.getElementById('xpmPriceValue');
-    if (xpmPriceElement)
-      xpmPriceElement.textContent = new Intl.NumberFormat(currentLocale, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 10,
-        maximumFractionDigits: 12,
-      }).format(prices.xpm.priceUSD);
-
-    const lastUpdatedTimestampElement = document.getElementById('lastUpdatedTimestamp');
-    if (lastUpdatedTimestampElement)
-      lastUpdatedTimestampElement.textContent = new Date().toLocaleString(currentLocale);
-
-    if (
-      supplyChartInstance &&
-      translations[currentLang] &&
-      prices.burni.circulatingSupply !== undefined
-    ) {
-      supplyChartInstance.data.datasets[0].data = [
-        prices.burni.circulatingSupply,
-        1000000 - prices.burni.circulatingSupply,
-      ];
-      const supplyLabelKey =
-        translations[currentLang].kpi_circulating_supply || translations.en.kpi_circulating_supply;
-      const maxSupplyLabelKey =
-        translations[currentLang].kpi_max_supply || translations.en.kpi_max_supply;
-      supplyChartInstance.data.labels[0] = `${supplyLabelKey} (${new Intl.NumberFormat(currentLocale, { maximumFractionDigits: 1 }).format(prices.burni.circulatingSupply / 1000)}K)`;
-      supplyChartInstance.data.labels[1] = maxSupplyLabelKey;
-      supplyChartInstance.update();
-    }
-  }
-
-  // Starte die neue, robuste Preisaktualisierung
-  updateLivePrices();
-  setInterval(updateLivePrices, 60000); // Alle 60 Sekunden aktualisieren
-
-  // Charts asynchron initialisieren
-  initializeChartsAsync();
-
-  async function initializeChartsAsync() {
-    await waitForChartJs();
-
-    if (!chartJsLoaded) {
-      console.warn('Chart.js nicht verfügbar - Charts werden übersprungen');
-      return;
-    }
-
-    console.log('Chart.js geladen - initialisiere Charts...');
-    initializeSupplyChart();
-    initializeAthAtlChart();
-    initializeScheduleChart();
-  }
-
-  function initializeSupplyChart() {
-    try {
-      const supplyCtx = document.getElementById('supplyChart')?.getContext('2d');
-      if (supplyCtx) {
-        supplyChartInstance = new Chart(supplyCtx, {
-          type: 'doughnut',
-          data: {
-            labels: ['Circulating Supply', 'Max Supply'],
-            datasets: [
-              {
-                label: 'Token Supply',
-                data: [387900, 1000000 - 387900],
-                backgroundColor: ['#FDBA74', '#D1D5DB'],
-                borderColor: ['#F97316', '#9CA3AF'],
-                borderWidth: 1,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: { position: 'top', labels: { color: '#374151' } },
-              tooltip: {
-                callbacks: {
-                  label: (context) => {
-                    let label = context.dataset.label || '';
-                    if (context.label) label = context.label;
-                    if (label) label += ': ';
-                    if (context.parsed !== null)
-                      label +=
-                        new Intl.NumberFormat(locales[currentLang]).format(context.parsed) +
-                        ' Tokens';
-                    return label;
-                  },
-                },
-              },
-            },
-          },
-        });
-      }
-    } catch (error) {
-      console.error('Error initializing supply chart:', error);
-    }
-  }
-
-  function initializeAthAtlChart() {
-    try {
-      const athAtlCtx = document.getElementById('athAtlChart')?.getContext('2d');
-      if (athAtlCtx) {
-        athAtlChartInstance = new Chart(athAtlCtx, {
-          type: 'bar',
-          data: {
-            labels: ['All-Time Low (ATL) May 17, 2025', 'All-Time High (ATH) May 19, 2025'],
-            datasets: [
-              {
-                label: 'Price in XRP',
-                data: [0.0011, 0.0528],
-                backgroundColor: ['#FCA5A5', '#6EE7B7'],
-                borderColor: ['#EF4444', '#10B981'],
-                borderWidth: 1,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            indexAxis: 'y',
-            scales: {
-              x: {
-                beginAtZero: true,
-                title: { display: true, text: 'Price in XRP', color: '#374151' },
-                ticks: {
-                  color: '#374151',
-                  callback: (value) => new Intl.NumberFormat(locales[currentLang]).format(value),
-                },
-              },
-              y: { ticks: { color: '#374151', font: { size: 10 } } },
-            },
-            plugins: {
-              legend: { display: false },
-              tooltip: {
-                callbacks: {
-                  label: (context) =>
-                    context.dataset.label +
-                    ': ' +
-                    new Intl.NumberFormat(locales[currentLang]).format(context.parsed.x) +
-                    ' XRP',
-                },
-              },
-            },
-          },
-        });
-      }
-    } catch (error) {
-      console.error('Error initializing ATH/ATL chart:', error);
-    }
-  }
-
-  function initializeScheduleChart() {
-    try {
-      const scheduleCtx = document.getElementById('scheduleChart')?.getContext('2d');
-      if (scheduleCtx) {
-        const scheduleData = generateSchedule('2025-06-01', 500000, 260, currentLang, translations);
-        const chartLabels = scheduleData
-          .map((row) => row.date)
-          .slice(0, 4)
-          .concat(['...'])
-          .concat(scheduleData.map((row) => row.date).slice(-3));
-        const chartDatasetData = scheduleData
-          .map((row) => parseFloat(row.coins))
-          .slice(0, 4)
-          .concat([null])
-          .concat(scheduleData.map((row) => parseFloat(row.coins)).slice(-3));
-
-        scheduleChartInstance = new Chart(scheduleCtx, {
-          type: 'line',
-          data: {
-            labels: chartLabels,
-            datasets: [
-              {
-                label: 'Remaining Coins',
-                data: chartDatasetData,
-                borderColor: '#F97316',
-                backgroundColor: 'rgba(249, 115, 22, 0.1)',
-                fill: true,
-                tension: 0.4,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              y: {
-                beginAtZero: false,
-                title: { display: true, text: 'Number of Coins', color: '#374151' },
-                ticks: {
-                  color: '#374151',
-                  callback: (value) => new Intl.NumberFormat(locales[currentLang]).format(value),
-                },
-              },
-              x: {
-                title: { display: true, text: 'Date', color: '#374151' },
-                ticks: { color: '#374151' },
-              },
-            },
-            plugins: {
-              legend: { display: true, position: 'top', labels: { color: '#374151' } },
-              tooltip: {
-                callbacks: {
-                  label: (context) => {
-                    const label = context.dataset.label || '';
-                    const value = context.parsed.y;
-                    return value !== null
-                      ? label + ': ' + new Intl.NumberFormat(locales[currentLang]).format(value)
-                      : '';
-                  },
-                },
-              },
-            },
-          },
-        });
-        renderScheduleTable(scheduleData, currentLang);
-      }
-    } catch (error) {
-      console.error('Error initializing schedule chart:', error);
-    }
-  }
-
-  setTimeout(() => {
-    const twitterTimeline = document.querySelector('.twitter-timeline');
-    if (
-      twitterTimeline &&
-      (twitterTimeline.offsetHeight === 0 || twitterTimeline.offsetWidth === 0) &&
-      !twitterTimeline.querySelector('iframe')
-    ) {
-      const fallback = document.getElementById('twitter-fallback');
-      if (fallback) fallback.classList.remove('hidden');
-    }
-  }, 1500);
-
-  // Mock-Daten für Live-Preise und AMM-Pool
-  const mockData = {
-    burni: {
-      day: [0.0011, 0.0012, 0.001, 0.0013, 0.0011, 0.0014, 0.0012],
-      week: [0.0011, 0.0013, 0.001, 0.0012, 0.0015, 0.0009, 0.0014],
-      month: [0.0011, 0.0014, 0.001, 0.0013, 0.0012, 0.0016, 0.0011],
-    },
-    xrp: {
-      day: [0.5, 0.51, 0.49, 0.52, 0.5, 0.53, 0.51],
-      week: [0.5, 0.52, 0.48, 0.51, 0.54, 0.47, 0.52],
-      month: [0.5, 0.53, 0.47, 0.52, 0.51, 0.55, 0.49],
-    },
-    xpm: {
-      day: [0.02, 0.021, 0.019, 0.022, 0.02, 0.023, 0.021],
-      week: [0.02, 0.022, 0.019, 0.021, 0.024, 0.018, 0.022],
-      month: [0.02, 0.023, 0.018, 0.022, 0.021, 0.025, 0.019],
-    },
-    ammPool: {
-      day: [1000, 1010, 990, 1020, 1000, 1030, 1015],
-      week: [1000, 1020, 980, 1010, 1040, 970, 1025],
-      month: [1000, 1030, 970, 1020, 1010, 1050, 995],
-    },
-  };
-
-  let priceChartInstance;
-  let currentInterval = 'day';
-
-  // Funktion zum Aktualisieren des Charts
-  function updatePriceChart(interval) {
-    try {
-      currentInterval = interval;
-
-      // Chart.js Verfügbarkeit prüfen
-      if (typeof Chart === 'undefined') {
-        console.warn('Chart.js not available, deferring chart update...');
-        return;
-      }
-
-      if (priceChartInstance) priceChartInstance.destroy();
-
-      const ctx = document.getElementById('priceChart');
-      if (!ctx) return;
-
-      const chartContext = ctx.getContext('2d');
-      const labels =
-        interval === 'day'
-          ? ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '23:59']
-          : interval === 'week'
-            ? ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
-            : ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7'];
-
-      priceChartInstance = new Chart(chartContext, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: 'Burni Coin ($)',
-              data: mockData.burni[interval],
-              borderColor: '#F97316',
-              backgroundColor: 'rgba(249, 115, 22, 0.1)',
-              fill: false,
-              tension: 0.4,
-            },
-            {
-              label: 'XRP ($)',
-              data: mockData.xrp[interval],
-              borderColor: '#10B981',
-              backgroundColor: 'rgba(16, 185, 129, 0.1)',
-              fill: false,
-              tension: 0.4,
-            },
-            {
-              label: 'XPM ($)',
-              data: mockData.xpm[interval],
-              borderColor: '#3B82F6',
-              backgroundColor: 'rgba(59, 130, 246, 0.1)',
-              fill: false,
-              tension: 0.4,
-            },
-            {
-              label: 'AMM Pool Volume',
-              data: mockData.ammPool[interval],
-              borderColor: '#8B5CF6',
-              backgroundColor: 'rgba(139, 92, 246, 0.1)',
-              fill: false,
-              tension: 0.4,
-              yAxisID: 'y1',
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: {
-            mode: 'index',
-            intersect: false,
-          },
-          scales: {
-            x: {
-              title: {
-                display: true,
-                text: interval === 'day' ? 'Zeit' : interval === 'week' ? 'Wochentag' : 'Woche',
-                color: '#374151',
-              },
-              grid: { color: 'rgba(0,0,0,0.1)' },
-            },
-            y: {
-              type: 'linear',
-              display: true,
-              position: 'left',
-              beginAtZero: false,
-              title: {
-                display: true,
-                text: 'Preis ($)',
-                color: '#374151',
-              },
-              grid: { color: 'rgba(0,0,0,0.1)' },
-            },
-            y1: {
-              type: 'linear',
-              display: true,
-              position: 'right',
-              title: {
-                display: true,
-                text: 'Pool Volume',
-                color: '#374151',
-              },
-              grid: {
-                drawOnChartArea: false,
-              },
-            },
-          },
-          plugins: {
-            legend: {
-              display: true,
-              position: 'top',
-              labels: { color: '#374151' },
-            },
-            tooltip: {
-              enabled: true,
-              backgroundColor: 'rgba(0,0,0,0.8)',
-              titleColor: '#fff',
-              bodyColor: '#fff',
-            },
-          },
-        },
-      });
-    } catch (error) {
-      console.error('Error creating price chart:', error);
-    }
-  }
-
-  // Event-Listener für Intervall-Buttons
-  function initializeLiveDataSection() {
-    const dayBtn = document.getElementById('interval-day');
-    const weekBtn = document.getElementById('interval-week');
-    const monthBtn = document.getElementById('interval-month');
-
-    if (dayBtn && weekBtn && monthBtn) {
-      dayBtn.addEventListener('click', () => {
-        updatePriceChart('day');
-        setActiveIntervalButton('day');
-      });
-      weekBtn.addEventListener('click', () => {
-        updatePriceChart('week');
-        setActiveIntervalButton('week');
-      });
-      monthBtn.addEventListener('click', () => {
-        updatePriceChart('month');
-        setActiveIntervalButton('month');
-      });
-
-      // Initiales Laden
-      updatePriceChart('day');
-      setActiveIntervalButton('day');
-    }
-  }
-
-  function setActiveIntervalButton(activeInterval) {
-    ['day', 'week', 'month'].forEach((interval) => {
-      const btn = document.getElementById(`interval-${interval}`);
-      if (btn) {
-        if (interval === activeInterval) {
-          btn.classList.add('bg-orange-600', 'text-white');
-          btn.classList.remove('bg-teal-500');
-        } else {
-          btn.classList.remove('bg-orange-600', 'text-white');
-          btn.classList.add('bg-teal-500');
-        }
-      }
-    });
-  }
-
-  // Simulierte Preisaktualisierung Live-Data KPI (alle 10 Sekunden)
-  function updateLiveDataPrices() {
-    const burniEl = document.getElementById('burniPrice');
-    const xrpEl = document.getElementById('xrpPrice');
-    const xpmEl = document.getElementById('xpmPrice');
-
-    if (burniEl && xrpEl && xpmEl) {
-      // Realistische Schwankungen um Basiswerte
-      const burniBase = 0.0011;
-      const xrpBase = 0.5;
-      const xpmBase = 0.02;
-
-      burniEl.textContent = `$${(burniBase + (Math.random() - 0.5) * 0.0002).toFixed(4)}`;
-      xrpEl.textContent = `$${(xrpBase + (Math.random() - 0.5) * 0.04).toFixed(2)}`;
-      xpmEl.textContent = `$${(xpmBase + (Math.random() - 0.5) * 0.002).toFixed(3)}`;
-
-      // Aktualisiere auch Chart-Daten leicht (simuliert Live-Updates)
-      if (priceChartInstance && Math.random() > 0.7) {
-        // 30% Chance für Chart-Update
-        const lastIndex = mockData.burni[currentInterval].length - 1;
-        mockData.burni[currentInterval][lastIndex] = parseFloat(
-          burniEl.textContent.replace('$', ''),
-        );
-        mockData.xrp[currentInterval][lastIndex] = parseFloat(xrpEl.textContent.replace('$', ''));
-        mockData.xpm[currentInterval][lastIndex] = parseFloat(xpmEl.textContent.replace('$', ''));
-        priceChartInstance.update('none'); // Update ohne Animation
-      }
-    }
-  }
-
-  // Initialize Live Data section
-  initializeLiveDataSection();
-
-  // Start price updates every 10 seconds
-  setInterval(updateLiveDataPrices, 10000);
-  updateLiveDataPrices(); // Initial call
-
-  console.log('About to start i18n system...');
-  // ===== INTERNATIONALIZATION (i18n) SYSTEM =====
-
-  // Get URL language parameter, localStorage, or browser language
-  function getInitialLanguage() {
-    // Priority 1: URL parameter
-    const urlParams = new URLSearchParams(window.location.search);
-    const langParam = urlParams.get('lang');
-    if (langParam && translations[langParam]) {
-      console.log(`Language set from URL parameter: ${langParam}`);
-      return langParam;
-    }
-
-    // Priority 2: Saved preference in localStorage
-    const savedLang = localStorage.getItem('burni-language');
-    if (savedLang && translations[savedLang]) {
-      console.log(`Language loaded from localStorage: ${savedLang}`);
-      return savedLang;
-    }
-
-    // Priority 3: Browser language detection (multiple fallbacks)
-    const browserLanguages = [
-      navigator.language,
-      navigator.userLanguage,
-      navigator.browserLanguage,
-      navigator.systemLanguage,
-      ...(navigator.languages || []),
-    ].filter(Boolean);
-
-    for (const lang of browserLanguages) {
-      const langCode = lang.split('-')[0].toLowerCase();
-      if (translations[langCode]) {
-        console.log(`Auto-detected browser language: ${langCode} (from: ${lang})`);
-        return langCode;
-      }
-    }
-
-    // Priority 4: Geolocation-based language hints (common patterns)
-    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    if (timeZone) {
-      const germanTimeZones = ['Europe/Berlin', 'Europe/Vienna', 'Europe/Zurich'];
-      if (germanTimeZones.includes(timeZone)) {
-        console.log(`Language inferred from timezone: de (${timeZone})`);
-        return 'de';
-      }
-    }
-
-    console.log('Using fallback language: en');
-    return 'en';
-  }
-
-  // Update all elements with data-i18n attributes with loading state
-  async function applyTranslations(lang) {
-    const loadedTranslations = await loadTranslations();
-    const translation = loadedTranslations[lang] || loadedTranslations.en;
-    console.log(`Applying translations for language: ${lang}`);
-    console.log(`Translation object:`, translation);
-
-    // Add loading indicator
-    const loadingClass = 'i18n-loading';
-    document.body.classList.add(loadingClass);
-
-    // Update all elements with data-i18n attribute
-    const i18nElements = document.querySelectorAll('[data-i18n]');
-    console.log(`Found ${i18nElements.length} elements with data-i18n attribute`);
-
-    i18nElements.forEach((element) => {
-      const key = element.getAttribute('data-i18n');
-      console.log(
-        `Processing element with key: ${key}, current text: "${element.textContent}", new text: "${translation[key]}"`,
-      );
-      if (translation[key]) {
-        // Für Tests und Playwright - sofortige Aktualisierung
-        const isTest =
-          window.navigator.userAgent.includes('Playwright') ||
-          window.location.search.includes('e2e-test') ||
-          window.__playwright ||
-          document.body.getAttribute('data-test-mode') === 'true';
-
-        if (isTest) {
-          element.textContent = translation[key];
-          console.log(
-            `Updated element with key ${key} to: "${element.textContent}" (immediate for tests)`,
-          );
-          // Trigger update events for tests
-          element.dispatchEvent(new Event('i18n-updated', { bubbles: true }));
-        } else {
-          // CSS-Klassen für Animation verwenden statt inline styles
-          element.classList.add('i18n-fade');
-          setTimeout(() => {
-            element.textContent = translation[key];
-            element.classList.remove('i18n-fade');
-            console.log(`Updated element with key ${key} to: "${element.textContent}"`);
-            element.dispatchEvent(new Event('i18n-updated', { bubbles: true }));
-          }, 100);
-        }
-      } else {
-        console.warn(`No translation found for key: ${key}`);
-      }
-    });
-
-    // Update all elements with data-i18n-alt attribute (for alt text)
-    document.querySelectorAll('[data-i18n-alt]').forEach((element) => {
-      const key = element.getAttribute('data-i18n-alt');
-      if (translation[key]) {
-        element.setAttribute('alt', translation[key]);
-      }
-    });
-
-    // Update all elements with data-i18n-aria-label attribute
-    document.querySelectorAll('[data-i18n-aria-label]').forEach((element) => {
-      const key = element.getAttribute('data-i18n-aria-label');
-      if (translation[key]) {
-        element.setAttribute('aria-label', translation[key]);
-      }
-    });
-
-    // Update page title
-    if (translation.page_title) {
-      document.title = translation.page_title;
-    }
-
-    // Update language selector value
-    const langSelect = document.getElementById('lang-select');
-    if (langSelect) {
-      langSelect.value = lang;
-    }
-
-    // Save language preference
-    localStorage.setItem('burni-language', lang);
-
-    // Update current language variable
-    currentLang = lang;
-
-    // Remove loading state after transitions complete
-    setTimeout(() => {
-      document.body.classList.remove(loadingClass);
-    }, 300);
-
-    console.log(`Language updated to: ${lang} (saved to localStorage)`);
-  }
-
-  // Change language and update URL
-  async function changeLanguage(lang) {
-    if (!translations[lang]) {
-      console.warn(`Translation for language '${lang}' not found`);
-      return;
-    }
-
-    // Update URL parameter
-    const url = new URL(window.location);
-    url.searchParams.set('lang', lang);
-    window.history.replaceState({}, '', url);
-
-    // Apply translations
-    await applyTranslations(lang);
-
-    // Regenerate dynamic content (schedules, charts) with new language
-    if (typeof renderScheduleTable === 'function') {
-      const schedule = generateSchedule(
-        new Date('2025-06-01'),
-        500000,
-        20,
-        lang,
-        translations[lang],
-      );
-      renderScheduleTable(schedule, lang);
-    }
-
-    // Update charts with new language
-    updateChartsForLanguage(lang);
-
-    // Update live data with new locale formatting
-    if (typeof updateLiveDataPrices === 'function') {
-      updateLiveDataPrices();
-    }
-  }
-
-  // Initialize language system with enhanced features
-  function initializeLanguageSystem() {
-    console.log('initializeLanguageSystem called');
-    const initialLang = getInitialLanguage();
-    console.log(`Initial language determined: ${initialLang}`);
-
-    // Set up language selector event listener
-    const langSelect = document.getElementById('lang-select');
-    console.log('Language selector element:', langSelect);
-
-    if (langSelect) {
-      console.log('Setting up language selector event listeners');
-      // Add change event listener
-      langSelect.addEventListener('change', (e) => {
-        const newLang = e.target.value;
-        console.log(`Language change requested: ${newLang}`);
-        changeLanguage(newLang);
-
-        // Announce to screen readers
-        announceLanguageChange(newLang);
-      });
-
-      // Add keyboard support for better accessibility
-      langSelect.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          langSelect.click();
-        }
-      });
-
-      // Add ARIA attributes for better accessibility
-      langSelect.setAttribute('aria-describedby', 'lang-description');
-      langSelect.setAttribute('role', 'combobox');
-
-      // Create hidden description for screen readers
-      const description = document.createElement('div');
-      description.id = 'lang-description';
-      description.className = 'sr-only';
-      description.textContent =
-        'Select your preferred language. Changes will be applied immediately.';
-      langSelect.parentNode.insertBefore(description, langSelect.nextSibling);
-    }
-
-    // Apply initial language
-    console.log(`Applying initial language: ${initialLang}`);
-    applyTranslations(initialLang);
-
-    // Add keyboard shortcut for language switching (Alt + L)
-    document.addEventListener('keydown', (e) => {
-      if (e.altKey && e.key === 'l') {
-        e.preventDefault();
-        toggleLanguage();
-      }
-    });
-
-    console.log(`i18n system initialized with language: ${initialLang}`);
-    console.log('Keyboard shortcut: Alt + L to toggle language');
-    console.log('Language selector element:', document.getElementById('lang-select'));
-  }
-
-  // Toggle between available languages (for keyboard shortcut)
-  function toggleLanguage() {
-    const currentLang = getCurrentLanguage();
-    const availableLanguages = Object.keys(translations);
-    const currentIndex = availableLanguages.indexOf(currentLang);
-    const nextIndex = (currentIndex + 1) % availableLanguages.length;
-    const nextLang = availableLanguages[nextIndex];
-
-    console.log(`Toggling language from ${currentLang} to ${nextLang}`);
-    changeLanguage(nextLang);
-    announceLanguageChange(nextLang);
-  }
-
-  // Announce language change to screen readers
-  function announceLanguageChange(lang) {
-    const translation = translations[lang] || translations.en;
-    const announcement = document.createElement('div');
-    announcement.setAttribute('aria-live', 'polite');
-    announcement.setAttribute('aria-atomic', 'true');
-    announcement.className = 'sr-only';
-    announcement.textContent = `Language changed to ${lang === 'de' ? 'German' : 'English'}`;
-
-    document.body.appendChild(announcement);
-
-    // Remove announcement after screen reader has processed it
-    setTimeout(() => {
-      if (announcement.parentNode) {
-        announcement.parentNode.removeChild(announcement);
-      }
-    }, 1000);
-  }
-
-  // Get current language helper function
-  function getCurrentLanguage() {
-    return currentLang || 'en';
-  }
-
-  // Initialize the language system
-  initializeLanguageSystem();
-
-  // ===== END OF i18n SYSTEM =====
-
-  // XRPL-related scripts
-  const xrplScripts = [
-    'https://cdnjs.cloudflare.com/ajax/libs/xrpl.js/v1.6.0/xrpl.min.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/xrpl.js/v1.6.0/xrpl-amm.min.js',
-  ];
-  const loadScript = (src) => {
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = src;
-      script.onload = () => resolve();
-      script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
-      document.head.appendChild(script);
-    });
-  };
-  async function loadXRPLScripts() {
-    for (const src of xrplScripts) {
-      try {
-        await loadScript(src);
-        console.log(`Script loaded: ${src}`);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  }
-  loadXRPLScripts();
-
-  // Tokenomics KPI-Updates (Mock)
-  async function updateTokenomicsMetrics() {
-    try {
-      const metrics = await fetchBurniMetrics();
-      document.getElementById('circulatingSupplyValue').textContent = new Intl.NumberFormat(
-        locales[currentLang] || 'en-US',
-      ).format(metrics.circulatingSupply);
-      document.getElementById('kpi_holders_value').textContent = metrics.holders;
-      document.getElementById('kpi_trustlines_value').textContent = metrics.trustlines;
-      // Simulate mock prices in tokenomics section
-      document.getElementById('burniPriceValue').textContent =
-        `$${(Math.random() * 0.0005 + 0.001).toFixed(4)}`;
-      document.getElementById('xrpPriceValue').textContent =
-        `$${(Math.random() * 0.05 + 0.5).toFixed(2)}`;
-      document.getElementById('xpmPriceValue').textContent =
-        `$${(Math.random() * 0.005 + 0.02).toFixed(3)}`;
-    } catch (error) {
-      console.error('Error updating tokenomics metrics:', error);
-    }
-  }
-  // Initial load and periodic update every 60s
-  updateTokenomicsMetrics();
-  setInterval(updateTokenomicsMetrics, 60000);
-
-  // XRPL Live Data Integration
-  async function fetchXRPLiveData() {
-    try {
-      console.log('Fetching live XRPL data from livenet.xrpl.org...');
-
-      // Fetch general XRPL data
-      const xrplResponse = await fetch('https://livenet.xrpl.org/api/v1/server_info');
-      if (!xrplResponse.ok) throw new Error(`XRPL API error: ${xrplResponse.status}`);
-
-      const xrplData = await xrplResponse.json();
-      console.log('XRPL server info:', xrplData);
-
-      // Fetch XRP price from a CORS-friendly endpoint
-      let xrpPrice = 0.5; // Fallback
-      try {
-        const priceResponse = await fetch(
-          'https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd',
-        );
-        if (priceResponse.ok) {
-          const priceData = await priceResponse.json();
-          xrpPrice = priceData.ripple?.usd || 0.5;
-        }
-      } catch (priceError) {
-        console.warn('Could not fetch XRP price, using fallback:', priceError);
-      }
-
-      // Try to fetch Burni token info from XRPL
-      let burniData = { balance: 'N/A', holders: 'N/A', trustlines: 'N/A' };
-      try {
-        const burniResponse = await fetch(
-          'https://livenet.xrpl.org/api/v1/account/rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2/currencies',
-        );
-        if (burniResponse.ok) {
-          const burniInfo = await burniResponse.json();
-          console.log('Burni token info:', burniInfo);
-          // Process burni data if available
-        }
-      } catch (burniError) {
-        console.warn('Could not fetch Burni data from XRPL, using mock data:', burniError);
-      }
-
-      return {
-        xrpPrice: xrpPrice,
-        burniPrice: Math.random() * 0.0005 + 0.001, // Still mock for Burni
-        xpmPrice: Math.random() * 0.005 + 0.02, // Still mock for XPM
-        serverInfo: xrplData,
-        burniData: burniData,
-      };
-    } catch (error) {
-      console.error('Error fetching XRPL live data:', error);
-      // Fallback to mock data
-      return {
-        xrpPrice: Math.random() * 0.05 + 0.5,
-        burniPrice: Math.random() * 0.0005 + 0.001,
-        xpmPrice: Math.random() * 0.005 + 0.02,
-        serverInfo: null,
-        burniData: { balance: 'N/A', holders: 'N/A', trustlines: 'N/A' },
-      };
-    }
-  }
-
-  // Enhanced Live Data Price Updates with XRPL integration
-  async function updateLiveDataPrices() {
-    const burniEl = document.getElementById('burniPrice');
-    const xrpEl = document.getElementById('xrpPrice');
-    const xpmEl = document.getElementById('xpmPrice');
-
-    if (burniEl && xrpEl && xpmEl) {
-      try {
-        const liveData = await fetchXRPLiveData();
-
-        burniEl.textContent = `$${liveData.burniPrice.toFixed(4)}`;
-        xrpEl.textContent = `$${liveData.xrpPrice.toFixed(2)}`;
-        xpmEl.textContent = `$${liveData.xpmPrice.toFixed(3)}`;
-
-        // Update tokenomics section prices too
-        const burniPriceValue = document.getElementById('burniPriceValue');
-        const xrpPriceValue = document.getElementById('xrpPriceValue');
-        const xpmPriceValue = document.getElementById('xpmPriceValue');
-
-        if (burniPriceValue) burniPriceValue.textContent = `$${liveData.burniPrice.toFixed(4)}`;
-        if (xrpPriceValue) xrpPriceValue.textContent = `$${liveData.xrpPrice.toFixed(2)}`;
-        if (xpmPriceValue) xpmPriceValue.textContent = `$${liveData.xpmPrice.toFixed(3)}`;
-
-        // Update chart data if chart exists
-        if (priceChartInstance && Math.random() > 0.7) {
-          const lastIndex = mockData.burni[currentInterval].length - 1;
-          mockData.burni[currentInterval][lastIndex] = liveData.burniPrice;
-          mockData.xrp[currentInterval][lastIndex] = liveData.xrpPrice;
-          mockData.xpm[currentInterval][lastIndex] = liveData.xpmPrice;
-          priceChartInstance.update('none');
-        }
-
-        console.log('Live prices updated:', liveData);
-      } catch (error) {
-        console.error('Error updating live prices:', error);
-        // Fallback to previous mock behavior
-        burniEl.textContent = `$${(0.0011 + (Math.random() - 0.5) * 0.0002).toFixed(4)}`;
-        xrpEl.textContent = `$${(0.5 + (Math.random() - 0.5) * 0.04).toFixed(2)}`;
-        xpmEl.textContent = `$${(0.02 + (Math.random() - 0.5) * 0.002).toFixed(3)}`;
-      }
-    }
-  }
-
-  // Start live data price updates with XRPL integration
-  updateLiveDataPrices();
-  setInterval(updateLiveDataPrices, 10000);
-
-  // Function to update charts with new language
-  function updateChartsForLanguage(lang) {
-    const translation = translations[lang] || translations.en;
-
-    // Update schedule chart if it exists
-    if (scheduleChartInstance) {
-      scheduleChartInstance.options.scales.y.title.text =
-        translation.remaining_coins || 'Number of Coins';
-      scheduleChartInstance.options.scales.x.title.text = translation.date || 'Date';
-      scheduleChartInstance.update();
-    }
-
-    // Update supply chart if it exists
-    if (supplyChartInstance) {
-      supplyChartInstance.update();
-    }
-
-    // Update ATH/ATL chart if it exists
-    if (athAtlChartInstance) {
-      athAtlChartInstance.update();
-    }
-
-    // Update price chart if it exists (live data chart)
-    if (typeof priceChartInstance !== 'undefined' && priceChartInstance) {
-      priceChartInstance.update();
-    }
-  }
-
-  // Debug: Test i18n system
-  console.log('i18n System Test:');
-  console.log('Available languages:', Object.keys(translations));
-  console.log('Current language:', currentLang);
-  console.log('German translation sample:', translations.de?.hero_title);
-  console.log('Language selector element:', document.getElementById('lang-select'));
-
-  // Test immediate translation on page load
-  setTimeout(() => {
-    const heroTitle = document.querySelector('[data-i18n="hero_title"]');
-    if (heroTitle) {
-      console.log('Hero title element found:', heroTitle.textContent);
-    } else {
-      console.log('Hero title element NOT found');
-    }
-  }, 1000);
-});
+   * [ENTFERNT] Die veraltete Funktion `fetchLivePrices` wurde vollständig gelöscht,
+   * um die Codebasis zu bereinigen. Die Funktionalität wird nun von `updateLivePrices`
+   * und dem `PriceOracle` übernommen.
+   */
+
+  // Initialer Ladevorgang (wird durch das 'languageSwitched'-Event bei Seitenstart getriggert)
+  console.log('main.js wartet auf das erste languageSwitched-Event zur Initialisierung...');
+}); // ENDE DOMContentLoaded
 
 // ===== TRANSLATIONS (DYNAMIC LOAD) =====
 let translations = {};

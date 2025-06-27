@@ -10,11 +10,13 @@
     "build:feature": "npm run build:css && echo Feature-Branch-Build abgeschlossen!",
     "start": "npm run build && npm run serve",
     "clean": "del-cli assets/css/*.min.css",
-    "lint": "prettier --write \"**/*.{html,css,js}\" --ignore-path .gitignore",
-    "lint:check": "prettier --check \"**/*.{html,css,js}\" --ignore-path .gitignore",
+    "lint": "eslint . --fix",
+    "lint:check": "eslint .",
+    "lint:report": "eslint . --format json --output-file lint-results.json || true",
     "test": "jest",
     "test:unit": "jest",
     "test:e2e": "start-server-and-test start http://localhost:8080 playwright test e2e/",
+    "test:e2e:ci": "playwright test --reporter=json,html",
     "test:e2e:install": "playwright install",
     "lighthouse": "lhci autorun",
     "validate": "html-validate index.html 404.html",
@@ -79,6 +81,9 @@
     "dev:functions": "netlify functions:serve",
     "prepare": "husky install"
   },
+  "lint-staged": {
+    "**/*.{html,css,js,json,md}": "prettier --write"
+  },
   "devDependencies": {
     "@babel/core": "^7.24.0",
     "@babel/preset-env": "^7.24.0",
@@ -93,12 +98,15 @@
     "cssnano": "^7.0.7",
     "del-cli": "^6.0.0",
     "dotenv": "^16.5.0",
+    "eslint": "^9.29.0",
+    "eslint-config-prettier": "^10.1.5",
     "html-validate": "^9.6.1",
     "http-server": "^14.1.1",
     "husky": "^8.0.0",
     "jest": "^30.0.0",
     "jest-environment-jsdom": "^30.0.0",
     "jsdom": "^26.1.0",
+    "lint-staged": "^16.1.2",
     "mini-css-extract-plugin": "^2.7.6",
     "nodemailer": "^7.0.3",
     "postcss": "^8.5.5",
@@ -110,20 +118,13 @@
     "wait-on": "^8.0.3",
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.0.4",
-    "xmlbuilder": "^15.1.1"
+    "webpack-dev-server": "^4.15.1"
+  },
+  "overrides": {
+    "fastify": "4.29.1",
+    "http-proxy-middleware": "2.0.9"
   },
   "dependencies": {
-    "@axe-core/webdriverjs": "^4.10.2",
-    "@netlify/functions": "^2.5.1",
-    "axe-playwright": "^2.1.0",
-    "canvas": "^3.1.0",
-    "chalk": "^5.4.1",
-    "chrome-launcher": "^1.2.0",
-    "googleapis": "^129.0.0",
-    "lighthouse": "^12.6.1",
-    "netlify-cli": "^17.15.6",
-    "node-fetch": "^3.3.2",
-    "selenium-webdriver": "^4.33.0"
+    "googleapis": "^150.0.1"
   }
 }

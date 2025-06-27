@@ -1,0 +1,32 @@
+{
+  "extension-health-check": {
+    "status": "success",
+    "lastSuccess": "2025-06-27T09:29:07.904Z"
+  },
+  "website-health-check": {
+    "status": "success",
+    "lastSuccess": "2025-06-27T09:29:08.466Z"
+  },
+  "snyk-security-scan": {
+    "status": "success",
+    "lastSuccess": "2025-06-27T09:30:12.565Z"
+  },
+  "deployment-check": {
+    "status": "success",
+    "lastSuccess": "2025-06-27T09:29:35.553Z"
+  },
+  "gsc-integration-monitor": {
+    "status": "success",
+    "lastSuccess": "2025-06-27T09:29:34.467Z"
+  },
+  "ai-auth": {
+    "name": "KI Authentifizierungs-Check",
+    "status": "success",
+    "message": "Alle erforderlichen KI-API-Schlüssel sind in der .env-Datei konfiguriert.",
+    "lastCheck": "2025-06-27T09:29:05.870Z"
+  },
+  "dependabot-monitor": {
+    "status": "success",
+    "lastSuccess": "2025-06-27T09:29:57.622Z"
+  }
+}

@@ -1,0 +1,18 @@
+---
+Title: URL nicht erreichbar: undefined
+Source: Website Health Check
+Created: 2025-06-25T17:54:23.129Z
+Status: Open
+---
+
+### Problembeschreibung
+
+Die URL undefined konnte nicht erreicht werden.
+Fehler: getaddrinfo ENOTFOUND www.burnitoken.com
+
+### Nächste Schritte
+
+1.  Problem analysieren.
+2.  Lösung implementieren.
+3.  Änderungen testen und verifizieren.
+4.  ToDo als "Done" markieren.

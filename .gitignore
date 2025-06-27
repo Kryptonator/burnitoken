@@ -101,3 +101,13 @@ tools/gsc-service-account.json
 *-api-key.json
 credentials.json
 tools/toolsgsc-service-account1.json
+
+# Ignore sensitive credentials
+tools/gsc-credentials.json
+
+# Cloud Storage and Sync temporary files
+*.tmp.driveupload # OneDrive
+.~lock.*# # LibreOffice lock files
+.dropbox.cache # Dropbox
+.dropbox # Dropbox
+*.part # Partial download files (e.g., from browsers)

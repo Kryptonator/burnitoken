@@ -1,0 +1,17 @@
+---
+Title: Fix Unhealthy API Endpoints
+Source: API Health Check
+Created: 2025-06-26T18:26:09.325Z
+Status: Open
+---
+
+### Problembeschreibung
+
+The following external APIs are not responding correctly: Fake Failing API. This may affect website functionality.
+
+### Nächste Schritte
+
+1.  Problem analysieren.
+2.  Lösung implementieren.
+3.  Änderungen testen und verifizieren.
+4.  ToDo als "Done" markieren.

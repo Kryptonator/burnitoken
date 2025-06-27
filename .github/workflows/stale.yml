@@ -1,0 +1,53 @@
+# .github/workflows/stale.yml
+# Dieser Workflow markiert und schließt automatisch veraltete Issues und Pull Requests.
+
+name: 'Veraltete Issues und PRs schließen'
+
+on:
+  schedule:
+    # Läuft täglich um 05:00 UTC
+    - cron: '0 5 * * *'
+  # Ermöglicht manuelles Auslösen über den "Actions"-Tab
+  workflow_dispatch:
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v9
+        with:
+          # Das Token wird für API-Aufrufe benötigt.
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+          # --- Konfiguration für die initiale Bereinigung ---
+          # Diese Konfiguration wird ALLE alten Issues/PRs schnell erfassen.
+          # Wir werden dies später auf 14 Tage ändern.
+
+          # Tage der Inaktivität, bevor ein Issue als "stale" (veraltet) markiert wird.
+          # Für die initiale Bereinigung auf 1 Tag gesetzt.
+          days-before-stale: 1
+
+          # Tage der Inaktivität nach der Markierung als "stale", bevor ein Issue geschlossen wird.
+          # Für die initiale Bereinigung auf 1 Tag gesetzt.
+          days-before-close: 1
+
+          # Das Label, das auf veraltete Issues und Pull Requests angewendet wird.
+          stale-issue-label: 'stale'
+          stale-pr-label: 'stale'
+
+          # Die Nachricht, die bei veralteten Issues gepostet wird.
+          stale-issue-message: >
+            Dieses Issue wurde automatisch als "stale" markiert, da es seit einiger Zeit inaktiv ist.
+            Es wird geschlossen, wenn keine weitere Aktivität erfolgt. Vielen Dank für Ihre Beiträge.
+
+          # Die Nachricht, die bei veralteten PRs gepostet wird.
+          stale-pr-message: >
+            Dieser Pull Request wurde automatisch als "stale" markiert, da er seit einiger Zeit inaktiv ist.
+            Er wird geschlossen, wenn keine weitere Aktivität erfolgt. Vielen Dank für Ihre Beiträge.
+
+          # Maximale Anzahl von Aktionen pro Lauf, um API-Limits zu vermeiden.
+          operations-per-run: 100
+
+          # Ausnahmen: Labels, die verhindern, dass ein Eintrag als "stale" markiert wird.
+          exempt-issue-labels: 'pinned,security,never-stale,wichtig'
+          exempt-pr-labels: 'pinned,security,never-stale,work-in-progress'

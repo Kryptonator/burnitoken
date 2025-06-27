@@ -5,9 +5,7 @@
       "label": "� Dependency Security Manager",
       "type": "shell",
       "command": "node",
-      "args": [
-        "tools/dependency-security-manager.js"
-      ],
+      "args": ["tools/dependency-security-manager.js"],
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -25,10 +23,21 @@
       "label": "�🚀 Master Task Manager (Auto-Start)",
       "type": "shell",
       "command": "node",
-      "args": [
-        "tools/master-task-manager.js",
-        "--silent"
-      ],
+      "args": ["tools/master-task-manager.js", "--silent"],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🤖 Unified Monitoring (Auto-Start)",
+      "type": "shell",
+      "command": "node",
+      "args": ["tools/unified-monitoring-service.js", "--silent"],
       "presentation": {
         "reveal": "silent",
         "close": true
@@ -42,9 +51,7 @@
       "label": "🚀 Master Task Manager (Manuell)",
       "type": "shell",
       "command": "node",
-      "args": [
-        "tools/master-task-manager.js"
-      ],
+      "args": ["tools/master-task-manager.js"],
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -62,9 +69,7 @@
       "label": "📊 Task Manager Status anzeigen",
       "type": "shell",
       "command": "node",
-      "args": [
-        "tools/task-manager-status.js"
-      ],
+      "args": ["tools/task-manager-status.js"],
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -79,9 +84,7 @@
       "label": "📊 Extension Status Dashboard",
       "type": "shell",
       "command": "node",
-      "args": [
-        "tools/extension-status-dashboard.js"
-      ],
+      "args": ["tools/extension-status-dashboard.js"],
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -99,9 +102,7 @@
       "label": "🔧 Extension Health Check",
       "type": "shell",
       "command": "node",
-      "args": [
-        "extension-function-validator.js"
-      ],
+      "args": ["extension-function-validator.js"],
       "group": "test",
       "presentation": {
         "echo": true,
@@ -116,9 +117,7 @@
       "label": "🔄 GSC Integration Monitor",
       "type": "shell",
       "command": "node",
-      "args": [
-        "tools/gsc-integration-monitor.js"
-      ],
+      "args": ["tools/gsc-integration-monitor.js"],
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -133,9 +132,7 @@
       "label": "🔍 Unified Status Check",
       "type": "shell",
       "command": "node",
-      "args": [
-        "tools/unified-status-manager.js"
-      ],
+      "args": ["tools/unified-status-manager.js"],
       "presentation": {
         "reveal": "always",
         "focus": true,
@@ -153,7 +150,7 @@
         "Write-Host '🔍 VS Code Recovery Center wird gestartet...' -ForegroundColor Cyan; Write-Host ''; Write-Host '📸 Recovery-Screenshots:' -ForegroundColor Yellow; Get-ChildItem -Path '.recovery-screenshots' -Filter 'vscode_recovery_*.png' -ErrorAction SilentlyContinue | Sort-Object -Property LastWriteTime -Descending | Select-Object -First 5 | Format-Table Name,@{Name='Zeit';Expression={$_.LastWriteTime.ToString('dd.MM HH:mm')}},@{Name='KB';Expression={[int]($_.Length / 1KB)}} -AutoSize; Write-Host ''; Write-Host '🛠️ Wiederherstellungs-Optionen:' -ForegroundColor Green; Write-Host ' - Task \"📸 Take Recovery Screenshot Now\" für sofortigen Screenshot' -ForegroundColor Cyan; Write-Host ''; Write-Host '💡 Tipp: Nutzen Sie den VS Code Explorer, um Screenshots direkt zu öffnen!' -ForegroundColor Magenta;"
       ],
       "group": {
-        "kind": "none", 
+        "kind": "none",
         "isDefault": true
       },
       "presentation": {
@@ -184,25 +181,6 @@
       "problemMatcher": []
     },
     {
-      "label": "🔒 Snyk Security Scan",
-      "type": "shell",
-      "command": "node",
-      "args": [
-        "tools/enhanced-security-manager.js",
-        "--report"
-      ],
-      "group": "test",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": true,
-        "panel": "dedicated",
-        "showReuseMessage": false,
-        "clear": true
-      },
-      "problemMatcher": []
-    },
-    {
       "label": "🚀 Complete Extension Optimization",
       "type": "shell",
       "command": "powershell",
@@ -227,9 +205,7 @@
       "label": "🌐 Website Health Check",
       "type": "shell",
       "command": "node",
-      "args": [
-        "tools/website-health-check.js"
-      ],
+      "args": ["tools/website-health-check.js"],
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -244,9 +220,7 @@
       "label": "🚢 Deployment Status Check",
       "type": "shell",
       "command": "node",
-      "args": [
-        "tools/deployment-checker.js"
-      ],
+      "args": ["tools/deployment-checker.js"],
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -258,12 +232,28 @@
       "problemMatcher": []
     },
     {
+      "label": "🚀 Unified Monitoring Service",
+      "type": "shell",
+      "command": "node",
+      "args": ["tools/unified-monitoring-service.js"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "📊 Master Status Dashboard",
       "type": "shell",
       "command": "node",
-      "args": [
-        "tools/master-status-dashboard.js"
-      ],
+      "args": ["tools/master-status-dashboard.js"],
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -279,12 +269,25 @@
       "problemMatcher": []
     },
     {
+      "label": "📊 Status Dashboard generieren",
+      "type": "shell",
+      "command": "node",
+      "args": ["tools/generate-status-dashboard.js"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
       "label": "🔄 Start Continuous Monitoring",
       "type": "shell",
       "command": "node",
-      "args": [
-        "tools/unified-monitoring-service.js"
-      ],
+      "args": ["tools/unified-monitoring-service.js"],
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -300,9 +303,7 @@
       "label": "👀 [Überwachung] Dependabot PRs prüfen",
       "type": "shell",
       "command": "node",
-      "args": [
-        "tools/dependabot-monitor.js"
-      ],
+      "args": ["tools/dependabot-monitor.js"],
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -317,9 +318,7 @@
       "label": "🔧 Start Auto-Recovery System",
       "type": "shell",
       "command": "node",
-      "args": [
-        "tools/auto-recovery-system.js"
-      ],
+      "args": ["tools/auto-recovery-system.js"],
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -335,10 +334,7 @@
       "label": "⚡ Force Website Recovery",
       "type": "shell",
       "command": "node",
-      "args": [
-        "tools/auto-recovery-system.js",
-        "--force"
-      ],
+      "args": ["tools/auto-recovery-system.js", "--force"],
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -353,9 +349,7 @@
       "label": "🛠️ Fix PowerShell Problems",
       "type": "shell",
       "command": "node",
-      "args": [
-        "tools/safe-task-starter.js"
-      ],
+      "args": ["tools/safe-task-starter.js"],
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -373,9 +367,7 @@
       "label": "📊 Status-Report generieren",
       "type": "shell",
       "command": "node",
-      "args": [
-        "tools/generate-status-report.js"
-      ],
+      "args": ["tools/generate-status-report.js"],
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -390,9 +382,7 @@
       "label": "💻 Start PowerShell-Safe Monitoring",
       "type": "shell",
       "command": "node",
-      "args": [
-        "tools/powerfix-monitoring.js"
-      ],
+      "args": ["tools/powerfix-monitoring.js"],
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -402,6 +392,203 @@
       },
       "isBackground": true,
       "problemMatcher": []
+    },
+    {
+      "label": "🌍 Test I18N",
+      "type": "shell",
+      "command": "npx",
+      "args": ["playwright", "test", "tests/i18n.test.js"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      }
+    },
+    {
+      "label": "♿ Accessibility Check",
+      "type": "shell",
+      "command": "npx",
+      "args": ["playwright", "test", "tests/accessibility.test.js"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      }
+    },
+    {
+      "label": "🔗 Test API",
+      "type": "shell",
+      "command": "npx",
+      "args": ["playwright", "test", "tests/api.spec.js"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      }
+    },
+    {
+      "label": "⚡ Performance Test",
+      "type": "shell",
+      "command": "npx",
+      "args": ["playwright", "test", "tests/performance.test.js"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      }
+    },
+    {
+      "label": "🌐 Browser Compatibility Test",
+      "type": "shell",
+      "command": "npx",
+      "args": ["playwright", "test", "tests/browser-compatibility.test.js"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      }
+    },
+    {
+      "label": "🔄 GSC Auth Check",
+      "type": "shell",
+      "command": "node",
+      "args": ["tools/gsc-auth-check.js"],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "🔒 Snyk Security Scan",
+      "type": "shell",
+      "command": "node",
+      "args": ["tools/enhanced-security-manager.js", "--report"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "💾 Session-Saver: Sitzung speichern",
+      "type": "shell",
+      "command": "node",
+      "args": ["tools/session-saver.js"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "group": "build"
+    },
+    {
+      "label": "🤖 AI Conversation Bridge starten",
+      "type": "shell",
+      "command": "node",
+      "args": ["tools/ai-conversation-bridge.js"],
+      "isBackground": true,
+      "presentation": {
+        "echo": true,
+        "reveal": "silent"
+      },
+      "group": "build"
+    },
+    {
+      "label": "🔑 GSC Auth Check (Auto-Start)",
+      "type": "shell",
+      "command": "node",
+      "args": ["tools/gsc-auth-check.js"],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "🤖 KI Auth Check (Auto-Start)",
+      "type": "shell",
+      "command": "node",
+      "args": ["tools/ai-auth-check.js"],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "🤖 AI Conversation Bridge (Auto-Start)",
+      "type": "shell",
+      "command": "node",
+      "args": ["tools/ai-conversation-bridge.js"],
+      "isBackground": true,
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "group": "build"
+    },
+    {
+      "label": "🧠 AI-Status anzeigen",
+      "type": "shell",
+      "command": "node",
+      "args": ["tools/ai-status-reporter.js"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared"
+      },
+      "group": "test"
+    },
+    {
+      "label": "🔄 Alle KI-Dienste neustarten",
+      "type": "shell",
+      "command": "node",
+      "args": ["tools/restart-ai-services.js"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared"
+      },
+      "group": "build"
     }
   ]
 }

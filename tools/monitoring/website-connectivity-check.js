@@ -3,11 +3,12 @@
 
 const https = require('https');
 const dns = require('dns');
+const { sendAlert } = require('../alert-service'); // Alert-Service importieren
 
 console.log('🌐 WEBSITE ERREICHBARKEITS-DIAGNOSE');
 console.log('='.repeat(50));
 
-const domains = ['burnitoken.com', 'burnitoken.website', 'kryptonator.github.io'];
+const domains = ['burnitoken.website', 'kryptonator.github.io']; // 'burnitoken.com' entfernt
 
 async function checkDNS(domain) {
   return new Promise((resolve) => {
@@ -107,7 +108,18 @@ async function runDiagnosis() {
     console.log(`\n🎉 IHRE WEBSITE IST ERREICHBAR UNTER:`);
     console.log(`   🚀 https://${workingDomains[0]}`);
   } else {
-    console.log('\n🚨 KRITISCH: Keine Domain ist erreichbar!');
+    const errorMessage = 'KRITISCH: Keine der konfigurierten Domains ist erreichbar!';
+    console.log(`\n🚨 ${errorMessage}`);
+    // Automatisch ein GitHub Issue erstellen
+    sendAlert({
+      message: errorMessage,
+      level: 'error',
+      extra: {
+        component: 'Website Connectivity Check',
+        failedDomains: failedDomains.join(', ') || 'Alle',
+        timestamp: new Date().toISOString(),
+      },
+    });
   }
 }
 

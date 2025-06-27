@@ -106,22 +106,6 @@ updates:
       - "security:patch"
       - "version-update:semver-patch"
 
-  # Docker-Container aktualisieren (falls verwendet)
-  - package-ecosystem: "docker"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      day: "wednesday" 
-      time: "10:00"
-      timezone: "Europe/Berlin"
-    open-pull-requests-limit: 3
-    labels:
-      - "dependencies"
-      - "docker"
-    commit-message:
-      prefix: "🐳"
-      include: "scope"
-      
 # Globale Einstellungen für alle Ecosystems
 registries:
   npm-github:

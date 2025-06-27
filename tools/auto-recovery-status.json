@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-25T07:08:21.134Z",
+  "timestamp": "2025-06-27T09:29:04.227Z",
   "lastRun": null,
   "recoveriesPerformed": 0,
   "lastRecoveryDate": null,
@@ -121,6 +121,70 @@
     },
     {
       "timestamp": "2025-06-25T07:08:21.134Z",
+      "message": "Selbstdiagnose fehlgeschlagen"
+    },
+    {
+      "timestamp": "2025-06-25T10:15:25.684Z",
+      "message": "Selbstdiagnose fehlgeschlagen"
+    },
+    {
+      "timestamp": "2025-06-25T15:55:01.628Z",
+      "message": "Selbstdiagnose fehlgeschlagen"
+    },
+    {
+      "timestamp": "2025-06-25T16:02:35.770Z",
+      "message": "Selbstdiagnose fehlgeschlagen"
+    },
+    {
+      "timestamp": "2025-06-25T17:44:17.968Z",
+      "message": "Selbstdiagnose fehlgeschlagen"
+    },
+    {
+      "timestamp": "2025-06-25T17:54:21.606Z",
+      "message": "Selbstdiagnose fehlgeschlagen"
+    },
+    {
+      "timestamp": "2025-06-25T18:13:53.258Z",
+      "message": "Selbstdiagnose fehlgeschlagen"
+    },
+    {
+      "timestamp": "2025-06-25T18:31:28.324Z",
+      "message": "Selbstdiagnose fehlgeschlagen"
+    },
+    {
+      "timestamp": "2025-06-25T18:52:09.401Z",
+      "message": "Selbstdiagnose fehlgeschlagen"
+    },
+    {
+      "timestamp": "2025-06-25T19:24:10.711Z",
+      "message": "Selbstdiagnose fehlgeschlagen"
+    },
+    {
+      "timestamp": "2025-06-26T02:48:59.019Z",
+      "message": "Selbstdiagnose fehlgeschlagen"
+    },
+    {
+      "timestamp": "2025-06-26T02:51:38.585Z",
+      "message": "Selbstdiagnose fehlgeschlagen"
+    },
+    {
+      "timestamp": "2025-06-26T12:08:03.665Z",
+      "message": "Selbstdiagnose fehlgeschlagen"
+    },
+    {
+      "timestamp": "2025-06-26T17:32:28.961Z",
+      "message": "Selbstdiagnose fehlgeschlagen"
+    },
+    {
+      "timestamp": "2025-06-27T05:14:26.184Z",
+      "message": "Selbstdiagnose fehlgeschlagen"
+    },
+    {
+      "timestamp": "2025-06-27T08:36:30.056Z",
+      "message": "Selbstdiagnose fehlgeschlagen"
+    },
+    {
+      "timestamp": "2025-06-27T09:29:04.227Z",
       "message": "Selbstdiagnose fehlgeschlagen"
     }
   ]

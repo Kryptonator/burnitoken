@@ -1,5 +1,5 @@
 module.exports = {
-  testDir: './tests/e2e',
+  testDir: './tests',
   use: {
     baseURL: 'http://localhost:8080',
     trace: 'on-first-retry',

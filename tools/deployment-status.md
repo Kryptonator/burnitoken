@@ -1,36 +1,27 @@
 # BurniToken Website Deployment Status
 
-**Zeitpunkt:** 25.6.2025, 09:08:24
-**Status:** ❌ FAILED
+**Zeitpunkt:** 27.6.2025, 11:29:35
+**Status:** ✅ DEPLOYED
 
 ## Zusammenfassung
 
-- **Website aktiv:** ❌ Nein
-- **Status-Code:** 0
-- **Antwortzeit:** 0ms
-- **Kritische Dateien:** 0/6 gefunden
-- **Kritische Elemente:** 0/5 gefunden
-
-### Fehlende Dateien
-
-- `index.html`
-- `styles.css`
-- `main.js`
-- `manifest.json`
-- `favicon.ico`
-- `robots.txt`
+- **Website aktiv:** ✅ Ja
+- **Status-Code:** 200
+- **Antwortzeit:** 173ms
+- **Kritische Dateien:** 6/6 gefunden
+- **Kritische Elemente:** 5/5 gefunden
 
 ## Details zu überprüften Dateien
 
-| Datei | Status | HTTP-Code | Content-Type |
-| ----- | ------ | --------- | ------------ |
-| `index.html` | ❌ | N/A | N/A |
-| `styles.css` | ❌ | N/A | N/A |
-| `main.js` | ❌ | N/A | N/A |
-| `manifest.json` | ❌ | N/A | N/A |
-| `favicon.ico` | ❌ | N/A | N/A |
-| `robots.txt` | ❌ | N/A | N/A |
+| Datei           | Status | HTTP-Code | Content-Type                          |
+| --------------- | ------ | --------- | ------------------------------------- |
+| `index.html`    | ✅     | 200       | text/html; charset=UTF-8              |
+| `styles.css`    | ✅     | 200       | text/html; charset=UTF-8              |
+| `main.js`       | ✅     | 200       | application/javascript; charset=UTF-8 |
+| `manifest.json` | ✅     | 200       | application/json                      |
+| `favicon.ico`   | ✅     | 200       | text/html; charset=UTF-8              |
+| `robots.txt`    | ✅     | 200       | text/plain; charset=UTF-8             |
 
 ---
 
-Bericht generiert am 25.6.2025, 09:08:24
+Bericht generiert am 27.6.2025, 11:29:35
