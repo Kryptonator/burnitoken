@@ -82,6 +82,7 @@ audit.json
 lighthouse-*.json
 axe-*.json
 *.log
+website-health-report.json
 
 # Redundante Backups und alte Versionen
 *-backup-*.html
