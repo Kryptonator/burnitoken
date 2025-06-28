@@ -26,6 +26,9 @@ allure-report/
 e2e-report/
 .nyc_output/
 
+# Website health monitoring logs
+tools/monitoring/website-health.log
+
 # Temporäre Dateien & Backups
 temp/
 tmp/
