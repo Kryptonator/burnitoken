@@ -81,6 +81,7 @@ data_i18n_keys.txt
 audit.json
 lighthouse-*.json
 axe-*.json
+ssl-error-report-*.json
 *.log
 
 # Redundante Backups und alte Versionen

@@ -114,14 +114,45 @@ class DNSStatusChecker {
 
   async checkSSL() {
     try {
-      const { stdout } = await execAsync(
+      // Check certificate subject
+      const { stdout: sslSubject } = await execAsync(
         `openssl s_client -connect ${this.domain}:443 -servername ${this.domain} < /dev/null 2>/dev/null | openssl x509 -noout -subject 2>/dev/null`,
       );
-      const hasSSL = stdout.includes(this.domain);
+      const hasSSL = sslSubject.includes(this.domain);
 
-      console.log(`🔒 SSL Certificate: ${hasSSL ? '✅ Active' : '❌ Not Ready'}`);
+      if (!hasSSL) {
+        console.log(`🔒 SSL Certificate: ❌ Not Ready`);
+        return false;
+      }
 
-      return hasSSL;
+      // Check certificate expiration
+      try {
+        const { stdout: sslExpiry } = await execAsync(
+          `openssl s_client -connect ${this.domain}:443 -servername ${this.domain} < /dev/null 2>/dev/null | openssl x509 -noout -enddate 2>/dev/null`,
+        );
+        
+        const expiryMatch = sslExpiry.match(/notAfter=(.+)/);
+        if (expiryMatch) {
+          const expiryDate = new Date(expiryMatch[1]);
+          const now = new Date();
+          const daysUntilExpiry = Math.ceil((expiryDate - now) / (1000 * 60 * 60 * 24));
+          
+          if (expiryDate < now) {
+            console.log(`🔒 SSL Certificate: ❌ EXPIRED on ${expiryDate.toISOString().split('T')[0]}`);
+            return false;
+          } else if (daysUntilExpiry <= 30) {
+            console.log(`🔒 SSL Certificate: ⚠️  Expires in ${daysUntilExpiry} days (${expiryDate.toISOString().split('T')[0]})`);
+          } else {
+            console.log(`🔒 SSL Certificate: ✅ Active (expires ${expiryDate.toISOString().split('T')[0]})`);
+          }
+        } else {
+          console.log(`🔒 SSL Certificate: ✅ Active`);
+        }
+      } catch (expiryError) {
+        console.log(`🔒 SSL Certificate: ✅ Active (expiry check failed)`);
+      }
+
+      return true;
     } catch (error) {
       console.log(`🔒 SSL Certificate: ⏳ Not ready or checking failed`);
       return false;

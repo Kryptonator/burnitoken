@@ -146,21 +146,60 @@ class DNSMigrationMonitor {
     try {
       console.log('🔐 SSL Certificate Check...');
 
-      const sslCheck = execSync(
-        `echo | openssl s_client -servername ${this.domain} -connect ${this.domain}:443 2>/dev/null | openssl x509 -noout -issuer`,
-        {
-          encoding: 'utf8',
-          timeout: 10000,
-        },
-      );
+      // Check both certificate presence and expiration
+      let sslCheck, sslExpiry;
+      
+      try {
+        // Check certificate issuer
+        sslCheck = execSync(
+          `echo | openssl s_client -servername ${this.domain} -connect ${this.domain}:443 2>/dev/null | openssl x509 -noout -issuer`,
+          {
+            encoding: 'utf8',
+            timeout: 10000,
+          },
+        );
 
-      if (sslCheck.includes("Let's Encrypt") || sslCheck.includes('issuer')) {
-        console.log(`   ✅ SSL: Certificate aktiv ✓`);
-        return true;
-      } else {
+        // Check certificate expiration
+        sslExpiry = execSync(
+          `echo | openssl s_client -servername ${this.domain} -connect ${this.domain}:443 2>/dev/null | openssl x509 -noout -enddate`,
+          {
+            encoding: 'utf8',
+            timeout: 10000,
+          },
+        );
+      } catch (err) {
+        console.log(`   ⏳ SSL: Certificate wird erstellt...`);
+        return false;
+      }
+
+      // Check if certificate exists
+      const hasCertificate = sslCheck.includes("Let's Encrypt") || sslCheck.includes('issuer');
+      
+      if (!hasCertificate) {
         console.log(`   ⏳ SSL: Certificate noch nicht aktiv`);
         return false;
       }
+
+      // Check certificate expiration
+      const expiryMatch = sslExpiry.match(/notAfter=(.+)/);
+      if (expiryMatch) {
+        const expiryDate = new Date(expiryMatch[1]);
+        const now = new Date();
+        const daysUntilExpiry = Math.ceil((expiryDate - now) / (1000 * 60 * 60 * 24));
+        
+        if (expiryDate < now) {
+          console.log(`   ❌ SSL: Certificate EXPIRED on ${expiryDate.toISOString().split('T')[0]}`);
+          return false;
+        } else if (daysUntilExpiry <= 30) {
+          console.log(`   ⚠️  SSL: Certificate expires in ${daysUntilExpiry} days (${expiryDate.toISOString().split('T')[0]})`);
+        } else {
+          console.log(`   ✅ SSL: Certificate aktiv ✓ (expires ${expiryDate.toISOString().split('T')[0]})`);
+        }
+      } else {
+        console.log(`   ✅ SSL: Certificate aktiv ✓`);
+      }
+      
+      return true;
     } catch (error) {
       console.log(`   ⏳ SSL: Certificate wird erstellt...`);
       return false;

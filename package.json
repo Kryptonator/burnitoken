@@ -38,6 +38,7 @@
     "gsc:crawl": "node tools/gsc-crawl-stats.js",
     "test:alert": "node tools/test-email-alert.js",
     "test:alert:dry": "node tools/test-email-alert.js --use-ethereal",
+    "health:check": "node tools/website-health-check.js",
     "cloud:sync": "node tools/update-cloud-settings.js",
     "dev:functions": "netlify functions:serve",
     "prepare": "husky install"
