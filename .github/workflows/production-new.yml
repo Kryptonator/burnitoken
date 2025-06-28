@@ -47,6 +47,10 @@ jobs:
       - name: ⚡ Performance audit
         run: npm run lighthouse || true
         
+      - name: 🏥 External API Health Check
+        run: npm run health:check || echo "⚠️ Some external APIs are unhealthy but deployment continues"
+        continue-on-error: true
+        
       - name: 📦 Upload build artifacts
         uses: actions/upload-artifact@v4
         if: success()

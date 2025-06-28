@@ -40,6 +40,8 @@
     "test:alert:dry": "node tools/test-email-alert.js --use-ethereal",
     "cloud:sync": "node tools/update-cloud-settings.js",
     "dev:functions": "netlify functions:serve",
+    "health:check": "node tools/monitoring/api-health-monitor.js",
+    "health:monitor": "node tools/monitoring/api-health-monitor.js --continuous",
     "prepare": "husky install"
   },
   "devDependencies": {
