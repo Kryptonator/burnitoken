@@ -40,7 +40,12 @@
     "test:alert:dry": "node tools/test-email-alert.js --use-ethereal",
     "cloud:sync": "node tools/update-cloud-settings.js",
     "dev:functions": "netlify functions:serve",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "health:check": "node tools/monitoring/website-health-checker.js",
+    "health:monitor": "node tools/monitoring/automated-health-monitor.js",
+    "health:monitor:single": "node tools/monitoring/automated-health-monitor.js --single",
+    "monitor:connectivity": "node tools/monitoring/website-connectivity-check.js",
+    "monitor:simple": "node tools/monitoring/simple-browser-monitor.js"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",

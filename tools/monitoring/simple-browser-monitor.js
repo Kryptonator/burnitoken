@@ -21,6 +21,25 @@ function testUrl(url) {
     const startTime = Date.now();
     const urlObj = new URL(url);
     const client = urlObj.protocol === 'https:' ? https : http;
+    let resolved = false;
+
+    // SSL-specific timeout for HTTPS requests
+    let sslTimeout;
+    if (urlObj.protocol === 'https:') {
+      sslTimeout = setTimeout(() => {
+        if (!resolved) {
+          resolved = true;
+          resolve({
+            url,
+            status: 0,
+            duration: Date.now() - startTime,
+            error: `SSL-Verbindungs-Timeout für ${url}`,
+            errorType: 'SSL_TIMEOUT',
+            success: false,
+          });
+        }
+      }, 8000); // 8 seconds for SSL handshake
+    }
 
     const req = client.request(
       {
@@ -31,45 +50,68 @@ function testUrl(url) {
         headers: {
           'User-Agent': 'BurniToken-Monitor/1.0',
         },
-        timeout: 10000,
+        timeout: 15000,
       },
       (res) => {
-        const duration = Date.now() - startTime;
-
-        resolve({
-          url,
-          status: res.statusCode,
-          duration,
-          headers: {
-            contentType: res.headers['content-type'],
-            server: res.headers['server'],
-            cacheControl: res.headers['cache-control'],
-            location: res.headers['location'],
-          },
-          success: res.statusCode >= 200 && res.statusCode < 400,
-        });
+        if (!resolved) {
+          resolved = true;
+          if (sslTimeout) clearTimeout(sslTimeout);
+          
+          const duration = Date.now() - startTime;
+          resolve({
+            url,
+            status: res.statusCode,
+            duration,
+            headers: {
+              contentType: res.headers['content-type'],
+              server: res.headers['server'],
+              cacheControl: res.headers['cache-control'],
+              location: res.headers['location'],
+            },
+            success: res.statusCode >= 200 && res.statusCode < 400,
+          });
+        }
       },
     );
 
     req.on('error', (err) => {
-      resolve({
-        url,
-        status: 0,
-        duration: Date.now() - startTime,
-        error: err.message,
-        success: false,
-      });
+      if (!resolved) {
+        resolved = true;
+        if (sslTimeout) clearTimeout(sslTimeout);
+        
+        // Detect SSL-specific errors
+        const isSSLError = err.code === 'ECONNRESET' || err.code === 'ENOTFOUND' || 
+                          err.message.includes('SSL') || err.message.includes('TLS') ||
+                          err.code === 'CERT_HAS_EXPIRED' || err.code === 'UNABLE_TO_VERIFY_LEAF_SIGNATURE';
+        
+        resolve({
+          url,
+          status: 0,
+          duration: Date.now() - startTime,
+          error: isSSLError ? `SSL-Verbindungs-Timeout für ${url}` : err.message,
+          errorType: isSSLError ? 'SSL_ERROR' : 'NETWORK_ERROR',
+          originalError: err.message,
+          code: err.code,
+          success: false,
+        });
+      }
     });
 
     req.on('timeout', () => {
-      req.destroy();
-      resolve({
-        url,
-        status: 0,
-        duration: Date.now() - startTime,
-        error: 'Timeout',
-        success: false,
-      });
+      if (!resolved) {
+        resolved = true;
+        req.destroy();
+        if (sslTimeout) clearTimeout(sslTimeout);
+        
+        resolve({
+          url,
+          status: 0,
+          duration: Date.now() - startTime,
+          error: 'Timeout',
+          errorType: 'REQUEST_TIMEOUT',
+          success: false,
+        });
+      }
     });
 
     req.end();
@@ -80,8 +122,12 @@ async function runMonitoring() {
   console.log('🔍 BurniToken Website Monitoring gestartet...\n');
   console.log('='.repeat(80));
 
+  const results = [];
+  let sslTimeoutCount = 0;
+
   for (const url of URLS_TO_TEST) {
     const result = await testUrl(url);
+    results.push(result);
 
     const statusIcon = result.success ? '✅' : '❌';
     const statusText = result.status || 'ERROR';
@@ -95,14 +141,27 @@ async function runMonitoring() {
     }
 
     if (result.error) {
-      console.log(`   Fehler: ${result.error}`);
+      if (result.errorType === 'SSL_TIMEOUT' || result.errorType === 'SSL_ERROR') {
+        console.log(`   🔴 SSL-Fehler: ${result.error}`);
+        sslTimeoutCount++;
+      } else {
+        console.log(`   Fehler: ${result.error}`);
+      }
     }
 
     console.log('');
   }
 
   console.log('='.repeat(80));
+  
+  if (sslTimeoutCount > 0) {
+    console.log(`🚨 ${sslTimeoutCount} SSL-Verbindungs-Timeout(s) erkannt!`);
+    console.log('   Empfehlung: SSL-Konfiguration und Zertifikate überprüfen');
+  }
+  
   console.log('✅ Monitoring abgeschlossen');
+  
+  return results;
 }
 
 if (require.main === module) {
