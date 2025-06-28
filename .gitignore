@@ -38,6 +38,11 @@ backups/
 *.orig
 .cache/
 
+# Monitoring reports (generated files)
+website-health-report.json
+monitoring-log.json
+ssl-issue-*.json
+
 # Betriebssystem-Dateien
 .DS_Store
 Thumbs.db
