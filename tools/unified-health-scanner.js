@@ -8,6 +8,7 @@
  * Erstellt: 2025-06-27
  */
 
+const secrets = require('./config-loader'); // Lade die zentrale Konfiguration
 const { sendAlert } = require('./alert-service');
 const { exec } = require('child_process');
 const path = require('path');

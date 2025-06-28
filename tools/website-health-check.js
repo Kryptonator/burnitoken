@@ -216,35 +216,46 @@ async function checkURL(url) {
             isAvailable ? 'success' : 'error',
           );
 
-          if (res.statusCode >= 200 && res.statusCode < 400) {
-            healthStatus.summary.availableUrls++;
-            resolve(true);
-          } else {
-            sendAlert({
-              message: `Website nicht erreichbar: ${url} (Status: ${res.statusCode})`,
-              createIssue: true,
-            });
-            resolve(false);
-          }
+          resolve(isAvailable);
         });
+      });
+
+      req.on('error', (err) => {
+        log(`Fehler bei URL ${url}: ${err.message}`, 'error');
+
+        healthStatus.urls[url] = {
+          status: 0,
+          statusText: err.message,
+          available: false,
+          responseTime: 0,
+          loadTime: 0,
+          error: err.message,
+          lastChecked: new Date().toISOString(),
+        };
+
+        createTodo(
+          `URL nicht erreichbar: ${url.href}`,
+          `Die URL ${url.href} konnte nicht erreicht werden.\nFehler: ${err.message}`,
+          'Website Health Check',
+        );
+
+        resolve(false);
       });
 
       req.on('timeout', () => {
         req.destroy();
-        healthStatus.urls[url] = { status: 'timeout', loadTime: CONFIG.timeoutMs };
-        sendAlert({
-          message: `Timeout bei der Überprüfung der Website: ${url}`,
-          createIssue: true,
-        });
-        resolve(false);
-      });
+        log(`Timeout bei URL ${url}`, 'error');
 
-      req.on('error', (err) => {
-        healthStatus.urls[url] = { status: 'error', message: err.message };
-        sendAlert({
-          message: `Fehler bei der Überprüfung der Website: ${url} - ${err.message}`,
-          createIssue: true,
-        });
+        healthStatus.urls[url] = {
+          status: 0,
+          statusText: 'Timeout',
+          available: false,
+          responseTime: CONFIG.timeoutMs,
+          loadTime: CONFIG.timeoutMs,
+          error: 'Connection timeout',
+          lastChecked: new Date().toISOString(),
+        };
+
         resolve(false);
       });
 

@@ -1,7 +1,6 @@
 // Hauptkonfiguration für Lighthouse mit Google Search Console Integration
 const path = require('path');
 const fs = require('fs');
-require('dotenv').config({ path: path.resolve(__dirname, 'config.secrets') });
 
 // GSC Service Account Datei prüfen
 const GSC_SERVICE_ACCOUNT_FILE = path.join(__dirname, 'tools', 'gsc-service-account.json');

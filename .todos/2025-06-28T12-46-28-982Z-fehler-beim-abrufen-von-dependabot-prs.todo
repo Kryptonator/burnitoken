@@ -1,0 +1,20 @@
+---
+Title: Fehler beim Abrufen von Dependabot PRs
+Source: Dependabot Monitor
+Created: 2025-06-28T12:46:28.983Z
+Status: Open
+---
+
+### Problembeschreibung
+
+Dependabot Monitor konnte keine PRs abrufen.
+Fehlerdetails: To get started with GitHub CLI, please run:  gh auth login
+Alternatively, populate the GH_TOKEN environment variable with a GitHub API authentication token.
+
+
+### Nächste Schritte
+
+1.  Problem analysieren.
+2.  Lösung implementieren.
+3.  Änderungen testen und verifizieren.
+4.  ToDo als "Done" markieren.

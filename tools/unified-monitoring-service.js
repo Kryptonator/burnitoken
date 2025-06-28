@@ -114,3 +114,7 @@ function runAllChecks() {
 
 // Service starten
 runAllChecks();
+
+module.exports = {
+  runAllChecks,
+};

@@ -10,7 +10,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync, spawn } = require('child_process');
-const { runFullMonitoringCheck } = require('./unified-monitoring-service');
+const { runAllChecks: runFullMonitoringCheck } = require('./unified-monitoring-service');
 
 // Konfiguration
 const CONFIG = {

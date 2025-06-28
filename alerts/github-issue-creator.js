@@ -1,3 +1,4 @@
+const config = require('../tools/config-loader');
 // tools/github-issue-creator.js
 /**
  * GitHub Issue Creator
@@ -9,20 +10,19 @@
  */
 
 const https = require('https');
-const secrets = require('./config-loader'); // Lade die zentrale Konfiguration
 
 // --- Konfiguration ---
 // GitHub Repository (owner/repo)
-let GITHUB_REPO = secrets.GITHUB_REPO;
+let GITHUB_REPO = config.GITHUB_REPO;
 if (!GITHUB_REPO) {
   GITHUB_REPO = 'Kryptonator/burnitoken'; // Fallback
   console.log(
-    `⚠️  Hinweis: GITHUB_REPO ist nicht in config.secrets konfiguriert. Es wird der Standardwert '${GITHUB_REPO}' verwendet.`,
+    `⚠️  Hinweis: GITHUB_REPO ist nicht in der Konfiguration gefunden. Es wird der Standardwert '${GITHUB_REPO}' verwendet.`,
   );
 }
-const GITHUB_OWNER = secrets.GITHUB_OWNER || GITHUB_REPO.split('/')[0];
-// GitHub-Token aus den geladenen Secrets
-const GITHUB_TOKEN = secrets.GITHUB_TOKEN;
+const GITHUB_OWNER = GITHUB_REPO.split('/')[0];
+// GitHub-Token aus den Umgebungsvariablen laden
+const GITHUB_TOKEN = config.GITHUB_TOKEN;
 
 /**
  * Erstellt ein neues GitHub Issue.

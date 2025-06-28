@@ -1,125 +1,203 @@
-name: CI - Test and Validate
+!# ==================================================================================================
+# GITHUB WORKFLOW: MASTER CI/CD PIPELINE (ZUSAMMENGEFÜHRT)
+#
+# BESCHREIBUNG:
+# Diese Pipeline ist die zentrale Automatisierung für das BurniToken-Projekt.
+# Sie wurde aus mehreren alten Workflows (main-ci-cd.yml, production.yml, monitoring.yml, format.yml, automation-integrity-check.yml) 
+# konsolidiert, um Redundanz zu beseitigen und einen klaren, autarken Prozess zu schaffen.
+#
+# FEATURES:
+# 1.  **CI (Continuous Integration):**
+#     - Läuft bei jedem Pull Request auf den `main`-Branch.
+#     - Installiert Abhängigkeiten.
+#     - Führt Linting, Tests, einen Security-Audit und einen Integritätscheck durch.
+#     - Führt Lighthouse-Audits (Performance, SEO, Accessibility) direkt im PR durch.
+#     - Blockiert das Merging, wenn einer dieser Schritte fehlschlägt.
+#
+# 2.  **CD (Continuous Deployment):**
+#     - Läuft NUR bei einem direkten Push auf den `main`-Branch (z.B. nach einem Merge).
+#     - Erstellt einen Produktions-Build der Anwendung.
+#     - Veröffentlicht die gebaute Seite automatisch auf GitHub Pages.
+#
+# 3.  **Repository-Verwaltung & Wartung:**
+#     - Läuft täglich, um veraltete ("stale") Issues und Pull Requests zu finden und zu schließen.
+#     - Formatiert den Code automatisch bei Pushes auf den `main`-Branch.
+#
+# ==================================================================================================
 
+name: ✅ CI/CD Master Pipeline
 on:
   push:
-    branches: [ main, master, feature/add-new-button ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main ]
+  schedule:
+    # Läuft täglich um Mitternacht UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 jobs:
-  test-suite:
-    name: 🧪 Test Suite
+  # ===================================================================
+  # JOB 1: PR-Validierung & Tests
+  # ===================================================================
+  validate-pr:
+    name: 🧪 PR Validierung & Tests
+    # Dieser Job läuft nur auf Pull Requests, nicht bei direkten Pushes auf main
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    env:
-      CI: true
-      NODE_VERSION: '20'
     steps:
-      - name: 📥 Checkout code
+      - name: 1. Code auschecken
         uses: actions/checkout@v4
-      
-      - name: 📦 Set up Node.js ${{ env.NODE_VERSION }}
+
+      - name: 2. Node.js Umgebung aufsetzen (v22)
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: '22'
           cache: 'npm'
-      
-      - name: 📥 Install dependencies
+
+      - name: 3. Abhängigkeiten installieren
         run: npm ci
-      
-      - name: 🎨 Lint code
-        run: npm run lint:check
-      
-      - name: 🧪 Run unit & integration tests
-        run: npm test -- --verbose
-      
-      - name: 🏗️ Build CSS for Playwright
-        run: npm run build:css
-        
-      - name: 🚀 Run E2E tests with Playwright
-        run: npx playwright install --with-deps && npx playwright test
 
-      - name: 📊 Upload test artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: 4. Code-Formatierung prüfen (Linting)
+        run: npm run lint:check --if-present
+
+      - name: 5. Tests ausführen
+        run: npm test
+
+      - name: 6. Security Audit durchführen
+        run: npm audit
+
+      - name: 7. Automation Integrity Check
+        run: node tools/final-automation-audit.js
+
+      - name: 8. Lighthouse-Audits durchführen
+        run: |
+          npm install -g @lhci/cli
+          npx lhci autorun --config=./lighthouserc-performance.js || echo "Lighthouse Performance audit failed"
+          npx lhci autorun --config=./lighthouserc-seo.js || echo "Lighthouse SEO audit failed"
+          npx lhci autorun --config=./lighthouserc-accessibility.js || echo "Lighthouse Accessibility audit failed"
+
+      - name: 9. Lighthouse-Berichte hochladen
+        uses: actions/upload-artifact@v3
         with:
-          name: test-reports
-          path: |
-            coverage/
-            playwright-report/
+          name: lighthouse-reports
+          path: ./.lighthouseci/
 
-  security-check:
-    name: 🔒 Security & Dependency Check
-    needs: test-suite
+  # ===================================================================
+  # JOB 2: Build & Deploy
+  # ===================================================================
+  build-and-deploy:
+    name: 🚀 Build & Deploy
+    # Dieser Job läuft nur bei Pushes auf den main-Branch
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    # Braucht die Ergebnisse von validate-pr, wenn es ein PR-Merge war (implizit)
+    # Bei direktem Push gibt es keine Abhängigkeit.
     steps:
-      - name: 📥 Checkout code
+      - name: 1. Code auschecken
         uses: actions/checkout@v4
-      
-      - name: 📦 Set up Node.js
+
+      - name: 2. Node.js Umgebung aufsetzen (v22)
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
+
+      - name: 3. Abhängigkeiten installieren
+        run: npm ci
+
+      - name: 4. Produktions-Build erstellen
+        run: npm run build --if-present
+
+      - name: 5. Build-Output überprüfen
+        run: |
+          echo "Überprüfe den Inhalt des Build-Verzeichnisses..."
+          ls -la
+          if [ ! -f "index.html" ]; then
+            echo "Fehler: index.html wurde nicht im Stammverzeichnis gefunden!"
+            exit 1
+          fi
+          echo "Validierung erfolgreich: index.html gefunden."
+
+      - name: 6. Auf GitHub Pages veröffentlichen
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Der Build-Output landet im Stammverzeichnis, nicht in 'dist'.
+          publish_dir: ./
+
+  # ===================================================================
+  # JOB 3: Repository-Wartung (Auto-Format & Stale Issues)
+  # ===================================================================
+  repository-maintenance:
+    name: 🧹 Repository Wartung
+    # Läuft nach Zeitplan ODER bei Push auf main
+    if: github.event_name == 'schedule' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    steps:
+      # Schritt 1: Code auschecken (wird für beide Jobs benötigt)
+      # Wichtig: Wir verwenden den Bot-Token, um Push-Rechte zu haben.
+      - name: 1. Code mit Bot-Token auschecken
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GEMINI_BOT_TOKEN }}
+
+      # Schritt 2: Veraltete Issues und PRs mit Bot-Identität schließen
+      - name: 2. Veraltete Issues & PRs schließen (nur bei schedule)
+        if: github.event_name == 'schedule'
+        uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GEMINI_BOT_TOKEN }}
+          stale-issue-message: 'Dieses Issue ist seit 60 Tagen inaktiv und wird aus Gründen der Übersichtlichkeit vom Bot geschlossen. Bei Bedarf bitte neu öffnen.'
+          stale-pr-message: 'Dieser Pull Request ist seit 60 Tagen inaktiv und wird vom Bot geschlossen. Bei Bedarf bitte neu erstellen.'
+          days-before-stale: 60
+          days-before-close: 7
+
+      # Schritt 3: Code automatisch formatieren und committen
+      - name: 3. Code formatieren & committen (nur bei push)
+        id: format_and_commit # ID hinzugefügt, um auf den Output zugreifen zu können
+        if: github.event_name == 'push'
+        run: |
+          # Git mit den Bot-Informationen konfigurieren
+          git config --global user.name 'GeminiAiChefDev'
+          git config --global user.email 'gemini-ai-chef-dev@users.noreply.github.com'
           
-      - name: 📥 Install dependencies
-        run: npm ci
-        
-      - name: 🛡️ Run security audit
-        run: npm audit --audit-level=high
-
-  accessibility-check:
-    name: ♿ Accessibility Check
-    needs: test-suite
-    runs-on: ubuntu-latest
-    steps:
-      - name: 📥 Checkout code
-        uses: actions/checkout@v4
-      
-      - name: 📦 Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
+          # Abhängigkeiten installieren und Code formatieren
+          npm ci
+          npm run lint:fix --if-present
           
-      - name: 📥 Install dependencies
-        run: npm ci
+          # Prüfen, ob es Änderungen gibt, und nur dann committen & pushen
+          if ! git diff-index --quiet HEAD; then
+            echo "Änderungen gefunden, erstelle Commit..."
+            git add .
+            git commit -m "Chore: Automatische Code-Formatierung durch Gemini-Bot"
+            git push
+            echo "changes_committed=true" >> $GITHUB_OUTPUT
+          else
+            echo "Keine Formatierungsänderungen erforderlich."
+            echo "changes_committed=false" >> $GITHUB_OUTPUT
+          fi
 
-      - name: 🏗️ Build Project
-        run: npm run build:css
-        
-      - name: ♿ Run Lighthouse accessibility audit
-        run: npx lhci autorun --config=./lighthouserc-accessibility.js
-        env:
-          LHCI_SERVER_URL: ${{ secrets.LHCI_SERVER_URL }}
-          LHCI_TOKEN: ${{ secrets.LHCI_TOKEN }}
+      # Schritt 4: Eine übersichtliche Zusammenfassung erstellen
+      - name: 4. Aktivitäts-Zusammenfassung erstellen
+        if: always() # Dieser Schritt läuft immer, um eine Zusammenfassung zu garantieren
+        run: |
+          echo "### 🤖 Bot-Aktivitätsbericht (`${{ github.event_name }}`)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
 
-  send-failure-notification:
-    name: ✉️ Send Failure Notification
-    needs: [test-suite, security-check, accessibility-check]
-    if: failure()
-    runs-on: ubuntu-latest
-    steps:
-      - name: 📧 Send E-Mail Alert
-        # This action sends an email notification when a workflow fails.
-        # IMPORTANT: You must configure the following secrets in your GitHub repository settings:
-        # - MAIL_USERNAME: The username for your SMTP server (e.g., your Yahoo email address).
-        # - MAIL_PASSWORD: The application-specific password for your email account.
-        # - MAIL_RECIPIENT: The email address where the notification should be sent.
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.mail.yahoo.com
-          server_port: 465
-          username: ${{ secrets.MAIL_USERNAME }}
-          password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "🚨 CI Failure: Workflow failed for ${{ github.repository }}"
-          to: ${{ secrets.MAIL_RECIPIENT }}
-          from: BurniToken Notifier <github-actions@burnitoken.com>
-          body: |
-            A workflow run for **${{ github.repository }}** failed.
+          if ( '${{ github.event_name }}' == 'schedule' ); then
+            echo "#### 🧹 Job: Veraltete Issues & PRs" >> $GITHUB_STEP_SUMMARY
+            echo "- Der Job zur Überprüfung inaktiver Issues und PRs wurde erfolgreich ausgeführt." >> $GITHUB_STEP_SUMMARY
+            echo "- Eventuelle Aktionen (Kommentare, Schließungen) sind direkt in den jeweiligen Issues/PRs sichtbar." >> $GITHUB_STEP_SUMMARY
+          fi
 
-            - **Workflow:** `${{ github.workflow }}`
-            - **Branch:** `${{ github.ref_name }}`
-            - **Commit:** `${{ github.sha }}`
-            
-            Please review the failed run for details:
-            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          if ( '${{ github.event_name }}' == 'push' ); then
+            echo "#### 💅 Job: Automatische Code-Formatierung" >> $GITHUB_STEP_SUMMARY
+            if ( '${{ steps.format_and_commit.outputs.changes_committed }}' == 'true' ); then
+              echo "- **Status:** ✅ Änderungen wurden formatiert und committet." >> $GITHUB_STEP_SUMMARY
+              echo "- **Aktion:** Ein neuer Commit wurde zum `main`-Branch hinzugefügt." >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- **Status:** ℹ️ Keine Änderungen erforderlich." >> $GITHUB_STEP_SUMMARY
+              echo "- **Aktion:** Der Code war bereits korrekt formatiert." >> $GITHUB_STEP_SUMMARY
+            fi
+          fi

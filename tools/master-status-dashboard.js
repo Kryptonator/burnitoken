@@ -688,7 +688,11 @@ async function main() {
     // Auto-Refresh, wenn aktiviert
     if (masterStatus.autoRefresh) {
       let refreshInterval = setInterval(async () => {
-        await refreshAndDisplayDashboard(false);
+        try {
+          await refreshAndDisplayDashboard(false);
+        } catch (error) {
+          log(`Fehler während des Auto-Refresh-Zyklus: ${error.message}`, 'error');
+        }
       }, masterStatus.refreshInterval * 1000);
 
       // Bei Ctrl+C sauber beenden
