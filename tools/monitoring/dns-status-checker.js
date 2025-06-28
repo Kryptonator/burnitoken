@@ -115,17 +115,60 @@ class DNSStatusChecker {
   async checkSSL() {
     try {
       const { stdout } = await execAsync(
-        `openssl s_client -connect ${this.domain}:443 -servername ${this.domain} < /dev/null 2>/dev/null | openssl x509 -noout -subject 2>/dev/null`,
+        `openssl s_client -connect ${this.domain}:443 -servername ${this.domain} < /dev/null 2>/dev/null | openssl x509 -noout -subject -dates 2>/dev/null`,
       );
       const hasSSL = stdout.includes(this.domain);
 
-      console.log(`🔒 SSL Certificate: ${hasSSL ? '✅ Active' : '❌ Not Ready'}`);
+      if (hasSSL) {
+        // Check for expiration date
+        const notAfter = this.extractDate(stdout, 'notAfter=');
+        if (notAfter) {
+          const expirationDate = new Date(notAfter);
+          const currentDate = new Date();
+          const daysUntilExpiry = Math.ceil((expirationDate - currentDate) / (1000 * 60 * 60 * 24));
 
-      return hasSSL;
+          if (expirationDate <= currentDate) {
+            // Certificate expired
+            const error = {
+              source: "tools/website-health-check.js",
+              errorCode: "E_SSL_CERT_EXPIRED",
+              url: `https://${this.domain}`,
+              timestamp: new Date().toISOString(),
+              details: `Das SSL-Zertifikat ist am ${expirationDate.toISOString().split('T')[0]} abgelaufen.`
+            };
+            
+            console.log(`🔒 SSL Certificate: ❌ EXPIRED (${Math.abs(daysUntilExpiry)} days ago)`);
+            console.error('🚨 CRITICAL SSL ERROR:', JSON.stringify(error, null, 2));
+            return false;
+          } else if (daysUntilExpiry <= 30) {
+            console.log(`🔒 SSL Certificate: ⚠️  Active but expires in ${daysUntilExpiry} days`);
+            return true;
+          } else {
+            console.log(`🔒 SSL Certificate: ✅ Active (expires in ${daysUntilExpiry} days)`);
+            return true;
+          }
+        } else {
+          console.log(`🔒 SSL Certificate: ✅ Active`);
+          return true;
+        }
+      } else {
+        console.log(`🔒 SSL Certificate: ❌ Not Ready`);
+        return false;
+      }
     } catch (error) {
       console.log(`🔒 SSL Certificate: ⏳ Not ready or checking failed`);
       return false;
     }
+  }
+
+  extractDate(sslInfo, prefix) {
+    const lines = sslInfo.split('\n');
+    for (const line of lines) {
+      if (line.includes(prefix)) {
+        return line.replace(prefix, '').trim();
+      }
+    }
+    return null;
   }
 
   extractIP(nslookupOutput) {

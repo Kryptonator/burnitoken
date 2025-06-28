@@ -146,8 +146,9 @@ class DNSMigrationMonitor {
     try {
       console.log('🔐 SSL Certificate Check...');
 
+      // Enhanced SSL check with expiration date validation
       const sslCheck = execSync(
-        `echo | openssl s_client -servername ${this.domain} -connect ${this.domain}:443 2>/dev/null | openssl x509 -noout -issuer`,
+        `echo | openssl s_client -servername ${this.domain} -connect ${this.domain}:443 2>/dev/null | openssl x509 -noout -issuer -dates`,
         {
           encoding: 'utf8',
           timeout: 10000,
@@ -155,8 +156,37 @@ class DNSMigrationMonitor {
       );
 
       if (sslCheck.includes("Let's Encrypt") || sslCheck.includes('issuer')) {
-        console.log(`   ✅ SSL: Certificate aktiv ✓`);
-        return true;
+        // Check for expiration date
+        const notAfter = this.extractDate(sslCheck, 'notAfter=');
+        if (notAfter) {
+          const expirationDate = new Date(notAfter);
+          const currentDate = new Date();
+          const daysUntilExpiry = Math.ceil((expirationDate - currentDate) / (1000 * 60 * 60 * 24));
+
+          if (expirationDate <= currentDate) {
+            // Certificate expired - create error report
+            const error = {
+              source: "tools/website-health-check.js",
+              errorCode: "E_SSL_CERT_EXPIRED",
+              url: `https://${this.domain}`,
+              timestamp: new Date().toISOString(),
+              details: `Das SSL-Zertifikat ist am ${expirationDate.toISOString().split('T')[0]} abgelaufen.`
+            };
+            
+            console.log(`   ❌ SSL: Certificate EXPIRED (${Math.abs(daysUntilExpiry)} days ago)`);
+            console.error('🚨 CRITICAL SSL ERROR:', JSON.stringify(error, null, 2));
+            return false;
+          } else if (daysUntilExpiry <= 30) {
+            console.log(`   ⚠️  SSL: Certificate expires in ${daysUntilExpiry} days`);
+            return true;
+          } else {
+            console.log(`   ✅ SSL: Certificate aktiv (expires in ${daysUntilExpiry} days) ✓`);
+            return true;
+          }
+        } else {
+          console.log(`   ✅ SSL: Certificate aktiv ✓`);
+          return true;
+        }
       } else {
         console.log(`   ⏳ SSL: Certificate noch nicht aktiv`);
         return false;
@@ -165,6 +195,16 @@ class DNSMigrationMonitor {
       console.log(`   ⏳ SSL: Certificate wird erstellt...`);
       return false;
     }
+  }
+
+  extractDate(sslInfo, prefix) {
+    const lines = sslInfo.split('\n');
+    for (const line of lines) {
+      if (line.includes(prefix)) {
+        return line.replace(prefix, '').trim();
+      }
+    }
+    return null;
   }
 
   printStatus(dns, https, www, ssl) {
