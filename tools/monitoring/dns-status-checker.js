@@ -115,13 +115,35 @@ class DNSStatusChecker {
   async checkSSL() {
     try {
       const { stdout } = await execAsync(
-        `openssl s_client -connect ${this.domain}:443 -servername ${this.domain} < /dev/null 2>/dev/null | openssl x509 -noout -subject 2>/dev/null`,
+        `openssl s_client -connect ${this.domain}:443 -servername ${this.domain} < /dev/null 2>/dev/null | openssl x509 -noout -dates 2>/dev/null`,
       );
-      const hasSSL = stdout.includes(this.domain);
 
-      console.log(`🔒 SSL Certificate: ${hasSSL ? '✅ Active' : '❌ Not Ready'}`);
+      // Parse expiration date
+      const validToMatch = stdout.match(/notAfter=(.+)/);
+      if (validToMatch) {
+        const expirationDate = new Date(validToMatch[1].trim());
+        const now = new Date();
+        const daysUntilExpiration = Math.ceil((expirationDate - now) / (1000 * 60 * 60 * 24));
 
-      return hasSSL;
+        if (expirationDate < now) {
+          console.log(`🔒 SSL Certificate: ❌ EXPIRED (${Math.abs(daysUntilExpiration)} days ago)`);
+          return false;
+        } else if (daysUntilExpiration <= 7) {
+          console.log(`🔒 SSL Certificate: ⚠️  Expires in ${daysUntilExpiration} days`);
+          return false;
+        } else {
+          console.log(`🔒 SSL Certificate: ✅ Active (${daysUntilExpiration} days remaining)`);
+          return true;
+        }
+      } else {
+        // Fallback to original check
+        const { stdout: subjectCheck } = await execAsync(
+          `openssl s_client -connect ${this.domain}:443 -servername ${this.domain} < /dev/null 2>/dev/null | openssl x509 -noout -subject 2>/dev/null`,
+        );
+        const hasSSL = subjectCheck.includes(this.domain);
+        console.log(`🔒 SSL Certificate: ${hasSSL ? '✅ Active' : '❌ Not Ready'}`);
+        return hasSSL;
+      }
     } catch (error) {
       console.log(`🔒 SSL Certificate: ⏳ Not ready or checking failed`);
       return false;

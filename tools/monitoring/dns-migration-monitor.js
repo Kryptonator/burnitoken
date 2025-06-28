@@ -146,6 +146,7 @@ class DNSMigrationMonitor {
     try {
       console.log('🔐 SSL Certificate Check...');
 
+      // Check certificate issuer
       const sslCheck = execSync(
         `echo | openssl s_client -servername ${this.domain} -connect ${this.domain}:443 2>/dev/null | openssl x509 -noout -issuer`,
         {
@@ -154,9 +155,37 @@ class DNSMigrationMonitor {
         },
       );
 
+      // Check certificate expiration dates
+      const datesCheck = execSync(
+        `echo | openssl s_client -servername ${this.domain} -connect ${this.domain}:443 2>/dev/null | openssl x509 -noout -dates`,
+        {
+          encoding: 'utf8',
+          timeout: 10000,
+        },
+      );
+
       if (sslCheck.includes("Let's Encrypt") || sslCheck.includes('issuer')) {
-        console.log(`   ✅ SSL: Certificate aktiv ✓`);
-        return true;
+        // Parse expiration date
+        const validToMatch = datesCheck.match(/notAfter=(.+)/);
+        if (validToMatch) {
+          const expirationDate = new Date(validToMatch[1].trim());
+          const now = new Date();
+          const daysUntilExpiration = Math.ceil((expirationDate - now) / (1000 * 60 * 60 * 24));
+
+          if (expirationDate < now) {
+            console.log(`   ❌ SSL: Certificate expired ${Math.abs(daysUntilExpiration)} days ago`);
+            return false;
+          } else if (daysUntilExpiration <= 7) {
+            console.log(`   ⚠️  SSL: Certificate expires in ${daysUntilExpiration} days`);
+            return false;
+          } else {
+            console.log(`   ✅ SSL: Certificate aktiv ✓ (expires in ${daysUntilExpiration} days)`);
+            return true;
+          }
+        } else {
+          console.log(`   ✅ SSL: Certificate aktiv ✓`);
+          return true;
+        }
       } else {
         console.log(`   ⏳ SSL: Certificate noch nicht aktiv`);
         return false;
