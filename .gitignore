@@ -96,3 +96,8 @@ tools/gsc-service-account.json
 *-service-account.json
 *-api-key.json
 credentials.json
+
+# Monitoring outputs (temporary files)
+monitoring-alerts/
+monitoring-reports/
+critical-website-issues-report.json

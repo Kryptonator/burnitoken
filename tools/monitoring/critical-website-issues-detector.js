@@ -33,6 +33,7 @@ class CriticalWebsiteIssueDetector {
     await this.detectCodeConflicts(htmlContent);
     await this.detectCSSConflicts();
     await this.detectJSConflicts();
+    await this.checkBackendServices();
 
     // Generiere Bericht
     await this.generateIssueReport();
@@ -290,6 +291,64 @@ class CriticalWebsiteIssueDetector {
         issue: `${loadedJSFiles} JavaScript files loaded`,
         impact: 'Potential variable conflicts, performance impact',
         solution: 'Consolidate JavaScript files',
+      });
+    }
+  }
+
+  // 🚨 BACKEND SERVICES CHECK
+  async checkBackendServices() {
+    console.log('\n🚨 ANALYZING BACKEND SERVICES CONNECTIVITY...');
+    console.log('===============================================');
+    
+    try {
+      const { CriticalBackendServiceMonitor } = require('./backend-service-monitor');
+      const backendMonitor = new CriticalBackendServiceMonitor();
+      const healthReport = await backendMonitor.monitorServices();
+      
+      if (healthReport.overallStatus === 'CRITICAL') {
+        console.log(`❌ CRITICAL: Backend services are failing`);
+        
+        healthReport.alerts.forEach(alert => {
+          if (alert.errorCode === 'E-12045') {
+            this.issues.push({
+              type: 'CRITICAL',
+              category: '🚨 CRITICAL BACKEND ERROR',
+              issue: `Payment Gateway Database Connection Failed (${alert.errorCode})`,
+              location: alert.service,
+              impact: 'Backend services are non-functional, affecting user transactions and data persistence',
+              solution: 'Check database connectivity, verify service configuration, restart payment gateway service',
+              details: alert.details,
+              timestamp: alert.timestamp
+            });
+            console.log(`   🚨 ERROR E-12045: ${alert.service} - ${alert.details}`);
+          } else {
+            this.issues.push({
+              type: 'WARNING',
+              category: '⚠️ BACKEND SERVICE WARNING',
+              issue: `Backend Service Issue (${alert.errorCode})`,
+              location: alert.service,
+              impact: 'Service degradation may affect user experience',
+              solution: 'Monitor service and apply recommended actions',
+              details: alert.details,
+              timestamp: alert.timestamp
+            });
+            console.log(`   ⚠️ WARNING: ${alert.service} - ${alert.details}`);
+          }
+        });
+      } else {
+        console.log(`✅ Backend services status: ${healthReport.overallStatus}`);
+      }
+      
+    } catch (error) {
+      console.log(`❌ Backend services monitoring failed: ${error.message}`);
+      this.issues.push({
+        type: 'WARNING',
+        category: '🔧 MONITORING ERROR',
+        issue: 'Backend services monitoring failed',
+        location: 'Backend Service Monitor',
+        impact: 'Unable to verify backend service health - potential blind spot for critical issues',
+        solution: 'Check monitoring system configuration and network connectivity',
+        details: error.message
       });
     }
   }

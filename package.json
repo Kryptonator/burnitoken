@@ -40,6 +40,9 @@
     "test:alert:dry": "node tools/test-email-alert.js --use-ethereal",
     "cloud:sync": "node tools/update-cloud-settings.js",
     "dev:functions": "netlify functions:serve",
+    "monitor:backend": "node tools/monitoring/backend-service-monitor.js",
+    "test:backend": "jest tests/backend-integration.test.js",
+    "test:e2e:backend": "playwright test tests/e2e/backend-services.spec.js",
     "prepare": "husky install"
   },
   "devDependencies": {
