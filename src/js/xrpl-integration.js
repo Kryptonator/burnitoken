@@ -31,7 +31,37 @@ class BurniTokenXRPLIntegration {
       console.log('✅ XRPL Integration ready!');
     } catch (error) {
       console.error('❌ XRPL Integration failed:', error);
+      this.handleAPIError(error, 'XRPL_INIT');
     }
+  }
+
+  /**
+   * Handle and categorize API errors properly
+   */
+  handleAPIError(error, context) {
+    const errorReport = {
+      service: 'burnitoken-frontend',
+      component: 'xrpl-integration',
+      context: context,
+      type: 'external-api-error',
+      message: error.message,
+      timestamp: new Date().toISOString(),
+      severity: this.getErrorSeverity(context)
+    };
+
+    // Log error for debugging but don't treat as internal service failure
+    console.warn('🌐 External API Error:', errorReport);
+    
+    // Emit event for proper error tracking
+    this.emit('api-error', errorReport);
+    
+    return errorReport;
+  }
+
+  getErrorSeverity(context) {
+    // XRPL connection issues are warnings, not critical errors
+    if (context.includes('XRPL')) return 'warning';
+    return 'info';
   }
 
   // 🔗 CONNECTION MANAGEMENT
@@ -57,6 +87,7 @@ class BurniTokenXRPLIntegration {
     } catch (error) {
       console.error('❌ XRPL Connection failed:', error);
       this.connected = false;
+      this.handleAPIError(error, 'XRPL_CONNECTION');
       return false;
     }
   }

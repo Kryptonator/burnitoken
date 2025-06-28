@@ -40,7 +40,9 @@
     "test:alert:dry": "node tools/test-email-alert.js --use-ethereal",
     "cloud:sync": "node tools/update-cloud-settings.js",
     "dev:functions": "netlify functions:serve",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "monitor:check": "node tools/monitoring/service-monitor.js",
+    "monitor:validate": "node tools/monitoring/service-monitor.js && echo 'Monitoring system validated'"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",

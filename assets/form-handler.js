@@ -61,6 +61,7 @@ class FormHandler {
         });
       }
     } catch (error) {
+      this.handleFormError(error, 'newsletter_signup');
       this.showNotification(
         '⚠️ Fehler beim Anmelden. Bitte versuchen Sie es später erneut.',
         'error',
@@ -116,6 +117,7 @@ class FormHandler {
         });
       }
     } catch (error) {
+      this.handleFormError(error, 'contact_form_submit');
       this.showNotification(
         '⚠️ Fehler beim Senden der Nachricht. Bitte versuchen Sie es später erneut.',
         'error',
@@ -222,10 +224,32 @@ class FormHandler {
         if (Math.random() > 0.1) {
           resolve();
         } else {
-          reject(new Error('Simulated API error'));
+          const error = new Error('Simulated API error');
+          error.type = 'external-api-error';
+          error.service = 'burnitoken-frontend';
+          error.component = 'form-handler';
+          reject(error);
         }
       }, delay);
     });
+  }
+
+  /**
+   * Handle form submission errors properly
+   */
+  handleFormError(error, context) {
+    const errorReport = {
+      service: 'burnitoken-frontend',
+      component: 'form-handler',
+      context: context,
+      type: 'form-submission-error',
+      message: error.message,
+      timestamp: new Date().toISOString(),
+      severity: 'info'
+    };
+
+    console.warn('📝 Form Submission Error:', errorReport);
+    return errorReport;
   }
 }
 
