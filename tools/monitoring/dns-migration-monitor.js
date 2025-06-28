@@ -146,6 +146,7 @@ class DNSMigrationMonitor {
     try {
       console.log('🔐 SSL Certificate Check...');
 
+      // Prüfe SSL-Zertifikat Existenz
       const sslCheck = execSync(
         `echo | openssl s_client -servername ${this.domain} -connect ${this.domain}:443 2>/dev/null | openssl x509 -noout -issuer`,
         {
@@ -154,13 +155,44 @@ class DNSMigrationMonitor {
         },
       );
 
-      if (sslCheck.includes("Let's Encrypt") || sslCheck.includes('issuer')) {
-        console.log(`   ✅ SSL: Certificate aktiv ✓`);
-        return true;
-      } else {
+      if (!sslCheck.includes("Let's Encrypt") && !sslCheck.includes('issuer')) {
         console.log(`   ⏳ SSL: Certificate noch nicht aktiv`);
         return false;
       }
+
+      // Zusätzlich: Prüfe SSL-Zertifikat Ablaufdatum
+      try {
+        const sslDates = execSync(
+          `echo | openssl s_client -servername ${this.domain} -connect ${this.domain}:443 2>/dev/null | openssl x509 -noout -dates`,
+          {
+            encoding: 'utf8',
+            timeout: 10000,
+          },
+        );
+
+        const notAfterMatch = sslDates.match(/notAfter=(.+)/);
+        if (notAfterMatch) {
+          const expiryDate = new Date(notAfterMatch[1]);
+          const now = new Date();
+          const daysUntilExpiry = Math.ceil((expiryDate - now) / (1000 * 60 * 60 * 24));
+
+          if (expiryDate < now) {
+            console.log(`   ❌ SSL: Certificate EXPIRED on ${expiryDate.toLocaleDateString('de-DE')}`);
+            return false;
+          } else if (daysUntilExpiry <= 30) {
+            console.log(`   ⚠️ SSL: Certificate expires in ${daysUntilExpiry} days`);
+          } else {
+            console.log(`   ✅ SSL: Certificate aktiv ✓ (expires in ${daysUntilExpiry} days)`);
+          }
+        } else {
+          console.log(`   ✅ SSL: Certificate aktiv ✓`);
+        }
+      } catch (dateError) {
+        // Wenn Datumscheck fehlschlägt, aber Zertifikat existiert
+        console.log(`   ✅ SSL: Certificate aktiv ✓ (expiry check failed)`);
+      }
+
+      return true;
     } catch (error) {
       console.log(`   ⏳ SSL: Certificate wird erstellt...`);
       return false;

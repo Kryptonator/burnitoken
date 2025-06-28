@@ -119,9 +119,39 @@ class DNSStatusChecker {
       );
       const hasSSL = stdout.includes(this.domain);
 
-      console.log(`🔒 SSL Certificate: ${hasSSL ? '✅ Active' : '❌ Not Ready'}`);
+      if (!hasSSL) {
+        console.log(`🔒 SSL Certificate: ❌ Not Ready`);
+        return false;
+      }
 
-      return hasSSL;
+      // Zusätzlich: Prüfe SSL-Zertifikat Ablaufdatum
+      try {
+        const { stdout: sslDates } = await execAsync(
+          `openssl s_client -connect ${this.domain}:443 -servername ${this.domain} < /dev/null 2>/dev/null | openssl x509 -noout -dates 2>/dev/null`,
+        );
+
+        const notAfterMatch = sslDates.match(/notAfter=(.+)/);
+        if (notAfterMatch) {
+          const expiryDate = new Date(notAfterMatch[1]);
+          const now = new Date();
+          const daysUntilExpiry = Math.ceil((expiryDate - now) / (1000 * 60 * 60 * 24));
+
+          if (expiryDate < now) {
+            console.log(`🔒 SSL Certificate: ❌ EXPIRED on ${expiryDate.toLocaleDateString('de-DE')}`);
+            return false;
+          } else if (daysUntilExpiry <= 30) {
+            console.log(`🔒 SSL Certificate: ⚠️ Active (expires in ${daysUntilExpiry} days)`);
+          } else {
+            console.log(`🔒 SSL Certificate: ✅ Active (expires in ${daysUntilExpiry} days)`);
+          }
+        } else {
+          console.log(`🔒 SSL Certificate: ✅ Active`);
+        }
+      } catch (dateError) {
+        console.log(`🔒 SSL Certificate: ✅ Active (expiry check failed)`);
+      }
+
+      return true;
     } catch (error) {
       console.log(`🔒 SSL Certificate: ⏳ Not ready or checking failed`);
       return false;

@@ -83,6 +83,10 @@ lighthouse-*.json
 axe-*.json
 *.log
 
+# Website Health Check Reports
+website-health-*.json
+ssl-incident-*.json
+
 # Redundante Backups und alte Versionen
 *-backup-*.html
 *-simple.html
