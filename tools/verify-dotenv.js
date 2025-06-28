@@ -15,7 +15,5 @@ if (token) {
   console.log('✅ GITHUB_TOKEN wurde erfolgreich geladen.');
   console.log(`Token-Vorschau: ${token.substring(0, 4)}...${token.substring(token.length - 4)}`);
 } else {
-  console.error(
-    '❌ GITHUB_TOKEN konnte nicht geladen werden. Bitte überprüfen Sie die .env-Datei und den Pfad.',
-  );
+  console.error('❌ GITHUB_TOKEN konnte nicht geladen werden. Bitte überprüfen Sie die .env-Datei und den Pfad.');
 }

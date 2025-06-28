@@ -1,6 +1,6 @@
 /**
  * COMPREHENSIVE-MONITOR-DASHBOARD - Zentrales Monitoring-Dashboard
- *
+ * 
  * Überwacht alle Extensions, KI-Services und GSC-Integrationen
  * und führt nach Fixes automatische Commits durch.
  */
@@ -13,44 +13,20 @@ const { autoCommitAndPush } = require('./auto-commit-push');
 // Konfigurations-Objekt für alle zu überwachenden Komponenten
 const CONFIG = {
   extensions: [
-    {
-      name: 'Session-Saver',
-      statusChecker: './tools/extension-function-validator.js',
-      params: ['--extension=session-saver'],
-    },
-    {
-      name: 'AI Conversation Bridge',
-      statusChecker: './tools/extension-function-validator.js',
-      params: ['--extension=ai-conversation-bridge'],
-    },
-    {
-      name: 'Extension Status Dashboard',
-      statusChecker: './tools/extension-status-dashboard.js',
-      params: ['--check'],
-    },
+    { name: 'Session-Saver', statusChecker: './tools/extension-function-validator.js', params: ['--extension=session-saver'] },
+    { name: 'AI Conversation Bridge', statusChecker: './tools/extension-function-validator.js', params: ['--extension=ai-conversation-bridge'] },
+    { name: 'Extension Status Dashboard', statusChecker: './tools/extension-status-dashboard.js', params: ['--check'] },
   ],
   aiServices: [
     { name: 'AI Status Checker', statusChecker: './tools/ai-status.js', params: [] },
-    {
-      name: 'AI Services Manager',
-      statusChecker: './tools/ai-services-manager.js',
-      params: ['--check'],
-    },
+    { name: 'AI Services Manager', statusChecker: './tools/ai-services-manager.js', params: ['--check'] },
   ],
   gscTools: [
     { name: 'GSC Status Check', statusChecker: './tools/gsc-status-check.js', params: [] },
     { name: 'GSC Auth Check', statusChecker: './tools/gsc-auth-check.js', params: [] },
     { name: 'GSC Crawl Stats', statusChecker: './tools/gsc-crawl-stats.js', params: ['--test'] },
-    {
-      name: 'GSC Integration Monitor',
-      statusChecker: './tools/gsc-integration-monitor.js',
-      params: ['--quick-check'],
-    },
-    {
-      name: 'GSC Sitemap Monitor',
-      statusChecker: './tools/fix-sitemap-gsc-issue.js',
-      params: ['--check'],
-    },
+    { name: 'GSC Integration Monitor', statusChecker: './tools/gsc-integration-monitor.js', params: ['--quick-check'] },
+    { name: 'GSC Sitemap Monitor', statusChecker: './tools/fix-sitemap-gsc-issue.js', params: ['--check'] },
   ],
 };
 
@@ -74,15 +50,12 @@ const COLORS = {
 function checkComponentStatus(component) {
   try {
     console.log(`${COLORS.cyan}🔍 Prüfe Status von ${component.name}...${COLORS.reset}`);
-
+    
     const command = `node ${component.statusChecker} ${(component.params || []).join(' ')}`;
     const result = execSync(command, { stdio: 'pipe' }).toString().trim();
-
-    const isSuccess =
-      !result.includes('FEHLER') &&
-      !result.includes('ERROR') &&
-      !result.toLowerCase().includes('failed');
-
+    
+    const isSuccess = !result.includes('FEHLER') && !result.includes('ERROR') && !result.toLowerCase().includes('failed');
+    
     if (isSuccess) {
       console.log(`${COLORS.green}✅ ${component.name}: OK${COLORS.reset}`);
       return true;
@@ -104,13 +77,13 @@ function checkComponentStatus(component) {
 function tryFixComponent(component) {
   try {
     console.log(`${COLORS.yellow}🔧 Versuche ${component.name} zu reparieren...${COLORS.reset}`);
-
+    
     // Bestimme den passenden Fixer basierend auf der Komponente
     let fixCommand = '';
-
+    
     if (component.name.includes('GSC')) {
       fixCommand = 'node ./tools/gsc-tools-fixer-v2.js';
-
+      
       // Spezialfall für Sitemap-Probleme
       if (component.name.includes('Sitemap')) {
         fixCommand = 'node ./tools/fix-sitemap-gsc-issue.js --fix';
@@ -121,17 +94,16 @@ function tryFixComponent(component) {
       // Extension-Fixes
       fixCommand = 'node ./tools/extension-auto-restart.js';
     }
-
+    
     // Fix ausführen
     console.log(`${COLORS.cyan}🛠️ Führe aus: ${fixCommand}${COLORS.reset}`);
     execSync(fixCommand, { stdio: 'inherit' });
-
+    
     // Überprüfen, ob der Fix erfolgreich war
     return checkComponentStatus(component);
+    
   } catch (error) {
-    console.log(
-      `${COLORS.red}❌ Reparatur von ${component.name} fehlgeschlagen: ${error.message}${COLORS.reset}`,
-    );
+    console.log(`${COLORS.red}❌ Reparatur von ${component.name} fehlgeschlagen: ${error.message}${COLORS.reset}`);
     return false;
   }
 }
@@ -140,25 +112,23 @@ function tryFixComponent(component) {
  * Durchläuft alle Komponenten und protokolliert ihren Status
  */
 function runFullDashboard() {
-  console.log(
-    `${COLORS.bright}${COLORS.blue}=== 🚀 COMPREHENSIVE MONITOR DASHBOARD ====${COLORS.reset}`,
-  );
+  console.log(`${COLORS.bright}${COLORS.blue}=== 🚀 COMPREHENSIVE MONITOR DASHBOARD ====${COLORS.reset}`);
   console.log(`${COLORS.blue}Gestartet: ${new Date().toLocaleString('de-DE')}${COLORS.reset}\n`);
-
+  
   let results = {
     extensions: { total: 0, success: 0, fixed: 0, failed: 0 },
     aiServices: { total: 0, success: 0, fixed: 0, failed: 0 },
     gscTools: { total: 0, success: 0, fixed: 0, failed: 0 },
   };
-
+  
   const fixedComponents = [];
-
+  
   // Extensions prüfen
   console.log(`${COLORS.bright}${COLORS.magenta}\n=== EXTENSIONS ====${COLORS.reset}`);
   for (const extension of CONFIG.extensions) {
     results.extensions.total++;
     const status = checkComponentStatus(extension);
-
+    
     if (status) {
       results.extensions.success++;
     } else {
@@ -172,13 +142,13 @@ function runFullDashboard() {
       }
     }
   }
-
+  
   // AI-Services prüfen
   console.log(`${COLORS.bright}${COLORS.magenta}\n=== AI SERVICES ====${COLORS.reset}`);
   for (const service of CONFIG.aiServices) {
     results.aiServices.total++;
     const status = checkComponentStatus(service);
-
+    
     if (status) {
       results.aiServices.success++;
     } else {
@@ -192,13 +162,13 @@ function runFullDashboard() {
       }
     }
   }
-
+  
   // GSC-Tools prüfen
   console.log(`${COLORS.bright}${COLORS.magenta}\n=== GSC TOOLS ====${COLORS.reset}`);
   for (const tool of CONFIG.gscTools) {
     results.gscTools.total++;
     const status = checkComponentStatus(tool);
-
+    
     if (status) {
       results.gscTools.success++;
     } else {
@@ -212,47 +182,33 @@ function runFullDashboard() {
       }
     }
   }
-
+  
   // Zusammenfassung ausgeben
   console.log(`\n${COLORS.bright}${COLORS.blue}=== 📊 ZUSAMMENFASSUNG ====${COLORS.reset}`);
   printResults('Extensions', results.extensions);
   printResults('AI Services', results.aiServices);
   printResults('GSC Tools', results.gscTools);
-
+  
   // Gesamtergebnis
-  const totalComponents =
-    results.extensions.total + results.aiServices.total + results.gscTools.total;
-  const totalSuccess =
-    results.extensions.success + results.aiServices.success + results.gscTools.success;
+  const totalComponents = results.extensions.total + results.aiServices.total + results.gscTools.total;
+  const totalSuccess = results.extensions.success + results.aiServices.success + results.gscTools.success;
   const totalFixed = results.extensions.fixed + results.aiServices.fixed + results.gscTools.fixed;
-  const totalFailed =
-    results.extensions.failed + results.aiServices.failed + results.gscTools.failed;
-
+  const totalFailed = results.extensions.failed + results.aiServices.failed + results.gscTools.failed;
+  
   console.log(`\n${COLORS.bright}${COLORS.blue}=== 📈 GESAMTERGEBNIS ====${COLORS.reset}`);
   console.log(`${COLORS.cyan}Gesamt: ${totalComponents} Komponenten${COLORS.reset}`);
-  console.log(
-    `${COLORS.green}✅ Erfolgreich: ${totalSuccess} (${Math.round((totalSuccess / totalComponents) * 100)}%)${COLORS.reset}`,
-  );
-  console.log(
-    `${COLORS.yellow}🔧 Repariert: ${totalFixed} (${Math.round((totalFixed / totalComponents) * 100)}%)${COLORS.reset}`,
-  );
-  console.log(
-    `${COLORS.red}❌ Fehlgeschlagen: ${totalFailed} (${Math.round((totalFailed / totalComponents) * 100)}%)${COLORS.reset}`,
-  );
-
+  console.log(`${COLORS.green}✅ Erfolgreich: ${totalSuccess} (${Math.round(totalSuccess/totalComponents*100)}%)${COLORS.reset}`);
+  console.log(`${COLORS.yellow}🔧 Repariert: ${totalFixed} (${Math.round(totalFixed/totalComponents*100)}%)${COLORS.reset}`);
+  console.log(`${COLORS.red}❌ Fehlgeschlagen: ${totalFailed} (${Math.round(totalFailed/totalComponents*100)}%)${COLORS.reset}`);
+  
   // Aktualisiere Statusdatei
   updateStatusFile({
     timestamp: new Date().toISOString(),
-    summary: {
-      total: totalComponents,
-      success: totalSuccess,
-      fixed: totalFixed,
-      failed: totalFailed,
-    },
+    summary: { total: totalComponents, success: totalSuccess, fixed: totalFixed, failed: totalFailed },
     details: results,
-    fixedComponents,
+    fixedComponents
   });
-
+  
   // Auto-Commit wenn es Fixes gab
   if (fixedComponents.length > 0) {
     const fixDescription = `Auto-Fix: ${fixedComponents.join(', ')} repariert`;
@@ -267,15 +223,9 @@ function runFullDashboard() {
  */
 function printResults(category, result) {
   console.log(`\n${COLORS.cyan}${category}: ${result.total} Komponenten${COLORS.reset}`);
-  console.log(
-    `${COLORS.green}✅ Erfolgreich: ${result.success} (${Math.round((result.success / result.total) * 100)}%)${COLORS.reset}`,
-  );
-  console.log(
-    `${COLORS.yellow}🔧 Repariert: ${result.fixed} (${Math.round((result.fixed / result.total) * 100)}%)${COLORS.reset}`,
-  );
-  console.log(
-    `${COLORS.red}❌ Fehlgeschlagen: ${result.failed} (${Math.round((result.failed / result.total) * 100)}%)${COLORS.reset}`,
-  );
+  console.log(`${COLORS.green}✅ Erfolgreich: ${result.success} (${Math.round(result.success/result.total*100)}%)${COLORS.reset}`);
+  console.log(`${COLORS.yellow}🔧 Repariert: ${result.fixed} (${Math.round(result.fixed/result.total*100)}%)${COLORS.reset}`);
+  console.log(`${COLORS.red}❌ Fehlgeschlagen: ${result.failed} (${Math.round(result.failed/result.total*100)}%)${COLORS.reset}`);
 }
 
 /**
@@ -286,37 +236,35 @@ function updateStatusFile(status) {
   const statusFile = path.join(process.cwd(), 'MONITOR_STATUS.json');
   fs.writeFileSync(statusFile, JSON.stringify(status, null, 2));
   console.log(`\n${COLORS.cyan}📄 Status in MONITOR_STATUS.json gespeichert${COLORS.reset}`);
-
+  
   // Auch Markdown-Dokumentation erstellen/aktualisieren
   const markdownFile = path.join(process.cwd(), 'EXTENSION_SERVICES_MONITOR_IMPLEMENTATION.md');
   let markdown = '';
-
+  
   if (fs.existsSync(markdownFile)) {
     markdown = fs.readFileSync(markdownFile, 'utf8');
-
+    
     // Füge neue Statusinfo am Ende hinzu
     markdown += `\n\n## Status-Update: ${new Date().toLocaleString('de-DE')}\n\n`;
   } else {
     markdown = `# Extension & Services Monitoring\n\n## Status-Update: ${new Date().toLocaleString('de-DE')}\n\n`;
   }
-
+  
   markdown += `### Zusammenfassung\n\n`;
   markdown += `- Gesamtzahl Komponenten: ${status.summary.total}\n`;
-  markdown += `- ✅ Erfolgreich: ${status.summary.success} (${Math.round((status.summary.success / status.summary.total) * 100)}%)\n`;
-  markdown += `- 🔧 Repariert: ${status.summary.fixed} (${Math.round((status.summary.fixed / status.summary.total) * 100)}%)\n`;
-  markdown += `- ❌ Fehlgeschlagen: ${status.summary.failed} (${Math.round((status.summary.failed / status.summary.total) * 100)}%)\n\n`;
-
+  markdown += `- ✅ Erfolgreich: ${status.summary.success} (${Math.round(status.summary.success/status.summary.total*100)}%)\n`;
+  markdown += `- 🔧 Repariert: ${status.summary.fixed} (${Math.round(status.summary.fixed/status.summary.total*100)}%)\n`;
+  markdown += `- ❌ Fehlgeschlagen: ${status.summary.failed} (${Math.round(status.summary.failed/status.summary.total*100)}%)\n\n`;
+  
   if (status.fixedComponents.length > 0) {
     markdown += `### Automatisch reparierte Komponenten\n\n`;
-    status.fixedComponents.forEach((comp) => {
+    status.fixedComponents.forEach(comp => {
       markdown += `- ${comp}\n`;
     });
   }
-
+  
   fs.writeFileSync(markdownFile, markdown);
-  console.log(
-    `${COLORS.cyan}📄 Dokumentation in EXTENSION_SERVICES_MONITOR_IMPLEMENTATION.md aktualisiert${COLORS.reset}`,
-  );
+  console.log(`${COLORS.cyan}📄 Dokumentation in EXTENSION_SERVICES_MONITOR_IMPLEMENTATION.md aktualisiert${COLORS.reset}`);
 }
 
 // Hauptfunktion ausführen

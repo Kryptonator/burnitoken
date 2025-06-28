@@ -27,3 +27,29 @@ const { Builder } = require('selenium-webdriver');
   console.log('Accessibility-Report gespeichert: axe-accessibility-report.json');
   await driver.quit();
 })();
+
+/**
+ * Führt einen Lighthouse-Audit durch und gibt die wichtigsten Kennzahlen für das Dashboard zurück.
+ * @returns {Promise<{status: string, performance: number, accessibility: number, seo: number}>}
+ */
+async function runLighthouseAudit() {
+  const chrome = await chromeLauncher.launch({ chromeFlags: ['--headless'] });
+  const options = {
+    logLevel: 'info',
+    output: 'json',
+    onlyCategories: ['performance', 'accessibility', 'seo'],
+    port: chrome.port,
+  };
+  const runnerResult = await lighthouse('https://burnitoken.com', options);
+  await chrome.kill();
+
+  const categories = runnerResult.lhr.categories;
+  return {
+    status: (categories.performance.score > 0.9 && categories.accessibility.score > 0.9 && categories.seo.score > 0.9) ? 'GOOD' : 'WARNING',
+    performance: Math.round(categories.performance.score * 100),
+    accessibility: Math.round(categories.accessibility.score * 100),
+    seo: Math.round(categories.seo.score * 100)
+  };
+}
+
+module.exports = { runLighthouseAudit };

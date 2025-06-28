@@ -15,7 +15,7 @@ const EXPECTED_TASKS = [
   'Extension Health Check',
   'Extension Management Full Run',
   'Extension Configuration Update',
-  '🚀 Complete Extension Optimization',
+  '🚀 Complete Extension Optimization'
 ];
 
 /**
@@ -56,102 +56,105 @@ function writeJsonFile(filePath, data) {
  */
 function validateAndRepairTasks() {
   console.log('🔍 Prüfe Tasks für Extension-Management...');
-
+  
   const tasksJson = readJsonFile(TASKS_PATH);
   if (!tasksJson) {
     console.error('❌ tasks.json fehlt oder ist beschädigt.');
     return false;
   }
-
+  
   let updated = false;
   const taskMap = new Map();
-
+  
   // Erstelle Map von Task-Labels
-  tasksJson.tasks.forEach((task) => {
+  tasksJson.tasks.forEach(task => {
     taskMap.set(task.label, task);
   });
-
+  
   // Prüfe auf fehlende Tasks
   for (const expectedTask of EXPECTED_TASKS) {
     if (!taskMap.has(expectedTask)) {
       console.warn(`⚠️ Fehlende Task: ${expectedTask}`);
-
+      
       // Füge fehlende Task hinzu basierend auf Art
       if (expectedTask === 'Extension Health Check') {
         tasksJson.tasks.push({
-          label: 'Extension Health Check',
-          type: 'shell',
-          command: 'node',
-          args: ['extension-function-validator.js'],
-          group: 'test',
-          presentation: {
-            echo: true,
-            reveal: 'always',
-            focus: false,
-            panel: 'shared',
+          "label": "Extension Health Check",
+          "type": "shell",
+          "command": "node",
+          "args": ["extension-function-validator.js"],
+          "group": "test",
+          "presentation": {
+            "echo": true,
+            "reveal": "always",
+            "focus": false,
+            "panel": "shared"
           },
-          problemMatcher: [],
+          "problemMatcher": []
         });
         updated = true;
-      } else if (expectedTask === 'Extension Management Full Run') {
+      } 
+      else if (expectedTask === 'Extension Management Full Run') {
         tasksJson.tasks.push({
-          label: 'Extension Management Full Run',
-          type: 'shell',
-          command: 'node',
-          args: ['master-extension-orchestrator.js'],
-          group: 'build',
-          presentation: {
-            echo: true,
-            reveal: 'always',
-            focus: false,
-            panel: 'shared',
+          "label": "Extension Management Full Run",
+          "type": "shell",
+          "command": "node",
+          "args": ["master-extension-orchestrator.js"],
+          "group": "build",
+          "presentation": {
+            "echo": true,
+            "reveal": "always",
+            "focus": false,
+            "panel": "shared"
           },
-          problemMatcher: [],
+          "problemMatcher": []
         });
         updated = true;
-      } else if (expectedTask === 'Extension Configuration Update') {
+      }
+      else if (expectedTask === 'Extension Configuration Update') {
         tasksJson.tasks.push({
-          label: 'Extension Configuration Update',
-          type: 'shell',
-          command: 'node',
-          args: ['advanced-extension-manager.js'],
-          group: 'build',
-          presentation: {
-            echo: true,
-            reveal: 'always',
-            focus: false,
-            panel: 'shared',
+          "label": "Extension Configuration Update",
+          "type": "shell",
+          "command": "node",
+          "args": ["advanced-extension-manager.js"],
+          "group": "build",
+          "presentation": {
+            "echo": true,
+            "reveal": "always",
+            "focus": false,
+            "panel": "shared"
           },
-          problemMatcher: [],
+          "problemMatcher": []
         });
         updated = true;
-      } else if (expectedTask === '🚀 Complete Extension Optimization') {
+      }
+      else if (expectedTask === '🚀 Complete Extension Optimization') {
         tasksJson.tasks.push({
-          label: '🚀 Complete Extension Optimization',
-          type: 'shell',
-          command: 'powershell',
-          args: [
-            '-Command',
-            "Write-Host '🔍 Starting Full Extension Optimization...' -ForegroundColor Cyan; node extension-function-validator.js && node advanced-extension-manager.js && node master-extension-orchestrator.js && Write-Host '✅ Extension Optimization Complete!' -ForegroundColor Green",
+          "label": "🚀 Complete Extension Optimization",
+          "type": "shell",
+          "command": "powershell",
+          "args": [
+            "-Command",
+            "Write-Host '🔍 Starting Full Extension Optimization...' -ForegroundColor Cyan; node extension-function-validator.js && node advanced-extension-manager.js && node master-extension-orchestrator.js && Write-Host '✅ Extension Optimization Complete!' -ForegroundColor Green"
           ],
-          group: {
-            kind: 'build',
-            isDefault: true,
+          "group": {
+            "kind": "build",
+            "isDefault": true
           },
-          presentation: {
-            echo: true,
-            reveal: 'always',
-            focus: true,
-            panel: 'new',
-            clear: true,
+          "presentation": {
+            "echo": true,
+            "reveal": "always",
+            "focus": true,
+            "panel": "new",
+            "clear": true
           },
-          problemMatcher: [],
+          "problemMatcher": []
         });
         updated = true;
       }
     }
   }
-
+  
   // Speichere aktualisierte Tasks
   if (updated) {
     if (writeJsonFile(TASKS_PATH, tasksJson)) {
@@ -160,7 +163,7 @@ function validateAndRepairTasks() {
   } else {
     console.log('✓ Alle erwarteten Tasks sind korrekt konfiguriert');
   }
-
+  
   return true;
 }
 
@@ -169,29 +172,29 @@ function validateAndRepairTasks() {
  */
 function validateAndRepairSettings() {
   console.log('🔍 Prüfe Settings für Extension-Management...');
-
+  
   const settings = readJsonFile(SETTINGS_PATH);
   if (!settings) {
     console.error('❌ settings.json fehlt oder ist beschädigt.');
     return false;
   }
-
+  
   let updated = false;
-
+  
   // Prüfe und korrigiere Auto-Update Einstellung
   if (settings['extensions.autoUpdate'] === false) {
     settings['extensions.autoUpdate'] = true;
     updated = true;
     console.warn('⚠️ Automatische Extension-Updates waren deaktiviert - aktiviert');
   }
-
+  
   // Prüfe und korrigiere automatische Tasks
   if (settings['task.allowAutomaticTasks'] !== 'on') {
     settings['task.allowAutomaticTasks'] = 'on';
     updated = true;
     console.warn('⚠️ Automatische Tasks waren deaktiviert - aktiviert');
   }
-
+  
   // Speichere aktualisierte Settings
   if (updated) {
     if (writeJsonFile(SETTINGS_PATH, settings)) {
@@ -200,23 +203,21 @@ function validateAndRepairSettings() {
   } else {
     console.log('✓ Alle erwarteten Settings sind korrekt konfiguriert');
   }
-
+  
   return true;
 }
 
 // Hauptfunktion
 function main() {
   console.log('🚀 Starte Extension Task Validator...');
-
+  
   const tasksValid = validateAndRepairTasks();
   const settingsValid = validateAndRepairSettings();
-
+  
   if (tasksValid && settingsValid) {
     console.log('🎉 Extension Task Validation abgeschlossen - Alles OK!');
   } else {
-    console.warn(
-      '⚠️ Extension Task Validation abgeschlossen - Einige Probleme konnten nicht behoben werden',
-    );
+    console.warn('⚠️ Extension Task Validation abgeschlossen - Einige Probleme konnten nicht behoben werden');
   }
 }
 

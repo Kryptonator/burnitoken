@@ -1,23 +1,23 @@
 # BurniToken Website Master Status
 
-**Zeitpunkt:** 28.6.2025, 19:41:20
+**Zeitpunkt:** 28.6.2025, 22:45:55
 **Gesamtstatus:** ✅ OPTIMAL
 
 ## Zusammenfassung
 
-| Komponente    | Status      | Details                            |
-| ------------- | ----------- | ---------------------------------- |
-| Website       | ✅ HEALTHY  | 1/1 URLs verfügbar                 |
-| Deployment    | ✅ DEPLOYED | 6/6 kritische Dateien              |
-| Performance   | ✅ GOOD     | Score: 100/100                     |
-| Extensions    | ✅ OPTIMAL  | 8/8 erforderliche Extensions aktiv |
-| Auto-Recovery | ✅ ACTIVE   | 0 Recoveries durchgeführt          |
+| Komponente | Status | Details |
+| ---------- | ------ | ------- |
+| Website | ✅ HEALTHY | 1/1 URLs verfügbar |
+| Deployment | ✅ DEPLOYED | 6/6 kritische Dateien |
+| Performance | ✅ GOOD | Score: 100/100 |
+| Extensions | ✅ OPTIMAL | 8/8 erforderliche Extensions aktiv |
+| Auto-Recovery | ✅ ACTIVE | 0 Recoveries durchgeführt |
 
 ## Website-URLs
 
-| URL                        | Status | Verfügbar | Antwortzeit |
-| -------------------------- | ------ | --------- | ----------- |
-| https://burnitoken.website | 200    | ✅        | 80ms        |
+| URL | Status | Verfügbar | Antwortzeit |
+| --- | ------ | --------- | ----------- |
+| https://burnitoken.website | 200 | ✅ | 80ms |
 
 ## SSL-Zertifikat
 
@@ -28,4 +28,4 @@
 
 ---
 
-Bericht generiert am 28.6.2025, 19:41:20 | Auto-Refresh: Aktiv
+Bericht generiert am 28.6.2025, 22:45:55 | Auto-Refresh: Aktiv

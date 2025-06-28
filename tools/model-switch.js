@@ -27,35 +27,35 @@ const SUPPORTED_MODELS = ['copilot', 'chatgpt', 'claude', 'gemini', 'llama'];
  */
 async function main() {
   console.log('🔄 KI-Modell-Wechsel-Tool');
-
+  
   // Prüfe, ob ein Modell angegeben wurde
   if (!targetModel) {
     showUsage();
     return;
   }
-
+  
   // Prüfe, ob das angegebene Modell unterstützt wird
   if (!SUPPORTED_MODELS.includes(targetModel)) {
     console.error(`❌ Nicht unterstütztes KI-Modell: ${targetModel}`);
     console.log(`💡 Unterstützte Modelle: ${SUPPORTED_MODELS.join(', ')}`);
     return;
   }
-
+  
   try {
     // Importiere die AI Conversation Bridge
     const aiBridge = require('./ai-conversation-bridge');
-
+    
     // Wechsle zum angegebenen Modell
     const currentModel = aiBridge.getCurrentModel();
-
+    
     if (currentModel === targetModel) {
       console.log(`ℹ️ Sie verwenden bereits ${targetModel}`);
       return;
     }
-
+    
     console.log(`🔄 Wechsel von ${currentModel} zu ${targetModel}...`);
     aiBridge.switchModel(targetModel);
-
+    
     console.log(`✅ KI-Modell erfolgreich gewechselt zu ${targetModel}`);
     console.log('💡 Der Konversationskontext wurde übertragen');
   } catch (err) {

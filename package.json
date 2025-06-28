@@ -77,10 +77,13 @@
     "auto:commit": "node tools/auto-commit-push.js",
     "monitor:full": "node tools/comprehensive-monitor-dashboard.js",
     "dev:functions": "netlify functions:serve",
-    "prepare": "husky install"
-  },
-  "lint-staged": {
-    "**/*.{html,css,js,json,md}": "prettier --write"
+    "prepare": "husky install",
+    "web-vitals": "node tools/core-web-vitals-monitor.js",
+    "web-vitals:ci": "node tools/core-web-vitals-monitor.js --ci",
+    "web-vitals:full": "node tools/core-web-vitals-monitor.js --full",
+    "web-vitals:errors": "node tools/core-web-vitals-monitor.js --error-pages",
+    "meta-tags": "node tools/meta-tags-validator.js",
+    "meta-tags:ci": "node tools/meta-tags-validator.js --ci"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",
@@ -96,13 +99,13 @@
     "cssnano": "^7.0.7",
     "del-cli": "^6.0.0",
     "dotenv": "^16.5.0",
+    "eslint": "^9.29.0",
     "html-validate": "^9.6.1",
     "http-server": "^14.1.1",
     "husky": "^8.0.0",
     "jest": "^30.0.0",
     "jest-environment-jsdom": "^30.0.0",
     "jsdom": "^26.1.0",
-    "lint-staged": "^16.1.2",
     "mini-css-extract-plugin": "^2.7.6",
     "nodemailer": "^7.0.3",
     "postcss": "^8.5.5",
@@ -114,13 +117,21 @@
     "wait-on": "^8.0.3",
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1"
-  },
-  "overrides": {
-    "fastify": "4.29.1",
-    "http-proxy-middleware": "2.0.9"
+    "webpack-dev-server": "^5.0.4",
+    "xmlbuilder": "^15.1.1"
   },
   "dependencies": {
-    "googleapis": "^150.0.1"
+    "@axe-core/webdriverjs": "^4.10.2",
+    "@netlify/functions": "^2.5.1",
+    "axe-playwright": "^2.1.0",
+    "canvas": "^3.1.0",
+    "chalk": "^5.4.1",
+    "chrome-launcher": "^1.2.0",
+    "googleapis": "^129.0.0",
+    "lighthouse": "^12.6.1",
+    "netlify-cli": "^17.15.6",
+    "node-fetch": "^3.3.2",
+    "selenium-webdriver": "^4.33.0",
+    "xrpl": "^4.3.0"
   }
 }

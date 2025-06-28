@@ -76,12 +76,8 @@ describe('Language Switcher', () => {
     langSelect.value = 'de';
     updateI18nTexts('de');
 
-    expect(document.querySelector('[data-i18n="nav_home"]').textContent).toBe(
-      translations.de.nav_home,
-    );
-    expect(document.querySelector('[data-i18n="nav_about"]').textContent).toBe(
-      translations.de.nav_about,
-    );
+    expect(document.querySelector('[data-i18n="nav_home"]').textContent).toBe(translations.de.nav_home);
+    expect(document.querySelector('[data-i18n="nav_about"]').textContent).toBe(translations.de.nav_about);
   });
 
   it('should update text content on language change to English', () => {
@@ -89,12 +85,8 @@ describe('Language Switcher', () => {
     langSelect.value = 'en';
     updateI18nTexts('en');
 
-    expect(document.querySelector('[data-i18n="nav_home"]').textContent).toBe(
-      translations.en.nav_home,
-    );
-    expect(document.querySelector('[data-i18n="nav_about"]').textContent).toBe(
-      translations.en.nav_about,
-    );
+    expect(document.querySelector('[data-i18n="nav_home"]').textContent).toBe(translations.en.nav_home);
+    expect(document.querySelector('[data-i18n="nav_about"]').textContent).toBe(translations.en.nav_about);
   });
 
   it('should handle missing translations gracefully', () => {

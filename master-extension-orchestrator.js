@@ -22,11 +22,11 @@ const orchestratorStatus = {
     enabled: 0,
     disabled: 0,
     updated: 0,
-    failed: 0,
+    failed: 0
   },
   performance: {
     startupImpact: 'low',
-    recommendations: [],
+    recommendations: []
   },
   integration: {
     tailwind: false,
@@ -36,8 +36,8 @@ const orchestratorStatus = {
     html: false,
     accessibility: false,
     playwright: false,
-    copilot: false,
-  },
+    copilot: false
+  }
 };
 
 /**
@@ -55,7 +55,7 @@ function readJsonFile(filePath) {
     sendAlert({
       message: `Fehler beim Lesen der Konfigurationsdatei: ${filePath}`,
       level: 'error',
-      extra: { error: err.message },
+      extra: { error: err.message }
     });
     return null;
   }
@@ -77,7 +77,7 @@ function writeJsonFile(filePath, data) {
     sendAlert({
       message: `Fehler beim Schreiben der Konfigurationsdatei: ${filePath}`,
       level: 'error',
-      extra: { error: err.message },
+      extra: { error: err.message }
     });
     return false;
   }
@@ -88,41 +88,42 @@ function writeJsonFile(filePath, data) {
  */
 function analyzeExtensions() {
   console.log('🔍 Analysiere installierte Extensions...');
-
+  
   try {
     const installedExtensions = execSync('code --list-extensions', { encoding: 'utf8' })
       .split('\n')
       .filter(Boolean);
-
+    
     orchestratorStatus.extensions.total = installedExtensions.length;
     orchestratorStatus.extensions.enabled = installedExtensions.length; // Vereinfacht: alle installiert = aktiviert
-
+    
     console.log(`✅ Gefunden: ${installedExtensions.length} installierte Extensions`);
-
+    
     // Prüfe Integration mit wichtigen Technologien
     orchestratorStatus.integration = {
-      tailwind: installedExtensions.some((ext) => ext.includes('tailwind')),
-      eslint: installedExtensions.some((ext) => ext.includes('eslint')),
-      prettier: installedExtensions.some((ext) => ext.includes('prettier')),
-      git: installedExtensions.some((ext) => ext.includes('git')),
-      html: installedExtensions.some((ext) => ext.includes('html')),
-      accessibility: installedExtensions.some((ext) => ext.includes('accessibility')),
-      playwright: installedExtensions.some((ext) => ext.includes('playwright')),
-      copilot: installedExtensions.some((ext) => ext.includes('copilot')),
+      tailwind: installedExtensions.some(ext => ext.includes('tailwind')),
+      eslint: installedExtensions.some(ext => ext.includes('eslint')),
+      prettier: installedExtensions.some(ext => ext.includes('prettier')),
+      git: installedExtensions.some(ext => ext.includes('git')),
+      html: installedExtensions.some(ext => ext.includes('html')),
+      accessibility: installedExtensions.some(ext => ext.includes('accessibility')),
+      playwright: installedExtensions.some(ext => ext.includes('playwright')),
+      copilot: installedExtensions.some(ext => ext.includes('copilot'))
     };
-
+    
     // Performance-Einschätzung
     if (installedExtensions.length > 40) {
       orchestratorStatus.performance.startupImpact = 'high';
       orchestratorStatus.performance.recommendations.push(
-        'Reduzieren Sie die Anzahl der Extensions auf unter 40 für bessere Performance',
+        'Reduzieren Sie die Anzahl der Extensions auf unter 40 für bessere Performance'
       );
     } else if (installedExtensions.length > 25) {
       orchestratorStatus.performance.startupImpact = 'medium';
       orchestratorStatus.performance.recommendations.push(
-        'Erwägen Sie, nicht genutzte Extensions zu deaktivieren',
+        'Erwägen Sie, nicht genutzte Extensions zu deaktivieren'
       );
     }
+    
   } catch (err) {
     console.error('❌ Fehler beim Analysieren der Extensions:', err.message);
   }
@@ -133,42 +134,41 @@ function analyzeExtensions() {
  */
 function optimizeIntegration() {
   console.log('🔄 Optimiere Extension-Integration...');
-
+  
   const settings = readJsonFile(SETTINGS_PATH) || {};
   let updated = false;
-
+  
   // Optimiere Tailwind + ESLint + Prettier Integration
-  if (
-    orchestratorStatus.integration.tailwind &&
-    orchestratorStatus.integration.eslint &&
-    orchestratorStatus.integration.prettier
-  ) {
+  if (orchestratorStatus.integration.tailwind && 
+      orchestratorStatus.integration.eslint && 
+      orchestratorStatus.integration.prettier) {
+    
     // Stelle sicher, dass Tailwind-Klassen nicht von Prettier umgebrochen werden
     if (!settings['prettier.htmlWhitespaceSensitivity']) {
       settings['prettier.htmlWhitespaceSensitivity'] = 'css';
       updated = true;
     }
-
+    
     // Stelle sicher, dass ESLint Tailwind-Klassen nicht als zu lang markiert
     if (!settings['eslint.rules.max-len']) {
       settings['eslint.rules.max-len'] = 'off';
       updated = true;
     }
   }
-
+  
   // Optimiere Git + GitHub Integration
   if (orchestratorStatus.integration.git) {
     if (!settings['git.enableSmartCommit']) {
       settings['git.enableSmartCommit'] = true;
       updated = true;
     }
-
+    
     if (!settings['git.autofetch']) {
       settings['git.autofetch'] = true;
       updated = true;
     }
   }
-
+  
   // Speichere aktualisierte Einstellungen
   if (updated) {
     if (writeJsonFile(SETTINGS_PATH, settings)) {
@@ -184,33 +184,33 @@ function optimizeIntegration() {
  */
 function updateExtensionsJson() {
   console.log('📝 Aktualisiere extensions.json...');
-
+  
   try {
     const installedExtensions = execSync('code --list-extensions', { encoding: 'utf8' })
       .split('\n')
       .filter(Boolean);
-
+    
     // Bestehende Konfiguration lesen oder neue erstellen
     const extensionsJson = readJsonFile(EXTENSIONS_PATH) || { recommendations: [] };
-
+    
     // Wichtige Extensions identifizieren und als Empfehlungen hinzufügen
-    const criticalExtensions = installedExtensions.filter(
-      (ext) =>
-        ext.includes('tailwind') ||
-        ext.includes('eslint') ||
-        ext.includes('prettier') ||
-        ext.includes('git') ||
-        ext.includes('html') ||
-        ext.includes('accessibility') ||
-        ext.includes('playwright') ||
-        ext.includes('copilot'),
+    const criticalExtensions = installedExtensions.filter(ext => 
+      ext.includes('tailwind') || 
+      ext.includes('eslint') || 
+      ext.includes('prettier') || 
+      ext.includes('git') || 
+      ext.includes('html') || 
+      ext.includes('accessibility') || 
+      ext.includes('playwright') || 
+      ext.includes('copilot')
     );
-
+    
     // Zusammenführen der bestehenden und kritischen Empfehlungen
-    extensionsJson.recommendations = [
-      ...new Set([...extensionsJson.recommendations, ...criticalExtensions]),
-    ];
-
+    extensionsJson.recommendations = [...new Set([
+      ...extensionsJson.recommendations, 
+      ...criticalExtensions
+    ])];
+    
     // Speichern der aktualisierten Konfiguration
     if (writeJsonFile(EXTENSIONS_PATH, extensionsJson)) {
       console.log('✅ extensions.json aktualisiert');
@@ -225,7 +225,7 @@ function updateExtensionsJson() {
  */
 function saveStatus() {
   console.log('💾 Speichere Extension-Status...');
-
+  
   if (writeJsonFile(STATUS_PATH, orchestratorStatus)) {
     console.log('✅ Extension-Status gespeichert');
   }
@@ -239,19 +239,19 @@ function generateReport() {
   console.log('==============================');
   console.log(`Installierte Extensions: ${orchestratorStatus.extensions.total}`);
   console.log(`Startup-Performance: ${orchestratorStatus.performance.startupImpact}`);
-
+  
   console.log('\nTechnologie-Integration:');
   Object.entries(orchestratorStatus.integration).forEach(([tech, enabled]) => {
     console.log(`- ${tech}: ${enabled ? '✅' : '❌'}`);
   });
-
+  
   if (orchestratorStatus.performance.recommendations.length > 0) {
     console.log('\nEmpfehlungen:');
-    orchestratorStatus.performance.recommendations.forEach((rec) => {
+    orchestratorStatus.performance.recommendations.forEach(rec => {
       console.log(`- ${rec}`);
     });
   }
-
+  
   console.log('\n🏁 Bericht abgeschlossen');
 }
 
@@ -260,22 +260,22 @@ function generateReport() {
  */
 function orchestrateExtensions() {
   console.log('🚀 Starte Extension-Orchestrierung...');
-
+  
   // Analysiere installierte Extensions
   analyzeExtensions();
-
+  
   // Optimiere Integration zwischen Extensions
   optimizeIntegration();
-
+  
   // Aktualisiere extensions.json
   updateExtensionsJson();
-
+  
   // Speichere Status
   saveStatus();
-
+  
   // Generiere Bericht
   generateReport();
-
+  
   console.log('🎉 Extension-Orchestrierung abgeschlossen!');
 }
 
@@ -292,7 +292,7 @@ async function runOrchestrator() {
     console.log('✅ Master Extension Orchestrator erfolgreich durchgelaufen.');
     sendAlert({
       message: 'Master Extension Orchestrator erfolgreich ausgeführt.',
-      level: 'info',
+      level: 'info'
     });
   } catch (error) {
     console.error('🔥 Kritischer Fehler im Master Extension Orchestrator:', error.message);
@@ -301,7 +301,7 @@ async function runOrchestrator() {
     sendAlert({
       message: 'KRITISCHER FEHLER im Master Extension Orchestrator!',
       level: 'error',
-      extra: { error: error.message, stack: error.stack },
+      extra: { error: error.message, stack: error.stack }
     });
   }
 }

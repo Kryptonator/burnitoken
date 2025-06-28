@@ -18,10 +18,10 @@ const statusFiles = [
   'tools/auto-recovery-status.json',
   'tools/system-status.json',
   'tools/deployment-status.json',
-  'tools/website-status.json',
+  'tools/website-status.json'
 ];
 
-statusFiles.forEach((f) => {
+statusFiles.forEach(f => {
   const abs = path.join(__dirname, '..', f);
   if (fs.existsSync(abs)) {
     report += `## ${f}\n\n`;
@@ -37,10 +37,10 @@ statusFiles.forEach((f) => {
 // Recovery-Screenshots auflisten
 const screenshotDir = path.join(__dirname, '.recovery-screenshots');
 if (fs.existsSync(screenshotDir)) {
-  const files = fs.readdirSync(screenshotDir).filter((f) => f.endsWith('.png'));
+  const files = fs.readdirSync(screenshotDir).filter(f => f.endsWith('.png'));
   report += `## Recovery-Screenshots\n\n`;
   if (files.length > 0) {
-    files.slice(0, 5).forEach((f) => {
+    files.slice(0, 5).forEach(f => {
       report += `- ${f}\n`;
     });
   } else {

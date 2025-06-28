@@ -1,6 +1,6 @@
 /**
  * Auto-Recovery-System für burnitoken.website
- *
+ * 
  * Wird beim Start von VS Code automatisch ausgeführt und stellt sicher,
  * dass alle kritischen Services und Extensions aktiv sind. Behandelt
  * Wiederherstellung nach Abstürzen oder Neustarts des Editors.
@@ -20,14 +20,14 @@ let recoveryState = {
   lastCheckTime: 0,
   recoveryAttempts: 0,
   servicesStarted: {},
-  extensionsActivated: false,
+  extensionsActivated: false
 };
 
 // Logging-Funktion
 function log(message) {
   const timestamp = new Date().toISOString();
   const logMessage = `[${timestamp}] ${message}\n`;
-
+  
   console.log(message);
   fs.appendFileSync(LOG_FILE, logMessage);
 }
@@ -59,7 +59,7 @@ function isServiceRunning(serviceName) {
   try {
     const command = `powershell -Command "Get-Process | Where-Object { $_.CommandLine -like '*${serviceName}*' } | Select-Object -First 1 | Select-Object Id"`;
     const output = execSync(command, { encoding: 'utf8', stdio: 'pipe' });
-
+    
     // Wenn ein Prozess gefunden wurde, enthält die Ausgabe eine Zahl
     return output.trim().match(/\d+/) !== null;
   } catch (err) {
@@ -72,31 +72,31 @@ function startCriticalServices() {
   const criticalServices = [
     {
       name: 'session-saver',
-      script: 'tools/session-saver.js',
+      script: 'tools/session-saver.js'
     },
     {
       name: 'ai-bridge',
-      script: 'tools/start-ai-bridge.js',
+      script: 'tools/start-ai-bridge.js'
     },
     {
       name: 'gsc-indexing-watch',
-      script: 'tools/gsc-indexing-watch.js',
-    },
+      script: 'tools/gsc-indexing-watch.js'
+    }
   ];
-
+  
   log('🔄 Starte kritische Services...');
-
-  criticalServices.forEach((service) => {
+  
+  criticalServices.forEach(service => {
     if (!recoveryState.servicesStarted[service.name] && !isServiceRunning(service.script)) {
       log(`▶️ Starte ${service.name}...`);
-
+      
       try {
         const child = exec(`node ${service.script}`, (err) => {
           if (err) {
             log(`❌ Fehler beim Starten von ${service.name}: ${err.message}`);
           }
         });
-
+        
         // Erfolg nur loggen, nicht auf tatsächlichen Start warten
         log(`✅ ${service.name} gestartet (PID: ${child.pid})`);
         recoveryState.servicesStarted[service.name] = true;
@@ -115,12 +115,12 @@ function checkExtensions() {
     log('ℹ️ Extensions bereits überprüft');
     return;
   }
-
+  
   log('🧩 Überprüfe Extensions...');
-
+  
   // Extension-Validator ausführen, falls vorhanden
   const extensionValidator = path.join(__dirname, '..', 'extension-function-validator.js');
-
+  
   if (fs.existsSync(extensionValidator)) {
     try {
       execSync(`node ${extensionValidator}`, { stdio: 'pipe' });
@@ -137,23 +137,21 @@ function checkExtensions() {
 // GSC-Indexierung prüfen
 function checkGSCIndexing() {
   log('🔍 Überprüfe GSC-Indexierung...');
-
+  
   // Schnelle Prüfung auf noindex-Tags
   try {
     const htmlFiles = [];
     const scanDir = (dir) => {
       try {
         const files = fs.readdirSync(dir);
-
-        files.forEach((file) => {
+        
+        files.forEach(file => {
           const fullPath = path.join(dir, file);
-
-          if (
-            fs.statSync(fullPath).isDirectory() &&
-            !file.startsWith('.') &&
-            file !== 'node_modules' &&
-            file !== 'vendor'
-          ) {
+          
+          if (fs.statSync(fullPath).isDirectory() && 
+              !file.startsWith('.') && 
+              file !== 'node_modules' && 
+              file !== 'vendor') {
             scanDir(fullPath);
           } else if (file.endsWith('.html') || file.endsWith('.htm')) {
             htmlFiles.push(fullPath);
@@ -163,14 +161,14 @@ function checkGSCIndexing() {
         // Ignorieren
       }
     };
-
+    
     // Hauptverzeichnis scannen
     scanDir(path.join(__dirname, '..'));
-
+    
     // Erste 5 HTML-Dateien auf noindex prüfen
     const samplesToCheck = Math.min(5, htmlFiles.length);
     let noindexFound = false;
-
+    
     for (let i = 0; i < samplesToCheck; i++) {
       const file = htmlFiles[i];
       try {
@@ -184,11 +182,9 @@ function checkGSCIndexing() {
         // Ignorieren
       }
     }
-
+    
     if (noindexFound) {
-      log(
-        '⚠️ noindex-Tags gefunden! Es wird empfohlen, die Task "Fix GSC Indexierung" auszuführen',
-      );
+      log('⚠️ noindex-Tags gefunden! Es wird empfohlen, die Task "Fix GSC Indexierung" auszuführen');
     } else if (htmlFiles.length > 0) {
       log('✅ Keine noindex-Tags in den überprüften HTML-Dateien gefunden');
     } else {
@@ -202,21 +198,21 @@ function checkGSCIndexing() {
 // Hauptfunktion für die Wiederherstellung
 function performRecovery() {
   log('🚀 Auto-Recovery-System startet...');
-
+  
   // Status laden
   loadState();
-
+  
   // Zähler erhöhen
   recoveryState.recoveryAttempts++;
-
+  
   // Services und Extensions prüfen & starten
   startCriticalServices();
   checkExtensions();
   checkGSCIndexing();
-
+  
   // Status speichern
   saveState();
-
+  
   log(`✅ Recovery-Durchlauf ${recoveryState.recoveryAttempts} abgeschlossen`);
 }
 
@@ -231,21 +227,19 @@ function main() {
       console.error(`Fehler beim Erstellen des Log-Verzeichnisses: ${err.message}`);
     }
   }
-
+  
   // Silent Mode erkennen
   const isSilent = process.argv.includes('--silent');
-
+  
   // Recovery sofort durchführen
   performRecovery();
-
+  
   if (!isSilent) {
     // Abschlussmeldung
     log('✅ Auto-Recovery abgeschlossen. Das System wurde wiederhergestellt.');
     console.log('\n✅ Alle kritischen Systeme wurden überprüft und gestartet.');
     console.log('   Die Website ist bereit für die Entwicklung und das Deployment.');
-    console.log(
-      '\nFür einen detaillierten Status führen Sie "📊 Unified Status Report erstellen" aus.',
-    );
+    console.log('\nFür einen detaillierten Status führen Sie "📊 Unified Status Report erstellen" aus.');
   }
 }
 

@@ -1,10 +1,10 @@
 /**
  * VS Code Neustart-Test
- *
+ * 
  * Diese Datei wurde erstellt, um nach einem VS Code Neustart zu überprüfen,
  * ob das PowerShell-Problem behoben wurde. Wenn nach dem Neustart keine
  * PowerShell-Fenster mehr im Sekundentakt auftauchen, war der Neustart erfolgreich.
- *
+ * 
  * Datum: 2025-06-23
  */
 

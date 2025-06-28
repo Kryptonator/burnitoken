@@ -95,15 +95,33 @@ jobs:
         with:
           name: production-build
           path: ./
-            - name: 🚀 Deploy to Netlify
+      - name: 🚀 Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.2
         with:
           publish-dir: './'
-          production-branch: master
+          production-branch: 'main'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          deploy-message: 'Deploy from GitHub Actions'
+          deploy-message: "🚀 Deploy from GitHub Actions"
+          enable-pull-request-comment: false
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        timeout-minutes: 5
-        continue-on-error: true
+        timeout-minutes: 1
+
+  notify:
+    name: 📣 Notify
+    runs-on: ubuntu-latest
+    needs: [deploy, netlify-deploy]
+    if: always()
+
+    steps:
+      - name: Status-Webhook bei Erfolg
+        if: needs.deploy.result == 'success' && needs.netlify-deploy.result == 'success'
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{"status":"success","workflow":"Production Deployment"}' ${{ secrets.STATUS_WEBHOOK_URL }}
+      - name: Status-Webhook bei Fehler
+        if: failure()
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{"status":"failure","workflow":"Production Deployment"}' ${{ secrets.STATUS_WEBHOOK_URL }}

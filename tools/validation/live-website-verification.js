@@ -19,7 +19,7 @@ class LiveWebsiteVerification {
     this.workspaceRoot = process.cwd();
     this.websiteUrl = 'https://burnitoken.website';
     this.verificationResults = [];
-
+    
     // GSC Auth Client initialisieren, falls Service Account verfügbar
     if (fs.existsSync(SERVICE_ACCOUNT_FILE)) {
       this.gscAuthClient = new google.auth.GoogleAuth({
@@ -55,7 +55,7 @@ class LiveWebsiteVerification {
 
     // Performance-Check
     await this.checkPerformance();
-
+    
     // Google Search Console Status prüfen
     await this.checkGoogleSearchConsoleStatus();
 
@@ -356,11 +356,11 @@ class LiveWebsiteVerification {
         category: 'Google Search Console',
         status: 'Not Available',
         message: 'Service Account Datei nicht gefunden',
-        details: `Datei nicht gefunden: ${SERVICE_ACCOUNT_FILE}`,
+        details: `Datei nicht gefunden: ${SERVICE_ACCOUNT_FILE}`
       });
       return;
     }
-
+    
     // Überprüfe die Gültigkeit der Service-Account-Datei
     try {
       const serviceAccountContent = JSON.parse(fs.readFileSync(SERVICE_ACCOUNT_FILE, 'utf8'));
@@ -370,7 +370,7 @@ class LiveWebsiteVerification {
           category: 'Google Search Console',
           status: 'Error',
           message: 'Service Account Datei ist ungültig',
-          details: 'Die Datei enthält nicht die erforderlichen Informationen',
+          details: 'Die Datei enthält nicht die erforderlichen Informationen'
         });
         return;
       }
@@ -380,18 +380,18 @@ class LiveWebsiteVerification {
         category: 'Google Search Console',
         status: 'Error',
         message: 'Service Account Datei konnte nicht gelesen werden',
-        details: err.message,
+        details: err.message
       });
       return;
     }
-
+    
     if (!this.gscAuthClient) {
       console.log('⚠️ Google Search Console Auth Client konnte nicht initialisiert werden');
       this.verificationResults.push({
         category: 'Google Search Console',
         status: 'Not Available',
         message: 'Auth Client nicht initialisiert',
-        details: 'Die GSC API-Integration wurde übersprungen',
+        details: 'Die GSC API-Integration wurde übersprungen'
       });
       return;
     }
@@ -404,31 +404,31 @@ class LiveWebsiteVerification {
       // 1. Überprüfe die Verfügbarkeit der GSC API für die Domain
       console.log('🔄 Überprüfe GSC API-Zugriff...');
       const siteVerificationResult = await searchconsole.sites.get({
-        siteUrl: GSC_PROPERTY,
+        siteUrl: GSC_PROPERTY
       });
 
       if (siteVerificationResult.data) {
         console.log(`✅ GSC API-Zugriff erfolgreich für ${GSC_PROPERTY}`);
-
+        
         // Erfolgreiches Resultat speichern
         this.verificationResults.push({
           category: 'Google Search Console',
           status: 'Connected',
           message: `Verbindung mit ${GSC_PROPERTY} hergestellt`,
-          details: `Permission Level: ${siteVerificationResult.data.permissionLevel || 'Unknown'}`,
+          details: `Permission Level: ${siteVerificationResult.data.permissionLevel || 'Unknown'}`
         });
-
+        
         // 2. Aktuelle GSC-Performance-Daten abfragen (letzte 7 Tage)
         const endDate = new Date();
         const startDate = new Date();
         startDate.setDate(startDate.getDate() - 7);
-
+        
         // Formatieren als YYYY-MM-DD
         const startDateStr = startDate.toISOString().split('T')[0];
         const endDateStr = endDate.toISOString().split('T')[0];
-
+        
         console.log(`🔄 Rufe Performance-Daten für ${startDateStr} bis ${endDateStr} ab...`);
-
+        
         const performanceResponse = await searchconsole.searchanalytics.query({
           siteUrl: GSC_PROPERTY,
           requestBody: {
@@ -438,36 +438,23 @@ class LiveWebsiteVerification {
             rowLimit: 7, // Tägliche Daten für die letzten 7 Tage
           },
         });
-
-        if (
-          performanceResponse.data &&
-          performanceResponse.data.rows &&
-          performanceResponse.data.rows.length > 0
-        ) {
+        
+        if (performanceResponse.data && performanceResponse.data.rows && performanceResponse.data.rows.length > 0) {
           // Gesamtzahlen berechnen
-          const totalClicks = performanceResponse.data.rows.reduce(
-            (sum, row) => sum + row.clicks,
-            0,
-          );
-          const totalImpressions = performanceResponse.data.rows.reduce(
-            (sum, row) => sum + row.impressions,
-            0,
-          );
+          const totalClicks = performanceResponse.data.rows.reduce((sum, row) => sum + row.clicks, 0);
+          const totalImpressions = performanceResponse.data.rows.reduce((sum, row) => sum + row.impressions, 0);
           const avgCtr = ((totalClicks / totalImpressions) * 100).toFixed(2);
-          const avgPosition =
-            performanceResponse.data.rows.reduce((sum, row) => sum + row.position, 0) /
-            performanceResponse.data.rows.length;
-
-          console.log(
-            `✅ Performance-Daten: ${totalClicks} Klicks, ${totalImpressions} Impressions`,
-          );
-
+          const avgPosition = performanceResponse.data.rows.reduce((sum, row) => sum + row.position, 0) / 
+                              performanceResponse.data.rows.length;
+          
+          console.log(`✅ Performance-Daten: ${totalClicks} Klicks, ${totalImpressions} Impressions`);
+          
           // GSC Performance-Daten speichern
           this.verificationResults.push({
             category: 'GSC Performance (7 days)',
             status: 'Data Available',
             message: `${totalClicks} Klicks, ${totalImpressions} Impressions`,
-            details: `CTR: ${avgCtr}%, Avg Position: ${avgPosition.toFixed(1)}`,
+            details: `CTR: ${avgCtr}%, Avg Position: ${avgPosition.toFixed(1)}`
           });
         } else {
           console.log('⚠️ Keine Performance-Daten für die letzten 7 Tage gefunden');
@@ -475,7 +462,7 @@ class LiveWebsiteVerification {
             category: 'GSC Performance',
             status: 'No Data',
             message: 'Keine Performance-Daten für die letzten 7 Tage gefunden',
-            details: 'Möglicherweise ist die Website noch zu neu in der GSC',
+            details: 'Möglicherweise ist die Website noch zu neu in der GSC'
           });
         }
       } else {
@@ -484,7 +471,7 @@ class LiveWebsiteVerification {
           category: 'Google Search Console',
           status: 'Error',
           message: 'Konnte keine GSC-Daten abrufen',
-          details: 'Bitte prüfen Sie die GSC-Berechtigungen und -Konfiguration',
+          details: 'Bitte prüfen Sie die GSC-Berechtigungen und -Konfiguration'
         });
       }
     } catch (error) {
@@ -493,7 +480,7 @@ class LiveWebsiteVerification {
         category: 'Google Search Console',
         status: 'Error',
         message: 'GSC API-Fehler aufgetreten',
-        details: error.message,
+        details: error.message
       });
     }
   }

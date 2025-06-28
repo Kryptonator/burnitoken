@@ -18,18 +18,18 @@ const DEBUG = process.argv.includes('--debug');
 const CONFIG = {
   // Verzeichnis für gemeinsam genutzte KI-Konversationen
   conversationDir: path.join(os.tmpdir(), 'ai-conversations'),
-
+  
   // Backup-Verzeichnis für Session-Saver
   backupDir: path.join(os.tmpdir(), 'burnitoken-session-saver'),
-
+  
   // Unterstützte KI-Modelle
   supportedModels: [
     { id: 'copilot', name: 'GitHub Copilot', emoji: '🤖' },
     { id: 'chatgpt', name: 'ChatGPT', emoji: '🟢' },
     { id: 'claude', name: 'Claude', emoji: '🟣' },
     { id: 'gemini', name: 'Gemini', emoji: '🔵' },
-    { id: 'llama', name: 'Llama', emoji: '🦙' },
-  ],
+    { id: 'llama', name: 'Llama', emoji: '🦙' }
+  ]
 };
 
 // Hilfsfunktion für Debug-Logging
@@ -57,36 +57,36 @@ function fileExists(filePath) {
 function getActiveModel() {
   try {
     debugLog(`Suche aktive Session in ${CONFIG.conversationDir}`);
-
+    
     // Prüfe, ob die AI Bridge aktiv ist
     const sessionFile = path.join(CONFIG.conversationDir, 'active-session.json');
-
+    
     if (fileExists(sessionFile)) {
       debugLog(`Session-Datei gefunden: ${sessionFile}`);
       try {
         const sessionData = JSON.parse(fs.readFileSync(sessionFile, 'utf8'));
         const sessionId = sessionData.sessionId;
-
+        
         debugLog(`Aktive Session-ID: ${sessionId}`);
-
+        
         // Prüfe die Modell-spezifischen Dateien für das neueste Update
         let latestModel = null;
         let latestTimestamp = 0;
-
+        
         for (const model of CONFIG.supportedModels) {
           const modelFile = path.join(
-            CONFIG.conversationDir,
-            `${sessionId}_${model.id}_context.json`,
+            CONFIG.conversationDir, 
+            `${sessionId}_${model.id}_context.json`
           );
-
+          
           if (fileExists(modelFile)) {
             try {
               debugLog(`Modell-Datei gefunden für ${model.id}: ${modelFile}`);
               const modelData = JSON.parse(fs.readFileSync(modelFile, 'utf8'));
               const timestamp = new Date(modelData.timestamp).getTime();
-
+              
               debugLog(`${model.id} Zeitstempel: ${modelData.timestamp}`);
-
+              
               if (timestamp > latestTimestamp) {
                 latestTimestamp = timestamp;
                 latestModel = model;
@@ -100,7 +100,7 @@ function getActiveModel() {
             debugLog(`Keine Modelldatei für ${model.id}`);
           }
         }
-
+        
         if (latestModel) {
           return latestModel;
         } else {
@@ -115,7 +115,7 @@ function getActiveModel() {
   } catch (err) {
     debugLog(`Fehler bei der Modell-Erkennung: ${err.message}`);
   }
-
+  
   return CONFIG.supportedModels[0]; // Default zu Copilot
 }
 
@@ -125,7 +125,7 @@ function getActiveModel() {
 function isProcessRunning(scriptName) {
   try {
     let command = '';
-
+    
     // Unterschiedliche Befehle je nach Betriebssystem
     if (process.platform === 'win32') {
       // In Windows suchen wir nach dem Prozess anhand des Skriptnamens
@@ -134,7 +134,7 @@ function isProcessRunning(scriptName) {
       // In Unix/Linux verwenden wir pgrep mit dem vollständigen Pfad
       command = `pgrep -f "${scriptName}"`;
     }
-
+    
     const output = execSync(command, { encoding: 'utf8' }).trim();
     return output.length > 0;
   } catch (err) {
@@ -149,14 +149,14 @@ function isProcessRunning(scriptName) {
 function showAIStatus() {
   console.log('🧠 AI Integration Status');
   console.log('=======================');
-
+  
   // Prüfe Verzeichnisse
   debugLog(`Prüfe Verzeichnisse: ${CONFIG.conversationDir} und ${CONFIG.backupDir}`);
-
+  
   // Prüfe, ob die Verzeichnisse existieren
   const aiDirExists = fileExists(CONFIG.conversationDir);
   const backupDirExists = fileExists(CONFIG.backupDir);
-
+  
   if (!aiDirExists || !backupDirExists) {
     sendAlert({
       message: `AI Status: Kritisches Verzeichnis fehlt! Conversations: ${aiDirExists}, Backups: ${backupDirExists}`,
@@ -166,15 +166,15 @@ function showAIStatus() {
   }
   console.log(`AI Conversations Verzeichnis: ${aiDirExists ? '✅ Vorhanden' : '❌ Fehlt'}`);
   console.log(`Session Backups Verzeichnis: ${backupDirExists ? '✅ Vorhanden' : '❌ Fehlt'}`);
-
+  
   // Prüfe laufende Prozesse
   debugLog('Prüfe laufende Prozesse');
-
+  
   // Prüfe, ob die AI Bridge und Session-Saver aktiv sind
   const aiBridgeRunning = isProcessRunning('ai-conversation-bridge.js');
   const aiBridgeStarterRunning = isProcessRunning('start-ai-bridge.js');
   const sessionSaverRunning = isProcessRunning('session-saver.js');
-
+  
   const aiBridgeStatus = aiBridgeRunning || aiBridgeStarterRunning;
   if (!aiBridgeStatus || !sessionSaverRunning) {
     sendAlert({
@@ -185,12 +185,12 @@ function showAIStatus() {
   }
   console.log(`AI Conversation Bridge: ${aiBridgeStatus ? '✅ Aktiv' : '❌ Inaktiv'}`);
   console.log(`Session-Saver: ${sessionSaverRunning ? '✅ Aktiv' : '❌ Inaktiv'}`);
-
+  
   // Zeige das aktuell verwendete Modell
   debugLog('Ermittle aktives KI-Modell');
   const activeModel = getActiveModel();
   console.log(`\nAktives AI-Modell: ${activeModel.emoji} ${activeModel.name}`);
-
+  
   // Überprüfe die Verfügbarkeit der KI-Dateien
   debugLog('Prüfe KI-Dateien');
   const aiFiles = [
@@ -198,7 +198,7 @@ function showAIStatus() {
     'tools/start-ai-bridge.js',
     'tools/model-switch.js',
     'tools/session-saver.js',
-    'tools/recover-session.js',
+    'tools/recover-session.js'
   ];
   let missingFiles = [];
   console.log('\nKI-Dateien:');
@@ -214,18 +214,18 @@ function showAIStatus() {
       // webhookUrl: 'https://hooks.slack.com/services/xxx/yyy/zzz'
     });
   }
-
+  
   // Anzeige der verfügbaren Modelle
   console.log('\nVerfügbare Modelle:');
   for (const model of CONFIG.supportedModels) {
     const isActive = model.id === activeModel.id;
     console.log(`${model.emoji} ${model.name}${isActive ? ' (Aktiv)' : ''}`);
   }
-
+  
   console.log('\n💡 TIP: Um das Modell zu wechseln, führe aus:');
   console.log('node tools/model-switch.js --model=<modellname>');
   console.log('Unterstützte Modelle: copilot, chatgpt, claude, gemini, llama');
-
+  
   // Debug-Hinweis
   if (!DEBUG) {
     console.log('\nℹ️ Für detailliertere Informationen: node tools/ai-status.js --debug');

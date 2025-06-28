@@ -17,27 +17,25 @@ const aiBridgePath = path.join(__dirname, 'ai-conversation-bridge.js');
  */
 function startAIBridge() {
   console.log('🚀 Starte AI Conversation Bridge...');
-
+  
   // Prüfe, ob die Bridge-Datei existiert
   if (!fs.existsSync(aiBridgePath)) {
     console.error(`❌ AI Conversation Bridge nicht gefunden: ${aiBridgePath}`);
     return;
   }
-
+  
   try {
     // Starte die Bridge als separaten Prozess
     const process = spawn('node', [aiBridgePath], {
       detached: true,
-      stdio: 'ignore',
+      stdio: 'ignore'
     });
-
+    
     // Löse den Prozess vom Elternprozess
     process.unref();
-
+    
     console.log('✅ AI Conversation Bridge gestartet');
-    console.log(
-      '💡 Die Bridge ermöglicht nahtlose Wechsel zwischen KI-Modellen mit gemeinsamem Kontext',
-    );
+    console.log('💡 Die Bridge ermöglicht nahtlose Wechsel zwischen KI-Modellen mit gemeinsamem Kontext');
     console.log('📋 Unterstützte Modelle: GitHub Copilot, ChatGPT, Claude, Gemini, Llama');
   } catch (err) {
     console.error(`❌ Fehler beim Starten der AI Conversation Bridge: ${err.message}`);
@@ -50,9 +48,7 @@ function startAIBridge() {
 function showManualSwitchInstructions() {
   console.log('\n📝 Manuelle Modellwechsel:');
   console.log('-------------------------');
-  console.log(
-    'Um zu einem anderen KI-Modell zu wechseln, verwenden Sie eine der folgenden Methoden:',
-  );
+  console.log('Um zu einem anderen KI-Modell zu wechseln, verwenden Sie eine der folgenden Methoden:');
   console.log('1. Fügen Sie eine Zeile in Ihre Konversation ein: "Bitte wechsle zu [Modellname]"');
   console.log('2. Oder führen Sie folgenden Befehl aus:');
   console.log('   node tools/model-switch.js --model=chatgpt');

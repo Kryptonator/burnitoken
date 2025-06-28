@@ -35,7 +35,7 @@ const CRITICAL_EXTENSIONS = [
   'ritwickdey.liveserver',
   'eamodio.gitlens',
   'github.copilot',
-  'ms-playwright.playwright',
+  'ms-playwright.playwright'
 ];
 
 // KI-Integration-Dateien
@@ -48,14 +48,14 @@ const AI_INTEGRATION_FILES = [
   'tools/model-switch.js',
   'tools/ai-status.js',
   'tools/ai-status-fix.js',
-  'tools/ai-services-manager.js',
+  'tools/ai-services-manager.js'
 ];
 
 // Status-Tracking
 const extensionStatus = {
   healthy: [],
   issues: [],
-  recommendations: [],
+  recommendations: []
 };
 
 /**
@@ -88,7 +88,7 @@ function readJsonFile(filePath) {
  */
 function checkExtensionStatus() {
   log('🔍 Prüfe installierte VS Code Extensions...');
-
+  
   try {
     // Prüfe, ob settings.json existiert
     if (!fileExists(SETTINGS_PATH)) {
@@ -105,9 +105,9 @@ function checkExtensionStatus() {
       const installedExtensions = execSync('code --list-extensions', { encoding: 'utf8' })
         .split('\n')
         .filter(Boolean);
-
+      
       log(`✅ Gefunden: ${installedExtensions.length} installierte Extensions`);
-
+      
       for (const ext of CRITICAL_EXTENSIONS) {
         if (installedExtensions.includes(ext)) {
           extensionStatus.healthy.push(ext);
@@ -121,7 +121,7 @@ function checkExtensionStatus() {
     }
 
     // Prüfe KI-Integration
-    const missingFiles = AI_INTEGRATION_FILES.filter((file) => !fileExists(file));
+    const missingFiles = AI_INTEGRATION_FILES.filter(file => !fileExists(file));
     if (missingFiles.length > 0) {
       log(`⚠️ Fehlende KI-Integrationsdateien: ${missingFiles.join(', ')}`);
       extensionStatus.recommendations.push('KI-Integration ist unvollständig');
@@ -134,13 +134,13 @@ function checkExtensionStatus() {
     log(`✅ Gesunde Extensions: ${extensionStatus.healthy.length}`);
     log(`⚠️ Extensions mit Problemen: ${extensionStatus.issues.length}`);
     log(`💡 Empfehlungen: ${extensionStatus.recommendations.length}`);
-
+    
     log('Health Check abgeschlossen!');
-
+    
     return {
       healthy: extensionStatus.healthy.length,
       issues: extensionStatus.issues.length,
-      recommendations: extensionStatus.recommendations.length,
+      recommendations: extensionStatus.recommendations.length
     };
   } catch (error) {
     log(`❌ Unerwarteter Fehler: ${error.message}`);
@@ -148,7 +148,7 @@ function checkExtensionStatus() {
     return {
       healthy: 0,
       issues: 1,
-      recommendations: 0,
+      recommendations: 0
     };
   }
 }

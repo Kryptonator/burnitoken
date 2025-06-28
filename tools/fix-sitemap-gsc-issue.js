@@ -1,7 +1,7 @@
 /**
  * GSC Sitemap Fix-Tool
  * Dieses Script behebt bekannte Probleme mit der Google Search Console Sitemap-Integration
- *
+ * 
  * Ausführung: node tools/fix-sitemap-gsc-issue.js
  */
 
@@ -23,7 +23,7 @@ const HEADERS_PATH = path.resolve(__dirname, '..', '_headers');
 // 1. Prüfe, ob alle Sitemap-Dateien vorhanden sind
 console.log('1️⃣ Überprüfe Existenz aller Sitemap-Dateien...');
 const missingFiles = [];
-[SITEMAP_PATH, SITEMAP_BASIC_PATH, SITEMAPINDEX_PATH].forEach((file) => {
+[SITEMAP_PATH, SITEMAP_BASIC_PATH, SITEMAPINDEX_PATH].forEach(file => {
   if (!fs.existsSync(file)) {
     missingFiles.push(file);
   }
@@ -31,11 +31,11 @@ const missingFiles = [];
 
 if (missingFiles.length > 0) {
   console.log('⚠️ Fehlende Sitemap-Dateien gefunden:');
-  missingFiles.forEach((file) => console.log(`   - ${path.basename(file)}`));
-
+  missingFiles.forEach(file => console.log(`   - ${path.basename(file)}`));
+  
   // Fehlende Dateien erstellen
   console.log('🔧 Erstelle fehlende Dateien...');
-
+  
   // Generiere erst die Haupt-Sitemap neu
   try {
     console.log('   Regeneriere sitemap.xml...');
@@ -43,7 +43,7 @@ if (missingFiles.length > 0) {
   } catch (error) {
     console.error('⚠️ Fehler beim Generieren der Sitemap:', error);
   }
-
+  
   // Wenn sitemap-basic.xml fehlt, erstelle eine vereinfachte Version
   if (!fs.existsSync(SITEMAP_BASIC_PATH)) {
     console.log('   Erstelle sitemap-basic.xml...');
@@ -62,7 +62,7 @@ if (missingFiles.length > 0) {
 </urlset>`;
     fs.writeFileSync(SITEMAP_BASIC_PATH, simpleContent);
   }
-
+  
   // Wenn sitemapindex.xml fehlt, erstelle eine Sitemap-Index
   if (!fs.existsSync(SITEMAPINDEX_PATH)) {
     console.log('   Erstelle sitemapindex.xml...');
@@ -88,72 +88,64 @@ console.log('\n2️⃣ Teste Erreichbarkeit der Sitemap-Dateien online...');
 
 function testUrl(url) {
   return new Promise((resolve, reject) => {
-    https
-      .get(url, (response) => {
-        const { statusCode, headers } = response;
-        let data = '';
-
-        response.on('data', (chunk) => {
-          data += chunk;
-        });
-        response.on('end', () => {
-          resolve({
-            url,
-            statusCode,
-            contentType: headers['content-type'],
-            size: data.length,
-            success: statusCode === 200,
-          });
-        });
-      })
-      .on('error', (err) => {
+    https.get(url, (response) => {
+      const { statusCode, headers } = response;
+      let data = '';
+      
+      response.on('data', (chunk) => { data += chunk; });
+      response.on('end', () => {
         resolve({
           url,
-          statusCode: 0,
-          contentType: null,
-          size: 0,
-          success: false,
-          error: err.message,
+          statusCode,
+          contentType: headers['content-type'],
+          size: data.length,
+          success: statusCode === 200
         });
       });
+    }).on('error', (err) => {
+      resolve({
+        url,
+        statusCode: 0,
+        contentType: null,
+        size: 0,
+        success: false,
+        error: err.message
+      });
+    });
   });
 }
 
 const urls = [
   'https://burnitoken.website/sitemap.xml',
   'https://burnitoken.website/sitemap-basic.xml',
-  'https://burnitoken.website/sitemapindex.xml',
+  'https://burnitoken.website/sitemapindex.xml'
 ];
 
-Promise.all(urls.map(testUrl)).then((results) => {
+Promise.all(urls.map(testUrl)).then(results => {
   // Zeige die Ergebnisse an
   let failedUrls = 0;
-
-  results.forEach((result) => {
+  
+  results.forEach(result => {
     if (result.success) {
-      console.log(
-        `✅ ${result.url} - Status: ${result.statusCode}, Typ: ${result.contentType}, Größe: ${result.size} Bytes`,
-      );
+      console.log(`✅ ${result.url} - Status: ${result.statusCode}, Typ: ${result.contentType}, Größe: ${result.size} Bytes`);
     } else {
       console.log(`❌ ${result.url} - Fehler: ${result.error || `Status ${result.statusCode}`}`);
       failedUrls++;
     }
   });
-
+  
   if (failedUrls > 0) {
-    console.log(
-      `\n⚠️ ${failedUrls} URL(s) nicht erreichbar. Netlify-Konfiguration wird überprüft...`,
-    );
-
+    console.log(`\n⚠️ ${failedUrls} URL(s) nicht erreichbar. Netlify-Konfiguration wird überprüft...`);
+    
     // 3. Prüfe und optimiere Netlify-Konfiguration
     console.log('\n3️⃣ Optimiere Netlify-Konfiguration...');
-
+    
     if (fs.existsSync(NETLIFY_TOML_PATH)) {
       let netlifyConfig = fs.readFileSync(NETLIFY_TOML_PATH, 'utf8');
-
+      
       // Stelle sicher, dass die Sitemap-Redirects korrekt sind
       const hasSitemapRedirects = netlifyConfig.includes('[[redirects]]\n  from = "/sitemap.xml"');
-
+      
       if (!hasSitemapRedirects) {
         console.log('   Füge Sitemap-Redirects zu netlify.toml hinzu...');
         const redirectSection = `
@@ -176,31 +168,29 @@ Promise.all(urls.map(testUrl)).then((results) => {
   status = 200
   force = true
 `;
-
+        
         // Füge Redirects vor die generische Regel ein
-        netlifyConfig = netlifyConfig.replace(
-          /\[\[redirects\]\]\n  from = "\/\*"/,
-          redirectSection + '\n[[redirects]]\n  from = "/*"',
-        );
-
+        netlifyConfig = netlifyConfig.replace(/\[\[redirects\]\]\n  from = "\/\*"/,
+          redirectSection + '\n[[redirects]]\n  from = "/*"');
+        
         fs.writeFileSync(NETLIFY_TOML_PATH, netlifyConfig);
         console.log('   ✅ Sitemap-Redirects hinzugefügt');
       } else {
         console.log('   ✅ Sitemap-Redirects bereits konfiguriert');
       }
     }
-
+    
     // 4. Header-Datei optimieren
     console.log('\n4️⃣ Optimiere Header-Konfiguration...');
-
+    
     if (fs.existsSync(HEADERS_PATH)) {
       let headersConfig = fs.readFileSync(HEADERS_PATH, 'utf8');
-
+      
       const hasSitemapHeaders = headersConfig.includes('/sitemap.xml');
-
+      
       if (!hasSitemapHeaders) {
         console.log('   Füge Sitemap-spezifische Header hinzu...');
-
+        
         headersConfig += `
 # Verbesserte Header für Sitemap-Dateien
 /sitemap.xml
@@ -227,44 +217,41 @@ Promise.all(urls.map(testUrl)).then((results) => {
   } else {
     console.log('\n✅ Alle Sitemaps sind online erreichbar');
   }
-
+  
   // 5. Aktualisiere den Zeitstempel und validiere die XML
   console.log('\n5️⃣ Aktualisiere Zeitstempel und validiere XML...');
-
+  
   try {
     execSync('npm run validate:sitemap', { stdio: 'inherit' });
   } catch (error) {
     console.error('⚠️ Fehler bei der Sitemap-Validierung:', error);
   }
-
+  
   // 6. Implementiere ein automatisches Monitoring für die Sitemap
   console.log('\n6️⃣ Implementiere automatisches Sitemap-Monitoring...');
-
+  
   // Erstelle einen neuen Eintrag in der package.json
   const packageJsonPath = path.resolve(__dirname, '..', 'package.json');
   if (fs.existsSync(packageJsonPath)) {
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-
+    
     if (!packageJson.scripts['gsc:sitemap:fix']) {
       console.log('   Füge neuen Script-Eintrag in package.json hinzu...');
-
+      
       packageJson.scripts['gsc:sitemap:fix'] = 'node tools/fix-sitemap-gsc-issue.js';
-      packageJson.scripts['gsc:sitemap:monitor'] =
-        'node tools/gsc-status-check.js --monitor-sitemap';
-
+      packageJson.scripts['gsc:sitemap:monitor'] = 'node tools/gsc-status-check.js --monitor-sitemap';
+      
       fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
       console.log('   ✅ Neue Scripts hinzugefügt: gsc:sitemap:fix, gsc:sitemap:monitor');
     } else {
       console.log('   ✅ Die notwendigen Scripts sind bereits konfiguriert');
     }
   }
-
+  
   console.log('\n🎉 SITEMAP-OPTIMIERUNG ABGESCHLOSSEN');
   console.log('=====================================================');
   console.log('Nächste Schritte:');
-  console.log(
-    '1. Führe ein Deployment durch: "npm run build:prod && git add . && git commit -m \'Fix GSC Sitemap issue\' && git push"',
-  );
+  console.log('1. Führe ein Deployment durch: "npm run build:prod && git add . && git commit -m \'Fix GSC Sitemap issue\' && git push"');
   console.log('2. Reiche die Sitemap in der Google Search Console neu ein');
   console.log('3. Führe "npm run gsc:sitemap:monitor" aus, um den Status zu überwachen');
 });
