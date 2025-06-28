@@ -146,7 +146,8 @@ class DNSMigrationMonitor {
     try {
       console.log('🔐 SSL Certificate Check...');
 
-      const sslCheck = execSync(
+      // Check SSL certificate issuer
+      const sslIssuer = execSync(
         `echo | openssl s_client -servername ${this.domain} -connect ${this.domain}:443 2>/dev/null | openssl x509 -noout -issuer`,
         {
           encoding: 'utf8',
@@ -154,12 +155,42 @@ class DNSMigrationMonitor {
         },
       );
 
-      if (sslCheck.includes("Let's Encrypt") || sslCheck.includes('issuer')) {
-        console.log(`   ✅ SSL: Certificate aktiv ✓`);
-        return true;
-      } else {
+      // Check SSL certificate expiration date
+      const sslDates = execSync(
+        `echo | openssl s_client -servername ${this.domain} -connect ${this.domain}:443 2>/dev/null | openssl x509 -noout -dates`,
+        {
+          encoding: 'utf8',
+          timeout: 10000,
+        },
+      );
+
+      if (!sslIssuer.includes("Let's Encrypt") && !sslIssuer.includes('issuer')) {
         console.log(`   ⏳ SSL: Certificate noch nicht aktiv`);
         return false;
+      }
+
+      // Parse expiration date
+      const notAfterMatch = sslDates.match(/notAfter=(.+)/);
+      if (notAfterMatch) {
+        const expirationDate = new Date(notAfterMatch[1]);
+        const currentDate = new Date();
+        const daysUntilExpiration = Math.ceil(
+          (expirationDate - currentDate) / (1000 * 60 * 60 * 24),
+        );
+
+        if (daysUntilExpiration < 0) {
+          console.log(`   ❌ SSL: Certificate EXPIRED ${Math.abs(daysUntilExpiration)} days ago!`);
+          return false;
+        } else if (daysUntilExpiration <= 7) {
+          console.log(`   ⚠️  SSL: Certificate expires in ${daysUntilExpiration} days`);
+          return true; // Still valid but warning
+        } else {
+          console.log(`   ✅ SSL: Certificate aktiv ✓ (expires in ${daysUntilExpiration} days)`);
+          return true;
+        }
+      } else {
+        console.log(`   ✅ SSL: Certificate aktiv ✓`);
+        return true;
       }
     } catch (error) {
       console.log(`   ⏳ SSL: Certificate wird erstellt...`);

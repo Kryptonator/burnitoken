@@ -39,6 +39,9 @@
     "test:alert": "node tools/test-email-alert.js",
     "test:alert:dry": "node tools/test-email-alert.js --use-ethereal",
     "cloud:sync": "node tools/update-cloud-settings.js",
+    "health:check": "node tools/website-health-check.js",
+    "health:test": "node tools/test-website-health-check.js",
+    "health:monitor": "node tools/automated-ssl-monitoring.js",
     "dev:functions": "netlify functions:serve",
     "prepare": "husky install"
   },
