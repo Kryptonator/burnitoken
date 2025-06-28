@@ -38,6 +38,7 @@
     "gsc:crawl": "node tools/gsc-crawl-stats.js",
     "test:alert": "node tools/test-email-alert.js",
     "test:alert:dry": "node tools/test-email-alert.js --use-ethereal",
+    "test:comprehensive": "node tools/monitoring/comprehensive-test-runner.js",
     "cloud:sync": "node tools/update-cloud-settings.js",
     "dev:functions": "netlify functions:serve",
     "prepare": "husky install"
@@ -78,6 +79,7 @@
   "dependencies": {
     "@axe-core/webdriverjs": "^4.10.2",
     "@netlify/functions": "^2.5.1",
+    "@octokit/rest": "^22.0.0",
     "axe-playwright": "^2.1.0",
     "canvas": "^3.1.0",
     "chrome-launcher": "^1.2.0",

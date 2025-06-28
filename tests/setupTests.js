@@ -6,6 +6,19 @@ const { TextEncoder, TextDecoder } = require('util');
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
 
+// Polyfill für setImmediate/clearImmediate (needed for nodemailer)
+if (!global.setImmediate) {
+  global.setImmediate = function(fn) {
+    return setTimeout(fn, 0);
+  };
+}
+
+if (!global.clearImmediate) {
+  global.clearImmediate = function(id) {
+    return clearTimeout(id);
+  };
+}
+
 // Example: mock fetch
 beforeAll(() => {
   global.fetch = jest.fn(() =>

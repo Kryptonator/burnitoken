@@ -12,26 +12,11 @@ require('dotenv').config();
 describe('Alert System', () => {
   let transporter;
 
-  beforeAll(async () => {
-    // Skip network calls in CI environment or when running unit tests
-    if (process.env.CI || process.env.NODE_ENV === 'test') {
-      // Mock transporter for CI/test environments
-      transporter = {
-        sendMail: jest.fn().mockResolvedValue({
-          messageId: 'test-message-id',
-          accepted: ['test@example.com'],
-          rejected: [],
-          pending: [],
-          response: '250 Message accepted'
-        })
-      };
-      return;
-    }
-
-    // Only create real transporter for local development
-    try {
-      const testAccount = await nodemailer.createTestAccount();
-      transporter = nodemailer.createTransporter({
+  beforeAll(() => {
+    // Erstelle einen Test-Account für Ethereal (kein realer E-Mail-Versand)
+    return nodemailer.createTestAccount().then((testAccount) => {
+      // Erstelle einen Transporter mit Ethereal Test-Account
+      transporter = nodemailer.createTransport({
         host: 'smtp.ethereal.email',
         port: 587,
         secure: false,
@@ -40,19 +25,7 @@ describe('Alert System', () => {
           pass: testAccount.pass,
         },
       });
-    } catch (error) {
-      console.warn('Could not create test account, using mock transporter:', error.message);
-      // Fallback to mock for environments without network access
-      transporter = {
-        sendMail: jest.fn().mockResolvedValue({
-          messageId: 'mock-message-id',
-          accepted: ['test@example.com'],
-          rejected: [],
-          pending: [],
-          response: '250 Message accepted'
-        })
-      };
-    }
+    });
   });
 
   test('Email Alert Konfiguration sollte korrekt formatiert sein', () => {
@@ -65,6 +38,12 @@ describe('Alert System', () => {
   });
 
   test('Test-E-Mail sollte versendbar sein', async () => {
+    // Überspringe den Test, wenn wir in einer CI-Umgebung sind
+    if (process.env.CI) {
+      console.log('Skipping email sending test in CI environment');
+      return;
+    }
+
     const mailOptions = {
       from: '"BurniToken Test" <test@example.com>',
       to: 'test@ethereal.email',
@@ -78,9 +57,7 @@ describe('Alert System', () => {
     expect(info.messageId).toBeDefined();
 
     // Log-URL für Ethereal (nur für Tests)
-    if (typeof nodemailer.getTestMessageUrl === 'function' && info.messageId.includes('@ethereal.email')) {
-      console.log('Test-E-Mail-URL:', nodemailer.getTestMessageUrl(info));
-    }
+    console.log('Test-E-Mail-URL:', nodemailer.getTestMessageUrl(info));
   });
 
   test('GitHub Actions E-Mail Alert Format sollte korrekt sein', () => {

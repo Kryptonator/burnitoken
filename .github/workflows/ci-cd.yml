@@ -53,7 +53,7 @@ jobs:
           server_address: smtp.mail.yahoo.com
           server_port: 465
           username: burn.coin@yahoo.com
-          password: ${{ secrets.github }}
+          password: ${{ secrets.YAHOO_APP_PASSWORD }}
           subject: "[BurniToken CI/CD] Build/Test failed!"
           to: burn.coin@yahoo.com
           from: BurniToken CI/CD <burn.coin@yahoo.com>
