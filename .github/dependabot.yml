@@ -4,6 +4,61 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 5
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Berlin"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "Kryptonator"
+    assignees:
+      - "Kryptonator"
     commit-message:
       prefix: "chore(deps)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "javascript"
+    groups:
+      dev-dependencies:
+        patterns:
+          - "*-loader"
+          - "eslint*"
+          - "*-plugin"
+          - "test-*"
+        update-types:
+          - "minor"
+          - "patch"
+      production-dependencies:
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "*-loader"
+          - "eslint*"
+          - "*-plugin"
+          - "test-*"
+        update-types:
+          - "minor"
+          - "patch"
+    # Set automatic merge for patch security updates
+    automerge: true
+    automergeable-types: ["security:patch"]
+
+  # Update GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Berlin"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "Kryptonator"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    automerge: true
+    automergeable-types: ["security:patch"]
