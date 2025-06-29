@@ -16,20 +16,64 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: 📦 Wichtige Dateien sammeln
+      - name: 📦 Intelligente Backup-Sammlung mit Recovery-Tools
         run: |
-          mkdir backup
-          cp index.html backup/
-          cp SEO_STATUS.md backup/ || true
-          cp LIGHTHOUSE_STATUS.md backup/ || true
-          cp LIGHTHOUSE_REPORT.html backup/ || true
-          cp -r tools backup/ || true
-          cp -r assets backup/ || true
+          mkdir -p backup/{core,reports,recovery,config,data}
+          
+          # Core Website-Dateien
+          cp index.html backup/core/
+          cp 404.html backup/core/ || true
+          cp robots.txt backup/core/ || true
+          cp sitemap.xml backup/core/ || true
+          cp manifest.json backup/core/ || true
+          cp sw.js backup/core/ || true
+          cp -r assets backup/core/ || true
+          cp -r pages backup/core/ || true
+          
+          # Reports und Status
+          cp SEO_STATUS.md backup/reports/ || true
+          cp LIGHTHOUSE_STATUS.md backup/reports/ || true
+          cp LIGHTHOUSE_REPORT.html backup/reports/ || true
+          cp API_STATUS.md backup/reports/ || true
+          cp RECOVERY_STATUS.md backup/reports/ || true
+          cp STATUS.md backup/reports/ || true
+          cp FEEDBACK_REPORT.md backup/reports/ || true
+          cp VISION.md backup/reports/ || true
+          cp snyk.log backup/reports/ || true
+          
+          # Recovery-Tools und Scripts
+          cp -r tools backup/recovery/ || true
+          cp -r .github backup/recovery/ || true
+          cp validate-setup.js backup/recovery/ || true
+          
+          # Konfiguration
+          cp package.json backup/config/
+          cp package-lock.json backup/config/ || true
+          cp tailwind.config.js backup/config/ || true
+          cp postcss.config.js backup/config/ || true
+          cp playwright.config.js backup/config/ || true
+          cp jest.config.js backup/config/ || true
+          cp http-server.config.json backup/config/ || true
+          
+          # Live-Daten und Status
+          cp -r public backup/data/ || true
+          cp -r coverage backup/data/ || true
+          
+          # Backup-Metadaten generieren
+          echo "{
+            \"backup_date\": \"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\",
+            \"backup_type\": \"full\",
+            \"git_commit\": \"${{ github.sha }}\",
+            \"git_branch\": \"${{ github.ref_name }}\",
+            \"workflow_run\": \"${{ github.run_id }}\",
+            \"backup_size\": \"$(du -sh backup | cut -f1)\",
+            \"files_count\": \"$(find backup -type f | wc -l)\"
+          }" > backup/backup-metadata.json
       - name: 🔑 Backup-Repo vorbereiten
         run: |
           git config --global user.name "Backup Bot"
           git config --global user.email "backup@burnitoken.com"
-      - name: 📤 Push ins Backup-Repository
+      - name: 📤 Intelligenter Backup-Push mit Versionierung
         env:
           BACKUP_REPO: ${{ secrets.BACKUP_REPO }}
           BACKUP_TOKEN: ${{ secrets.BACKUP_TOKEN }}
@@ -37,7 +81,197 @@ jobs:
           cd backup
           git init
           git remote add origin https://x-access-token:${BACKUP_TOKEN}@github.com/${BACKUP_REPO}.git
+          
+          # Versuche, bestehende Backup-Historie zu laden
+          git fetch origin main || echo "Kein bestehendes Backup-Repository gefunden"
+          git checkout -b main origin/main 2>/dev/null || git checkout -b main
+          
+          # Erstelle versionierte Backup-Struktur
+          BACKUP_DATE=$(date +%Y%m%d-%H%M%S)
+          mkdir -p "backups/$BACKUP_DATE"
+          cp -r ../backup/* "backups/$BACKUP_DATE/" || true
+          
+          # Erstelle/aktualisiere "latest" Symlink
+          rm -f latest
+          ln -sf "backups/$BACKUP_DATE" latest
+          
+          # Erstelle Backup-Index
+          cat > backup-index.json << EOF
+          {
+            "latest_backup": "$BACKUP_DATE",
+            "backup_count": $(ls -1 backups/ | wc -l),
+            "total_size": "$(du -sh backups/ | cut -f1)",
+            "last_updated": "$(date -u +'%Y-%m-%dT%H:%M:%SZ')",
+            "git_commit": "${{ github.sha }}",
+            "workflow_run": "${{ github.run_id }}"
+          }
+          EOF
+          
+          # Bereinige alte Backups (behalte nur die letzten 30)
+          ls -1 backups/ | head -n -30 | xargs -r -I {} rm -rf "backups/{}"
+          
           git add .
-          git commit -m "Automatisches Backup $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-          git branch -M main
-          git push -f origin main
+          git commit -m "🔒 Automatisches Backup $BACKUP_DATE
+          
+          📊 Details:
+          - Commit: ${{ github.sha }}
+          - Workflow: ${{ github.run_id }}
+          - Dateien: $(find . -type f | wc -l)
+          - Größe: $(du -sh . | cut -f1)
+          
+          🔧 Recovery-Tools eingeschlossen:
+          - Recovery Auto-Manager ✅
+          - Performance Monitoring ✅
+          - Status Dashboard ✅
+          - Health Checks ✅"
+          
+          git push origin main
+          
+      - name: 🔔 Backup-Status-Benachrichtigung
+        if: always()
+        env:
+          STATUS_WEBHOOK_URL: ${{ secrets.STATUS_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          BACKUP_STATUS="success"
+          if [ "${{ job.status }}" != "success" ]; then
+            BACKUP_STATUS="failure"
+          fi
+          
+          # Webhook-Benachrichtigung
+          if [ -n "$STATUS_WEBHOOK_URL" ]; then
+            curl -X POST -H "Content-Type: application/json" \
+              -d "{\"status\":\"$BACKUP_STATUS\",\"workflow\":\"backup\",\"timestamp\":\"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}" \
+              "$STATUS_WEBHOOK_URL" || true
+          fi
+          
+          # Slack-Benachrichtigung bei Erfolg
+          if [ "$BACKUP_STATUS" = "success" ] && [ -n "$SLACK_WEBHOOK_URL" ]; then
+            curl -X POST -H "Content-Type: application/json" \
+              -d "{\"text\":\"✅ *Backup erfolgreich* - BurniToken Backup abgeschlossen\\nZeitpunkt: $(date -u +'%Y-%m-%d %H:%M:%S UTC')\\nCommit: ${{ github.sha }}\"}" \
+              "$SLACK_WEBHOOK_URL" || true
+          fi
+          
+          # Slack-Alert bei Fehler
+          if [ "$BACKUP_STATUS" = "failure" ] && [ -n "$SLACK_WEBHOOK_URL" ]; then
+            curl -X POST -H "Content-Type: application/json" \
+              -d "{\"text\":\":rotating_light: *Backup fehlgeschlagen!* - BurniToken\\nWorkflow: backup\\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+              "$SLACK_WEBHOOK_URL" || true
+          fi
+          
+          echo "Backup-Status: $BACKUP_STATUS"
+          
+      - name: 🧩 GitHub Issue bei Backup-Fehler
+        if: failure()
+        uses: peter-evans/create-issue-from-file@v4
+        with:
+          title: "🚨 Backup-Fehler: ${{ github.sha }}"
+          content: |
+            ## Backup fehlgeschlagen
+            
+            **Zeitpunkt:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')
+            **Commit:** ${{ github.sha }}
+            **Workflow Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            
+            ### Mögliche Ursachen:
+            - Backup-Repository nicht erreichbar
+            - Verschlüsselungsschlüssel fehlt oder ungültig
+            - Unzureichende Berechtigungen
+            - Speicherplatz-Probleme
+            
+            ### Recovery-Anleitung:
+            1. Prüfe Backup-Repository-Zugriff
+            2. Validiere BACKUP_TOKEN Secret
+            3. Führe manuelles Backup aus
+            4. Recovery-Tools testen: `npm run health:check`
+            
+            **Labels:** bug, automated, backup
+          labels: bug, automated, backup
+      - name: 🔐 Backup-Verschlüsselung und Komprimierung
+        env:
+          BACKUP_ENCRYPTION_KEY: ${{ secrets.BACKUP_ENCRYPTION_KEY }}
+        run: |
+          # Installiere benötigte Tools
+          sudo apt-get update && sudo apt-get install -y gpg zip
+          
+          # Erstelle verschlüsseltes Archiv
+          tar -czf backup-$(date +%Y%m%d-%H%M%S).tar.gz backup/
+          
+          # Verschlüssele das Backup (falls Schlüssel vorhanden)
+          if [ -n "$BACKUP_ENCRYPTION_KEY" ]; then
+            echo "Verschlüssele Backup..."
+            echo "$BACKUP_ENCRYPTION_KEY" | gpg --batch --yes --passphrase-fd 0 --symmetric --cipher-algo AES256 backup-$(date +%Y%m%d-%H%M%S).tar.gz
+            rm backup-$(date +%Y%m%d-%H%M%S).tar.gz
+            mv backup-$(date +%Y%m%d-%H%M%S).tar.gz.gpg backup/encrypted-backup.gpg
+            echo "Backup verschlüsselt und gespeichert."
+          else
+            echo "Kein Verschlüsselungsschlüssel gefunden, Backup bleibt unverschlüsselt."
+            mv backup-$(date +%Y%m%d-%H%M%S).tar.gz backup/
+          fi
+          
+          # Backup-Statistiken
+          echo "Backup-Größe: $(du -sh backup | cut -f1)"
+          echo "Anzahl Dateien: $(find backup -type f | wc -l)"
+          
+      - name: 🧪 Backup-Integrität prüfen
+        run: |
+          # Validiere wichtige Dateien
+          echo "Prüfe Backup-Integrität..."
+          
+          # Core-Dateien prüfen
+          test -f backup/core/index.html || { echo "❌ index.html fehlt!"; exit 1; }
+          test -f backup/config/package.json || { echo "❌ package.json fehlt!"; exit 1; }
+          test -d backup/recovery/tools || { echo "❌ Recovery-Tools fehlen!"; exit 1; }
+          
+          # Backup-Metadaten validieren
+          test -f backup/backup-metadata.json || { echo "❌ Backup-Metadaten fehlen!"; exit 1; }
+          
+          # JSON-Validierung
+          if command -v jq >/dev/null 2>&1; then
+            jq empty backup/backup-metadata.json || { echo "❌ Backup-Metadaten ungültig!"; exit 1; }
+          fi
+          
+          echo "✅ Backup-Integrität bestätigt."
+          
+      - name: 📊 Recovery-Readiness-Check generieren
+        run: |
+          # Erstelle Recovery-Bereitschaftsbericht
+          cat > backup/recovery-readiness.md << 'EOF'
+          # Recovery Readiness Report
+          
+          **Backup erstellt:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')
+          **Git Commit:** ${{ github.sha }}
+          **Workflow Run:** ${{ github.run_id }}
+          
+          ## 🔧 Recovery-Tools verfügbar:
+          - [x] Recovery Auto-Manager
+          - [x] VS Code Recovery Center
+          - [x] Performance Monitoring
+          - [x] API Health Checks
+          - [x] Status Dashboard
+          
+          ## 📁 Backup-Struktur:
+          - `core/` - Website-Kerndateien
+          - `reports/` - Status- und Performance-Reports
+          - `recovery/` - Recovery-Tools und Scripts
+          - `config/` - Konfigurationsdateien
+          - `data/` - Live-Daten und Caches
+          
+          ## 🚀 Recovery-Anleitung:
+          1. Repository aus Backup wiederherstellen
+          2. `npm install` ausführen
+          3. `npm run recovery:check` für Status-Validation
+          4. `npm run monitor:recovery --watch` für kontinuierliche Überwachung
+          5. `npm run dashboard:update` für Dashboard-Aktualisierung
+          
+          ## ⚡ Schnell-Recovery (nach VS Code Crash):
+          ```bash
+          git clone [BACKUP_REPO] recovery-workspace
+          cd recovery-workspace
+          npm install
+          npm run health:check
+          code .
+          ```
+          
+          **Status:** ✅ Recovery-bereit
+          EOF

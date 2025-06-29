@@ -1,6 +1,6 @@
 {
   "isActive": true,
-  "lastCheck": "2025-06-23T16:30:00Z",
+  "lastCheck": "2025-06-29T17:44:10.745Z",
   "services": {
     "gsc": {
       "name": "Google Search Console Monitor",
@@ -26,6 +26,34 @@
       "name": "Meta-Tags Validator",
       "status": "running",
       "lastCheck": "2025-06-23T16:29:00Z"
+    },
+    "website": {
+      "id": "website",
+      "name": "Website",
+      "status": "running",
+      "statusCode": 200,
+      "responseTime": 194
+    },
+    "api": {
+      "id": "api",
+      "name": "API",
+      "status": "running",
+      "statusCode": 200,
+      "responseTime": 260
+    },
+    "xrpl": {
+      "id": "xrpl",
+      "name": "XRPL Connection",
+      "status": "running",
+      "statusCode": 200,
+      "responseTime": 190
+    },
+    "coingecko": {
+      "id": "coingecko",
+      "name": "CoinGecko API",
+      "status": "running",
+      "statusCode": 200,
+      "responseTime": 308
     }
   }
 }

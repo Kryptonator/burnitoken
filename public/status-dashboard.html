@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Status Dashboard – BurniToken</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #181a1b; color: #f3f3f3; margin: 0; padding: 0; }
+    header { background: #222; padding: 1.5rem 2rem; }
+    h1 { margin: 0; font-size: 2rem; }
+    main { padding: 2rem; max-width: 900px; margin: auto; }
+    section { margin-bottom: 2rem; }
+    .card { background: #23272a; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 8px #0002; }
+    a { color: #4fd1c5; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .status-ok { color: #4fd164; font-weight: bold; }
+    .status-fail { color: #e53e3e; font-weight: bold; }
+    .badge { display: inline-block; padding: 0.2em 0.7em; border-radius: 1em; font-size: 0.95em; margin-left: 0.5em; }
+    .badge-ok { background: #4fd16422; color: #4fd164; }
+    .badge-fail { background: #e53e3e22; color: #e53e3e; }
+    .report-list { list-style: none; padding: 0; }
+    .report-list li { margin-bottom: 0.7em; }
+  </style>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <h1>BurniToken Status Dashboard</h1>
+    <p>Letztes Update: <span id="last-update">$(date +'%Y-%m-%d %H:%M')</span></p>
+  </header>
+  <main>
+    <section>
+      <h2>Monitoring & Reports</h2>
+      <ul class="report-list">
+        <li><a href="SEO_STATUS.md">SEO-Status</a></li>
+        <li><a href="LIGHTHOUSE_STATUS.md">Lighthouse/Core Web Vitals</a></li>
+        <li><a href="LIGHTHOUSE_REPORT.html">Lighthouse-Report (HTML)</a></li>
+        <li><a href="STATUS.md">Deploy-Status</a></li>
+        <li><a href="API_STATUS.md">API-Status</a></li>
+        <li><a href="FEEDBACK_REPORT.md">Feedback-Report</a></li>
+        <li><a href="RECOVERY_STATUS.md">Recovery-Status</a></li>
+        <li><a href="snyk.log">Sicherheits-Log (Snyk)</a></li>
+        <li><a href="VISION.md">Vision & Roadmap</a></li>
+      </ul>
+    </section>
+    <section>
+      <h2>Deploy-Historie</h2>
+      <div class="card">
+        <canvas id="deployHistoryChart" height="60"></canvas>
+        <p style="font-size:0.95em;color:#aaa;">Verlauf der letzten Deployments (Status: Erfolg/Fehler).</p>
+      </div>
+    </section>
+    <section>
+      <h2>Lighthouse Score Verlauf</h2>
+      <div class="card">
+        <canvas id="lighthouseChart" height="80"></canvas>
+        <p style="font-size:0.95em;color:#aaa;">Verlauf der letzten Lighthouse-Scores (Performance, Accessibility, Best Practices, SEO). Daten werden automatisch aktualisiert.</p>
+      </div>
+    </section>
+    <section>
+      <h2>Letzte Deployments & Releases</h2>
+      <p>Siehe <a href="https://github.com/$(REPO)/releases">GitHub Releases</a> für vollständige Release- und Recovery-Historie.</p>
+    </section>
+    <section>
+      <h2>Live-Status</h2>
+      <ul>
+        <li>Hauptseite: <a href="/">Live-Check</a></li>
+        <li>API: <a href="/api/status.json">Live-Check</a></li>
+      </ul>
+    </section>
+    <section>
+      <h2>Letzte Fehler & Recovery</h2>
+      <p>Siehe <a href="https://github.com/$(REPO)/issues?q=label:deploy+label:bug">automatisierte Deploy-Issues</a> für Fehler- und Recovery-Historie.</p>
+    </section>
+  </main>
+  <script>
+    // Beispiel: Lighthouse-Scores aus JSON laden und als Chart anzeigen
+    fetch('lighthouse-scores.json')
+      .then(response => response.json())
+      .then(data => {
+        const ctx = document.getElementById('lighthouseChart').getContext('2d');
+        const labels = data.map(entry => entry.date);
+        const perf = data.map(entry => entry.performance);
+        const acc = data.map(entry => entry.accessibility);
+        const bp = data.map(entry => entry.best_practices);
+        const seo = data.map(entry => entry.seo);
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels,
+            datasets: [
+              { label: 'Performance', data: perf, borderColor: '#4fd164', fill: false },
+              { label: 'Accessibility', data: acc, borderColor: '#4fd1c5', fill: false },
+              { label: 'Best Practices', data: bp, borderColor: '#f6e05e', fill: false },
+              { label: 'SEO', data: seo, borderColor: '#63b3ed', fill: false }
+            ]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { labels: { color: '#f3f3f3' } } },
+            scales: {
+              x: { ticks: { color: '#aaa' } },
+              y: { min: 0, max: 100, ticks: { color: '#aaa', stepSize: 10 } }
+            }
+          }
+        });
+      })
+      .catch(() => {
+        document.getElementById('lighthouseChart').parentElement.innerHTML += '<div style="color:#e53e3e">Keine Score-Daten gefunden.</div>';
+      });
+
+    // Deploy-Historie laden und als Chart anzeigen
+    fetch('deploy-history.json')
+      .then(response => response.json())
+      .then(data => {
+        const ctx = document.getElementById('deployHistoryChart').getContext('2d');
+        const labels = data.map(entry => new Date(entry.date).toLocaleString());
+        const statusData = data.map(entry => entry.status === 'success' ? 1 : 0);
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels,
+            datasets: [{
+              label: 'Deploy-Status',
+              data: statusData,
+              backgroundColor: statusData.map(v => v ? '#4fd164' : '#e53e3e')
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { ticks: { color: '#aaa' } },
+              y: {
+                min: 0, max: 1, ticks: {
+                  color: '#aaa',
+                  callback: v => v === 1 ? 'Erfolg' : 'Fehler',
+                  stepSize: 1
+                }
+              }
+            }
+          }
+        });
+      })
+      .catch(() => {
+        document.getElementById('deployHistoryChart').parentElement.innerHTML += '<div style="color:#e53e3e">Keine Deploy-Historie gefunden.</div>';
+      });
+  </script>
+</body>
+</html>
