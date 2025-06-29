@@ -1,0 +1,40 @@
+{
+  "service": {
+    "name": "burnitoken-frontend",
+    "type": "static-website",
+    "version": "1.0.0",
+    "description": "BurniToken static website with XRPL integration",
+    "hasBackend": false,
+    "hasDatabase": false,
+    "hasPaymentGateway": false
+  },
+  "monitoring": {
+    "excludeServices": ["payment-gateway", "database"],
+    "externalAPIs": [
+      {
+        "name": "XRPL",
+        "url": "wss://xrplcluster.com/",
+        "type": "websocket",
+        "critical": false
+      },
+      {
+        "name": "CoinGecko",
+        "url": "https://api.coingecko.com/api/v3/simple/price",
+        "type": "rest",
+        "critical": false
+      }
+    ],
+    "errorCategories": {
+      "E-12045": {
+        "description": "Database connection error",
+        "applicability": "backend-services-only",
+        "shouldIgnoreFor": ["static-website", "frontend"]
+      }
+    }
+  },
+  "deployment": {
+    "platform": "netlify",
+    "type": "static",
+    "functions": ["contact-form", "crypto-price", "security-report", "token-info"]
+  }
+}
