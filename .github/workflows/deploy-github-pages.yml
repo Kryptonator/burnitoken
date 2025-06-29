@@ -1,0 +1,40 @@
+name: Deploy Reports to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'SEO_STATUS.md'
+      - 'LIGHTHOUSE_STATUS.md'
+      - 'LIGHTHOUSE_REPORT.html'
+      - '.github/workflows/deploy-github-pages.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Copy Reports to public
+        run: |
+          mkdir -p public
+          cp SEO_STATUS.md public/
+          cp LIGHTHOUSE_STATUS.md public/
+          cp LIGHTHOUSE_REPORT.html public/
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -87,24 +87,13 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "Europe/Berlin"
+      interval: "daily"
     open-pull-requests-limit: 5
-    reviewers:
-      - "Kryptonator"
-    labels:
-      - "dependencies"
-      - "github-actions"
-      - "ci-cd"
     commit-message:
-      prefix: "👷"
-      include: "scope"
-    automerge: true
-    automergeable-types: 
-      - "security:patch"
-      - "version-update:semver-patch"
+      prefix: "chore(actions)"
+    labels:
+      - dependencies
+      - security
 
   # Docker-Container aktualisieren (falls verwendet)
   - package-ecosystem: "docker"

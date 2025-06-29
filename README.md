@@ -1,14 +1,22 @@
 # 🏆 BurniToken.website - Mission-Critical Live Operations
 
 [![Website Status](https://img.shields.io/website?url=https%3A%2F%2Fburnitoken.website)](https://burnitoken.website)
+[![UptimeRobot Status](https://img.shields.io/badge/dynamic/json?color=brightgreen&label=UptimeRobot&query=%24.status&url=https%3A%2F%2Fuptime.burnitoken.website%2Fapi%2Fstatus.json)](https://uptimerobot.com/) <!-- Platzhalter: Ersetze mit deinem echten UptimeRobot-Link -->
 [![XRPL Oracle Status](https://img.shields.io/badge/XRPL%20Price%20Oracle-Live-green)](https://burnitoken.website)
 [![Performance](https://img.shields.io/badge/Performance-A-green)](https://burnitoken.website)
 [![Security](https://img.shields.io/badge/Security-HTTPS-green)](https://burnitoken.website)
 [![Mobile](https://img.shields.io/badge/Mobile-Optimized-green)](https://burnitoken.website)
 [![CI Tests](https://github.com/burnitoken/burnitoken.com/actions/workflows/ci.yml/badge.svg)](https://github.com/burnitoken/burnitoken.com/actions/workflows/ci.yml)
 [![CI/CD Pipeline](https://github.com/burnitoken/burnitoken.com/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/burnitoken/burnitoken.com/actions/workflows/ci-cd.yml)
-[![Lighthouse](https://img.shields.io/badge/Lighthouse-Optimized-brightgreen)](https://github.com/burnitoken/burnitoken.com/actions)
-[![Accessibility](https://img.shields.io/badge/WCAG-AA-brightgreen)](https://github.com/burnitoken/burnitoken.com/actions)
+[![Lighthouse](https://img.shields.io/badge/Lighthouse-OK-brightgreen)](LIGHTHOUSE_STATUS.md)
+[![Accessibility](https://img.shields.io/badge/Accessibility-OK-brightgreen)](LIGHTHOUSE_STATUS.md)
+[![SEO](https://img.shields.io/badge/SEO-OK-brightgreen)](SEO_STATUS.md)
+[![npm audit](https://img.shields.io/badge/dependencies-audited-brightgreen)](https://github.com/burnitoken/burnitoken.com/actions)
+
+---
+
+> **Letzter SEO-Check:** 29.6.2025, 14:53:11 – Status: OK
+> **Letzter Lighthouse/Accessibility-Check:** 29.6.2025, 15:02:44 – Status: OK
 
 ## 🎯 Status: Live, Robust & Monitored
 
@@ -62,6 +70,15 @@ Ein täglicher GitHub-Actions-Workflow (`.github/workflows/health-check.yml`) f�
 - **Hosting:** Netlify
 - **SSL:** Let's Encrypt (via Netlify)
 - **Monitoring:** GitHub Actions, Slack/Discord Alerts, Status-Webhooks
+
+## 🟢 Monitoring & Alerting
+
+- **Uptime-Monitoring:** Die Website wird extern (z.B. mit [UptimeRobot](https://uptimerobot.com/) oder [Better Uptime](https://betteruptime.com/)) überwacht. Status-Badge siehe oben.
+- **Alerting:** Bei Ausfällen oder Fehlern werden Benachrichtigungen an das Team gesendet (z.B. per E-Mail, Discord, Telegram). 
+  - Beispiel: UptimeRobot → E-Mail/Telegram/Discord-Webhook einrichten.
+- **Recovery:** Im Fehlerfall automatische oder manuelle Recovery-Prozesse gemäß [Recovery-Guide](./RECOVERY.md).
+
+**Hinweis:** Den Uptime-Badge bitte mit deinem echten UptimeRobot-Status-URL ersetzen, sobald der Monitor eingerichtet ist.
 
 ## ✅ Mission Complete
 

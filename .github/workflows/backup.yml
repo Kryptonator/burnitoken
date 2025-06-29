@@ -1,0 +1,43 @@
+name: Backup
+
+on:
+  schedule:
+    - cron: '30 5 * * *' # täglich um 5:30 Uhr UTC
+  push:
+    branches:
+      - main
+
+jobs:
+  backup:
+    name: 🔒 Automatisches Backup
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: 📦 Wichtige Dateien sammeln
+        run: |
+          mkdir backup
+          cp index.html backup/
+          cp SEO_STATUS.md backup/ || true
+          cp LIGHTHOUSE_STATUS.md backup/ || true
+          cp LIGHTHOUSE_REPORT.html backup/ || true
+          cp -r tools backup/ || true
+          cp -r assets backup/ || true
+      - name: 🔑 Backup-Repo vorbereiten
+        run: |
+          git config --global user.name "Backup Bot"
+          git config --global user.email "backup@burnitoken.com"
+      - name: 📤 Push ins Backup-Repository
+        env:
+          BACKUP_REPO: ${{ secrets.BACKUP_REPO }}
+          BACKUP_TOKEN: ${{ secrets.BACKUP_TOKEN }}
+        run: |
+          cd backup
+          git init
+          git remote add origin https://x-access-token:${BACKUP_TOKEN}@github.com/${BACKUP_REPO}.git
+          git add .
+          git commit -m "Automatisches Backup $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          git branch -M main
+          git push -f origin main

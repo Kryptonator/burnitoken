@@ -83,7 +83,8 @@
     "web-vitals:full": "node tools/core-web-vitals-monitor.js --full",
     "web-vitals:errors": "node tools/core-web-vitals-monitor.js --error-pages",
     "meta-tags": "node tools/meta-tags-validator.js",
-    "meta-tags:ci": "node tools/meta-tags-validator.js --ci"
+    "meta-tags:ci": "node tools/meta-tags-validator.js --ci",
+    "release": "standard-version"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",
@@ -108,10 +109,12 @@
     "jsdom": "^26.1.0",
     "mini-css-extract-plugin": "^2.7.6",
     "nodemailer": "^7.0.3",
+    "playwright": "^1.53.1",
     "postcss": "^8.5.5",
     "prettier": "^3.2.0",
     "rimraf": "^6.0.1",
     "snyk": "^1.1297.2",
+    "standard-version": "^9.5.0",
     "start-server-and-test": "^2.0.12",
     "tailwindcss": "^4.1.10",
     "wait-on": "^8.0.3",

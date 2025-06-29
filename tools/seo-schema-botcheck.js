@@ -30,7 +30,13 @@ try {
 
 const github = require('./github-auto');
 
-const INDEX_PATH = path.join(__dirname, '../index.html');
+const PAGES = [
+  path.join(__dirname, '../index.html'),
+  path.join(__dirname, '../pages/token/index.html'),
+  path.join(__dirname, '../pages/community/index.html'),
+  path.join(__dirname, '../pages/docs/index.html'),
+  // Weitere Seiten hier ergänzen
+];
 const LOG_PATH = path.join(__dirname, 'seo-schema-botcheck.log');
 const STATUS_PATH = path.join(__dirname, '../SEO_STATUS.md');
 
@@ -154,59 +160,71 @@ function updateStatusFile(status, details) {
 }
 
 function main() {
-  if (!fs.existsSync(INDEX_PATH)) {
-    const msg = 'index.html nicht gefunden!';
-    console.error(chalkRed(msg));
-    updateStatusFile('ERROR', msg);
-    github.createGithubIssue('SEO/Schema-Check: index.html fehlt', msg);
-    process.exit(1);
-  }
-  let html = fs.readFileSync(INDEX_PATH, 'utf8');
-  console.log(chalkCyan('\n--- SEO & Schema Bot-Check (Gemini/Googlebot/Bingbot) ---'));
-  let allOk = true;
-  let fixed = false;
+  let allPagesOk = true;
   let errorDetails = [];
-  if (!checkMetaTags(html)) {
-    const fixedHtml = autoFixMetaTags(html);
-    if (fixedHtml) {
-      html = fixedHtml;
-      fixed = true;
-    } else {
-      allOk = false;
-      errorDetails.push('Meta-Tags fehlen');
+  let fixedAny = false;
+  for (const PAGE_PATH of PAGES) {
+    if (!fs.existsSync(PAGE_PATH)) {
+      log(`Seite nicht gefunden: ${PAGE_PATH}`);
+      errorDetails.push(`${PAGE_PATH} fehlt`);
+      allPagesOk = false;
+      continue;
+    }
+    let html = fs.readFileSync(PAGE_PATH, 'utf8');
+    console.log(chalkCyan(`\n--- SEO & Schema Bot-Check für ${PAGE_PATH} ---`));
+    let allOk = true;
+    let fixed = false;
+    let pageErrors = [];
+    if (!checkMetaTags(html)) {
+      const fixedHtml = autoFixMetaTags(html);
+      if (fixedHtml) {
+        html = fixedHtml;
+        fixed = true;
+      } else {
+        allOk = false;
+        pageErrors.push('Meta-Tags fehlen');
+      }
+    }
+    if (!checkAltTexts(html)) {
+      const fixedHtml = autoFixAltTexts(html);
+      if (fixedHtml) {
+        html = fixedHtml;
+        fixed = true;
+      } else {
+        allOk = false;
+        pageErrors.push('Alt-Texte fehlen');
+      }
+    }
+    if (!checkCanonical(html)) allOk = false;
+    if (!checkSitemap(html)) allOk = false;
+    if (fixed) {
+      fs.writeFileSync(PAGE_PATH, html, 'utf8');
+      fixedAny = true;
+      log(`Auto-Fix durchgeführt für ${PAGE_PATH}`);
+    }
+    if (!allOk) {
+      allPagesOk = false;
+      errorDetails.push(`${PAGE_PATH}: ${pageErrors.join(', ')}`);
     }
   }
-  if (!checkAltTexts(html)) {
-    const fixedHtml = autoFixAltTexts(html);
-    if (fixedHtml) {
-      html = fixedHtml;
-      fixed = true;
-    } else {
-      allOk = false;
-      errorDetails.push('Alt-Texte fehlen');
-    }
-  }
-  if (!checkCanonical(html)) allOk = false;
-  if (!checkSitemap(html)) allOk = false;
-  if (fixed) {
-    fs.writeFileSync(INDEX_PATH, html, 'utf8');
-    github.gitCommitAndPush('Auto-Fix: SEO/Schema/Alt-Text in index.html durch Bot');
-    updateStatusFile('FIXED', 'Fehler wurden automatisch behoben und gepusht.');
-    console.log(chalkBgYellowBlack('\nAuto-Fix durchgeführt und gepusht!\n'));
-    log('Auto-Fix durchgeführt und gepusht!');
+  if (fixedAny) {
+    github.gitCommitAndPush('Auto-Fix: SEO/Schema/Alt-Text auf mehreren Seiten durch Bot');
+    updateStatusFile('FIXED', 'Fehler wurden automatisch behoben und gepusht (Multi-Page).');
+    console.log(chalkBgYellowBlack('\nAuto-Fix für mehrere Seiten durchgeführt und gepusht!\n'));
+    log('Auto-Fix für mehrere Seiten durchgeführt und gepusht!');
     process.exit(0);
   }
-  if (allOk) {
-    updateStatusFile('OK', 'Alle Checks bestanden.');
-    console.log(chalkBgGreenBlack('\nSEO/Schema/Bot-Check: ALLES OK!\n'));
-    log('SEO/Schema/Bot-Check: ALLES OK!');
+  if (allPagesOk) {
+    updateStatusFile('OK', 'Alle Checks auf allen Seiten bestanden.');
+    console.log(chalkBgGreenBlack('\nSEO/Schema/Bot-Check: ALLES OK auf allen Seiten!\n'));
+    log('SEO/Schema/Bot-Check: ALLES OK auf allen Seiten!');
     process.exit(0);
   } else {
-    const detailMsg = errorDetails.join(', ');
+    const detailMsg = errorDetails.join('; ');
     updateStatusFile('ERROR', detailMsg);
-    github.createGithubIssue('SEO/Schema-Check: Fehler', `Nicht automatisch behebbar: ${detailMsg}`);
-    console.log(chalkBgRedWhite('\nSEO/Schema/Bot-Check: FEHLER! Siehe oben und Log.\n'));
-    log('SEO/Schema/Bot-Check: FEHLER!');
+    github.createGithubIssue('SEO/Schema-Check: Fehler (Multi-Page)', `Nicht automatisch behebbar: ${detailMsg}`);
+    console.log(chalkBgRedWhite('\nSEO/Schema/Bot-Check: FEHLER auf mindestens einer Seite! Siehe oben und Log.\n'));
+    log('SEO/Schema/Bot-Check: FEHLER auf mindestens einer Seite!');
     process.exit(2);
   }
 }

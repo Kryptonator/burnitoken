@@ -49,6 +49,58 @@ jobs:
         with:
           name: health-report
           path: HEALTH_REPORT.md
+      - name: 🌐 API-Monitoring
+        run: node tools/api-monitor.js
+      - name: 📤 Upload API Status Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-status
+          path: API_STATUS.md
+      - name: 📣 Community Feedback Report
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: node tools/feedback-report.js
+      - name: 📤 Upload Feedback Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: feedback-report
+          path: FEEDBACK_REPORT.md
+      - name: 📣 Community Feedback aus Twitter/X integrieren
+        run: |
+          node tools/feedback-report.js --twitter || echo "Twitter-Feedback-Integration optional."
+      - name: 📤 Upload Twitter Feedback Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: twitter-feedback-report
+          path: FEEDBACK_REPORT_TWITTER.md
+      - name: 📊 Status-Dashboard generieren
+        run: node tools/status-dashboard.js
+      - name: 📤 Upload Status Dashboard
+        uses: actions/upload-artifact@v4
+        with:
+          name: status-dashboard
+          path: STATUS.md
+      - name: 🛡️ Snyk Security Check
+        uses: snyk/actions/node@v3
+        with:
+          command: test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: 📤 Upload Snyk Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: snyk-report
+          path: snyk.log
+      - name: ♻️ Recovery-Status prüfen
+        run: node tools/recovery-check.js
+      - name: 📤 Upload Recovery Status
+        uses: actions/upload-artifact@v4
+        with:
+          name: recovery-status
+          path: RECOVERY_STATUS.md
       - name: Slack-Alert bei Fehler
         if: failure()
         run: |

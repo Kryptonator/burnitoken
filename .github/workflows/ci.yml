@@ -30,6 +30,8 @@ jobs:
         
       - name: 🔍 Lint code
         run: node --max-old-space-size=4096 ./node_modules/.bin/eslint .
+      - name: 📦 Security/Dependency Audit
+        run: npm audit --audit-level=moderate || true
       - name: 🔨 Build project
         run: node --max-old-space-size=4096 ./node_modules/.bin/webpack --config webpack.config.js || npm run build
       - name: 🧪 Run unit tests
