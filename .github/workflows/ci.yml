@@ -134,7 +134,7 @@ jobs:
           server_address: smtp.mail.yahoo.com
           server_port: 465
           username: burn.coin@yahoo.com
-          password: ${{ secrets.YAHOO_APP_PASSWORD }}
+          password: ${{ secrets.github }}
           subject: "[BurniToken CI] Tests Failed - Immediate Attention Required"
           to: burn.coin@yahoo.com
           from: BurniToken CI <burn.coin@yahoo.com>
