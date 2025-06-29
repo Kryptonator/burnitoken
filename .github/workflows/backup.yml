@@ -3,9 +3,7 @@ name: Backup
 on:
   schedule:
     - cron: '30 5 * * *' # täglich um 5:30 Uhr UTC
-  push:
-    branches:
-      - main
+  workflow_dispatch: # Ermöglicht manuellen Start
 
 jobs:
   backup:
@@ -111,7 +109,12 @@ jobs:
           ls -1 backups/ | head -n -30 | xargs -r -I {} rm -rf "backups/{}"
           
           git add .
-          git commit -m "🔒 Automatisches Backup $BACKUP_DATE
+          
+          # Prüfe ob es Änderungen gibt
+          if git diff --staged --quiet; then
+            echo "ℹ️ Keine Änderungen zu committen"
+          else
+            git commit -m "🔒 Automatisches Backup $BACKUP_DATE
           
           📊 Details:
           - Commit: ${{ github.sha }}
@@ -125,7 +128,9 @@ jobs:
           - Status Dashboard ✅
           - Health Checks ✅"
           
-          git push origin main
+            git push origin main
+            echo "✅ Backup erfolgreich gepusht"
+          fi
           
       - name: 🔔 Backup-Status-Benachrichtigung
         if: always()
