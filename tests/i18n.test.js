@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Lade die echten Übersetzungen
-const translationsPath = path.resolve(__dirname, '../../assets/translations.json');
+const translationsPath = path.resolve(__dirname, '../assets/translations.json');
 const translations = JSON.parse(fs.readFileSync(translationsPath, 'utf8'));
 
 describe('Language Switcher', () => {
