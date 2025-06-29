@@ -9,7 +9,10 @@ const url = process.argv[2] || 'http://localhost:8080';
 console.log(`Running Lighthouse audit for: ${url}`);
 
 try {
-  execSync(`npx lighthouse ${url} --output=json --output-path=./lighthouse-report.json --quiet --chrome-flags=--headless --only-categories=performance,accessibility,seo,best-practices`, { stdio: 'inherit' });
+  execSync(
+    `npx lighthouse ${url} --output=json --output-path=./lighthouse-report.json --quiet --chrome-flags=--headless --only-categories=performance,accessibility,seo,best-practices`,
+    { stdio: 'inherit' },
+  );
   const report = require('../lighthouse-report.json');
   const perf = report.categories.performance.score * 100;
   const seo = report.categories.seo.score * 100;
