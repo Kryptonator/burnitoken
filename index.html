@@ -1095,12 +1095,27 @@
     <!-- Scripts -->
     <script src="https://unpkg.com/xrpl@2.7.0/dist/npm/xrpl.min.js"></script>
     <script src="assets/js/price-oracle.js" defer></script>
+    <script src="assets/js/monitoring-services.js" defer></script>
+    <script src="assets/js/security-hardening.js" defer></script>
+    <script src="assets/js/seo-automation.js" defer></script>
+    <script src="assets/js/system-dashboard.js" defer></script>
     <script src="main.js" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const priceElementIds = ['price-burni', 'price-burni-tokenomics'];
-            const oracle = new BurniPriceOracle(priceElementIds);
+            // Initialize Price Oracle with correct selectors
+            const oracle = new BurniPriceOracle({
+                selectors: {
+                    priceValue: '[data-price-value]',
+                    priceStatus: '[data-price-status]',
+                    priceContainer: '[data-price-display]'
+                },
+                refreshInterval: 30000, // 30 seconds
+                enableNotifications: true
+            });
             oracle.start();
+
+            // Add global oracle access for debugging
+            window.burniOracle = oracle;
         });
     </script>
 </body></html>
