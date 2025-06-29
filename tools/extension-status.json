@@ -1,12 +1,12 @@
 {
-  "timestamp": "2025-06-28T12:39:13.723Z",
+  "timestamp": "2025-06-29T19:12:26.875Z",
   "summary": {
     "extensions": {
-      "total": 64,
-      "active": 38,
-      "inactive": 3,
+      "total": 31,
+      "active": 25,
+      "inactive": 16,
       "required": 8,
-      "requiredActive": 8
+      "requiredActive": 6
     },
     "services": {
       "total": 10,
@@ -41,7 +41,7 @@
     {
       "id": "eamodio.gitlens",
       "name": "gitlens",
-      "isActive": true,
+      "isActive": false,
       "isRequired": true
     },
     {
@@ -59,7 +59,7 @@
     {
       "id": "bradlc.vscode-tailwindcss",
       "name": "vscode-tailwindcss",
-      "isActive": true,
+      "isActive": false,
       "isRequired": true
     },
     {
@@ -71,19 +71,19 @@
     {
       "id": "formulahendry.auto-close-tag",
       "name": "auto-close-tag",
-      "isActive": true,
+      "isActive": false,
       "isRequired": false
     },
     {
       "id": "formulahendry.auto-rename-tag",
       "name": "auto-rename-tag",
-      "isActive": true,
+      "isActive": false,
       "isRequired": false
     },
     {
       "id": "ecmel.vscode-html-css",
       "name": "vscode-html-css",
-      "isActive": true,
+      "isActive": false,
       "isRequired": false
     },
     {
@@ -125,7 +125,7 @@
     {
       "id": "html-validate.vscode-html-validate",
       "name": "vscode-html-validate",
-      "isActive": true,
+      "isActive": false,
       "isRequired": false
     },
     {
@@ -155,7 +155,7 @@
     {
       "id": "davidanson.vscode-markdownlint",
       "name": "vscode-markdownlint",
-      "isActive": true,
+      "isActive": false,
       "isRequired": false
     },
     {
@@ -173,13 +173,13 @@
     {
       "id": "humao.rest-client",
       "name": "rest-client",
-      "isActive": true,
+      "isActive": false,
       "isRequired": false
     },
     {
       "id": "github.vscode-github-actions",
       "name": "vscode-github-actions",
-      "isActive": true,
+      "isActive": false,
       "isRequired": false
     },
     {
@@ -191,13 +191,13 @@
     {
       "id": "ms-vscode.vscode-github-issue-notebooks",
       "name": "vscode-github-issue-notebooks",
-      "isActive": true,
+      "isActive": false,
       "isRequired": false
     },
     {
       "id": "github.codespaces",
       "name": "codespaces",
-      "isActive": true,
+      "isActive": false,
       "isRequired": false
     },
     {
@@ -209,7 +209,7 @@
     {
       "id": "hediet.vscode-drawio",
       "name": "vscode-drawio",
-      "isActive": true,
+      "isActive": false,
       "isRequired": false
     },
     {
@@ -257,7 +257,7 @@
     {
       "id": "austenc.tailwind-docs",
       "name": "tailwind-docs",
-      "isActive": true,
+      "isActive": false,
       "isRequired": false
     },
     {
@@ -311,7 +311,7 @@
       "status": "active",
       "connected": true,
       "authValid": true,
-      "lastCheck": "2025-06-28T04:20:43.844Z"
+      "lastCheck": "2025-06-28T12:45:58.148Z"
     },
     {
       "name": "gsc-auth",
@@ -338,5 +338,11 @@
       "status": "active"
     }
   ],
-  "recommendations": []
+  "recommendations": [
+    {
+      "priority": "high",
+      "message": "Installiere fehlende erforderliche Extensions: eamodio.gitlens, bradlc.vscode-tailwindcss",
+      "action": "extension-install"
+    }
+  ]
 }
