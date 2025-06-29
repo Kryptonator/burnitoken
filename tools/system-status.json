@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-28T04:21:00.573Z",
+  "timestamp": "2025-06-29T11:21:49.413Z",
   "services": {
     "Session Saver": "active",
     "AI Conversation Bridge": "active",
@@ -7,7 +7,7 @@
     "Extension Health Validator": "active"
   },
   "extensions": {
-    "total": 64,
+    "total": 31,
     "recommended": [
       "github.copilot",
       "github.copilot-chat",
@@ -51,12 +51,35 @@
       "mhutchie.git-graph",
       "ms-vscode.vscode-copilot-vision"
     ],
-    "missing": ["ms-vscode.vscode-css", "solidity.solidity", "ms-vscode.vscode-json"]
+    "missing": [
+      "eamodio.gitlens",
+      "bradlc.vscode-tailwindcss",
+      "formulahendry.auto-close-tag",
+      "formulahendry.auto-rename-tag",
+      "ecmel.vscode-html-css",
+      "ms-vscode.vscode-css",
+      "solidity.solidity",
+      "html-validate.vscode-html-validate",
+      "davidanson.vscode-markdownlint",
+      "humao.rest-client",
+      "github.vscode-github-actions",
+      "ms-vscode.vscode-github-issue-notebooks",
+      "github.codespaces",
+      "hediet.vscode-drawio",
+      "ms-vscode.vscode-json",
+      "austenc.tailwind-docs"
+    ]
   },
   "tasks": {
-    "total": 38,
-    "autoStart": ["💾 Session-Saver: Sitzung speichern"]
+    "total": 27,
+    "autoStart": []
   },
-  "issues": [],
+  "issues": [
+    {
+      "component": "tasks",
+      "message": "Keine Auto-Start Tasks konfiguriert",
+      "timestamp": "2025-06-29T11:21:50.659Z"
+    }
+  ],
   "actionsTaken": []
 }

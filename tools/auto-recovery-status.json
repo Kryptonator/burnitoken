@@ -1,7 +1,18 @@
 {
-  "timestamp": "2025-06-28T12:46:36.274Z",
-  "lastRecovery": null,
+  "timestamp": "2025-06-29T11:21:13.896Z",
+  "lastRun": null,
   "recoveriesPerformed": 0,
+  "lastRecoveryDate": null,
+  "todaysRecoveries": 0,
+  "status": "error",
+  "lastActions": [],
+  "errors": [
+    {
+      "timestamp": "2025-06-29T11:21:13.896Z",
+      "message": "Selbstdiagnose fehlgeschlagen"
+    }
+  ],
+  "lastRecovery": null,
   "recoveriesPerformedToday": 0,
   "recoveryEnabled": true,
   "history": [],
