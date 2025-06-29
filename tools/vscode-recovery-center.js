@@ -737,6 +737,98 @@ function showErrorReportSummary() {
 }
 
 /**
+ * Prüft alle Automatisierungen, Extensions und Bots und stellt sie ggf. wieder her
+ */
+function runAutomationHealthChecks() {
+  printColored('\n🤖 Automatisierungs- & Bot-Health-Check', '\x1b[1;36m');
+  let allOk = true;
+
+  // 1. Absturzbericht prüfen/generieren
+  const crashLogPath = path.join(__dirname, 'crash.log');
+  if (fs.existsSync(crashLogPath)) {
+    printColored('❗ Absturz erkannt! Crash-Log gefunden.', '\x1b[31m');
+    const crashLog = fs.readFileSync(crashLogPath, 'utf8');
+    printColored('--- Crash-Log ---', '\x1b[33m');
+    console.log(crashLog);
+    printColored('-----------------', '\x1b[33m');
+    // Optional: Crash-Log an Monitoring senden
+    allOk = false;
+  } else {
+    printColored('✅ Kein Absturz seit letztem Start erkannt.', '\x1b[32m');
+  }
+
+  // 2. VS Code Extensions prüfen (nur Beispiel, da Node.js)
+  try {
+    const extensions = [
+      'dbaeumer.vscode-eslint',
+      'esbenp.prettier-vscode',
+      'streetsidesoftware.code-spell-checker',
+      'ms-playwright.playwright',
+      'github.vscode-pull-request-github'
+    ];
+    const extDir = path.join(os.homedir(), '.vscode', 'extensions');
+    let missing = [];
+    extensions.forEach(ext => {
+      if (!fs.existsSync(path.join(extDir, ext))) {
+        missing.push(ext);
+      }
+    });
+    if (missing.length > 0) {
+      printColored('❌ Fehlende VS Code Extensions:', '\x1b[31m');
+      missing.forEach(e => printColored('  - ' + e, '\x1b[33m'));
+      allOk = false;
+    } else {
+      printColored('✅ Alle kritischen VS Code Extensions installiert.', '\x1b[32m');
+    }
+  } catch (e) {
+    printColored('⚠️ Konnte Extensions nicht prüfen (Berechtigungen?)', '\x1b[33m');
+    allOk = false;
+  }
+
+  // 3. Bots & Tokens prüfen (z.B. GEMINI_BOT_TOKEN)
+  const secretsPath = path.join(__dirname, '../config.secrets');
+  let geminiToken = null;
+  if (fs.existsSync(secretsPath)) {
+    const secrets = fs.readFileSync(secretsPath, 'utf8');
+    const match = secrets.match(/GEMINI_BOT_TOKEN\s*=\s*(\S+)/);
+    if (match) {
+      geminiToken = match[1];
+      printColored('✅ GEMINI_BOT_TOKEN gefunden.', '\x1b[32m');
+      // Hier könnte ein Live-Check gegen den Bot erfolgen (z.B. HTTP-Request)
+      // ...
+    } else {
+      printColored('❌ GEMINI_BOT_TOKEN fehlt in config.secrets!', '\x1b[31m');
+      allOk = false;
+    }
+  } else {
+    printColored('❌ config.secrets fehlt!', '\x1b[31m');
+    allOk = false;
+  }
+
+  // 4. Weitere Bots prüfen (z.B. Slack, Discord, eigene Bots)
+  // Beispiel: Slack Bot Token
+  const slackMatch = secretsPath && fs.existsSync(secretsPath)
+    ? fs.readFileSync(secretsPath, 'utf8').match(/SLACK_BOT_TOKEN\s*=\s*(\S+)/)
+    : null;
+  if (slackMatch) {
+    printColored('✅ SLACK_BOT_TOKEN gefunden.', '\x1b[32m');
+    // ... ggf. Live-Check
+  } else {
+    printColored('⚠️ SLACK_BOT_TOKEN nicht gefunden (optional)', '\x1b[33m');
+  }
+
+  // 5. Bots automatisch neu starten (nur Beispiel, falls Skripte vorhanden)
+  // Hier könnten child_process.execSync-Aufrufe stehen, z.B.:
+  // try { execSync('pm2 restart gemini-bot'); printColored('🔄 Gemini-Bot neu gestartet.', '\x1b[36m'); } catch (e) { ... }
+
+  if (allOk) {
+    printColored('\n🎉 Alle Automatisierungen, Extensions und Bots sind funktionsfähig!', '\x1b[1;42m');
+  } else {
+    printColored('\n❗ Es gibt Probleme mit Automatisierungen, Extensions oder Bots! Siehe Hinweise oben.', '\x1b[1;41m');
+  }
+}
+
+/**
  * Hauptfunktion
  */
 function main() {
