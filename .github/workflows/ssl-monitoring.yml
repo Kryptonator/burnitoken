@@ -1,0 +1,186 @@
+name: SSL Certificate Monitoring
+
+on:
+  schedule:
+    # Run every day at 08:00 UTC
+    - cron: '0 8 * * *'
+  workflow_dispatch: # Allow manual trigger
+  push:
+    paths:
+      - 'tools/website-health-check.js'
+      - '.github/workflows/ssl-monitoring.yml'
+
+jobs:
+  ssl-certificate-check:
+    name: SSL Certificate Health Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --only=production
+
+      - name: Run SSL Certificate Health Check
+        id: health-check
+        run: |
+          echo "Running SSL certificate health check..."
+          node tools/website-health-check.js || echo "health_check_failed=true" >> $GITHUB_OUTPUT
+          
+      - name: Upload Health Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: website-health-report
+          path: website-health-report.json
+          retention-days: 30
+
+      - name: Check for critical SSL issues
+        run: |
+          if [ -f website-health-report.json ]; then
+            CRITICAL_ISSUES=$(node -e "
+              const report = JSON.parse(require('fs').readFileSync('website-health-report.json', 'utf8'));
+              console.log(report.summary.criticalIssues);
+            ")
+            
+            if [ "$CRITICAL_ISSUES" -gt "0" ]; then
+              echo "🚨 Found $CRITICAL_ISSUES critical SSL certificate issues!"
+              
+              # Extract SSL certificate specific alerts
+              node -e "
+                const report = JSON.parse(require('fs').readFileSync('website-health-report.json', 'utf8'));
+                const sslAlerts = report.alerts.filter(alert => 
+                  alert.errorCode.includes('SSL_CERT') || alert.errorCode.includes('HTTPS')
+                );
+                console.log('SSL Certificate Alerts:');
+                sslAlerts.forEach((alert, index) => {
+                  console.log(\`\${index + 1}. [\${alert.errorCode}] \${alert.details}\`);
+                  console.log(\`   URL: \${alert.url}\`);
+                  console.log(\`   Time: \${alert.timestamp}\`);
+                });
+              "
+              
+              exit 1
+            else
+              echo "✅ No critical SSL certificate issues found."
+            fi
+          else
+            echo "❌ Health report not found!"
+            exit 1
+          fi
+
+      - name: Create Issue for SSL Certificate Problems
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            let issueBody = '**SSL Certificate Health Check Failed**\n\n';
+            issueBody += '🤖 *This issue was automatically created by the SSL monitoring system.*\n\n';
+            
+            if (fs.existsSync('website-health-report.json')) {
+              const report = JSON.parse(fs.readFileSync('website-health-report.json', 'utf8'));
+              
+              issueBody += '**Error Details:**\n\n';
+              
+              const sslAlerts = report.alerts.filter(alert => 
+                alert.errorCode.includes('SSL_CERT') || alert.errorCode.includes('HTTPS')
+              );
+              
+              if (sslAlerts.length > 0) {
+                issueBody += '```json\n';
+                issueBody += JSON.stringify(sslAlerts[0], null, 2);
+                issueBody += '\n```\n\n';
+              }
+              
+              issueBody += '**Summary:**\n';
+              issueBody += `- Total domains checked: ${report.summary.totalDomains}\n`;
+              issueBody += `- Critical issues: ${report.summary.criticalIssues}\n`;
+              issueBody += `- Warnings: ${report.summary.warnings}\n`;
+              issueBody += `- Check timestamp: ${report.timestamp}\n\n`;
+              
+              if (sslAlerts.length > 1) {
+                issueBody += '**All SSL Alerts:**\n';
+                sslAlerts.forEach((alert, index) => {
+                  issueBody += `${index + 1}. **[${alert.errorCode}]** ${alert.details}\n`;
+                  issueBody += `   - URL: ${alert.url}\n`;
+                  issueBody += `   - Time: ${alert.timestamp}\n\n`;
+                });
+              }
+            } else {
+              issueBody += '❌ **Health report file not found.**\n\n';
+            }
+            
+            issueBody += '**Recommended Actions:**\n';
+            issueBody += '1. Check SSL certificate status for affected domains\n';
+            issueBody += '2. Renew expired certificates immediately\n';
+            issueBody += '3. Verify DNS configuration\n';
+            issueBody += '4. Test HTTPS connectivity\n\n';
+            issueBody += '---\n';
+            issueBody += '*Generated by GitHub Actions SSL Monitoring*';
+            
+            // Check if there's already an open SSL issue
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'ssl-monitoring,critical'
+            });
+            
+            if (issues.length === 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: '🤖 [Automatisch gemeldet] SSL-Zertifikat kritische Probleme erkannt',
+                body: issueBody,
+                labels: ['ssl-monitoring', 'critical', 'automated']
+              });
+              console.log('✅ Created new SSL monitoring issue');
+            } else {
+              console.log('ℹ️ SSL monitoring issue already exists, updating with comment');
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issues[0].number,
+                body: `**Update: SSL Check Failed Again**\n\n${issueBody}`
+              });
+            }
+
+  ssl-certificate-test:
+    name: Test SSL Certificate Checker
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run SSL Certificate Tests
+        run: npm test -- tests/website-health-check.test.js
+
+      - name: Test CLI functionality
+        run: |
+          echo "Testing CLI help..."
+          node tools/website-health-check.js --help
+          
+          echo "Testing domain-specific check..."
+          node tools/website-health-check.js --domain burnitoken.com || true
+          
+          echo "Testing alert threshold setting..."
+          node tools/website-health-check.js --alert-days 30 || true
