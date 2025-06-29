@@ -11,7 +11,15 @@
         "workbench.editor.limit.enabled": true,
         "workbench.editor.limit.value": 5,
         "workbench.editor.showTabs": "multiple",
-        "breadcrumbs.enabled": true
+        "breadcrumbs.enabled": true,
+        "extensions.autoUpdate": true,
+        "extensions.ignoreRecommendations": false,
+        "github.copilot.enable": {
+            "*": true,
+            "yaml": true,
+            "plaintext": true,
+            "markdown": true
+        }
     },
     "extensions": {
         "recommendations": [

@@ -1,0 +1,26 @@
+policy:
+  rules:
+    - name: high-severity-vulnerabilities
+      description: Block packages with high severity vulnerabilities
+      priority: 1
+      conditions:
+        - security.severity: high
+      actions:
+        - block: true
+
+    - name: medium-severity-vulnerabilities
+      description: Block packages with more than 3 medium severity vulnerabilities
+      priority: 2
+      conditions:
+        - security.severity: medium
+          security.count: ">3"
+      actions:
+        - block: true
+
+    - name: license-compliance
+      description: Block packages with banned licenses
+      priority: 3
+      conditions:
+        - license: ["GPL", "LGPL", "CC-BY-NC", "CC-BY-SA"]
+      actions:
+        - block: true
