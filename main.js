@@ -328,9 +328,27 @@ document.addEventListener('DOMContentLoaded', async () => {
           xrpUsdPrice = xrpPriceData.ripple?.usd || fallbackPrices.xrp.priceUSD;
         } else {
           console.warn(`CoinGecko API request for XRP price failed: ${xrpPriceResponse.status}`);
+          // Log price feed error in monitoring format
+          console.error(JSON.stringify({
+            service: 'price-feed-monitor',
+            timestamp: new Date().toISOString(),
+            errorCode: 'PF-5001',
+            details: 'Der Endpunkt lieferte eine ungültige Antwort.',
+            endpoint: 'CoinGecko XRP Price',
+            httpStatus: xrpPriceResponse.status
+          }));
         }
       } catch (e) {
         console.warn('Could not fetch XRP price from CoinGecko, using fallback.', e);
+        // Log price feed error in monitoring format
+        console.error(JSON.stringify({
+          service: 'price-feed-monitor',
+          timestamp: new Date().toISOString(),
+          errorCode: 'PF-5001',
+          details: 'Der Endpunkt lieferte eine ungültige Antwort.',
+          endpoint: 'CoinGecko XRP Price',
+          networkError: e.message
+        }));
       }
 
       const burniMetrics = await fetchBurniMetrics();
