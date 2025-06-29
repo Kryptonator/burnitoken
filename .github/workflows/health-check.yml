@@ -130,18 +130,70 @@ jobs:
           title: "🚨 Health-Check-Fehler: ${{ github.workflow }} @ ${{ github.sha }}"
           content-filepath: HEALTH_REPORT.md
           labels: bug, automated, health-check
-      - name: 🔧 Auto-Fix & Commit mit Gemini Bot
+      - name: 🔧 Auto-Fix & Commit mit Gemini Bot (robust)
         if: failure()
         env:
           GEMINI_BOT_TOKEN: ${{ secrets.GEMINI_BOT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -e
           git config --global user.name "Gemini Bot"
           git config --global user.email "bot@burnitoken.com"
           git status
           if ! git diff --quiet; then
             git add .
-            git commit -m "Automatischer Fix durch Gemini Bot (Health-Check)"
-            git push https://x-access-token:${GEMINI_BOT_TOKEN}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
+            git commit -m "Auto-Fix durch Gemini Bot: ${{ github.workflow }} @ ${{ github.sha }} (${{ github.run_id }})"
+            git pull --rebase origin ${{ github.ref_name }} || echo "Rebase fehlgeschlagen, fahre fort."
+            if git push https://x-access-token:${GEMINI_BOT_TOKEN}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}; then
+              echo "Gemini Bot Commit & Push erfolgreich" > GEMINI_BOT_STATUS.md
+            else
+              echo "Push fehlgeschlagen, versuche PR zu erstellen..." | tee GEMINI_BOT_STATUS.md
+              gh pr create --title "Auto-Fix: ${{ github.workflow }}" --body "Automatischer Fix durch Gemini Bot" --base ${{ github.ref_name }} --head ${{ github.ref_name }} || echo "PR-Erstellung fehlgeschlagen" >> GEMINI_BOT_STATUS.md
+            fi
           else
-            echo "Keine Änderungen zum Commit."
+            echo "Keine Änderungen zum Commit." > GEMINI_BOT_STATUS.md
           fi
+      - name: 📤 Upload Gemini Bot Status
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemini-bot-status
+          path: GEMINI_BOT_STATUS.md
+      - name: 📤 Upload Lighthouse Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: LIGHTHOUSE_REPORT.html
+      - name: 📤 Upload Visual Regression Screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-regression
+          path: tests/e2e/screenshots
+      - name: 📤 Upload Playwright E2E Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-e2e-results
+          path: test-results/
+      - name: 📤 Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+      - name: 📤 Upload SEO Status Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-status
+          path: SEO_STATUS.md
+      - name: 📤 Upload Lighthouse Status Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-status
+          path: LIGHTHOUSE_STATUS.md
+      - name: 📤 Upload Feedback Report (Discord, E-Mail, weitere Kanäle)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: feedback-report-all-channels
+          path: FEEDBACK_REPORT_ALL.md
+      - name: 📨 Feedback aus allen Kanälen sammeln
+        run: node tools/feedback-report-all.js

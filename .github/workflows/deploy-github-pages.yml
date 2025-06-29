@@ -29,6 +29,12 @@ jobs:
           cp SEO_STATUS.md public/
           cp LIGHTHOUSE_STATUS.md public/
           cp LIGHTHOUSE_REPORT.html public/
+          cp STATUS.md public/
+          cp API_STATUS.md public/
+          cp FEEDBACK_REPORT.md public/
+          cp RECOVERY_STATUS.md public/
+          cp snyk.log public/ || true
+          cp VISION.md public/ || true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -38,3 +44,192 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Status-Webhook bei Erfolg
+        if: success()
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{"status":"success","workflow":"deploy-github-pages"}' ${{ secrets.STATUS_WEBHOOK_URL }}
+      - name: Status-Webhook bei Fehler
+        if: failure()
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{"status":"failure","workflow":"deploy-github-pages"}' ${{ secrets.STATUS_WEBHOOK_URL }}
+      - name: Slack-Alert bei Fehler
+        if: failure()
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{
+              "text": ":rotating_light: *Deploy-Fehler bei BurniToken!*\\nWorkflow: deploy-github-pages\\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }' ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Discord-Alert bei Fehler
+        if: failure()
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{
+              "content": ":rotating_light: **Deploy-Fehler bei BurniToken!**\\nWorkflow: deploy-github-pages\\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }' ${{ secrets.DISCORD_WEBHOOK_URL }}
+      - name: GitHub Issue bei Deploy-Fehler
+        if: failure()
+        uses: peter-evans/create-issue-from-file@v4
+        with:
+          title: "🚨 Deploy-Fehler: deploy-github-pages @ ${{ github.sha }}"
+          content-filepath: STATUS.md
+          labels: bug, automated, deploy
+      - name: Prepare Deploy Log
+        if: always()
+        run: |
+          if [ -f deploy.log ]; then
+            echo "Deploy-Log gefunden."
+          else
+            echo "Kein deploy.log vorhanden, generiere Dummy-Log."
+            echo "No deploy.log available for this run." > deploy.log
+          fi
+      - name: Upload Deploy Log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-log
+          path: deploy.log
+      - name: PR-Kommentar mit Deployment-Summary
+        if: github.event_name == 'pull_request' && success()
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: deploy-github-pages
+          message: |
+            🚀 **Deploy-Status:** Erfolgreich!
+            Workflow: deploy-github-pages
+            Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            
+            [Deployment-Reports ansehen](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: PR-Kommentar bei Deploy-Fehler
+        if: github.event_name == 'pull_request' && failure()
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: deploy-github-pages
+          message: |
+            ❌ **Deploy-Status:** Fehler!
+            Workflow: deploy-github-pages
+            Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            
+            Bitte Logs und Issues prüfen!
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Status-Badge und ToDo-Liste im README aktualisieren
+        if: success()
+        run: |
+          STATUS_BADGE="![Deploy Status](https://img.shields.io/badge/Deploy-success-brightgreen)"
+          TODO_LIST="\n## ToDo (automatisch generiert)\n- [x] Deployment erfolgreich: ${{ github.run_id }}\n- [ ] Manuelle Review\n- [ ] Feedback einholen\n- [ ] Nächste Features planen\n"
+          awk '/^# /{print; print ENVIRON["STATUS_BADGE"]; print ENVIRON["TODO_LIST"]; next}1' README.md > README.tmp && mv README.tmp README.md
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add README.md
+          git commit -m "Automatisches Status-Badge und ToDo-Update nach Deploy ${{ github.run_id }}"
+          git push
+        env:
+          STATUS_BADGE: "![Deploy Status](https://img.shields.io/badge/Deploy-success-brightgreen)"
+          TODO_LIST: "\n## ToDo (automatisch generiert)\n- [x] Deployment erfolgreich: ${{ github.run_id }}\n- [ ] Manuelle Review\n- [ ] Feedback einholen\n- [ ] Nächste Features planen\n"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Automatisches Tagging nach erfolgreichem Deploy
+        if: success()
+        run: |
+          TAG_NAME="deploy-$(date +'%Y%m%d-%H%M')"
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git tag $TAG_NAME
+          git push origin $TAG_NAME
+      - name: Automatisches GitHub Release nach erfolgreichem Deploy
+        if: success()
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "deploy-$(date +'%Y%m%d-%H%M')"
+          name: "Deploy ${{ github.run_id }}"
+          body: |
+            Automatisches Release nach erfolgreichem Deploy.
+            Workflow: deploy-github-pages
+            Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Deployment-Reports als Release-Assets anhängen
+        if: success()
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "deploy-$(date +'%Y%m%d-%H%M')"
+          name: "Deploy ${{ github.run_id }}"
+          body: |
+            Automatisches Release mit Reports nach erfolgreichem Deploy.
+            Workflow: deploy-github-pages
+            Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          files: |
+            SEO_STATUS.md
+            LIGHTHOUSE_STATUS.md
+            LIGHTHOUSE_REPORT.html
+            STATUS.md
+            API_STATUS.md
+            FEEDBACK_REPORT.md
+            RECOVERY_STATUS.md
+            snyk.log
+            VISION.md
+      - name: Automatischer Rollback auf letzten erfolgreichen Tag bei Fehler
+        if: failure()
+        run: |
+          echo "Starte automatischen Rollback auf letzten erfolgreichen Deploy-Tag..."
+          LAST_TAG=$(git tag --list 'deploy-*' --sort=-creatordate | head -n 1)
+          if [ -z "$LAST_TAG" ]; then
+            echo "Kein vorheriger Deploy-Tag gefunden. Rollback nicht möglich."
+            exit 1
+          fi
+          echo "Rollback auf $LAST_TAG"
+          git reset --hard $LAST_TAG
+          git push --force origin HEAD:main
+          echo "Rollback auf $LAST_TAG abgeschlossen."
+      - name: Smoke-Tests nach Deploy (Live-Check)
+        if: success()
+        run: |
+          echo "Starte Smoke-Tests gegen die Live-Seite..."
+          URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+          echo "Prüfe Hauptseite: $URL"
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$URL")
+          if [ "$STATUS" != "200" ]; then
+            echo "Fehler: Hauptseite nicht erreichbar (Status $STATUS)"; exit 1;
+          fi
+          echo "Hauptseite erfolgreich erreichbar."
+          # Beispiel für weitere Checks (kann beliebig erweitert werden)
+          for page in SEO_STATUS.md LIGHTHOUSE_STATUS.md; do
+            PAGE_URL="$URL/$page"
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$PAGE_URL")
+            if [ "$STATUS" != "200" ]; then
+              echo "Fehler: $page nicht erreichbar (Status $STATUS)"; exit 1;
+            fi
+            echo "$page erfolgreich erreichbar."
+          done
+          echo "Alle Smoke-Tests bestanden."
+      - name: API-Endpoint Live-Check
+        if: success()
+        run: |
+          BASE_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+          API_URL="$BASE_URL/api/status.json"
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$API_URL")
+          if [ "$STATUS" != "200" ]; then
+            echo "Fehler: API-Endpoint $API_URL nicht erreichbar (Status $STATUS)"; exit 1;
+          fi
+          echo "API-Endpoint erreichbar."
+      - name: Installiere Lighthouse CI
+        if: success()
+        run: npm install -g @lhci/cli@0.13.x
+      - name: Core Web Vitals Check (Lighthouse)
+        if: success()
+        run: |
+          BASE_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+          lhci collect --url=$BASE_URL --numberOfRuns=1 || { echo "Lighthouse/Core Web Vitals Check fehlgeschlagen"; exit 1; }
+          echo "Core Web Vitals Check bestanden."
+      - name: Installiere pa11y
+        if: success()
+        run: npm install -g pa11y
+      - name: Accessibility-Check (pa11y)
+        if: success()
+        run: |
+          BASE_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+          pa11y $BASE_URL --reporter cli || { echo "Accessibility-Check fehlgeschlagen"; exit 1; }
+          echo "Accessibility-Check bestanden."
+          echo "Alle erweiterten Checks bestanden."

@@ -87,3 +87,5 @@ Das Projekt hat alle Ziele erreicht: Eine technisch exzellente, robuste und proa
 ---
 
 > Letzte Aktualisierung: 19.06.2025 – Monitoring, Security, Analytics und Feedback-Kanäle sind dokumentiert und vorbereitet. Für produktive Nutzung API-Keys und Links anpassen!
+
+- [VISION.md](VISION.md): Die Vision und Leitlinien für die BurniToken-Plattform – Zero-Downtime, Self-Healing, Automatisierung, Transparenz, Security, Recovery, User-zentrierte Entwicklung.
