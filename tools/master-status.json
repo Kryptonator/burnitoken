@@ -1,16 +1,16 @@
 {
-  "timestamp": "2025-06-28T20:45:55.058Z",
+  "timestamp": "2025-06-29T22:08:11.657Z",
   "summary": {
-    "overallStatus": "optimal",
+    "overallStatus": "unknown",
     "website": "healthy",
     "deployment": "deployed",
-    "extensions": "optimal",
+    "extensions": "degraded",
     "performance": "good",
     "autoRecovery": "active"
   },
   "details": {
     "website": {
-      "timestamp": "2025-06-28T12:45:46.586Z",
+      "timestamp": "2025-06-29T21:25:48.221Z",
       "summary": {
         "overallStatus": "healthy",
         "availableUrls": 1,
@@ -23,25 +23,25 @@
           "status": 200,
           "statusText": "OK",
           "available": true,
-          "responseTime": 80,
-          "loadTime": 135,
+          "responseTime": 95,
+          "loadTime": 140,
           "contentType": "text/html; charset=UTF-8",
-          "lastChecked": "2025-06-28T12:45:46.892Z"
+          "lastChecked": "2025-06-29T21:25:48.746Z"
         }
       },
       "ssl": {
         "valid": true,
         "expiry": "2025-09-18T13:46:12.000Z",
-        "daysRemaining": 82,
+        "daysRemaining": 80,
         "issuer": "Let's Encrypt"
       },
       "performance": {
-        "ttfb": 80,
-        "loadTime": 135
+        "ttfb": 95,
+        "loadTime": 140
       }
     },
     "deployment": {
-      "timestamp": "2025-06-28T12:46:07.359Z",
+      "timestamp": "2025-06-29T21:25:59.084Z",
       "summary": {
         "status": "deployed",
         "criticalFilesFound": 6,
@@ -85,18 +85,18 @@
             "contentType": "text/plain; charset=UTF-8"
           }
         },
-        "responseTime": 193
+        "responseTime": 285
       }
     },
     "extensions": {
-      "timestamp": "2025-06-28T12:39:13.723Z",
+      "timestamp": "2025-06-29T19:12:26.875Z",
       "summary": {
         "extensions": {
-          "total": 64,
-          "active": 38,
-          "inactive": 3,
+          "total": 31,
+          "active": 25,
+          "inactive": 16,
           "required": 8,
-          "requiredActive": 8
+          "requiredActive": 6
         },
         "services": {
           "total": 10,
@@ -131,7 +131,7 @@
         {
           "id": "eamodio.gitlens",
           "name": "gitlens",
-          "isActive": true,
+          "isActive": false,
           "isRequired": true
         },
         {
@@ -149,7 +149,7 @@
         {
           "id": "bradlc.vscode-tailwindcss",
           "name": "vscode-tailwindcss",
-          "isActive": true,
+          "isActive": false,
           "isRequired": true
         },
         {
@@ -161,19 +161,19 @@
         {
           "id": "formulahendry.auto-close-tag",
           "name": "auto-close-tag",
-          "isActive": true,
+          "isActive": false,
           "isRequired": false
         },
         {
           "id": "formulahendry.auto-rename-tag",
           "name": "auto-rename-tag",
-          "isActive": true,
+          "isActive": false,
           "isRequired": false
         },
         {
           "id": "ecmel.vscode-html-css",
           "name": "vscode-html-css",
-          "isActive": true,
+          "isActive": false,
           "isRequired": false
         },
         {
@@ -215,7 +215,7 @@
         {
           "id": "html-validate.vscode-html-validate",
           "name": "vscode-html-validate",
-          "isActive": true,
+          "isActive": false,
           "isRequired": false
         },
         {
@@ -245,7 +245,7 @@
         {
           "id": "davidanson.vscode-markdownlint",
           "name": "vscode-markdownlint",
-          "isActive": true,
+          "isActive": false,
           "isRequired": false
         },
         {
@@ -263,13 +263,13 @@
         {
           "id": "humao.rest-client",
           "name": "rest-client",
-          "isActive": true,
+          "isActive": false,
           "isRequired": false
         },
         {
           "id": "github.vscode-github-actions",
           "name": "vscode-github-actions",
-          "isActive": true,
+          "isActive": false,
           "isRequired": false
         },
         {
@@ -281,13 +281,13 @@
         {
           "id": "ms-vscode.vscode-github-issue-notebooks",
           "name": "vscode-github-issue-notebooks",
-          "isActive": true,
+          "isActive": false,
           "isRequired": false
         },
         {
           "id": "github.codespaces",
           "name": "codespaces",
-          "isActive": true,
+          "isActive": false,
           "isRequired": false
         },
         {
@@ -299,7 +299,7 @@
         {
           "id": "hediet.vscode-drawio",
           "name": "vscode-drawio",
-          "isActive": true,
+          "isActive": false,
           "isRequired": false
         },
         {
@@ -347,7 +347,7 @@
         {
           "id": "austenc.tailwind-docs",
           "name": "tailwind-docs",
-          "isActive": true,
+          "isActive": false,
           "isRequired": false
         },
         {
@@ -401,7 +401,7 @@
           "status": "active",
           "connected": true,
           "authValid": true,
-          "lastCheck": "2025-06-28T04:20:43.844Z"
+          "lastCheck": "2025-06-28T12:45:58.148Z"
         },
         {
           "name": "gsc-auth",
@@ -428,7 +428,13 @@
           "status": "active"
         }
       ],
-      "recommendations": []
+      "recommendations": [
+        {
+          "priority": "high",
+          "message": "Installiere fehlende erforderliche Extensions: eamodio.gitlens, bradlc.vscode-tailwindcss",
+          "action": "extension-install"
+        }
+      ]
     },
     "monitoring": {
       "timestamp": "2025-06-26T13:03:05.294Z",
@@ -500,9 +506,44 @@
       }
     },
     "recovery": {
-      "timestamp": "2025-06-28T12:46:36.274Z",
-      "lastRecovery": null,
+      "timestamp": "2025-06-29T21:25:46.614Z",
+      "lastRun": null,
       "recoveriesPerformed": 0,
+      "lastRecoveryDate": null,
+      "todaysRecoveries": 0,
+      "status": "error",
+      "lastActions": [],
+      "errors": [
+        {
+          "timestamp": "2025-06-29T11:21:13.896Z",
+          "message": "Selbstdiagnose fehlgeschlagen"
+        },
+        {
+          "timestamp": "2025-06-29T11:57:57.857Z",
+          "message": "Selbstdiagnose fehlgeschlagen"
+        },
+        {
+          "timestamp": "2025-06-29T12:27:12.909Z",
+          "message": "Selbstdiagnose fehlgeschlagen"
+        },
+        {
+          "timestamp": "2025-06-29T14:26:08.559Z",
+          "message": "Selbstdiagnose fehlgeschlagen"
+        },
+        {
+          "timestamp": "2025-06-29T16:12:44.455Z",
+          "message": "Selbstdiagnose fehlgeschlagen"
+        },
+        {
+          "timestamp": "2025-06-29T19:49:59.211Z",
+          "message": "Selbstdiagnose fehlgeschlagen"
+        },
+        {
+          "timestamp": "2025-06-29T21:25:46.613Z",
+          "message": "Selbstdiagnose fehlgeschlagen"
+        }
+      ],
+      "lastRecovery": null,
       "recoveriesPerformedToday": 0,
       "recoveryEnabled": true,
       "history": [],

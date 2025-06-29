@@ -65,9 +65,17 @@ async function checkWs(url) {
   return new Promise((resolve) => {
     try {
       const ws = new (require('ws'))(url, { handshakeTimeout: 8000 });
-      ws.on('open', () => { ws.terminate(); resolve(true); });
-      ws.on('error', () => { resolve(false); });
-      setTimeout(() => { ws.terminate(); resolve(false); }, 8000);
+      ws.on('open', () => {
+        ws.terminate();
+        resolve(true);
+      });
+      ws.on('error', () => {
+        resolve(false);
+      });
+      setTimeout(() => {
+        ws.terminate();
+        resolve(false);
+      }, 8000);
     } catch (e) {
       resolve(false);
     }

@@ -11,10 +11,12 @@ const testError = {
     service: 'payment-gateway',
     errorCode: 'E-12045',
     timestamp: new Date().toISOString(),
-    details: 'Die Verbindung zur Datenbank konnte nicht hergestellt werden.'
-  }
+    details: 'Die Verbindung zur Datenbank konnte nicht hergestellt werden.',
+  },
 };
 
 sendAlert(testError);
 
-console.log('✅ Test-Alert wurde ausgelöst. Überprüfen Sie die Konsolenausgabe und Ihr GitHub Repository.');
+console.log(
+  '✅ Test-Alert wurde ausgelöst. Überprüfen Sie die Konsolenausgabe und Ihr GitHub Repository.',
+);

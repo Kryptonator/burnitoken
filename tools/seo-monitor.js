@@ -26,7 +26,9 @@ const CONFIG = {
 if (!fs.existsSync(CONFIG.REPORT_DIR)) fs.mkdirSync(CONFIG.REPORT_DIR, { recursive: true });
 
 // === HILFSFUNKTIONEN ===
-function log(msg) { console.log('\x1b[36m[SEO-MONITOR]\x1b[0m', msg); }
+function log(msg) {
+  console.log('\x1b[36m[SEO-MONITOR]\x1b[0m', msg);
+}
 function alert(msg) {
   if (CONFIG.ALERT_EMAIL) {
     // E-Mail-Alert (Platzhalter, Integration via CI/CD empfohlen)
@@ -43,7 +45,9 @@ async function checkGSC() {
   }
   try {
     // Nutze vorhandenes gsc-status-check.js Tool
-    const result = execSync(`node tools/gsc-status-check.js --diagnose --json`, { encoding: 'utf8' });
+    const result = execSync(`node tools/gsc-status-check.js --diagnose --json`, {
+      encoding: 'utf8',
+    });
     const data = JSON.parse(result);
     if (data.status === 'ok') {
       log('GSC-Status: OK');
@@ -63,7 +67,10 @@ async function checkLighthouse() {
   log('Starte Lighthouse SEO-Check...');
   try {
     const outFile = path.join(CONFIG.REPORT_DIR, 'lighthouse-seo.json');
-    execSync(`npx lighthouse ${CONFIG.SITE_URL} --output=json --output-path=${outFile} --only-categories=seo --quiet`, { stdio: 'ignore' });
+    execSync(
+      `npx lighthouse ${CONFIG.SITE_URL} --output=json --output-path=${outFile} --only-categories=seo --quiet`,
+      { stdio: 'ignore' },
+    );
     const report = JSON.parse(fs.readFileSync(outFile, 'utf8'));
     const score = report.categories.seo.score;
     if (score < 0.9) {
@@ -82,12 +89,12 @@ async function checkLighthouse() {
 async function checkRobotsAndSitemap() {
   log('Prüfe robots.txt und sitemap.xml...');
   try {
-    const robots = await fetch(CONFIG.ROBOTS_URL).then(r => r.text());
+    const robots = await fetch(CONFIG.ROBOTS_URL).then((r) => r.text());
     if (!robots.includes('User-agent')) {
       alert('robots.txt fehlt oder ist fehlerhaft!');
       return { status: 'error', message: 'robots.txt fehlt/fehlerhaft' };
     }
-    const sitemap = await fetch(CONFIG.SITEMAP_URL).then(r => r.text());
+    const sitemap = await fetch(CONFIG.SITEMAP_URL).then((r) => r.text());
     if (!sitemap.includes('<urlset')) {
       alert('sitemap.xml fehlt oder ist fehlerhaft!');
       return { status: 'error', message: 'sitemap.xml fehlt/fehlerhaft' };
@@ -107,8 +114,8 @@ async function checkRobotsAndSitemap() {
   results.gsc = await checkGSC();
   results.lighthouse = await checkLighthouse();
   results.robots = await checkRobotsAndSitemap();
-  const errors = Object.values(results).filter(r => r.status === 'error');
-  const warns = Object.values(results).filter(r => r.status === 'warn');
+  const errors = Object.values(results).filter((r) => r.status === 'error');
+  const warns = Object.values(results).filter((r) => r.status === 'warn');
   if (errors.length > 0) {
     log('❌ Kritische SEO/Indexierungs-Probleme gefunden!');
     process.exit(2);

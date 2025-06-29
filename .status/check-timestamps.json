@@ -1,0 +1,24 @@
+{
+  "website-health-check": {
+    "status": "success",
+    "lastSuccess": "2025-06-29T22:08:48.192Z"
+  },
+  "deployment-check": {
+    "status": "success",
+    "lastSuccess": "2025-06-29T22:09:07.781Z"
+  },
+  "ai-auth": {
+    "name": "KI Authentifizierungs-Check",
+    "status": "success",
+    "message": "Alle erforderlichen KI-API-Schlüssel sind in der .env-Datei konfiguriert.",
+    "lastCheck": "2025-06-29T22:08:46.197Z"
+  },
+  "gsc-integration-monitor": {
+    "status": "success",
+    "lastSuccess": "2025-06-29T22:09:06.904Z"
+  },
+  "dependabot-monitor": {
+    "status": "success",
+    "lastSuccess": "2025-06-29T22:09:29.897Z"
+  }
+}

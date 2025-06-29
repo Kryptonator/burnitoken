@@ -7,7 +7,12 @@
 const fs = require('fs');
 const path = require('path');
 // Chalk v5+ ESM-Import-Workaround für CommonJS:
-let chalkCyan = x => x, chalkGreen = x => x, chalkRed = x => x, chalkBgGreenBlack = x => x, chalkBgRedWhite = x => x, chalkBgYellowBlack = x => x;
+let chalkCyan = (x) => x,
+  chalkGreen = (x) => x,
+  chalkRed = (x) => x,
+  chalkBgGreenBlack = (x) => x,
+  chalkBgRedWhite = (x) => x,
+  chalkBgYellowBlack = (x) => x;
 try {
   const chalkImport = require('chalk');
   if (typeof chalkImport.cyan === 'function') {
@@ -46,12 +51,23 @@ function log(msg) {
 
 function checkMetaTags(html) {
   const required = [
-    'description', 'og:title', 'og:description', 'og:image', 'og:url', 'og:type',
-    'twitter:card', 'twitter:title', 'twitter:description', 'twitter:image',
-    'canonical', 'robots', 'sitemap', 'viewport'
+    'description',
+    'og:title',
+    'og:description',
+    'og:image',
+    'og:url',
+    'og:type',
+    'twitter:card',
+    'twitter:title',
+    'twitter:description',
+    'twitter:image',
+    'canonical',
+    'robots',
+    'sitemap',
+    'viewport',
   ];
   let ok = true;
-  required.forEach(tag => {
+  required.forEach((tag) => {
     if (!html.includes(tag)) {
       console.log(chalkRed(`❌ Fehlendes Tag: ${tag}`));
       log(`Fehlendes Tag: ${tag}`);
@@ -65,7 +81,7 @@ function checkMetaTags(html) {
 function checkLdJson(html) {
   const schemas = ['Organization', 'WebSite', 'Product', 'FAQPage', 'BreadcrumbList'];
   let ok = true;
-  schemas.forEach(type => {
+  schemas.forEach((type) => {
     if (!html.includes(`"@type": "${type}"`)) {
       console.log(chalkRed(`❌ Fehlendes Schema.org: ${type}`));
       log(`Fehlendes Schema.org: ${type}`);
@@ -79,7 +95,7 @@ function checkLdJson(html) {
 function checkAltTexts(html) {
   const imgTags = html.match(/<img [^>]*>/g) || [];
   let ok = true;
-  imgTags.forEach(tag => {
+  imgTags.forEach((tag) => {
     if (!/alt="[^"]+"/.test(tag)) {
       console.log(chalkRed(`❌ Fehlender Alt-Text: ${tag}`));
       log(`Fehlender Alt-Text: ${tag}`);
@@ -125,12 +141,18 @@ function autoFixMetaTags(html) {
     { tag: 'og:type', html: '<meta property="og:type" content="website">' },
     { tag: 'twitter:card', html: '<meta name="twitter:card" content="summary_large_image">' },
     { tag: 'twitter:title', html: '<meta name="twitter:title" content="TODO: Twitter Title">' },
-    { tag: 'twitter:description', html: '<meta name="twitter:description" content="TODO: Twitter Desc">' },
+    {
+      tag: 'twitter:description',
+      html: '<meta name="twitter:description" content="TODO: Twitter Desc">',
+    },
     { tag: 'twitter:image', html: '<meta name="twitter:image" content="TODO: Twitter Image">' },
     { tag: 'canonical', html: '<link rel="canonical" href="TODO: Canonical URL">' },
     { tag: 'robots', html: '<meta name="robots" content="index, follow">' },
     { tag: 'sitemap', html: '<link rel="sitemap" type="application/xml" href="/sitemap.xml">' },
-    { tag: 'viewport', html: '<meta name="viewport" content="width=device-width, initial-scale=1.0">' }
+    {
+      tag: 'viewport',
+      html: '<meta name="viewport" content="width=device-width, initial-scale=1.0">',
+    },
   ];
   let newHtml = html;
   requiredTags.forEach(({ tag, html: tagHtml }) => {
@@ -146,7 +168,7 @@ function autoFixMetaTags(html) {
 function autoFixAltTexts(html) {
   // Fügt fehlende alt="TODO" zu <img>-Tags ohne Alt-Attribut hinzu
   let changed = false;
-  let newHtml = html.replace(/<img ((?!alt=)[^>])+>/g, match => {
+  let newHtml = html.replace(/<img ((?!alt=)[^>])+>/g, (match) => {
     changed = true;
     log(`Auto-Fix: Alt-Text ergänzt: ${match}`);
     return match.replace(/<img /, '<img alt="TODO" ');
@@ -222,8 +244,15 @@ function main() {
   } else {
     const detailMsg = errorDetails.join('; ');
     updateStatusFile('ERROR', detailMsg);
-    github.createGithubIssue('SEO/Schema-Check: Fehler (Multi-Page)', `Nicht automatisch behebbar: ${detailMsg}`);
-    console.log(chalkBgRedWhite('\nSEO/Schema/Bot-Check: FEHLER auf mindestens einer Seite! Siehe oben und Log.\n'));
+    github.createGithubIssue(
+      'SEO/Schema-Check: Fehler (Multi-Page)',
+      `Nicht automatisch behebbar: ${detailMsg}`,
+    );
+    console.log(
+      chalkBgRedWhite(
+        '\nSEO/Schema/Bot-Check: FEHLER auf mindestens einer Seite! Siehe oben und Log.\n',
+      ),
+    );
     log('SEO/Schema/Bot-Check: FEHLER auf mindestens einer Seite!');
     process.exit(2);
   }

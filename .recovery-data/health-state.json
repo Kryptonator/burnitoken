@@ -1,0 +1,46 @@
+{
+  "timestamp": "2025-06-29T23:34:08.891Z",
+  "healthMetrics": {
+    "github-actions": {
+      "healthy": true,
+      "missingWorkflows": [],
+      "totalWorkflows": 5,
+      "existingWorkflows": 5
+    },
+    "monitoring-services": {
+      "healthy": true,
+      "scriptExists": true,
+      "lastCheck": "2025-06-29T23:34:08.890Z"
+    },
+    "security-hardening": {
+      "healthy": true,
+      "scriptExists": true,
+      "reportsDirectoryExists": true,
+      "lastCheck": "2025-06-29T23:34:08.890Z"
+    },
+    "seo-automation": {
+      "healthy": true,
+      "scriptExists": true,
+      "sitemapExists": true,
+      "lastCheck": "2025-06-29T23:34:08.890Z"
+    },
+    "price-oracle": {
+      "healthy": true,
+      "scriptExists": true,
+      "lastCheck": "2025-06-29T23:34:08.890Z"
+    },
+    "backup-system": {
+      "healthy": true,
+      "workflowExists": true,
+      "backupDirectoryExists": false,
+      "lastCheck": "2025-06-29T23:34:08.890Z"
+    },
+    "disaster-recovery": {
+      "healthy": true,
+      "workflowExists": true,
+      "recoveryDataExists": true,
+      "lastCheck": "2025-06-29T23:34:08.891Z"
+    }
+  },
+  "healingAttempts": 0
+}

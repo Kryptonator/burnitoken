@@ -117,8 +117,8 @@ async function runDiagnosis() {
       extra: {
         component: 'Website Connectivity Check',
         failedDomains: failedDomains.join(', ') || 'Alle',
-        timestamp: new Date().toISOString()
-      }
+        timestamp: new Date().toISOString(),
+      },
     });
   }
 }

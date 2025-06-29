@@ -45,10 +45,15 @@ async function runLighthouseAudit() {
 
   const categories = runnerResult.lhr.categories;
   return {
-    status: (categories.performance.score > 0.9 && categories.accessibility.score > 0.9 && categories.seo.score > 0.9) ? 'GOOD' : 'WARNING',
+    status:
+      categories.performance.score > 0.9 &&
+      categories.accessibility.score > 0.9 &&
+      categories.seo.score > 0.9
+        ? 'GOOD'
+        : 'WARNING',
     performance: Math.round(categories.performance.score * 100),
     accessibility: Math.round(categories.accessibility.score * 100),
-    seo: Math.round(categories.seo.score * 100)
+    seo: Math.round(categories.seo.score * 100),
   };
 }
 

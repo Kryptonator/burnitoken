@@ -19,8 +19,20 @@ const { execSync } = require('child_process');
 
 const EXT_LIST_PATH = path.join(__dirname, 'extensions.json');
 const SETTINGS_PATH = path.join(__dirname, 'vscode-settings.json');
-const KEYBINDINGS_PATH = path.join(process.env.HOME || process.env.USERPROFILE, '.config', 'Code', 'User', 'keybindings.json');
-const VSCODE_SETTINGS_PATH = path.join(process.env.HOME || process.env.USERPROFILE, '.config', 'Code', 'User', 'settings.json');
+const KEYBINDINGS_PATH = path.join(
+  process.env.HOME || process.env.USERPROFILE,
+  '.config',
+  'Code',
+  'User',
+  'keybindings.json',
+);
+const VSCODE_SETTINGS_PATH = path.join(
+  process.env.HOME || process.env.USERPROFILE,
+  '.config',
+  'Code',
+  'User',
+  'settings.json',
+);
 
 function getDesiredExtensions() {
   if (!fs.existsSync(EXT_LIST_PATH)) return [];
@@ -30,7 +42,10 @@ function getDesiredExtensions() {
 function getInstalledExtensions() {
   try {
     const output = execSync('code --list-extensions', { encoding: 'utf8' });
-    return output.split('\n').map(x => x.trim()).filter(Boolean);
+    return output
+      .split('\n')
+      .map((x) => x.trim())
+      .filter(Boolean);
   } catch (e) {
     return [];
   }
@@ -48,8 +63,8 @@ function uninstallExtension(id) {
 
 function checkExtensions(enforce = false) {
   const desired = getDesiredExtensions();
-  const requiredIds = desired.filter(e => e.required).map(e => e.id);
-  const optionalIds = desired.filter(e => !e.required).map(e => e.id);
+  const requiredIds = desired.filter((e) => e.required).map((e) => e.id);
+  const optionalIds = desired.filter((e) => !e.required).map((e) => e.id);
   const allDesired = [...requiredIds, ...optionalIds];
   const installed = getInstalledExtensions();
 
@@ -67,7 +82,13 @@ function checkExtensions(enforce = false) {
 
 function checkSettings() {
   if (!fs.existsSync(SETTINGS_PATH)) return;
-  const userSettingsPath = path.join(process.env.HOME || process.env.USERPROFILE, '.config', 'Code', 'User', 'settings.json');
+  const userSettingsPath = path.join(
+    process.env.HOME || process.env.USERPROFILE,
+    '.config',
+    'Code',
+    'User',
+    'settings.json',
+  );
   if (!fs.existsSync(userSettingsPath)) {
     console.log('⚠️  VS Code settings.json nicht gefunden, Settings-Check übersprungen.');
     return;
@@ -83,7 +104,8 @@ function checkSettings() {
 }
 
 function checkKeybindings() {
-  if (!fs.existsSync(KEYBINDINGS_PATH)) return { ok: false, message: 'keybindings.json nicht gefunden' };
+  if (!fs.existsSync(KEYBINDINGS_PATH))
+    return { ok: false, message: 'keybindings.json nicht gefunden' };
   try {
     JSON.parse(fs.readFileSync(KEYBINDINGS_PATH, 'utf8'));
     return { ok: true };
@@ -124,7 +146,8 @@ function checkWindowNotResponding() {
 }
 
 function checkSettingsConsistency() {
-  if (!fs.existsSync(VSCODE_SETTINGS_PATH)) return { ok: false, message: 'settings.json nicht gefunden' };
+  if (!fs.existsSync(VSCODE_SETTINGS_PATH))
+    return { ok: false, message: 'settings.json nicht gefunden' };
   try {
     JSON.parse(fs.readFileSync(VSCODE_SETTINGS_PATH, 'utf8'));
     return { ok: true };

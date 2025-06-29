@@ -20,7 +20,10 @@ function getDesiredExtensions() {
 
 function getInstalledExtensions() {
   const output = execSync('code --list-extensions', { encoding: 'utf8' });
-  return output.split('\n').map(x => x.trim()).filter(Boolean);
+  return output
+    .split('\n')
+    .map((x) => x.trim())
+    .filter(Boolean);
 }
 
 function installExtension(id) {
@@ -35,8 +38,8 @@ function uninstallExtension(id) {
 
 function main() {
   const desired = getDesiredExtensions();
-  const requiredIds = desired.filter(e => e.required).map(e => e.id);
-  const optionalIds = desired.filter(e => !e.required).map(e => e.id);
+  const requiredIds = desired.filter((e) => e.required).map((e) => e.id);
+  const optionalIds = desired.filter((e) => !e.required).map((e) => e.id);
   const allDesired = [...requiredIds, ...optionalIds];
   const installed = getInstalledExtensions();
 

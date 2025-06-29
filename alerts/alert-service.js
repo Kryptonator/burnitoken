@@ -11,11 +11,14 @@ function sendAlert({ message, webhookUrl, email, level = 'error', extra = {} }) 
   if (!message) return;
   const payload = {
     text: `[${level.toUpperCase()}] ${message}`,
-    ...extra
+    ...extra,
   };
   // Logge Alert zusätzlich in Datei
   try {
-    fs.appendFileSync(ALERT_LOG, `[${new Date().toISOString()}] [${level.toUpperCase()}] ${message}\n`);
+    fs.appendFileSync(
+      ALERT_LOG,
+      `[${new Date().toISOString()}] [${level.toUpperCase()}] ${message}\n`,
+    );
   } catch (e) {}
   // E-Mail senden
   if (email) {
@@ -23,14 +26,19 @@ function sendAlert({ message, webhookUrl, email, level = 'error', extra = {} }) 
       service: 'yahoo',
       auth: {
         user: process.env.ALERT_EMAIL_USER || 'burn.coin@yahoo.com',
-        pass: process.env.ALERT_EMAIL_PASS || 'DEIN_APP_PASSWORT'
-      }
+        pass: process.env.ALERT_EMAIL_PASS || 'DEIN_APP_PASSWORT',
+      },
     });
     const mailOptions = {
       from: process.env.ALERT_EMAIL_USER || 'burn.coin@yahoo.com',
       to: email,
-      subject: `[ALARM] ${level.toUpperCase()} - BurniToken Recovery/Status` ,
-      text: `Automatische Benachrichtigung (BurniToken Recovery/Status):\n\n${message}` + (extra && Object.keys(extra).length ? '\n\nZusatzinfos:\n' + JSON.stringify(extra, null, 2) : '') + '\n\nBitte prüfen Sie umgehend das System!'
+      subject: `[ALARM] ${level.toUpperCase()} - BurniToken Recovery/Status`,
+      text:
+        `Automatische Benachrichtigung (BurniToken Recovery/Status):\n\n${message}` +
+        (extra && Object.keys(extra).length
+          ? '\n\nZusatzinfos:\n' + JSON.stringify(extra, null, 2)
+          : '') +
+        '\n\nBitte prüfen Sie umgehend das System!',
     };
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
@@ -44,15 +52,18 @@ function sendAlert({ message, webhookUrl, email, level = 'error', extra = {} }) 
   else if (webhookUrl) {
     const parsedUrl = url.parse(webhookUrl);
     const data = JSON.stringify(payload);
-    const req = https.request({
-      hostname: parsedUrl.hostname,
-      path: parsedUrl.path,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': data.length
-      }
-    }, res => {});
+    const req = https.request(
+      {
+        hostname: parsedUrl.hostname,
+        path: parsedUrl.path,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': data.length,
+        },
+      },
+      (res) => {},
+    );
     req.on('error', (e) => {
       console.error('Alert-Webhook-Fehler:', e);
     });

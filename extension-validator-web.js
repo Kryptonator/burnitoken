@@ -3,11 +3,12 @@ function runExtensionValidator() {
 
   // Mach einen AJAX-Aufruf, um den Extension Validator auszuführen
   try {
-    // Da wir im Browser sind und keinen direkten Node.js-Zugriff haben, 
+    // Da wir im Browser sind und keinen direkten Node.js-Zugriff haben,
     // simulieren wir die Ausführung mit einer Meldung
     setTimeout(() => {
-      document.getElementById('status').innerHTML = 'Simulation der Ausführung abgeschlossen. In einer echten Umgebung würde hier der Extension Validator laufen.';
-      
+      document.getElementById('status').innerHTML =
+        'Simulation der Ausführung abgeschlossen. In einer echten Umgebung würde hier der Extension Validator laufen.';
+
       // Zeige Tipps zur Tailwind-Aktualisierung
       document.getElementById('results').innerHTML = `
       <h3>Tailwind CSS Update Anleitung:</h3>
@@ -36,7 +37,6 @@ function runExtensionValidator() {
 </pre>
       `;
     }, 1000);
-    
   } catch (error) {
     document.getElementById('status').innerHTML = 'Fehler: ' + error.message;
   }

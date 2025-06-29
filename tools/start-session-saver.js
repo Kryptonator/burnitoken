@@ -21,7 +21,7 @@ const vscodeTasksPath = path.join(__dirname, '..', '.vscode', 'tasks.json');
  */
 function addSessionSaverTask() {
   console.log('🔄 Füge Session-Saver Task zu VS Code hinzu...');
-  
+
   try {
     // Lese bestehende tasks.json
     let tasksJson = { version: '2.0.0', tasks: [] };
@@ -29,12 +29,10 @@ function addSessionSaverTask() {
       const tasksContent = fs.readFileSync(vscodeTasksPath, 'utf8');
       tasksJson = JSON.parse(tasksContent);
     }
-    
+
     // Prüfe, ob Session-Saver Task bereits existiert
-    const existingTask = tasksJson.tasks.find(task => 
-      task.label === '🔄 Start Session-Saver'
-    );
-    
+    const existingTask = tasksJson.tasks.find((task) => task.label === '🔄 Start Session-Saver');
+
     if (!existingTask) {
       // Füge neuen Task hinzu
       const newTask = {
@@ -47,23 +45,20 @@ function addSessionSaverTask() {
           echo: false,
           focus: false,
           panel: 'dedicated',
-          close: true
+          close: true,
         },
         runOptions: {
-          runOn: 'folderOpen'
+          runOn: 'folderOpen',
         },
         isBackground: true,
-        problemMatcher: []
+        problemMatcher: [],
       };
-      
+
       tasksJson.tasks.push(newTask);
-      
+
       // Speichere aktualisierte Task-Konfiguration
-      fs.writeFileSync(
-        vscodeTasksPath, 
-        JSON.stringify(tasksJson, null, 2)
-      );
-      
+      fs.writeFileSync(vscodeTasksPath, JSON.stringify(tasksJson, null, 2));
+
       console.log('✅ Session-Saver Task hinzugefügt');
     } else {
       console.log('✓ Session-Saver Task bereits vorhanden');
@@ -78,7 +73,7 @@ function addSessionSaverTask() {
  */
 function enableAutoStart() {
   console.log('🔄 Aktiviere automatischen Start des Session-Savers...');
-  
+
   try {
     // Lese bestehende settings.json
     let settingsJson = {};
@@ -86,16 +81,13 @@ function enableAutoStart() {
       const settingsContent = fs.readFileSync(vscodeSettingsPath, 'utf8');
       settingsJson = JSON.parse(settingsContent);
     }
-    
+
     // Aktiviere automatische Tasks
     settingsJson['task.allowAutomaticTasks'] = 'on';
-    
+
     // Speichere aktualisierte Einstellungen
-    fs.writeFileSync(
-      vscodeSettingsPath, 
-      JSON.stringify(settingsJson, null, 2)
-    );
-    
+    fs.writeFileSync(vscodeSettingsPath, JSON.stringify(settingsJson, null, 2));
+
     console.log('✅ Automatischer Start aktiviert');
   } catch (err) {
     console.error(`❌ Fehler beim Aktivieren des automatischen Starts: ${err.message}`);
@@ -107,17 +99,17 @@ function enableAutoStart() {
  */
 function startSessionSaver() {
   console.log('🚀 Starte Session-Saver im Hintergrund...');
-  
+
   try {
     // Starte Session-Saver als separaten Prozess
     const process = spawn('node', [sessionSaverPath], {
       detached: true,
-      stdio: 'ignore'
+      stdio: 'ignore',
     });
-    
+
     // Löse den Prozess vom Elternprozess
     process.unref();
-    
+
     console.log('✅ Session-Saver gestartet');
   } catch (err) {
     console.error(`❌ Fehler beim Starten des Session-Savers: ${err.message}`);
@@ -129,20 +121,20 @@ function startSessionSaver() {
  */
 function main() {
   console.log('🚀 Session-Saver Initialisierung...');
-  
+
   // Prüfe, ob Session-Saver existiert
   if (!fs.existsSync(sessionSaverPath)) {
     console.error(`❌ Session-Saver nicht gefunden: ${sessionSaverPath}`);
     return;
   }
-  
+
   // Füge Task hinzu und aktiviere automatischen Start
   addSessionSaverTask();
   enableAutoStart();
-  
+
   // Starte Session-Saver
   startSessionSaver();
-  
+
   console.log('🎉 Session-Saver Setup abgeschlossen');
   console.log('💡 Der Session-Saver speichert automatisch alle 10 Sekunden Ihren Arbeitsstand');
 }

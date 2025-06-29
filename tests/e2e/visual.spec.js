@@ -10,7 +10,10 @@ const seiten = [
 seiten.forEach((pfad) => {
   test(`Visual Regression: ${pfad}`, async ({ page }) => {
     await page.goto(`http://localhost:8080${pfad}`);
-    await expect(page).toHaveScreenshot(`${pfad.replace(/[\/.]/g, '_')}.png`, { fullPage: true, threshold: 0.02 });
+    await expect(page).toHaveScreenshot(`${pfad.replace(/[\/.]/g, '_')}.png`, {
+      fullPage: true,
+      threshold: 0.02,
+    });
   });
 });
 

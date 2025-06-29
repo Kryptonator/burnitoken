@@ -12,7 +12,10 @@ const STATUS_PATH = path.join(__dirname, '../LIGHTHOUSE_STATUS.md');
 function runLighthouse() {
   try {
     // Nutzt Lighthouse CLI im Dateimodus (z.B. für lokale index.html)
-    execSync('npx lighthouse http://localhost:8080/index.html --output html --output-path LIGHTHOUSE_REPORT.html --quiet --chrome-flags="--headless"', { stdio: 'inherit' });
+    execSync(
+      'npx lighthouse http://localhost:8080/index.html --output html --output-path LIGHTHOUSE_REPORT.html --quiet --chrome-flags="--headless"',
+      { stdio: 'inherit' },
+    );
     return true;
   } catch (e) {
     return false;
@@ -32,7 +35,10 @@ function main() {
     process.exit(0);
   } else {
     updateStatusFile('ERROR', 'Lighthouse- oder Accessibility-Check fehlgeschlagen!');
-    github.createGithubIssue('Lighthouse/Accessibility-Check: Fehler', 'Siehe LIGHTHOUSE_STATUS.md und Report.');
+    github.createGithubIssue(
+      'Lighthouse/Accessibility-Check: Fehler',
+      'Siehe LIGHTHOUSE_STATUS.md und Report.',
+    );
     process.exit(2);
   }
 }

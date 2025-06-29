@@ -48,7 +48,7 @@ test('Sprache wechseln funktioniert', async ({ page }) => {
 
 // Test: Fehlerfall Preis-API (Fallback)
 test('Preis-Widget zeigt Fallback bei API-Fehler', async ({ page }) => {
-  await page.route('**/api.coingecko.com/**', route => route.abort());
+  await page.route('**/api.coingecko.com/**', (route) => route.abort());
   await page.goto('http://localhost:8080');
   const priceStatus = await page.locator('[data-price-status]');
   await expect(priceStatus).toHaveText(/Fehler|Fallback|Error/i);
