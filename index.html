@@ -432,8 +432,9 @@
                 <a href="#faq" class="nav-link">FAQ</a>
             </div>
             <div class="flex items-center space-x-4">
-                <div class="price-container">
-                    <span id="price-burni" class="text-lg font-semibold" data-status="loading">$....</span>
+                <div class="price-container" data-price-display>
+                    <span class="text-lg font-semibold" data-price-value>$....</span>
+                    <span class="ml-2 text-xs text-gray-500 dark:text-gray-400" data-price-status aria-live="polite" aria-atomic="true">Loading...</span>
                 </div>
                 <button id="theme-toggle" type="button" aria-label="Toggle theme" class="p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-500">
                     <svg id="theme-icon-light" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -513,7 +514,10 @@
                     <div class="space-y-4">
                         <div class="flex justify-between items-center">
                             <span class="font-medium">Current Price (USD)</span>
-                            <span id="price-burni-tokenomics" class="font-bold text-green-500 text-lg" data-status="loading">$....</span>
+                            <span class="font-bold text-green-500 text-lg" data-price-display>
+                                <span data-price-value>$....</span>
+                                <span class="ml-2 text-xs text-gray-500 dark:text-gray-400" data-price-status aria-live="polite" aria-atomic="true">Loading...</span>
+                            </span>
                         </div>
                         <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
                             <div class="bg-green-500 h-2.5 rounded-full w-45"></div>

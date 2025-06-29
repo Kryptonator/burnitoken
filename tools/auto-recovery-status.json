@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-29T11:21:13.896Z",
+  "timestamp": "2025-06-29T12:27:12.909Z",
   "lastRun": null,
   "recoveriesPerformed": 0,
   "lastRecoveryDate": null,
@@ -9,6 +9,14 @@
   "errors": [
     {
       "timestamp": "2025-06-29T11:21:13.896Z",
+      "message": "Selbstdiagnose fehlgeschlagen"
+    },
+    {
+      "timestamp": "2025-06-29T11:57:57.857Z",
+      "message": "Selbstdiagnose fehlgeschlagen"
+    },
+    {
+      "timestamp": "2025-06-29T12:27:12.909Z",
       "message": "Selbstdiagnose fehlgeschlagen"
     }
   ],

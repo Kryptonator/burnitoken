@@ -78,3 +78,18 @@ jobs:
           title: "🚨 Health-Check-Fehler: ${{ github.workflow }} @ ${{ github.sha }}"
           content-filepath: HEALTH_REPORT.md
           labels: bug, automated, health-check
+      - name: 🔧 Auto-Fix & Commit mit Gemini Bot
+        if: failure()
+        env:
+          GEMINI_BOT_TOKEN: ${{ secrets.GEMINI_BOT_TOKEN }}
+        run: |
+          git config --global user.name "Gemini Bot"
+          git config --global user.email "bot@burnitoken.com"
+          git status
+          if ! git diff --quiet; then
+            git add .
+            git commit -m "Automatischer Fix durch Gemini Bot (Health-Check)"
+            git push https://x-access-token:${GEMINI_BOT_TOKEN}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
+          else
+            echo "Keine Änderungen zum Commit."
+          fi
