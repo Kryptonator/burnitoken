@@ -8,13 +8,16 @@ async function loadTranslations(lang) {
 }
 
 function updateI18nElements(trans) {
-  document.querySelectorAll('[data-i18n]').forEach(el => {
+  document.querySelectorAll('[data-i18n]').forEach((el) => {
     const key = el.getAttribute('data-i18n');
     // Immer Wert setzen, auch wenn leer, Fallback: Key selbst
-    el.textContent = (key in trans) ? trans[key] : key;
+    el.textContent = key in trans ? trans[key] : key;
     // aria-label ggf. mitübersetzen, falls vorhanden und identisch mit Key
-    if (el.hasAttribute('aria-label') && el.getAttribute('aria-label').toLowerCase().includes(key.replace(/_/g, ' '))) {
-      el.setAttribute('aria-label', (key in trans) ? trans[key] : key);
+    if (
+      el.hasAttribute('aria-label') &&
+      el.getAttribute('aria-label').toLowerCase().includes(key.replace(/_/g, ' '))
+    ) {
+      el.setAttribute('aria-label', key in trans ? trans[key] : key);
     }
   });
 }
@@ -42,7 +45,7 @@ function initNavigationAndLanguage() {
   // Sprachumschaltung
   const langSelect = document.getElementById('lang-select');
   if (langSelect) {
-    langSelect.addEventListener('change', e => switchLanguage(e.target.value));
+    langSelect.addEventListener('change', (e) => switchLanguage(e.target.value));
     switchLanguage(langSelect.value);
   }
 
@@ -59,7 +62,7 @@ function initNavigationAndLanguage() {
       newBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     });
     // Menü schließt bei Klick auf Link
-    mobileMenu.querySelectorAll('a').forEach(link => {
+    mobileMenu.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', () => {
         mobileMenu.classList.add('hidden');
         mobileMenu.classList.remove('active');
@@ -67,7 +70,7 @@ function initNavigationAndLanguage() {
       });
     });
     // Tastatursteuerung für mobilen Menü-Button
-    newBtn.addEventListener('keydown', e => {
+    newBtn.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         newBtn.click();
@@ -77,7 +80,7 @@ function initNavigationAndLanguage() {
 
   // Verbesserte Navigation Active-State beim Scrollen
   const navLinks = Array.from(document.querySelectorAll('a.nav-link'));
-  const sections = navLinks.map(link => document.querySelector(link.getAttribute('href')));
+  const sections = navLinks.map((link) => document.querySelector(link.getAttribute('href')));
   function updateActiveNav() {
     let index = sections.findIndex((section, i) => {
       if (!section) return false;
@@ -91,8 +94,8 @@ function initNavigationAndLanguage() {
   updateActiveNav();
 
   // Verbesserte Smooth Scrolling Logik
-  document.querySelectorAll('a.nav-link, #mobile-menu a').forEach(link => {
-    link.addEventListener('click', function(e) {
+  document.querySelectorAll('a.nav-link, #mobile-menu a').forEach((link) => {
+    link.addEventListener('click', function (e) {
       const href = this.getAttribute('href');
       if (href && href.startsWith('#')) {
         e.preventDefault();
@@ -133,22 +136,22 @@ function initNavigationAndLanguage() {
 
   // Event-Listener für alle ehemals onclick/onkeydown-Elemente
   // scrollToSection
-  document.querySelectorAll('[data-scroll-to]').forEach(el => {
-    el.addEventListener('click', e => {
+  document.querySelectorAll('[data-scroll-to]').forEach((el) => {
+    el.addEventListener('click', (e) => {
       const section = el.getAttribute('data-scroll-to');
       if (section) scrollToSection(section);
     });
   });
   // showTooltip
-  document.querySelectorAll('[data-tooltip]').forEach(el => {
+  document.querySelectorAll('[data-tooltip]').forEach((el) => {
     el.addEventListener('mouseenter', () => showTooltip(el));
   });
   // initializeCalculator
-  document.querySelectorAll('[data-init-calculator]').forEach(el => {
+  document.querySelectorAll('[data-init-calculator]').forEach((el) => {
     el.addEventListener('click', initializeCalculator);
   });
   // toggleFAQ
-  document.querySelectorAll('[data-toggle-faq]').forEach(el => {
+  document.querySelectorAll('[data-toggle-faq]').forEach((el) => {
     el.addEventListener('click', () => {
       const faqId = el.getAttribute('data-toggle-faq');
       if (faqId) toggleFAQ(faqId);
@@ -156,7 +159,11 @@ function initNavigationAndLanguage() {
   });
 
   // Für Playwright-Tests: Desktop-Navigation immer sichtbar machen
-  if (navigator.userAgent.includes('Playwright') || window.__playwright || document.body.getAttribute('data-playwright') === 'true') {
+  if (
+    navigator.userAgent.includes('Playwright') ||
+    window.__playwright ||
+    document.body.getAttribute('data-playwright') === 'true'
+  ) {
     const desktopNav = document.querySelector('nav[aria-label="Main navigation"]');
     if (desktopNav) {
       desktopNav.classList.remove('hidden');

@@ -10,8 +10,8 @@ async function testEmailAlert() {
     secure: true, // true für port 465
     auth: {
       user: 'burn.coin@yahoo.com',
-      pass: process.env.YAHOO_APP_PASSWORD
-    }
+      pass: process.env.YAHOO_APP_PASSWORD,
+    },
   });
 
   // Konfiguriere die E-Mail
@@ -25,7 +25,7 @@ async function testEmailAlert() {
       <p>Dies ist ein <strong>Test</strong> der BurniToken E-Mail-Alert-Funktion.</p>
       <p>Wenn Sie diese E-Mail erhalten, funktioniert das Alert-System korrekt.</p>
       <p>Test durchgeführt am: ${new Date().toLocaleString()}</p>
-    `
+    `,
   };
 
   try {
@@ -41,13 +41,12 @@ async function testEmailAlert() {
 }
 
 // Führe den Test aus
-testEmailAlert()
-  .then(success => {
-    if (success) {
-      console.log('✅ E-Mail-Alert-Test erfolgreich');
-      process.exit(0);
-    } else {
-      console.log('❌ E-Mail-Alert-Test fehlgeschlagen');
-      process.exit(1);
-    }
-  });
+testEmailAlert().then((success) => {
+  if (success) {
+    console.log('✅ E-Mail-Alert-Test erfolgreich');
+    process.exit(0);
+  } else {
+    console.log('❌ E-Mail-Alert-Test fehlgeschlagen');
+    process.exit(1);
+  }
+});
