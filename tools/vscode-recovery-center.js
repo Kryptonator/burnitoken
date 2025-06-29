@@ -858,6 +858,14 @@ function main() {
   checkRecoveryManagerStatus();
   listRecoveryScreenshots();
   showRecoveryOptions();
+  // SEO/Schema/Bot-Check nach jedem Recovery-Event
+  printColored('\n[Recovery] Starte SEO/Schema/Bot-Check ...', '\x1b[36m');
+  try {
+    require('child_process').execSync('node tools/seo-schema-botcheck.js', { stdio: 'inherit' });
+    printColored('[Recovery] SEO/Schema/Bot-Check abgeschlossen.', '\x1b[32m');
+  } catch (e) {
+    printColored('[Recovery] SEO/Schema/Bot-Check: Fehler erkannt! Siehe Log.', '\x1b[31m');
+  }
   printColored(`\n${divider}`, '\x1b[1;36m');
   printColored(' Prioritätenliste nach Absturz:', '\x1b[1;33m');
   printColored(' 1. ✅ Meta-Tags & Social Media Cards optimieren', '\x1b[32m');
