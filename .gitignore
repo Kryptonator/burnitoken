@@ -1,12 +1,101 @@
+# Abhängigkeiten
 node_modules/
-.DS_Store
-*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Umgebungsvariablen
 .env
+.env.*
+!.env.example
+
+# Build-Ausgaben
 dist/
+build/
 assets/css/*.min.css
-data_i18n_keys.txt
+assets/js/*.bundle.js
+.lighthouseci/
+
+# Test-Ausgaben
 coverage/
+test-results/
 playwright-report/
+allure-results/
+allure-report/
+e2e-report/
+.nyc_output/
+
+# Website health monitoring logs
+tools/monitoring/website-health.log
+
+# Temporäre Dateien & Backups
+temp/
+tmp/
+.tmp/
+backups/
+*.backup
+*.bak
+*.swp
+*.tmp
+*.orig
+.cache/
+
+# Betriebssystem-Dateien
 .DS_Store
-.env
-assets/fonts/
+Thumbs.db
+desktop.ini
+
+# Editors & IDEs
+.idea/
+*.sublime*
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Binärdateien
+*.msi
+*.exe
+*.dmg
+*.iso
+*.zip
+*.tar.gz
+
+# Lokale Konfigurationsdateien
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Trunk-spezifische Dateien
+.trunk/.gitignore
+.trunk/trunk.yaml
+.trunk/configs/
+!.trunk/out/
+
+# Spezifische Projekt-Dateien
+data_i18n_keys.txt
+
+# Generierte Reports und Logs
+*-report.json
+audit.json
+lighthouse-*.json
+axe-*.json
+*.log
+
+# Redundante Backups und alte Versionen
+*-backup-*.html
+*-simple.html
+*-simple-*.html
+temp_*.html
+# Local Netlify folder
+.netlify
+
+# Google API Schlüssel und Service Accounts
+tools/gsc-service-account.json
+*-service-account.json
+*-api-key.json
+credentials.json
