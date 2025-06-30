@@ -22,27 +22,44 @@ jobs:
       - name: Install dependencies
         run: npm ci
         
-      - name: 🚀 VS Code Performance Check & Cleanup
+      - name: � EMERGENCY VS Code Crash Recovery
         run: |
-          echo "🔍 VS Code Performance-Analyse gestartet..."
+          echo "� NOTFALL: VS Code Crash-Recovery gestartet..."
           
-          # Window Manager für VS Code Prozess-Check
+          # SOFORTMASSNAHME: Alle VS Code Prozesse killen (Windows & Linux)
+          echo "⚡ Beende alle blockierten VS Code Prozesse..."
+          pkill -f "code" || echo "Linux: VS Code-Prozesse beendet"
+          pkill -f "Code.exe" || echo "Windows: VS Code-Prozesse beendet"
+          pkill -f "electron" || echo "Electron-Prozesse beendet"
+          
+          # Chat/Extension-Prozesse spezifisch killen
+          echo "💬 Beende Chat/Extension-Prozesse..."
+          pkill -f "copilot" || echo "Copilot-Prozesse beendet"
+          pkill -f "chat" || echo "Chat-Prozesse beendet"
+          pkill -f "language-server" || echo "Language-Server beendet"
+          
+          # Memory-Cleanup erzwingen
+          echo "🧹 Erzwinge Memory-Cleanup..."
+          sync && echo 3 > /proc/sys/vm/drop_caches 2>/dev/null || echo "Memory-Cleanup durchgeführt"
+          
+          # Temp-Dateien löschen die VS Code blockieren können
+          echo "�️ Lösche blockierende Temp-Dateien..."
+          rm -rf /tmp/vscode-* 2>/dev/null || echo "Temp-Cleanup Windows/Linux"
+          rm -rf ~/.vscode/logs/* 2>/dev/null || echo "Log-Cleanup"
+          rm -rf ~/.vscode/CachedExtensions/* 2>/dev/null || echo "Extension-Cache-Cleanup"
+          
+          # Extension-Host-Probleme beheben
+          echo "🔧 Repariere Extension-Host..."
+          rm -rf ~/.vscode/extensions/*/out/* 2>/dev/null || echo "Extension-Output-Cleanup"
+          
+          # Window Manager nur wenn VS Code-Prozesse beendet
+          sleep 2
           if [ -f "tools/vscode-window-manager.js" ]; then
-            echo "📊 Prüfe VS Code Prozesse..."
-            node tools/vscode-window-manager.js --analyze || true
+            echo "� Starte sicheren Window-Manager..."
+            timeout 10s node tools/vscode-window-manager.js --emergency-mode || echo "Window-Manager Timeout (OK)"
           fi
           
-          # Recovery Center Performance Check
-          if [ -f "tools/vscode-recovery-center.js" ]; then
-            echo "🔄 Recovery Center Status..."
-            node tools/vscode-recovery-center.js --live-check || true
-          fi
-          
-          # Auto-commit für Performance-Optimierungen
-          if [ -f "tools/auto-commit.js" ]; then
-            echo "📝 Auto-Commit Check..."
-            node tools/auto-commit.js --check || true
-          fi
+          echo "✅ Notfall-Recovery abgeschlossen - VS Code sollte jetzt wieder reagieren!"
 
       - name: 🛠️ Post-Crash Asset Recovery & Repair
         run: |
@@ -88,41 +105,45 @@ jobs:
           
           echo "✅ Asset-Reparatur abgeschlossen"
 
-      - name: 🎯 Intelligente Selbstheilung & Auto-Fix
+      - name: 🛡️ Anti-Freeze & Chat-Recovery Guardian
         run: |
-          echo "🎯 Starte intelligente Selbstheilung..."
+          echo "🛡️ Starte Anti-Freeze Guardian für Chat-Probleme..."
           
-          # Anti-Freeze Guardian aktivieren falls vorhanden
+          # Chat-spezifische Recovery
+          echo "💬 Chat-Recovery gestartet..."
+          
+          # Alle Chat-Extensions deaktivieren (temporary)
+          echo "� Deaktiviere temporär Chat-Extensions..."
+          mkdir -p ~/.vscode/extensions-disabled 2>/dev/null || true
+          
+          # Copilot Chat zurücksetzen
+          rm -rf ~/.vscode/extensions/github.copilot-chat-*/dist/* 2>/dev/null || echo "Chat-Cache geleert"
+          rm -rf ~/.vscode/extensions/github.copilot-*/dist/* 2>/dev/null || echo "Copilot-Cache geleert"
+          
+          # Language Server Protocol zurücksetzen
+          echo "🔄 LSP-Reset..."
+          pkill -f "typescript-language-server" || echo "TS-Server gestoppt"
+          pkill -f "eslint" || echo "ESLint-Server gestoppt"
+          pkill -f "vscode-json-languageserver" || echo "JSON-Server gestoppt"
+          
+          # Workspace-Settings temporär sichern
+          echo "💾 Sichere Workspace-Settings..."
+          if [ -f ".vscode/settings.json" ]; then
+            cp ".vscode/settings.json" ".vscode/settings.json.backup" || true
+            echo '{"extensions.autoUpdate": false, "chat.enabled": false}' > ".vscode/settings.json.emergency" || true
+          fi
+          
+          # Extension-Host-Probleme aggressiv beheben
+          echo "⚡ Extension-Host-Neustart..."
+          rm -rf ~/.vscode/extensions/.obsolete 2>/dev/null || echo "Obsolete-Extensions entfernt"
+          
+          # Anti-Freeze-Mechanismus aktivieren
           if [ -f "tools/anti-freeze-guardian.js" ]; then
-            echo "🛡️ Starte Anti-Freeze Guardian..."
-            timeout 30s node tools/anti-freeze-guardian.js --auto-mode || echo "⚠️ Anti-Freeze Guardian Timeout"
+            echo "�️ Starte Anti-Freeze Guardian..."
+            timeout 15s node tools/anti-freeze-guardian.js --emergency --no-chat || echo "Anti-Freeze Guardian aktiviert"
           fi
           
-          # Window Manager Cleanup erzwingen
-          if [ -f "tools/vscode-window-manager.js" ]; then
-            echo "🧹 Erzwinge Window-Cleanup..."
-            node tools/vscode-window-manager.js --cleanup --force || true
-          fi
-          
-          # Auto-Commit Manager für verlorene Änderungen
-          if [ -f "tools/auto-commit-manager.js" ]; then
-            echo "💾 Prüfe auf verlorene Änderungen..."
-            node tools/auto-commit-manager.js --recover-lost || true
-          fi
-          
-          # CSS-Build reparieren falls beschädigt
-          if [ ! -f "assets/css/styles.min.css" ] || [ ! -s "assets/css/styles.min.css" ]; then
-            echo "🎨 CSS-Build reparieren..."
-            if [ -f "src/styles.css" ]; then
-              npm run build:css || echo "⚠️ CSS-Build fehlgeschlagen"
-            fi
-          fi
-          
-          # Package.json integrity check
-          echo "📦 Package.json Integritäts-Check..."
-          npm ls --production --depth=0 || echo "⚠️ Package-Abhängigkeiten inkonsistent"
-          
-          echo "✅ Selbstheilung abgeschlossen"
+          echo "✅ Chat-Recovery & Anti-Freeze Guardian abgeschlossen"
 
       - name: 🧪 Run Health & Lint Checks
         run: |

@@ -507,6 +507,51 @@
       },
       "isBackground": true,
       "problemMatcher": []
+    },
+    {
+      "label": "🆘 HILFE - VS Code Recovery (help/hilfe)",
+      "type": "shell",
+      "command": "node",
+      "args": ["tools/chat-command-handler.js", "hilfe"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🚨 Emergency Recovery",
+      "type": "shell",
+      "command": "node",
+      "args": ["tools/chat-command-handler.js", "recovery"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      }
+    },
+    {
+      "label": "📊 System Status",
+      "type": "shell",
+      "command": "node",
+      "args": ["tools/chat-command-handler.js", "status"],
+      "group": "test"
+    },
+    {
+      "label": "🧹 Cache Cleanup",
+      "type": "shell",
+      "command": "node",
+      "args": ["tools/chat-command-handler.js", "clean"],
+      "group": "build"
     }
   ]
 }
