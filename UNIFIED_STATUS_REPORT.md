@@ -1,6 +1,6 @@
 # Unified Status Report: burnitoken.website
 
-**Erstellungsdatum:** 2025-06-22 21:24:05  
+**Erstellungsdatum:** 2025-06-30 18:22:47  
 **Website:** https://burnitoken.website  
 
 ## 🔴 Gesamtstatus: ⚠️ Kritische Probleme
@@ -12,7 +12,7 @@
 
 ## 🔍 GSC-Indexierungsstatus
 
-* **HTML-Dateien gesamt:** 12
+* **HTML-Dateien gesamt:** 26
 * **Dateien mit noindex-Tags:** 0
 
 ## 🧩 Extension-Status
@@ -50,4 +50,4 @@
 
 ---
 
-Dieser Bericht wurde automatisch erstellt am 2025-06-22 21:24:05 (Dauer: 1.53s)
+Dieser Bericht wurde automatisch erstellt am 2025-06-30 18:22:47 (Dauer: 11.25s)

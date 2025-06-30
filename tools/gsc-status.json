@@ -1,12 +1,12 @@
 {
-  "lastCheck": "2025-06-28T11:06:59.135Z",
+  "lastCheck": "2025-06-30T18:22:43.659Z",
   "indexingStatus": "indexable",
   "url": "https://burnitoken.website",
   "noindexCount": 0,
   "sitemapStatus": "valid",
   "crawlErrors": 0,
-  "lastUpdated": "2025-06-28T11:06:59.538Z",
+  "lastUpdated": "2025-06-30T18:22:44.305Z",
   "sitemapUrlCount": 6,
-  "websiteStatus": "online",
-  "statusCode": 200
+  "websiteStatus": "error",
+  "statusCode": 0
 }

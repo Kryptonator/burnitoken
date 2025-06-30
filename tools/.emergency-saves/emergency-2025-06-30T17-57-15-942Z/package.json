@@ -87,7 +87,6 @@
     "master:restart": "node tools/master-self-healing-controller.js restart",
     "master:status": "node tools/master-self-healing-controller.js status",
     "master:heal": "node tools/master-self-healing-controller.js heal",
-    "master:cloud": "node tools/master-self-healing-controller.js cloud",
     "master:daemon": "node tools/master-self-healing-controller.js daemon",
     "master:enable": "node tools/master-self-healing-controller.js enable",
     "master:disable": "node tools/master-self-healing-controller.js disable",
