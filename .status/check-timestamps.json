@@ -1,11 +1,11 @@
 {
   "website-health-check": {
     "status": "success",
-    "lastSuccess": "2025-06-30T10:00:21.435Z"
+    "lastSuccess": "2025-06-30T11:18:04.010Z"
   },
   "deployment-check": {
     "status": "success",
-    "lastSuccess": "2025-06-30T10:00:32.517Z"
+    "lastSuccess": "2025-06-30T11:18:15.415Z"
   },
   "ai-auth": {
     "name": "KI Authentifizierungs-Check",
