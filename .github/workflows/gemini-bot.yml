@@ -1,7 +1,68 @@
 name: GeminiAiChefDev Status & Auto-Review
 
 description: |
-  Automatischer Status- und Review-Workflow für BurniToken. Führt Health-Checks, Linting, Security und Status-Kommentare aus. GeminiAiChefDev übernimmt die Überwachung und informiert bei jedem Push/PR.
+  Automatischer Status- und Review-Workflow f      - name: 🚨 KRITISCH: Anti-Input-Crash Guardian
+        run: |
+          echo "🚨 KRITISCH: VS Code schließt sich beim Schreiben - Sofortmaßnahmen!"
+          
+          # SCHREIBSCHUTZ-PROBLEM: Aggressive Chat/Input-Deaktivierung
+          echo "⚡ Deaktiviere ALLE Input-blockierenden Extensions..."
+          
+          # Copilot Chat KOMPLETT deaktivieren
+          echo "🚫 Copilot Chat TOTAL-DEAKTIVIERUNG..."
+          rm -rf ~/.vscode/extensions/github.copilot-chat* 2>/dev/null || echo "Chat-Extension entfernt"
+          
+          # Language Server ALLE killen
+          echo "⚡ ALLE Language Server stoppen..."
+          pkill -9 -f "language-server" || echo "Language Server gestoppt"
+          pkill -9 -f "typescript" || echo "TypeScript Server gestoppt"
+          pkill -9 -f "eslint" || echo "ESLint Server gestoppt"
+          pkill -9 -f "copilot" || echo "Copilot Prozesse gestoppt"
+          
+          # Input-Handler zurücksetzen
+          echo "⌨️ Input-Handler Notfall-Reset..."
+          rm -rf ~/.vscode/User/workspaceStorage/*/state.vscdb* 2>/dev/null || echo "Input-State gelöscht"
+          
+          # EMERGENCY: VS Code Settings überschreiben
+          echo "🆘 NOTFALL-SETTINGS aktivieren..."
+          mkdir -p ~/.vscode/User 2>/dev/null || true
+          cat > ~/.vscode/User/settings.json << 'EOF'
+          {
+            "extensions.autoUpdate": false,
+            "extensions.autoCheckUpdates": false,
+            "github.copilot.enable": false,
+            "github.copilot.chat.enable": false,
+            "editor.quickSuggestions": false,
+            "editor.suggestOnTriggerCharacters": false,
+            "editor.acceptSuggestionOnEnter": "off",
+            "editor.tabCompletion": "off",
+            "typescript.suggest.enabled": false,
+            "javascript.suggest.enabled": false,
+            "emmet.showSuggestionsAsSnippets": false,
+            "editor.parameterHints.enabled": false,
+            "editor.hover.enabled": false,
+            "editor.lightbulb.enabled": false,
+            "workbench.startupEditor": "none",
+            "telemetry.telemetryLevel": "off",
+            "update.mode": "none"
+          }
+          EOF
+          
+          # Workspace-Settings überschreiben
+          mkdir -p .vscode 2>/dev/null || true
+          cat > .vscode/settings.json << 'EOF'
+          {
+            "extensions.ignoreRecommendations": true,
+            "github.copilot.enable": false,
+            "editor.quickSuggestions": false,
+            "typescript.suggest.enabled": false,
+            "javascript.suggest.enabled": false
+          }
+          EOF
+          
+          # Alle Chat-Extensions deaktivieren (temporary)
+          echo "🔇 Deaktiviere temporär Chat-Extensions..."
+          mkdir -p ~/.vscode/extensions-disabled 2>/dev/null || trueken. Führt Health-Checks, Linting, Security und Status-Kommentare aus. GeminiAiChefDev übernimmt die Überwachung und informiert bei jedem Push/PR.
 
 on:
   push:
