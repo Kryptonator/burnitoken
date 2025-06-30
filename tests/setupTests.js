@@ -7,7 +7,57 @@ global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
 
 // setImmediate Polyfill für jsdom-Umgebung
-if (typeof setImmediate === 'undefined') {
+if (typeof setImmediate === 'undefined') { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
   global.setImmediate = function (callback, ...args) {
     return setTimeout(() => callback(...args), 0);
   };

@@ -51,8 +51,8 @@ describe('Language Switcher', () => {
     window.applyTranslations = (lang) => {
       document.querySelectorAll('[data-i18n]').forEach((el) => {
         const key = el.getAttribute('data-i18n');
-        if (translations[lang] && translations[lang][key]) {
-          el.textContent = translations[lang][key];
+        if (translations[lang] && translations[lang].translation && translations[lang].translation[key]) {
+          el.textContent = translations[lang].translation[key];
         }
       });
     };
@@ -65,8 +65,8 @@ describe('Language Switcher', () => {
   const updateI18nTexts = (lang) => {
     document.querySelectorAll('[data-i18n]').forEach((el) => {
       const key = el.getAttribute('data-i18n');
-      if (translations[lang] && translations[lang][key]) {
-        el.textContent = translations[lang][key];
+      if (translations[lang] && translations[lang].translation && translations[lang].translation[key]) {
+        el.textContent = translations[lang].translation[key];
       }
     });
   };
@@ -77,10 +77,10 @@ describe('Language Switcher', () => {
     updateI18nTexts('de');
 
     expect(document.querySelector('[data-i18n="nav_home"]').textContent).toBe(
-      translations.de.nav_home,
+      translations.de.translation.nav_home,
     );
     expect(document.querySelector('[data-i18n="nav_about"]').textContent).toBe(
-      translations.de.nav_about,
+      translations.de.translation.nav_about,
     );
   });
 
@@ -90,10 +90,10 @@ describe('Language Switcher', () => {
     updateI18nTexts('en');
 
     expect(document.querySelector('[data-i18n="nav_home"]').textContent).toBe(
-      translations.en.nav_home,
+      translations.en.translation.nav_home,
     );
     expect(document.querySelector('[data-i18n="nav_about"]').textContent).toBe(
-      translations.en.nav_about,
+      translations.en.translation.nav_about,
     );
   });
 
