@@ -1,0 +1,15 @@
+[
+  {
+    "timestamp": "2025-06-30T07:28:42.099Z",
+    "status": "OK",
+    "errors": [],
+    "todos": [
+      "Alerts & Monitoring für alle Checks aktivieren",
+      "Social Cards & strukturierte Daten finalisieren",
+      "Regelmäßige Live-Readiness-Checks automatisieren",
+      "README & Dokumentation aktuell halten",
+      "DX-Verbesserungen (Prettier, ESLint, Onboarding) umsetzen",
+      "Recovery- und Health-Checks weiter ausbauen"
+    ]
+  }
+]
