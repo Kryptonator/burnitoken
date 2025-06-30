@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-29T22:08:47.722Z",
+  "timestamp": "2025-06-30T03:13:24.349Z",
   "summary": {
     "overallStatus": "healthy",
     "availableUrls": 1,
@@ -12,10 +12,10 @@
       "status": 200,
       "statusText": "OK",
       "available": true,
-      "responseTime": 94,
-      "loadTime": 155,
+      "responseTime": 73,
+      "loadTime": 130,
       "contentType": "text/html; charset=UTF-8",
-      "lastChecked": "2025-06-29T22:08:48.173Z"
+      "lastChecked": "2025-06-30T03:13:24.677Z"
     }
   },
   "ssl": {
@@ -25,7 +25,7 @@
     "issuer": "Let's Encrypt"
   },
   "performance": {
-    "ttfb": 94,
-    "loadTime": 155
+    "ttfb": 73,
+    "loadTime": 130
   }
 }
