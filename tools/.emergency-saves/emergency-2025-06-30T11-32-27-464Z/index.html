@@ -74,9 +74,7 @@
     <link rel="preload" href="/assets/images/burniimage.webp" as="image" type="image/webp" />
     <link rel="preload" href="/assets/images/burniimage.jpg" as="image" type="image/jpeg" />
     <link rel="preload" href="/assets/css/styles.min.css" as="style" />
-    <link rel="preload" href="/assets/css/price-oracle.css" as="style" />
     <link rel="preload" href="/assets/scripts-fixed.min.js" as="script" />
-    <link rel="preload" href="/assets/js/price-oracle.js" as="script" />
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/chart.js" as="script" />
     <link rel="prefetch" href="/assets/images/burni-chart.webp" />
 
@@ -464,7 +462,6 @@
 
     <!-- Price Oracle Status CSS -->
     <link rel="stylesheet" href="assets/css/price-oracle-status.css" />
-    <link rel="stylesheet" href="assets/css/price-oracle.css" />
   </head>
   <body
     class="bg-gray-50 font-sans leading-normal tracking-normal text-gray-800 antialiased dark:bg-gray-900 dark:text-gray-200"
@@ -486,17 +483,9 @@
         </div>
         <div class="flex items-center space-x-4">
           <div class="price-container price-widget" data-price-display id="xrp-price-widget">
-            <div class="flex items-center space-x-3">
-              <span class="text-lg font-semibold price-value" data-price-usd id="hero-xrp-price"
-                >$--</span
-              >
-              <span class="text-sm text-gray-600 dark:text-gray-400" data-price-eur
-                >€--</span
-              >
-              <span class="text-xs text-gray-500 dark:text-gray-500" data-price-btc
-                >₿--</span
-              >
-            </div>
+            <span class="text-lg font-semibold price-value" data-price-value id="hero-xrp-price"
+              >$....</span
+            >
             <div class="status-indicator" id="xrp-status-indicator">
               <span
                 class="ml-2 text-xs text-gray-500 dark:text-gray-400"
@@ -505,11 +494,6 @@
                 aria-atomic="true"
                 >Loading...</span
               >
-              <span
-                class="ml-1 text-xs text-gray-400 dark:text-gray-500"
-                data-price-timestamp
-                aria-label="Last updated time"
-              ></span>
             </div>
           </div>
           <button
@@ -687,28 +671,17 @@
             <h3 class="text-2xl font-bold text-center mb-6">Live Tokenomics</h3>
             <div class="space-y-4">
               <div class="flex justify-between items-center">
-                <span class="font-medium">Current Price</span>
-                <div class="text-right" data-price-container>
-                  <div class="space-y-1">
-                    <div class="font-bold text-green-500 text-lg" data-price-usd>$--</div>
-                    <div class="text-sm text-gray-600 dark:text-gray-400" data-price-eur>€--</div>
-                    <div class="text-xs text-gray-500 dark:text-gray-500" data-price-btc>₿--</div>
-                  </div>
-                  <div class="mt-1">
-                    <span
-                      class="text-xs text-gray-500 dark:text-gray-400"
-                      data-price-status
-                      aria-live="polite"
-                      aria-atomic="true"
-                      >Loading...</span
-                    >
-                    <span
-                      class="ml-1 text-xs text-gray-400 dark:text-gray-500"
-                      data-price-change
-                      aria-label="24h price change"
-                    >--%</span>
-                  </div>
-                </div>
+                <span class="font-medium">Current Price (USD)</span>
+                <span class="font-bold text-green-500 text-lg" data-price-display>
+                  <span data-price-value>$....</span>
+                  <span
+                    class="ml-2 text-xs text-gray-500 dark:text-gray-400"
+                    data-price-status
+                    aria-live="polite"
+                    aria-atomic="true"
+                    >Loading...</span
+                  >
+                </span>
               </div>
               <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
                 <div class="bg-green-500 h-2.5 rounded-full w-45"></div>
@@ -1459,25 +1432,16 @@
     <script src="main.js" defer></script>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        // Initialize XRP Price Oracle with Multi-Currency Support
-        window.xrpOracle = new BurniPriceOracle({
+        // Initialize Price Oracle with correct selectors
+        const oracle = new BurniPriceOracle({
           selectors: {
-            priceUsd: '[data-price-usd]',
-            priceEur: '[data-price-eur]',
-            priceBtc: '[data-price-btc]',
+            priceValue: '[data-price-value]',
             priceStatus: '[data-price-status]',
-            priceChange: '[data-price-change]',
-            priceTimestamp: '[data-price-timestamp]',
-            priceContainer: '[data-price-display], [data-price-container]',
+            priceContainer: '[data-price-display]',
           },
           refreshInterval: 30000, // 30 seconds
-          cacheExpiry: 60000, // 1 minute
           enableNotifications: true,
-          maxRetries: 3
         });
-
-        // Start price fetching
-        window.xrpOracle.start();
         oracle.start();
 
         // Add global oracle access for debugging
