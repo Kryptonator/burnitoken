@@ -337,6 +337,7 @@ function runLiveReadinessChecks() {
 }
 
 function sendAlert(message) {
+  const ALERT_WEBHOOK_URL = process.env.ALERT_WEBHOOK_URL;
   if (!ALERT_WEBHOOK_URL) return;
   try {
     const url = new URL(ALERT_WEBHOOK_URL);
@@ -363,30 +364,22 @@ function sendAlert(message) {
  */
 function showRecoveryOptions() {
   printColored('\n🛠️ Wiederherstellungsoptionen:', '\x1b[1;36m');
-  printColored('  0. 🛡️ Anti-Freeze Guardian starten: "node tools/anti-freeze-guardian.js" (PRIO 1)', '\x1b[1;31m');
+  printColored('\n🚨 NEUE CRASH-PRÄVENTION-TOOLS:', '\x1b[1;31m');
+  printColored('  A. Window Manager starten: "node tools/vscode-window-manager.js"', '\x1b[1;32m');
+  printColored('  B. Auto-Commit Manager starten: "node tools/auto-commit-manager.js"', '\x1b[1;32m');
+  printColored('  C. Beide Tools gleichzeitig: "npm run start-protection"', '\x1b[1;32m');
+  printColored('  D. Window Cleanup erzwingen: "node tools/vscode-window-manager.js --cleanup"', '\x1b[32m');
+  printColored('  E. Sofortiger Commit: "node tools/auto-commit-manager.js --force-commit"', '\x1b[32m');
+  
+  printColored('\n🔧 STANDARD-RECOVERY-OPTIONEN:', '\x1b[1;36m');
   printColored('  1. Recovery Manager neu starten: "node tools/vscode-recovery-manager.js --force-restart"', '\x1b[32m');
-  printColored(
-    '  2. Sofortigen Recovery-Screenshot erstellen: "node tools/auto-screenshot-manager.js --now"',
-    '\x1b[32m',
-  );
-  printColored(
-    '  3. Google Search Console Status prüfen: "node tools/gsc-status-check.js"',
-    '\x1b[32m',
-  );
-  printColored(
-    '  4. Google Search Console Setup Guide: "node tools/gsc-setup-guide.js"',
-    '\x1b[32m',
-  );
+  printColored('  2. Sofortigen Recovery-Screenshot erstellen: "node tools/auto-screenshot-manager.js --now"', '\x1b[32m');
+  printColored('  3. Google Search Console Status prüfen: "node tools/gsc-status-check.js"', '\x1b[32m');
+  printColored('  4. Google Search Console Setup Guide: "node tools/gsc-setup-guide.js"', '\x1b[32m');
   printColored('  5. Core Web Vitals prüfen: "node tools/core-web-vitals-monitor.js"', '\x1b[32m');
-  printColored(
-    '  6. Meta-Tags & Social Cards validieren: "node tools/meta-tags-validator.js"',
-    '\x1b[32m',
-  );
+  printColored('  6. Meta-Tags & Social Cards validieren: "node tools/meta-tags-validator.js"', '\x1b[32m');
   printColored('  7. Alle Dienste prüfen: "npm run validate"', '\x1b[32m');
-  printColored(
-    '  8. Live-Readiness-Check: "node tools/vscode-recovery-center.js --live-check"',
-    '\x1b[32m',
-  );
+  printColored('  8. Live-Readiness-Check: "node tools/vscode-recovery-center.js --live-check"', '\x1b[32m');
   printColored('  9. Monitoring-Status prüfen: "node tools/sentry-status.js"', '\x1b[32m');
   printColored(' 10. Deployment-Check: "node tools/deployment-check.js"', '\x1b[32m');
 }
@@ -396,32 +389,55 @@ function showRecoveryOptions() {
  */
 function showProjectOverview() {
   printColored('\n📋 Projektübersicht: Ziele, Status & ToDos', '\x1b[1;36m');
+  
+  // CRASH ANALYSIS - Spezielle Sektion für Absturz-Analyse
+  printColored('\n🚨 CRASH ANALYSIS (29.06.25 23:30 Uhr):', '\x1b[1;31m');
+  printColored('  Problem: "Window not respond" + 3 zusätzliche VS Code-Fenster', '\x1b[31m');
+  printColored('  Ursache: Lösung war fertig aber nicht committed/gepusht', '\x1b[31m');
+  printColored('  Neue Lösung: VS Code Window Manager + Auto-Commit Manager', '\x1b[32m');
+  
+  // Window Manager Status
+  const windowManagerPath = path.join(__dirname, 'vscode-window-manager.js');
+  const autoCommitPath = path.join(__dirname, 'auto-commit-manager.js');
+  
+  if (fs.existsSync(windowManagerPath)) {
+    printColored('  ✅ VS Code Window Manager installiert', '\x1b[32m');
+  } else {
+    printColored('  ❌ VS Code Window Manager fehlt', '\x1b[31m');
+  }
+  
+  if (fs.existsSync(autoCommitPath)) {
+    printColored('  ✅ Auto-Commit Manager installiert', '\x1b[32m');
+  } else {
+    printColored('  ❌ Auto-Commit Manager fehlt', '\x1b[31m');
+  }
+
   // Hauptziele
   const ziele = [
     'Technisch: Stabile, automatisierte, sichere Live-Website',
     'Inhaltlich: Vollständige, aktuelle, mehrsprachige Inhalte',
     'Organisatorisch: Monitoring, Recovery, DX, Dokumentation',
+    'NEU: Crash-Prävention & automatische Wiederherstellung'
   ];
-  printColored('Hauptziele:', '\x1b[1;37m');
-  ziele.forEach((z) => printColored('  • ' + z, '\x1b[36m'));
+  printColored('\nHauptziele:', '\x1b[1;37m');
+  ziele.forEach(z => printColored('  • ' + z, '\x1b[36m'));
 
-  // Status-Checks (Dateien/Ordner)
+  // Status-Checks (Dateien/Ordner) - Erweitert um neue Tools
   const checks = [
     { label: 'CI/CD-Workflow (ci.yml)', path: '../.github/workflows/ci.yml' },
     { label: 'Automatisierte Tests (tests/)', path: '../tests' },
-    {
-      label: 'Recovery Center (tools/vscode-recovery-center.js)',
-      path: 'vscode-recovery-center.js',
-    },
+    { label: 'Recovery Center (tools/vscode-recovery-center.js)', path: 'vscode-recovery-center.js' },
+    { label: 'VS Code Window Manager (NEW)', path: 'vscode-window-manager.js' },
+    { label: 'Auto-Commit Manager (NEW)', path: 'auto-commit-manager.js' },
     { label: 'Google Search Console API (tools/gsc-status-check.js)', path: 'gsc-status-check.js' },
     { label: 'Monitoring/Alerts (Sentry, UptimeRobot)', path: '../sentry.client.js' },
     { label: 'SEO/Meta/Social Cards', path: '../sitemap.xml' },
     { label: 'Mehrsprachigkeit (assets/translations.json)', path: '../assets/translations.json' },
     { label: 'Performance-Checks (Lighthouse, Core Web Vitals)', path: '../playwright.config.js' },
-    { label: 'README aktuell', path: '../README.md' },
+    { label: 'README aktuell', path: '../README.md' }
   ];
   printColored('\nStatus:', '\x1b[1;37m');
-  checks.forEach((c) => {
+  checks.forEach(c => {
     const abs = path.join(__dirname, c.path);
     if (fs.existsSync(abs)) {
       printColored(`  ✅ ${c.label}`, '\x1b[32m');
@@ -430,17 +446,23 @@ function showProjectOverview() {
     }
   });
 
-  // ToDos (statisch + dynamisch)
+  // ToDos (erweitert um Crash-Prävention)
   const todos = [
+    'SOFORT: Window Manager und Auto-Commit Manager testen',
+    'SOFORT: Automatische Backups alle 5 Minuten aktivieren',
     'Alerts & Monitoring für alle Checks aktivieren',
     'Social Cards & strukturierte Daten finalisieren',
     'Regelmäßige Live-Readiness-Checks automatisieren',
     'README & Dokumentation aktuell halten',
     'DX-Verbesserungen (Prettier, ESLint, Onboarding) umsetzen',
     'Recovery- und Health-Checks weiter ausbauen',
+    'Crash-Prävention: Mehrfache Absicherung gegen Datenverlust'
   ];
-  printColored('\nOffene ToDos:', '\x1b[1;37m');
-  todos.forEach((t) => printColored('  • ' + t, '\x1b[33m'));
+  printColored('\nOffene ToDos (Priorität nach Crash):', '\x1b[1;37m');
+  todos.forEach((t, i) => {
+    const color = i < 2 ? '\x1b[1;31m' : '\x1b[33m'; // Ersten 2 kritisch (rot)
+    printColored(`  • ${t}`, color);
+  });
 }
 
 /**
