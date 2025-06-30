@@ -1,6 +1,6 @@
 # BurniToken Website Status Report
 
-**Zeitpunkt:** 30.6.2025, 13:18:03
+**Zeitpunkt:** 30.6.2025, 13:33:07
 **Gesamtstatus:** ✅ HEALTHY
 
 ## Zusammenfassung
@@ -13,7 +13,7 @@
 
 | URL | Status | Verfügbar | Antwortzeit | Letzte Prüfung |
 | --- | ------ | --------- | ----------- | -------------- |
-| https://burnitoken.website | 200 | ✅ | 91ms | 30.6.2025, 13:18:03 |
+| https://burnitoken.website | 200 | ✅ | 79ms | 30.6.2025, 13:33:07 |
 
 ## SSL-Zertifikat
 
@@ -23,4 +23,4 @@
 
 ---
 
-Bericht generiert am 30.6.2025, 13:18:03
+Bericht generiert am 30.6.2025, 13:33:07
