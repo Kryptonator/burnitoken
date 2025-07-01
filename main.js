@@ -1820,13 +1820,23 @@ class PriceUpdateManager {
     };
 
     try {
-      // Try to fetch XRP price
-      const xrpResponse = await fetch(
-        'https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd',
-      );
-      if (xrpResponse.ok) {
-        const xrpData = await xrpResponse.json();
-        fallbackPrices.xrp.priceUSD = xrpData.ripple?.usd || fallbackPrices.xrp.priceUSD;
+      // Try to fetch XRP price with monitoring
+      const xrpUrl = 'https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd';
+      
+      if (window.PriceFeedMonitor) {
+        const result = await window.PriceFeedMonitor.monitorFetch(xrpUrl);
+        if (result.valid && result.data && result.data.ripple && result.data.ripple.usd) {
+          fallbackPrices.xrp.priceUSD = result.data.ripple.usd;
+        } else if (result.error) {
+          console.warn('Price feed monitoring detected error:', result.error);
+        }
+      } else {
+        // Fallback to original fetch
+        const xrpResponse = await fetch(xrpUrl);
+        if (xrpResponse.ok) {
+          const xrpData = await xrpResponse.json();
+          fallbackPrices.xrp.priceUSD = xrpData.ripple?.usd || fallbackPrices.xrp.priceUSD;
+        }
       }
     } catch (error) {
       console.warn('Could not fetch live prices, using fallbacks:', error);
