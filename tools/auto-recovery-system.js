@@ -66,9 +66,7 @@ const recoveryStatus = {
 /**
  * Log-Funktion für Konsole und Datei
  */
-function log(message, level = 'info') {
-  const timestamp = new Date().toISOString();
-  const formattedMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
+] [${level.toUpperCase()}] ${message}`;
 
   switch (level) {
     case 'error':
@@ -102,7 +100,57 @@ function saveRecoveryStatus() {
   try {
     // Stelle sicher, dass das Verzeichnis existiert
     const statusDir = path.dirname(CONFIG.statusFile);
-    if (!fs.existsSync(statusDir)) {
+    if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
       fs.mkdirSync(statusDir, { recursive: true });
     }
 
@@ -135,7 +183,7 @@ async function executeRecoveryAction(action) {
 
       // Prüfe, ob Netlify Deploy Hook erforderlich ist
       if (
-        action.requiresNetlifyHook &&
+        action.requiresNetlifyHook;
         (!CONFIG.netlifyDeployHook || !CONFIG.isNetlifyDeployEnabled)
       ) {
         log(

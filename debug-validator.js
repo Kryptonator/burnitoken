@@ -25,7 +25,7 @@ try {
   try {
     const installedExtensions = execSync('code --list-extensions', { encoding: 'utf8' });
     console.log(`Installierte Extensions: ${installedExtensions.split('\n').length}`);
-  } catch (execError) {
+  } catch (execError) 
     console.error('Fehler beim Ausführen von code --list-extensions:', execError.message);
   }
 

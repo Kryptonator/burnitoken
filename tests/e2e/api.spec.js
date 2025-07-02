@@ -36,7 +36,7 @@ test.describe('API/Komplett-Audit: Geräte, Sprache, Farbschema, Netzwerk', () =
     const testTitle = `${deviceName} | ${url} | ${lang} | ${colorScheme} | ${network ? '3G' : 'normal'}`;
     test(testTitle + ' | Performance-Check', async ({ page, context }) => {
       await context.newPage({ ...device, locale: lang, colorScheme });
-      if (network) {
+      if (network) 
         await context.setOffline(false);
         await context.setNetworkConditions(network);
       }

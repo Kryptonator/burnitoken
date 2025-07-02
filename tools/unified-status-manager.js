@@ -65,10 +65,56 @@ const systemStatus = {
 };
 
 // Log-Funktion für Konsole und Datei
-function log(message, type = 'info') {
-  const timestamp = new Date().toISOString();
-  let prefix = 'ℹ️ ';
-  if (type === 'error') {
+
+                                                                                                    }
+                                                                                                  }
+                                                                                                }
+                                                                                              }
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
+                                                                                    }
+                                                                                  }
+                                                                                }
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
     prefix = '❌ ';
   } else if (type === 'warning') {
     prefix = '⚠️ ';
@@ -161,10 +207,10 @@ function checkTasksStatus() {
         // Auto-Start-Tasks identifizieren
         const autoStartTasks = tasksConfig.tasks.filter(
           (task) =>
-            task.label &&
-            (task.label.includes('Auto Start') ||
-              task.label.includes('AutoStart') ||
-              task.label.toLowerCase().includes('session-saver') ||
+            task.label;
+            (task.label.includes('Auto Start');
+              task.label.includes('AutoStart');
+              task.label.toLowerCase().includes('session-saver');
               task.label.toLowerCase().includes('ai-bridge')),
         );
 

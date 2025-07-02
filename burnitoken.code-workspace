@@ -1,46 +1,143 @@
 {
-    "folders": [
-        {
-            "name": "🚀 Burni Token - Main Files",
-            "path": "."
-        }
-    ],
-    "settings": {
-        "workbench.startupEditor": "none",
-        "explorer.openEditors.visible": 4,
-        "workbench.editor.limit.enabled": true,
-        "workbench.editor.limit.value": 5,
-        "workbench.editor.showTabs": "multiple",
-        "breadcrumbs.enabled": true,
-        "extensions.autoUpdate": true,
-        "extensions.ignoreRecommendations": false,
-        "github.copilot.enable": {
-            "*": true,
-            "yaml": true,
-            "plaintext": true,
-            "markdown": true
-        }
-    },
-    "extensions": {
-        "recommendations": [
-            "esbenp.prettier-vscode",
-            "bradlc.vscode-tailwindcss",
-            "ritwickdey.liveserver",
-            "ecmel.vscode-html-css",
-            "formulahendry.auto-rename-tag",
-            "formulahendry.auto-close-tag",
-            "eamodio.gitlens",
-            "github.vscode-pull-request-github",
-            "redhat.vscode-yaml",
-            "mhutchie.git-graph",
-            "xabikos.javascriptsnippets",
-            "zignd.html-css-class-completion",
-            "pranaygp.vscode-css-peek",
-            "heybourn.headwind",
-            "austenc.tailwind-docs",
-            "github.copilot",
-            "github.copilot-chat",
-            "ms-edgedevtools.vscode-edge-devtools"
-        ]
+  "folders": [
+    {
+      "name": "BurniToken Website",
+      "path": "."
     }
+  ],
+  "settings": {
+    "files.watcherExclude": {
+      "**/node_modules/**": true,
+      "**/coverage/**": true,
+      "**/public/**": true,
+      "**/.git/**": true,
+      "**/playwright-report/**": true,
+      "**/test-results/**": true
+    },
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true,
+      "source.organizeImports": true,
+      "source.removeUnusedImports": true
+    },
+    "prettier.requireConfig": true,
+    "prettier.useEditorConfig": true,
+    "eslint.alwaysShowStatus": true,
+    "eslint.format.enable": true,
+    "liveServer.settings.port": 3000,
+    "liveServer.settings.host": "localhost",
+    "liveServer.settings.donotShowInfoMsg": true,
+    "liveServer.settings.CustomBrowser": "chrome",
+    "liveServer.settings.NoBrowser": false,
+    "liveServer.settings.ignoreFiles": [
+      ".vscode/**",
+      "**/*.scss",
+      "**/*.sass",
+      "**/*.ts"
+    ],
+    "playwright.showTrace": true,
+    "playwright.reuseBrowser": true,
+    "playwright.experimental.ctRunOptions": {
+      "reporter": "html"
+    },
+    "github-actions.workflows.pinned.refresh.enabled": true,
+    "github-actions.workflows.pinned.refresh.interval": 300,
+    "axe.enableAccessibilityTree": true,
+    "axe.enabledRules": [
+      "all"
+    ],
+    "webhint.enableTelemetry": false,
+    "thunder-client.saveToWorkspace": true,
+    "thunder-client.followRedirect": true,
+    "thunder-client.requestLayout": "Left/Right",
+    "snyk.enableCodeActions": true,
+    "snyk.enableDeltaFindings": true,
+    "markdownlint.config": {
+      "default": true,
+      "MD033": false,
+      "MD013": {
+        "line_length": 120
+      }
+    },
+    "tailwindCSS.includeLanguages": {
+      "html": "html",
+      "javascript": "javascript"
+    },
+    "tailwindCSS.experimental.classRegex": [
+      [
+        "class:\\s*?[\"'`]([^\"'`]*).*?[\"'`]",
+        "[\"'`]([^\"'`]*)[\"'`]"
+      ],
+      [
+        "className:\\s*?[\"'`]([^\"'`]*).*?[\"'`]",
+        "[\"'`]([^\"'`]*)[\"'`]"
+      ]
+    ],
+    "burnitoken.autoHeal.enabled": true,
+    "burnitoken.autoHeal.interval": 30000,
+    "burnitoken.monitoring.realtime": true,
+    "burnitoken.lighthouse.autoRun": true,
+    "burnitoken.seo.autoValidate": true
+  },
+  "extensions": {
+    "recommendations": [
+      "esbenp.prettier-vscode",
+      "ms-vscode.vscode-eslint",
+      "bradlc.vscode-tailwindcss",
+      "formulahendry.auto-rename-tag",
+      "christian-kohler.path-intellisense",
+      "ms-playwright.playwright",
+      "connor4312.nodejs-testing",
+      "formulahendry.code-runner",
+      "deque-systems.vscode-axe-linter",
+      "webhint.vscode-webhint",
+      "github.vscode-github-actions",
+      "ms-vscode-remote.remote-containers",
+      "ms-azuretools.vscode-docker",
+      "rangav.vscode-thunder-client",
+      "humao.rest-client",
+      "snyk-security.snyk-vulnerability-scanner",
+      "ms-vscode.live-server",
+      "wayou.vscode-todo-highlight",
+      "yzhang.markdown-all-in-one",
+      "davidanson.vscode-markdownlint"
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "🚀 BurniToken: Full Setup",
+        "type": "shell",
+        "command": "npm install && npm run build && node tools/extension-orchestrator.js --install",
+        "group": "build",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": true,
+          "panel": "new"
+        }
+      },
+      {
+        "label": "⚡ Auto-Heal All Systems",
+        "type": "shell",
+        "command": "node tools/extension-orchestrator.js --auto-heal",
+        "isBackground": true,
+        "group": "build"
+      },
+      {
+        "label": "🎯 Live-Readiness Check",
+        "type": "shell",
+        "command": "node tools/vscode-recovery-center.js --live-check",
+        "group": "test"
+      },
+      {
+        "label": "🔍 Complete Audit Suite",
+        "type": "shell",
+        "command": "npm run lighthouse && npm run test:a11y && npm audit && npm run validate",
+        "group": "test"
+      }
+    ]
+  }
 }

@@ -50,7 +50,57 @@ const extensionStatus = {
 
 // Lösche alte Log-Datei falls vorhanden
 try {
-  if (fs.existsSync(LOG_FILE)) {
+  if (fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
     fs.unlinkSync(LOG_FILE);
   }
 } catch (err) {
@@ -60,11 +110,7 @@ try {
 /**
  * Logge in Konsole und Datei
  */
-function log(message) {
-  console.log(message);
-  try {
-    fs.appendFileSync(LOG_FILE, message + '\n', 'utf8');
-  } catch (err) {
+ catch (err) {
     console.error(`Konnte nicht in Log-Datei schreiben: ${err.message}`);
   }
 }

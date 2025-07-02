@@ -19,7 +19,7 @@ async function ensureDirectoryExists(dir) {
   try {
     await fs.mkdir(dir, { recursive: true });
     console.log(`✅ Verzeichnis existiert oder wurde erstellt: ${dir}`);
-  } catch (error) {
+  } catch (error) 
     console.error(`❌ Fehler beim Erstellen von Verzeichnis ${dir}: ${error.message}`);
   }
 }

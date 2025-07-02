@@ -2,13 +2,13 @@
 
 /**
  * 🛡️ ANTI-CRASH-GUARDIAN v2.0
- * 
+ *
  * MISSION: Ein für alle Mal Abstürze eliminieren!
  * BASED ON: Goldene Basis vom 29.06.2025 23:00-02:00 Uhr
- * 
+ *
  * Automatische Crash-Prevention mit:
  * - VS Code Prozess-Hygiene
- * - RAM-Überwachung  
+ * - RAM-Überwachung
  * - Emergency-Saves
  * - Golden-State-Recovery
  */
@@ -24,7 +24,7 @@ const CONFIG = {
   CHECK_INTERVAL: 15000, // 15 Sekunden
   EMERGENCY_SAVE_DIR: path.join(__dirname, '.emergency-saves'),
   GOLDEN_COMMIT: '63e227f', // Perfekte Basis
-  LOG_FILE: path.join(__dirname, 'anti-crash-guardian.log')
+  LOG_FILE: path.join(__dirname, 'anti-crash-guardian.log'),
 };
 
 class AntiCrashGuardian {
@@ -39,7 +39,7 @@ class AntiCrashGuardian {
     const timestamp = new Date().toISOString();
     const logEntry = `[${timestamp}] ${message}`;
     console.log(logEntry);
-    
+
     try {
       fs.appendFileSync(CONFIG.LOG_FILE, logEntry + '\n');
     } catch (err) {
@@ -51,26 +51,30 @@ class AntiCrashGuardian {
   cleanupVSCodeProcesses() {
     try {
       const processes = execSync('tasklist | findstr "Code.exe"', { encoding: 'utf8' });
-      const processLines = processes.split('\n').filter(line => line.includes('Code.exe'));
-      
-      if (processLines.length > CONFIG.MAX_VSCODE_PROCESSES) {
-        this.log(`🚨 KRITISCH: ${processLines.length} VS Code Prozesse gefunden (Max: ${CONFIG.MAX_VSCODE_PROCESSES})`);
-        
+      const processLines = processes.split('\n').filter((line) => line.includes('Code.exe'));
+
+      if (processLines.length > CONFIG.MAX_VSCODE_PROCESSES) 
+        this.log(
+          `🚨 KRITISCH: ${processLines.length} VS Code Prozesse gefunden (Max: ${CONFIG.MAX_VSCODE_PROCESSES})`,
+        );
+
         // Emergency Save BEVOR wir Prozesse beenden
         this.emergencySave();
-        
+
         // Sortiere Prozesse nach Speicherverbrauch (kleinste zuerst beenden)
-        const processInfo = processLines.map(line => {
-          const parts = line.trim().split(/\s+/);
-          return {
-            pid: parts[1],
-            memory: parseInt(parts[4].replace(/[^\d]/g, '')) || 0
-          };
-        }).sort((a, b) => a.memory - b.memory);
+        const processInfo = processLines
+          .map((line) => {
+            const parts = line.trim().split(/\s+/);
+            return {
+              pid: parts[1],
+              memory: parseInt(parts[4].replace(/[^\d]/g, '')) || 0,
+            };
+          })
+          .sort((a, b) => a.memory - b.memory);
 
         // Beende überschüssige Prozesse (außer den 3 größten)
         const toKill = processInfo.slice(0, -CONFIG.MAX_VSCODE_PROCESSES);
-        
+
         for (const proc of toKill) {
           try {
             execSync(`taskkill /F /PID ${proc.pid}`, { encoding: 'utf8' });
@@ -79,10 +83,10 @@ class AntiCrashGuardian {
             this.log(`❌ Fehler beim Beenden von PID ${proc.pid}: ${err.message}`);
           }
         }
-        
+
         return true; // Bereinigung durchgeführt
       }
-      
+
       return false; // Keine Bereinigung nötig
     } catch (err) {
       this.log(`❌ Fehler bei Prozess-Bereinigung: ${err.message}`);
@@ -95,7 +99,7 @@ class AntiCrashGuardian {
     try {
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
       const saveDir = path.join(CONFIG.EMERGENCY_SAVE_DIR, `emergency-${timestamp}`);
-      
+
       if (!fs.existsSync(saveDir)) {
         fs.mkdirSync(saveDir, { recursive: true });
       }
@@ -106,18 +110,18 @@ class AntiCrashGuardian {
         'main.js',
         'package.json',
         'assets/css/styles.min.css',
-        'tools/vscode-recovery-center.js'
+        'tools/vscode-recovery-center.js',
       ];
 
       for (const file of criticalFiles) {
         const srcPath = path.join(__dirname, '..', file);
         const destPath = path.join(saveDir, path.basename(file));
-        
+
         if (fs.existsSync(srcPath)) {
           fs.copyFileSync(srcPath, destPath);
         }
       }
-      
+
       this.log(`💾 Emergency Save in: ${saveDir}`);
       return saveDir;
     } catch (err) {
@@ -129,16 +133,16 @@ class AntiCrashGuardian {
   // 🏆 Golden State Recovery
   recoverToGoldenState() {
     this.log('🏆 GOLDEN STATE RECOVERY wird eingeleitet...');
-    
+
     try {
       // Sichere aktuelle Arbeit
       this.emergencySave();
-      
+
       // Reset zu goldener Basis
       execSync(`git stash`);
       execSync(`git reset --hard ${CONFIG.GOLDEN_COMMIT}`);
       execSync(`npm install --silent`);
-      
+
       this.log('✅ Golden State wiederhergestellt!');
       return true;
     } catch (err) {
@@ -151,15 +155,18 @@ class AntiCrashGuardian {
   checkSystemHealth() {
     try {
       // RAM-Check
-      const memInfo = execSync('wmic OS get TotalVisibleMemorySize,FreePhysicalMemory /format:csv', { encoding: 'utf8' });
-      const lines = memInfo.split('\n').filter(line => line.includes(','));
-      
+      const memInfo = execSync(
+        'wmic OS get TotalVisibleMemorySize,FreePhysicalMemory /format:csv',
+        { encoding: 'utf8' },
+      );
+      const lines = memInfo.split('\n').filter((line) => line.includes(','));
+
       if (lines.length > 0) {
         const parts = lines[0].split(',');
         const totalMem = parseInt(parts[2]) || 0;
         const freeMem = parseInt(parts[1]) || 0;
         const usedPercent = ((totalMem - freeMem) / totalMem) * 100;
-        
+
         if (usedPercent > CONFIG.MAX_RAM_USAGE_PERCENT) {
           this.log(`🚨 RAM KRITISCH: ${usedPercent.toFixed(1)}% verwendet`);
           return 'RAM_CRITICAL';
@@ -195,15 +202,15 @@ class AntiCrashGuardian {
           this.emergencySave();
           this.cleanupVSCodeProcesses();
           break;
-          
+
         case 'PROCESSES_CLEANED':
           this.log('🧹 VS Code Prozesse bereinigt');
           break;
-          
+
         case 'HEALTHY':
           // Stille Überwachung
           break;
-          
+
         case 'ERROR':
           this.crashCount++;
           if (this.crashCount >= 3) {
@@ -231,7 +238,7 @@ class AntiCrashGuardian {
 // 🚀 AUTOSTART
 if (require.main === module) {
   const guardian = new AntiCrashGuardian();
-  
+
   // Graceful Shutdown
   process.on('SIGINT', () => {
     guardian.log('🛑 Shutdown Signal empfangen');

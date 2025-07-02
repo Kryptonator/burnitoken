@@ -42,7 +42,7 @@ async function main() {
   // Überprüfe, ob im Silent-Mode ausgeführt
   const silentMode = process.argv.includes('--silent');
 
-  if (!silentMode) {
+  if (!silentMode) 
     console.log(`${colors.cyan}🔒 Dependency Security Manager wird gestartet...${colors.reset}`);
     console.log(
       `${colors.blue}📅 Startzeit: ${new Date().toLocaleString('de-DE')}${colors.reset}\n`,
@@ -294,3 +294,12 @@ main().catch((error) => {
   console.error(`${colors.red}⛔ Fehler: ${error.message}${colors.reset}`);
   process.exit(1);
 });
+
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer

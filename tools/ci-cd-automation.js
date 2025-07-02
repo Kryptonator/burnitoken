@@ -88,7 +88,7 @@ function runAllTests() {
     }
 
     // End-to-End Tests überspringen, wenn gewünscht
-    if (!CONFIG.skipE2E) {
+    if (!CONFIG.skipE2E) 
       console.log(`${COLORS.magenta}\n=== E2E TESTS ====${COLORS.reset}`);
       try {
         execSync('npm run test:e2e', { stdio: 'inherit', timeout: CONFIG.testTimeout });
@@ -325,3 +325,13 @@ if (require.main === module) {
 }
 
 module.exports = { runCiCdProcess, runAllTests, checkDeploymentIntegrity, performRollback };
+
+
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer

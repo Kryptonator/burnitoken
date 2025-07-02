@@ -23,10 +23,7 @@ try {
 /**
  * In Datei loggen
  */
-function log(message) {
-  try {
-    fs.appendFileSync(LOG_FILE, message + '\n', 'utf8');
-  } catch (err) {
+ catch (err) {
     // Fehler hier ignorieren, da kein Konsolen-Zugriff
   }
 }

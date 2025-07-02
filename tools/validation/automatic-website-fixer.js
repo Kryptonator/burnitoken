@@ -251,7 +251,7 @@ class AutomaticWebsiteFixer {
 
     let validationsPassed = 0;
     checks.forEach((check) => {
-      if (check.test) {
+      if (check.test) 
         console.log(`   ✅ ${check.name}: Fixed`);
         validationsPassed++;
       } else {

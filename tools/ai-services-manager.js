@@ -30,7 +30,7 @@ const SERVICES = [
  */
 function killProcess(name) {
   try {
-    if (process.platform === 'win32') {
+    if (process.platform === 'win32') 
       spawn('powershell', ['-Command', `Stop-Process -Name "*node*" -Force`], { stdio: 'ignore' });
     } else {
       spawn('pkill', ['-f', name], { stdio: 'ignore' });

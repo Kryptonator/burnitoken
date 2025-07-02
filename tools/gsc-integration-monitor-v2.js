@@ -65,7 +65,7 @@ async function makeRequestWithRetry(url, options = {}) {
       const response = await makeHttpRequest(url, requestOptions);
 
       // Speichere Antwort für Diagnose
-      if (CONFIG.diagnostic.saveResponses) {
+      if (CONFIG.diagnostic.saveResponses) 
         saveResponseForDiagnostic(url, response);
       }
 
@@ -372,7 +372,7 @@ async function fixGscIntegrationIssues(checkResults) {
 
   // Robots.txt-Problem beheben
   if (
-    checkResults.checks.robots &&
+    checkResults.checks.robots;
     (!checkResults.checks.robots.status === 'OK' || !checkResults.checks.robots.hasSitemap)
   ) {
     console.log(`${COLORS.yellow}🔧 Behebe Robots.txt-Problem...${COLORS.reset}`);
@@ -516,3 +516,13 @@ if (require.main === module) {
 }
 
 module.exports = { checkGscIntegration, fixGscIntegrationIssues };
+
+
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer

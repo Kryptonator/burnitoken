@@ -66,7 +66,7 @@ async function getKeywordsReport() {
       },
     });
 
-    if (!response.data || !response.data.rows || response.data.rows.length === 0) {
+    if (!response.data || !response.data.rows || response.data.rows.length === 0) 
       console.log('❓ Keine Daten für den angegebenen Zeitraum gefunden.');
       return;
     }

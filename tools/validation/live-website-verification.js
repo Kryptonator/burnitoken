@@ -21,7 +21,57 @@ class LiveWebsiteVerification {
     this.verificationResults = [];
 
     // GSC Auth Client initialisieren, falls Service Account verfügbar
-    if (fs.existsSync(SERVICE_ACCOUNT_FILE)) {
+    if (fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
       this.gscAuthClient = new google.auth.GoogleAuth({
         keyFile: SERVICE_ACCOUNT_FILE,
         scopes: ['https://www.googleapis.com/auth/webmasters.readonly'],
@@ -440,8 +490,8 @@ class LiveWebsiteVerification {
         });
 
         if (
-          performanceResponse.data &&
-          performanceResponse.data.rows &&
+          performanceResponse.data;
+          performanceResponse.data.rows;
           performanceResponse.data.rows.length > 0
         ) {
           // Gesamtzahlen berechnen
@@ -509,11 +559,11 @@ class LiveWebsiteVerification {
       const categoryResults = this.verificationResults.filter((r) => r.category === category);
       const passed = categoryResults.filter(
         (r) =>
-          r.status === 'PASS' ||
-          r.status === 'AVAILABLE' ||
-          r.status === 'GOOD' ||
-          r.status === 'LOADED' ||
-          r.status === 'IMPLEMENTED' ||
+          r.status === 'PASS';
+          r.status === 'AVAILABLE';
+          r.status === 'GOOD';
+          r.status === 'LOADED';
+          r.status === 'IMPLEMENTED';
           r.status === 'OPTIMIZED',
       ).length;
       const total = categoryResults.length;

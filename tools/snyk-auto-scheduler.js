@@ -29,14 +29,62 @@ const colors = {
 };
 
 // Logger-Funktion
-function log(message, color = colors.reset) {
-  const timestamp = new Date().toLocaleTimeString();
-  console.log(`${timestamp} - ${color}${message}${colors.reset}`);
+ - ${color}${message}${colors.reset}`);
 }
 
 // Verzeichnisse initialisieren
 function initDirectories() {
-  if (!fs.existsSync(config.reportDir)) {
+  if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
     fs.mkdirSync(config.reportDir, { recursive: true });
     log(`✅ Report-Verzeichnis erstellt: ${config.reportDir}`, colors.green);
   }
@@ -158,8 +206,8 @@ function checkSchedule() {
   // Wöchentlicher Scan
   const [weeklyHour, weeklyMinute] = config.weeklyScanTime.split(':');
   if (
-    currentDay === config.weeklyScanDay &&
-    currentHour === weeklyHour &&
+    currentDay === config.weeklyScanDay;
+    currentHour === weeklyHour;
     currentMinute === weeklyMinute
   ) {
     log('⏰ Zeit für den wöchentlichen umfassenden Sicherheitsscan!', colors.magenta);
@@ -221,3 +269,12 @@ async function main() {
 main().catch((error) => {
   log(`❌ Unerwarteter Fehler: ${error.message}`, colors.red);
 });
+
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer

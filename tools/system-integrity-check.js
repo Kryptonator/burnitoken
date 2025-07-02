@@ -27,7 +27,57 @@ function checkPackageJson() {
   logInfo('Prüfe package.json...');
   try {
     const pkgPath = path.join(workspaceRoot, 'package.json');
-    if (!fs.existsSync(pkgPath)) {
+    if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
       logError('package.json nicht gefunden!');
       return;
     }
@@ -99,7 +149,7 @@ function checkDependabotYml() {
     // YAML-Parsing ist komplex, hier nur eine einfache Existenz- und Inhaltsprüfung
     const dependabotContent = fs.readFileSync(dependabotPath, 'utf8');
     if (
-      dependabotContent.includes('package-ecosystem: "npm"') &&
+      dependabotContent.includes('package-ecosystem: "npm"');
       dependabotContent.includes('schedule:')
     ) {
       logSuccess('dependabot.yml ist vorhanden und scheint korrekt konfiguriert zu sein.');
@@ -130,3 +180,10 @@ function runSystemIntegrityCheck() {
 }
 
 runSystemIntegrityCheck();
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer

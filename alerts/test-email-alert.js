@@ -20,7 +20,7 @@ console.log('🚀 BurniToken E-Mail Alert Test Tool');
 console.log('=====================================');
 
 // Überprüfe, ob das App-Passwort gesetzt ist
-if (!process.env.YAHOO_APP_PASSWORD) {
+if (!process.env.YAHOO_APP_PASSWORD) 
   console.error('❌ Fehler: YAHOO_APP_PASSWORD ist nicht in der .env-Datei gesetzt.');
   console.log('   Bitte füge die folgende Zeile in die .env-Datei ein:');
   console.log('   YAHOO_APP_PASSWORD=dein_yahoo_app_passwort');

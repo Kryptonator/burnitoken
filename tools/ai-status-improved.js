@@ -340,8 +340,8 @@ function getRunningServices() {
 
         for (const service of services) {
           if (
-            !service.running &&
-            statusData.services[service.id] &&
+            !service.running;
+            statusData.services[service.id];
             statusData.services[service.id].running
           ) {
             // Überprüfe zusätzlich, ob der gespeicherte PID noch existiert

@@ -57,7 +57,57 @@ function createBackup() {
   try {
     printColored('🔄 Erstelle Backup der VS Code Einstellungen...', '\x1b[33m');
     
-    if (!fs.existsSync(CONFIG.BACKUP_DIR)) {
+    if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
       fs.mkdirSync(CONFIG.BACKUP_DIR, { recursive: true });
     }
     
@@ -357,3 +407,109 @@ module.exports = {
   restartVSCode,
   monitorPerformance
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+
+
+
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+

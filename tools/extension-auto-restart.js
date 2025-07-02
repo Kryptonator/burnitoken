@@ -15,7 +15,7 @@ const { execSync, spawn } = require('child_process');
 const statusDashboard = require('./extension-status-dashboard');
 
 // Alternative implementierung falls statusDashboard.getStartupStatus nicht vorhanden ist
-if (!statusDashboard.getStartupStatus) {
+if (!statusDashboard.getStartupStatus) 
   statusDashboard.getStartupStatus = async function () {
     // Fallback-Implementierung
     try {
@@ -47,9 +47,7 @@ const serviceRestartAttempts = {};
 /**
  * Log-Funktion für Konsole und Datei
  */
-function log(message, level = 'info') {
-  const timestamp = new Date().toISOString();
-  const formattedMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
+] [${level.toUpperCase()}] ${message}`;
 
   // Log in Konsole mit Farbe
   switch (level) {
@@ -240,3 +238,18 @@ module.exports = {
   checkAndRestartServices,
   runOnWorkspaceOpen,
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer

@@ -10,7 +10,7 @@ async function testNetlifyFunctions() {
     // Test der Token-Info API
     console.log('\n📊 Teste Token-Info API:');
     const tokenResponse = await fetch('http://localhost:8888/.netlify/functions/token-info');
-    if (tokenResponse.ok) {
+    if (tokenResponse.ok) 
       const tokenData = await tokenResponse.json();
       console.log('✅ Token-Info API erfolgreich getestet');
       console.log('Name:', tokenData.name);

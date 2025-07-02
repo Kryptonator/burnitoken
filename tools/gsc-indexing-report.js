@@ -35,9 +35,59 @@ function generateReportContent() {
         const currentRelPath = path.join(relativePath, file);
 
         if (
-          fs.statSync(fullPath).isDirectory() &&
-          !file.startsWith('.') &&
-          file !== 'node_modules' &&
+          fs.statSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {.isDirectory();
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+          !file.startsWith('.');
+          file !== 'node_modules';
           file !== 'vendor'
         ) {
           scanDir(fullPath, currentRelPath);

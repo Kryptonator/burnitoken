@@ -71,7 +71,57 @@ const STANDARD_FIXES = {
       console.log(`Fehlende Abhängigkeit erkannt: ${module}`);
 
       // Prüfen, ob es sich um einen lokalen Pfad handelt
-      if (module.startsWith('./') || module.startsWith('../')) {
+      if (module.startsWith) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { || module.startsWith('../')) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
         // Lokale Datei fehlt
         const localPath = path.join(path.dirname(file), module);
         console.log(`Lokale Datei fehlt: ${localPath}`);
@@ -97,8 +147,8 @@ const STANDARD_FIXES = {
 
       // Wenn die Variable in einem anderen Teil des Codes definiert ist
       if (
-        content.includes(`const ${varName}`) ||
-        content.includes(`let ${varName}`) ||
+        content.includes(`const ${varName}`);
+        content.includes(`let ${varName}`);
         content.includes(`var ${varName}`)
       ) {
         console.log(
@@ -122,13 +172,7 @@ const STANDARD_FIXES = {
 };
 
 // Log Funktion
-function log(message, logToFile = true) {
-  console.log(message);
-
-  if (logToFile) {
-    try {
-      fs.appendFileSync(LOG_FILE, message + '\n');
-    } catch (err) {
+ catch (err) {
       console.error('Fehler beim Schreiben ins Log:', err.message);
     }
   }

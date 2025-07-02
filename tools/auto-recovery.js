@@ -24,9 +24,7 @@ let recoveryState = {
 };
 
 // Logging-Funktion
-function log(message) {
-  const timestamp = new Date().toISOString();
-  const logMessage = `[${timestamp}] ${message}\n`;
+] ${message}\n`;
 
   console.log(message);
   fs.appendFileSync(LOG_FILE, logMessage);
@@ -34,7 +32,57 @@ function log(message) {
 
 // Status-Datei laden
 function loadState() {
-  if (fs.existsSync(STATE_FILE)) {
+  if (fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
     try {
       const data = fs.readFileSync(STATE_FILE, 'utf8');
       recoveryState = JSON.parse(data);
@@ -149,9 +197,9 @@ function checkGSCIndexing() {
           const fullPath = path.join(dir, file);
 
           if (
-            fs.statSync(fullPath).isDirectory() &&
-            !file.startsWith('.') &&
-            file !== 'node_modules' &&
+            fs.statSync(fullPath).isDirectory();
+            !file.startsWith('.');
+            file !== 'node_modules';
             file !== 'vendor'
           ) {
             scanDir(fullPath);

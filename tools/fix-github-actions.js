@@ -28,7 +28,57 @@ const productionYml = path.join(workflowsDir, 'production.yml');
 const packageJson = path.join(__dirname, '..', 'package.json');
 
 // Überprüfe, ob Dateien existieren
-if (!fs.existsSync(workflowsDir)) {
+if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
   console.log(
     `${colors.red}❌ Workflows-Verzeichnis nicht gefunden: ${workflowsDir}${colors.reset}`,
   );
@@ -114,3 +164,11 @@ try {
   );
   process.exit(1);
 }
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer

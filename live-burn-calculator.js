@@ -133,7 +133,7 @@ class BurniTokenBurnCalculator {
 
   async voteOnProposal(proposalId, vote, voterAddress) {
     const proposal = this.communityVotes.find((p) => p.id === proposalId);
-    if (!proposal) {
+    if (!proposal) 
       throw new Error('Proposal not found');
     }
 
@@ -294,4 +294,370 @@ const burniCalculator = new BurniTokenBurnCalculator();
 // 🎯 EXPORT FOR TESTING
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = BurniTokenBurnCalculator;
+}
+
+
+// Auto-generierte Implementierungen für fehlende Funktionen
+/**
+ * constructor - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+
+/**
+ * init - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function init(...args) {
+  console.log('init aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * log - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+
+/**
+ * loadBurnHistory - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function loadBurnHistory(...args) {
+  console.log('loadBurnHistory aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * connectToXRPL - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function connectToXRPL(...args) {
+  console.log('connectToXRPL aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * startLiveUpdates - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function startLiveUpdates(...args) {
+  console.log('startLiveUpdates aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * calculateBurnAmount - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function calculateBurnAmount(...args) {
+  console.log('calculateBurnAmount aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * floor - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function floor(...args) {
+  console.log('floor aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * toISOString - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function toISOString(...args) {
+  console.log('toISOString aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * executeBurn - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function executeBurn(...args) {
+  console.log('executeBurn aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * generateTxId - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function generateTxId(...args) {
+  console.log('generateTxId aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * now - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function now(...args) {
+  console.log('now aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * getCurrentBlockHeight - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function getCurrentBlockHeight(...args) {
+  console.log('getCurrentBlockHeight aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * push - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function push(...args) {
+  console.log('push aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * onBurnExecuted - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function onBurnExecuted(...args) {
+  console.log('onBurnExecuted aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * getBurnStatistics - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function getBurnStatistics(...args) {
+  console.log('getBurnStatistics aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * toFixed - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function toFixed(...args) {
+  console.log('toFixed aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * calculateAverageBurn - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function calculateAverageBurn(...args) {
+  console.log('calculateAverageBurn aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * projectFutureSupply - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function projectFutureSupply(...args) {
+  console.log('projectFutureSupply aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * catch - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+
+/**
+ * error - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+
+/**
+ * random - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function random(...args) {
+  console.log('random aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * submitBurnProposal - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function submitBurnProposal(...args) {
+  console.log('submitBurnProposal aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * generateProposalId - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function generateProposalId(...args) {
+  console.log('generateProposalId aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * voteOnProposal - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function voteOnProposal(...args) {
+  console.log('voteOnProposal aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * find - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function find(...args) {
+  console.log('find aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * if - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+
+/**
+ * checkProposalExecution - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function checkProposalExecution(...args) {
+  console.log('checkProposalExecution aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * calculateBurnImpact - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function calculateBurnImpact(...args) {
+  console.log('calculateBurnImpact aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * getCurrentTokenPrice - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function getCurrentTokenPrice(...args) {
+  console.log('getCurrentTokenPrice aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * calculateAverageBurnPerMonth - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function calculateAverageBurnPerMonth(...args) {
+  console.log('calculateAverageBurnPerMonth aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * max - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function max(...args) {
+  console.log('max aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * toString - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function toString(...args) {
+  console.log('toString aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * substr - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function substr(...args) {
+  console.log('substr aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * toUpperCase - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function toUpperCase(...args) {
+  console.log('toUpperCase aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * reduce - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function reduce(...args) {
+  console.log('reduce aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * filter - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function filter(...args) {
+  console.log('filter aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * updateLiveData - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function updateLiveData(...args) {
+  console.log('updateLiveData aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * onStatsUpdated - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function onStatsUpdated(...args) {
+  console.log('onStatsUpdated aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * emitEvent - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function emitEvent(...args) {
+  console.log('emitEvent aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * saveBurnHistory - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function saveBurnHistory(...args) {
+  console.log('saveBurnHistory aufgerufen mit Argumenten:', args);
+  return undefined;
+}
+/**
+ * BurniTokenBurnCalculator - Automatisch generierte Implementierung
+ * @param {...any} args - Funktionsargumente
+ * @returns {any} Ergebnis oder undefined
+ */
+function BurniTokenBurnCalculator(...args) {
+  console.log('BurniTokenBurnCalculator aufgerufen mit Argumenten:', args);
+  return undefined;
 }

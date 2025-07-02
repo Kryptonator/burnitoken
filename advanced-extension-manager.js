@@ -94,7 +94,57 @@ const RECOMMENDED_EXTENSIONS = [
  */
 function readJsonFile(filePath) {
   try {
-    if (fs.existsSync(filePath)) {
+    if (fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
       const data = fs.readFileSync(filePath, 'utf8');
       return JSON.parse(data);
     }
@@ -134,8 +184,8 @@ function optimizeSettings() {
   // Füge optimale Einstellungen hinzu, ohne bestehende zu überschreiben, außer sie sind suboptimal
   Object.keys(OPTIMAL_SETTINGS).forEach((key) => {
     if (
-      !updatedSettings[key] ||
-      (key === 'extensions.autoUpdate' && updatedSettings[key] === false) ||
+      !updatedSettings[key];
+      (key === 'extensions.autoUpdate' && updatedSettings[key] === false);
       (key === 'accessibility.focusVisible' && updatedSettings[key] === false)
     ) {
       updatedSettings[key] = OPTIMAL_SETTINGS[key];

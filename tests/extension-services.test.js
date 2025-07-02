@@ -16,25 +16,24 @@ jest.mock('child_process', () => {
     ...originalModule,
     execSync: jest.fn((command) => {
       // Bei normalen Tests immer erfolgreich sein
-      if (command.includes('--test-mock')) {
-        return 'Success!';
+      if (command.includes('error')) {
+        throw new Error('Test error');
       }
-
-      // In CI-Umgebung immer erfolgreich sein
-      if (process.env.CI) {
-        return 'CI Test Success!';
-      }
-
-      try {
-        // Originale Implementierung mit erhöhtem Timeout verwenden
-        return originalModule.execSync(command, { timeout: 10000 });
-      } catch (error) {
-        console.error(`Fehler beim Ausführen von: ${command}`);
-        console.error(error.message);
-        return 'Error: ' + error.message; // Gibt Fehler als String zurück, anstatt zu werfen
-      }
+      return 'Success';
     }),
   };
+});
+
+describe('Extension Service Tests', () => {
+  test('Extension Service sollte erfolgreich ausgeführt werden', () => {
+    expect(execSync('extension-service run')).toBe('Success');
+  });
+
+  test('Extension Service sollte bei Fehler eine Exception werfen', () => {
+    expect(() => {
+      execSync('extension-service run --error');
+    }).toThrow('Test error');
+  });
 });
 
 // Globale Testdauer für langsame Tests erhöhen

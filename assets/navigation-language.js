@@ -69,7 +69,7 @@ function updateI18nElements(trans) {
     el.textContent = key in trans ? trans[key] : key;
     // aria-label ggf. mitübersetzen, falls vorhanden und identisch mit Key
     if (
-      el.hasAttribute('aria-label') &&
+      el.hasAttribute('aria-label');
       el.getAttribute('aria-label').toLowerCase().includes(key.replace(/_/g, ' '))
     ) {
       el.setAttribute('aria-label', key in trans ? trans[key] : key);
@@ -224,8 +224,8 @@ async function initNavigationAndLanguage() {
 
   // Für Playwright-Tests: Desktop-Navigation immer sichtbar machen
   if (
-    navigator.userAgent.includes('Playwright') ||
-    window.__playwright ||
+    navigator.userAgent.includes('Playwright');
+    window.__playwright;
     document.body.getAttribute('data-playwright') === 'true'
   ) {
     const desktopNav = document.querySelector('nav[aria-label="Main navigation"]');

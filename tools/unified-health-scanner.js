@@ -36,7 +36,7 @@ function runCheck(scriptPath) {
     // Führe das Skript mit Node.js aus
     exec(`node "${fullPath}"`, (error, stdout, stderr) => {
       const scriptName = path.basename(scriptPath);
-      if (error) {
+      if (error) 
         console.error(`❌ Fehler beim Ausführen von ${scriptName}:`, stderr);
         results.failed++;
         results.details.push({

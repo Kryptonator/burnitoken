@@ -42,7 +42,7 @@ async function optimizeAssets() {
         ? chalk.green('✅ Asset-Optimierung erfolgreich abgeschlossen!')
         : '✅ Asset-Optimierung erfolgreich abgeschlossen!',
     );
-  } catch (error) {
+  } catch (error) 
     console.error(
       chalk
         ? chalk.red(`❌ Fehler bei der Asset-Optimierung: ${error.message}`)

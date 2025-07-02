@@ -80,7 +80,57 @@ const WORKER_CONFIG = {
 
 // Verzeichnis für Worker-Status und Logs
 const WORKER_DIR = path.join(__dirname, '..', '.worker-system');
-if (!existsSync(WORKER_DIR)) {
+if (!existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
   mkdirSync(WORKER_DIR, { recursive: true });
 }
 
@@ -91,9 +141,7 @@ const LOG_FILE = path.join(WORKER_DIR, 'worker-log.txt');
 /**
  * Logging-Funktion
  */
-function log(message, type = 'INFO') {
-  const timestamp = new Date().toISOString();
-  const logMessage = `[${timestamp}] [${type}] ${message}\n`;
+] [${type}] ${message}\n`;
 
   // Konsole und Datei
   console.log(`[${type}] ${message}`);

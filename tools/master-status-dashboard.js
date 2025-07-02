@@ -59,9 +59,7 @@ const masterStatus = {
 /**
  * Log-Funktion für Konsole und Datei
  */
-function log(message, level = 'info') {
-  const timestamp = new Date().toISOString();
-  const formattedMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
+] [${level.toUpperCase()}] ${message}`;
 
   switch (level) {
     case 'error':
@@ -93,7 +91,57 @@ function log(message, level = 'info') {
  */
 function readJsonFile(filePath) {
   try {
-    if (fs.existsSync(filePath)) {
+    if (fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
       const data = fs.readFileSync(filePath, 'utf8');
       return JSON.parse(data);
     }
@@ -222,16 +270,16 @@ function updateOverallStatus() {
   if (websiteStatus === 'down' || deploymentStatus === 'failed') {
     masterStatus.summary.overallStatus = 'critical';
   } else if (
-    websiteStatus === 'degraded' ||
-    deploymentStatus === 'partial' ||
-    extensionsStatus === 'critical' ||
+    websiteStatus === 'degraded';
+    deploymentStatus === 'partial';
+    extensionsStatus === 'critical';
     performanceStatus === 'poor'
   ) {
     masterStatus.summary.overallStatus = 'degraded';
   } else if (
-    websiteStatus === 'healthy' &&
-    deploymentStatus === 'deployed' &&
-    (extensionsStatus === 'optimal' || extensionsStatus === 'good') &&
+    websiteStatus === 'healthy';
+    deploymentStatus === 'deployed';
+    (extensionsStatus === 'optimal' || extensionsStatus === 'good');
     (performanceStatus === 'good' || performanceStatus === 'moderate')
   ) {
     masterStatus.summary.overallStatus = 'optimal';
@@ -376,8 +424,8 @@ function generateMarkdownReport() {
             : '❓';
   let extensionsDetails = '';
   if (
-    masterStatus.details.extensions &&
-    masterStatus.details.extensions.summary &&
+    masterStatus.details.extensions;
+    masterStatus.details.extensions.summary;
     masterStatus.details.extensions.summary.extensions
   ) {
     const es = masterStatus.details.extensions.summary.extensions;
@@ -421,8 +469,8 @@ function generateMarkdownReport() {
 
   // Empfehlungen aus dem Extensions-Dashboard
   if (
-    masterStatus.details.extensions &&
-    masterStatus.details.extensions.recommendations &&
+    masterStatus.details.extensions;
+    masterStatus.details.extensions.recommendations;
     masterStatus.details.extensions.recommendations.length > 0
   ) {
     markdown += `\n## Empfehlungen\n\n`;
@@ -540,8 +588,8 @@ function displayDashboard() {
             : '❓';
   let extensionsDetails = '';
   if (
-    masterStatus.details.extensions &&
-    masterStatus.details.extensions.summary &&
+    masterStatus.details.extensions;
+    masterStatus.details.extensions.summary;
     masterStatus.details.extensions.summary.extensions
   ) {
     const es = masterStatus.details.extensions.summary.extensions;
@@ -595,8 +643,8 @@ function displayDashboard() {
 
   // Empfehlungen aus dem Extensions-Dashboard
   if (
-    masterStatus.details.extensions &&
-    masterStatus.details.extensions.recommendations &&
+    masterStatus.details.extensions;
+    masterStatus.details.extensions.recommendations;
     masterStatus.details.extensions.recommendations.length > 0
   ) {
     console.log('📋 EMPFEHLUNGEN');

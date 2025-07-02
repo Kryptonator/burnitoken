@@ -48,7 +48,57 @@ function initAIBridge() {
   console.log('🧠 AI Conversation Bridge wird initialisiert...');
 
   // Erstelle Konversationsverzeichnis, falls nicht vorhanden
-  if (!fs.existsSync(CONFIG.conversationDir)) {
+  if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
     fs.mkdirSync(CONFIG.conversationDir, { recursive: true });
   }
 
@@ -137,8 +187,8 @@ function detectModelSwitch() {
       if (model.id === currentModel) continue;
 
       if (
-        lastLines.includes(`using ${model.id}`) ||
-        lastLines.includes(`switch to ${model.id}`) ||
+        lastLines.includes(`using ${model.id}`);
+        lastLines.includes(`switch to ${model.id}`);
         lastLines.includes(`${model.name.toLowerCase()}`)
       ) {
         handleModelSwitch(currentModel, model.id);

@@ -29,16 +29,64 @@ const colors = {
 };
 
 // Logger-Funktion
-function log(message, color = colors.reset) {
-  console.log(color + message + colors.reset);
-}
+
 
 // Verzeichnisse initialisieren
 function initDirectories() {
   const dirs = [config.backupDir, config.securityDir, config.emergencyDir];
 
   dirs.forEach((dir) => {
-    if (!fs.existsSync(dir)) {
+    if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
       fs.mkdirSync(dir, { recursive: true });
       log(`✅ Verzeichnis erstellt: ${dir}`, colors.green);
     }
@@ -263,3 +311,12 @@ main().catch((error) => {
   log(`❌ Unerwarteter Fehler: ${error.message}`, colors.red);
   process.exit(1);
 });
+
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer

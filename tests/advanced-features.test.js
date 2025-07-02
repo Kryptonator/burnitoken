@@ -143,7 +143,9 @@ describe('Advanced Features', () => {
           const saved = localStorage.getItem(this.storageKey);
           if (saved && ['light', 'dark', 'auto'].includes(saved)) {
             this.currentTheme = saved;
+            return saved;
           }
+          return 'auto';
         }
 
         setTheme(theme) {

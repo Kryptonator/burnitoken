@@ -32,7 +32,7 @@ async function checkSitemapAccess() {
 
       console.log(`   Status: ${response.status} ${response.statusText}`);
 
-      if (response.ok) {
+      if (response.ok) 
         const content = await response.text();
         const contentLength = content.length;
         const isXml = content.trim().startsWith('<?xml');

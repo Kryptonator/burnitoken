@@ -39,14 +39,7 @@ if (!fs.existsSync(CONFIG.recoveryDir)) {
 /**
  * Zeigt eine formatierte Meldung in der Konsole an
  */
-function log(message, type = 'INFO') {
-  const colorCodes = {
-    INFO: '\x1b[36m', // Cyan
-    SUCCESS: '\x1b[32m', // Grün
-    WARNING: '\x1b[33m', // Gelb
-    ERROR: '\x1b[31m', // Rot
-    DEBUG: '\x1b[90m', // Grau
-  };
+;
   const reset = '\x1b[0m';
   const color = colorCodes[type] || colorCodes.INFO;
   const timestamp = new Date().toLocaleTimeString();

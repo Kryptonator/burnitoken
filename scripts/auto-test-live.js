@@ -65,7 +65,7 @@ function testLiveWebsite() {
         const allFeaturesWorking =
           hasTitle && hasBurniToken && hasFormHandler && hasEnhancedContrast && hasFormsEnhanced;
 
-        if (res.statusCode === 200 && allFeaturesWorking) {
+        if (res.statusCode === 200 && allFeaturesWorking) 
           console.log(`\n🎉 LIVE-WEBSITE TEST: ERFOLGREICH! Alle Features funktionieren.`);
         } else if (res.statusCode === 200) {
           console.log(
@@ -154,8 +154,8 @@ async function checkGSCStatus() {
       });
 
       if (
-        performanceResponse.data &&
-        performanceResponse.data.rows &&
+        performanceResponse.data;
+        performanceResponse.data.rows;
         performanceResponse.data.rows.length > 0
       ) {
         const data = performanceResponse.data.rows[0];

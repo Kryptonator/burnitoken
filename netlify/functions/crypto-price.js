@@ -19,7 +19,7 @@ exports.handler = async (event, context) => {
       `https://api.coingecko.com/api/v3/simple/price?ids=${symbol}&vs_currencies=usd,eur&include_24hr_change=true`,
     );
 
-    if (!response.ok) {
+    if (!response.ok) 
       throw new Error(`API-Fehler: ${response.status} ${response.statusText}`);
     }
 

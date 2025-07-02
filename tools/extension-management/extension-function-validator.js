@@ -169,7 +169,7 @@ class ExtensionFunctionValidator {
           totalTests++;
           const result = await this.runExtensionTest(extensionTest.extension, test);
 
-          if (result.passed) {
+          if (result.passed) 
             passedTests++;
             console.log(`   ✅ ${test} - ${result.message}`);
           } else {

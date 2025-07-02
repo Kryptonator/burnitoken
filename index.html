@@ -70,15 +70,31 @@
       crossorigin="anonymous"
     />
 
-    <!-- Preload critical assets -->
+    <!-- Performance-optimierte Resource Hints -->
+    <!-- Preconnect für externe APIs -->
+    <link rel="preconnect" href="https://api.coingecko.com" />
+    <link rel="preconnect" href="https://api.coincap.io" />
+    <link rel="preconnect" href="https://data.xrpl.org" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="dns-prefetch" href="//min-api.cryptocompare.com" />
+    
+    <!-- Preload critical assets für LCP-Optimierung -->
+    <link rel="preload" href="/assets/css/critical.min.css" as="style" />
+    <link rel="stylesheet" href="/assets/css/critical.min.css" />
+    <link rel="preload" href="/assets/images/burni-logo.webp" as="image" type="image/webp" />
     <link rel="preload" href="/assets/images/burniimage.webp" as="image" type="image/webp" />
     <link rel="preload" href="/assets/images/burniimage.jpg" as="image" type="image/jpeg" />
-    <link rel="preload" href="/assets/css/styles.min.css" as="style" />
-    <link rel="preload" href="/assets/css/price-oracle.css" as="style" />
-    <link rel="preload" href="/assets/scripts-fixed.min.js" as="script" />
     <link rel="preload" href="/assets/js/price-oracle.js" as="script" />
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/chart.js" as="script" />
+    <link rel="preload" href="/assets/js/auto-healing-system.js" as="script" />
+    <link rel="preload" href="/assets/js/performance-monitor.js" as="script" />
+    
+    <!-- Prefetch für nicht-kritische Ressourcen -->
+    <link rel="prefetch" href="/assets/css/styles.min.css" />
+    <link rel="prefetch" href="/assets/css/price-oracle-ui.css" />
+    <link rel="prefetch" href="/assets/scripts-fixed.min.js" />
     <link rel="prefetch" href="/assets/images/burni-chart.webp" />
+    <link rel="prefetch" href="/assets/images/burni-social.webp" />
+    <link rel="prefetch" href="https://cdn.jsdelivr.net/npm/chart.js" />
 
     <!-- Critical CSS -->
     <style>
@@ -465,6 +481,7 @@
     <!-- Price Oracle Status CSS -->
     <link rel="stylesheet" href="assets/css/price-oracle-status.css" />
     <link rel="stylesheet" href="assets/css/price-oracle.css" />
+    <link rel="stylesheet" href="assets/css/price-oracle-ui.css" />
   </head>
   <body
     class="bg-gray-50 font-sans leading-normal tracking-normal text-gray-800 antialiased dark:bg-gray-900 dark:text-gray-200"
@@ -485,32 +502,33 @@
           <a href="#faq" class="nav-link">FAQ</a>
         </div>
         <div class="flex items-center space-x-4">
-          <div class="price-container price-widget" data-price-display id="xrp-price-widget">
-            <div class="flex items-center space-x-3">
-              <span class="text-lg font-semibold price-value" data-price-usd id="hero-xrp-price"
-                >$--</span
-              >
-              <span class="text-sm text-gray-600 dark:text-gray-400" data-price-eur
-                >€--</span
-              >
-              <span class="text-xs text-gray-500 dark:text-gray-500" data-price-btc
-                >₿--</span
-              >
+          <!-- Enhanced Price Widget with Robust Fallback System -->
+          <div class="price-container price-widget" 
+               data-price-display 
+               data-price-type="usd"
+               data-token-id="burnitoken"
+               data-currency="usd"
+               id="xrp-price-widget"
+               role="region"
+               aria-label="BurniToken Preis-Widget">
+            <!-- Price content will be managed by Price Oracle -->
+            <div class="price-loading" role="status" aria-live="polite">
+              <div class="skeleton-price">
+                <div class="skeleton-bar skeleton-main" aria-hidden="true"></div>
+                <div class="skeleton-bar skeleton-change" aria-hidden="true"></div>
+              </div>
+              <span class="sr-only">Lade BurniToken Preis-Daten...</span>
             </div>
-            <div class="status-indicator" id="xrp-status-indicator">
-              <span
-                class="ml-2 text-xs text-gray-500 dark:text-gray-400"
-                data-price-status
-                aria-live="polite"
-                aria-atomic="true"
-                >Loading...</span
-              >
-              <span
-                class="ml-1 text-xs text-gray-400 dark:text-gray-500"
-                data-price-timestamp
-                aria-label="Last updated time"
-              ></span>
-            </div>
+          </div>
+          
+          <!-- Price Status Indicator -->
+          <div class="status-indicator" id="xrp-status-indicator">
+            <span data-price-status 
+                  aria-live="polite"
+                  aria-atomic="true"
+                  class="text-xs">
+              Initialisiere...
+            </span>
           </div>
           <button
             id="theme-toggle"
@@ -688,25 +706,21 @@
             <div class="space-y-4">
               <div class="flex justify-between items-center">
                 <span class="font-medium">Current Price</span>
-                <div class="text-right" data-price-container>
-                  <div class="space-y-1">
-                    <div class="font-bold text-green-500 text-lg" data-price-usd>$--</div>
-                    <div class="text-sm text-gray-600 dark:text-gray-400" data-price-eur>€--</div>
-                    <div class="text-xs text-gray-500 dark:text-gray-500" data-price-btc>₿--</div>
-                  </div>
-                  <div class="mt-1">
-                    <span
-                      class="text-xs text-gray-500 dark:text-gray-400"
-                      data-price-status
-                      aria-live="polite"
-                      aria-atomic="true"
-                      >Loading...</span
-                    >
-                    <span
-                      class="ml-1 text-xs text-gray-400 dark:text-gray-500"
-                      data-price-change
-                      aria-label="24h price change"
-                    >--%</span>
+                <!-- Enhanced Price Widget for Statistics Section -->
+                <div class="text-right" 
+                     data-price-display
+                     data-price-type="usd"
+                     data-token-id="burnitoken"
+                     data-currency="usd"
+                     role="region"
+                     aria-label="Aktueller BurniToken Preis">
+                  <!-- Price content will be managed by Price Oracle -->
+                  <div class="price-loading" role="status" aria-live="polite">
+                    <div class="skeleton-price">
+                      <div class="skeleton-bar skeleton-main" aria-hidden="true"></div>
+                      <div class="skeleton-bar skeleton-change" aria-hidden="true"></div>
+                    </div>
+                    <span class="sr-only">Lade aktuelle BurniToken Preis-Daten...</span>
                   </div>
                 </div>
               </div>
@@ -1449,14 +1463,9 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/xrpl@2.7.0/dist/npm/xrpl.min.js"></script>
+    <script src="assets/js/auto-healing-system.js" defer></script>
     <script src="assets/js/price-oracle.js" defer></script>
-    <script src="assets/js/price-oracle-dashboard.js" defer></script>
-    <script src="assets/js/price-oracle-recovery.js" defer></script>
-    <script src="assets/js/monitoring-services.js" defer></script>
-    <script src="assets/js/security-hardening.js" defer></script>
-    <script src="assets/js/seo-automation.js" defer></script>
-    <script src="assets/js/system-dashboard.js" defer></script>
-    <script src="main.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         // Initialize XRP Price Oracle with Multi-Currency Support
@@ -1473,7 +1482,7 @@
           refreshInterval: 30000, // 30 seconds
           cacheExpiry: 60000, // 1 minute
           enableNotifications: true,
-          maxRetries: 3
+          maxRetries: 3,
         });
 
         // Start price fetching
@@ -1482,6 +1491,32 @@
 
         // Add global oracle access for debugging
         window.burniOracle = oracle;
+        
+        // Initialize Core Web Vitals Monitoring
+        if ('PerformanceObserver' in window) {
+          // LCP Monitoring
+          new PerformanceObserver((entryList) => {
+            const entries = entryList.getEntries();
+            const lastEntry = entries[entries.length - 1];
+            console.log('LCP:', lastEntry.startTime);
+            if (lastEntry.startTime > 2500) {
+              console.warn('⚠️ LCP over 2.5s:', lastEntry.startTime);
+            }
+          }).observe({ entryTypes: ['largest-contentful-paint'] });
+          
+          // CLS Monitoring
+          let clsValue = 0;
+          new PerformanceObserver((entryList) => {
+            for (const entry of entryList.getEntries()) {
+              if (!entry.hadRecentInput) {
+                clsValue += entry.value;
+              }
+            }
+            if (clsValue > 0.1) {
+              console.warn('⚠️ CLS over 0.1:', clsValue);
+            }
+          }).observe({ entryTypes: ['layout-shift'] });
+        }
       });
     </script>
   </body>

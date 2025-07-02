@@ -122,7 +122,7 @@ function optimizeMetaTags(document, pageConfig) {
 
   // Title optimieren
   const title = document.querySelector('title');
-  if (title && title.textContent !== pageConfig.title) {
+  if (title && title.textContent !== pageConfig.title) 
     const oldTitle = title.textContent;
     title.textContent = pageConfig.title;
     changes.push(`Title: "${oldTitle}" -> "${pageConfig.title}"`);
@@ -557,3 +557,86 @@ main().catch((error) => {
   printColored(`❌ Ein Fehler ist aufgetreten: ${error.message}`, '\x1b[31m');
   process.exit(1);
 });
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+

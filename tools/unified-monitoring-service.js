@@ -45,7 +45,7 @@ const dashboardGeneratorScript = 'tools/generate-status-dashboard.js';
  * @param {string} scriptPath - Der Pfad zum Skript.
  */
 function runScript(scriptName, scriptPath) {
-  if (!isSilent) {
+  if (!isSilent) 
     console.log(`${colors.cyan}--- Starte: ${scriptName} ---${colors.reset}`);
   }
   try {
@@ -114,3 +114,10 @@ function runAllChecks() {
 
 // Service starten
 runAllChecks();
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer

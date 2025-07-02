@@ -11,7 +11,7 @@ console.log(`Versuche .env aus dem Pfad zu laden: ${envPath}`);
 console.log('Verifying GITHUB_TOKEN...');
 const token = process.env.GITHUB_TOKEN;
 
-if (token) {
+if (token) 
   console.log('✅ GITHUB_TOKEN wurde erfolgreich geladen.');
   console.log(`Token-Vorschau: ${token.substring(0, 4)}...${token.substring(token.length - 4)}`);
 } else {

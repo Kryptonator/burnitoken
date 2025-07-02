@@ -167,7 +167,7 @@ class BurniTokenTestSuite {
     this.testResults.forEach((result) => {
       const status = result.passed ? '✅' : '❌';
       console.log(`${status} ${result.test}`);
-      if (!result.passed && typeof result.data === 'string') {
+      if (!result.passed && typeof result.data === 'string') 
         console.log(`   Error: ${result.data}`);
       }
     });

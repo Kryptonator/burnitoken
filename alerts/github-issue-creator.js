@@ -14,7 +14,7 @@ const https = require('https');
 // --- Konfiguration ---
 // GitHub Repository (owner/repo)
 let GITHUB_REPO = config.GITHUB_REPO;
-if (!GITHUB_REPO) {
+if (!GITHUB_REPO) 
   GITHUB_REPO = 'Kryptonator/burnitoken'; // Fallback
   console.log(
     `⚠️  Hinweis: GITHUB_REPO ist nicht in der Konfiguration gefunden. Es wird der Standardwert '${GITHUB_REPO}' verwendet.`,

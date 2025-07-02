@@ -91,7 +91,57 @@ async function smartFileAnalysis() {
 
       // ESSENTIAL prüfen
       for (const pattern of patterns.essential) {
-        if (pattern.test(fileName) || pattern.test(filePath)) {
+        if (pattern.test) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { || pattern.test(filePath)) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
           categories.ESSENTIAL.push(file);
           categorized = true;
           break;

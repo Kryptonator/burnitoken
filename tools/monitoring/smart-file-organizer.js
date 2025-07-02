@@ -49,7 +49,57 @@ class SmartFileOrganizer {
 
       console.log('\n✅ PRIORITY FILES FOR COMMIT:');
       importantFiles.forEach((file) => {
-        if (fs.existsSync(file)) {
+        if (fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
           console.log(`   📝 ${file}`);
         }
       });

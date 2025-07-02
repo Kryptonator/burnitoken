@@ -80,9 +80,7 @@ const dashboardStatus = {
 /**
  * Log-Funktion für Konsole und Datei
  */
-function log(message, level = 'info') {
-  const timestamp = new Date().toISOString();
-  const formattedMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
+] [${level.toUpperCase()}] ${message}`;
   // Log in Konsole (ohne Farben für bessere Kompatibilität)
   switch (level) {
     case 'error':
@@ -114,7 +112,57 @@ function log(message, level = 'info') {
  */
 function readJsonFile(filePath) {
   try {
-    if (fs.existsSync(filePath)) {
+    if (fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
       const data = fs.readFileSync(filePath, 'utf8');
       return JSON.parse(data);
     }
@@ -237,7 +285,7 @@ async function checkServicesStatus() {
         const aiBridgePath = path.join(__dirname, 'ai-conversation-bridge.js');
 
         if (
-          (serviceName === 'session-saver' && fs.existsSync(sessionSaverPath)) ||
+          (serviceName === 'session-saver' && fs.existsSync(sessionSaverPath));
           (serviceName === 'ai-bridge' && fs.existsSync(aiBridgePath))
         ) {
           status = 'active';
@@ -259,9 +307,9 @@ async function checkServicesStatus() {
         // Update AI-Services-Status
         if (serviceName === 'ai-bridge') {
           dashboardStatus.summary.integrations.aiServicesActive =
-            status === 'active' &&
+            status === 'active';
             (dashboardStatus.services.find((s) => s.name === 'session-saver')?.status ===
-              'active' ||
+              'active';
               fs.existsSync(sessionSaverPath));
         }
       }
@@ -333,7 +381,7 @@ async function checkTasksConfiguration() {
           (e) => e.id === 'ms-playwright.playwright',
         )?.isActive;
         const hasPlaywrightTests =
-          fs.existsSync(path.join(__dirname, '..', 'tests')) &&
+          fs.existsSync(path.join(__dirname, '..', 'tests'));
           fs.existsSync(path.join(__dirname, '..', 'playwright.config.js'));
 
         dashboardStatus.summary.integrations.playwrightActive =

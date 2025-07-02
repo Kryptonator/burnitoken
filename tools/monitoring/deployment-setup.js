@@ -140,7 +140,57 @@ jspm_packages/
 *.backup.*
 `;
 
-        if (!fs.existsSync('.gitignore')) {
+        if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
           fs.writeFileSync('.gitignore', gitignoreContent);
           console.log('   ✅ .gitignore erstellt');
         }

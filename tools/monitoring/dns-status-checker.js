@@ -48,7 +48,7 @@ class DNSStatusChecker {
       const isNetlify = stdout.includes(this.expectedNetlifyIP);
 
       console.log(`📍 A Record: ${isNetlify ? '✅ Netlify' : '❌ Not Netlify'}`);
-      if (isNetlify) {
+      if (isNetlify) 
         console.log(`   ✅ IP: ${this.expectedNetlifyIP} (Netlify)`);
       } else {
         console.log(`   ❌ Current IP: ${this.extractIP(stdout)}`);

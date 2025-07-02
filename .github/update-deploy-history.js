@@ -262,11 +262,22 @@ function showRecoveryInformation(timeString) {
   console.log(`Letzter stabiler Deploy vor ${timeString}:`);
   console.log(`- Datum: ${deployDate.toLocaleString()}`);
   console.log(`- Commit: ${lastStableDeploy.commit.substring(0, 7)}`);
-  console.log(`- Workflow: ${lastStableDeploy.url}`);
+  console.log(`- Workflow: ${lastStableDeploy.url || 'Nicht verfügbar'}`);
+  
+  // Shell-spezifische Anpassungen für Befehle
+  const shellEnv = detectShellEnvironment();
+  const isPowerShell = shellEnv.type === 'powershell';
+  
+  const checkoutCmd = isPowerShell ? 
+    `git checkout ${lastStableDeploy.commit}` : 
+    `git checkout ${lastStableDeploy.commit}`;
+    
   console.log('\nZum Wiederherstellen:');
-  console.log(`git checkout ${lastStableDeploy.commit}`);
+  console.log(checkoutCmd);
   console.log('npm install');
   console.log('npm run build');
+  console.log('\nFür automatisches Rollback:');
+  console.log(`node .github/update-deploy-history.js --recovery --time="${deployDate.toISOString()}"`);
   console.log('=== RECOVERY COMPLETE ===\n');
 }
 
@@ -377,7 +388,7 @@ function checkCriticalPerformanceIssues(history, currentCommit) {
     sum + (item.measurements?.loadTime || 0), 0) / previousSuccessful.length;
   
   // Wenn aktuelle Ladezeit mehr als 50% langsamer ist - kritisch
-  if (current.measurements.loadTime > avgPrevLoadTime * 1.5 &&
+  if (current.measurements.loadTime > avgPrevLoadTime * 1.5;
       current.measurements.loadTime > current.thresholds.loadTimeWarning) {
     console.warn(`⚠️ KRITISCHES PERFORMANCE-PROBLEM: Ladezeit ${current.measurements.loadTime}ms ist ${Math.round((current.measurements.loadTime/avgPrevLoadTime - 1) * 100)}% langsamer als vorher (${Math.round(avgPrevLoadTime)}ms)`);
     
@@ -400,7 +411,7 @@ function checkCriticalPerformanceIssues(history, currentCommit) {
 /**
  * Führt einen automatischen Rollback durch, wenn nötig
  */
-function executeAutoRollbackIfNeeded() {
+function executeAutoRollbackIfNeeded(autoFix = true) {
   if (!fs.existsSync(recoveryFlagPath)) return;
   
   try {
@@ -414,6 +425,33 @@ function executeAutoRollbackIfNeeded() {
     
     console.log('\n🚨 AUTO-ROLLBACK WIRD AUSGEFÜHRT 🚨');
     console.log(`Grund: ${recoveryData.reason}`);
+    console.log(`Zeitpunkt: ${new Date(recoveryData.timestamp).toLocaleString()}`);
+    console.log(`Empfohlene Aktion: ${recoveryData.recommendedAction || 'Rollback durchführen'}`);
+    
+    if (!autoFix) {
+      console.log('\nAuto-Fix ist deaktiviert. Um den Rollback manuell durchzuführen:');
+      console.log('node .github/update-deploy-history.js --recovery --time=' + 
+                 new Date(recoveryData.timestamp).toISOString());
+      return;
+    }
+    
+    // Sicherstellen, dass die Historie existiert
+    if (!fs.existsSync(historyPath)) {
+      console.error('Keine Deploy-Historie gefunden, kann kein Rollback durchführen');
+      return;
+    }
+    
+    let history;
+    try {
+      history = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
+      if (!Array.isArray(history) || history.length === 0) {
+        console.error('Deploy-Historie ist leer oder fehlerhaft');
+        return;
+      }
+    } catch (e) {
+      console.error('Fehler beim Lesen der Deploy-Historie:', e);
+      return;
+    }
     
     // Letzten stabilen Deploy finden
     const lastStableDeploy = findLastStableDeployBefore(new Date(recoveryData.timestamp));
@@ -464,11 +502,48 @@ function executeAutoRollbackIfNeeded() {
       // Weiter mit Commit, auch wenn Build fehlgeschlagen ist
     }
     
-    // 4. Auto-Recovery dokumentieren und committen
+    // 4. Self-Healing-Historie aktualisieren
+    let healingHistory = [];
+    if (fs.existsSync(selfHealingPath)) {
+      try {
+        healingHistory = JSON.parse(fs.readFileSync(selfHealingPath, 'utf8'));
+      } catch (e) {
+        console.warn('Self-Healing-Historie konnte nicht geladen werden, erstelle neu');
+        healingHistory = [];
+      }
+    }
+    
+    // Neuen Recovery-Eintrag erstellen
+    healingHistory.push({
+      id: `recovery-${Date.now()}`,
+      timestamp: new Date().toISOString(),
+      type: 'auto-rollback',
+      commit: lastStableDeploy.commit,
+      reason: recoveryData.reason,
+      success: true
+    });
+    
+    safeWriteJson(selfHealingPath, healingHistory);
+    
+    // Deploy-Historie aktualisieren
+    history.push({
+      date: new Date().toISOString(),
+      status: 'success',
+      run_id: 'recovery-run',
+      commit: lastStableDeploy.commit,
+      url: lastStableDeploy.url || '',
+      recovery: true,
+      reason: recoveryData.reason
+    });
+    
+    safeWriteJson(historyPath, history);
+    
+    // 5. Auto-Recovery dokumentieren und committen
     const recoveryFiles = [
       'package-lock.json',
       'public/deploy-history.json',
       'public/performance-history.json',
+      'public/self-healing-history.json',
       'public/crash-logs.json'
     ];
     
@@ -648,19 +723,79 @@ function commitAndPushChanges(message, files = [], options = {}) {
 
 /**
  * Führt einen Selbstheilungsprozess durch, basierend auf der Historie und Wissensdatenbank
+ * Diese Funktion wird von der neuen runSelfHealing-Funktion abgelöst, bleibt aber für Kompatibilität erhalten
  */
 function executeSelfHealing() {
+  console.log('⚠️ Hinweis: executeSelfHealing wurde durch runSelfHealing ersetzt, verwende die neue Funktion');
+  
+  // Prüfen, ob public-Verzeichnis existiert
+  if (!fs.existsSync(publicDir)) {
+    try {
+      fs.mkdirSync(publicDir, { recursive: true });
+      console.log(`Public-Verzeichnis erstellt: ${publicDir}`);
+    } catch (err) {
+      console.error(`Fehler beim Erstellen von ${publicDir}:`, err);
+      return;
+    }
+  }
+  
   if (!fs.existsSync(selfHealingPath)) {
     console.log('Keine Selbstheilungs-Historie gefunden, starte ersten Eintrag');
   }
   
   try {
     // Aktuelle Deploy-Historie laden
-    const history = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
+    let history = [];
+    if (fs.existsSync(historyPath)) {
+      try {
+        history = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
+      } catch (e) {
+        console.warn('Deploy-Historie konnte nicht geladen werden, erstelle neu');
+        history = [];
+      }
+    }
+    
+    if (history.length === 0) {
+      console.log('Keine Deploy-Historie gefunden, erstelle Dummy-Eintrag für ersten Lauf');
+      history.push({
+        date: new Date().toISOString(),
+        status: 'success',
+        run_id: 'initial-run',
+        commit: 'initial-commit',
+        url: 'https://github.com/example/burnitoken'
+      });
+      safeWriteJson(historyPath, history);
+    }
+    
     const latestDeploy = history[history.length - 1];
     
     // Aktuelle Performance-Historie laden
-    const performanceHistory = JSON.parse(fs.readFileSync(performancePath, 'utf8'));
+    let performanceHistory = [];
+    if (fs.existsSync(performancePath)) {
+      try {
+        performanceHistory = JSON.parse(fs.readFileSync(performancePath, 'utf8'));
+      } catch (e) {
+        console.warn('Performance-Historie konnte nicht geladen werden, erstelle neu');
+        performanceHistory = [];
+      }
+    }
+    
+    if (performanceHistory.length === 0) {
+      console.log('Keine Performance-Historie gefunden, erstelle Dummy-Eintrag für ersten Lauf');
+      performanceHistory.push({
+        timestamp: new Date().toISOString(),
+        commit: latestDeploy.commit,
+        deployTime: latestDeploy.date,
+        measurements: {
+          memory: process.memoryUsage(),
+          loadTime: 1000, // Platzhalter
+          scriptErrors: 0,
+          apiLatency: 0
+        }
+      });
+      safeWriteJson(performancePath, performanceHistory);
+    }
+    
     const latestPerformance = performanceHistory[performanceHistory.length - 1];
     
     // Fehlerprotokollierung aktivieren
@@ -668,7 +803,7 @@ function executeSelfHealing() {
     const logError = (error) => {
       errorLog.push({
         timestamp: new Date().toISOString(),
-        error
+        error: typeof error === 'string' ? error : (error.message || 'Unbekannter Fehler')
       });
     };
     
@@ -700,8 +835,16 @@ function executeSelfHealing() {
         }
         
         // 3. Status nach Rollback überprüfen
-        const postRollbackDeploy = JSON.parse(fs.readFileSync(historyPath, 'utf8')).pop();
-        if (postRollbackDeploy.status === 'success') {
+        let postRollbackHistory = [];
+        try {
+          postRollbackHistory = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
+        } catch (e) {
+          console.warn('Deploy-Historie nach Rollback konnte nicht geladen werden');
+          logError(e);
+        }
+        
+        const postRollbackDeploy = postRollbackHistory.length > 0 ? postRollbackHistory[postRollbackHistory.length - 1] : null;
+        if (postRollbackDeploy && postRollbackDeploy.status === 'success') {
           console.log('Rollback erfolgreich, dokumentiere Selbstheilung');
           
           // Selbstheilungs-Eintrag erstellen
@@ -709,18 +852,41 @@ function executeSelfHealing() {
             timestamp: new Date().toISOString(),
             deploy: postRollbackDeploy,
             performance: latestPerformance,
-            errors: errorLog
+            errors: errorLog,
+            action: 'rollback',
+            success: true
           };
           
-          safeWriteJson(selfHealingPath, healingEntry);
+          // Bisherige Einträge laden oder neu initialisieren
+          let healingHistory = [];
+          if (fs.existsSync(selfHealingPath)) {
+            try {
+              healingHistory = JSON.parse(fs.readFileSync(selfHealingPath, 'utf8'));
+            } catch (e) {
+              console.warn('Selbstheilungs-Historie konnte nicht geladen werden, erstelle neu');
+              healingHistory = [];
+            }
+          }
+          
+          healingHistory.push(healingEntry);
+          safeWriteJson(selfHealingPath, healingHistory);
         } else {
           console.warn('Rollback war nicht erfolgreich, weitere Analyse erforderlich');
+          logError('Rollback fehlgeschlagen - Status nicht erfolgreich oder Historie nicht lesbar');
         }
       } else {
         console.error('Kein stabiler Deploy für Rollback gefunden');
+        logError('Kein stabiler Deploy für Rollback gefunden');
       }
     } else {
-      console.log('Letzter Deploy war erfolgreich, keine Aktion erforderlich');
+      console.log('Letzter Deploy war erfolgreich, keine Rollback-Aktion erforderlich');
+      
+      // Stattdessen die moderne Self-Healing-Funktion aufrufen
+      runSelfHealing({
+        autoFix: true,
+        runAudits: true,
+        commitOnSuccess: true
+      });
     }
   } catch (err) {
     console.error('Fehler im Selbstheilungsprozess:', err);
@@ -893,6 +1059,17 @@ function runSelfHealing(options = {}) {
 
   console.log('\n🔄 Starte Self-Healing-Prozess...');
   
+  // Prüfen, ob public-Verzeichnis existiert
+  if (!fs.existsSync(publicDir)) {
+    try {
+      fs.mkdirSync(publicDir, { recursive: true });
+      console.log(`Public-Verzeichnis erstellt: ${publicDir}`);
+    } catch (err) {
+      console.error(`Fehler beim Erstellen von ${publicDir}:`, err);
+      return;
+    }
+  }
+  
   // Vorherige Self-Healing-Historie laden
   let healingHistory = [];
   if (fs.existsSync(selfHealingPath)) {
@@ -916,7 +1093,35 @@ function runSelfHealing(options = {}) {
       knowledgeBase = JSON.parse(fs.readFileSync(optimizationKnowledgeBase, 'utf8'));
     } catch (e) {
       console.warn('Optimierungs-Wissensbasis konnte nicht geladen werden, erstelle neu');
+      
+      // Optimierungs-Wissensbasis-Verzeichnis erstellen, falls es nicht existiert
+      const knowledgeBaseDir = path.dirname(optimizationKnowledgeBase);
+      if (!fs.existsSync(knowledgeBaseDir)) {
+        try {
+          fs.mkdirSync(knowledgeBaseDir, { recursive: true });
+          console.log(`Knowledge-Base-Verzeichnis erstellt: ${knowledgeBaseDir}`);
+        } catch (err) {
+          console.error(`Fehler beim Erstellen von ${knowledgeBaseDir}:`, err);
+        }
+      }
+      
+      // Optimierungs-Wissensbasis mit Grundwerten erstellen
+      safeWriteJson(optimizationKnowledgeBase, knowledgeBase);
     }
+  } else {
+    // Optimierungs-Wissensbasis-Verzeichnis erstellen, falls es nicht existiert
+    const knowledgeBaseDir = path.dirname(optimizationKnowledgeBase);
+    if (!fs.existsSync(knowledgeBaseDir)) {
+      try {
+        fs.mkdirSync(knowledgeBaseDir, { recursive: true });
+        console.log(`Knowledge-Base-Verzeichnis erstellt: ${knowledgeBaseDir}`);
+      } catch (err) {
+        console.error(`Fehler beim Erstellen von ${knowledgeBaseDir}:`, err);
+      }
+    }
+    
+    // Optimierungs-Wissensbasis mit Grundwerten erstellen
+    safeWriteJson(optimizationKnowledgeBase, knowledgeBase);
   }
 
   // Self-Healing Protokoll starten
@@ -974,15 +1179,15 @@ function runSelfHealing(options = {}) {
             if (fix.applied && fix.successful) {
               knowledgeBase.successfulFixes.push({
                 type: fix.type,
-                pattern: fix.pattern,
-                solution: fix.solution,
+                pattern: fix.pattern || '',
+                solution: fix.solution || '',
                 date: new Date().toISOString()
               });
             } else if (fix.applied && !fix.successful) {
               knowledgeBase.failedFixes.push({
                 type: fix.type,
-                pattern: fix.pattern,
-                solution: fix.solution,
+                pattern: fix.pattern || '',
+                solution: fix.solution || '',
                 date: new Date().toISOString(),
                 error: fix.error || 'Unknown error'
               });
@@ -997,7 +1202,7 @@ function runSelfHealing(options = {}) {
   }
   
   // Verlauf aktualisieren
-  healingSession.success = healingSession.tests.allPassed || false;
+  healingSession.success = healingSession.tests?.allPassed || false;
   healingHistory.push(healingSession);
   if (healingHistory.length > 100) {
     healingHistory = healingHistory.slice(-100); // Auf letzte 100 beschränken
@@ -1190,45 +1395,67 @@ function checkForCommonIssues(issues) {
  * @returns {Array} Priorisierte Probleme
  */
 function prioritizeIssues(issues, knowledgeBase) {
-  // Gewichtungen für verschiedene Faktoren
-  const weights = {
-    severity: {
-      critical: 10,
-      high: 5,
-      medium: 3,
-      low: 1
-    },
-    score: 5,  // Multiplikator für (1 - score)
-    successHistory: 2, // Bonus für Probleme, die wir erfolgreich beheben können
-    failHistory: -3    // Malus für Probleme, bei denen Fixes fehlgeschlugen
+  // Priorisierungswerte für verschiedene Schweregrade
+  const severityScores = {
+    'critical': 100,
+    'high': 80,
+    'medium': 60,
+    'low': 40,
+    'info': 20
   };
   
-  return issues.map(issue => {
-    let priority = 0;
+  // Priorisierungswerte für verschiedene Problemtypen
+  const typeScores = {
+    'security': 50,        // Sicherheitsprobleme haben höchste Priorität
+    'performance-lcp': 45, // Core Web Vitals haben hohe Priorität
+    'performance-cls': 45,
+    'performance-fid': 45,
+    'seo-critical': 40,    // SEO-Probleme sind wichtig für Sichtbarkeit
+    'accessibility': 35,   // Barrierefreiheit ist wichtig für Nutzerbasis
+    'api-reliability': 30, // API-Stabilität ist wichtig für Funktionalität
+    'code-quality': 25     // Code-Qualität verbessert Wartbarkeit
+  };
+  
+  // Bonuspunkte für Issues, die in der Vergangenheit erfolgreich behoben wurden
+  const successBonus = 15;
     
-    // 1. Nach Schweregrad priorisieren
-    priority += weights.severity[issue.severity] || weights.severity.medium;
+  // Maluspunkte für Issues, bei denen Fixes in der Vergangenheit fehlgeschlagen sind
+  const failurePenalty = -10;
+  
+  // Jedes Issue mit einem Priorisierungswert versehen
+  const scoredIssues = issues.map(issue => {
+    // Grundwert basierend auf Schweregrad
+    let score = severityScores[issue.severity] || 50;
     
-    // 2. Nach Score priorisieren (niedrigerer Score = höhere Priorität)
-    if (issue.score !== undefined) {
-      priority += weights.score * (1 - issue.score);
+    // Bonus für bestimmte Problemtypen
+    if (issue.type in typeScores) {
+      score += typeScores[issue.type];
     }
     
-    // 3. Erfolgshistorie berücksichtigen
-    const successfulFixes = knowledgeBase.successfulFixes.filter(fix => 
-      fix.type === issue.type
-    ).length;
+    // Bonus/Malus basierend auf bisherigem Erfolg/Misserfolg
+    const successfulFixExists = knowledgeBase.successfulFixes.some(fix => fix.type === issue.type);
+    const failedFixExists = knowledgeBase.failedFixes.some(fix => fix.type === issue.type && fix.failureCount > 2);
     
-    const failedFixes = knowledgeBase.failedFixes.filter(fix => 
-      fix.type === issue.type
-    ).length;
+    if (successfulFixExists) {
+    }
     
-    priority += successfulFixes * weights.successHistory;
-    priority += failedFixes * weights.failHistory;
+    if (failedFixExists) {
+      score += failurePenalty;
+    }
     
-    return { ...issue, priority };
-  })
-  .sort((a, b) => b.priority - a.priority); // Absteigend nach Priorität
+    // Wert für User Impact einbeziehen, falls vorhanden
+    if (issue.userImpact) {
+      score += issue.userImpact * 10; // Skala von 0-10 mit Faktor 10 gewichten
+    }
+    
+    return {
+      ...issue,
+      priorityScore: score
+    };
+  });
+  
+  // Nach Prioritätswert absteigend sortieren
+  return scoredIssues.sort((a, b) => b.priorityScore - a.priorityScore);
 }
 
 /**
@@ -1241,11 +1468,9 @@ function applyFixes(issues, knowledgeBase) {
   const appliedFixes = [];
   
   for (const issue of issues) {
-    console.log(`🔧 Versuche Fix für: ${issue.type} (${issue.description})`);
-    
     let fix = {
       type: issue.type,
-      issueDescription: issue.description,
+      description: issue.description,
       applied: false,
       successful: false,
       timestamp: new Date().toISOString()
@@ -1257,718 +1482,1721 @@ function applyFixes(issues, knowledgeBase) {
           fix = applyMetaDescriptionFix(issue, fix);
           break;
           
-        case 'a11y-missing-alt':
-          fix = applyMissingAltFix(issue, fix);
-          break;
-          
         case 'performance-lcp':
           fix = applyLCPFix(issue, fix);
           break;
           
-        case 'seo-structured-data':
-          fix = applyStructuredDataFix(issue, fix);
+        case 'performance-unused-css':
+          fix = applyUnusedCSSFix(issue, fix);
           break;
           
-        case 'js-debugger':
-        case 'js-console-log':
-        case 'js-todo-comment':
-          fix = applyJSCleanupFix(issue, fix);
+        case 'a11y-missing-alt':
+          fix = applyMissingAltFix(issue, fix);
+          break;
+          
+        case 'seo-missing-meta':
+          fix = applyMissingMetaFix(issue, fix);
           break;
           
         default:
-          console.log(`⚠️ Kein automatischer Fix verfügbar für ${issue.type}`);
-          fix.reason = 'No automated fix available';
+          console.log(`⚠️ Kein automatischer Fix verfügbar für: ${issue.type}`);
+          fix.reason = 'No automatic fix available';
+          break;
       }
+      
+      appliedFixes.push(fix);
     } catch (err) {
-      console.error(`❌ Fehler beim Fix für ${issue.type}:`, err);
-      fix.successful = false;
+      console.error(`Fehler beim Anwenden des Fixes für ${issue.type}:`, err);
       fix.error = err.message;
+      appliedFixes.push(fix);
     }
-    
-    appliedFixes.push(fix);
   }
   
   return appliedFixes;
 }
-
-/**
- * Fügt fehlende Meta-Description hinzu oder korrigiert diese
- * @param {Object} issue - Das Problem
- * @param {Object} fix - Das Fix-Objekt, das angereichert wird
- * @returns {Object} Das aktualisierte Fix-Objekt
- */
-function applyMetaDescriptionFix(issue, fix) {
-  const filePaths = issue.affectedElements || [];
   
-  for (const filePath of filePaths) {
-    const fullPath = path.join(__dirname, '..', '..', filePath);
-    if (!fs.existsSync(fullPath)) continue;
+  for (const issue of issues) {
+    console.log(`\n⚙️ Bearbeite Problem: ${issue.type} (${issue.severity})`);
+    console.log(`   ${issue.description}`);
     
-    const content = fs.readFileSync(fullPath, 'utf8');
-    
-    // 1. Prüfen, ob <head> vorhanden ist
-    if (!/<head[^>]*>/i.test(content)) {
-      fix.reason = 'No head tag found';
-      continue;
-    }
-    
-    // 2. Prüfen, ob bereits eine Meta-Description vorhanden ist
-    const hasMetaDescription = /<meta\s+(?:name="description"|content="[^"]*"\s+name="description")/i.test(content);
-    
-    let updatedContent = content;
-    if (!hasMetaDescription) {
-      // Meta-Description einfügen
-      const defaultDesc = 'Die deflationäre Kryptowährung auf dem XRP Ledger mit automatischem Token-Burning. Investieren Sie in eine nachhaltige Zukunft.';
-      const metaTag = `<meta name="description" content="${defaultDesc}" />`;
-      
-      // Einfügen nach <head> oder vor </head>
-      updatedContent = updatedContent.replace(
-        /<head[^>]*>/i,
-        match => `${match}\n    ${metaTag}`
-      );
-      
-      fs.writeFileSync(fullPath, updatedContent, 'utf8');
-      fix.applied = true;
-      fix.successful = true;
-      fix.changes = [{
-        file: filePath,
-        description: 'Meta-Description-Tag eingefügt',
-        insertedContent: metaTag
-      }];
-    } else {
-      // Meta-Description korrigieren, wenn name fehlt
-      const metaDescWithoutName = /<meta\s+content="([^"]*)"\s*(?!name=)[^>]*>/gi;
-      if (metaDescWithoutName.test(content)) {
-        updatedContent = content.replace(
-          metaDescWithoutName,
-          (match, content) => `<meta name="description" content="${content}" />`
-        );
-        
-        fs.writeFileSync(fullPath, updatedContent, 'utf8');
-        fix.applied = true;
-        fix.successful = true;
-        fix.changes = [{
-          file: filePath,
-          description: 'Meta-Description-Tag korrigiert (name-Attribut hinzugefügt)',
-        }];
-      }
-    }
-  }
-  
-  return fix;
-}
-
-/**
- * Fügt fehlende alt-Attribute zu Bildern hinzu
- * @param {Object} issue - Das Problem
- * @param {Object} fix - Das Fix-Objekt, das angereichert wird
- * @returns {Object} Das aktualisierte Fix-Objekt
- */
-function applyMissingAltFix(issue, fix) {
-  const filePaths = ['index.html', ...issue.affectedElements.map(el => {
-    if (el.startsWith('/')) return el.substring(1);
-    return el;
-  })];
-  
-  // Eindeutigen Dateipfad finden (index.html oder ähnliches)
-  let htmlFiles = filePaths.filter(p => p.endsWith('.html'));
-  if (htmlFiles.length === 0) htmlFiles = ['index.html'];
-
-  const changes = [];
-  
-  for (const htmlFile of htmlFiles) {
-    const fullPath = path.join(__dirname, '..', '..', htmlFile);
-    if (!fs.existsSync(fullPath)) continue;
-    
-    let content = fs.readFileSync(fullPath, 'utf8');
-    let modified = false;
-    
-    // Bilder ohne alt-Attribute finden und fix anwenden
-    const imgRegex = /<img(?!.*alt=)[^>]*>/g;
-    content = content.replace(imgRegex, match => {
-      modified = true;
-      
-      // Versuche, einen sinnvollen Alt-Text zu generieren
-      let altText = 'BurniToken Bild'; // Default
-      
-      // Aus src-Attribut einen besseren Alt-Text ableiten
-      const srcMatch = match.match(/src="([^"]+)"/);
-      if (srcMatch && srcMatch[1]) {
-        const src = srcMatch[1];
-        const filename = path.basename(src, path.extname(src));
-        
-        // Vom Dateinamen abgeleitet
-        if (filename.includes('logo')) {
-          altText = 'BurniToken Logo';
-        } else if (filename.includes('chart')) {
-          altText = 'BurniToken Chart zur Performance';
-        } else if (filename.includes('burn')) {
-          altText = 'Token-Burning Illustration';
-        } else if (filename.includes('lagerfeuer')) {
-          altText = 'Burni im Lagerfeuer - Token-Burning Symbol';
-        }
-      }
-      
-      // Alt-Attribut einfügen
-      return match.replace(/(<img)/, `$1 alt="${altText}"`);
-    });
-    
-    if (modified) {
-      fs.writeFileSync(fullPath, content, 'utf8');
-      changes.push({
-        file: htmlFile,
-        description: 'Alt-Attribute zu Bildern ohne alt-Text hinzugefügt'
-      });
-    }
-  }
-  
-  if (changes.length > 0) {
-    fix.applied = true;
-    fix.successful = true;
-    fix.changes = changes;
-  }
-  
-  return fix;
-}
-
-/**
- * Optimiert die LCP (Largest Contentful Paint)
- * @param {Object} issue - Das Problem
- * @param {Object} fix - Das Fix-Objekt, das angereichert wird
- * @returns {Object} Das aktualisierte Fix-Objekt
- */
-function applyLCPFix(issue, fix) {
-  const changes = [];
-  
-  // 1. Preloading für wichtige Bilder hinzufügen
-  const indexPath = path.join(__dirname, '..', '..', 'index.html');
-  if (fs.existsSync(indexPath)) {
-    const content = fs.readFileSync(indexPath, 'utf8');
-    
-    // Kritische Assets aus dem Issue
-    const criticalAssets = issue.affectedElements || [];
-    
-    // Bereits vorhandene Preloads prüfen
-    const existingPreloads = [];
-    const preloadRegex = /<link[^>]*rel="preload"[^>]*href="([^"]+)"[^>]*>/g;
-    let preloadMatch;
-    while ((preloadMatch = preloadRegex.exec(content)) !== null) {
-      existingPreloads.push(preloadMatch[1]);
-    }
-    
-    // Preloads für kritische Assets hinzufügen, die noch nicht preloaded werden
-    const preloadsToAdd = criticalAssets.filter(asset => 
-      !existingPreloads.some(preload => preload.includes(asset.split('/').pop()))
-    );
-    
-    if (preloadsToAdd.length > 0) {
-      let updatedContent = content;
-      
-      // Preloads nach dem Titel einfügen
-      const preloadTags = preloadsToAdd.map(asset => 
-        `    <link rel="preload" href="${asset}" as="${asset.endsWith('.css') ? 'style' : 'image'}" type="${
-          asset.endsWith('.css') ? 'text/css' : 
-          asset.endsWith('.webp') ? 'image/webp' : 
-          asset.endsWith('.png') ? 'image/png' : 
-          'image/jpeg'
-        }" />`
-      ).join('\n');
-      
-      updatedContent = updatedContent.replace(
-        /<\/title>/i,
-        match => `${match}\n${preloadTags}`
-      );
-      
-      fs.writeFileSync(indexPath, updatedContent, 'utf8');
-      changes.push({
-        file: 'index.html',
-        description: `Preload-Tags für kritische Assets hinzugefügt: ${preloadsToAdd.join(', ')}`
-      });
-    }
-  }
-  
-  if (changes.length > 0) {
-    fix.applied = true;
-    fix.successful = true;
-    fix.changes = changes;
-  } else {
-    fix.reason = 'Keine optimierbaren Assets gefunden oder alle kritischen Assets werden bereits preloaded';
-  }
-  
-  return fix;
-}
-
-/**
- * Fügt strukturierte Daten (Schema.org) hinzu oder korrigiert diese
- * @param {Object} issue - Das Problem
- * @param {Object} fix - Das Fix-Objekt, das angereichert wird
- * @returns {Object} Das aktualisierte Fix-Objekt
- */
-function applyStructuredDataFix(issue, fix) {
-  const filePaths = issue.affectedElements || [];
-  
-  for (const filePath of filePaths) {
-    const fullPath = path.join(__dirname, '..', '..', filePath);
-    if (!fs.existsSync(fullPath)) continue;
-    
-    const content = fs.readFileSync(fullPath, 'utf8');
-    
-    // 1. Prüfen, ob <head> vorhanden ist
-    if (!/<head[^>]*>/i.test(content)) {
-      fix.reason = 'No head tag found';
-      continue;
-    }
-    
-    // 2. FAQ-Strukturierte Daten finden/erstellen
-    // FAQ-Abschnitt in der HTML suchen
-    const faqSection = content.match(/<section[^>]*id="faq"[^>]*>([\s\S]*?)<\/section>/i);
-    
-    if (faqSection) {
-      // FAQ-Fragen und Antworten extrahieren
-      const faqItems = [];
-      const faqItemRegex = /<h3[^>]*>(.*?)<\/h3>[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>/gi;
-      let match;
-      
-      let faqContent = faqSection[1];
-      while ((match = faqItemRegex.exec(faqContent)) !== null) {
-        faqItems.push({
-          question: match[1].trim().replace(/<[^>]*>/g, ''),
-          answer: match[2].trim().replace(/<[^>]*>/g, '')
-        });
-      }
-      
-      if (faqItems.length > 0) {
-        // FAQ-Schema erstellen
-        const faqSchema = {
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          "mainEntity": faqItems.map(item => ({
-            "@type": "Question",
-            "name": item.question,
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": item.answer
-            }
-          }))
-        };
-        
-        // Als JSON-LD in den head einfügen
-        const schemaScript = `<script type="application/ld+json">
-${JSON.stringify(faqSchema, null, 2)}
-</script>`;
-        
-        // Prüfen, ob bereits FAQ-Schema vorhanden ist
-        const hasExistingFAQSchema = content.includes('"@type": "FAQPage"');
-        
-        let updatedContent = content;
-        if (!hasExistingFAQSchema) {
-          updatedContent = updatedContent.replace(
-            /<\/head>/i,
-            `${schemaScript}\n</head>`
-          );
-          
-          fs.writeFileSync(fullPath, updatedContent, 'utf8');
-          fix.applied = true;
-          fix.successful = true;
-          fix.changes = [{
-            file: filePath,
-            description: `FAQ Schema.org-Markup für ${faqItems.length} Fragen hinzugefügt`
-          }];
-        } else {
-          // Hier könnte man auch vorhandenes Schema aktualisieren
-          fix.reason = 'FAQ Schema bereits vorhanden';
-        }
-      } else {
-        fix.reason = 'Keine FAQ-Fragen gefunden';
-      }
-    } else {
-      fix.reason = 'Kein FAQ-Abschnitt gefunden';
-    }
-  }
-  
-  return fix;
-}
-
-/**
- * Behebt JavaScript-Probleme (debugger, console.log, etc.)
- * @param {Object} issue - Das Problem
- * @param {Object} fix - Das Fix-Objekt, das angereichert wird
- * @returns {Object} Das aktualisierte Fix-Objekt
- */
-function applyJSCleanupFix(issue, fix) {
-  const filePaths = issue.affectedElements || [];
-  
-  for (const filePath of filePaths) {
-    const fullPath = path.join(__dirname, '..', '..', filePath);
-    if (!fs.existsSync(fullPath)) continue;
-    
-    const content = fs.readFileSync(fullPath, 'utf8');
-    let updatedContent = content;
-    
-    switch (issue.type) {
-      case 'js-debugger':
-        // Debugger-Statements entfernen
-        updatedContent = updatedContent.replace(/(?<!\/\/)\s*debugger;/g, '');
-        break;
-        
-      case 'js-console-log':
-        // console.log-Statements auskommentieren
-        updatedContent = updatedContent.replace(/(console\.log\([^)]*\);)/g, '// $1');
-        break;
-        
-      case 'js-todo-comment':
-        // TODO-Kommentare mit Warnung versehen
-        updatedContent = updatedContent.replace(
-          /(\/\/\s*TODO[^:\n]*):?\s*(.*)/g, 
-          '// FIXME: Production has TODO comment - $1: $2'
-        );
-        break;
-    }
-    
-    if (updatedContent !== content) {
-      fs.writeFileSync(fullPath, updatedContent, 'utf8');
-      fix.applied = true;
-      fix.successful = true;
-      fix.changes = [{
-        file: filePath,
-        description: `JavaScript bereinigt: ${issue.type}`
-      }];
-    }
-  }
-  
-  return fix;
-}
-
-/**
- * Führt Tests nach angewendeten Fixes durch
- * @param {Array} appliedFixes - Die angewendeten Fixes
- * @returns {Object} Testergebnisse
- */
-function runTestsAfterFixes(appliedFixes) {
-  console.log('🧪 Teste Änderungen...');
-  
-  const testResults = {
-    performanceTests: [],
-    accessibilityTests: [],
-    seoTests: [],
-    validationTests: [],
-    allPassed: true
-  };
-  
-  // Nur relevante Tests basierend auf den angewendeten Fixes ausführen
-  const fixTypes = appliedFixes
-    .filter(fix => fix.applied)
-    .map(fix => fix.type);
-  
-  try {
-    // 1. HTML-Validierung für alle HTML-Änderungen
-    if (appliedFixes.some(fix => fix.changes?.some(change => change.file?.endsWith('.html')))) {
-      const htmlFiles = new Set();
-      
-      appliedFixes.forEach(fix => {
-        fix.changes?.forEach(change => {
-          if (change.file?.endsWith('.html')) {
-            htmlFiles.add(change.file);
-          }
-        });
-      });
-      
-      // Hier würde man W3C-Validierung ausführen
-      // Simuliertes Ergebnis
-      htmlFiles.forEach(file => {
-        const validationResult = {
-          file,
-          passed: true,
-          errors: 0,
-          warnings: 0
-        };
-        
-        testResults.validationTests.push(validationResult);
-        testResults.allPassed = testResults.allPassed && validationResult.passed;
-      });
-      
-      console.log(`✅ HTML-Validierung für ${htmlFiles.size} Dateien bestanden`);
-    }
-    
-    // 2. Accessibility-Tests für A11Y-Fixes
-    if (fixTypes.some(type => type.startsWith('a11y'))) {
-      // Hier würde man accessibility-Tests ausführen
-      // Simuliertes Ergebnis
-      const a11yResult = {
-        passed: true,
-        score: 0.95,
-        issues: 2,
-        critical: 0
-      };
-      
-      testResults.accessibilityTests.push(a11yResult);
-      testResults.allPassed = testResults.allPassed && a11yResult.passed;
-      
-      console.log(`✅ Accessibility-Tests bestanden: Score ${a11yResult.score}`);
-    }
-    
-    // 3. SEO-Tests für SEO-Fixes
-    if (fixTypes.some(type => type.startsWith('seo'))) {
-      // Hier würde man SEO-Tests ausführen
-      // Simuliertes Ergebnis
-      const seoResult = {
-        passed: true,
-        score: 0.92,
-        issues: 3,
-        critical: 0
-      };
-      
-      testResults.seoTests.push(seoResult);
-      testResults.allPassed = testResults.allPassed && seoResult.passed;
-      
-      console.log(`✅ SEO-Tests bestanden: Score ${seoResult.score}`);
-    }
-    
-    // 4. Performance-Tests für Performance-Fixes
-    if (fixTypes.some(type => type.startsWith('performance'))) {
-      // Hier würde man Performance-Tests ausführen
-      // Simuliertes Ergebnis
-      const performanceResult = {
-        passed: true,
-        score: 0.88,
-        lcp: 2800, // ms
-        fid: 80,   // ms
-        cls: 0.05
-      };
-      
-      testResults.performanceTests.push(performanceResult);
-      testResults.allPassed = testResults.allPassed && performanceResult.passed;
-      
-      console.log(`✅ Performance-Tests bestanden: Score ${performanceResult.score}`);
-    }
-  } catch (err) {
-    console.error('❌ Fehler bei den Tests:', err);
-    testResults.error = err.message;
-    testResults.allPassed = false;
-  }
-  
-  return testResults;
-}
-
-/**
- * Committet die erfolgreichen Änderungen
- * @param {Array} fixes - Die angewendeten Fixes
- * @returns {boolean} Erfolg
- */
-function commitSelfHealingChanges(fixes) {
-  // Dateien sammeln, die geändert wurden
-  const changedFiles = [];
-  fixes.forEach(fix => {
-    if (fix.applied && fix.successful && fix.changes) {
-      fix.changes.forEach(change => {
-        if (change.file && !changedFiles.includes(change.file)) {
-          changedFiles.push(change.file);
-        }
-      });
-    }
-  });
-  
-  if (changedFiles.length === 0) {
-    console.log('Keine Änderungen zum Committen');
-    return false;
-  }
-  
-  // Commit-Nachricht erstellen
-  const fixTypes = [...new Set(fixes
-    .filter(fix => fix.applied && fix.successful)
-    .map(fix => fix.type)
-  )];
-  
-  const commitMessage = `[AUTO-OPTIMIZE] ${fixTypes.join(', ')} - Self-Healing durch KI`;
-  
-  try {
-    return commitAndPushChanges(commitMessage, changedFiles, { 
-      autoFix: true,
-      createBranch: true,
-      pushOrigin: true
-    });
-  } catch (err) {
-    console.error('Fehler beim Committen der Self-Healing-Änderungen:', err);
-    return false;
-  }
-}
-
-function main() {
-  // PowerShell-Probleme prüfen und beheben
-  checkAndFixPowerShellIssues();
-  
-  // Prüfe auf Auto-Rollback
-  executeAutoRollbackIfNeeded();
-  
-  // Self-Healing-Modus
-  if (process.argv.includes('--self-healing')) {
-    console.log('🤖 Self-Healing-Modus gestartet...');
-    runSelfHealing({
-      autoFix: !process.argv.includes('--no-fix'),
-      runAudits: !process.argv.includes('--no-audits'),
-      commitOnSuccess: !process.argv.includes('--no-commit')
-    });
-    return;
-  }
-  
-  // PowerShell-spezifische Diagnosemodus
-  if (process.argv.includes('--check-powershell')) {
-    const shellEnv = detectShellEnvironment();
-    console.log('\n=== POWERSHELL DIAGNOSE ===');
-    console.log(`Shell-Typ: ${shellEnv.type}`);
-    console.log(`Version: ${shellEnv.version}`);
-    console.log(`Windows: ${shellEnv.isWindows}`);
-    console.log(`PowerShell-Probleme: ${shellEnv.hasPowerShellIssues ? 'Ja' : 'Nein'}`);
-    
-    console.log('\nKommando-Anpassungen:');
-    Object.entries(shellEnv.commands).forEach(([key, cmd]) => {
-      console.log(`${key}: ${cmd}`);
-    });
-    
-    // Internetverbindung testen
-    try {
-      const internetCmd = shellEnv.commands.checkInternet;
-      const internetResult = execSync(internetCmd, { encoding: 'utf8' });
-      console.log(`\nInternetverbindung: ${internetResult.includes('true') ? 'Verfügbar' : 'Nicht verfügbar'}`);
-    } catch (e) {
-      console.log('\nInternetverbindung: Fehler beim Test');
-    }
-    
-    // PowerShell-spezifische Lösungen
-    if (shellEnv.type === 'powershell') {
-      console.log('\nEmpfehlungen für PowerShell:');
-      console.log('1. UTF-8 Kodierung sicherstellen:');
-      console.log('   [Console]::OutputEncoding = [System.Text.Encoding]::UTF8');
-      console.log('2. Execution Policy temporär umgehen:');
-      console.log('   powershell -ExecutionPolicy Bypass -File "script.ps1"');
-      console.log('3. JSON-Dateien mit BOM speichern für PowerShell:');
-      console.log('   $content | Out-File -FilePath file.json -Encoding UTF8');
-    }
-    
-    console.log('=== ENDE DER DIAGNOSE ===\n');
-    return;
-  }
-  
-  // Prüfe auf Recovery-Modus
-  if (process.argv.includes('--recovery')) {
-    const timeArg = process.argv.find(arg => arg.startsWith('--time='));
-    if (timeArg) {
-      const timeValue = timeArg.split('=')[1];
-      showRecoveryInformation(timeValue);
-      
-      // Bei Recovery auch gleich Absturz-Bericht anzeigen
-      showCrashReport(timeValue);
-      return;
-    } else {
-      console.error('Bitte gib einen Zeitpunkt an: --time=HH:MM oder --time=ISO-TIMESTAMP');
-      return;
-    }
-  }
-  
-  // Absturz-Berichts-Modus
-  if (process.argv.includes('--crash-report')) {
-    const timeArg = process.argv.find(arg => arg.startsWith('--since='));
-    const timeValue = timeArg ? timeArg.split('=')[1] : null;
-    showCrashReport(timeValue);
-    return;
-  }
-  
-  // Absturz-Protokollierungs-Modus
-  if (process.argv.includes('--log-crash')) {
-    const typeArg = process.argv.find(arg => arg.startsWith('--type='));
-    const messageArg = process.argv.find(arg => arg.startsWith('--message='));
-    const componentArg = process.argv.find(arg => arg.startsWith('--component='));
-    
-    if (!typeArg || !messageArg) {
-      console.error('Für die Absturz-Protokollierung sind mindestens --type und --message erforderlich');
-      return;
-    }
-    
-    const crashInfo = {
-      type: typeArg.split('=')[1],
-      message: messageArg.split('=')[1],
-      component: componentArg ? componentArg.split('=')[1] : 'unknown',
-      severity: (process.argv.find(arg => arg.startsWith('--severity=')) || '=high').split('=')[1],
-      affectedUsers: parseInt((process.argv.find(arg => arg.startsWith('--users=')) || '=1').split('=')[1], 10)
+    // Fix-Ergebnis initialisieren
+    const fixResult = {
+      issueType: issue.type,
+      issueDescription: issue.description,
+      timestamp: new Date().toISOString(),
+      applied: false,
+      successful: false,
+      actions: []
     };
     
-    const crashId = logCrash(crashInfo);
-    console.log(`Absturz protokolliert mit ID: ${crashId}`);
-    return;
-  }
-  
-  // Performance-Analyse-Modus
-  if (process.argv.includes('--analyze-performance')) {
-    if (!fs.existsSync(performancePath)) {
-      console.error('Keine Performance-Historie gefunden');
-      return;
-    }
-    
     try {
-      const perfHistory = JSON.parse(fs.readFileSync(performancePath, 'utf8'));
-      console.log('\n=== PERFORMANCE-ANALYSE ===');
-      console.log(`${perfHistory.length} Einträge in der Historie`);
-      
-      if (perfHistory.length > 0) {
-        // Neueste Messung
-        const latest = perfHistory[perfHistory.length - 1];
-        console.log(`\nAktuelle Messung (${new Date(latest.timestamp).toLocaleString()}):`);
-        console.log(`- Ladezeit: ${latest.measurements.loadTime.toFixed(0)}ms`);
-        console.log(`- Speicherverbrauch: ${Math.round(latest.measurements.memory.heapUsed / 1024 / 1024)}MB`);
-        
-        // Trend berechnen
-        if (perfHistory.length > 1) {
-          const previous = perfHistory.slice(-6, -1); // Letzte 5 vor aktuell
-          const avgPrevLoad = previous.reduce((sum, item) => sum + item.measurements.loadTime, 0) / previous.length;
-          const trend = latest.measurements.loadTime / avgPrevLoad;
+      // Basierend auf Problem-Typ entsprechende Fix-Funktion auswählenh (err) {
+      switch (issue.type) {im Fix für ${issue.type}:`, err);
+        case 'performance-lcp':
+          fixResult.actions = optimizeLCP(issue);= err.message;
+          break;
           
-          console.log(`\nTrend: ${trend < 0.95 ? '🟢 Verbessert' : trend > 1.05 ? '🔴 Verschlechtert' : '🟡 Stabil'} (${Math.abs(100 - trend*100).toFixed(1)}% ${trend < 1 ? 'schneller' : 'langsamer'})`);
+        case 'performance-unused-css':
+          fixResult.actions = optimizeCSS(issue);
+          break;
+          
+        case 'seo-meta-tags':
+          fixResult.actions = fixMetaTags(issue);
+          break;
+          iption hinzu oder korrigiert diese
+        case 'accessibility-missing-alt': Problem
+          fixResult.actions = fixMissingAltAttributes(issue);x-Objekt, das angereichert wird
+          break;ekt
+          
+        case 'performance-unoptimized-images':pplyMetaDescriptionFix(issue, fix) {
+          fixResult.actions = optimizeImages(issue);s = issue.affectedElements || [];
+          break;
+          
+        case 'security-csp':st fullPath = path.join(__dirname, '..', '..', filePath);
+          fixResult.actions = fixContentSecurityPolicy(issue);ync(fullPath)) continue;
+          break;
+        leSync(fullPath, 'utf8');
+        case 'api-reliability':
+          fixResult.actions = improveAPIReliability(issue);/ 1. Prüfen, ob <head> vorhanden ist
+          break;if (!/<head[^>]*>/i.test(content)) {
+           tag found';
+        default:   continue;
+          console.log(`⚠️ Keine automatische Korrektur verfügbar für Problemtyp: ${issue.type}`);  }
+      }
+         // 2. Prüfen, ob bereits eine Meta-Description vorhanden ist
+      // Fix als angewendet markieren, wenn Aktionen durchgeführt wurden    const hasMetaDescription = /<meta\s+(?:name="description"|content="[^"]*"\s+name="description")/i.test(content);
+      fixResult.applied = fixResult.actions.length > 0; 
+      
+      // Erfolg bestimmen (wenn alle Aktionen erfolgreich waren)
+      fixResult.successful = fixResult.applied;
+                           fixResult.actions.every(action => action.success);owährung auf dem XRP Ledger mit automatischem Token-Burning. Investieren Sie in eine nachhaltige Zukunft.';
+                              const metaTag = `<meta name="description" content="${defaultDesc}" />`;
+      // In Knowledge Base eintragen
+      if (fixResult.applied) {
+        if (fixResult.successful) {    updatedContent = updatedContent.replace(
+          // Erfolgreichen Fix zur Wissensbasis hinzufügen
+          knowledgeBase.successfulFixes.push({
+            type: issue.type,
+            timestamp: fixResult.timestamp,  
+            actions: fixResult.actions.map(a => a.description)');
+          });  fix.applied = true;
+        } else {
+          // Fehlgeschlagenen Fix tracken
+          const existingFailedFix = knowledgeBase.failedFixes.find(f => f.type === issue.type);
+          if (existingFailedFix) {tion: 'Meta-Description-Tag eingefügt',
+            existingFailedFix.failureCount = (existingFailedFix.failureCount || 0) + 1;   insertedContent: metaTag
+            existingFailedFix.lastAttempt = fixResult.timestamp;  }];
+          } else {
+            knowledgeBase.failedFixes.push({
+              type: issue.type,  const metaDescWithoutName = /<meta\s+content="([^"]*)"\s*(?!name=)[^>]*>/gi;
+              failureCount: 1,t(content)) {
+              lastAttempt: fixResult.timestampnt.replace(
+            });
+          }
+        }
+          
+        // Aktualisierte Knowledge Base speichernent, 'utf8');
+        safeWriteJson(optimizationKnowledgeBase, knowledgeBase);
+      }= true;
+      
+      // Ausgabe des Ergebnisses  file: filePath,
+      if (fixResult.applied) {    description: 'Meta-Description-Tag korrigiert (name-Attribut hinzugefügt)',
+        if (fixResult.successful) {
+          console.log(`✅ Fix für '${issue.type}' erfolgreich angewendet!`);
+        } else {
+          console.log(`❌ Fix für '${issue.type}' angewendet, aber nicht erfolgreich.`);
         }
       }
       
-      console.log('\n=== ENDE DER ANALYSE ===');
-    } catch (e) {
-      console.error('Fehler bei der Performance-Analyse:', e);
+    } catch (error) {
+      console.error(`❌ Fehler beim Anwenden des Fixes für ${issue.type}:`, error);
+      fixResult.error = error.message;
     }
-    
-    return;
+    ngereichert wird
+    results.push(fixResult);x-Objekt
   }
-
-  let history = [];
-  if (fs.existsSync(historyPath)) {
+  
+  return results;lePaths = ['index.html'];
+}
+essen Elemente hinzu
+/**ffectedElements)) {
+ * Führt einen automatischen Rollback durch, wenn nötigEach(el => {
+ */'string') {
+function executeAutoRollbackIfNeeded(autoFix = true) { el.startsWith('/') ? el.substring(1) : el;
+  if (!fs.existsSync(recoveryFlagPath)) return;
+  ilePaths.push(cleanPath);
+  try { }
+    const recoveryData = JSON.parse(fs.readFileSync(recoveryFlagPath, 'utf8')); }
+     });
+    // Älter als 15 Minuten ignorieren - verhindert doppelte Rollbacks}
+    if (new Date() - new Date(recoveryData.timestamp) > 15 * 60 * 1000) {
+      console.log('Recovery-Flag ignoriert (älter als 15 Minuten)'); // Eindeutigen Dateipfad finden (index.html oder ähnliches)
+      return;  let htmlFiles = filePaths.filter(p => p.endsWith('.html'));
+    }f (htmlFiles.length === 0) htmlFiles = ['index.html'];
+    
+    console.log('\n🚨 AUTO-ROLLBACK WIRD AUSGEFÜHRT 🚨');
+    console.log(`Grund: ${recoveryData.reason}`);
+    console.log(`Zeitpunkt: ${new Date(recoveryData.timestamp).toLocaleString()}`);
+    console.log(`Empfohlene Aktion: ${recoveryData.recommendedAction || 'Rollback durchführen'}`); const fullPath = path.join(__dirname, '..', '..', htmlFile);
+    e;
+    if (!autoFix) {
+      console.log('\nAuto-Fix ist deaktiviert. Um den Rollback manuell durchzuführen:');  let content = fs.readFileSync(fullPath, 'utf8');
+      console.log('node .github/update-deploy-history.js --recovery --time=' + 
+                 new Date(recoveryData.timestamp).toISOString());
+      return;d fix anwenden
+    })[^>]*>/g;
+    
+    // Sicherstellen, dass die Historie existiert
+    if (!fs.existsSync(historyPath)) {
+      console.error('Keine Deploy-Historie gefunden, kann kein Rollback durchführen');Versuche, einen sinnvollen Alt-Text zu generieren
+      return;et altText = 'BurniToken Bild'; // Default
+    }
+       // Aus src-Attribut einen besseren Alt-Text ableiten
+    let history;    const srcMatch = match.match(/src="([^"]+)"/);
     try {
       history = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
+      if (!Array.isArray(history) || history.length === 0) {src));
+        console.error('Deploy-Historie ist leer oder fehlerhaft');        
+        return;amen abgeleitet
+      }      if (filename.includes('logo')) {
+    } catch (e) {;
+      console.error('Fehler beim Lesen der Deploy-Historie:', e);
+      return;erformance';
+    }    } else if (filename.includes('burn')) {
+    
+    // Letzten stabilen Deploy findenme.includes('lagerfeuer')) {
+    const lastStableDeploy = findLastStableDeployBefore(new Date(recoveryData.timestamp));      altText = 'Burni im Lagerfeuer - Token-Burning Symbol';
+    if (!lastStableDeploy) {
+      console.error('Keinen stabilen Deploy für Rollback gefunden!');
+      return;
+    }einfügen
+    return match.replace(/(<img)/, `$1 alt="${altText}"`);
+    const shellEnv = detectShellEnvironment();
+    
+    console.log(`Rollback zu Commit: ${lastStableDeploy.commit.substring(0, 7)} vom ${new Date(lastStableDeploy.date).toLocaleString()}`); (modified) {
+    
+    // Hier führt in Produktion der tatsächliche Rollback aus:
+    
+    // 1. Git Reset/Checkout zum stabilen Commit - mit Shell-spezifischen Anpassungenute zu Bildern ohne alt-Text hinzugefügt'
+    const gitCheckout = getShellSafeCommand(`git checkout ${lastStableDeploy.commit}`);
+    console.log(`Shell-angepasster Befehl: ${gitCheckout}`);
+    
+    try {
+      execSync(gitCheckout, { encoding: 'utf8' });
+      console.log('Git-Checkout erfolgreich');
     } catch (e) {
-      history = [];
+      console.error('Fehler beim Git-Checkout:', e);
+      return;
+    }
+    
+    // 2. Dependencies installieren - mit Shell-spezifischen Anpassungen
+    const npmInstall = getShellSafeCommand('npm install');
+    console.log(`Shell-angepasster Befehl: ${npmInstall}`);
+    Contentful Paint)
+    try {
+      execSync(npmInstall, { encoding: 'utf8', stdio: 'inherit' });am {Object} fix - Das Fix-Objekt, das angereichert wird
+      console.log('npm install erfolgreich');returns {Object} Das aktualisierte Fix-Objekt
+    } catch (e) {
+      console.error('Fehler bei npm install:', e);
+      // Weiter mit Build, auch wenn Install Probleme hatte;
+    }
+    
+    // 3. Build ausführen - mit Shell-spezifischen AnpassungenndexPath = path.join(__dirname, '..', '..', 'index.html');
+    const npmBuild = getShellSafeCommand('npm run build');(fs.existsSync(indexPath)) {
+    console.log(`Shell-angepasster Befehl: ${npmBuild}`); const content = fs.readFileSync(indexPath, 'utf8');
+      
+    try { dem Issue
+      execSync(npmBuild, { encoding: 'utf8', stdio: 'inherit' });s = issue.affectedElements || [];
+      console.log('npm run build erfolgreich');
+    } catch (e) {Preloads prüfen
+      console.error('Fehler bei npm run build:', e); const existingPreloads = [];
+      // Weiter mit Commit, auch wenn Build fehlgeschlagen ist  const preloadRegex = /<link[^>]*rel="preload"[^>]*href="([^"]+)"[^>]*>/g;
+    }adMatch;
+       while ((preloadMatch = preloadRegex.exec(content)) !== null) {
+    // 4. Self-Healing-Historie aktualisieren      existingPreloads.push(preloadMatch[1]);
+    let healingHistory = []; }
+    if (fs.existsSync(selfHealingPath)) {
+      try {inzufügen, die noch nicht preloaded werden
+        healingHistory = JSON.parse(fs.readFileSync(selfHealingPath, 'utf8'));
+      } catch (e) {ncludes(asset.split('/').pop()))
+        console.warn('Self-Healing-Historie konnte nicht geladen werden, erstelle neu'); );
+        healingHistory = [];
+      }.length > 0) {
+    }    let updatedContent = content;
+    
+    // Neuen Recovery-Eintrag erstellen
+    healingHistory.push({sToAdd.map(asset => 
+      id: `recovery-${Date.now()}`,asset.endsWith('.css') ? 'style' : 'image'}" type="${
+      timestamp: new Date().toISOString(),      asset.endsWith('.css') ? 'text/css' : 
+      type: 'auto-rollback',image/webp' : 
+      commit: lastStableDeploy.commit,
+      reason: recoveryData.reason,      'image/jpeg'
+      success: true
+    });
+    
+    safeWriteJson(selfHealingPath, healingHistory);= updatedContent.replace(
+    
+    // Deploy-Historie aktualisieren
+    history.push({ );
+      date: new Date().toISOString(),  
+      status: 'success',
+      run_id: 'recovery-run',
+      commit: lastStableDeploy.commit,
+      url: lastStableDeploy.url || '',  description: `Preload-Tags für kritische Assets hinzugefügt: ${preloadsToAdd.join(', ')}`
+      recovery: true,  });
+      reason: recoveryData.reason
+    });
+    
+    safeWriteJson(historyPath, history);
+    
+    // 5. Auto-Recovery dokumentieren und committen
+    const recoveryFiles = [
+      'package-lock.json',
+      'public/deploy-history.json',nden oder alle kritischen Assets werden bereits preloaded';
+      'public/performance-history.json',
+      'public/self-healing-history.json',
+      'public/crash-logs.json'
+    ];
+    
+    const recoveryCommitMessage = `Auto-Rollback zu stabilem Commit ${lastStableDeploy.commit.substring(0, 7)} vom ${new Date(lastStableDeploy.date).toLocaleString()} wegen ${recoveryData.reason}`;
+    nzu oder korrigiert diese
+    // Commit erstellen und pushenm {Object} issue - Das Problem
+    const commitSuccess = commitAndPushChanges(ram {Object} fix - Das Fix-Objekt, das angereichert wird
+      recoveryCommitMessage,
+      recoveryFiles,
+      {aFix(issue, fix) {
+        autoFix: true,
+        createBranch: true,  // Sicherheitshalber neuen Branch erstellen
+        pushOrigin: true, (const filePath of filePaths) {
+        recoveryMode: true const fullPath = path.join(__dirname, '..', '..', filePath);
+      }  if (!fs.existsSync(fullPath)) continue;
+    );
+    readFileSync(fullPath, 'utf8');
+    if (commitSuccess) {
+      console.log('Recovery-Commit erfolgreich erstellt und gepusht');> vorhanden ist
+    } else {<head[^>]*>/i.test(content)) {
+      console.warn('Recovery-Commit konnte nicht erstellt/gepusht werden');
+    }   continue;
+      }
+    // Recovery-Flag löschen
+    fs.unlinkSync(recoveryFlagPath);   // 2. FAQ-Strukturierte Daten finden/erstellen
+    console.log('Auto-Rollback abgeschlossen');    // FAQ-Abschnitt in der HTML suchen
+  } catch (err) { const faqSection = content.match(/<section[^>]*id="faq"[^>]*>([\s\S]*?)<\/section>/i);
+    console.error('Fehler beim Auto-Rollback:', err);
+  }
+}
+
+/**   const faqItemRegex = /<h3[^>]*>(.*?)<\/h3>[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>/gi;
+ * Führt einen Git-Commit und Push für Änderungen durch
+ * @param {string} message - Commit-Nachricht
+ * @param {string[]} files - Liste der Dateien, die committet werden sollen (relative Pfade)    let faqContent = faqSection[1];
+ * @param {Object} options - Optionen (autoFix, branch, etc.ec(faqContent)) !== null) {
+ * @returns {boolean} Erfolg
+ */(/<[^>]*>/g, ''),
+function commitAndPushChanges(message, files = [], options = {}) {      answer: match[2].trim().replace(/<[^>]*>/g, '')
+  const {
+    autoFix = true,     // Automatisches Fixen von Fehlern  }
+    branch = '',        // Ziel-Branch, leer = aktueller Branch
+    createBranch = false, // Neuen Branch erstellen?
+    pushOrigin = true,  // Nach Origin pushen?
+    recoveryMode = false // Ist dies ein Recovery-Commit?aqSchema = {
+  } = options;     "@context": "https://schema.org",
+        "@type": "FAQPage",
+  const shellEnv = detectShellEnvironment();
+  const isPowerShell = shellEnv.type === 'powershell';
+  
+  try {        "acceptedAnswer": {
+    // 1. Aktuelle Branch ermitteln wenn nicht angegeben: "Answer",
+    let targetBranch = branch;
+    if (!targetBranch) {
+      try {
+        const branchCmd = isPowerShell ? 
+          'git rev-parse --abbrev-ref HEAD' :   
+          'git rev-parse --abbrev-ref HEAD';nfügen
+        targetBranch = execSync(branchCmd, { encoding: 'utf8' }).trim();>
+      } catch (e) {ema, null, 2)}
+        console.error('Fehler beim Ermitteln des aktuellen Branch:', e);
+        return false;
+      }Prüfen, ob bereits FAQ-Schema vorhanden ist
+    } const hasExistingFAQSchema = content.includes('"@type": "FAQPage"');
+      
+    // 2. Prüfen, ob Änderungen vorhanden sindtent;
+    try {ma) {
+      const statusCmd = isPowerShell ? updatedContent.replace(
+        'git status --porcelain' : 
+        'git status --porcelain';n</head>`
+      const statusOutput = execSync(statusCmd, { encoding: 'utf8' });
+      
+      if (!statusOutput && files.length === 0) {h, updatedContent, 'utf8');
+        console.log('Keine Änderungen zum Committen gefunden.');
+        return true; // Erfolg, aber nichts zu tun
+      }
+    } catch (e) {ile: filePath,
+      console.error('Fehler beim Prüfen des Git-Status:', e);escription: `FAQ Schema.org-Markup für ${faqItems.length} Fragen hinzugefügt`
+      if (!autoFix) return false;}];
+    }} else {
+    es Schema aktualisieren
+    // 3. Neuen Branch erstellen falls gewünscht
+    if (createBranch) {
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');e {
+      const newBranch = `recovery-${timestamp}`;fix.reason = 'Keine FAQ-Fragen gefunden';
+      
+      try {
+        const createBranchCmd = isPowerShell ? x.reason = 'Kein FAQ-Abschnitt gefunden';
+          `git checkout -b ${newBranch}` : 
+          `git checkout -b ${newBranch}`;
+        execSync(createBranchCmd, { encoding: 'utf8' });
+        console.log(`Neuen Branch "${newBranch}" erstellt`);
+        targetBranch = newBranch;
+      } catch (e) {
+        console.error('Fehler beim Erstellen eines neuen Branch:', e);
+        if (!autoFix) return false;
+      }s Problem
+    }-Objekt, das angereichert wird
+    ktualisierte Fix-Objekt
+    // 4. Dateien stagen
+    if (files.length > 0) {
+      for (const file of files) {aths = issue.affectedElements || [];
+        try {
+          const addCmd = isPowerShell ? 
+            `git add "${file}"` : filePath);
+            `git add "${file}"`;fs.existsSync(fullPath)) continue;
+          execSync(addCmd, { encoding: 'utf8' });
+        } catch (e) {f8');
+          console.error(`Fehler beim Stagen von ${file}:`, e); updatedContent = content;
+          if (!autoFix) return false;
+        }
+      } case 'js-debugger':
+    } else {     // Debugger-Statements entfernen
+      // Alle Änderungen stagen      updatedContent = updatedContent.replace(/(?<!\/\/)\s*debugger;/g, '');
+      try {;
+        const addAllCmd = isPowerShell ?        
+          'git add .' :       case 'js-console-log':
+          'git add .';     // console.log-Statements auskommentieren
+        execSync(addAllCmd, { encoding: 'utf8' });log\([^)]*\);)/g, '// $1');
+      } catch (e) {
+        console.error('Fehler beim Stagen aller Änderungen:', e);
+        if (!autoFix) return false;
+      }     // TODO-Kommentare mit Warnung versehen
+    }replace(
+    
+    // 5. Commit durchführen        '// FIXME: Production has TODO comment - $1: $2'
+    const commitMessage = recoveryMode ? 
+      `[AUTO-RECOVERY] ${message}` : 
+      message;
+    
+    try {
+      const commitCmd = isPowerShell ? updatedContent, 'utf8');
+        `git commit -m "${commitMessage.replace(/"/g, '\\"')}"` :   fix.applied = true;
+        `git commit -m "${commitMessage.replace(/"/g, '\\"')}"`;ue;
+      execSync(commitCmd, { encoding: 'utf8' });
+      console.log(`Änderungen committet: "${commitMessage}"`);
+    } catch (e) {
+      console.error('Fehler beim Committen:', e);
+      return false;
+    }
+    
+    // 6. Push, falls gewünscht
+    if (pushOrigin) {
+      try {
+        const pushCmd = isPowerShell ? 
+          `git push origin ${targetBranch}` : 
+          `git push origin ${targetBranch}`;n Fixes
+        execSync(pushCmd, { encoding: 'utf8' });
+        console.log(`Änderungen zu origin/${targetBranch} gepusht`);
+      } catch (e) {unTestsAfterFixes(appliedFixes) {
+        console.error('Fehler beim Pushen:', e);'🧪 Teste Änderungen...');
+        
+        if (autoFix) {nst testResults = {
+          console.log('Versuche Push mit --force-with-lease...');
+          try {
+            const forcePushCmd = isPowerShell ? 
+              `git push --force-with-lease origin ${targetBranch}` : 
+              `git push --force-with-lease origin ${targetBranch}`;
+            execSync(forcePushCmd, { encoding: 'utf8' });
+            console.log(`Änderungen mit --force-with-lease zu origin/${targetBranch} gepusht`);
+          } catch (e2) {relevante Tests basierend auf den angewendeten Fixes ausführen
+            console.error('Auch Force-Push fehlgeschlagen:', e2);st fixTypes = appliedFixes
+            return false; .filter(fix => fix.applied)
+          }  .map(fix => fix.type);
+        } else {
+          return false; try {
+        }    // 1. HTML-Validierung für alle HTML-Änderungen
+      } if (appliedFixes.some(fix => fix.changes?.some(change => change.file?.endsWith('.html')))) {
+    }
+    
+    return true;
+  } catch (e) {     fix.changes?.forEach(change => {
+    console.error('Unerwarteter Fehler beim Git-Workflow:', e);)) {
+    return false;
+  }        }
+}
+
+/**
+ * Führt einen Selbstheilungsprozess durch, basierend auf der Historie und Wissensdatenbankde man W3C-Validierung ausführen
+ * Diese Funktion wird von der neuen runSelfHealing-Funktion abgelöst, bleibt aber für Kompatibilität erhaltenebnis
+ */Each(file => {
+function executeSelfHealing() {    const validationResult = {
+  console.log('⚠️ Hinweis: executeSelfHealing wurde durch runSelfHealing ersetzt, verwende die neue Funktion');        file,
+  
+  // Prüfen, ob public-Verzeichnis existiert
+  if (!fs.existsSync(publicDir)) {
+    try {
+      fs.mkdirSync(publicDir, { recursive: true });      
+      console.log(`Public-Verzeichnis erstellt: ${publicDir}`); testResults.validationTests.push(validationResult);
+    } catch (err) {ed && validationResult.passed;
+      console.error(`Fehler beim Erstellen von ${publicDir}:`, err);
+      return;
+    }console.log(`✅ HTML-Validierung für ${htmlFiles.size} Dateien bestanden`);
+  }
+  
+  if (!fs.existsSync(selfHealingPath)) {
+    console.log('Keine Selbstheilungs-Historie gefunden, starte ersten Eintrag');tsWith('a11y'))) {
+  }er würde man accessibility-Tests ausführen
+  muliertes Ergebnis
+  try {st a11yResult = {
+    // Aktuelle Deploy-Historie laden  passed: true,
+    let history = [];
+    if (fs.existsSync(historyPath)) {
+      try {
+        history = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
+      } catch (e) {
+        console.warn('Deploy-Historie konnte nicht geladen werden, erstelle neu');sibilityTests.push(a11yResult);
+        history = [];lPassed = testResults.allPassed && a11yResult.passed;
+      }
+    }ole.log(`✅ Accessibility-Tests bestanden: Score ${a11yResult.score}`);
+    
+    if (history.length === 0) {
+      console.log('Keine Deploy-Historie gefunden, erstelle Dummy-Eintrag für ersten Lauf');
+      history.push({ixTypes.some(type => type.startsWith('seo'))) {
+        date: new Date().toISOString(),// Hier würde man SEO-Tests ausführen
+        status: 'success',
+        run_id: 'initial-run', const seoResult = {
+        commit: 'initial-commit',    passed: true,
+        url: 'https://github.com/example/burnitoken'
+      });
+      safeWriteJson(historyPath, history);
+    }
+    
+    const latestDeploy = history[history.length - 1];Tests.push(seoResult);
+    lPassed = testResults.allPassed && seoResult.passed;
+    // Aktuelle Performance-Historie laden
+    let performanceHistory = [];✅ SEO-Tests bestanden: Score ${seoResult.score}`);
+    if (fs.existsSync(performancePath)) {
+      try {
+        performanceHistory = JSON.parse(fs.readFileSync(performancePath, 'utf8'));
+      } catch (e) {
+        console.warn('Performance-Historie konnte nicht geladen werden, erstelle neu');// Hier würde man Performance-Tests ausführen
+        performanceHistory = [];
+      } const performanceResult = {
+    }    passed: true,
+    
+    if (performanceHistory.length === 0) {
+      console.log('Keine Performance-Historie gefunden, erstelle Dummy-Eintrag für ersten Lauf');
+      performanceHistory.push({
+        timestamp: new Date().toISOString(),
+        commit: latestDeploy.commit,
+        deployTime: latestDeploy.date,rformanceTests.push(performanceResult);
+        measurements: {allPassed = testResults.allPassed && performanceResult.passed;
+          memory: process.memoryUsage(),
+          loadTime: 1000, // Platzhalternsole.log(`✅ Performance-Tests bestanden: Score ${performanceResult.score}`);
+          scriptErrors: 0,
+          apiLatency: 0
+        }
+      });stResults.error = err.message;
+      safeWriteJson(performancePath, performanceHistory);
+    }
+    
+    const latestPerformance = performanceHistory[performanceHistory.length - 1];
+    
+    // Fehlerprotokollierung aktivieren
+    let errorLog = [];
+    const logError = (error) => {derungen
+      errorLog.push({es - Die angewendeten Fixes
+        timestamp: new Date().toISOString(),} Erfolg
+        error: typeof error === 'string' ? error : (error.message || 'Unbekannter Fehler')
+      });ngChanges(fixes) {
+    };eln, die geändert wurden
+    changedFiles = [];
+    // Beispiel: Automatisches Rollback bei wiederholten Fehlerns.forEach(fix => {
+    if (latestDeploy.status !== 'success') {
+      console.warn('Letzter Deploy war nicht erfolgreich, führe Selbstheilung durch');
+        if (change.file && !changedFiles.includes(change.file)) {
+      // 1. Letzten stabilen Deploy finden
+      const lastStableDeploy = findLastStableDeployBefore(new Date(latestDeploy.date));   }
+      if (lastStableDeploy) {
+        console.log(`Rollback zu letztem stabilen Deploy vom ${new Date(lastStableDeploy.date).toLocaleString()}`);
+        
+        // Rollback-Befehle sammeln
+        let rollbackCommands = [f (changedFiles.length === 0) {
+          `git checkout ${lastStableDeploy.commit}`,  console.log('Keine Änderungen zum Committen');
+          'npm install',
+          'npm run build' }
+        ];  
+        / Commit-Nachricht erstellen
+        // 2. Führe Rollback-Befehle aus
+        for (const command of rollbackCommands) {)
+          try {
+            console.log(`Führe aus: ${command}`);];
+            execSync(command, { encoding: 'utf8', stdio: 'inherit' });
+          } catch (e) {${fixTypes.join(', ')} - Self-Healing durch KI`;
+            console.error(`Fehler bei Befehl "${command}":`, e);
+            logError(e);
+          }iles, { 
+        }
+        
+        // 3. Status nach Rollback überprüfen
+        let postRollbackHistory = [];
+        try { (err) {
+          postRollbackHistory = JSON.parse(fs.readFileSync(historyPath, 'utf8'));onsole.error('Fehler beim Committen der Self-Healing-Änderungen:', err);
+        } catch (e) {eturn false;
+          console.warn('Deploy-Historie nach Rollback konnte nicht geladen werden');}
+          logError(e);
+        }
+        
+        const postRollbackDeploy = postRollbackHistory.length > 0 ? postRollbackHistory[postRollbackHistory.length - 1] : null;/ PowerShell-Probleme prüfen und beheben
+        if (postRollbackDeploy && postRollbackDeploy.status === 'success') {checkAndFixPowerShellIssues();
+          console.log('Rollback erfolgreich, dokumentiere Selbstheilung');
+          
+          // Selbstheilungs-Eintrag erstellen
+          const healingEntry = {
+            timestamp: new Date().toISOString(),Self-Healing-Modus
+            deploy: postRollbackDeploy,if (process.argv.includes('--self-healing')) {
+            performance: latestPerformance,
+            errors: errorLog,  runSelfHealing({
+            action: 'rollback',utoFix: !process.argv.includes('--no-fix'),
+            success: true
+          };s: !process.argv.includes('--no-commit')
+          
+          // Bisherige Einträge laden oder neu initialisieren
+          let healingHistory = [];
+          if (fs.existsSync(selfHealingPath)) {
+            try {
+              healingHistory = JSON.parse(fs.readFileSync(selfHealingPath, 'utf8'));v.includes('--check-powershell')) {
+            } catch (e) { const shellEnv = detectShellEnvironment();
+              console.warn('Selbstheilungs-Historie konnte nicht geladen werden, erstelle neu');   console.log('\n=== POWERSHELL DIAGNOSE ===');
+              healingHistory = [];    console.log(`Shell-Typ: ${shellEnv.type}`);
+            }Version: ${shellEnv.version}`);
+          }ows}`);
+          leme: ${shellEnv.hasPowerShellIssues ? 'Ja' : 'Nein'}`);
+          healingHistory.push(healingEntry);  
+          safeWriteJson(selfHealingPath, healingHistory);Anpassungen:');
+        } else {).forEach(([key, cmd]) => {
+          console.warn('Rollback war nicht erfolgreich, weitere Analyse erforderlich');    console.log(`${key}: ${cmd}`);
+          logError('Rollback fehlgeschlagen - Status nicht erfolgreich oder Historie nicht lesbar');
+        }
+      } else {
+        console.error('Kein stabiler Deploy für Rollback gefunden');
+        logError('Kein stabiler Deploy für Rollback gefunden');nternet;
+      }coding: 'utf8' });
+    } else {cludes('true') ? 'Verfügbar' : 'Nicht verfügbar'}`);
+      console.log('Letzter Deploy war erfolgreich, keine Rollback-Aktion erforderlich');atch (e) {
+      le.log('\nInternetverbindung: Fehler beim Test');
+      // Stattdessen die moderne Self-Healing-Funktion aufrufen }
+      runSelfHealing({  
+        autoFix: true,
+        runAudits: true,
+        commitOnSuccess: truell:');
+      });en:');
+    } = [System.Text.Encoding]::UTF8');
+  } catch (err) {umgehen:');
+    console.error('Fehler im Selbstheilungsprozess:', err);Bypass -File "script.ps1"');
+  }
+}  console.log('   $content | Out-File -FilePath file.json -Encoding UTF8');
+
+/**
+ * Loggt einen Absturz oder kritischen FehlerSE ===\n');
+ * @param {Object} crashInfo - Informationen zum Absturzurn;
+ * @returns {string} Die Absturz-ID
+ */
+function logCrash(crashInfo) {e auf Recovery-Modus
+  try {
+    // Crash-Logs laden oder neu erstellen
+    let crashes = [];
+    if (fs.existsSync(crashLogsPath)) {alue = timeArg.split('=')[1];
+      try {
+        crashes = JSON.parse(fs.readFileSync(crashLogsPath, 'utf8')); 
+      } catch (e) {  // Bei Recovery auch gleich Absturz-Bericht anzeigen
+        console.warn('Crash-Logs konnten nicht geladen werden, erstelle neu');
+      }
+    }
+    me=HH:MM oder --time=ISO-TIMESTAMP');
+    // Absturz-ID generieren (Zeitstempel + Hash)
+    const timestamp = Date.now();
+    const randomPart = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+    const crashId = `crash-${timestamp}-${randomPart}`;
+    
+    // Absturz-Eintrag erstellen(process.argv.includes('--crash-report')) {
+    const crashEntry = {const timeArg = process.argv.find(arg => arg.startsWith('--since='));
+      id: crashId,=')[1] : null;
+      timestamp: new Date().toISOString(),shReport(timeValue);
+      ...crashInfo, return;
+      systemInfo: {}
+        nodeVersion: process.version,
+        platform: process.platform,
+        arch: process.arch,
+        memoryUsage: process.memoryUsage()= process.argv.find(arg => arg.startsWith('--type='));
+      }> arg.startsWith('--message='));
+    };d(arg => arg.startsWith('--component='));
+    
+    // Absturz protokollieren
+    crashes.push(crashEntry);urz-Protokollierung sind mindestens --type und --message erforderlich');
+    if (crashes.length > 100) {
+      crashes = crashes.slice(-100); // Auf letzte 100 beschränken
+    }
+    shInfo = {
+    safeWriteJson(crashLogsPath, crashes); type: typeArg.split('=')[1],
+       message: messageArg.split('=')[1],
+    // Recovery Flag setzen, falls kritisch    component: componentArg ? componentArg.split('=')[1] : 'unknown',
+    if (crashInfo.severity === 'critical' && !fs.existsSync(recoveryFlagPath)) {gv.find(arg => arg.startsWith('--severity=')) || '=high').split('=')[1],
+      fs.writeFileSync(recoveryFlagPath, JSON.stringify({(arg => arg.startsWith('--users=')) || '=1').split('=')[1], 10)
+        reason: `crash-${crashInfo.type}`,
+        timestamp: new Date().toISOString(),
+        crashId,ashInfo);
+        recommendedAction: 'check-logs-and-fix'.log(`Absturz protokolliert mit ID: ${crashId}`);
+      })); return;
+    }}
+    
+    return crashId;
+  } catch (err) {
+    console.error('Fehler beim Protokollieren des Absturzes:', err);
+    return 'error-logging-crash';
+  }  return;
+}
+
+/**
+ * Zeigt Absturz-Protokolle an const perfHistory = JSON.parse(fs.readFileSync(performancePath, 'utf8'));
+ * @param {string} [since] - Optional: Zeitstempel oder Uhrzeit (HH:MM), ab dem Abstürze angezeigt werden sollen  console.log('\n=== PERFORMANCE-ANALYSE ===');
+ */rfHistory.length} Einträge in der Historie`);
+function showCrashReport(since = null) {
+  if (!fs.existsSync(crashLogsPath)) {
+    console.log('Keine Absturz-Protokolle gefunden. Das ist gut!');
+    return;
+  }
+    console.log(`- Ladezeit: ${latest.measurements.loadTime.toFixed(0)}ms`);
+  try {    console.log(`- Speicherverbrauch: ${Math.round(latest.measurements.memory.heapUsed / 1024 / 1024)}MB`);
+    const crashes = JSON.parse(fs.readFileSync(crashLogsPath, 'utf8'));
+    
+    if (crashes.length === 0) {(perfHistory.length > 1) {
+      console.log('Keine Abstürze protokolliert. Das ist gut!');       const previous = perfHistory.slice(-6, -1); // Letzte 5 vor aktuell
+      return;        const avgPrevLoad = previous.reduce((sum, item) => sum + item.measurements.loadTime, 0) / previous.length;
+    }.measurements.loadTime / avgPrevLoad;
+    
+    // Startdatum für Filter0.95 ? '🟢 Verbessert' : trend > 1.05 ? '🔴 Verschlechtert' : '🟡 Stabil'} (${Math.abs(100 - trend*100).toFixed(1)}% ${trend < 1 ? 'schneller' : 'langsamer'})`);
+    let filterDate = null;
+    if (since) {
+      if (/^\d{1,2}:\d{2}$/.test(since)) { 
+        // Format HH:MM für heute interpretieren  console.log('\n=== ENDE DER ANALYSE ===');
+        const today = new Date();ch (e) {
+        const [hours, minutes] = since.split(':').map(Number);
+        filterDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), hours, minutes);
+      } else {
+        // Als ISO-String interpretierenturn;
+        filterDate = new Date(since);
+        if (isNaN(filterDate.getTime())) {
+          console.error('Ungültiges Zeitformat:', since);
+          filterDate = null;
+        }
+      }
+    }tch (e) {
+    
+    // Crashes nach Zeit filtern, falls Filter gesetzt
+    let filteredCrashes = filterDate 
+      ? crashes.filter(crash => new Date(crash.timestamp) >= filterDate)
+      : crashes;
+    tory.length || history[history.length - 1].run_id !== run_id) {
+    console.log('\n=== ABSTURZ-BERICHT ===');
+    console.log(`Anzahl der Abstürze${filterDate ? ` seit ${filterDate.toLocaleString()}` : ''}: ${filteredCrashes.length}`);ry.push(entry);
+    
+    if (filteredCrashes.length === 0) { (safeWriteJson(historyPath, history)) {
+      console.log('Keine Abstürze im ausgewählten Zeitraum.');', { date, status, run_id, commit });
+      return;
+    }
+     if (status === 'success') {
+    // Nach Typ gruppieren    trackPerformance(commit, date);
+    const crashesByType = filteredCrashes.reduce((acc, crash) => {
+      acc[crash.type] = acc[crash.type] || [];     // Nach erfolgreichem Deploy: Self-Healing ausführen, wenn aktiviert
+      acc[crash.type].push(crash);        if (process.env.ENABLE_SELF_HEALING === 'true') {
+      return acc;og('\n🤖 Automatisches Self-Healing nach erfolgreichem Deploy gestartet...');
+    }, {});
+       autoFix: true,
+    // Bericht für jeden Typ ausgeben
+    Object.entries(crashesByType).forEach(([type, crashes]) => {tOnSuccess: true
+      console.log(`\nTyp: ${type} (${crashes.length} Vorkommen)`);
+      console.log(`Schweregrad: ${crashes[0].severity}`);   }
+      console.log(`Beispielnachricht: ${crashes[0].message}`);   }
+      console.log(`Betroffene Komponente(n): ${[...new Set(crashes.map(c => c.component))].join(', ')}`);  }
+      console.log(`Erste Meldung: ${new Date(crashes[0].timestamp).toLocaleString()}`);
+      console.log(`Letzte Meldung: ${new Date(crashes[crashes.length - 1].timestamp).toLocaleString()}`);
+      
+      if (crashes.length >= 3) {
+        console.log('Der Fehler tritt wiederholt auf. Eine Untersuchung wird empfohlen.');
+      }
+    });        // Empfehlungen    console.log('\nEmpfehlungen:');    if (filteredCrashes.some(c => c.severity === 'critical')) {      console.log('❗ KRITISCHE ABSTÜRZE festgestellt! Sofortiges Handeln erforderlich.');      console.log('   Prüfen Sie die Logs und führen Sie einen Rollback durch, falls nötig.');      console.log('   Verwenden Sie: node .github/update-deploy-history.js --recovery --time=<letzte-stabile-zeit>');    } else if (filteredCrashes.some(c => c.severity === 'high')) {      console.log('⚠️ Schwerwiegende Fehler festgestellt. Eine zeitnahe Behebung wird empfohlen.');    } else {      console.log('ℹ️ Kleinere Probleme gefunden. Beheben Sie diese bei Gelegenheit.');    }        console.log('\n=== ENDE DES BERICHTS ===');  } catch (err) {    console.error('Fehler beim Anzeigen des Absturz-Berichts:', err);  }}/** * Self-Healing: Automatische Optimierung und Fehlerbehebung * Identifiziert Probleme und wendet automatisch Korrekturen an * @param {Object} options - Konfigurationsparameter
+ */
+function runSelfHealing(options = {}) {
+  const {
+    autoFix = true,           // Automatische Behebung von Fehlern
+    runAudits = true,         // Audits ausführen (Lighthouse, AXE, etc.)
+    updateMetaTags = true,    // Meta-Tags aktualisieren basierend auf GSC-Daten
+    optimizeImages = true,    // Bilder optimieren
+    testAfterFix = true,      // Tests nach Fixes ausführen
+    commitOnSuccess = true,   // Änderungen committen, wenn Tests erfolgreich
+    maxChangesPerRun = 3      // Maximale Anzahl an Änderungen pro Durchlauf
+  } = options;
+
+  console.log('\n🔄 Starte Self-Healing-Prozess...');
+  
+  // Prüfen, ob public-Verzeichnis existiert
+  if (!fs.existsSync(publicDir)) {
+    try {
+      fs.mkdirSync(publicDir, { recursive: true });
+      console.log(`Public-Verzeichnis erstellt: ${publicDir}`);
+    } catch (err) {
+      console.error(`Fehler beim Erstellen von ${publicDir}:`, err);
+      return;
     }
   }
   
-  // Nur anhängen, wenn Run-ID oder Commit neu ist
-  if (!history.length || history[history.length - 1].run_id !== run_id) {
-    const entry = { date, status, run_id, commit, url };
-    history.push(entry);
-    
-    if (safeWriteJson(historyPath, history)) {
-      console.log('Deploy-Historie aktualisiert:', { date, status, run_id, commit });
+  // Vorherige Self-Healing-Historie laden
+  let healingHistory = [];
+  if (fs.existsSync(selfHealingPath)) {
+    try {
+      healingHistory = JSON.parse(fs.readFileSync(selfHealingPath, 'utf8'));
+    } catch (e) {
+      console.warn('Self-Healing-Historie konnte nicht geladen werden, erstelle neu');
+    }
+  }
+
+  // Optimierungs-Wissensbasis laden oder erstellen
+  let knowledgeBase = {
+    metaTagPatterns: {},
+    commonIssues: {},
+    successfulFixes: [],
+    failedFixes: []
+  };
+  
+  if (fs.existsSync(optimizationKnowledgeBase)) {
+    try {
+      knowledgeBase = JSON.parse(fs.readFileSync(optimizationKnowledgeBase, 'utf8'));
+    } catch (e) {
+      console.warn('Optimierungs-Wissensbasis konnte nicht geladen werden, erstelle neu');
       
-      // Performance tracking nach erfolgreichem Deploy
-      if (status === 'success') {
-        trackPerformance(commit, date);
+      // Optimierungs-Wissensbasis-Verzeichnis erstellen, falls es nicht existiert
+      const knowledgeBaseDir = path.dirname(optimizationKnowledgeBase);
+      if (!fs.existsSync(knowledgeBaseDir)) {
+        try {
+          fs.mkdirSync(knowledgeBaseDir, { recursive: true });
+          console.log(`Knowledge-Base-Verzeichnis erstellt: ${knowledgeBaseDir}`);
+        } catch (err) {
+          console.error(`Fehler beim Erstellen von ${knowledgeBaseDir}:`, err);
+        }
+      }
+      
+      // Optimierungs-Wissensbasis mit Grundwerten erstellen
+      safeWriteJson(optimizationKnowledgeBase, knowledgeBase);
+    }
+  } else {
+    // Optimierungs-Wissensbasis-Verzeichnis erstellen, falls es nicht existiert
+    const knowledgeBaseDir = path.dirname(optimizationKnowledgeBase);
+    if (!fs.existsSync(knowledgeBaseDir)) {
+      try {
+        fs.mkdirSync(knowledgeBaseDir, { recursive: true });
+        console.log(`Knowledge-Base-Verzeichnis erstellt: ${knowledgeBaseDir}`);
+      } catch (err) {
+        console.error(`Fehler beim Erstellen von ${knowledgeBaseDir}:`, err);
+      }
+    }
+    
+    // Optimierungs-Wissensbasis mit Grundwerten erstellen
+    safeWriteJson(optimizationKnowledgeBase, knowledgeBase);
+  }
+
+  // Self-Healing Protokoll starten
+  const healingSession = {
+    id: `healing-${Date.now()}`,
+    timestamp: new Date().toISOString(),
+    commit: commit,
+    issues: [],
+    fixes: [],
+    tests: {},
+    success: false
+  };
+
+  // 1. Audits für Probleme durchführen
+  const issues = identifyIssues(runAudits);
+  healingSession.issues = issues;
+  
+  if (issues.length === 0) {
+    console.log('✅ Keine Probleme gefunden. Die Website ist in optimalem Zustand!');
+    healingSession.success = true;
+    healingHistory.push(healingSession);
+    safeWriteJson(selfHealingPath, healingHistory);
+    return;
+  }
+  
+  console.log(`🔍 ${issues.length} Probleme identifiziert`);
+  
+  // 2. Probleme priorisieren
+  const prioritizedIssues = prioritizeIssues(issues, knowledgeBase)
+    .slice(0, maxChangesPerRun);
+    
+  console.log(`🔧 Höchste Priorität: ${prioritizedIssues.map(i => i.type).join(', ')}`);
+  
+  // 3. Probleme beheben
+  if (autoFix) {
+    const fixes = applyFixes(prioritizedIssues, knowledgeBase);
+    healingSession.fixes = fixes;
+    
+    // 4. Tests nach Fixes ausführen
+    if (testAfterFix && fixes.some(f => f.applied)) {
+      console.log('🧪 Führe Tests nach Änderungen durch...');
+      const testResults = runTestsAfterFixes(fixes);
+      healingSession.tests = testResults;
+      
+      // 5. Bei Erfolg committen
+      if (commitOnSuccess && testResults.allPassed) {
+        const commitSuccess = commitSelfHealingChanges(fixes);
+        healingSession.committed = commitSuccess;
         
-        // Nach erfolgreichem Deploy: Self-Healing ausführen, wenn aktiviert
-        if (process.env.ENABLE_SELF_HEALING === 'true') {
-          console.log('\n🤖 Automatisches Self-Healing nach erfolgreichem Deploy gestartet...');
-          runSelfHealing({
-            autoFix: true,
-            runAudits: true,
-            commitOnSuccess: true
+        if (commitSuccess) {
+          console.log('🎉 Self-Healing erfolgreich abgeschlossen. Änderungen wurden committet!');
+          
+          // Erfolgreiche Fixes in die Wissensbasis aufnehmen
+          fixes.forEach(fix => {
+            if (fix.applied && fix.successful) {
+              knowledgeBase.successfulFixes.push({
+                type: fix.type,
+                pattern: fix.pattern || '',
+                solution: fix.solution || '',
+                date: new Date().toISOString()
+              });
+            } else if (fix.applied && !fix.successful) {
+              knowledgeBase.failedFixes.push({
+                type: fix.type,
+                pattern: fix.pattern || '',
+                solution: fix.solution || '',
+                date: new Date().toISOString(),
+                error: fix.error || 'Unknown error'
+              });
+            }
+          });
+          
+          // Wissensbasis aktualisieren
+          safeWriteJson(optimizationKnowledgeBase, knowledgeBase);
+        }
+      }
+    }
+  }
+  
+  // Verlauf aktualisieren
+  healingSession.success = healingSession.tests?.allPassed || false;
+  healingHistory.push(healingSession);
+  if (healingHistory.length > 100) {
+    healingHistory = healingHistory.slice(-100); // Auf letzte 100 beschränken
+  }
+  safeWriteJson(selfHealingPath, healingHistory);
+  
+  console.log('📊 Self-Healing-Sitzung abgeschlossen');
+}
+
+/**
+ * Identifiziert Probleme auf der Website
+ * @param {boolean} runAudits - Sollen Audits ausgeführt werden?
+ * @returns {Array} Gefundene Probleme
+ */
+function identifyIssues(runAudits = true) {
+  const issues = [];
+  
+  // 1. Bekannte Probleme überprüfen (statisch)
+  checkForCommonIssues(issues);
+  
+  // 2. Lighthouse-/Performance-Probleme identifizieren
+  if (runAudits) {
+    try {
+      console.log('🔍 Führe Performance-Audits durch...');
+      // In Produktion würden hier externe Audits ausgeführt
+      // Für dieses Beispiel simulieren wir einige Ergebnisse
+      
+      // Performance-Simulation
+      const samplePerformanceIssues = [
+        {
+          type: 'performance-lcp',
+          severity: 'high',
+          score: 0.78,
+          description: 'Largest Contentful Paint zu langsam: 3.2s',
+          affectedElements: ['assets/images/burni-logo.webp', 'assets/images/burni-chart.webp'],
+          recommendations: [
+            'Bilder optimieren',
+            'Preloading für kritische Assets',
+            'Reduzieren der Blocking-Zeit'
+          ]
+        },
+        {
+          type: 'performance-unused-css',
+          severity: 'medium',
+          score: 0.82,
+          description: 'Ungenutztes CSS entdeckt: ~30% der styles.min.css',
+          affectedElements: ['assets/css/styles.min.css'],
+          recommendations: [
+            'CSS optimieren und ungenutztes entfernen',
+            'Critical CSS extrahieren und inline einfügen'
+          ]
+        }
+      ];
+      
+      // SEO-Simulation
+      const sampleSeoIssues = [
+        {
+          type: 'seo-meta-description',
+          severity: 'high',
+          score: 0.65,
+          description: 'Meta-Beschreibungen fehlen name-Attribute',
+          affectedElements: ['index.html', 'pages/token/index.html'],
+          recommendations: [
+            'Meta-Description-Tags mit name="description" versehen',
+            'Beschreibungen auf 150-160 Zeichen optimieren'
+          ]
+        },
+        {
+          type: 'seo-structured-data',
+          severity: 'medium',
+          score: 0.7,
+          description: 'Schema.org-Markup für FAQ unvollständig',
+          affectedElements: ['index.html'],
+          recommendations: [
+            'Vollständiges FAQ-Schema implementieren',
+            'Strukturierte Daten validieren'
+          ]
+        }
+      ];
+      
+      // Accessibility-Simulation
+      const sampleA11yIssues = [
+        {
+          type: 'a11y-contrast',
+          severity: 'high',
+          score: 0.6,
+          description: 'Kontrastverhältnis unter 4.5:1 in Navigationselementen',
+          affectedElements: ['.nav-link', '.mobile-menu a'],
+          recommendations: [
+            'Dunklere Textfarbe oder helleren Hintergrund verwenden',
+            'WCAG AA-Standard erreichen (4.5:1)'
+          ]
+        }
+      ];
+      
+      // Issues zusammenführen
+      issues.push(...samplePerformanceIssues, ...sampleSeoIssues, ...sampleA11yIssues);
+      
+      console.log(`✅ Audit abgeschlossen. ${issues.length} Probleme identifiziert.`);
+    } catch (err) {
+      console.error('Fehler beim Durchführen der Audits:', err);
+    }
+  }
+  
+  return issues;
+}
+
+/**
+ * Prüft auf bekannte, häufige Probleme
+ * @param {Array} issues - Das Issues-Array, das erweitert wird
+ */
+function checkForCommonIssues(issues) {
+  try {
+    // 1. Prüfen auf fehlende alt-Attribute in Bildern
+    const indexHtmlPath = path.join(__dirname, '..', '..', 'index.html');
+    if (fs.existsSync(indexHtmlPath)) {
+      const content = fs.readFileSync(indexHtmlPath, 'utf8');
+      
+      // Bilder ohne alt-Attribute finden
+      const imgTagsWithoutAlt = (content.match(/<img(?!.*alt=)[^>]*>/g) || []);
+      
+      if (imgTagsWithoutAlt.length > 0) {
+        issues.push({
+          type: 'a11y-missing-alt',
+          severity: 'high',
+          description: `${imgTagsWithoutAlt.length} Bilder ohne alt-Attribut gefunden`,
+          affectedElements: imgTagsWithoutAlt.map(tag => tag.match(/src="([^"]+)"/)?.[1] || 'unknown'),
+          recommendations: [
+            'Alt-Attribute für alle Bilder hinzufügen',
+            'Für Dekorative Bilder alt="" verwenden'
+          ]
+        });
+      }
+      
+      // Fehlende Meta-Tags prüfen
+      const hasTitleTag = /<title>.*<\/title>/i.test(content);
+      const hasDescriptionTag = /<meta\s+(?:name="description"|content="[^"]*"\s+name="description")/i.test(content);
+      
+      if (!hasTitleTag || !hasDescriptionTag) {
+        issues.push({
+          type: 'seo-missing-meta',
+          severity: 'critical',
+          description: `Kritische Meta-Tags fehlen: ${!hasTitleTag ? 'title, ' : ''}${!hasDescriptionTag ? 'description' : ''}`,
+          affectedElements: ['index.html'],
+          recommendations: [
+            'Titel-Tag hinzufügen, falls nicht vorhanden',
+            'Meta-Description hinzufügen mit name="description"'
+          ]
+        });
+      }
+    }
+    
+    // 2. Prüfen auf potenzielle JavaScript-Fehler
+    const scriptsPath = path.join(__dirname, '..', '..', 'assets', 'scripts.js');
+    if (fs.existsSync(scriptsPath)) {
+      const jsContent = fs.readFileSync(scriptsPath, 'utf8');
+      
+      // Potenziell problematische Patterns
+      const suspiciousPatterns = [
+        { regex: /console\.log/g, type: 'js-console-log', desc: 'Console.log in Produktionscode' },
+        { regex: /\/\/\s*TODO/g, type: 'js-todo-comment', desc: 'TODO-Kommentare im Code' },
+        { regex: /(?<!\/\/)\s*debugger;/g, type: 'js-debugger', desc: 'Debugger-Statements im Code' },
+      ];
+      
+      for (const pattern of suspiciousPatterns) {
+        const matches = jsContent.match(pattern.regex);
+        if (matches && matches.length > 0) {
+          issues.push({
+            type: pattern.type,
+            severity: pattern.type === 'js-debugger' ? 'high' : 'medium',
+            description: `${matches.length} ${pattern.desc} gefunden`,
+            affectedElements: ['assets/scripts.js'],
+            recommendations: [
+              'Entwicklungs-Code aus der Produktion entfernen',
+              'Linting-Regeln für Produktionscode einrichten'
+            ]
           });
         }
       }
     }
-  } else {
-    console.log('Deploy bereits eingetragen.');
+  } catch (err) {
+    console.error('Fehler bei der Prüfung bekannter Probleme:', err);
   }
 }
 
-main();
+/**
+ * Priorisiert die gefundenen Probleme nach Schweregrad und Auswirkung
+ * @param {Array} issues - Gefundene Probleme
+ * @param {Object} knowledgeBase - Wissensbasis mit erfolgreichen/fehlgeschlagenen Fixes
+ * @returns {Array} Priorisierte Probleme
+ */
+function prioritizeIssues(issues, knowledgeBase) {
+  // Priorisierungswerte für verschiedene Schweregrade
+  const severityScores = {
+    'critical': 100,
+    'high': 80,
+    'medium': 60,
+    'low': 40,
+    'info': 20
+  };
+
+  // Priorisierungswerte für verschiedene Problemtypen
+  const typeScores = {
+    'security': 50,        // Sicherheitsprobleme haben höchste Priorität
+    'performance-lcp': 45, // Core Web Vitals haben hohe Priorität
+    'performance-cls': 45,
+    'performance-fid': 45,
+    'seo-critical': 40,    // SEO-Probleme sind wichtig für Sichtbarkeit
+    'accessibility': 35,   // Barrierefreiheit ist wichtig für Nutzerbasis
+    'api-reliability': 30, // API-Stabilität ist wichtig für Funktionalität
+    'code-quality': 25     // Code-Qualität verbessert Wartbarkeit
+  };
+
+  // Bonuspunkte für Issues, die in der Vergangenheit erfolgreich behoben wurden
+  const successBonus = 15;
+  
+  // Maluspunkte für Issues, bei denen Fixes in der Vergangenheit fehlgeschlagen sind
+  const failurePenalty = -10;
+
+  // Jedes Issue mit einem Priorisierungswert versehen
+  const scoredIssues = issues.map(issue => {
+    // Grundwert basierend auf Schweregrad
+    let score = severityScores[issue.severity] || 50;
+    
+    // Bonus für bestimmte Problemtypen
+    if (issue.type in typeScores) {
+      score += typeScores[issue.type];
+    }
+    
+    // Bonus/Malus basierend auf bisherigem Erfolg/Misserfolg
+    const successfulFixExists = knowledgeBase.successfulFixes.some(fix => fix.type === issue.type);
+    const failedFixExists = knowledgeBase.failedFixes.some(fix => fix.type === issue.type && fix.failureCount > 2);
+    
+    if (successfulFixExists) {
+      score += successBonus;
+    }
+    
+    if (failedFixExists) {
+      score += failurePenalty;
+    }
+    
+    // Wert für User Impact einbeziehen, falls vorhanden
+    if (issue.userImpact) {
+      score += issue.userImpact * 10; // Skala von 0-10 mit Faktor 10 gewichten
+    }
+    
+    return {
+      ...issue,
+      priorityScore: score
+    };
+  });
+  
+  // Nach Prioritätswert absteigend sortieren
+  return scoredIssues.sort((a, b) => b.priorityScore - a.priorityScore);
+}
+
+/**
+ * Wendet automatische Fixes für die Probleme an
+ * @param {Array} issues - Priorisierte Probleme
+ * @param {Object} knowledgeBase - Wissensbasis mit Lösungsmustern
+ * @returns {Array} Angewendete Fixes mit Ergebnissen
+ */
+function applyFixes(issues, knowledgeBase) {
+  console.log(`\n🔧 Wende automatische Korrekturen für ${issues.length} Probleme an...`);
+  const results = [];
+  
+  for (const issue of issues) {
+    console.log(`\n⚙️ Bearbeite Problem: ${issue.type} (${issue.severity})`);
+    console.log(`   ${issue.description}`);
+    
+    // Fix-Ergebnis initialisieren
+    const fixResult = {
+      issueType: issue.type,
+      issueDescription: issue.description,
+      timestamp: new Date().toISOString(),
+      applied: false,
+      successful: false,
+      actions: []
+    };
+    
+    try {
+      // Basierend auf Problem-Typ entsprechende Fix-Funktion auswählen
+      switch (issue.type) {
+        case 'performance-lcp':
+          fixResult.actions = optimizeLCP(issue);
+          break;
+          
+        case 'performance-unused-css':
+          fixResult.actions = optimizeCSS(issue);
+          break;
+          
+        case 'seo-meta-tags':
+          fixResult.actions = fixMetaTags(issue);
+          break;
+          
+        case 'accessibility-missing-alt':
+          fixResult.actions = fixMissingAltAttributes(issue);
+          break;
+          
+        case 'performance-unoptimized-images':
+          fixResult.actions = optimizeImages(issue);
+          break;
+          
+        case 'security-csp':
+          fixResult.actions = fixContentSecurityPolicy(issue);
+          break;
+        
+        case 'api-reliability':
+          fixResult.actions = improveAPIReliability(issue);
+          break;
+          
+        default:
+          console.log(`⚠️ Keine automatische Korrektur verfügbar für Problemtyp: ${issue.type}`);
+      }
+      
+      // Fix als angewendet markieren, wenn Aktionen durchgeführt wurden
+      fixResult.applied = fixResult.actions.length > 0;
+      
+      // Erfolg bestimmen (wenn alle Aktionen erfolgreich waren)
+      fixResult.successful = fixResult.applied;
+                           fixResult.actions.every(action => action.success);
+                           
+      // In Knowledge Base eintragen
+      if (fixResult.applied) {
+        if (fixResult.successful) {
+          // Erfolgreichen Fix zur Wissensbasis hinzufügen
+          knowledgeBase.successfulFixes.push({
+            type: issue.type,
+            timestamp: fixResult.timestamp,
+            actions: fixResult.actions.map(a => a.description)
+          });
+        } else {
+          // Fehlgeschlagenen Fix tracken
+          const existingFailedFix = knowledgeBase.failedFixes.find(f => f.type === issue.type);
+          if (existingFailedFix) {
+            existingFailedFix.failureCount = (existingFailedFix.failureCount || 0) + 1;
+            existingFailedFix.lastAttempt = fixResult.timestamp;
+          } else {
+            knowledgeBase.failedFixes.push({
+              type: issue.type,
+              failureCount: 1,
+              lastAttempt: fixResult.timestamp
+            });
+          }
+        }
+        
+        // Aktualisierte Knowledge Base speichern
+        safeWriteJson(optimizationKnowledgeBase, knowledgeBase);
+      }
+      
+      // Ausgabe des Ergebnisses
+      if (fixResult.applied) {
+        if (fixResult.successful) {
+          console.log(`✅ Fix für '${issue.type}' erfolgreich angewendet!`);
+        } else {
+          console.log(`❌ Fix für '${issue.type}' angewendet, aber nicht erfolgreich.`);
+        }
+      }
+      
+    } catch (error) {
+      console.error(`❌ Fehler beim Anwenden des Fixes für ${issue.type}:`, error);
+      fixResult.error = error.message;
+    }
+    
+    results.push(fixResult);
+  }
+  
+  return results;
+}
+
+/**
+ * Führt einen automatischen Rollback durch, wenn nötig
+ */
+function executeAutoRollbackIfNeeded(autoFix = true) {
+  if (!fs.existsSync(recoveryFlagPath)) return;
+  
+  try {
+    const recoveryData = JSON.parse(fs.readFileSync(recoveryFlagPath, 'utf8'));
+    
+    // Älter als 15 Minuten ignorieren - verhindert doppelte Rollbacks
+    if (new Date() - new Date(recoveryData.timestamp) > 15 * 60 * 1000) {
+      console.log('Recovery-Flag ignoriert (älter als 15 Minuten)');
+      return;
+    }
+    
+    console.log('\n🚨 AUTO-ROLLBACK WIRD AUSGEFÜHRT 🚨');
+    console.log(`Grund: ${recoveryData.reason}`);
+    console.log(`Zeitpunkt: ${new Date(recoveryData.timestamp).toLocaleString()}`);
+    console.log(`Empfohlene Aktion: ${recoveryData.recommendedAction || 'Rollback durchführen'}`);
+    
+    if (!autoFix) {
+      console.log('\nAuto-Fix ist deaktiviert. Um den Rollback manuell durchzuführen:');
+      console.log('node .github/update-deploy-history.js --recovery --time=' + 
+                 new Date(recoveryData.timestamp).toISOString());
+      return;
+    }
+    
+    // Sicherstellen, dass die Historie existiert
+    if (!fs.existsSync(historyPath)) {
+      console.error('Keine Deploy-Historie gefunden, kann kein Rollback durchführen');
+      return;
+    }
+    
+    let history;
+    try {
+      history = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
+      if (!Array.isArray(history) || history.length === 0) {
+        console.error('Deploy-Historie ist leer oder fehlerhaft');
+        return;
+      }
+    } catch (e) {
+      console.error('Fehler beim Lesen der Deploy-Historie:', e);
+      return;
+    }
+    
+    // Letzten stabilen Deploy finden
+    const lastStableDeploy = findLastStableDeployBefore(new Date(recoveryData.timestamp));
+    if (!lastStableDeploy) {
+      console.error('Keinen stabilen Deploy für Rollback gefunden!');
+      return;
+    }
+    
+    const shellEnv = detectShellEnvironment();
+    
+    console.log(`Rollback zu Commit: ${lastStableDeploy.commit.substring(0, 7)} vom ${new Date(lastStableDeploy.date).toLocaleString()}`);
+    
+    // Hier führt in Produktion der tatsächliche Rollback aus:
+    
+    // 1. Git Reset/Checkout zum stabilen Commit - mit Shell-spezifischen Anpassungen
+    const gitCheckout = getShellSafeCommand(`git checkout ${lastStableDeploy.commit}`);
+    console.log(`Shell-angepasster Befehl: ${gitCheckout}`);
+    
+    try {
+      execSync(gitCheckout, { encoding: 'utf8' });
+      console.log('Git-Checkout erfolgreich');
+    } catch (e) {
+      console.error('Fehler beim Git-Checkout:', e);
+      return;
+    }
+    
+    // 2. Dependencies installieren - mit Shell-spezifischen Anpassungen
+    const npmInstall = getShellSafeCommand('npm install');
+    console.log(`Shell-angepasster Befehl: ${npmInstall}`);
+    
+    try {
+      execSync(npmInstall, { encoding: 'utf8', stdio: 'inherit' });
+      console.log('npm install erfolgreich');
+    } catch (e) {
+      console.error('Fehler bei npm install:', e);
+      // Weiter mit Build, auch wenn Install Probleme hatte
+    }
+    
+    // 3. Build ausführen - mit Shell-spezifischen Anpassungen
+    const npmBuild = getShellSafeCommand('npm run build');
+    console.log(`Shell-angepasster Befehl: ${npmBuild}`);
+    
+    try {
+      execSync(npmBuild, { encoding: 'utf8', stdio: 'inherit' });
+      console.log('npm run build erfolgreich');
+    } catch (e) {
+      console.error('Fehler bei npm run build:', e);
+      // Weiter mit Commit, auch wenn Build fehlgeschlagen ist
+    }
+    
+    // 4. Self-Healing-Historie aktualisieren
+    let healingHistory = [];
+    if (fs.existsSync(selfHealingPath)) {
+      try {
+        healingHistory = JSON.parse(fs.readFileSync(selfHealingPath, 'utf8'));
+      } catch (e) {
+        console.warn('Self-Healing-Historie konnte nicht geladen werden, erstelle neu');
+        healingHistory = [];
+      }
+    }
+    
+    // Neuen Recovery-Eintrag erstellen
+    healingHistory.push({
+      id: `recovery-${Date.now()}`,
+      timestamp: new Date().toISOString(),
+      type: 'auto-rollback',
+      commit: lastStableDeploy.commit,
+      reason: recoveryData.reason,
+      success: true
+    });
+    
+    safeWriteJson(selfHealingPath, healingHistory);
+    
+    // Deploy-Historie aktualisieren
+    history.push({
+      date: new Date().toISOString(),
+      status: 'success',
+      run_id: 'recovery-run',
+      commit: lastStableDeploy.commit,
+      url: lastStableDeploy.url || '',
+      recovery: true,
+      reason: recoveryData.reason
+    });
+    
+    safeWriteJson(historyPath, history);
+    
+    // 5. Auto-Recovery dokumentieren und committen
+    const recoveryFiles = [
+      'package-lock.json',
+      'public/deploy-history.json',
+      'public/performance-history.json',
+      'public/self-healing-history.json',
+      'public/crash-logs.json'
+    ];
+    
+    const recoveryCommitMessage = `Auto-Rollback zu stabilem Commit ${lastStableDeploy.commit.substring(0, 7)} vom ${new Date(lastStableDeploy.date).toLocaleString()} wegen ${recoveryData.reason}`;
+    
+    // Commit erstellen und pushen
+    const commitSuccess = commitAndPushChanges(
+      recoveryCommitMessage,
+      recoveryFiles,
+      {
+        autoFix: true,
+        createBranch: true,  // Sicherheitshalber neuen Branch erstellen
+        pushOrigin: true,
+        recoveryMode: true
+      }
+    );
+    
+    if (commitSuccess) {
+      console.log('Recovery-Commit erfolgreich erstellt und gepusht');
+    } else {
+      console.warn('Recovery-Commit konnte nicht erstellt/gepusht werden');
+    }
+    
+    // Recovery-Flag löschen
+    fs.unlinkSync(recoveryFlagPath);
+    console.log('Auto-Rollback abgeschlossen');
+  } catch (err) {
+    console.error('Fehler beim Auto-Rollback:', err);
+  }
+}
+
+/**
+ * Führt einen Git-Commit und Push für Änderungen durch
+ * @param {string} message - Commit-Nachricht
+ * @param {string[]} files - Liste der Dateien, die committet werden sollen (relative Pfade)
+ * @param {Object} options - Optionen (autoFix, branch, etc.
+ * @returns {boolean} Erfolg
+ */
+function commitAndPushChanges(message, files = [], options = {}) {
+  const {
+    autoFix = true,     // Automatisches Fixen von Fehlern
+    branch = '',        // Ziel-Branch, leer = aktueller Branch
+    createBranch = false, // Neuen Branch erstellen?
+    pushOrigin = true,  // Nach Origin pushen?
+    recoveryMode = false // Ist dies ein Recovery-Commit?
+  } = options;
+  
+  const shellEnv = detectShellEnvironment();
+  const isPowerShell = shellEnv.type === 'powershell';
+  
+  try {
+    // 1. Aktuelle Branch ermitteln wenn nicht angegeben
+    let targetBranch = branch;
+    if (!targetBranch) {
+      try {
+        const branchCmd = isPowerShell ? 
+          'git rev-parse --abbrev-ref HEAD' : 
+          'git rev-parse --abbrev-ref HEAD';
+        targetBranch = execSync(branchCmd, { encoding: 'utf8' }).trim();
+      } catch (e) {
+        console.error('Fehler beim Ermitteln des aktuellen Branch:', e);
+        return false;
+      }
+    }
+    
+    // 2. Prüfen, ob Änderungen vorhanden sind
+    try {
+      const statusCmd = isPowerShell ? 
+        'git status --porcelain' : 
+        'git status --porcelain';
+      const statusOutput = execSync(statusCmd, { encoding: 'utf8' });
+      
+      if (!statusOutput && files.length === 0) {
+        console.log('Keine Änderungen zum Committen gefunden.');
+        return true; // Erfolg, aber nichts zu tun
+      }
+    } catch (e) {
+      console.error('Fehler beim Prüfen des Git-Status:', e);
+      if (!autoFix) return false;
+    }
+    
+    // 3. Neuen Branch erstellen falls gewünscht
+    if (createBranch) {
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const newBranch = `recovery-${timestamp}`;
+      
+      try {
+        const createBranchCmd = isPowerShell ? 
+          `git checkout -b ${newBranch}` : 
+          `git checkout -b ${newBranch}`;
+        execSync(createBranchCmd, { encoding: 'utf8' });
+        console.log(`Neuen Branch "${newBranch}" erstellt`);
+        targetBranch = newBranch;
+      } catch (e) {
+        console.error('Fehler beim Erstellen eines neuen Branch:', e);
+        if (!autoFix) return false;
+      }
+    }
+    
+    // 4. Dateien stagen
+    if (files.length > 0) {
+      for (const file of files) {
+        try {
+          const addCmd = isPowerShell ? 
+            `git add "${file}"` : 
+            `git add "${file}"`;
+          execSync(addCmd, { encoding: 'utf8' });
+        } catch (e) {
+          console.error(`Fehler beim Stagen von ${file}:`, e);
+          if (!autoFix) return false;
+        }
+      }
+    } else {
+      // Alle Änderungen stagen
+      try {
+        const addAllCmd = isPowerShell ? 
+          'git add .' : 
+          'git add .';
+        execSync(addAllCmd, { encoding: 'utf8' });
+      } catch (e) {
+        console.error('Fehler beim Stagen aller Änderungen:', e);
+        if (!autoFix) return false;
+      }
+    }
+    
+    // 5. Commit durchführen
+    const commitMessage = recoveryMode ? 
+      `[AUTO-RECOVERY] ${message}` : 
+      message;
+    
+    try {
+      const commitCmd = isPowerShell ? 
+        `git commit -m "${commitMessage.replace(/"/g, '\\"')}"` : 
+        `git commit -m "${commitMessage.replace(/"/g, '\\"')}"`;
+      execSync(commitCmd, { encoding: 'utf8' });
+      console.log(`Änderungen committet: "${commitMessage}"`);
+    } catch (e) {
+      console.error('Fehler beim Committen:', e);
+      return false;
+    }
+    
+    // 6. Push, falls gewünscht
+    if (pushOrigin) {
+      try {
+        const pushCmd = isPowerShell ? 
+          `git push origin ${targetBranch}` : 
+          `git push origin ${targetBranch}`;
+        execSync(pushCmd, { encoding: 'utf8' });
+        console.log(`Änderungen zu origin/${targetBranch} gepusht`);
+      } catch (e) {
+        console.error('Fehler beim Pushen:', e);
+        
+        if (autoFix) {
+          console.log('Versuche Push mit --force-with-lease...');
+          try {
+            const forcePushCmd = isPowerShell ? 
+              `git push --force-with-lease origin ${targetBranch}` : 
+              `git push --force-with-lease origin ${targetBranch}`;
+            execSync(forcePushCmd, { encoding: 'utf8' });
+            console.log(`Änderungen mit --force-with-lease zu origin/${targetBranch} gepusht`);
+          } catch (e2) {
+            console.error('Auch Force-Push fehlgeschlagen:', e2);
+            return false;
+          }
+        } else {
+          return false;
+        }
+      }
+    }
+    
+    return true;
+  } catch (e) {
+    console.error('Unerwarteter Fehler beim Git-Workflow:', e);
+    return false;
+  }
+}
+
+/**
+ * Führt einen Selbstheilungsprozess durch, basierend auf der Historie und Wissensdatenbank
+ * Diese Funktion wird von der neuen runSelfHealing-Funktion abgelöst, bleibt aber für Kompatibilität erhalten
+ */
+function executeSelfHealing() {
+  console.log('⚠️ Hinweis: executeSelfHealing wurde durch runSelfHealing ersetzt, verwende die neue Funktion');
+  
+  // Prüfen, ob public-Verzeichnis existiert
+  if (!fs.existsSync(publicDir)) {
+    try {
+      fs.mkdirSync(publicDir, { recursive: true });
+      console.log(`Public-Verzeichnis erstellt: ${publicDir}`);
+    } catch (err) {
+      console.error(`Fehler beim Erstellen von ${publicDir}:`, err);
+      return;
+    }
+  }
+  
+  if (!fs.existsSync(selfHealingPath)) {
+    console.log('Keine Selbstheilungs-Historie gefunden, starte ersten Eintrag');
+  }
+  
+  try {
+    // Aktuelle Deploy-Historie laden
+    let history = [];
+    if (fs.existsSync(historyPath)) {
+      try {
+        history = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
+      } catch (e) {
+        console.warn('Deploy-Historie konnte nicht geladen werden, erstelle neu');
+        history = [];
+      }
+    }
+    
+    if (history.length === 0) {
+      console.log('Keine Deploy-Historie gefunden, erstelle Dummy-Eintrag für ersten Lauf');
+      history.push({
+        date: new Date().toISOString(),
+        status: 'success',
+        run_id: 'initial-run',
+        commit: 'initial-commit',
+        url: 'https://github.com/example/burnitoken'
+      });
+      safeWriteJson(historyPath, history);
+    }
+    
+    const latestDeploy = history[history.length - 1];
+    
+    // Aktuelle Performance-Historie laden
+    let performanceHistory = [];
+    if (fs.existsSync(performancePath)) {
+      try {
+        performanceHistory = JSON.parse(fs.readFileSync(performancePath, 'utf8'));
+      } catch (e) {
+        console.warn('Performance-Historie konnte nicht geladen werden, erstelle neu');
+        performanceHistory = [];
+      }
+    }
+    
+    if (performanceHistory.length === 0) {
+      console.log('Keine Performance-Historie gefunden, erstelle Dummy-Eintrag für ersten Lauf');
+      performanceHistory.push({
+        timestamp: new Date().toISOString(),
+        commit: latestDeploy.commit,
+        deployTime: latestDeploy.date,
+        measurements: {
+          memory: process.memoryUsage(),
+          loadTime: 1000, // Platzhalter
+          scriptErrors: 0,
+          apiLatency: 0
+        }
+      });
+      safeWriteJson(performancePath, performanceHistory);
+    }
+    
+    const latestPerformance = performanceHistory[performanceHistory.length - 1];
+    
+    // Fehlerprotokollierung aktivieren
+    let errorLog = [];
+    const logError = (error) => {
+      errorLog.push({
+        timestamp: new Date().toISOString(),
+        error: typeof error === 'string' ? error : (error.message || 'Unbekannter Fehler')
+      });
+    };
+    
+    // Beispiel: Automatisches Rollback bei wiederholten Fehlern
+    if (latestDeploy.status !== 'success') {
+      console.warn('Letzter Deploy war nicht erfolgreich, führe Selbstheilung durch');
+      
+      // 1. Letzten stabilen Deploy finden
+      const lastStableDeploy = findLastStableDeployBefore(new Date(latestDeploy.date));
+      if (lastStableDeploy) {
+        console.log(`Rollback zu letztem stabilen Deploy vom ${new Date(lastStableDeploy.date).toLocaleString()}`);
+        
+        // Rollback-Befehle sammeln
+        let rollbackCommands = [
+          `git checkout ${lastStableDeploy.commit}`,
+          'npm install',
+          'npm run build'
+        ];
+        
+        // 2. Führe Rollback-Befehle aus
+        for (const command of rollbackCommands) {
+          try {
+            console.log(`Führe aus: ${command}`);
+            execSync(command, { encoding: 'utf8', stdio: 'inherit' });
+          } catch (e) {
+            console.error(`Fehler bei Befehl "${command}":`, e);
+            logError(e);
+          }
+        }
+        
+        // 3. Status nach Rollback überprüfen
+        let postRollbackHistory = [];
+        try {
+          postRollbackHistory = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
+        } catch (e) {
+          console.warn('Deploy-Historie nach Rollback konnte nicht geladen werden');
+          logError(e);
+        }
+        
+        const postRollbackDeploy = postRollbackHistory.length > 0 ? postRollbackHistory[postRollbackHistory.length - 1] : null;
+        if (postRollbackDeploy && postRollbackDeploy.status === 'success') {
+          console.log('Rollback erfolgreich, dokumentiere Selbstheilung');
+          

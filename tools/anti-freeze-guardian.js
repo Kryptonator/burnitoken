@@ -2,13 +2,13 @@
 
 /**
  * Anti-Freeze Guardian - Priorität 1 Schutz
- * 
+ *
  * Verhindert "The window is not responding" durch:
  * - Proaktive Ressourcen-Überwachung
  * - Automatische Speicherung vor kritischen Zuständen
  * - Sofortige Intervention bei Freeze-Indikatoren
  * - Präventive Neustarts bei Bedarf
- * 
+ *
  * Erstellt: 2025-06-30
  */
 
@@ -19,23 +19,21 @@ const os = require('os');
 
 // Anti-Freeze Konfiguration
 const GUARDIAN_CONFIG = {
-  MEMORY_THRESHOLD: 80,        // % RAM-Nutzung
-  CPU_THRESHOLD: 90,           // % CPU-Nutzung
-  RESPONSE_TIMEOUT: 5000,      // ms für Reaktionszeit
-  CHECK_INTERVAL: 10000,       // ms zwischen Checks
+  MEMORY_THRESHOLD: 80, // % RAM-Nutzung
+  CPU_THRESHOLD: 90, // % CPU-Nutzung
+  RESPONSE_TIMEOUT: 5000, // ms für Reaktionszeit
+  CHECK_INTERVAL: 10000, // ms zwischen Checks
   EMERGENCY_SAVE_PATH: path.join(__dirname, '.emergency-saves'),
   LOG_FILE: path.join(__dirname, 'anti-freeze.log'),
-  VSCODE_PROCESS_NAME: 'Code.exe'
+  VSCODE_PROCESS_NAME: 'Code.exe',
 };
 
 /**
  * Logger mit Timestamp
  */
-function log(message, level = 'INFO') {
-  const timestamp = new Date().toISOString();
-  const logEntry = `[${timestamp}] [${level}] ${message}`;
+] [${level}] ${message}`;
   console.log(logEntry);
-  
+
   try {
     fs.appendFileSync(GUARDIAN_CONFIG.LOG_FILE, logEntry + '\n');
   } catch (e) {
@@ -51,13 +49,14 @@ function checkSystemResources() {
     const totalMem = os.totalmem();
     const freeMem = os.freemem();
     const usedMem = ((totalMem - freeMem) / totalMem) * 100;
-    
-    const cpuUsage = os.loadavg()[0] * 100 / os.cpus().length;
-    
+
+    const cpuUsage = (os.loadavg()[0] * 100) / os.cpus().length;
+
     return {
       memory: Math.round(usedMem),
       cpu: Math.round(cpuUsage),
-      critical: usedMem > GUARDIAN_CONFIG.MEMORY_THRESHOLD || cpuUsage > GUARDIAN_CONFIG.CPU_THRESHOLD
+      critical:
+        usedMem > GUARDIAN_CONFIG.MEMORY_THRESHOLD || cpuUsage > GUARDIAN_CONFIG.CPU_THRESHOLD,
     };
   } catch (error) {
     log(`Fehler beim Ressourcen-Check: ${error.message}`, 'ERROR');
@@ -70,25 +69,26 @@ function checkSystemResources() {
  */
 function checkVSCodeProcess() {
   try {
-    const command = process.platform === 'win32' 
-      ? `tasklist /FI "IMAGENAME eq ${GUARDIAN_CONFIG.VSCODE_PROCESS_NAME}" /FO CSV`
-      : 'ps aux | grep -i code';
-    
+    const command =
+      process.platform === 'win32'
+        ? `tasklist /FI "IMAGENAME eq ${GUARDIAN_CONFIG.VSCODE_PROCESS_NAME}" /FO CSV`
+        : 'ps aux | grep -i code';
+
     const result = execSync(command, { encoding: 'utf8', timeout: 3000 });
-    
-    if (process.platform === 'win32') {
-      const lines = result.split('\n').filter(line => line.includes('Code.exe'));
+
+    if (process.platform === 'win32') 
+      const lines = result.split('\n').filter((line) => line.includes('Code.exe'));
       return {
         running: lines.length > 0,
         processCount: lines.length,
-        responsive: true // Wird durch Ping-Test ermittelt
+        responsive: true, // Wird durch Ping-Test ermittelt
       };
     } else {
-      const processes = result.split('\n').filter(line => line.includes('code'));
+      const processes = result.split('\n').filter((line) => line.includes('code'));
       return {
         running: processes.length > 0,
         processCount: processes.length,
-        responsive: true
+        responsive: true,
       };
     }
   } catch (error) {
@@ -105,20 +105,20 @@ function emergencySave() {
     if (!fs.existsSync(GUARDIAN_CONFIG.EMERGENCY_SAVE_PATH)) {
       fs.mkdirSync(GUARDIAN_CONFIG.EMERGENCY_SAVE_PATH, { recursive: true });
     }
-    
+
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const saveDir = path.join(GUARDIAN_CONFIG.EMERGENCY_SAVE_PATH, `emergency-${timestamp}`);
     fs.mkdirSync(saveDir, { recursive: true });
-    
+
     // Versuche VS Code Workspace zu speichern
     const workspaceFiles = [
       'index.html',
       'main.js',
       'package.json',
       'tools/vscode-recovery-center.js',
-      'tools/anti-freeze-guardian.js'
+      'tools/anti-freeze-guardian.js',
     ];
-    
+
     let savedFiles = 0;
     for (const file of workspaceFiles) {
       try {
@@ -132,7 +132,7 @@ function emergencySave() {
         log(`Fehler beim Speichern von ${file}: ${e.message}`, 'WARN');
       }
     }
-    
+
     log(`Emergency Save: ${savedFiles} Dateien gesichert in ${saveDir}`, 'SUCCESS');
     return saveDir;
   } catch (error) {
@@ -147,17 +147,17 @@ function emergencySave() {
 function preventiveRestart() {
   try {
     log('Präventiver VS Code Neustart wird eingeleitet...', 'WARN');
-    
+
     // Erst Emergency Save
     const saveDir = emergencySave();
-    
+
     // Dann VS Code sanft beenden
     if (process.platform === 'win32') {
       execSync('taskkill /F /IM Code.exe', { timeout: 10000 });
     } else {
       execSync('pkill -f code', { timeout: 10000 });
     }
-    
+
     // Kurz warten
     setTimeout(() => {
       try {
@@ -172,7 +172,7 @@ function preventiveRestart() {
         log(`Fehler beim Neustart: ${e.message}`, 'ERROR');
       }
     }, 2000);
-    
+
     return true;
   } catch (error) {
     log(`Präventiver Neustart fehlgeschlagen: ${error.message}`, 'ERROR');
@@ -185,21 +185,24 @@ function preventiveRestart() {
  */
 function runGuardian() {
   log('🛡️ Anti-Freeze Guardian gestartet', 'INFO');
-  
+
   setInterval(() => {
     try {
       // System-Ressourcen prüfen
       const resources = checkSystemResources();
-      
+
       if (resources.critical) {
-        log(`⚠️ Kritische Ressourcen-Nutzung: RAM ${resources.memory}%, CPU ${resources.cpu}%`, 'WARN');
-        
+        log(
+          `⚠️ Kritische Ressourcen-Nutzung: RAM ${resources.memory}%, CPU ${resources.cpu}%`,
+          'WARN',
+        );
+
         // VS Code Prozess prüfen
         const vscodeStatus = checkVSCodeProcess();
-        
+
         if (vscodeStatus.running && vscodeStatus.processCount > 0) {
           log(`VS Code läuft mit ${vscodeStatus.processCount} Prozessen`, 'INFO');
-          
+
           // Bei kritischen Werten: Präventive Maßnahmen
           if (resources.memory > 85 || resources.cpu > 95) {
             log('🚨 KRITISCHER ZUSTAND - Präventive Maßnahmen werden eingeleitet', 'CRITICAL');
@@ -210,7 +213,8 @@ function runGuardian() {
         }
       } else {
         // Alles normal - nur gelegentlich loggen
-        if (Math.random() < 0.1) { // 10% Chance für Info-Log
+        if (Math.random() < 0.1) {
+          // 10% Chance für Info-Log
           log(`✅ System stabil: RAM ${resources.memory}%, CPU ${resources.cpu}%`, 'INFO');
         }
       }
@@ -218,7 +222,7 @@ function runGuardian() {
       log(`Guardian-Loop Fehler: ${error.message}`, 'ERROR');
     }
   }, GUARDIAN_CONFIG.CHECK_INTERVAL);
-  
+
   // Graceful Shutdown
   process.on('SIGINT', () => {
     log('Anti-Freeze Guardian wird beendet', 'INFO');
@@ -232,7 +236,7 @@ function runGuardian() {
 function checkStatus() {
   const resources = checkSystemResources();
   const vscode = checkVSCodeProcess();
-  
+
   console.log('\n🛡️ ANTI-FREEZE GUARDIAN STATUS');
   console.log('═'.repeat(40));
   console.log(`System RAM: ${resources.memory}% (Schwelle: ${GUARDIAN_CONFIG.MEMORY_THRESHOLD}%)`);
@@ -246,7 +250,7 @@ function checkStatus() {
 // Kommandozeilen-Interface
 if (require.main === module) {
   const args = process.argv.slice(2);
-  
+
   if (args.includes('--status')) {
     checkStatus();
   } else if (args.includes('--emergency-save')) {
@@ -262,5 +266,5 @@ module.exports = {
   runGuardian,
   checkStatus,
   emergencySave,
-  preventiveRestart
+  preventiveRestart,
 };

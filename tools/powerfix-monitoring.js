@@ -50,9 +50,7 @@ const monitoringStatus = {
 /**
  * Log-Funktion für Konsole und Datei
  */
-function log(message, level = 'info') {
-  const timestamp = new Date().toISOString();
-  const formattedMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
+] [${level.toUpperCase()}] ${message}`;
 
   // Log in Konsole
   switch (level) {
@@ -84,7 +82,57 @@ function log(message, level = 'info') {
  * Prüft ob eine Lock-Datei existiert und ob sie gültig ist
  */
 function checkLock() {
-  if (fs.existsSync(CONFIG.lockFile)) {
+  if (fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
     const lockData = fs.statSync(CONFIG.lockFile);
     const lockAge = Date.now() - lockData.mtimeMs;
     const maxLockAge = CONFIG.maxLockAgeMinutes * 60 * 1000;

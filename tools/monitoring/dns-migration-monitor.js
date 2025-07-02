@@ -33,7 +33,7 @@ class DNSMigrationMonitor {
       this.checks++;
       await this.performCheck();
 
-      if (this.checks >= this.maxChecks) {
+      if (this.checks >= this.maxChecks) 
         console.log('\n⏰ Monitoring-Limit erreicht. Stoppe...');
         clearInterval(interval);
       }

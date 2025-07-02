@@ -78,7 +78,7 @@ function startSessionSaver() {
   setupFileWatchers();
 
   // Initialisiere KI-Modell-Integration, falls aktiviert
-  if (CONFIG.ai && CONFIG.ai.enabled) {
+  if (CONFIG.ai && CONFIG.ai.enabled) 
     try {
       // Versuche, die AI Conversation Bridge zu importieren und zu starten
       const aiBridge = require('./ai-conversation-bridge');

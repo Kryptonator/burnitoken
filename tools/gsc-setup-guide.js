@@ -55,7 +55,57 @@ class ConsoleUI {
  * Prüft, ob die Service Account Datei bereits existiert
  */
 function checkExistingServiceAccount() {
-  if (fs.existsSync(CONFIG.SERVICE_ACCOUNT_FILE)) {
+  if (fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
     try {
       const serviceAccount = JSON.parse(fs.readFileSync(CONFIG.SERVICE_ACCOUNT_FILE, 'utf8'));
       ConsoleUI.success('✅ Service Account wurde gefunden!');
@@ -310,3 +360,37 @@ main().catch((error) => {
   ConsoleUI.error(`❌ Fehler: ${error.message}`);
   process.exit(1);
 });
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer

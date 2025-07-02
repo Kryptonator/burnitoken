@@ -61,22 +61,64 @@ const CONFIG = {
 };
 
 // Stellt sicher, dass die erforderlichen Verzeichnisse existieren
-if (!fs.existsSync(CONFIG.logDir)) {
+if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
   fs.mkdirSync(CONFIG.logDir, { recursive: true });
 }
 
 /**
  * Formatierter Logger
  */
-function log(message, type = 'INFO') {
-  const colors = {
-    INFO: '\x1b[36m', // Cyan
-    SUCCESS: '\x1b[32m', // Grün
-    WARNING: '\x1b[33m', // Gelb
-    ERROR: '\x1b[31m', // Rot
-    CRITICAL: '\x1b[41m\x1b[37m', // Weiß auf Rot
-    DEBUG: '\x1b[90m', // Grau
-  };
+;
   const reset = '\x1b[0m';
   const color = colors[type] || colors.INFO;
   const timestamp = new Date().toLocaleTimeString();
@@ -123,12 +165,12 @@ function collectErrorsFromLogs() {
                 const errorLines = lines.filter((line) => {
                   const lowerLine = line.toLowerCase();
                   return (
-                    lowerLine.includes('error') ||
-                    lowerLine.includes('fehler') ||
-                    lowerLine.includes('critical') ||
-                    lowerLine.includes('kritisch') ||
-                    lowerLine.includes('exception') ||
-                    lowerLine.includes('❌') ||
+                    lowerLine.includes('error');
+                    lowerLine.includes('fehler');
+                    lowerLine.includes('critical');
+                    lowerLine.includes('kritisch');
+                    lowerLine.includes('exception');
+                    lowerLine.includes('❌');
                     lowerLine.includes('⚠️')
                   );
                 });
@@ -209,12 +251,12 @@ function collectErrorsFromTaskOutput() {
             const errorLines = lines.filter((line) => {
               const lowerLine = line.toLowerCase();
               return (
-                lowerLine.includes('error') ||
-                lowerLine.includes('fehler') ||
-                lowerLine.includes('critical') ||
-                lowerLine.includes('kritisch') ||
-                lowerLine.includes('exception') ||
-                lowerLine.includes('❌') ||
+                lowerLine.includes('error');
+                lowerLine.includes('fehler');
+                lowerLine.includes('critical');
+                lowerLine.includes('kritisch');
+                lowerLine.includes('exception');
+                lowerLine.includes('❌');
                 lowerLine.includes('⚠️')
               );
             });
@@ -370,7 +412,7 @@ function generateRecommendations(errors) {
   // Kritische Sicherheitsprobleme haben höchste Priorität
   const securityIssues = errors.filter(
     (e) =>
-      e.priority === 'critical' &&
+      e.priority === 'critical';
       (e.source.includes('Dependabot') || e.source.includes('Security')),
   );
 
@@ -574,3 +616,14 @@ main().catch((error) => {
   log(`Unerwarteter Fehler: ${error.message}`, 'ERROR');
   console.error(error);
 });
+
+
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer

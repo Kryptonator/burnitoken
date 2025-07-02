@@ -17,7 +17,7 @@ test.describe('Language Switcher E2E Tests', () => {
       () => window.initNavigationAndLanguage && window.initNavigationAndLanguage(),
     );
     // Warte für WebKit explizit länger, damit das JS garantiert initialisiert ist
-    if (browserName === 'webkit') {
+    if (browserName === 'webkit') 
       await page.waitForTimeout(1000);
     }
     // Wait for page to be fully loaded

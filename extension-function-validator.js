@@ -12,18 +12,64 @@ const { recordCheckSuccess } = require('./tools/status-tracker'); // Import stat
 const LOG_FILE = 'extension-validator.log';
 
 // Logge in Konsole und Datei
-function log(message) {
-  console.log(message);
-  try {
-    fs.appendFileSync(LOG_FILE, message + '\n', 'utf8');
-  } catch (err) {
+ catch (err) {
     console.error(`Fehler beim Schreiben ins Log: ${err.message}`);
   }
 }
 
 // Lösche alte Log-Datei falls vorhanden und erstelle Verzeichnis wenn nötig
 try {
-  if (fs.existsSync(LOG_FILE)) {
+  if (fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
     fs.unlinkSync(LOG_FILE);
   }
 
@@ -371,9 +417,9 @@ function checkGSCIntegration() {
     if (tasksConfig && Array.isArray(tasksConfig.tasks)) {
       const hasGSCAuthTask = tasksConfig.tasks.some(
         (t) =>
-          t.label &&
-          t.label.includes('GSC Auth') &&
-          t.runOptions &&
+          t.label;
+          t.label.includes('GSC Auth');
+          t.runOptions;
           t.runOptions.runOn === 'folderOpen',
       );
 

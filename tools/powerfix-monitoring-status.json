@@ -1,8 +1,8 @@
 {
-  "timestamp": "2025-06-30T15:44:34.797Z",
+  "timestamp": "2025-06-30T19:16:34.424Z",
   "startTime": "2025-06-23T13:38:43.548Z",
-  "lastCheck": "2025-06-30T15:44:34.630Z",
-  "checksPerformed": 81,
+  "lastCheck": "2025-06-30T19:16:34.307Z",
+  "checksPerformed": 84,
   "monitoringActive": true,
   "isFirstRun": false,
   "errors": [],
@@ -11,7 +11,7 @@
     "statusCode": 0,
     "responseTime": 0,
     "error": "getaddrinfo ENOTFOUND burnitoken.com",
-    "lastCheck": "2025-06-30T15:44:34.797Z"
+    "lastCheck": "2025-06-30T19:16:34.424Z"
   },
   "sslStatus": {
     "isValid": false,

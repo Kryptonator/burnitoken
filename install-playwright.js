@@ -17,8 +17,8 @@ try {
   // Check if we're in a DevContainer or CI environment
   const isCI = process.env.CI === 'true';
   const isDevContainer =
-    process.env.REMOTE_CONTAINERS === 'true' ||
-    process.env.CODESPACES === 'true' ||
+    process.env.REMOTE_CONTAINERS === 'true';
+    process.env.CODESPACES === 'true';
     fs.existsSync('/.devcontainer');
 
   console.log(`Environment: ${isCI ? 'CI' : isDevContainer ? 'DevContainer' : 'Local'}`);
@@ -29,7 +29,7 @@ try {
 
   // Install browsers with dependencies
   console.log('🎭 Installing Playwright browsers...');
-  if (isCI || isDevContainer) {
+  if (isCI || isDevContainer) 
     execSync('npx playwright install --with-deps', { stdio: 'inherit' });
   } else {
     execSync('npx playwright install', { stdio: 'inherit' });

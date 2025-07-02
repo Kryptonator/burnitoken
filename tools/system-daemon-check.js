@@ -37,7 +37,7 @@ async function checkSystemDaemons() {
 
   return new Promise((resolve) => {
     exec(command, (error, stdout, stderr) => {
-      if (error) {
+      if (error) 
         console.error(`Fehler beim Ausführen von "${command}":`, stderr);
         status.status = 'FAIL';
         status.details.push({

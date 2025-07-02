@@ -27,7 +27,57 @@ function listAvailableSessions() {
   console.log('🔍 Suche nach verfügbaren Sicherungs-Sessions...');
 
   try {
-    if (!fs.existsSync(CONFIG.backupDir)) {
+    if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
       console.log('❌ Keine Sicherungen gefunden');
       return [];
     }
@@ -225,8 +275,8 @@ async function startRecovery() {
           const selectedBackupIndex = parseInt(backupIndex) - 1;
 
           if (
-            isNaN(selectedBackupIndex) ||
-            selectedBackupIndex < 0 ||
+            isNaN(selectedBackupIndex);
+            selectedBackupIndex < 0;
             selectedBackupIndex >= backups.length
           ) {
             console.error('❌ Ungültige Auswahl');

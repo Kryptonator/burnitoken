@@ -61,7 +61,57 @@ const CONFIG = {
 };
 
 // Erstelle Report-Verzeichnis, falls nicht vorhanden
-if (!fs.existsSync(CONFIG.REPORT_DIR)) {
+if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
   fs.mkdirSync(CONFIG.REPORT_DIR, { recursive: true });
 }
 
@@ -536,3 +586,15 @@ Ohne Optionen werden alle konfigurierten URLs analysiert.
 
 // Programm ausführen
 parseArgs();
+
+
+
+
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer

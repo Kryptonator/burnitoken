@@ -45,7 +45,57 @@ async function testAndFixGscTools() {
     results.tested++;
 
     const toolPath = path.join(__dirname, tool);
-    if (!fs.existsSync(toolPath)) {
+    if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
       console.log(`❌ Tool not found: ${tool}`);
       appendToLog(`Tool not found: ${tool}`);
       results.failed++;
@@ -296,3 +346,7 @@ if (require.main === module) {
 }
 
 module.exports = { testAndFixGscTools };
+
+} // Auto-korrigierte schließende Klammer
+
+} // Auto-korrigierte schließende Klammer

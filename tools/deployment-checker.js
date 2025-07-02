@@ -60,9 +60,7 @@ const deploymentStatus = {
 /**
  * Log-Funktion für Konsole und Datei
  */
-function log(message, level = 'info') {
-  const timestamp = new Date().toISOString();
-  const formattedMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
+] [${level.toUpperCase()}] ${message}`;
 
   switch (level) {
     case 'error':
@@ -105,7 +103,7 @@ function checkFileExists(fileName) {
         contentType: res.headers['content-type'],
       };
 
-      if (exists) {
+      if (exists) 
         log(`✅ Datei ${fileName} gefunden (${res.statusCode})`, 'success');
       } else {
         log(`❌ Datei ${fileName} nicht gefunden (${res.statusCode})`, 'error');
@@ -299,13 +297,13 @@ async function checkDeployment() {
 
     // Bestimme den Gesamtstatus
     if (
-      deploymentStatus.details.websiteActive &&
-      foundFiles === CONFIG.criticalFiles.length &&
+      deploymentStatus.details.websiteActive;
+      foundFiles === CONFIG.criticalFiles.length;
       deploymentStatus.summary.elementsMissing.length === 0
     ) {
       deploymentStatus.summary.status = 'deployed';
     } else if (
-      deploymentStatus.details.websiteActive &&
+      deploymentStatus.details.websiteActive;
       (foundFiles > 0 || deploymentStatus.summary.elementsFound > 0)
     ) {
       deploymentStatus.summary.status = 'partial';

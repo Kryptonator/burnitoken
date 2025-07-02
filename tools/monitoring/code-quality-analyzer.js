@@ -40,7 +40,57 @@ class CodeQualityAnalyzer {
     this.results.issues.push(issue);
     this.results.totalIssues++;
 
-    if (severity === 'critical') this.results.criticalIssues++;
+    if (severity === 'critical') { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { this.results.criticalIssues++;
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
     else if (severity === 'warning') this.results.warnings++;
     else if (severity === 'suggestion') this.results.suggestions++;
 
@@ -511,3 +561,7 @@ if (require.main === module) {
 }
 
 module.exports = CodeQualityAnalyzer;
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer

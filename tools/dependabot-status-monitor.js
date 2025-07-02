@@ -26,21 +26,64 @@ const CONFIG = {
 };
 
 // Stellen Sie sicher, dass das Reportverzeichnis existiert
-if (!fs.existsSync(CONFIG.reportDir)) {
+if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
   fs.mkdirSync(CONFIG.reportDir, { recursive: true });
 }
 
 /**
  * Zeigt eine formatierte Meldung in der Konsole an
  */
-function log(message, type = 'INFO') {
-  const colorCodes = {
-    INFO: '\x1b[36m', // Cyan
-    SUCCESS: '\x1b[32m', // Grün
-    WARNING: '\x1b[33m', // Gelb
-    ERROR: '\x1b[31m', // Rot
-    DEBUG: '\x1b[90m', // Grau
-  };
+;
   const reset = '\x1b[0m';
   const color = colorCodes[type] || colorCodes.INFO;
   console.log(`${color}[${type}]${reset} ${message}`);
@@ -323,10 +366,10 @@ function generateStatusReport() {
     // Prüfen, ob sich etwas geändert hat im Vergleich zum letzten Eintrag
     const lastEntry = history[0];
     if (
-      !lastEntry ||
-      lastEntry.status !== status ||
-      lastEntry.outdatedCount !== outdatedCount ||
-      lastEntry.vulnerabilitiesCount !== vulnerabilitiesCount ||
+      !lastEntry;
+      lastEntry.status !== status;
+      lastEntry.outdatedCount !== outdatedCount;
+      lastEntry.vulnerabilitiesCount !== vulnerabilitiesCount;
       lastEntry.packageJsonHash !== packageJsonHash
     ) {
       history.unshift(historyEntry);
@@ -752,3 +795,12 @@ module.exports = {
   saveStatusReport,
   sendStatusToUnifiedManager,
 };
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer

@@ -22,9 +22,7 @@ const colors = {
 };
 
 // Ausgabefunktion
-function log(message, color = colors.reset) {
-  console.log(color + message + colors.reset);
-}
+
 
 // Prüfungsfunktionen
 async function checkDependabotConfig() {
@@ -32,7 +30,57 @@ async function checkDependabotConfig() {
 
   try {
     const dependabotPath = path.join('.github', 'dependabot.yml');
-    if (!fs.existsSync(dependabotPath)) {
+    if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
       log('❌ Keine Dependabot-Konfigurationsdatei gefunden!', colors.red);
       return false;
     }
@@ -103,10 +151,10 @@ async function checkGitHubWorkflows() {
 
         // Überprüfe, ob ein Workflow für Dependabot existiert
         if (
-          workflowContent.includes('dependabot') ||
-          (workflow.on &&
-            workflow.on.pull_request &&
-            workflow.jobs &&
+          workflowContent.includes('dependabot');
+          (workflow.on;
+            workflow.on.pull_request;
+            workflow.jobs;
             Object.values(workflow.jobs).some((job) => job.if && job.if.includes('dependabot')))
         ) {
           hasDependabotWorkflow = true;
@@ -252,3 +300,12 @@ main().catch((error) => {
   log(`❌ Fehler: ${error.message}`, colors.red);
   process.exit(1);
 });
+
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer

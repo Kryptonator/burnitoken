@@ -25,7 +25,57 @@ async function completeTrunkRemoval() {
 
     for (const file of trunkFiles) {
       try {
-        if (fs.existsSync(file)) {
+        if (fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
           if (fs.lstatSync(file).isDirectory()) {
             fs.rmSync(file, { recursive: true, force: true });
             console.log(`   ✅ Removed directory: ${file}`);
@@ -176,3 +226,12 @@ if (require.main === module) {
 }
 
 module.exports = { completeTrunkRemoval };
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer

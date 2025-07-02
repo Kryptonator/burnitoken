@@ -24,7 +24,7 @@ class HTMLFixer {
 
     this.content = this.content.replace(imgRegex, (match) => {
       const loadingMatches = match.match(/loading="[^"]*"/gi);
-      if (loadingMatches && loadingMatches.length > 1) {
+      if (loadingMatches && loadingMatches.length > 1) 
         // Keep only the first loading attribute
         let fixed = match;
         for (let i = 1; i < loadingMatches.length; i++) {

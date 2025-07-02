@@ -106,9 +106,7 @@ CRITICAL_SERVICES.forEach((service) => {
 /**
  * Hilfsfunktion für formatierte Ausgabe auf der Konsole
  */
-function log(message, level = 'info') {
-  const timestamp = new Date().toISOString();
-  const formattedMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
+] [${level.toUpperCase()}] ${message}`;
 
   // Output zu Konsole
   switch (level) {
@@ -151,7 +149,57 @@ function saveStatus() {
  */
 function loadStatus() {
   try {
-    if (fs.existsSync(CONFIG.STATUS_FILE)) {
+    if (fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
       const savedStatus = JSON.parse(fs.readFileSync(CONFIG.STATUS_FILE, 'utf8'));
 
       // Merge mit aktuellem Status, aber behalte Struktur bei

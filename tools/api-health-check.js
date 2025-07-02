@@ -22,9 +22,7 @@ const REQUEST_TIMEOUT = 5000; // 5 seconds
  * @param {string} message The message to log.
  * @param {'info' | 'success' | 'error' | 'warn'} level The log level.
  */
-function log(message, level = 'info') {
-  const timestamp = new Date().toISOString();
-  const formattedMessage = `[${timestamp}] [API Check] [${level.toUpperCase()}] ${message}`;
+] [API Check] [${level.toUpperCase()}] ${message}`;
 
   switch (level) {
     case 'error':
@@ -53,7 +51,7 @@ function checkApiEndpoint(endpoint) {
       });
 
       res.on('end', () => {
-        if (res.statusCode >= 200 && res.statusCode < 300) {
+        if (res.statusCode >= 200 && res.statusCode < 300) 
           log(`SUCCESS: ${endpoint.name} is responsive. Status: ${res.statusCode}`, 'success');
           resolve(true);
         } else {

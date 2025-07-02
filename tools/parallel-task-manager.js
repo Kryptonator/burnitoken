@@ -74,16 +74,64 @@ const TASK_GROUPS = {
 /**
  * Logging-Funktion
  */
-function log(message, type = 'INFO') {
-  const timestamp = new Date().toISOString();
-  const logMessage = `[${timestamp}] [${type}] ${message}\n`;
+] [${type}] ${message}\n`;
 
   // Konsole und Datei
   console.log(`[${type}] ${message}`);
 
   try {
     // Stellen Sie sicher, dass das Verzeichnis existiert
-    if (!existsSync(WORKER_DIR)) {
+    if (!existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
       mkdirSync(WORKER_DIR, { recursive: true });
     }
 

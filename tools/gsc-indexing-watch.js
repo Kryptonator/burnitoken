@@ -14,9 +14,7 @@ const LOG_FILE = path.join(__dirname, 'gsc-indexing-watch.log');
 let isFirstRun = true;
 
 // Logger
-function log(message) {
-  const timestamp = new Date().toISOString();
-  const logMessage = `[${timestamp}] ${message}\n`;
+] ${message}\n`;
 
   console.log(message);
   fs.appendFileSync(LOG_FILE, logMessage);
@@ -36,7 +34,57 @@ function findHtmlFiles() {
         try {
           const stats = fs.statSync(fullPath);
 
-          if (stats.isDirectory()) {
+          if (stats.isDirectory) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
             if (!entry.startsWith('.') && entry !== 'node_modules' && entry !== 'vendor') {
               scanDir(fullPath);
             }

@@ -774,7 +774,7 @@ body:not(.critical-loaded) {
   width: 10rem;
   height: 10rem;
   -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 
 @media (min-width: 768px) {
@@ -921,7 +921,7 @@ img {
 @supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
   .backdrop-blur-md {
     -webkit-backdrop-filter: blur(12px);
-            backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
   }
 }
 

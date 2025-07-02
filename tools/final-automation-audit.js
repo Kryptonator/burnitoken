@@ -13,7 +13,57 @@ const analyzeDependencies = () => {
     const serviceRegex = /script:\s*'([^']*)'/g;
     let match;
     const services = new Set(); // Use a Set to avoid duplicates
-    while ((match = serviceRegex.exec(masterTaskManagerContent)) !== null) {
+    while () { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) !== null) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
       services.add(match[1].replace('../', ''));
     }
 
@@ -88,3 +138,8 @@ const generateReport = () => {
 };
 
 generateReport();
+
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer

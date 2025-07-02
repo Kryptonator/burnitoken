@@ -490,12 +490,8 @@
               <span class="text-lg font-semibold price-value" data-price-usd id="hero-xrp-price"
                 >$--</span
               >
-              <span class="text-sm text-gray-600 dark:text-gray-400" data-price-eur
-                >€--</span
-              >
-              <span class="text-xs text-gray-500 dark:text-gray-500" data-price-btc
-                >₿--</span
-              >
+              <span class="text-sm text-gray-600 dark:text-gray-400" data-price-eur>€--</span>
+              <span class="text-xs text-gray-500 dark:text-gray-500" data-price-btc>₿--</span>
             </div>
             <div class="status-indicator" id="xrp-status-indicator">
               <span
@@ -706,7 +702,8 @@
                       class="ml-1 text-xs text-gray-400 dark:text-gray-500"
                       data-price-change
                       aria-label="24h price change"
-                    >--%</span>
+                      >--%</span
+                    >
                   </div>
                 </div>
               </div>
@@ -1473,7 +1470,7 @@
           refreshInterval: 30000, // 30 seconds
           cacheExpiry: 60000, // 1 minute
           enableNotifications: true,
-          maxRetries: 3
+          maxRetries: 3,
         });
 
         // Start price fetching

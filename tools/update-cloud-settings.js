@@ -42,7 +42,7 @@ class CloudSettingsSynchronizer {
         (file) => file.includes('.vscode/') || file.endsWith('.code-workspace'),
       );
 
-      if (vsCodeSettingsChanged) {
+      if (vsCodeSettingsChanged) 
         console.log('🔔 VS Code-Einstellungen wurden aktualisiert!');
         return changedFiles.filter(
           (file) => file.includes('.vscode/') || file.endsWith('.code-workspace'),

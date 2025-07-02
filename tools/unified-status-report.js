@@ -32,7 +32,57 @@ function safeExecSync(command) {
 function safeRequire(modulePath) {
   try {
     const fullPath = path.resolve(__dirname, modulePath);
-    if (fs.existsSync(fullPath)) {
+    if (fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
       return require(fullPath);
     }
     return null;
@@ -57,9 +107,9 @@ function analyzeIndexingStatus() {
         const fullPath = path.join(dir, file);
 
         if (
-          fs.statSync(fullPath).isDirectory() &&
-          !file.startsWith('.') &&
-          file !== 'node_modules' &&
+          fs.statSync(fullPath).isDirectory();
+          !file.startsWith('.');
+          file !== 'node_modules';
           file !== 'vendor'
         ) {
           scanDir(fullPath);
@@ -335,8 +385,8 @@ function generateReport() {
 
   // Keine kritischen Probleme
   if (
-    indexingStatus.noindexFiles.length === 0 &&
-    websiteStatus.isOnline &&
+    indexingStatus.noindexFiles.length === 0;
+    websiteStatus.isOnline;
     aiServicesStatus.runningServices === aiServicesStatus.existingServices
   ) {
     report += `* ✅ Keine kritischen Probleme gefunden. Das System läuft optimal.\n`;

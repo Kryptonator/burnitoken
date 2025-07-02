@@ -67,7 +67,57 @@ for (const check of checks) {
       stdio: ['pipe', 'pipe', 'pipe'],
     }).trim();
 
-    if (result.includes('not found')) {
+    if (result.includes) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
       throw new Error('Not installed');
     }
 

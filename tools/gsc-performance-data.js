@@ -13,6 +13,9 @@ const SERVICE_ACCOUNT_FILE = path.join(__dirname, 'gsc-service-account.json');
 // Domain-Property verwenden, für die der Service-Account berechtigt ist
 const SITE_URL = 'sc-domain:burnitoken.website';
 
+// Test-Modus-Flag
+const TEST_MODE = process.argv.includes('--test');
+
 // Zeit-Parameter für die Abfrage
 const DEFAULT_DAYS = 28; // Standardmäßig die letzten 28 Tage anzeigen
 
@@ -61,7 +64,7 @@ async function getPerformanceData() {
       },
     });
 
-    if (!response.data || !response.data.rows || response.data.rows.length === 0) {
+    if (!response?.data?.rows) 
       console.log('❓ Keine Daten für den angegebenen Zeitraum gefunden.');
       return;
     }
@@ -138,3 +141,6 @@ async function getPerformanceData() {
 }
 
 getPerformanceData();
+
+// Für Tests exportieren
+module.exports = {};

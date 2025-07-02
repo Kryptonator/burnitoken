@@ -16,7 +16,57 @@ async function executeSmartCleanup() {
 
     // Archive-Ordner erstellen
     console.log('📁 Erstelle Archive-Ordner...');
-    if (!fs.existsSync('archive')) {
+    if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
       fs.mkdirSync('archive');
     }
     if (!fs.existsSync('archive/experimental')) {

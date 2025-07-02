@@ -45,7 +45,57 @@ const orchestratorStatus = {
  */
 function readJsonFile(filePath) {
   try {
-    if (fs.existsSync(filePath)) {
+    if (fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
       const data = fs.readFileSync(filePath, 'utf8');
       return JSON.parse(data);
     }
@@ -139,8 +189,8 @@ function optimizeIntegration() {
 
   // Optimiere Tailwind + ESLint + Prettier Integration
   if (
-    orchestratorStatus.integration.tailwind &&
-    orchestratorStatus.integration.eslint &&
+    orchestratorStatus.integration.tailwind;
+    orchestratorStatus.integration.eslint;
     orchestratorStatus.integration.prettier
   ) {
     // Stelle sicher, dass Tailwind-Klassen nicht von Prettier umgebrochen werden
@@ -196,13 +246,13 @@ function updateExtensionsJson() {
     // Wichtige Extensions identifizieren und als Empfehlungen hinzufügen
     const criticalExtensions = installedExtensions.filter(
       (ext) =>
-        ext.includes('tailwind') ||
-        ext.includes('eslint') ||
-        ext.includes('prettier') ||
-        ext.includes('git') ||
-        ext.includes('html') ||
-        ext.includes('accessibility') ||
-        ext.includes('playwright') ||
+        ext.includes('tailwind');
+        ext.includes('eslint');
+        ext.includes('prettier');
+        ext.includes('git');
+        ext.includes('html');
+        ext.includes('accessibility');
+        ext.includes('playwright');
         ext.includes('copilot'),
     );
 

@@ -37,7 +37,57 @@ const CONFIG = {
 
 // Stellen Sie sicher, dass die Verzeichnisse existieren
 [CONFIG.backupDir, CONFIG.reportDir].forEach((dir) => {
-  if (!fs.existsSync(dir)) {
+  if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
     fs.mkdirSync(dir, { recursive: true });
   }
 });
@@ -45,14 +95,7 @@ const CONFIG = {
 /**
  * Zeigt eine formatierte Meldung in der Konsole an
  */
-function log(message, type = 'INFO') {
-  const colorCodes = {
-    INFO: '\x1b[36m', // Cyan
-    SUCCESS: '\x1b[32m', // Grün
-    WARNING: '\x1b[33m', // Gelb
-    ERROR: '\x1b[31m', // Rot
-    DEBUG: '\x1b[90m', // Grau
-  };
+;
   const reset = '\x1b[0m';
   const color = colorCodes[type] || colorCodes.INFO;
   const timestamp = new Date().toLocaleTimeString();
@@ -454,3 +497,12 @@ if (options.test) {
     log(`Unerwarteter Fehler: ${error.message}`, 'ERROR');
   });
 }
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer

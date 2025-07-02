@@ -50,9 +50,7 @@ const healthStatus = {
 /**
  * Log-Funktion für Konsole und Datei
  */
-function log(message, level = 'info') {
-  const timestamp = new Date().toISOString();
-  const formattedMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
+] [${level.toUpperCase()}] ${message}`;
 
   switch (level) {
     case 'error':
@@ -91,7 +89,57 @@ async function checkSSL(url) {
         try {
           const cert = res.socket.getPeerCertificate();
 
-          if (!cert || Object.keys(cert).length === 0) {
+          if (!cert || Object.keys) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {.length === 0) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
             log(`Kein SSL-Zertifikat für ${url} gefunden`, 'error');
             healthStatus.ssl.valid = false;
             createTodo(

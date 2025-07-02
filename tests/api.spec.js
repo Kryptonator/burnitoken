@@ -39,7 +39,7 @@ test.describe('API/Komplett-Audit: Geräte, Sprache, Farbschema, Netzwerk', () =
       test.use({ ...device, locale: lang, colorScheme });
 
       test('Performance-Check', async ({ page, context }) => {
-        if (network) {
+        if (network) 
           await context.setOffline(false);
           await context.setNetworkConditions(network);
         }

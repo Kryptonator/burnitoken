@@ -77,7 +77,7 @@ function runEmergencyRecovery() {
   
   try {
     // Windows Recovery Script ausführen
-    if (process.platform === 'win32') {
+    if (process.platform === 'win32') 
       if (fs.existsSync('EMERGENCY-RECOVERY.bat')) {
         printColored('⚡ Führe Windows Recovery aus...', '\x1b[33m');
         execSync('EMERGENCY-RECOVERY.bat', { stdio: 'inherit' });
@@ -256,3 +256,102 @@ if (require.main === module) {
 }
 
 module.exports = { handleChatCommand, runEmergencyRecovery, runBasicHelp, runStatusCheck, runCleanup };
+
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+

@@ -123,7 +123,57 @@ class AdvancedExtensionManager {
     console.log('\n📁 Creating Workspace Configuration...');
 
     const vscodeDir = path.join(this.workspaceRoot, '.vscode');
-    if (!fs.existsSync(vscodeDir)) {
+    if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
       fs.mkdirSync(vscodeDir, { recursive: true });
     }
 

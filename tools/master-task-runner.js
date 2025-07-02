@@ -72,7 +72,7 @@ async function runTasks() {
       try {
         console.log(`  -> Starte Task: ${task.name}...`);
         const { stdout, stderr } = await execPromise(task.command);
-        if (stderr && task.required) {
+        if (stderr && task.required) 
           // Wenn ein erforderlicher Task einen Fehler im stderr hat, abbrechen.
           throw new Error(stderr);
         }

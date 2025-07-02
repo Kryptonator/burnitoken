@@ -90,7 +90,7 @@ async function runMonitoring() {
     console.log(`${statusIcon} ${url}`);
     console.log(`   Status: ${statusText} | Zeit: ${duration}`);
 
-    if (result.headers?.location) {
+    if (result.headers?.location) 
       console.log(`   Redirect: ${result.headers.location}`);
     }
 

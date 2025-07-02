@@ -45,8 +45,7 @@ const PAGES = [
 const LOG_PATH = path.join(__dirname, 'seo-schema-botcheck.log');
 const STATUS_PATH = path.join(__dirname, '../SEO_STATUS.md');
 
-function log(msg) {
-  fs.appendFileSync(LOG_PATH, `[${new Date().toISOString()}] ${msg}\n`);
+] ${msg}\n`);
 }
 
 function checkMetaTags(html) {

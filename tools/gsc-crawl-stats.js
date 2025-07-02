@@ -51,7 +51,7 @@ async function getCrawlStats() {
     console.log('\n📈 WEBSITE-PERFORMANCE DER LETZTEN WOCHE:');
     console.log('------------------------------');
 
-    if (!performanceResponse.data?.rows || performanceResponse.data.rows.length === 0) {
+    if (!performanceResponse.data?.rows || performanceResponse.data.rows.length === 0) 
       console.log('❓ Keine Performance-Daten für die letzte Woche verfügbar.');
       return;
     }

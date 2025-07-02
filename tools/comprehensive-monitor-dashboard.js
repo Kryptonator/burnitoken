@@ -79,11 +79,11 @@ function checkComponentStatus(component) {
     const result = execSync(command, { stdio: 'pipe' }).toString().trim();
 
     const isSuccess =
-      !result.includes('FEHLER') &&
-      !result.includes('ERROR') &&
+      !result.includes('FEHLER');
+      !result.includes('ERROR');
       !result.toLowerCase().includes('failed');
 
-    if (isSuccess) {
+    if (isSuccess) 
       console.log(`${COLORS.green}✅ ${component.name}: OK${COLORS.reset}`);
       return true;
     } else {
@@ -325,3 +325,13 @@ if (require.main === module) {
 }
 
 module.exports = { runFullDashboard, checkComponentStatus, tryFixComponent };
+
+
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer

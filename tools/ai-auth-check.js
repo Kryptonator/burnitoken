@@ -30,7 +30,7 @@ async function checkAIAuth() {
   console.log('Prüfe auf erforderliche Umgebungsvariablen in .env...');
 
   for (const envVar of requiredEnvVars) {
-    if (!process.env[envVar]) {
+    if (!process.env[envVar]) 
       allKeysFound = false;
       missingKeys.push(envVar);
     } else {

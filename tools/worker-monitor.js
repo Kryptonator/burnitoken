@@ -18,9 +18,7 @@ const HEARTBEAT_INTERVAL = 30000; // 30 Sekunden
 /**
  * Logging-Funktion
  */
-function log(message, type = 'INFO') {
-  const timestamp = new Date().toISOString();
-  console.log(`[${type}] ${message}`);
+] ${message}`);
 
   try {
     const logFile = path.join(WORKER_DIR, 'monitor-log.txt');
@@ -37,7 +35,57 @@ function log(message, type = 'INFO') {
 async function checkMasterProcess() {
   try {
     // Prüft, wann die Worker-Status-Datei zuletzt aktualisiert wurde
-    if (!existsSync(STATUS_FILE)) {
+    if (!existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
       log('Status-Datei nicht gefunden, Master-Worker scheint nicht zu laufen', 'WARNING');
       return false;
     }

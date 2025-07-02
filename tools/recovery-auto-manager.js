@@ -44,6 +44,43 @@ function ensureDirectoriesExist() {
   dirs.forEach((dir) => {
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
+    }
+  });
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+      fs.mkdirSync(dir, { recursive: true });
       console.log(`Verzeichnis erstellt: ${dir}`);
     }
   });
@@ -392,3 +429,92 @@ main().catch((error) => {
   printColored(`\n❌ Unbehandelter Fehler: ${error.message}`, '\x1b[31m');
   process.exit(1);
 });
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+} // Auto-korrigierte schließende Klammer
+

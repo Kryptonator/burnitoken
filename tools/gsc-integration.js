@@ -29,7 +29,57 @@ let gscStatus = {
 
 // Status laden
 function loadStatus() {
-  if (fs.existsSync(GSC_STATUS_FILE)) {
+  if (fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
     try {
       const data = fs.readFileSync(GSC_STATUS_FILE, 'utf8');
       gscStatus = JSON.parse(data);
@@ -69,9 +119,9 @@ function checkNoindexTags() {
           const stats = fs.statSync(fullPath);
 
           if (
-            stats.isDirectory() &&
-            !file.startsWith('.') &&
-            file !== 'node_modules' &&
+            stats.isDirectory();
+            !file.startsWith('.');
+            file !== 'node_modules';
             file !== 'vendor'
           ) {
             scanDir(fullPath);
@@ -235,8 +285,8 @@ function showRecommendations() {
   }
 
   if (
-    gscStatus.noindexCount === 0 &&
-    gscStatus.sitemapStatus !== 'missing' &&
+    gscStatus.noindexCount === 0;
+    gscStatus.sitemapStatus !== 'missing';
     gscStatus.websiteStatus === 'online'
   ) {
     console.log('  ✅ Keine kritischen Probleme gefunden');

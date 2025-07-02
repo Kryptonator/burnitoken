@@ -10,7 +10,7 @@
   "prettier.tabWidth": 2,
   "liveServer.settings.donotShowInfoMsg": true,
   "liveServer.settings.donotVerifyTags": true,
-  "liveServer.settings.port": 5500,
+  "liveServer.settings.port": 3000,
   "html.validate.scripts": true,
   "html.validate.styles": true,
   "css.validate": true,
@@ -29,7 +29,7 @@
   "extensions.autoUpdate": true,
   "task.allowAutomaticTasks": "on",
   "extensions.ignoreRecommendations": false,
-  "prettier.requireConfig": false,
+  "prettier.requireConfig": true,
   "prettier.htmlWhitespaceSensitivity": "css",
   "eslint.rules.max-len": "off",
   "snyk.advanced.organization": "burnitoken",
@@ -55,31 +55,38 @@
   },
   "search.exclude": {
     "**/node_modules": true,
-    "**/bower_components": true,
-    "**/*.code-search": true,
-    "**/coverage": true,
-    "**/playwright-report": true,
-    "**/test-results": true,
-    "**/dist": true,
-    "**/*.min.*": true
+    "**/coverage": true
   },
   "files.watcherExclude": {
-    "**/.git/objects/**": true,
-    "**/.git/subtree-cache/**": true,
     "**/node_modules/**": true,
     "**/coverage/**": true,
-    "**/playwright-report/**": true,
-    "**/test-results/**": true,
-    "**/dist/**": true
+    "**/public/**": true
   },
   "typescript.validate.enable": false,
   "javascript.validate.enable": false,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": true,
+    "source.organizeImports": true
   },
   "eslint.validate": [
     "javascript"
   ],
   "problems.limit": 150,
-  "explorer.compactFolders": false
+  "explorer.compactFolders": false,
+  "editor.formatOnSave": true,
+  "eslint.alwaysShowStatus": true,
+  "eslint.format.enable": true,
+  "playwright.showTrace": true,
+  "playwright.reuseBrowser": true,
+  "github-actions.workflows.pinned.refresh.enabled": true,
+  "github-actions.workflows.pinned.refresh.interval": 300,
+  "axe.enableAccessibilityTree": true,
+  "axe.enabledRules": [
+    "all"
+  ],
+  "thunder-client.saveToWorkspace": true,
+  "thunder-client.followRedirect": true,
+  "burnitoken.autoHeal.enabled": true,
+  "burnitoken.autoHeal.interval": 30000,
+  "burnitoken.monitoring.realtime": true
 }

@@ -23,9 +23,7 @@ const restartAttempts = {};
 /**
  * Log-Funktion für Konsole und Datei
  */
-function log(message) {
-  const timestamp = new Date().toISOString();
-  const formattedMessage = `[${timestamp}] ${message}`;
+] ${message}`;
 
   console.log(message);
 
@@ -45,7 +43,57 @@ function restartService(name, script) {
   try {
     const scriptPath = path.resolve(script);
 
-    if (!fs.existsSync(scriptPath)) {
+    if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
       log(`❌ Service-Skript nicht gefunden: ${scriptPath}`);
       return false;
     }

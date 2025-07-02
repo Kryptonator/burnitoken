@@ -9,13 +9,60 @@ const { execSync } = require('child_process');
 const logFile = 'extension-validator.log';
 
 // Log-Funktion, die sowohl in die Konsole als auch in die Datei schreibt
-function log(message) {
-  console.log(message);
-  fs.appendFileSync(logFile, message + '\n', 'utf8');
-}
+
 
 // Lösche alte Log-Datei
-if (fs.existsSync(logFile)) {
+if (fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
   fs.unlinkSync(logFile);
 }
 

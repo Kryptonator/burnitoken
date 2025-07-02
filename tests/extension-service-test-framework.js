@@ -22,7 +22,57 @@ const TEST_LOG_FILE = path.join(
 const REPORT_FILE = path.join(__dirname, '..', 'TEST_REPORT.md');
 
 // Stelle sicher, dass das Log-Verzeichnis existiert
-if (!fs.existsSync(LOG_DIR)) {
+if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
   fs.mkdirSync(LOG_DIR, { recursive: true });
 }
 
@@ -44,9 +94,7 @@ const testResults = {
 };
 
 // Logger-Funktionen
-function log(message, type = 'info') {
-  const timestamp = new Date().toISOString();
-  const logMessage = `[${timestamp}] [${type.toUpperCase()}] ${message}`;
+] [${type.toUpperCase()}] ${message}`;
 
   if (VERBOSE || type === 'error') {
     console.log(logMessage);
@@ -276,7 +324,7 @@ async function testIntegration() {
     const statusOutput = execSync('npm run status:all', { encoding: 'utf8', timeout: 20000 });
 
     if (
-      statusOutput.toLowerCase().includes('error') &&
+      statusOutput.toLowerCase().includes('error');
       !statusOutput.toLowerCase().includes('no error')
     ) {
       throw new Error('Services not properly restarted');

@@ -1,0 +1,249 @@
+[
+  {
+    "file": "browser-compatibility.css",
+    "originalSize": 0,
+    "minifiedSize": 0,
+    "savings": null,
+    "analysis": {
+      "size": 0,
+      "lines": 1,
+      "selectors": 0,
+      "mediaQueries": 0,
+      "comments": 0
+    }
+  },
+  {
+    "file": "burni-calculator.css",
+    "originalSize": 0,
+    "minifiedSize": 0,
+    "savings": null,
+    "analysis": {
+      "size": 0,
+      "lines": 1,
+      "selectors": 0,
+      "mediaQueries": 0,
+      "comments": 0
+    }
+  },
+  {
+    "file": "critical.css",
+    "originalSize": 18,
+    "minifiedSize": 12,
+    "savings": 35,
+    "analysis": {
+      "size": 18478,
+      "lines": 1005,
+      "selectors": 190,
+      "mediaQueries": 16,
+      "comments": 77
+    }
+  },
+  {
+    "file": "dark-mode-variables.css",
+    "originalSize": 5,
+    "minifiedSize": 4,
+    "savings": 25,
+    "analysis": {
+      "size": 4881,
+      "lines": 230,
+      "selectors": 41,
+      "mediaQueries": 3,
+      "comments": 22
+    }
+  },
+  {
+    "file": "enhanced-contrast.css",
+    "originalSize": 7,
+    "minifiedSize": 6,
+    "savings": 25,
+    "analysis": {
+      "size": 7593,
+      "lines": 360,
+      "selectors": 52,
+      "mediaQueries": 4,
+      "comments": 23
+    }
+  },
+  {
+    "file": "enhanced-mobile-optimization.css",
+    "originalSize": 10,
+    "minifiedSize": 7,
+    "savings": 31,
+    "analysis": {
+      "size": 9806,
+      "lines": 461,
+      "selectors": 66,
+      "mediaQueries": 11,
+      "comments": 48
+    }
+  },
+  {
+    "file": "enhanced-touch-targets.css",
+    "originalSize": 1,
+    "minifiedSize": 1,
+    "savings": 40,
+    "analysis": {
+      "size": 1225,
+      "lines": 74,
+      "selectors": 10,
+      "mediaQueries": 1,
+      "comments": 11
+    }
+  },
+  {
+    "file": "forms-enhanced.css",
+    "originalSize": 5,
+    "minifiedSize": 4,
+    "savings": 21,
+    "analysis": {
+      "size": 4985,
+      "lines": 284,
+      "selectors": 45,
+      "mediaQueries": 2,
+      "comments": 9
+    }
+  },
+  {
+    "file": "performance-optimization.css",
+    "originalSize": 0,
+    "minifiedSize": 0,
+    "savings": null,
+    "analysis": {
+      "size": 0,
+      "lines": 1,
+      "selectors": 0,
+      "mediaQueries": 0,
+      "comments": 0
+    }
+  },
+  {
+    "file": "price-oracle-status.css",
+    "originalSize": 5,
+    "minifiedSize": 4,
+    "savings": 26,
+    "analysis": {
+      "size": 5089,
+      "lines": 307,
+      "selectors": 66,
+      "mediaQueries": 4,
+      "comments": 16
+    }
+  },
+  {
+    "file": "price-oracle-ui.css",
+    "originalSize": 9,
+    "minifiedSize": 5,
+    "savings": 42,
+    "analysis": {
+      "size": 9615,
+      "lines": 415,
+      "selectors": 57,
+      "mediaQueries": 4,
+      "comments": 14
+    }
+  },
+  {
+    "file": "price-oracle.css",
+    "originalSize": 2,
+    "minifiedSize": 1,
+    "savings": 20,
+    "analysis": {
+      "size": 1908,
+      "lines": 100,
+      "selectors": 16,
+      "mediaQueries": 1,
+      "comments": 5
+    }
+  },
+  {
+    "file": "price-widget.css",
+    "originalSize": 0,
+    "minifiedSize": 0,
+    "savings": null,
+    "analysis": {
+      "size": 0,
+      "lines": 1,
+      "selectors": 0,
+      "mediaQueries": 0,
+      "comments": 0
+    }
+  },
+  {
+    "file": "proportion-optimization.css",
+    "originalSize": 0,
+    "minifiedSize": 0,
+    "savings": null,
+    "analysis": {
+      "size": 0,
+      "lines": 1,
+      "selectors": 0,
+      "mediaQueries": 0,
+      "comments": 0
+    }
+  },
+  {
+    "file": "responsive-enhancements.css",
+    "originalSize": 13,
+    "minifiedSize": 8,
+    "savings": 36,
+    "analysis": {
+      "size": 13511,
+      "lines": 728,
+      "selectors": 162,
+      "mediaQueries": 32,
+      "comments": 33
+    }
+  },
+  {
+    "file": "responsive-optimized.css",
+    "originalSize": 2,
+    "minifiedSize": 1,
+    "savings": 33,
+    "analysis": {
+      "size": 1670,
+      "lines": 116,
+      "selectors": 26,
+      "mediaQueries": 5,
+      "comments": 8
+    }
+  },
+  {
+    "file": "schedule-table.css",
+    "originalSize": 0,
+    "minifiedSize": 0,
+    "savings": null,
+    "analysis": {
+      "size": 0,
+      "lines": 1,
+      "selectors": 0,
+      "mediaQueries": 0,
+      "comments": 0
+    }
+  },
+  {
+    "file": "styles-compat.css",
+    "originalSize": 16,
+    "minifiedSize": 12,
+    "savings": 26,
+    "analysis": {
+      "size": 16601,
+      "lines": 794,
+      "selectors": 126,
+      "mediaQueries": 7,
+      "comments": 43
+    }
+  },
+  {
+    "file": "touch-targets.css",
+    "originalSize": 0,
+    "minifiedSize": 0,
+    "savings": null,
+    "analysis": {
+      "size": 0,
+      "lines": 1,
+      "selectors": 0,
+      "mediaQueries": 0,
+      "comments": 0
+    }
+  }
+]

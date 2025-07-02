@@ -37,7 +37,57 @@ const CONFIG = {
 };
 
 // Erstelle Report-Verzeichnis, falls nicht vorhanden
-if (!fs.existsSync(CONFIG.REPORT_DIR)) {
+if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
   fs.mkdirSync(CONFIG.REPORT_DIR, { recursive: true });
 }
 
@@ -164,8 +214,8 @@ function analyzeWebVitals(reportPath) {
 
     // Zusammenfassung
     const hasProblem =
-      webVitals.LCP.value > CONFIG.THRESHOLDS.LCP ||
-      webVitals.CLS.value > CONFIG.THRESHOLDS.CLS ||
+      webVitals.LCP.value > CONFIG.THRESHOLDS.LCP;
+      webVitals.CLS.value > CONFIG.THRESHOLDS.CLS;
       webVitals.TTFB.value > CONFIG.THRESHOLDS.TTFB;
 
     console.log('');
@@ -415,3 +465,25 @@ Optionen:
 
 // Programm ausführen
 parseArgs();
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+} // Auto-korrigierte schließende Klammer
+
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer

@@ -65,8 +65,58 @@ class SimpleBrowserDoctor {
         const stat = fs.statSync(fullPath);
 
         if (
-          stat.isDirectory() &&
-          !item.startsWith('.') &&
+          stat.isDirectory) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {;
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+          !item.startsWith('.');
           !['node_modules', 'coverage', 'test-results'].includes(item)
         ) {
           files.push(...this.findHTMLFiles(fullPath));
@@ -125,9 +175,9 @@ class SimpleBrowserDoctor {
     const inlineScripts = content.match(/<script[^>]*>[\s\S]*?<\/script>/gi) || [];
     const complexScripts = inlineScripts.filter(
       (script) =>
-        script.length > 1000 ||
-        script.includes('eval(') ||
-        script.includes('Function(') ||
+        script.length > 1000;
+        script.includes('eval(');
+        script.includes('Function(');
         script.includes('document.write'),
     );
 
@@ -481,3 +531,8 @@ module.exports = SimpleBrowserDoctor;
 if (require.main === module) {
   main().catch(console.error);
 }
+
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer

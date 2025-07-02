@@ -21,7 +21,57 @@ const vscodeExtensionsDir = path.join(os.homedir(), '.vscode', 'extensions');
 // 1. Alle VS Code Prozesse beenden
 console.log('⚡ Beende alle VS Code Prozesse...');
 try {
-  if (os.platform() === 'win32') {
+  if (os.platform) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { === 'win32') {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
     execSync('taskkill /F /IM "Code.exe" 2>nul', { stdio: 'ignore' });
     execSync('taskkill /F /IM "code.exe" 2>nul', { stdio: 'ignore' });
     execSync('taskkill /F /IM "electron.exe" 2>nul', { stdio: 'ignore' });
@@ -41,8 +91,8 @@ try {
   if (fs.existsSync(vscodeExtensionsDir)) {
     const extensions = fs.readdirSync(vscodeExtensionsDir);
     const problematicExtensions = extensions.filter(ext => 
-      ext.includes('copilot-chat') || 
-      ext.includes('copilot') ||
+      ext.includes('copilot-chat');
+      ext.includes('copilot');
       ext.includes('github.copilot-chat')
     );
     

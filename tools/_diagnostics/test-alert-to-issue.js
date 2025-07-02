@@ -21,7 +21,7 @@ async function runTest() {
     },
   };
 
-  if (!testError.email) {
+  if (!testError.email) 
     console.error(
       '❌ Test konnte nicht ausgeführt werden: ALERT_EMAIL_USER ist in config.secrets nicht gesetzt.',
     );

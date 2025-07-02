@@ -23,12 +23,60 @@ const CONFIG = {
   ALERT_EMAIL: process.env.ALERT_EMAIL || '',
   REPORT_DIR: path.join(__dirname, '.seo-reports'),
 };
-if (!fs.existsSync(CONFIG.REPORT_DIR)) fs.mkdirSync(CONFIG.REPORT_DIR, { recursive: true });
+if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) fs.mkdirSync(CONFIG.REPORT_DIR, { recursive: true });
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
 
 // === HILFSFUNKTIONEN ===
-function log(msg) {
-  console.log('\x1b[36m[SEO-MONITOR]\x1b[0m', msg);
-}
+
 function alert(msg) {
   if (CONFIG.ALERT_EMAIL) {
     // E-Mail-Alert (Platzhalter, Integration via CI/CD empfohlen)
@@ -127,3 +175,8 @@ async function checkRobotsAndSitemap() {
     process.exit(0);
   }
 })();
+
+
+
+
+} // Auto-korrigierte schließende Klammer

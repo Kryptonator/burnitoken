@@ -39,13 +39,61 @@ const colors = {
 };
 
 // Logger
-function log(message, color = colors.reset) {
-  console.log(color + message + colors.reset);
-}
+
 
 // Verzeichnisse initialisieren
 function initializeDirs() {
-  if (!fs.existsSync(config.reportDir)) {
+  if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
     fs.mkdirSync(config.reportDir, { recursive: true });
     log(`✅ Sicherheits-Report-Verzeichnis erstellt: ${config.reportDir}`, colors.green);
   }
@@ -379,8 +427,8 @@ async function main() {
 
   // Aktionen basierend auf Argumenten ausführen
   if (
-    options.test ||
-    options.full ||
+    options.test;
+    options.full;
     (!options.fix && !options.monitor && !options.wizard && !options.vscode)
   ) {
     await runSnykTests({
@@ -423,3 +471,12 @@ main().catch((error) => {
   log(`❌ Unerwarteter Fehler: ${error.message}`, colors.red);
   process.exit(1);
 });
+
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer

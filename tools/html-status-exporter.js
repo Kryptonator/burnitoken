@@ -17,11 +17,9 @@ const OUTPUT_FILE = path.join(OUTPUT_DIR, 'website-dom-snapshot.html');
  * @param {string} message The message to log.
  * @param {'info' | 'success' | 'error'} level The log level.
  */
-function log(message, level = 'info') {
-  const timestamp = new Date().toISOString();
-  const formattedMessage = `[${timestamp}] [HTML Exporter] [${level.toUpperCase()}] ${message}`;
+] [HTML Exporter] [${level.toUpperCase()}] ${message}`;
 
-  if (level === 'error') {
+  if (level === 'error') 
     console.error(formattedMessage);
   } else {
     console.log(formattedMessage);

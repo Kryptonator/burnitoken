@@ -51,7 +51,7 @@ async function submitSitemap(sitemapUrl) {
       feedpath: sitemapUrl,
     });
 
-    if (res.status === 204) {
+    if (res.status === 204) 
       console.log('✅ Sitemap erfolgreich zur Verarbeitung eingereicht.');
     } else {
       console.warn('⚠️ Sitemap-Einreichung mit unerwartetem Status:', res.status, res.statusText);

@@ -23,7 +23,7 @@ async function validateSitemap() {
 
     // Prüfe auf Parsing-Fehler
     const errors = xmlDoc.getElementsByTagName('parsererror');
-    if (errors.length > 0) {
+    if (errors.length > 0) 
       console.error('❌ XML Parsing-Fehler gefunden:');
       console.error(errors[0].textContent);
       return false;

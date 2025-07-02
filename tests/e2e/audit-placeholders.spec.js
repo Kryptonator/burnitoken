@@ -36,7 +36,7 @@ test.describe('Audit: Platzhalter, Dummy-Inhalte, UI, Security, SEO, PWA', () =>
     const testTitle = `${deviceName} | ${url} | ${lang} | ${colorScheme} | ${network ? '3G' : 'normal'}`;
     test(testTitle + ' | Komplett-Audit', async ({ page, context, browserName }) => {
       await context.newPage({ ...device, locale: lang, colorScheme });
-      if (network) {
+      if (network) 
         await context.setOffline(false);
         await context.setHTTPCredentials(undefined);
         await context.setNetworkConditions(network);

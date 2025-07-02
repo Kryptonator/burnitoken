@@ -60,9 +60,7 @@ const monitorStatus = {
 /**
  * Log-Funktion für Konsole und Datei
  */
-function log(message, level = 'info') {
-  const timestamp = new Date().toISOString();
-  const formattedMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
+] [${level.toUpperCase()}] ${message}`;
 
   // Log in Konsole mit Farbe
   const consoleMessage = message;
@@ -105,7 +103,57 @@ function updateStatusFile() {
 function checkServiceAccountFile() {
   log('Prüfe GSC Service Account Datei...');
 
-  if (!fs.existsSync(SERVICE_ACCOUNT_FILE)) {
+  if (!fs.existsSync) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
     log(`Service Account Datei nicht gefunden: ${SERVICE_ACCOUNT_FILE}`, 'error');
     monitorStatus.gscStatus.errors.push('Service Account Datei fehlt');
     monitorStatus.recommendations.push('Service Account JSON-Datei wiederherstellen');
@@ -467,7 +515,7 @@ function checkGSCIntegration() {
     const tasksConfig = readJsonFile(tasksPath);
     if (tasksConfig && Array.isArray(tasksConfig.tasks)) {
       const hasGSCAuthTask = tasksConfig.tasks.some(t => 
-        t.label && t.label.includes('GSC Auth') && 
+        t.label && t.label.includes('GSC Auth');
         t.runOptions && t.runOptions.runOn === 'folderOpen');
       
       const hasGSCMonitorTask = tasksConfig.tasks.some(t => 
@@ -601,3 +649,15 @@ main()
 
 // Für Tests exportieren
 module.exports = {};
+
+
+
+
+
+
+
+
+
+
+} // Auto-korrigierte schließende Klammer
+} // Auto-korrigierte schließende Klammer

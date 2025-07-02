@@ -2,7 +2,7 @@
 const clearRequireCache = (modulePath) => {
   try {
     const resolvedPath = require.resolve(modulePath);
-    if (require.cache[resolvedPath]) {
+    if (require.cache[resolvedPath]) 
       delete require.cache[resolvedPath];
       console.log(`Cache cleared for ${modulePath}`);
     }
