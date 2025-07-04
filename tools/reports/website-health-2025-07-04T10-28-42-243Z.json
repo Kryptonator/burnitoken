@@ -1,0 +1,58 @@
+{
+  "timestamp": "2025-07-04T10:28:42.144Z",
+  "domains": [
+    {
+      "domain": "burnitoken.com",
+      "ssl": {
+        "domain": "burnitoken.com",
+        "isExpired": null,
+        "expirationDate": null,
+        "issueDate": null,
+        "daysUntilExpiration": null,
+        "subject": null,
+        "issuer": null,
+        "status": "ERROR",
+        "error": "Command failed: echo | openssl s_client -servername burnitoken.com -connect burnitoken.com:443 2>/dev/null | openssl x509 -noout -dates -subject\nCould not read certificate from <stdin>\nUnable to load certificate\n"
+      },
+      "accessibility": {
+        "domain": "burnitoken.com",
+        "isAccessible": false,
+        "statusCode": null,
+        "responseTime": null,
+        "status": "ERROR",
+        "error": "Command failed: curl -s -o /dev/null -w \"%{http_code},%{time_total}\" --max-time 30 https://burnitoken.com"
+      }
+    },
+    {
+      "domain": "burnitoken.website",
+      "ssl": {
+        "domain": "burnitoken.website",
+        "isExpired": null,
+        "expirationDate": null,
+        "issueDate": null,
+        "daysUntilExpiration": null,
+        "subject": null,
+        "issuer": null,
+        "status": "ERROR",
+        "error": "Command failed: echo | openssl s_client -servername burnitoken.website -connect burnitoken.website:443 2>/dev/null | openssl x509 -noout -dates -subject\nCould not read certificate from <stdin>\nUnable to load certificate\n"
+      },
+      "accessibility": {
+        "domain": "burnitoken.website",
+        "isAccessible": false,
+        "statusCode": null,
+        "responseTime": null,
+        "status": "ERROR",
+        "error": "Command failed: curl -s -o /dev/null -w \"%{http_code},%{time_total}\" --max-time 30 https://burnitoken.website"
+      }
+    }
+  ],
+  "errors": [],
+  "summary": {
+    "totalDomains": 2,
+    "sslExpired": 0,
+    "sslCritical": 0,
+    "sslWarning": 0,
+    "sslOk": 0,
+    "websiteErrors": 2
+  }
+}

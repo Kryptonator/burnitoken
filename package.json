@@ -26,7 +26,9 @@
     "lighthouse:ci": "lhci autorun",
     "ci:full": "npm run lint:check && npm run test:unit && npm run build && npm run lighthouse:ci && npm run test:e2e && npm run audit",
     "test:alert": "node tools/test-email-alert.js",
-    "test:alert:dry": "node tools/test-email-alert.js --use-ethereal"
+    "test:alert:dry": "node tools/test-email-alert.js --use-ethereal",
+    "health:check": "node tools/website-health-check.js",
+    "health:test": "node tools/website-health-check.js --test"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",
