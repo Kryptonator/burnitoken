@@ -10,3 +10,6 @@ playwright-report/
 .DS_Store
 .env
 assets/fonts/
+
+# SSL monitoring reports
+tools/reports/website-health-*.json
