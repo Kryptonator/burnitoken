@@ -1,0 +1,68 @@
+{
+  "timestamp": "2025-07-04T10:33:40.432Z",
+  "domains": [
+    {
+      "domain": "burnitoken.com",
+      "ssl": {
+        "domain": "burnitoken.com",
+        "isExpired": true,
+        "expirationDate": "2025-06-24T23:59:59.000Z",
+        "issueDate": "2024-06-24T00:00:00.000Z",
+        "daysUntilExpiration": -10,
+        "subject": "CN=burnitoken.com",
+        "issuer": "CN=Let's Encrypt Authority X3, O=Let's Encrypt, C=US",
+        "status": "EXPIRED"
+      },
+      "accessibility": {
+        "domain": "burnitoken.com",
+        "isAccessible": false,
+        "statusCode": null,
+        "responseTime": null,
+        "status": "TIMEOUT",
+        "error": "Connection timeout for burnitoken.com"
+      }
+    },
+    {
+      "domain": "burnitoken.website",
+      "ssl": {
+        "domain": "burnitoken.website",
+        "isExpired": null,
+        "expirationDate": null,
+        "issueDate": null,
+        "daysUntilExpiration": null,
+        "subject": null,
+        "issuer": null,
+        "status": "ERROR",
+        "error": "Could not parse certificate information"
+      },
+      "accessibility": {
+        "domain": "burnitoken.website",
+        "isAccessible": false,
+        "statusCode": null,
+        "responseTime": null,
+        "status": "TIMEOUT",
+        "error": "Connection timeout for burnitoken.website"
+      }
+    }
+  ],
+  "errors": [
+    {
+      "source": "tools/website-health-check.js",
+      "errorCode": "E_SSL_CERT_EXPIRED",
+      "url": "https://burnitoken.com",
+      "timestamp": "2025-07-04T10:33:40.457Z",
+      "details": "Das SSL-Zertifikat ist am 24.6.2025 abgelaufen.",
+      "severity": "CRITICAL",
+      "expirationDate": "2025-06-24T23:59:59.000Z",
+      "daysExpired": 10
+    }
+  ],
+  "summary": {
+    "totalDomains": 2,
+    "sslExpired": 1,
+    "sslCritical": 0,
+    "sslWarning": 0,
+    "sslOk": 0,
+    "websiteErrors": 0
+  }
+}

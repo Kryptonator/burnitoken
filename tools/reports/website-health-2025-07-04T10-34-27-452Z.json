@@ -1,0 +1,58 @@
+{
+  "timestamp": "2025-07-04T10:34:27.351Z",
+  "domains": [
+    {
+      "domain": "burnitoken.com",
+      "ssl": {
+        "domain": "burnitoken.com",
+        "isExpired": null,
+        "expirationDate": null,
+        "issueDate": null,
+        "daysUntilExpiration": null,
+        "subject": null,
+        "issuer": null,
+        "status": "ERROR",
+        "error": "Could not parse certificate information"
+      },
+      "accessibility": {
+        "domain": "burnitoken.com",
+        "isAccessible": false,
+        "statusCode": null,
+        "responseTime": null,
+        "status": "TIMEOUT",
+        "error": "Connection timeout for burnitoken.com"
+      }
+    },
+    {
+      "domain": "burnitoken.website",
+      "ssl": {
+        "domain": "burnitoken.website",
+        "isExpired": null,
+        "expirationDate": null,
+        "issueDate": null,
+        "daysUntilExpiration": null,
+        "subject": null,
+        "issuer": null,
+        "status": "ERROR",
+        "error": "Could not parse certificate information"
+      },
+      "accessibility": {
+        "domain": "burnitoken.website",
+        "isAccessible": false,
+        "statusCode": null,
+        "responseTime": null,
+        "status": "TIMEOUT",
+        "error": "Connection timeout for burnitoken.website"
+      }
+    }
+  ],
+  "errors": [],
+  "summary": {
+    "totalDomains": 2,
+    "sslExpired": 0,
+    "sslCritical": 0,
+    "sslWarning": 0,
+    "sslOk": 0,
+    "websiteErrors": 0
+  }
+}

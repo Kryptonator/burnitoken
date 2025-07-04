@@ -1,0 +1,137 @@
+name: SSL Certificate Health Monitoring
+
+on:
+  schedule:
+    # Run daily at 09:00 UTC (11:00 CET)
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+    inputs:
+      test_mode:
+        description: 'Run in test mode (simulate expired SSL)'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  ssl-health-check:
+    name: 🔐 SSL Certificate Health Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: 📦 Install dependencies
+        run: npm ci --only=production
+        
+      - name: 🏥 Run Website Health Check
+        id: health_check
+        run: |
+          if [ "${{ github.event.inputs.test_mode }}" = "true" ]; then
+            echo "🧪 Running health check in TEST MODE"
+            npm run health:test
+          else
+            echo "🔍 Running production health check"
+            npm run health:check
+          fi
+        continue-on-error: true
+        
+      - name: 📊 Upload Health Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ssl-health-report-${{ github.run_id }}
+          path: tools/reports/
+          retention-days: 30
+          
+      - name: 🚨 Create Issue on SSL Expiration
+        if: failure() && steps.health_check.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Find the latest health report
+            const reportsDir = path.join(process.cwd(), 'tools/reports');
+            const files = fs.readdirSync(reportsDir);
+            const latestReport = files.sort().pop();
+            
+            if (latestReport) {
+              const reportPath = path.join(reportsDir, latestReport);
+              const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+              
+              // Check if there are SSL expiration errors
+              const sslErrors = report.errors.filter(err => 
+                err.errorCode === 'E_SSL_CERT_EXPIRED' || 
+                err.errorCode === 'E_SSL_CERT_EXPIRING_SOON'
+              );
+              
+              if (sslErrors.length > 0) {
+                for (const error of sslErrors) {
+                  const issueTitle = `🤖 [Automatisch gemeldet] ${error.errorCode === 'E_SSL_CERT_EXPIRED' ? 'Test: Kritisches SSL-Zertifikat abgelaufen' : 'Warnung: SSL-Zertifikat läuft bald ab'}`;
+                  
+                  const issueBody = `**Fehlerdetails:**
+
+\`\`\`json
+${JSON.stringify(error, null, 2)}
+\`\`\`
+
+**Kontext:**
+
+Dieser Fehler wurde vom automatisierten System-Monitoring erkannt. Bitte untersuchen Sie die Ursache und beheben Sie das Problem.
+
+**Betroffene Domain:** ${error.url}
+**Zeitstempel:** ${error.timestamp}
+**Schweregrad:** ${error.severity}
+
+---
+*Dieses Issue wurde automatisch vom System-Monitoring erstellt.*`;
+
+                  // Check if similar issue already exists
+                  const existingIssues = await github.rest.issues.listForRepo({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    state: 'open',
+                    labels: 'ssl-monitoring,automated'
+                  });
+                  
+                  const duplicateIssue = existingIssues.data.find(issue => 
+                    issue.title.includes(error.url.replace('https://', ''))
+                  );
+                  
+                  if (!duplicateIssue) {
+                    await github.rest.issues.create({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      title: issueTitle,
+                      body: issueBody,
+                      labels: ['ssl-monitoring', 'automated', 'critical']
+                    });
+                    
+                    console.log(`Created issue for SSL error: ${error.url}`);
+                  } else {
+                    console.log(`Issue already exists for ${error.url}: #${duplicateIssue.number}`);
+                  }
+                }
+              }
+            }
+            
+      - name: 💬 Comment on Failure
+        if: failure() && steps.health_check.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            console.log('SSL Certificate health check failed. Check the artifacts for detailed reports.');
+            
+      - name: ✅ Success Notification
+        if: success()
+        run: |
+          echo "✅ SSL Certificate health check completed successfully"
+          echo "📊 All certificates are valid and not expiring soon"
