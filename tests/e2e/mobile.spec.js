@@ -101,9 +101,7 @@ test.describe('Mobile/UI-Audit: Geräte, Sprache, Farbschema, Netzwerk', () => {
       // SEO-Checks
       const title = await page.title();
       expect(title.length).toBeGreaterThan(0);
-      const metaDesc = await page
-        .locator('meta[name="description"]')
-        .getAttribute('content');
+      const metaDesc = await page.locator('meta[name="description"]').getAttribute('content');
       expect(metaDesc).not.toMatch(/lorem|platzhalter|dummy/i);
       const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
       expect(canonical).toContain('http');
