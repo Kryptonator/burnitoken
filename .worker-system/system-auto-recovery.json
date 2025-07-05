@@ -1,8 +1,0 @@
-{
-  "workerId": "system:Auto-Recovery",
-  "script": "tools/auto-recovery.js",
-  "args": [],
-  "critical": true,
-  "startTime": "2025-06-30T18:22:55.840Z",
-  "pid": 5636
-}

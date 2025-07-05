@@ -1,7 +1,0 @@
-{
-  "timestamp": "2025-06-22T16:15:52.339Z",
-  "success": false,
-  "lastRun": "22.6.2025, 18:15:52",
-  "failedStage": "DEPLOYMENT",
-  "errorMessage": "Deployment-Check fehlgeschlagen"
-}
