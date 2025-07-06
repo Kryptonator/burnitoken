@@ -37,7 +37,7 @@ function generateHtml() {
     const statusColor = timeSince === 'nie' ? '#ffcccc' : '#ccffcc'; // Rot für 'nie', sonst grün
     tableRows += `
             <tr>
-                <td>${checkName}</td>
+                <td>$${checkName}</td>
                 <td style="background-color: ${statusColor};">${timeSince}</td>
             </tr>`;
   }
@@ -71,7 +71,7 @@ function generateHtml() {
             </tr>
         </thead>
         <tbody>
-            ${tableRows}
+            $${tableRows}
         </tbody>
     </table>
     <footer>Automatisch generierter Bericht.</footer>
@@ -88,14 +88,14 @@ function createDashboard() {
   const htmlContent = generateHtml();
   try {
     fs.writeFileSync(DASHBOARD_FILE, htmlContent, 'utf8');
-    console.log(`✅ HTML-Dashboard erfolgreich unter ${DASHBOARD_FILE} erstellt.`);
+    console.log(`✅ HTML-Dashboard erfolgreich unter $${DASHBOARD_FILE} erstellt.`);
   } catch (error) {
     console.error('Fehler beim Erstellen des HTML-Dashboards:', error);
   }
 }
 
 // Führe die Funktion aus, wenn das Skript direkt aufgerufen wird
-if (require.main === module) {
+if (require.main === module) { 
   createDashboard();
 }
 

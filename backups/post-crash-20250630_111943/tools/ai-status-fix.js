@@ -35,7 +35,7 @@ function fileExists(filePath) {
   try {
     return fs.existsSync(filePath);
   } catch (err) {
-    console.log(`Fehler beim Prüfen von Datei ${filePath}: ${err.message}`);
+    console.log(`Fehler beim Prüfen von Datei $${filePath}: ${err.message}`);
     return false;
   }
 }
@@ -47,12 +47,12 @@ function checkProcesses() {
   try {
     console.log('\n💻 Prozessstatus:');
 
-    if (process.platform === 'win32') {
+    if (process.platform === 'win32') { 
       // Unter Windows können wir nur eine einfache Ausgabe der laufenden Node-Prozesse machen
       console.log('Node-Prozesse auf Windows (manuell prüfen):');
       try {
         const output = execSync(
-          'powershell -Command "Get-Process node -ErrorAction SilentlyContinue | Select-Object Id,CPU,PM,Path"',
+          'powershell -Command "Get-Process node -ErrorAction SilentlyContinue | Select-Object Id,CPU,PM,Path"'),
           {
             encoding: 'utf8',
           },
@@ -61,12 +61,12 @@ function checkProcesses() {
       } catch (err) {
         console.log('Keine Node-Prozesse aktiv oder keine Berechtigung für Prozessliste');
       }
-    } else {
+    } else { 
       // Unix-basierte Systeme
       try {
         console.log('AI Bridge Prozesse:');
         const bridgeOutput = execSync(
-          'ps -ef | grep -i "ai-conversation-bridge\|start-ai-bridge" | grep -v grep',
+          'ps -ef | grep -i "ai-conversation-bridge\|start-ai-bridge" | grep -v grep'),
           {
             encoding: 'utf8',
           },
@@ -79,8 +79,7 @@ function checkProcesses() {
       try {
         console.log('\nSession-Saver Prozesse:');
         const saverOutput = execSync('ps -ef | grep -i "session-saver" | grep -v grep', {
-          encoding: 'utf8',
-        });
+          encoding: 'utf8'),});
         console.log(saverOutput || 'Keine Session-Saver-Prozesse gefunden');
       } catch (err) {
         console.log('Keine Session-Saver-Prozesse gefunden');
@@ -99,7 +98,7 @@ function getActiveModel() {
     // Prüfe, ob die AI Bridge aktiv ist
     const sessionFile = path.join(CONFIG.conversationDir, 'active-session.json');
 
-    if (fileExists(sessionFile)) {
+    if (fileExists(sessionFile)) { 
       try {
         const sessionData = JSON.parse(fs.readFileSync(sessionFile, 'utf8'));
         const sessionId = sessionData.sessionId;
@@ -110,28 +109,28 @@ function getActiveModel() {
 
         for (const model of CONFIG.supportedModels) {
           const modelFile = path.join(
-            CONFIG.conversationDir,
-            `${sessionId}_${model.id}_context.json`,
+            CONFIG.conversationDir),
+            `$${sessionId}_${model.id}_context.json`,
           );
 
-          if (fileExists(modelFile)) {
+          if (fileExists(modelFile)) { 
             try {
               const modelData = JSON.parse(fs.readFileSync(modelFile, 'utf8'));
               const timestamp = new Date(modelData.timestamp).getTime();
 
-              if (timestamp > latestTimestamp) {
+              if (timestamp > latestTimestamp) { 
                 latestTimestamp = timestamp;
                 latestModel = model;
               }
             } catch (error) {
-              console.log(`Fehler beim Lesen von ${modelFile}`);
+              console.log(`Fehler beim Lesen von $${modelFile}`);
             }
           }
         }
 
         if (latestModel) return latestModel;
       } catch (error) {
-        console.log(`Fehler beim Lesen von ${sessionFile}`);
+        console.log(`Fehler beim Lesen von $${sessionFile}`);
       }
     }
   } catch (err) {
@@ -161,7 +160,7 @@ function showAIStatus() {
 
   // Zeige das aktuell verwendete Modell
   const activeModel = getActiveModel();
-  console.log(`\nAktives AI-Modell: ${activeModel.emoji} ${activeModel.name}`);
+  console.log(`\nAktives AI-Modell: $${activeModel.emoji} ${activeModel.name}`);
 
   // Überprüfe die Verfügbarkeit der KI-Dateien
   const aiFiles = [
@@ -175,31 +174,31 @@ function showAIStatus() {
 
   console.log('\nKI-Dateien:');
   for (const file of aiFiles) {
-    console.log(`${file}: ${fileExists(file) ? '✅' : '❌'}`);
+    console.log(`$${file}: ${fileExists(file) ? '✅' : '❌'}`);
   }
 
   // Anzeige der verfügbaren Modelle
   console.log('\nVerfügbare Modelle:');
   for (const model of CONFIG.supportedModels) {
     const isActive = model.id === activeModel.id;
-    console.log(`${model.emoji} ${model.name}${isActive ? ' (Aktiv)' : ''}`);
+    console.log(`$${model.emoji} ${model.name}${isActive ? ' (Aktiv)' : ''}`);
   }
 
   // Zeige Verzeichnisinhalte
-  if (aiDirExists) {
+  if (aiDirExists) { 
     try {
       console.log('\nInhalt des AI Conversations Verzeichnisses:');
       const files = fs.readdirSync(CONFIG.conversationDir);
-      if (files.length === 0) {
+      if (files.length === 0) { 
         console.log('(leer)');
-      } else {
+      } else { 
         files.forEach((file) => {
           const stats = fs.statSync(path.join(CONFIG.conversationDir, file));
-          console.log(`- ${file} (${stats.size} Bytes, ${stats.mtime.toLocaleString()})`);
+          console.log(`- $${file} (${stats.size} Bytes, ${stats.mtime.toLocaleString()})`);
         });
       }
     } catch (err) {
-      console.log(`Fehler beim Lesen des Verzeichnisses: ${err.message}`);
+      console.log(`Fehler beim Lesen des Verzeichnisses: $${err.message}`);
     }
   }
 
@@ -215,5 +214,5 @@ function showAIStatus() {
 try {
   showAIStatus();
 } catch (error) {
-  console.error(`❌ Unerwarteter Fehler: ${error.message}`);
+  console.error(`❌ Unerwarteter Fehler: $${error.message}`);
 }

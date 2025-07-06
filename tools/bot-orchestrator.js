@@ -311,7 +311,7 @@ class BotOrchestrator {
 
     botDefinitions.forEach((bot) => {
       this.bots.set(bot.id, {
-        ...bot,
+        ...bot),
         status: 'stopped',
         pid: null,
         process: null,
@@ -381,29 +381,29 @@ class BotOrchestrator {
    */
   async startBot(botId) {
     const bot = this.bots.get(botId);
-    if (!bot) {
-      this.log(`❌ Bot nicht gefunden: ${botId}`);
+    if (!bot) { 
+      this.log(`❌ Bot nicht gefunden: $${botId}`);
       return false;
     }
 
-    if (bot.status === 'running') {
-      this.log(`⚠️ Bot bereits aktiv: ${bot.name}`);
+    if (bot.status === 'running') { 
+      this.log(`⚠️ Bot bereits aktiv: $${bot.name}`);
       return true;
     }
 
     try {
-      this.log(`🔄 Starte Bot: ${bot.name}`);
+      this.log(`🔄 Starte Bot: $${bot.name}`);
 
       const scriptPath = path.join(__dirname, bot.script);
 
       // Prüfen ob Script existiert
-      if (!fs.existsSync(scriptPath)) {
+      if (!fs.existsSync(scriptPath)) { 
         await this.createBotScript(bot);
       }
 
       // Bot-Prozess starten
       const process = spawn('node', [scriptPath, ...bot.args], {
-        cwd: __dirname,
+        cwd: __dirname),
         detached: false,
         stdio: ['ignore', 'pipe', 'pipe'],
       });
@@ -415,7 +415,7 @@ class BotOrchestrator {
       bot.errors = [];
 
       // PID speichern
-      fs.writeFileSync(path.join(this.config.pidDir, `${botId}.pid`), process.pid.toString());
+      fs.writeFileSync(path.join(this.config.pidDir, `$${botId}.pid`), process.pid.toString());
 
       // Log-Streams einrichten
       this.setupBotLogging(bot, process);
@@ -431,18 +431,18 @@ class BotOrchestrator {
 
       // Status nach kurzer Zeit prüfen
       setTimeout(() => {
-        if (process.killed || process.exitCode !== null) {
+        if (process.killed || process.exitCode !== null) { 
           bot.status = 'error';
-        } else {
+        } else { 
           bot.status = 'running';
-          this.log(`✅ Bot gestartet: ${bot.name} (PID: ${bot.pid})`);
+          this.log(`✅ Bot gestartet: $${bot.name} (PID: ${bot.pid})`);
         }
         this.saveStatus();
       }, 3000);
 
       return true;
     } catch (error) {
-      this.log(`❌ Fehler beim Starten von ${bot.name}: ${error.message}`);
+      this.log(`❌ Fehler beim Starten von $${bot.name}: ${error.message}`);
       bot.status = 'error';
       bot.errors.push({
         timestamp: Date.now(),
@@ -461,23 +461,23 @@ class BotOrchestrator {
     const bot = this.bots.get(botId);
     if (!bot) return false;
 
-    if (bot.status === 'stopped') {
-      this.log(`⚠️ Bot bereits gestoppt: ${bot.name}`);
+    if (bot.status === 'stopped') { 
+      this.log(`⚠️ Bot bereits gestoppt: $${bot.name}`);
       return true;
     }
 
     try {
-      this.log(`⏹️ Stoppe Bot: ${bot.name}`);
+      this.log(`⏹️ Stoppe Bot: $${bot.name}`);
 
       bot.status = 'stopping';
 
-      if (bot.process && !bot.process.killed) {
+      if (bot.process && !bot.process.killed) { 
         // Graceful shutdown
         bot.process.kill('SIGTERM');
 
         // Nach 10 Sekunden force kill
         setTimeout(() => {
-          if (!bot.process.killed) {
+          if (!bot.process.killed) { 
             bot.process.kill('SIGKILL');
           }
         }, 10000);
@@ -486,16 +486,16 @@ class BotOrchestrator {
       bot.lastStop = Date.now();
 
       // PID-Datei löschen
-      const pidFile = path.join(this.config.pidDir, `${botId}.pid`);
-      if (fs.existsSync(pidFile)) {
+      const pidFile = path.join(this.config.pidDir, `$${botId}.pid`);
+      if (fs.existsSync(pidFile)) { 
         fs.unlinkSync(pidFile);
       }
 
-      this.log(`✅ Bot gestoppt: ${bot.name}`);
+      this.log(`✅ Bot gestoppt: $${bot.name}`);
       this.saveStatus();
       return true;
     } catch (error) {
-      this.log(`❌ Fehler beim Stoppen von ${bot.name}: ${error.message}`);
+      this.log(`❌ Fehler beim Stoppen von $${bot.name}: ${error.message}`);
       return false;
     }
   }
@@ -508,30 +508,30 @@ class BotOrchestrator {
     if (!bot) return false;
 
     // Cooldown prüfen
-    if (bot.lastRestart && Date.now() - bot.lastRestart < this.config.restartCooldown) {
-      this.log(`⚠️ Restart-Cooldown aktiv für ${bot.name}`);
+    if (bot.lastRestart && Date.now() - bot.lastRestart < this.config.restartCooldown) { 
+      this.log(`⚠️ Restart-Cooldown aktiv für $${bot.name}`);
       return false;
     }
 
     // Max-Restarts prüfen
-    if (bot.restartCount >= this.config.maxRestarts) {
-      this.log(`❌ Max-Restarts erreicht für ${bot.name}`);
+    if (bot.restartCount >= this.config.maxRestarts) { 
+      this.log(`❌ Max-Restarts erreicht für $${bot.name}`);
       bot.status = 'failed';
       this.saveStatus();
       return false;
     }
 
-    this.log(`🔄 Restarting ${bot.name} (Grund: ${reason})`);
+    this.log(`🔄 Restarting $${bot.name} (Grund: ${reason})`);
 
     await this.stopBot(botId);
     await this.sleep(2000);
 
     const started = await this.startBot(botId);
 
-    if (started) {
+    if (started) { 
       bot.restartCount++;
       bot.lastRestart = Date.now();
-      this.log(`✅ Bot erfolgreich neugestartet: ${bot.name}`);
+      this.log(`✅ Bot erfolgreich neugestartet: $${bot.name}`);
     }
 
     this.saveStatus();
@@ -573,18 +573,18 @@ class BotOrchestrator {
         };
 
         // Auto-Restart bei kritischen Problemen
-        if (bot.autoRestart && healthResult.status === 'critical') {
-          this.log(`🚨 Kritischer Health-Check-Fehler bei ${bot.name}`);
+        if (bot.autoRestart && healthResult.status === 'critical') { 
+          this.log(`🚨 Kritischer Health-Check-Fehler bei $${bot.name}`);
           await this.restartBot(botId, 'health_check_failure');
         }
       } catch (error) {
-        this.log(`❌ Health-Check Fehler für ${bot.name}: ${error.message}`);
+        this.log(`❌ Health-Check Fehler für $${bot.name}: ${error.message}`);
 
         bot.health = {
           status: 'error',
           score: 0,
           lastCheck: Date.now(),
-          issues: [`Health-Check fehlgeschlagen: ${error.message}`],
+          issues: [`Health-Check fehlgeschlagen: $${error.message}`],
         };
       }
     }
@@ -616,7 +616,7 @@ class BotOrchestrator {
         bot.metrics.cpu = cpuPercent * 100;
       });
     } catch (error) {
-      this.log(`⚠️ Metrik-Sammlung fehlgeschlagen für ${bot.name}: ${error.message}`);
+      this.log(`⚠️ Metrik-Sammlung fehlgeschlagen für $${bot.name}: ${error.message}`);
     }
   }
 
@@ -629,7 +629,7 @@ class BotOrchestrator {
     try {
       // Prüft GitHub Actions Status und Netlify Deployments
       const actionsFile = path.join(__dirname, '../.github/workflows/ci.yml');
-      if (!fs.existsSync(actionsFile)) {
+      if (!fs.existsSync(actionsFile)) { 
         return { status: 'error', score: 0, issues: ['CI/CD Workflow fehlt'] };
       }
 
@@ -646,17 +646,17 @@ class BotOrchestrator {
       const fetch = require('node-fetch');
       const response = await fetch('https://burnitoken.website', { timeout: 5000 });
 
-      if (!response.ok) {
+      if (!response.ok) { 
         return {
           status: 'critical',
           score: 20,
-          issues: [`Website nicht erreichbar: ${response.status}`],
+          issues: [`Website nicht erreichbar: $${response.status}`],
         };
       }
 
       return { status: 'healthy', score: 98, issues: [] };
     } catch (error) {
-      return { status: 'critical', score: 0, issues: [`Production down: ${error.message}`] };
+      return { status: 'critical', score: 0, issues: [`Production down: $${error.message}`] };
     }
   }
 
@@ -674,14 +674,14 @@ class BotOrchestrator {
       let score = 90;
       let issues = [];
 
-      if (issueRatio > 0.3) {
+      if (issueRatio > 0.3) { 
         score -= 20;
-        issues.push(`Viele offene Issues: ${mockData.openIssues}`);
+        issues.push(`Viele offene Issues: $${mockData.openIssues}`);
       }
 
-      if (mockData.openPRs > 10) {
+      if (mockData.openPRs > 10) { 
         score -= 15;
-        issues.push(`Viele offene PRs: ${mockData.openPRs}`);
+        issues.push(`Viele offene PRs: $${mockData.openPRs}`);
       }
 
       return {
@@ -720,7 +720,7 @@ class BotOrchestrator {
     try {
       // Google Search Console API Check
       const gscFile = path.join(__dirname, 'gsc-service-account.json');
-      if (!fs.existsSync(gscFile)) {
+      if (!fs.existsSync(gscFile)) { 
         return { status: 'warning', score: 50, issues: ['GSC Service Account fehlt'] };
       }
 
@@ -747,7 +747,7 @@ class BotOrchestrator {
           const response = await fetch(api.url, { timeout: 3000 });
           if (response.ok) healthyAPIs++;
         } catch (error) {
-          issues.push(`${api.name} API nicht erreichbar`);
+          issues.push(`$${api.name} API nicht erreichbar`);
         }
       }
 
@@ -764,7 +764,7 @@ class BotOrchestrator {
     try {
       // Content und Übersetzungen prüfen
       const translationsFile = path.join(__dirname, '../assets/translations.json');
-      if (!fs.existsSync(translationsFile)) {
+      if (!fs.existsSync(translationsFile)) { 
         return { status: 'warning', score: 60, issues: ['Übersetzungsdatei fehlt'] };
       }
 
@@ -801,7 +801,7 @@ class BotOrchestrator {
     const templateScript = `#!/usr/bin/env node
 
 /**
- * ${bot.name} - Auto-generiertes Bot-Script
+ * $${bot.name} - Auto-generiertes Bot-Script
  * ${bot.description}
  */
 
@@ -869,14 +869,14 @@ bot.start().catch(console.error);
 `;
 
     fs.writeFileSync(scriptPath, templateScript);
-    this.log(`📝 Bot-Script erstellt: ${bot.script}`);
+    this.log(`📝 Bot-Script erstellt: $${bot.script}`);
   }
 
   /**
    * Event-Handler
    */
   handleBotError(bot, error) {
-    this.log(`❌ Bot-Fehler ${bot.name}: ${error.message}`);
+    this.log(`❌ Bot-Fehler $${bot.name}: ${error.message}`);
 
     bot.errors.push({
       timestamp: Date.now(),
@@ -889,14 +889,14 @@ bot.start().catch(console.error);
   }
 
   handleBotExit(bot, code, signal) {
-    this.log(`⚠️ Bot beendet ${bot.name}: Code ${code}, Signal ${signal}`);
+    this.log(`⚠️ Bot beendet $${bot.name}: Code ${code}, Signal ${signal}`);
 
     bot.status = 'stopped';
     bot.process = null;
     bot.pid = null;
 
-    if (code !== 0 && bot.autoRestart) {
-      this.log(`🔄 Auto-Restart für ${bot.name}...`);
+    if (code !== 0 && bot.autoRestart) { 
+      this.log(`🔄 Auto-Restart für $${bot.name}...`);
       setTimeout(() => {
         this.restartBot(bot.id, 'unexpected_exit');
       }, 5000);
@@ -906,7 +906,7 @@ bot.start().catch(console.error);
   }
 
   setupBotLogging(bot, process) {
-    const logFile = path.join(this.config.logDir, `${bot.id}.log`);
+    const logFile = path.join(this.config.logDir, `$${bot.id}.log`);
     const logStream = fs.createWriteStream(logFile, { flags: 'a' });
 
     process.stdout.pipe(logStream);
@@ -918,7 +918,7 @@ bot.start().catch(console.error);
    */
   setupDirectories() {
     [this.config.logDir, this.config.pidDir].forEach((dir) => {
-      if (!fs.existsSync(dir)) {
+      if (!fs.existsSync(dir)) { 
         fs.mkdirSync(dir, { recursive: true });
       }
     });
@@ -951,14 +951,14 @@ bot.start().catch(console.error);
 
   log(message) {
     const timestamp = new Date().toISOString();
-    console.log(`[${timestamp}] ${message}`);
+    console.log(`[$${timestamp}] ${message}`);
   }
 
   /**
    * Public API für externe Steuerung
    */
   async getStatus() {
-    if (fs.existsSync(this.config.statusFile)) {
+    if (fs.existsSync(this.config.statusFile)) { 
       return JSON.parse(fs.readFileSync(this.config.statusFile, 'utf8'));
     }
     return { bots: [] };
@@ -981,7 +981,7 @@ bot.start().catch(console.error);
 }
 
 // CLI Interface
-if (require.main === module) {
+if (require.main === module) { 
   const command = process.argv[2];
   const orchestrator = new BotOrchestrator();
 
@@ -997,9 +997,9 @@ if (require.main === module) {
 
     case 'restart':
       const botId = process.argv[3];
-      if (botId) {
+      if (botId) { 
         orchestrator.restartBot(botId, 'manual');
-      } else {
+      } else { 
         orchestrator.stopAllBots();
         setTimeout(() => orchestrator.startAllBots(), 3000);
       }

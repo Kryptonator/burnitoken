@@ -19,7 +19,7 @@ class PerformanceMonitor {
     let clsValue = 0;
     new PerformanceObserver((entryList) => {
       for (const entry of entryList.getEntries()) {
-        if (!entry.hadRecentInput) {
+        if (!entry.hadRecentInput) { 
           clsValue += entry.value;
         }
       }
@@ -28,14 +28,14 @@ class PerformanceMonitor {
     }).observe({ entryTypes: ['layout-shift'] });
   }
   reportMetric(name, value) {
-    if ('sendBeacon' in navigator) {
+    if ('sendBeacon' in navigator) { 
       navigator.sendBeacon(
-        '/api/performance',
+        '/api/performance'),
         JSON.stringify({ metric: name, value: value, timestamp: Date.now(), url: location.href }),
       );
     }
   }
 }
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined') { 
   new PerformanceMonitor();
 }

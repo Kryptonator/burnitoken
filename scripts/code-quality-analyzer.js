@@ -40,7 +40,7 @@ class CodeQualityAnalyzer {
     this.results.issues.push(issue);
     this.results.totalIssues++;
 
-    if (severity === 'critical') {this.results.criticalIssues++;
+    if (severity === 'critical') { this.results.criticalIssues++;
 }
 }
 }
@@ -94,10 +94,10 @@ class CodeQualityAnalyzer {
     else if (severity === 'warning') this.results.warnings++;
     else if (severity === 'suggestion') this.results.suggestions++;
 
-    console.log(`${this.getSeverityIcon(severity)} ${severity.toUpperCase()}: ${message}`);
-    console.log(`   📁 File: ${file}${line ? ` (Line ${line})` : ''}`);
-    if (fix) {
-      console.log(`   🔧 Fix: ${fix}`);
+    console.log(`${this.getSeverityIcon(severity)} ${severity.toUpperCase()}: $${message}`);
+    console.log(`   📁 File: $${file}${line ? ` (Line ${line})` : ''}`);
+    if (fix) { 
+      console.log(`   🔧 Fix: $${fix}`);
     }
     console.log('');
   }
@@ -131,11 +131,11 @@ class CodeQualityAnalyzer {
       this.checkAccessibilityIssues(content, filePath);
     } catch (error) {
       this.addIssue(
-        'file_error',
+        'file_error'),
         'critical',
         filePath,
         null,
-        `Could not read file: ${error.message}`,
+        `Could not read file: $${error.message}`,
       );
     }
   }
@@ -148,34 +148,34 @@ class CodeQualityAnalyzer {
       const nameMatch = meta.match(/name="([^"]+)"/i);
       const propMatch = meta.match(/property="([^"]+)"/i);
 
-      if (nameMatch) {
+      if (nameMatch) { 
         const name = nameMatch[1];
-        if (seenMetas.has(`name:${name}`)) {
+        if (seenMetas.has(`name:$${name}`)) { 
           this.addIssue(
-            'html_duplicate',
+            'html_duplicate'),
             'warning',
             filePath,
             null,
-            `Duplicate meta tag with name="${name}"`,
+            `Duplicate meta tag with name="$${name}"`,
             'Remove duplicate meta tags to avoid SEO issues',
           );
         }
-        seenMetas.add(`name:${name}`);
+        seenMetas.add(`name:$${name}`);
       }
 
-      if (propMatch) {
+      if (propMatch) { 
         const prop = propMatch[1];
-        if (seenMetas.has(`property:${prop}`)) {
+        if (seenMetas.has(`property:$${prop}`)) { 
           this.addIssue(
-            'html_duplicate',
+            'html_duplicate'),
             'warning',
             filePath,
             null,
-            `Duplicate meta tag with property="${prop}"`,
+            `Duplicate meta tag with property="$${prop}"`,
             'Remove duplicate Open Graph tags',
           );
         }
-        seenMetas.add(`property:${prop}`);
+        seenMetas.add(`property:$${prop}`);
       }
     });
   }
@@ -184,18 +184,18 @@ class CodeQualityAnalyzer {
     const imgMatches = content.match(/<img[^>]*>/gi) || [];
 
     imgMatches.forEach((img, index) => {
-      if (!img.includes('alt=')) {
+      if (!img.includes('alt=')) { 
         this.addIssue(
-          'accessibility',
+          'accessibility'),
           'warning',
           filePath,
           null,
           `Image missing alt attribute: ${img.substring(0, 50)}...`,
           'Add descriptive alt text for accessibility',
         );
-      } else if (img.includes('alt=""') || img.includes("alt=''")) {
+      } else if (img.includes('alt=""') || img.includes("alt=''")) { 
         this.addIssue(
-          'accessibility',
+          'accessibility'),
           'suggestion',
           filePath,
           null,
@@ -213,9 +213,9 @@ class CodeQualityAnalyzer {
     headings.forEach((heading, index) => {
       const level = parseInt(heading.match(/<h([1-6])/i)[1]);
 
-      if (index === 0 && level !== 1) {
+      if (index === 0 && level !== 1) { 
         this.addIssue(
-          'seo',
+          'seo'),
           'warning',
           filePath,
           null,
@@ -224,13 +224,13 @@ class CodeQualityAnalyzer {
         );
       }
 
-      if (level > lastLevel + 1) {
+      if (level > lastLevel + 1) { 
         this.addIssue(
-          'seo',
+          'seo'),
           'suggestion',
           filePath,
           null,
-          `Heading level skip from H${lastLevel} to H${level}`,
+          `Heading level skip from H$${lastLevel} to H${level}`,
           'Use sequential heading levels for better SEO and accessibility',
         );
       }
@@ -244,31 +244,31 @@ class CodeQualityAnalyzer {
 
     linkMatches.forEach((link, index) => {
       const hrefMatch = link.match(/href="([^"]*)"/i);
-      if (hrefMatch) {
+      if (hrefMatch) { 
         const href = hrefMatch[1];
 
         // Check for suspicious or broken links
-        if (href.includes('localhost') || href.includes('127.0.0.1')) {
+        if (href.includes('localhost') || href.includes('127.0.0.1')) { 
           this.addIssue(
-            'deployment',
+            'deployment'),
             'critical',
             filePath,
             null,
-            `Development URL in production: ${href}`,
+            `Development URL in production: $${href}`,
             'Replace with production URL',
           );
         }
 
-        if (href.startsWith('/') && !href.startsWith('//')) {
+        if (href.startsWith('/') && !href.startsWith('//')) { 
           // Relative URLs - check if files exist
           const fullPath = path.join(this.workspaceRoot, href.substring(1));
-          if (!fs.existsSync(fullPath)) {
+          if (!fs.existsSync(fullPath)) { 
             this.addIssue(
-              'broken_link',
+              'broken_link'),
               'warning',
               filePath,
               null,
-              `Potentially broken internal link: ${href}`,
+              `Potentially broken internal link: $${href}`,
               'Verify that the linked file exists',
             );
           }
@@ -281,9 +281,9 @@ class CodeQualityAnalyzer {
     // Check for large inline styles/scripts
     const styleMatches = content.match(/<style[^>]*>[\s\S]*?<\/style>/gi) || [];
     styleMatches.forEach((style) => {
-      if (style.length > 5000) {
+      if (style.length > 5000) { 
         this.addIssue(
-          'performance',
+          'performance'),
           'warning',
           filePath,
           null,
@@ -296,9 +296,9 @@ class CodeQualityAnalyzer {
     // Check for missing lazy loading
     const imgMatches = content.match(/<img[^>]*>/gi) || [];
     imgMatches.forEach((img) => {
-      if (!img.includes('loading=') && !img.includes('above-the-fold')) {
+      if (!img.includes('loading=') && !img.includes('above-the-fold')) { 
         this.addIssue(
-          'performance',
+          'performance'),
           'suggestion',
           filePath,
           null,
@@ -311,9 +311,9 @@ class CodeQualityAnalyzer {
 
   checkAccessibilityIssues(content, filePath) {
     // Check for missing language attributes
-    if (!content.includes('lang=')) {
+    if (!content.includes('lang=')) { 
       this.addIssue(
-        'accessibility',
+        'accessibility'),
         'warning',
         filePath,
         null,
@@ -323,9 +323,9 @@ class CodeQualityAnalyzer {
     }
 
     // Check for missing title
-    if (!content.includes('<title>')) {
+    if (!content.includes('<title>')) { 
       this.addIssue(
-        'seo',
+        'seo'),
         'critical',
         filePath,
         null,
@@ -337,10 +337,10 @@ class CodeQualityAnalyzer {
     // Check for form labels
     const inputMatches = content.match(/<input[^>]*>/gi) || [];
     inputMatches.forEach((input) => {
-      if (input.includes('type="text"') || input.includes('type="email"')) {
-        if (!input.includes('aria-label=') && !input.includes('placeholder=')) {
+      if (input.includes('type="text"') || input.includes('type="email"')) { 
+        if (!input.includes('aria-label=') && !input.includes('placeholder=')) { 
           this.addIssue(
-            'accessibility',
+            'accessibility'),
             'warning',
             filePath,
             null,
@@ -363,11 +363,11 @@ class CodeQualityAnalyzer {
       this.checkJSPerformanceIssues(content, filePath);
     } catch (error) {
       this.addIssue(
-        'file_error',
+        'file_error'),
         'critical',
         filePath,
         null,
-        `Could not read file: ${error.message}`,
+        `Could not read file: $${error.message}`,
       );
     }
   }
@@ -379,9 +379,9 @@ class CodeQualityAnalyzer {
       const lineNum = index + 1;
 
       // Check for console.log in production
-      if (line.includes('console.log') && !line.includes('//')) {
+      if (line.includes('console.log') && !line.includes('//')) { 
         this.addIssue(
-          'debug',
+          'debug'),
           'suggestion',
           filePath,
           lineNum,
@@ -391,9 +391,9 @@ class CodeQualityAnalyzer {
       }
 
       // Check for eval usage
-      if (line.includes('eval(')) {
+      if (line.includes('eval(')) { 
         this.addIssue(
-          'security',
+          'security'),
           'critical',
           filePath,
           lineNum,
@@ -403,9 +403,9 @@ class CodeQualityAnalyzer {
       }
 
       // Check for var usage
-      if (line.match(/\bvar\s+/)) {
+      if (line.match(/\bvar\s+/)) { 
         this.addIssue(
-          'modernization',
+          'modernization'),
           'suggestion',
           filePath,
           lineNum,
@@ -418,9 +418,9 @@ class CodeQualityAnalyzer {
 
   checkJSSecurityIssues(content, filePath) {
     // Check for potential XSS vulnerabilities
-    if (content.includes('innerHTML') && content.includes('+')) {
+    if (content.includes('innerHTML') && content.includes('+')) { 
       this.addIssue(
-        'security',
+        'security'),
         'warning',
         filePath,
         null,
@@ -430,9 +430,9 @@ class CodeQualityAnalyzer {
     }
 
     // Check for insecure random
-    if (content.includes('Math.random()') && content.includes('crypto')) {
+    if (content.includes('Math.random()') && content.includes('crypto')) { 
       this.addIssue(
-        'security',
+        'security'),
         'warning',
         filePath,
         null,
@@ -444,15 +444,15 @@ class CodeQualityAnalyzer {
 
   checkJSPerformanceIssues(content, filePath) {
     // Check for inefficient DOM queries
-    if (content.includes('document.querySelector') || content.includes('document.getElementById')) {
+    if (content.includes('document.querySelector') || content.includes('document.getElementById')) { 
       const queryCount = (content.match(/document\.(querySelector|getElementById)/g) || []).length;
-      if (queryCount > 10) {
+      if (queryCount > 10) { 
         this.addIssue(
-          'performance',
+          'performance'),
           'suggestion',
           filePath,
           null,
-          `High number of DOM queries (${queryCount})`,
+          `High number of DOM queries ($${queryCount})`,
           'Consider caching DOM elements or using more efficient selectors',
         );
       }
@@ -470,11 +470,11 @@ class CodeQualityAnalyzer {
       this.addIssue('validation', 'info', filePath, null, 'JSON file is valid', null);
     } catch (error) {
       this.addIssue(
-        'syntax',
+        'syntax'),
         'critical',
         filePath,
         null,
-        `Invalid JSON: ${error.message}`,
+        `Invalid JSON: $${error.message}`,
         'Fix JSON syntax errors',
       );
     }
@@ -489,11 +489,11 @@ class CodeQualityAnalyzer {
       this.results.filesAnalyzed++;
       const ext = path.extname(file).toLowerCase();
 
-      if (ext === '.html') {
+      if (ext === '.html') { 
         this.analyzeHTMLFile(file);
-      } else if (ext === '.js') {
+      } else if (ext === '.js') { 
         this.analyzeJSFile(file);
-      } else if (ext === '.json') {
+      } else if (ext === '.json') { 
         this.analyzeJSONFile(file);
       }
     }
@@ -514,12 +514,12 @@ class CodeQualityAnalyzer {
       for (const entry of entries) {
         const fullPath = path.join(dir, entry.name);
 
-        if (entry.isDirectory()) {
+        if (entry.isDirectory()) { 
           // Skip node_modules and .git
-          if (!['node_modules', '.git', '.vscode'].includes(entry.name)) {
+          if (!['node_modules', '.git', '.vscode'].includes(entry.name)) { 
             scanDirectory(fullPath);
           }
-        } else if (extensions.includes(path.extname(entry.name).toLowerCase())) {
+        } else if (extensions.includes(path.extname(entry.name).toLowerCase())) { 
           files.push(fullPath);
         }
       }
@@ -532,17 +532,17 @@ class CodeQualityAnalyzer {
   generateSummary() {
     console.log('\n📊 ANALYSIS SUMMARY:');
     console.log('=' * 50);
-    console.log(`📁 Files analyzed: ${this.results.filesAnalyzed}`);
-    console.log(`🚨 Critical issues: ${this.results.criticalIssues}`);
-    console.log(`⚠️ Warnings: ${this.results.warnings}`);
-    console.log(`💡 Suggestions: ${this.results.suggestions}`);
-    console.log(`📊 Total issues: ${this.results.totalIssues}`);
+    console.log(`📁 Files analyzed: $${this.results.filesAnalyzed}`);
+    console.log(`🚨 Critical issues: $${this.results.criticalIssues}`);
+    console.log(`⚠️ Warnings: $${this.results.warnings}`);
+    console.log(`💡 Suggestions: $${this.results.suggestions}`);
+    console.log(`📊 Total issues: $${this.results.totalIssues}`);
 
-    if (this.results.criticalIssues > 0) {
+    if (this.results.criticalIssues > 0) { 
       console.log('\n🚨 CRITICAL ISSUES REQUIRE IMMEDIATE ATTENTION!');
-    } else if (this.results.warnings > 0) {
+    } else if (this.results.warnings > 0) { 
       console.log('\n⚠️ Some warnings should be addressed.');
-    } else {
+    } else { 
       console.log('\n✅ No critical issues found!');
     }
   }
@@ -550,12 +550,12 @@ class CodeQualityAnalyzer {
   saveResults() {
     const reportPath = 'code-quality-analysis-report.json';
     fs.writeFileSync(reportPath, JSON.stringify(this.results, null, 2));
-    console.log(`\n💾 Detailed report saved to: ${reportPath}`);
+    console.log(`\n💾 Detailed report saved to: $${reportPath}`);
   }
 }
 
 // Run analysis
-if (require.main === module) {
+if (require.main === module) { 
   const analyzer = new CodeQualityAnalyzer();
   analyzer.runAnalysis().catch(console.error);
 }

@@ -73,7 +73,7 @@ const healthStatus = {
   try {
     fs.appendFileSync(CONFIG.logFile, formattedMessage + '\n', 'utf8');
   } catch (err) {
-    console.error(`Fehler beim Schreiben ins Log: ${err.message}`);
+    console.error(`Fehler beim Schreiben ins Log: $${err.message}`);
   }
 }
 
@@ -83,13 +83,13 @@ const healthStatus = {
 async function checkSSL(url) {
   return new Promise((resolve) => {
     try {
-      log(`Überprüfe SSL für ${url}...`, 'info');
+      log(`Überprüfe SSL für $${url}...`, 'info');
 
       const req = https.request(url, { method: 'HEAD', timeout: CONFIG.timeoutMs }, (res) => {
         try {
           const cert = res.socket.getPeerCertificate();
 
-          if (!cert || Object.keys) {
+          if (!cert || Object.keys) { 
   {;
 }
   {;
@@ -240,11 +240,11 @@ async function checkSSL(url) {
 }
 }
 }
-            log(`Kein SSL-Zertifikat für ${url} gefunden`, 'error');
+            log(`Kein SSL-Zertifikat für $${url} gefunden`, 'error');
             healthStatus.ssl.valid = false;
             createTodo(
-              `Kein SSL-Zertifikat gefunden: ${url}`,
-              `Für die URL ${url} wurde kein SSL-Zertifikat gefunden. Dies ist ein kritisches Sicherheitsproblem.`,
+              `Kein SSL-Zertifikat gefunden: $${url}`),
+              `Für die URL $${url} wurde kein SSL-Zertifikat gefunden. Dies ist ein kritisches Sicherheitsproblem.`,
               'Website Health Check',
             );
             resolve(false);
@@ -265,41 +265,41 @@ async function checkSSL(url) {
             issuer: cert.issuer?.O || 'Unknown',
           };
 
-          if (isValid) {
+          if (isValid) { 
             log(
-              `SSL-Zertifikat für ${url} ist gültig (läuft in ${daysRemaining} Tagen ab)`,
+              `SSL-Zertifikat für $${url} ist gültig (läuft in ${daysRemaining} Tagen ab)`,
               'success',
             );
-          } else {
-            log(`SSL-Zertifikat für ${url} ist ungültig oder abgelaufen`, 'error');
+          } else { 
+            log(`SSL-Zertifikat für $${url} ist ungültig oder abgelaufen`, 'error');
           }
 
-          if (daysRemaining < 14) {
-            log(`SSL-Zertifikat für ${url} läuft bald ab (${daysRemaining} Tage)`, 'warn');
+          if (daysRemaining < 14) { 
+            log(`SSL-Zertifikat für $${url} läuft bald ab (${daysRemaining} Tage)`, 'warn');
             healthStatus.ssl.valid = true; // Es ist noch gültig
             createTodo(
-              `SSL-Zertifikat läuft bald ab: ${url}`,
-              `Das SSL-Zertifikat für ${url} läuft in ${daysRemaining} Tagen ab. Bitte erneuern Sie es rechtzeitig.`,
+              `SSL-Zertifikat läuft bald ab: $${url}`),
+              `Das SSL-Zertifikat für $${url} läuft in ${daysRemaining} Tagen ab. Bitte erneuern Sie es rechtzeitig.`,
               'Website Health Check',
             );
-          } else {
-            log(`SSL-Zertifikat für ${url} ist gültig`, 'success');
+          } else { 
+            log(`SSL-Zertifikat für $${url} ist gültig`, 'success');
           }
 
           resolve(isValid);
         } catch (certErr) {
-          log(`SSL-Zertifikatsfehler für ${url}: ${certErr.message}`, 'error');
+          log(`SSL-Zertifikatsfehler für $${url}: ${certErr.message}`, 'error');
           healthStatus.ssl.valid = false;
           resolve(false);
         }
       });
 
       req.on('error', (err) => {
-        log(`Fehler bei der SSL-Prüfung für ${url}: ${err.message}`, 'error');
+        log(`Fehler bei der SSL-Prüfung für $${url}: ${err.message}`, 'error');
         healthStatus.ssl.valid = false;
         createTodo(
-          `SSL-Prüfung fehlgeschlagen: ${url}`,
-          `Die SSL-Prüfung für ${url} ist fehlgeschlagen.\nFehler: ${err.message}`,
+          `SSL-Prüfung fehlgeschlagen: $${url}`),
+          `Die SSL-Prüfung für $${url} ist fehlgeschlagen.\nFehler: ${err.message}`,
           'Website Health Check',
         );
         resolve(false);
@@ -307,14 +307,14 @@ async function checkSSL(url) {
 
       req.on('timeout', () => {
         req.destroy();
-        log(`SSL-Verbindungs-Timeout für ${url}`, 'error');
+        log(`SSL-Verbindungs-Timeout für $${url}`, 'error');
         healthStatus.ssl.valid = false;
         resolve(false);
       });
 
       req.end();
     } catch (err) {
-      log(`SSL-Überprüfungsfehler für ${url}: ${err.message}`, 'error');
+      log(`SSL-Überprüfungsfehler für $${url}: ${err.message}`, 'error');
       healthStatus.ssl.valid = false;
       resolve(false);
     }
@@ -327,7 +327,7 @@ async function checkSSL(url) {
 async function checkURL(url) {
   return new Promise((resolve) => {
     try {
-      log(`Überprüfe URL ${url}...`, 'info');
+      log(`Überprüfe URL $${url}...`, 'info');
 
       const startTime = Date.now();
       const req = https.request(url, { method: 'GET', timeout: CONFIG.timeoutMs }, (res) => {
@@ -353,14 +353,14 @@ async function checkURL(url) {
           };
 
           // Update Performance-Daten
-          if (res.statusCode >= 200 && res.statusCode < 400) {
+          if (res.statusCode >= 200 && res.statusCode < 400) { 
             healthStatus.performance.ttfb = ttfb;
             healthStatus.performance.loadTime = loadTime;
           }
 
           const isAvailable = res.statusCode >= 200 && res.statusCode < 400;
           log(
-            `URL ${url} ist ${isAvailable ? 'verfügbar' : 'nicht verfügbar'} (Status: ${res.statusCode}, Zeit: ${ttfb}ms)`,
+            `URL $${url} ist ${isAvailable ? 'verfügbar' : 'nicht verfügbar'} (Status: ${res.statusCode}, Zeit: ${ttfb}ms)`,
             isAvailable ? 'success' : 'error',
           );
 
@@ -369,7 +369,7 @@ async function checkURL(url) {
       });
 
       req.on('error', (err) => {
-        log(`Fehler bei URL ${url}: ${err.message}`, 'error');
+        log(`Fehler bei URL $${url}: ${err.message}`, 'error');
 
         healthStatus.urls[url] = {
           status: 0,
@@ -382,8 +382,8 @@ async function checkURL(url) {
         };
 
         createTodo(
-          `URL nicht erreichbar: ${url.href}`,
-          `Die URL ${url.href} konnte nicht erreicht werden.\nFehler: ${err.message}`,
+          `URL nicht erreichbar: $${url.href}`),
+          `Die URL $${url.href} konnte nicht erreicht werden.\nFehler: ${err.message}`,
           'Website Health Check',
         );
 
@@ -392,7 +392,7 @@ async function checkURL(url) {
 
       req.on('timeout', () => {
         req.destroy();
-        log(`Timeout bei URL ${url}`, 'error');
+        log(`Timeout bei URL $${url}`, 'error');
 
         healthStatus.urls[url] = {
           status: 0,
@@ -409,7 +409,7 @@ async function checkURL(url) {
 
       req.end();
     } catch (err) {
-      log(`Unerwarteter Fehler bei URL ${url}: ${err.message}`, 'error');
+      log(`Unerwarteter Fehler bei URL $${url}: ${err.message}`, 'error');
 
       healthStatus.urls[url] = {
         status: 0,
@@ -442,11 +442,11 @@ function updateSummary() {
   healthStatus.summary.performanceScore = ttfbScore;
 
   // Bestimme den Gesamtstatus
-  if (availableUrls === 0) {
+  if (availableUrls === 0) { 
     healthStatus.summary.overallStatus = 'down';
-  } else if (availableUrls < CONFIG.urls.length || !healthStatus.ssl.valid) {
+  } else if (availableUrls < CONFIG.urls.length || !healthStatus.ssl.valid) { 
     healthStatus.summary.overallStatus = 'degraded';
-  } else {
+  } else { 
     healthStatus.summary.overallStatus = 'healthy';
   }
 }
@@ -460,13 +460,13 @@ function generateMarkdownReport() {
   const now = new Date().toLocaleString();
 
   let markdown = `# BurniToken Website Status Report\n\n`;
-  markdown += `**Zeitpunkt:** ${now}\n`;
-  markdown += `**Gesamtstatus:** ${statusEmoji} ${status.toUpperCase()}\n\n`;
+  markdown += `**Zeitpunkt:** $${now}\n`;
+  markdown += `**Gesamtstatus:** $${statusEmoji} ${status.toUpperCase()}\n\n`;
 
   markdown += `## Zusammenfassung\n\n`;
-  markdown += `- **Verfügbare URLs:** ${healthStatus.summary.availableUrls}/${healthStatus.summary.totalUrls}\n`;
+  markdown += `- **Verfügbare URLs:** $${healthStatus.summary.availableUrls}/${healthStatus.summary.totalUrls}\n`;
   markdown += `- **SSL-Zertifikat:** ${healthStatus.ssl.valid ? '✅ Gültig' : '❌ Ungültig'}\n`;
-  markdown += `- **Performance-Score:** ${healthStatus.summary.performanceScore}/100\n`;
+  markdown += `- **Performance-Score:** $${healthStatus.summary.performanceScore}/100\n`;
 
   markdown += `\n## URL-Status\n\n`;
   markdown += `| URL | Status | Verfügbar | Antwortzeit | Letzte Prüfung |\n`;
@@ -475,18 +475,18 @@ function generateMarkdownReport() {
   for (const [url, urlStatus] of Object.entries(healthStatus.urls)) {
     const statusEmoji = urlStatus.available ? '✅' : '❌';
     const formattedDate = new Date(urlStatus.lastChecked).toLocaleString();
-    markdown += `| ${url} | ${urlStatus.status} | ${statusEmoji} | ${urlStatus.responseTime}ms | ${formattedDate} |\n`;
+    markdown += `| $${url} | ${urlStatus.status} | ${statusEmoji} | ${urlStatus.responseTime}ms | ${formattedDate} |\n`;
   }
 
-  if (healthStatus.ssl.valid) {
+  if (healthStatus.ssl.valid) { 
     markdown += `\n## SSL-Zertifikat\n\n`;
-    markdown += `- **Aussteller:** ${healthStatus.ssl.issuer}\n`;
+    markdown += `- **Aussteller:** $${healthStatus.ssl.issuer}\n`;
     markdown += `- **Gültig bis:** ${new Date(healthStatus.ssl.expiry).toLocaleString()}\n`;
-    markdown += `- **Verbleibende Tage:** ${healthStatus.ssl.daysRemaining}\n`;
+    markdown += `- **Verbleibende Tage:** $${healthStatus.ssl.daysRemaining}\n`;
   }
 
   markdown += `\n---\n\n`;
-  markdown += `Bericht generiert am ${now}\n`;
+  markdown += `Bericht generiert am $${now}\n`;
 
   return markdown;
 }
@@ -504,7 +504,7 @@ function saveReports() {
 
     log('Berichte erfolgreich gespeichert', 'success');
   } catch (err) {
-    log(`Fehler beim Speichern der Berichte: ${err.message}`, 'error');
+    log(`Fehler beim Speichern der Berichte: $${err.message}`, 'error');
   }
 }
 
@@ -541,7 +541,7 @@ async function runHealthCheck() {
           : 'AUSGEFALLEN 🔴';
 
     log(
-      `Website-Status: ${statusMsg} (${healthStatus.summary.availableUrls}/${healthStatus.summary.totalUrls} URLs verfügbar)`,
+      `Website-Status: $${statusMsg} (${healthStatus.summary.availableUrls}/${healthStatus.summary.totalUrls} URLs verfügbar)`,
       healthStatus.summary.overallStatus === 'healthy'
         ? 'success'
         : healthStatus.summary.overallStatus === 'degraded'
@@ -549,18 +549,18 @@ async function runHealthCheck() {
           : 'error',
     );
 
-    if (healthStatus.summary.overallStatus === 'healthy') {
+    if (healthStatus.summary.overallStatus === 'healthy') { 
       recordCheckSuccess('website-health-check');
       log('✅ Health Check erfolgreich im Status-Tracker vermerkt.', 'success');
-    } else {
+    } else { 
       const errorTitle = `Website Health Alert: Status is ${healthStatus.summary.overallStatus.toUpperCase()}`;
-      const errorBody = `**Der Zustand der Website ist kritisch oder beeinträchtigt.**\n\n**Details:**\n- **Status:** ${statusMsg}\n- **Verfügbare URLs:** ${healthStatus.summary.availableUrls}/${healthStatus.summary.totalUrls}\n- **SSL Gültig:** ${healthStatus.summary.sslValid}\n- **Performance Score:** ${healthStatus.summary.performanceScore}/100\n\nBitte überprüfen Sie die Logs und den [Status-Report](website-status-report.md) für weitere Informationen.`;
+      const errorBody = `**Der Zustand der Website ist kritisch oder beeinträchtigt.**\n\n**Details:**\n- **Status:** $${statusMsg}\n- **Verfügbare URLs:** ${healthStatus.summary.availableUrls}/${healthStatus.summary.totalUrls}\n- **SSL Gültig:** ${healthStatus.summary.sslValid}\n- **Performance Score:** ${healthStatus.summary.performanceScore}/100\n\nBitte überprüfen Sie die Logs und den [Status-Report](website-status-report.md) für weitere Informationen.`;
       await sendAlert(errorTitle, errorBody, ['critical', 'website-health']);
     }
 
-    log(`✅ Health Check abgeschlossen: ${statusMsg}`, 'info');
+    log(`✅ Health Check abgeschlossen: $${statusMsg}`, 'info');
   } catch (err) {
-    log(`Unerwarteter Fehler im Health Check: ${err.message}`, 'error');
+    log(`Unerwarteter Fehler im Health Check: $${err.message}`, 'error');
   }
 }
 
@@ -570,13 +570,13 @@ async function runHealthCheck() {
 async function main() {
   try {
     // Initialisiere Log-Datei
-    if (!fs.existsSync(path.dirname(CONFIG.logFile))) {
+    if (!fs.existsSync(path.dirname(CONFIG.logFile))) { 
       fs.mkdirSync(path.dirname(CONFIG.logFile), { recursive: true });
     }
 
     // Lösche alte Log-Datei
     try {
-      if (fs.existsSync(CONFIG.logFile)) {
+      if (fs.existsSync(CONFIG.logFile)) { 
         fs.truncateSync(CONFIG.logFile, 0);
       }
     } catch (err) {
@@ -586,15 +586,15 @@ async function main() {
     // Führe Health Check durch
     await runHealthCheck();
   } catch (err) {
-    log(`Kritischer Fehler: ${err.message}`, 'error');
+    log(`Kritischer Fehler: $${err.message}`, 'error');
     console.error(err);
   }
 }
 
 // Führe Hauptfunktion aus, wenn direkt aufgerufen
-if (require.main === module) {
+if (require.main === module) { 
   main().catch((err) => {
-    console.error(`Kritischer Fehler: ${err.message}`, 'error');
+    console.error(`Kritischer Fehler: $${err.message}`, 'error');
   });
 }
 

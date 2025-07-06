@@ -7,7 +7,7 @@ const GSC_SERVICE_ACCOUNT_FILE = path.join(__dirname, 'tools', 'gsc-service-acco
 const GSC_ENABLED = fs.existsSync(GSC_SERVICE_ACCOUNT_FILE);
 
 // GSC Quick Test ausführen, um Verbindung zu prüfen
-if (GSC_ENABLED) {  try {
+if (GSC_ENABLED) {   try {
     const { execSync } = require('child_process');
     execSync('node tools/gsc-quick-test.js --test', { stdio: 'ignore' });
     console.log('✅ GSC-Verbindung erfolgreich hergestellt');

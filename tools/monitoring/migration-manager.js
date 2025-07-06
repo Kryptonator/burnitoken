@@ -44,7 +44,7 @@ class MigrationManager {
     console.log('⚙️  Netlify Konfiguration finalisieren...');
 
     // Überprüfe netlify.toml
-    if (fs.existsSync) {) {
+    if (fs.existsSync) { ) {
 }
 }
 }
@@ -96,10 +96,10 @@ class MigrationManager {
 }
 }
       const content = fs.readFileSync('netlify.toml', 'utf8');
-      if (content.includes('burnitoken.website')) {
+      if (content.includes('burnitoken.website')) { 
         console.log('   ✅ netlify.toml enthält Domain-Redirects');
         this.migrationSteps.push('✅ Netlify Redirects konfiguriert');
-      } else {
+      } else { 
         console.log('   ⚠️  Domain-Redirects fehlen in netlify.toml');
       }
     }
@@ -109,24 +109,24 @@ class MigrationManager {
     console.log('🔍 Google Integration vorbereiten...');
 
     // Analytics Code vorbereiten
-    if (fs.existsSync('google-analytics-integration.html')) {
+    if (fs.existsSync('google-analytics-integration.html')) { 
       console.log('   ✅ Google Analytics Code bereit');
       this.migrationSteps.push('✅ Google Analytics vorbereitet');
     }
 
     // Sitemap prüfen
-    if (fs.existsSync('sitemap.xml')) {
+    if (fs.existsSync('sitemap.xml')) { 
       const sitemap = fs.readFileSync('sitemap.xml', 'utf8');
-      if (sitemap.includes('burnitoken.website')) {
+      if (sitemap.includes('burnitoken.website')) { 
         console.log('   ✅ Sitemap für burnitoken.website konfiguriert');
         this.migrationSteps.push('✅ Sitemap URL korrekt');
       }
     }
 
     // robots.txt prüfen
-    if (fs.existsSync('robots.txt')) {
+    if (fs.existsSync('robots.txt')) { 
       const robots = fs.readFileSync('robots.txt', 'utf8');
-      if (robots.includes('burnitoken.website') || robots.includes('sitemap.xml')) {
+      if (robots.includes('burnitoken.website') || robots.includes('sitemap.xml')) { 
         console.log('   ✅ robots.txt enthält Sitemap-Verweis');
         this.migrationSteps.push('✅ robots.txt optimiert');
       }
@@ -139,7 +139,7 @@ class MigrationManager {
     const htmlFiles = ['index.html', 'live-dashboard.html'];
 
     for (const file of htmlFiles) {
-      if (fs.existsSync(file)) {
+      if (fs.existsSync(file)) { 
         const content = fs.readFileSync(file, 'utf8');
 
         // Meta Tags prüfen
@@ -148,14 +148,14 @@ class MigrationManager {
         const hasOG = content.includes('property="og:');
         const hasTwitter = content.includes('name="twitter:');
 
-        console.log(`   📄 ${file}:`);
+        console.log(`   📄 $${file}:`);
         console.log(`      ${hasTitle ? '✅' : '❌'} Title Tag`);
         console.log(`      ${hasDescription ? '✅' : '❌'} Meta Description`);
         console.log(`      ${hasOG ? '✅' : '❌'} Open Graph Tags`);
         console.log(`      ${hasTwitter ? '✅' : '❌'} Twitter Cards`);
 
-        if (hasTitle && hasDescription && hasOG && hasTwitter) {
-          this.migrationSteps.push(`✅ ${file} SEO-optimiert`);
+        if (hasTitle && hasDescription && hasOG && hasTwitter) { 
+          this.migrationSteps.push(`✅ $${file} SEO-optimiert`);
         }
       }
     }
@@ -169,15 +169,14 @@ class MigrationManager {
       execSync('git status --porcelain', { stdio: 'pipe' });
       const hasChanges = execSync('git status --porcelain', { encoding: 'utf8' }).trim().length > 0;
 
-      if (hasChanges) {
+      if (hasChanges) { 
         console.log('   📁 Neue Änderungen gefunden, committe...');
         execSync('git add .', { stdio: 'inherit' });
         execSync('git commit -m "feat: IONOS to Netlify migration setup with Google integration"', {
-          stdio: 'inherit',
-        });
+          stdio: 'inherit'),});
         console.log('   ✅ Changes committed');
         this.migrationSteps.push('✅ Git Changes committed');
-      } else {
+      } else { 
         console.log('   ℹ️  Keine neuen Änderungen');
       }
 
@@ -192,7 +191,7 @@ class MigrationManager {
         console.log('   ℹ️  Git Remote nicht konfiguriert - manueller Push erforderlich');
       }
     } catch (error) {
-      console.log(`   ⚠️  Git Operation: ${error.message}`);
+      console.log(`   ⚠️  Git Operation: $${error.message}`);
     }
   }
 
@@ -202,7 +201,7 @@ class MigrationManager {
     const instructions = `# 🎯 MIGRATION BEREIT - NÄCHSTE SCHRITTE
 
 ## ✅ Completed Setup
-${this.migrationSteps.map((step) => `- ${step}`).join('\n')}
+${this.migrationSteps.map((step) => `- $${step}`).join('\n')}
 
 ## 🔧 IONOS DNS Setup (KRITISCH)
 
@@ -217,7 +216,7 @@ A Record:    @      75.2.60.5
 AAAA Record: @      2600:1f18:3fff:c001::5
 
 # WWW Subdomain  
-CNAME:       www    ${this.netlifyUrl}
+CNAME:       www    $${this.netlifyUrl}
 
 # TTL für alle: 300 (5 Minuten)
 \`\`\`
@@ -225,7 +224,7 @@ CNAME:       www    ${this.netlifyUrl}
 ## 🌐 Netlify Custom Domain Setup
 
 ### In Netlify Dashboard:
-1. **Site:** ${this.netlifyUrl}
+1. **Site:** $${this.netlifyUrl}
 2. **Gehe zu:** Site settings → Domain management
 3. **Add custom domain:** ${this.domain}
 4. **DNS Verification:** Folge den Anweisungen
@@ -295,7 +294,7 @@ async function main() {
   await migration.executeMigration();
 }
 
-if (require.main === module) {
+if (require.main === module) { 
   main().catch(console.error);
 }
 

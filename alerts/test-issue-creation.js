@@ -24,12 +24,12 @@ const testErrorDetails = {
 
 // Den Alert senden, der das Issue erstellen soll
 sendAlert({
-  message: 'Test: Kritisches SSL-Zertifikat abgelaufen',
+  message: 'Test: Kritisches SSL-Zertifikat abgelaufen'),
   level: 'error', // Wichtig, da nur 'error'-Level Issues erstellen
   extra: testErrorDetails,
   createIssue: true, // Explizit auf true setzen für den Test
 });
 
 console.log(
-  '✅ Test-Alert wurde ausgelöst. Überprüfen Sie bitte Ihr GitHub Repository auf ein neues Issue.',
+  '✅ Test-Alert wurde ausgelöst. Überprüfen Sie bitte Ihr GitHub Repository auf ein neues Issue.'),
 );

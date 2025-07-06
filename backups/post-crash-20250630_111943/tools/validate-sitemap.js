@@ -23,7 +23,7 @@ async function validateSitemap() {
 
     // Prüfe auf Parsing-Fehler
     const errors = xmlDoc.getElementsByTagName('parsererror');
-    if (errors.length > 0) {
+    if (errors.length > 0) { 
   {;
 }
   {;
@@ -131,7 +131,7 @@ async function validateSitemap() {
     const today = new Date().toISOString().split('T')[0];
     const lastmodNodes = xmlDoc.getElementsByTagName('lastmod');
 
-    console.log(`📅 Aktualisiere ${lastmodNodes.length} URLs mit heutigem Datum (${today})...`);
+    console.log(`📅 Aktualisiere $${lastmodNodes.length} URLs mit heutigem Datum (${today})...`);
 
     Array.from(lastmodNodes).forEach((node) => {
       node.textContent = today;
@@ -154,15 +154,15 @@ async function validateSitemap() {
 }
 
 async function testSitemapAccess() {
-  console.log(`🌐 Teste Erreichbarkeit der Sitemap unter ${sitemapUrl}...`);
+  console.log(`🌐 Teste Erreichbarkeit der Sitemap unter $${sitemapUrl}...`);
 
   try {
     const response = await fetch(sitemapUrl);
-    if (response.ok) {
-      console.log(`✅ Sitemap ist erreichbar! Status: ${response.status}`);
+    if (response.ok) { 
+      console.log(`✅ Sitemap ist erreichbar! Status: $${response.status}`);
       return true;
-    } else {
-      console.error(`❌ Sitemap ist nicht erreichbar! Status: ${response.status}`);
+    } else { 
+      console.error(`❌ Sitemap ist nicht erreichbar! Status: $${response.status}`);
       return false;
     }
   } catch (error) {
@@ -174,10 +174,10 @@ async function testSitemapAccess() {
 // Führe Validierung aus
 validateSitemap()
   .then((isValid) => {
-    if (isValid) {
+    if (isValid) { 
       console.log('🎉 Sitemap-Validierung erfolgreich abgeschlossen.');
       process.exit(0);
-    } else {
+    } else { 
       console.error('❌ Sitemap-Validierung fehlgeschlagen.');
       process.exit(1);
     }

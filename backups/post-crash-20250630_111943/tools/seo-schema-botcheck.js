@@ -15,14 +15,14 @@ let chalkCyan = (x) => x,
   chalkBgYellowBlack = (x) => x;
 try {
   const chalkImport = require('chalk');
-  if (typeof chalkImport.cyan === 'function') {
+  if (typeof chalkImport.cyan === 'function') { 
     chalkCyan = chalkImport.cyan;
     chalkGreen = chalkImport.green;
     chalkRed = chalkImport.red;
     chalkBgGreenBlack = chalkImport.bgGreen.black;
     chalkBgRedWhite = chalkImport.bgRed.white;
     chalkBgYellowBlack = chalkImport.bgYellow.black;
-  } else if (typeof chalkImport.default === 'object') {
+  } else if (typeof chalkImport.default === 'object') { 
     // ESM-Import
     chalkCyan = chalkImport.default.cyan;
     chalkGreen = chalkImport.default.green;
@@ -67,9 +67,9 @@ function checkMetaTags(html) {
   ];
   let ok = true;
   required.forEach((tag) => {
-    if (!html.includes(tag)) {
-      console.log(chalkRed(`❌ Fehlendes Tag: ${tag}`));
-      log(`Fehlendes Tag: ${tag}`);
+    if (!html.includes(tag)) { 
+      console.log(chalkRed(`❌ Fehlendes Tag: $${tag}`));
+      log(`Fehlendes Tag: $${tag}`);
       ok = false;
     }
   });
@@ -81,9 +81,9 @@ function checkLdJson(html) {
   const schemas = ['Organization', 'WebSite', 'Product', 'FAQPage', 'BreadcrumbList'];
   let ok = true;
   schemas.forEach((type) => {
-    if (!html.includes(`"@type": "${type}"`)) {
-      console.log(chalkRed(`❌ Fehlendes Schema.org: ${type}`));
-      log(`Fehlendes Schema.org: ${type}`);
+    if (!html.includes(`"@type": "$${type}"`)) { 
+      console.log(chalkRed(`❌ Fehlendes Schema.org: $${type}`));
+      log(`Fehlendes Schema.org: $${type}`);
       ok = false;
     }
   });
@@ -95,9 +95,9 @@ function checkAltTexts(html) {
   const imgTags = html.match(/<img [^>]*>/g) || [];
   let ok = true;
   imgTags.forEach((tag) => {
-    if (!/alt="[^"]+"/.test(tag)) {
-      console.log(chalkRed(`❌ Fehlender Alt-Text: ${tag}`));
-      log(`Fehlender Alt-Text: ${tag}`);
+    if (!/alt="[^"]+"/.test(tag)) { 
+      console.log(chalkRed(`❌ Fehlender Alt-Text: $${tag}`));
+      log(`Fehlender Alt-Text: $${tag}`);
       ok = false;
     }
   });
@@ -106,10 +106,10 @@ function checkAltTexts(html) {
 }
 
 function checkCanonical(html) {
-  if (html.includes('rel="canonical"')) {
+  if (html.includes('rel="canonical"')) { 
     console.log(chalkGreen('✅ Canonical-Link vorhanden.'));
     return true;
-  } else {
+  } else { 
     console.log(chalkRed('❌ Canonical-Link fehlt!'));
     log('Canonical-Link fehlt!');
     return false;
@@ -117,10 +117,10 @@ function checkCanonical(html) {
 }
 
 function checkSitemap(html) {
-  if (html.includes('rel="sitemap"')) {
+  if (html.includes('rel="sitemap"')) { 
     console.log(chalkGreen('✅ Sitemap-Link vorhanden.'));
     return true;
-  } else {
+  } else { 
     console.log(chalkRed('❌ Sitemap-Link fehlt!'));
     log('Sitemap-Link fehlt!');
     return false;
@@ -155,10 +155,10 @@ function autoFixMetaTags(html) {
   ];
   let newHtml = html;
   requiredTags.forEach(({ tag, html: tagHtml }) => {
-    if (!newHtml.includes(tag)) {
+    if (!newHtml.includes(tag)) { 
       newHtml = newHtml.replace(headClose, tagHtml + '\n' + headClose);
       changed = true;
-      log(`Auto-Fix: Tag ergänzt: ${tag}`);
+      log(`Auto-Fix: Tag ergänzt: $${tag}`);
     }
   });
   return changed ? newHtml : null;
@@ -169,14 +169,14 @@ function autoFixAltTexts(html) {
   let changed = false;
   let newHtml = html.replace(/<img ((?!alt=)[^>])+>/g, (match) => {
     changed = true;
-    log(`Auto-Fix: Alt-Text ergänzt: ${match}`);
+    log(`Auto-Fix: Alt-Text ergänzt: $${match}`);
     return match.replace(/<img /, '<img alt="TODO" ');
   });
   return changed ? newHtml : null;
 }
 
 function updateStatusFile(status, details) {
-  const content = `# SEO/Schema Status\n\n- **Letzter Check:** ${new Date().toLocaleString()}\n- **Status:** ${status}\n- **Details:** ${details || '-'}\n`;
+  const content = `# SEO/Schema Status\n\n- **Letzter Check:** ${new Date().toLocaleString()}\n- **Status:** $${status}\n- **Details:** ${details || '-'}\n`;
   fs.writeFileSync(STATUS_PATH, content, 'utf8');
 }
 
@@ -185,71 +185,71 @@ function main() {
   let errorDetails = [];
   let fixedAny = false;
   for (const PAGE_PATH of PAGES) {
-    if (!fs.existsSync(PAGE_PATH)) {
-      log(`Seite nicht gefunden: ${PAGE_PATH}`);
-      errorDetails.push(`${PAGE_PATH} fehlt`);
+    if (!fs.existsSync(PAGE_PATH)) { 
+      log(`Seite nicht gefunden: $${PAGE_PATH}`);
+      errorDetails.push(`$${PAGE_PATH} fehlt`);
       allPagesOk = false;
       continue;
     }
     let html = fs.readFileSync(PAGE_PATH, 'utf8');
-    console.log(chalkCyan(`\n--- SEO & Schema Bot-Check für ${PAGE_PATH} ---`));
+    console.log(chalkCyan(`\n--- SEO & Schema Bot-Check für $${PAGE_PATH} ---`));
     let allOk = true;
     let fixed = false;
     let pageErrors = [];
-    if (!checkMetaTags(html)) {
+    if (!checkMetaTags(html)) { 
       const fixedHtml = autoFixMetaTags(html);
-      if (fixedHtml) {
+      if (fixedHtml) { 
         html = fixedHtml;
         fixed = true;
-      } else {
+      } else { 
         allOk = false;
         pageErrors.push('Meta-Tags fehlen');
       }
     }
-    if (!checkAltTexts(html)) {
+    if (!checkAltTexts(html)) { 
       const fixedHtml = autoFixAltTexts(html);
-      if (fixedHtml) {
+      if (fixedHtml) { 
         html = fixedHtml;
         fixed = true;
-      } else {
+      } else { 
         allOk = false;
         pageErrors.push('Alt-Texte fehlen');
       }
     }
     if (!checkCanonical(html)) allOk = false;
     if (!checkSitemap(html)) allOk = false;
-    if (fixed) {
+    if (fixed) { 
       fs.writeFileSync(PAGE_PATH, html, 'utf8');
       fixedAny = true;
-      log(`Auto-Fix durchgeführt für ${PAGE_PATH}`);
+      log(`Auto-Fix durchgeführt für $${PAGE_PATH}`);
     }
-    if (!allOk) {
+    if (!allOk) { 
       allPagesOk = false;
-      errorDetails.push(`${PAGE_PATH}: ${pageErrors.join(', ')}`);
+      errorDetails.push(`$${PAGE_PATH}: ${pageErrors.join(', ')}`);
     }
   }
-  if (fixedAny) {
+  if (fixedAny) { 
     github.gitCommitAndPush('Auto-Fix: SEO/Schema/Alt-Text auf mehreren Seiten durch Bot');
     updateStatusFile('FIXED', 'Fehler wurden automatisch behoben und gepusht (Multi-Page).');
     console.log(chalkBgYellowBlack('\nAuto-Fix für mehrere Seiten durchgeführt und gepusht!\n'));
     log('Auto-Fix für mehrere Seiten durchgeführt und gepusht!');
     process.exit(0);
   }
-  if (allPagesOk) {
+  if (allPagesOk) { 
     updateStatusFile('OK', 'Alle Checks auf allen Seiten bestanden.');
     console.log(chalkBgGreenBlack('\nSEO/Schema/Bot-Check: ALLES OK auf allen Seiten!\n'));
     log('SEO/Schema/Bot-Check: ALLES OK auf allen Seiten!');
     process.exit(0);
-  } else {
+  } else { 
     const detailMsg = errorDetails.join('; ');
     updateStatusFile('ERROR', detailMsg);
     github.createGithubIssue(
       'SEO/Schema-Check: Fehler (Multi-Page)',
-      `Nicht automatisch behebbar: ${detailMsg}`,
+      `Nicht automatisch behebbar: $${detailMsg}`,
     );
     console.log(
       chalkBgRedWhite(
-        '\nSEO/Schema/Bot-Check: FEHLER auf mindestens einer Seite! Siehe oben und Log.\n',
+        '\nSEO/Schema/Bot-Check: FEHLER auf mindestens einer Seite! Siehe oben und Log.\n'),
       ),
     );
     log('SEO/Schema/Bot-Check: FEHLER auf mindestens einer Seite!');

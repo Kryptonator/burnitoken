@@ -18,7 +18,7 @@ test.describe('Navigation Tests', () => {
     );
 
     // Warte für WebKit explizit länger, damit das JS garantiert initialisiert ist
-    if (browserName === 'webkit') {
+    if (browserName === 'webkit') { 
       await page.waitForTimeout(1000);
     }
 
@@ -71,8 +71,7 @@ test.describe('Navigation Tests', () => {
 
     // Warte, bis die Navigation im Testmodus sichtbar ist (per .test-visible)
     await page.waitForSelector('nav[aria-label="Main navigation"].test-visible', {
-      timeout: 10000,
-    });
+      timeout: 10000),});
     await page.waitForTimeout(500);
 
     // Double-check that page loader is gone and no elements are blocking
@@ -84,7 +83,7 @@ test.describe('Navigation Tests', () => {
         const style = window.getComputedStyle(el);
         return parseInt(style.zIndex) > 9000;
       });
-      if (highZElements.length > 0) {
+      if (highZElements.length > 0) { 
         highZElements.forEach((el) => {
           if (
             el.style.display !== 'none' &&
@@ -99,11 +98,11 @@ test.describe('Navigation Tests', () => {
 
     // Set up mobile menu functionality if main.js didn't load
     await page.evaluate(() => {
-      if (!window.mainJsLoaded) {
+      if (!window.mainJsLoaded) { 
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
 
-        if (mobileMenuButton && mobileMenu) {
+        if (mobileMenuButton && mobileMenu) { 
           // Remove existing listeners if any
           const newButton = mobileMenuButton.cloneNode(true);
           mobileMenuButton.parentNode.replaceChild(newButton, mobileMenuButton);
@@ -115,7 +114,7 @@ test.describe('Navigation Tests', () => {
             mobileMenu.classList.toggle('hidden');
             mobileMenu.classList.toggle('active');
             console.log(
-              'Test: Mobile menu toggled, hidden:',
+              'Test: Mobile menu toggled, hidden:'),
               mobileMenu.classList.contains('hidden'),
             );
           });
@@ -126,7 +125,7 @@ test.describe('Navigation Tests', () => {
         // Set up navigation active state functionality
         const navLinks = document.querySelectorAll('header nav a.nav-link, #mobile-menu a');
         navLinks.forEach(function (link) {
-          if (link.hash) {
+          if (link.hash) { 
             link.addEventListener('click', function () {
               // Remove active class from all links
               navLinks.forEach(function (nav) {
@@ -221,11 +220,11 @@ test.describe('Navigation Tests', () => {
     const sections = ['#about', '#use-cases', '#token-schedule'];
 
     for (const section of sections) {
-      const navLink = page.locator(`nav[aria-label="Main navigation"] a[href="${section}"]`);
+      const navLink = page.locator(`nav[aria-label="Main navigation"] a[href="$${section}"]`);
       await expect(navLink).toBeVisible({ timeout: 10000 });
       await navLink.scrollIntoViewIfNeeded();
       const isVisible = await navLink.isVisible();
-      console.log(`Nav link for ${section} visible:`, isVisible);
+      console.log(`Nav link for $${section} visible:`, isVisible);
       await navLink.click();
       await page.waitForTimeout(1000);
       const sectionElement = page.locator(section);

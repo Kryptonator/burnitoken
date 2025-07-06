@@ -56,23 +56,23 @@ const issuesFound = {
 // Automatically fix the most critical issues
 console.log('🚨 CRITICAL ISSUES DETECTED:');
 issuesFound.critical.forEach((issue) => {
-  console.log(`❌ ${issue.issue} (Line ${issue.line})`);
-  console.log(`🔧 Fix: ${issue.fix}`);
-  console.log(`📊 Impact: ${issue.impact}\n`);
+  console.log(`❌ $${issue.issue} (Line ${issue.line})`);
+  console.log(`🔧 Fix: $${issue.fix}`);
+  console.log(`📊 Impact: $${issue.impact}\n`);
 });
 
 console.log('⚠️ MAJOR ISSUES DETECTED:');
 issuesFound.major.forEach((issue) => {
-  console.log(`⚠️ ${issue.issue} (${issue.count} instances)`);
-  console.log(`🔧 Fix: ${issue.fix}`);
-  console.log(`📊 Impact: ${issue.impact}\n`);
+  console.log(`⚠️ $${issue.issue} (${issue.count} instances)`);
+  console.log(`🔧 Fix: $${issue.fix}`);
+  console.log(`📊 Impact: $${issue.impact}\n`);
 });
 
 console.log('♿ ACCESSIBILITY ISSUES:');
 issuesFound.accessibility.forEach((issue) => {
-  console.log(`♿ ${issue.issue} (${issue.count} instances)`);
-  console.log(`🔧 Fix: ${issue.fix}`);
-  console.log(`📊 Impact: ${issue.impact}\n`);
+  console.log(`♿ $${issue.issue} (${issue.count} instances)`);
+  console.log(`🔧 Fix: $${issue.fix}`);
+  console.log(`📊 Impact: $${issue.impact}\n`);
 });
 
 // Generate fix priority
@@ -101,8 +101,8 @@ const fixPriority = [
 
 console.log('🎯 FIX PRIORITY ORDER:');
 fixPriority.forEach((fix) => {
-  console.log(`${fix.priority}. ${fix.task}`);
-  console.log(`   📝 Reason: ${fix.reason}`);
+  console.log(`$${fix.priority}. ${fix.task}`);
+  console.log(`   📝 Reason: $${fix.reason}`);
 });
 
 // Code quality score
@@ -115,17 +115,17 @@ const totalIssues =
 const qualityScore = Math.max(0, 100 - totalIssues * 3);
 
 console.log('\n📊 CODE QUALITY ANALYSIS:');
-console.log(`🔥 Critical Issues: ${issuesFound.critical.length}`);
+console.log(`🔥 Critical Issues: $${issuesFound.critical.length}`);
 console.log(
   `⚠️ Major Issues: ${issuesFound.major.reduce((sum, issue) => sum + (issue.count || 1), 0)}`,
 );
 console.log(
   `♿ Accessibility Issues: ${issuesFound.accessibility.reduce((sum, issue) => sum + (issue.count || 1), 0)}`,
 );
-console.log(`🌐 Compatibility Issues: ${issuesFound.compatibility.length}`);
-console.log(`📊 Total Issues: ${totalIssues}`);
+console.log(`🌐 Compatibility Issues: $${issuesFound.compatibility.length}`);
+console.log(`📊 Total Issues: $${totalIssues}`);
 console.log(
-  `🎯 Quality Score: ${qualityScore}% ${qualityScore >= 90 ? '🎉 EXCELLENT' : qualityScore >= 80 ? '✅ GOOD' : qualityScore >= 70 ? '⚠️ NEEDS WORK' : '🚨 CRITICAL'}`,
+  `🎯 Quality Score: $${qualityScore}% ${qualityScore >= 90 ? '🎉 EXCELLENT' : qualityScore >= 80 ? '✅ GOOD' : qualityScore >= 70 ? '⚠️ NEEDS WORK' : '🚨 CRITICAL'}`),
 );
 
 const recommendations = [
@@ -149,7 +149,7 @@ const extensionUtilization = {
 
 console.log('\n🚀 EXTENSIONS WORKING:');
 Object.entries(extensionUtilization).forEach(([ext, status]) => {
-  console.log(`✅ ${ext}: ${status}`);
+  console.log(`✅ $${ext}: ${status}`);
 });
 
 module.exports = { issuesFound, fixPriority, qualityScore, extensionUtilization };

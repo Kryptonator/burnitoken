@@ -147,7 +147,7 @@ class AutoHealingSystem {
       try {
         results[serviceName] = await this.checkService(serviceName);
       } catch (error) {
-        console.error(`❌ Health-Check für ${serviceName} fehlgeschlagen:`, error);
+        console.error(`❌ Health-Check für $${serviceName} fehlgeschlagen:`, error);
         results[serviceName] = { status: 'error', error: error.message };
       }
     }
@@ -163,37 +163,37 @@ class AutoHealingSystem {
     const serviceConfig = this.config.services[serviceName];
     const serviceState = this.state.serviceStates[serviceName];
 
-    if (!serviceConfig) {
-      console.warn(`⚠️ Unbekannter Service: ${serviceName}`);
+    if (!serviceConfig) { 
+      console.warn(`⚠️ Unbekannter Service: $${serviceName}`);
       return { status: 'unknown' };
     }
 
     try {
       // Abhängigkeiten prüfen
       const dependenciesOk = await this.checkDependencies(serviceConfig.dependencies);
-      if (!dependenciesOk) {
+      if (!dependenciesOk) { 
         throw new Error('Dependencies not available');
       }
 
       // Service Health-Check ausführen
       const healthResult = await serviceConfig.healthCheck();
 
-      if (healthResult.status === 'healthy' || healthResult.status === 'ok') {
+      if (healthResult.status === 'healthy' || healthResult.status === 'ok') { 
         serviceState.status = 'healthy';
         serviceState.lastSuccess = Date.now();
         serviceState.failureCount = 0;
         this.state.recoveryAttempts[serviceName] = 0;
-      } else {
+      } else { 
         throw new Error(healthResult.error || 'Health check failed');
       }
     } catch (error) {
       serviceState.status = 'unhealthy';
       serviceState.failureCount++;
 
-      console.warn(`⚠️ Service ${serviceName} ist ungesund:`, error.message);
+      console.warn(`⚠️ Service $${serviceName} ist ungesund:`, error.message);
 
       // Auto-Recovery versuchen
-      if (serviceState.failureCount >= 2 && !serviceState.isRecovering) {
+      if (serviceState.failureCount >= 2 && !serviceState.isRecovering) { 
         await this.attemptRecovery(serviceName);
       }
     }
@@ -206,21 +206,21 @@ class AutoHealingSystem {
     const serviceConfig = this.config.services[serviceName];
     const serviceState = this.state.serviceStates[serviceName];
 
-    if (this.state.recoveryAttempts[serviceName] >= this.config.maxRetries) {
-      console.error(`🚨 Service ${serviceName}: Maximale Recovery-Versuche erreicht`);
+    if (this.state.recoveryAttempts[serviceName] >= this.config.maxRetries) { 
+      console.error(`🚨 Service $${serviceName}: Maximale Recovery-Versuche erreicht`);
       await this.alertCriticalFailure(serviceName);
       return false;
     }
 
-    console.log(`🔧 Starte Recovery für Service: ${serviceName}`);
+    console.log(`🔧 Starte Recovery für Service: $${serviceName}`);
     serviceState.isRecovering = true;
     this.state.recoveryAttempts[serviceName]++;
 
     try {
       const recoveryResult = await serviceConfig.recovery();
 
-      if (recoveryResult.success) {
-        console.log(`✅ Recovery erfolgreich für ${serviceName}`);
+      if (recoveryResult.success) { 
+        console.log(`✅ Recovery erfolgreich für $${serviceName}`);
         serviceState.status = 'recovering';
         serviceState.isRecovering = false;
 
@@ -228,11 +228,11 @@ class AutoHealingSystem {
         setTimeout(() => this.checkService(serviceName), 2000);
 
         return true;
-      } else {
+      } else { 
         throw new Error(recoveryResult.error || 'Recovery failed');
       }
     } catch (error) {
-      console.error(`❌ Recovery fehlgeschlagen für ${serviceName}:`, error);
+      console.error(`❌ Recovery fehlgeschlagen für $${serviceName}:`, error);
       serviceState.isRecovering = false;
 
       // Exponential backoff für nächsten Versuch
@@ -246,19 +246,19 @@ class AutoHealingSystem {
 
   // Service-spezifische Health-Checks
   async checkPriceOracle() {
-    if (!window.burniPriceOracle) {
+    if (!window.burniPriceOracle) { 
       return { status: 'unhealthy', error: 'Price Oracle not initialized' };
     }
 
     const oracle = window.burniPriceOracle;
     const lastUpdate = oracle.state?.lastUpdate;
 
-    if (!lastUpdate || Date.now() - lastUpdate > 120000) {
+    if (!lastUpdate || Date.now() - lastUpdate > 120000) { 
       // 2 Minuten
       return { status: 'unhealthy', error: 'Price data stale' };
     }
 
-    if (oracle.state?.status === 'error') {
+    if (oracle.state?.status === 'error') { 
       return { status: 'unhealthy', error: oracle.state.error };
     }
 
@@ -267,12 +267,12 @@ class AutoHealingSystem {
 
   async recoverPriceOracle() {
     try {
-      if (!window.burniPriceOracle) {
+      if (!window.burniPriceOracle) { 
         // Re-initialisieren
-        if (typeof window.BurniPriceOracle === 'function') {
+        if (typeof window.BurniPriceOracle === 'function') { 
           window.burniPriceOracle = new window.BurniPriceOracle();
           return { success: true };
-        } else {
+        } else { 
           throw new Error('BurniPriceOracle class not available');
         }
       }
@@ -289,7 +289,7 @@ class AutoHealingSystem {
     // Prüfe ob Extension Orchestrator läuft
     try {
       const response = await fetch('/api/extensions/status').catch(() => null);
-      if (response && response.ok) {
+      if (response && response.ok) { 
         return { status: 'healthy' };
       }
     } catch (error) {
@@ -320,12 +320,12 @@ class AutoHealingSystem {
 
   async checkWebVitals() {
     // Prüfe Performance-Metriken
-    if (typeof window !== 'undefined' && window.performance) {
+    if (typeof window !== 'undefined' && window.performance) { 
       const navigation = window.performance.getEntriesByType('navigation')[0];
-      if (navigation && navigation.loadEventEnd > 0) {
+      if (navigation && navigation.loadEventEnd > 0) { 
         const loadTime = navigation.loadEventEnd - navigation.fetchStart;
 
-        if (loadTime > 5000) {
+        if (loadTime > 5000) { 
           // 5 Sekunden
           return { status: 'unhealthy', error: 'Slow page load time' };
         }
@@ -340,13 +340,13 @@ class AutoHealingSystem {
   async recoverWebVitals() {
     try {
       // Cache leeren und neu laden
-      if ('caches' in window) {
+      if ('caches' in window) { 
         const cacheNames = await caches.keys();
         await Promise.all(cacheNames.map((name) => caches.delete(name)));
       }
 
       // Service Worker neu registrieren falls vorhanden
-      if ('serviceWorker' in navigator) {
+      if ('serviceWorker' in navigator) { 
         const registrations = await navigator.serviceWorker.getRegistrations();
         await Promise.all(registrations.map((reg) => reg.unregister()));
       }
@@ -362,11 +362,11 @@ class AutoHealingSystem {
     const requiredMeta = ['title', 'description', 'og:title', 'og:description'];
     const missingMeta = requiredMeta.filter((name) => {
       const selector =
-        name === 'title' ? 'title' : `meta[${name.includes(':') ? 'property' : 'name'}="${name}"]`;
+        name === 'title' ? 'title' : `meta[${name.includes(':') ? 'property' : 'name'}="$${name}"]`;
       return !document.querySelector(selector);
     });
 
-    if (missingMeta.length > 0) {
+    if (missingMeta.length > 0) { 
       return { status: 'unhealthy', error: `Missing meta tags: ${missingMeta.join(', ')}` };
     }
 
@@ -394,7 +394,7 @@ class AutoHealingSystem {
 
     const failedApis = results.filter((r) => r.status === 'rejected' || !r.value).length;
 
-    if (failedApis >= apis.length) {
+    if (failedApis >= apis.length) { 
       return { status: 'unhealthy', error: 'All APIs unreachable' };
     }
 
@@ -407,7 +407,7 @@ class AutoHealingSystem {
       await this.delay(1000);
 
       // Price Oracle neu initialisieren
-      if (window.burniPriceOracle) {
+      if (window.burniPriceOracle) { 
         await window.burniPriceOracle.forceUpdate();
       }
 
@@ -424,15 +424,15 @@ class AutoHealingSystem {
     const totalCount = services.length;
     const healthPercent = (healthyCount / totalCount) * 100;
 
-    if (healthPercent >= 90) {
+    if (healthPercent >= 90) { 
       this.state.systemHealth = 'excellent';
-    } else if (healthPercent >= 75) {
+    } else if (healthPercent >= 75) { 
       this.state.systemHealth = 'good';
-    } else if (healthPercent >= 50) {
+    } else if (healthPercent >= 50) { 
       this.state.systemHealth = 'degraded';
-    } else if (healthPercent >= 25) {
+    } else if (healthPercent >= 25) { 
       this.state.systemHealth = 'critical';
-    } else {
+    } else { 
       this.state.systemHealth = 'failed';
     }
 
@@ -441,7 +441,7 @@ class AutoHealingSystem {
 
   updateHealthUI() {
     const statusElement = document.getElementById('system-health-status');
-    if (statusElement) {
+    if (statusElement) { 
       const healthConfig = {
         excellent: { emoji: '💚', text: 'Excellent', class: 'health-excellent' },
         good: { emoji: '🟢', text: 'Good', class: 'health-good' },
@@ -451,8 +451,8 @@ class AutoHealingSystem {
       };
 
       const config = healthConfig[this.state.systemHealth];
-      statusElement.innerHTML = `${config.emoji} ${config.text}`;
-      statusElement.className = `system-health ${config.class}`;
+      statusElement.innerHTML = `$${config.emoji} ${config.text}`;
+      statusElement.className = `system-health $${config.class}`;
     }
   }
 
@@ -475,7 +475,7 @@ class AutoHealingSystem {
     console.log('📊 Diagnosis Complete:', diagnosis);
 
     // Bei kritischen Problemen sofortiges Recovery
-    if (this.state.systemHealth === 'critical' || this.state.systemHealth === 'failed') {
+    if (this.state.systemHealth === 'critical' || this.state.systemHealth === 'failed') { 
       await this.performEmergencyRecovery();
     }
 
@@ -526,7 +526,7 @@ class AutoHealingSystem {
 
   setupUIIntegration() {
     // UI-Element für System-Status erstellen falls nicht vorhanden
-    if (!document.getElementById('system-health-status')) {
+    if (!document.getElementById('system-health-status')) { 
       const statusDiv = document.createElement('div');
       statusDiv.id = 'system-health-status';
       statusDiv.className = 'system-health';
@@ -551,16 +551,16 @@ class AutoHealingSystem {
   }
 
   async alertCriticalFailure(serviceName) {
-    const message = `🚨 CRITICAL: Service ${serviceName} failed after max retries`;
+    const message = `🚨 CRITICAL: Service $${serviceName} failed after max retries`;
     console.error(message);
 
-    if (this.config.alerts.webhook) {
+    if (this.config.alerts.webhook) { 
       try {
         await fetch(this.config.alerts.webhook, {
-          method: 'POST',
+          method: 'POST'),
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            text: message,
+            text: message),
             timestamp: new Date().toISOString(),
             service: serviceName,
             systemHealth: this.state.systemHealth,
@@ -574,10 +574,10 @@ class AutoHealingSystem {
 
   logHealthStatus(results) {
     const summary = Object.entries(results)
-      .map(([name, result]) => `${result.status === 'healthy' ? '✅' : '❌'} ${name}`)
+      .map(([name, result]) => `${result.status === 'healthy' ? '✅' : '❌'} $${name}`)
       .join(' | ');
 
-    console.log(`🏥 Health Status: ${summary} | System: ${this.state.systemHealth.toUpperCase()}`);
+    console.log(`🏥 Health Status: $${summary} | System: ${this.state.systemHealth.toUpperCase()}`);
   }
 
   delay(ms) {
@@ -596,11 +596,11 @@ class AutoHealingSystem {
 window.AutoHealingSystem = AutoHealingSystem;
 
 // Auto-Initialisierung
-if (document.readyState === 'loading') {
+if (document.readyState === 'loading') { 
   document.addEventListener('DOMContentLoaded', () => {
     window.autoHealing = new AutoHealingSystem();
   });
-} else {
+} else { 
   window.autoHealing = new AutoHealingSystem();
 }
 

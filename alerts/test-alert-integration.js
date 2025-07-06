@@ -15,7 +15,7 @@ const errorDetails = {
 };
 
 sendAlert({
-  message: errorMessage,
+  message: errorMessage),
   extra: errorDetails,
   level: 'error', // Stellt sicher, dass createIssue ausgelöst wird
 });

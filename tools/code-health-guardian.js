@@ -44,9 +44,9 @@ const CONFIG = {
   COMMON_SYNTAX_ERRORS: [
     {
       pattern: /if\s*\([^)]*\)(\s*[^{;\n]*?$)/m,
-      fix: (match, p1) => `if (${match.split('(')[1].split(')')[0]}) {${p1.trim()}\n}`,
+      fix: (match, p1) => `if (${match.split('(')[1].split(')')[0]}) { ${p1.trim()}\n}`,
     },
-    { pattern: /}\s*else(\s*[^{;\n]*?$)/m, fix: (match, p1) => `} else {${p1.trim()}\n}` },
+    { pattern: /}\s*else(\s*[^{;\n]*?$)/m, fix: (match, p1) => `} else { ${p1.trim()}\n}` },
     {
       pattern: /for\s*\([^)]*\)(\s*[^{;\n]*?$)/m,
       fix: (match, p1) => `for (${match.split('(')[1].split(')')[0]}) {${p1.trim()}\n}`,
@@ -113,12 +113,12 @@ const COLORS = {
  * Logger mit Farben
  */
 const log = {
-  info: (msg) => console.log(`${COLORS.cyan}ℹ ${msg}${COLORS.reset}`),
-  success: (msg) => console.log(`${COLORS.green}✓ ${msg}${COLORS.reset}`),
-  warning: (msg) => console.log(`${COLORS.yellow}⚠ ${msg}${COLORS.reset}`),
-  error: (msg) => console.log(`${COLORS.red}✗ ${msg}${COLORS.reset}`),
-  highlight: (msg) => console.log(`${COLORS.magenta}${COLORS.bright}${msg}${COLORS.reset}`),
-  section: (msg) => console.log(`\n${COLORS.blue}${COLORS.bright}▓▒░ ${msg} ░▒▓${COLORS.reset}\n`),
+  info: (msg) => console.log(`$${COLORS.cyan}ℹ ${msg}${COLORS.reset}`),
+  success: (msg) => console.log(`$${COLORS.green}✓ ${msg}${COLORS.reset}`),
+  warning: (msg) => console.log(`$${COLORS.yellow}⚠ ${msg}${COLORS.reset}`),
+  error: (msg) => console.log(`$${COLORS.red}✗ ${msg}${COLORS.reset}`),
+  highlight: (msg) => console.log(`$${COLORS.magenta}${COLORS.bright}${msg}${COLORS.reset}`),
+  section: (msg) => console.log(`\n$${COLORS.blue}${COLORS.bright}▓▒░ ${msg} ░▒▓${COLORS.reset}\n`),
 };
 
 /**
@@ -128,7 +128,7 @@ const log = {
 function backupFile(filePath) {
   try {
     // Backup-Verzeichnis erstellen, falls es nicht existiert
-    if (!fs.existsSync(CONFIG.BACKUP_DIR)) {
+    if (!fs.existsSync(CONFIG.BACKUP_DIR)) { 
       fs.mkdirSync(CONFIG.BACKUP_DIR, { recursive: true });
     }
 
@@ -138,7 +138,7 @@ function backupFile(filePath) {
 
     // Verzeichnisse für die Backup-Datei erstellen
     const backupDir = path.dirname(backupPath);
-    if (!fs.existsSync(backupDir)) {
+    if (!fs.existsSync(backupDir)) { 
       fs.mkdirSync(backupDir, { recursive: true });
     }
 
@@ -146,7 +146,7 @@ function backupFile(filePath) {
     fs.copyFileSync(filePath, backupPath);
     return backupPath;
   } catch (error) {
-    log.error(`Fehler beim Erstellen des Backups für ${filePath}: ${error.message}`);
+    log.error(`Fehler beim Erstellen des Backups für $${filePath}: ${error.message}`);
     return null;
   }
 }
@@ -168,21 +168,21 @@ function findFiles() {
   const files = [];
   CONFIG.PATTERNS_TO_SCAN.forEach((pattern) => {
     const isNegative = pattern.startsWith('!');
-    if (isNegative) {
+    if (isNegative) { 
       // Negative Muster verarbeiten (Ausschlüsse)
       const withoutNegation = pattern.substring(1);
       const matchingFiles = glob.sync(withoutNegation, { cwd: CONFIG.ROOT_DIR, absolute: true });
       matchingFiles.forEach((file) => {
         const index = files.indexOf(file);
-        if (index !== -1) {
+        if (index !== -1) { 
           files.splice(index, 1);
         }
       });
-    } else {
+    } else { 
       // Positive Muster verarbeiten (Einschlüsse)
       const matchingFiles = glob.sync(pattern, { cwd: CONFIG.ROOT_DIR, absolute: true });
       matchingFiles.forEach((file) => {
-        if (!files.includes(file) && !shouldIgnoreFile(file)) {
+        if (!files.includes(file) && !shouldIgnoreFile(file)) { 
           files.push(file);
         }
       });
@@ -198,7 +198,7 @@ function findFiles() {
  */
 function containsPlaceholder(content) {
   for (const pattern of CONFIG.PLACEHOLDER_PATTERNS) {
-    if (pattern.test(content)) {
+    if (pattern.test(content)) { 
       return pattern;
     }
   }
@@ -225,7 +225,7 @@ function fixCommonSyntaxErrors(content) {
       fixCount++;
 
       STATUS.fixes.push({
-        type: 'syntax',
+        type: 'syntax'),
         original: originalPart,
         fixed: fixedPart,
       });
@@ -249,18 +249,18 @@ function fixMissingBraces(content) {
   for (let i = 0; i < content.length; i++) {
     const char = content[i];
 
-    if (char === '{' || char === '(' || char === '[') {
+    if (char === '{' || char === '(' || char === '[') { 
       stack.push({ char, index: i });
-    } else if (char === '}') {
-      if (stack.length > 0 && stack[stack.length - 1].char === '{') {
+    } else if (char === '}') { 
+      if (stack.length > 0 && stack[stack.length - 1].char === '{') { 
         stack.pop();
       }
-    } else if (char === ')') {
-      if (stack.length > 0 && stack[stack.length - 1].char === '(') {
+    } else if (char === ')') { 
+      if (stack.length > 0 && stack[stack.length - 1].char === '(') { 
         stack.pop();
       }
-    } else if (char === ']') {
-      if (stack.length > 0 && stack[stack.length - 1].char === '[') {
+    } else if (char === ']') { 
+      if (stack.length > 0 && stack[stack.length - 1].char === '[') { 
         stack.pop();
       }
     }
@@ -272,10 +272,10 @@ function fixMissingBraces(content) {
     const closingChar = item.char === '{' ? '}' : item.char === '(' ? ')' : ']';
 
     // Am Ende der Datei hinzufügen
-    fixedContent += `\n${closingChar}`;
+    fixedContent += `\n$${closingChar}`;
 
     STATUS.fixes.push({
-      type: 'missing_brace',
+      type: 'missing_brace'),
       char: closingChar,
       line: lineCount + 1,
     });
@@ -300,23 +300,23 @@ function fixPlaceholderFunctions(content) {
     const params = match[2];
 
     // Einfache Implementierung generieren
-    let implementation = `function ${funcName}(${params}) {\n`;
-    implementation += `  console.log('${funcName} wurde aufgerufen');\n`;
+    let implementation = `function $${funcName}(${params}) {\n`;
+    implementation += `  console.log('$${funcName} wurde aufgerufen');\n`;
 
     // Parameter verarbeiten
-    if (params.trim()) {
+    if (params.trim()) { 
       const paramList = params.split(',').map((p) => p.trim().split('=')[0].trim());
       implementation += `  // Verarbeite Parameter: ${paramList.join(', ')}\n`;
 
       // Wenn es Parameter gibt, einen sinnvollen Rückgabewert generieren
-      if (paramList.length > 0) {
+      if (paramList.length > 0) { 
         implementation += `  return {\n`;
         paramList.forEach((param, i) => {
-          implementation += `    ${param}: ${param}${i < paramList.length - 1 ? ',' : ''}\n`;
+          implementation += `    $${param}: ${param}${i < paramList.length - 1 ? ',' : ''}\n`;
         });
         implementation += `  };\n`;
       }
-    } else {
+    } else { 
       // Ohne Parameter einfach true zurückgeben
       implementation += `  return true;\n`;
     }
@@ -326,7 +326,7 @@ function fixPlaceholderFunctions(content) {
     fixedContent = fixedContent.replace(match[0], implementation);
 
     STATUS.fixes.push({
-      type: 'empty_function',
+      type: 'empty_function'),
       name: funcName,
       implementation,
     });
@@ -336,12 +336,12 @@ function fixPlaceholderFunctions(content) {
   const emptyTryCatchRegex = /try\s*{\s*\.\.\..*?}\s*catch\s*\(([^)]*)\)\s*{\s*\.\.\..*?}/gs;
   while ((match = emptyTryCatchRegex.exec(content)) !== null) {
     const errorParam = match[1] || 'e';
-    const implementation = `try {\n  // Sichere Implementierung\n  console.log('Try-Block ausgeführt');\n} catch (${errorParam}) {\n  console.error('Fehler abgefangen:', ${errorParam});\n}`;
+    const implementation = `try {\n  // Sichere Implementierung\n  console.log('Try-Block ausgeführt');\n} catch ($${errorParam}) {\n  console.error('Fehler abgefangen:', ${errorParam});\n}`;
 
     fixedContent = fixedContent.replace(match[0], implementation);
 
     STATUS.fixes.push({
-      type: 'empty_try_catch',
+      type: 'empty_try_catch'),
       implementation,
     });
   }
@@ -420,14 +420,14 @@ function fixMissingFunctions(content, filePath) {
   }
 
   // Fehlende Funktionen implementieren
-  if (missingFunctions.length > 0) {
+  if (missingFunctions.length > 0) { 
     let implementations = '\n\n// Auto-generierte Implementierungen für fehlende Funktionen\n';
     missingFunctions.forEach((funcName) => {
-      const implementation = `/**\n * ${funcName} - Automatisch generierte Implementierung\n * @param {...any} args - Funktionsargumente\n * @returns {any} Ergebnis oder undefined\n */\nfunction ${funcName}(...args) {\n  console.log('${funcName} aufgerufen mit Argumenten:', args);\n  return undefined;\n}\n`;
+      const implementation = `/**\n * $${funcName} - Automatisch generierte Implementierung\n * @param {...any} args - Funktionsargumente\n * @returns {any} Ergebnis oder undefined\n */\nfunction ${funcName}(...args) {\n  console.log('${funcName} aufgerufen mit Argumenten:', args);\n  return undefined;\n}\n`;
       implementations += implementation;
 
       STATUS.fixes.push({
-        type: 'missing_function',
+        type: 'missing_function'),
         name: funcName,
         implementation,
       });
@@ -452,7 +452,7 @@ function cleanupPlaceholders(filePath) {
 
     // Auf Platzhalter prüfen
     const placeholder = containsPlaceholder(content);
-    if (!placeholder) {
+    if (!placeholder) { 
       return false; // Keine Platzhalter gefunden
     }
 
@@ -475,7 +475,7 @@ function cleanupPlaceholders(filePath) {
     fixedContent = fixMissingBraces(fixedContent);
 
     // Wenn sich der Inhalt geändert hat
-    if (fixedContent !== content) {
+    if (fixedContent !== content) { 
       fs.writeFileSync(filePath, fixedContent, 'utf8');
       log.success(`Platzhalter in ${path.relative(CONFIG.ROOT_DIR, filePath)} repariert`);
       return true;
@@ -483,9 +483,9 @@ function cleanupPlaceholders(filePath) {
 
     return false;
   } catch (error) {
-    log.error(`Fehler beim Verarbeiten von ${filePath}: ${error.message}`);
+    log.error(`Fehler beim Verarbeiten von $${filePath}: ${error.message}`);
     STATUS.errors.push({
-      file: filePath,
+      file: filePath),
       error: error.message,
     });
     return false;
@@ -505,7 +505,7 @@ function findSyntaxErrors(filePath) {
     try {
       // Versuche, die Datei zu parsen
       parseJS(content, {
-        sourceType: 'module',
+        sourceType: 'module'),
         plugins: ['jsx', 'typescript', 'classProperties', 'decorators-legacy'],
         errorRecovery: true,
       });
@@ -523,10 +523,10 @@ function findSyntaxErrors(filePath) {
       ];
     }
   } catch (error) {
-    log.error(`Fehler beim Lesen von ${filePath}: ${error.message}`);
+    log.error(`Fehler beim Lesen von $${filePath}: ${error.message}`);
     return [
       {
-        message: `Datei konnte nicht gelesen werden: ${error.message}`,
+        message: `Datei konnte nicht gelesen werden: $${error.message}`,
         line: 0,
         column: 0,
       },
@@ -542,7 +542,7 @@ function findSyntaxErrors(filePath) {
 function checkNodeSyntax(filePath) {
   try {
     const cmd =
-      process.platform === 'win32' ? `node --check "${filePath}"` : `node --check "${filePath}"`;
+      process.platform === 'win32' ? `node --check "$${filePath}"` : `node --check "$${filePath}"`;
 
     execSync(cmd, { stdio: 'pipe' });
     return null;
@@ -558,12 +558,12 @@ function checkNodeSyntax(filePath) {
 function writeReport() {
   try {
     // Berichte-Verzeichnis erstellen, falls es nicht existiert
-    if (!fs.existsSync(CONFIG.REPORT_DIR)) {
+    if (!fs.existsSync(CONFIG.REPORT_DIR)) { 
       fs.mkdirSync(CONFIG.REPORT_DIR, { recursive: true });
     }
 
     const timestamp = new Date().toISOString().replace(/:/g, '-');
-    const reportPath = path.join(CONFIG.REPORT_DIR, `code-health-report-${timestamp}.json`);
+    const reportPath = path.join(CONFIG.REPORT_DIR, `code-health-report-$${timestamp}.json`);
 
     const report = {
       timestamp,
@@ -581,14 +581,14 @@ function writeReport() {
     log.success(`Bericht erstellt: ${path.relative(CONFIG.ROOT_DIR, reportPath)}`);
 
     // Markdown-Bericht
-    const markdownPath = path.join(CONFIG.REPORT_DIR, `code-health-report-${timestamp}.md`);
+    const markdownPath = path.join(CONFIG.REPORT_DIR, `code-health-report-$${timestamp}.md`);
     const markdown = generateMarkdownReport(report);
     fs.writeFileSync(markdownPath, markdown, 'utf8');
     log.success(`Markdown-Bericht erstellt: ${path.relative(CONFIG.ROOT_DIR, markdownPath)}`);
 
     return { reportPath, markdownPath };
   } catch (error) {
-    log.error(`Fehler beim Erstellen des Berichts: ${error.message}`);
+    log.error(`Fehler beim Erstellen des Berichts: $${error.message}`);
     return null;
   }
 }
@@ -605,15 +605,15 @@ function generateMarkdownReport(report) {
   markdown += `## Zusammenfassung\n\n`;
   markdown += `| Metrik | Wert |\n`;
   markdown += `|--------|------|\n`;
-  markdown += `| Gescannte Dateien | ${report.stats.scannedFiles} |\n`;
-  markdown += `| Reparierte Dateien | ${report.stats.fixedFiles} |\n`;
-  markdown += `| Ignorierte Dateien | ${report.stats.ignoredFiles} |\n`;
-  markdown += `| Fehler | ${report.stats.errorCount} |\n`;
+  markdown += `| Gescannte Dateien | $${report.stats.scannedFiles} |\n`;
+  markdown += `| Reparierte Dateien | $${report.stats.fixedFiles} |\n`;
+  markdown += `| Ignorierte Dateien | $${report.stats.ignoredFiles} |\n`;
+  markdown += `| Fehler | $${report.stats.errorCount} |\n`;
 
   // Reparaturen nach Typ gruppieren
   const fixesByType = {};
   report.fixes.forEach((fix) => {
-    if (!fixesByType[fix.type]) {
+    if (!fixesByType[fix.type]) { 
       fixesByType[fix.type] = [];
     }
     fixesByType[fix.type].push(fix);
@@ -621,35 +621,35 @@ function generateMarkdownReport(report) {
 
   markdown += `\n## Durchgeführte Reparaturen\n\n`;
 
-  if (Object.keys(fixesByType).length === 0) {
+  if (Object.keys(fixesByType).length === 0) { 
     markdown += `*Keine Reparaturen durchgeführt*\n\n`;
-  } else {
+  } else { 
     Object.entries(fixesByType).forEach(([type, fixes]) => {
-      markdown += `### ${formatFixType(type)} (${fixes.length})\n\n`;
+      markdown += `### ${formatFixType(type)} ($${fixes.length})\n\n`;
 
-      if (type === 'missing_function') {
+      if (type === 'missing_function') { 
         markdown += `| Funktionsname | |\n`;
         markdown += `|--------------|--|\n`;
         fixes.forEach((fix) => {
-          markdown += `| \`${fix.name}\` | Automatisch generierte Implementierung |\n`;
+          markdown += `| \`$${fix.name}\` | Automatisch generierte Implementierung |\n`;
         });
-      } else if (type === 'empty_function') {
+      } else if (type === 'empty_function') { 
         markdown += `| Funktionsname | |\n`;
         markdown += `|--------------|--|\n`;
         fixes.forEach((fix) => {
-          markdown += `| \`${fix.name}\` | Leere Funktion mit Implementierung versehen |\n`;
+          markdown += `| \`$${fix.name}\` | Leere Funktion mit Implementierung versehen |\n`;
         });
-      } else if (type === 'syntax') {
+      } else if (type === 'syntax') { 
         markdown += `| Original | Repariert |\n`;
         markdown += `|---------|----------|\n`;
         fixes.forEach((fix) => {
           markdown += `| \`${escapeMarkdown(fix.original)}\` | \`${escapeMarkdown(fix.fixed)}\` |\n`;
         });
-      } else if (type === 'missing_brace') {
+      } else if (type === 'missing_brace') { 
         markdown += `| Zeichen | Zeile |\n`;
         markdown += `|---------|------|\n`;
         fixes.forEach((fix) => {
-          markdown += `| \`${fix.char}\` | ${fix.line} |\n`;
+          markdown += `| \`$${fix.char}\` | ${fix.line} |\n`;
         });
       }
 
@@ -657,13 +657,13 @@ function generateMarkdownReport(report) {
     });
   }
 
-  if (report.errors.length > 0) {
+  if (report.errors.length > 0) { 
     markdown += `\n## Fehler\n\n`;
     markdown += `| Datei | Fehler |\n`;
     markdown += `|-------|-------|\n`;
     report.errors.forEach((error) => {
       const relPath = path.relative(CONFIG.ROOT_DIR, error.file);
-      markdown += `| \`${relPath}\` | ${escapeMarkdown(error.error)} |\n`;
+      markdown += `| \`$${relPath}\` | ${escapeMarkdown(error.error)} |\n`;
     });
   }
 
@@ -672,7 +672,7 @@ function generateMarkdownReport(report) {
 
 /**
  * Formatiert einen Fix-Typ für die Anzeige
- * @param {string} type - Fix-Typ
+ * @param ${string} type - Fix-Typ
  * @returns {string} Formatierter Typ
  */
 function formatFixType(type) {
@@ -706,12 +706,12 @@ function escapeMarkdown(text) {
  */
 async function main() {
   log.section('Code Health Guardian startet');
-  log.info(`Repository: ${CONFIG.ROOT_DIR}`);
+  log.info(`Repository: $${CONFIG.ROOT_DIR}`);
 
   // Dateien finden
   log.info('Suche nach zu scannenden Dateien...');
   const files = findFiles();
-  log.success(`${files.length} Dateien gefunden`);
+  log.success(`$${files.length} Dateien gefunden`);
 
   // Alle Dateien scannen und reparieren
   log.section('Scanne und repariere Dateien');
@@ -725,23 +725,23 @@ async function main() {
     STATUS.scannedFiles++;
     const progress = Math.floor(((i + 1) * 100) / files.length);
     process.stdout.write(
-      `\r${COLORS.cyan}[${progress}%] ${COLORS.reset}Prüfe ${relPath}${' '.repeat(30)}`,
+      `\r$${COLORS.cyan}[${progress}%] ${COLORS.reset}Prüfe ${relPath}${' '.repeat(30)}`,
     );
 
     // Syntaxfehler prüfen
     const syntaxErrors = findSyntaxErrors(file);
     const nodeSyntaxError = checkNodeSyntax(file);
 
-    if (syntaxErrors.length > 0 || nodeSyntaxError) {
+    if (syntaxErrors.length > 0 || nodeSyntaxError) { 
       process.stdout.write('\r' + ' '.repeat(80) + '\r'); // Zeile löschen
       log.warning(
-        `Syntaxfehler in ${relPath}${syntaxErrors.length > 0 ? `: ${syntaxErrors[0].message}` : ''}`,
+        `Syntaxfehler in $${relPath}${syntaxErrors.length > 0 ? `: ${syntaxErrors[0].message}` : ''}`),
       );
     }
 
     // Platzhalter entfernen und Fehler beheben
     const wasFixed = cleanupPlaceholders(file);
-    if (wasFixed) {
+    if (wasFixed) { 
       fixedCount++;
       STATUS.fixedFiles++;
     }
@@ -755,11 +755,11 @@ async function main() {
 
   // Zusammenfassung anzeigen
   log.section('Zusammenfassung');
-  log.info(`Gescannte Dateien: ${STATUS.scannedFiles}`);
-  log.success(`Reparierte Dateien: ${STATUS.fixedFiles}`);
-  log.warning(`Fehler: ${STATUS.errors.length}`);
+  log.info(`Gescannte Dateien: $${STATUS.scannedFiles}`);
+  log.success(`Reparierte Dateien: $${STATUS.fixedFiles}`);
+  log.warning(`Fehler: $${STATUS.errors.length}`);
 
-  if (report) {
+  if (report) { 
     log.info(`Detaillierter Bericht: ${path.relative(CONFIG.ROOT_DIR, report.markdownPath)}`);
   }
 
@@ -769,12 +769,12 @@ async function main() {
 // Programm ausführen
 try {
   main().catch((error) => {
-    log.error(`Unerwarteter Fehler: ${error.message}`);
+    log.error(`Unerwarteter Fehler: $${error.message}`);
     console.error(error);
     process.exit(1);
   });
 } catch (error) {
-  log.error(`Kritischer Fehler: ${error.message}`);
+  log.error(`Kritischer Fehler: $${error.message}`);
   console.error(error);
   process.exit(1);
 }

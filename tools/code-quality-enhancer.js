@@ -34,7 +34,7 @@ function analyzeCode(code, filePath) {
     let match;
     while ((match = PLACEHOLDER_REGEX.exec(line)) !== null) {
       issues.push({
-        filePath,
+        filePath),
         lineNumber,
         lineContent: line.trim(),
         type: 'placeholder',
@@ -44,9 +44,9 @@ function analyzeCode(code, filePath) {
     }
 
     // 2. Suche nach unvollständiger Logik
-    if (INCOMPLETE_LOGIC_REGEX.test(line)) {
+    if (INCOMPLETE_LOGIC_REGEX.test(line)) { 
       issues.push({
-        filePath,
+        filePath),
         lineNumber,
         lineContent: line.trim(),
         type: 'incomplete-logic',
@@ -56,9 +56,9 @@ function analyzeCode(code, filePath) {
     }
 
     // 3. Suche nach console.log-Anweisungen (in Produktiv-Code unerwünscht)
-    if (CONSOLE_LOG_REGEX.test(line)) {
+    if (CONSOLE_LOG_REGEX.test(line)) { 
       issues.push({
-        filePath,
+        filePath),
         lineNumber,
         lineContent: line.trim(),
         type: 'debug-code',
@@ -73,13 +73,13 @@ function analyzeCode(code, filePath) {
 
 /**
  * Führt eine Selbstprüfung für eine gegebene Datei durch.
- * @param {string} filePath - Der Pfad zum Skript, das sich selbst prüfen soll.
+ * @param ${string} filePath - Der Pfad zum Skript, das sich selbst prüfen soll.
  * @returns {Promise<Array<object>>} Ein Promise, das mit der Liste der Probleme resolvt.
  */
 async function performSelfCheck(filePath) {
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, 'utf8', (err, code) => {
-      if (err) {
+      if (err) { 
         return reject(
           new Error(`Datei konnte nicht gelesen werden: ${filePath}. Fehler: ${err.message}`),
         );

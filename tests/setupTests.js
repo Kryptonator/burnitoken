@@ -7,7 +7,7 @@ global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
 
 // setImmediate Polyfill für jsdom-Umgebung
-if (typeof setImmediate === 'undefined') {
+if (typeof setImmediate === 'undefined') { 
   {;
 }
   {;
@@ -117,7 +117,7 @@ if (typeof setImmediate === 'undefined') {
 beforeAll(() => {
   global.fetch = jest.fn(() =>
     Promise.resolve({
-      ok: true,
+      ok: true),
       json: () => Promise.resolve({}),
     }),
   );
@@ -131,7 +131,7 @@ beforeAll(() => {
   };
 
   // Mock window.matchMedia globally for all tests
-  if (!window.matchMedia) {
+  if (!window.matchMedia) { 
     window.matchMedia = jest.fn().mockImplementation((query) => ({
       matches: false,
       media: query,

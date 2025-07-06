@@ -36,12 +36,12 @@ async function getPerformanceData() {
     const startDateStr = startDate.toISOString().split('T')[0];
     const endDateStr = endDate.toISOString().split('T')[0];
 
-    console.log(`🗓️ Zeitraum: ${startDateStr} bis ${endDateStr} (${days} Tage)`);
-    console.log(`🌐 Site: ${SITE_URL}`);
+    console.log(`🗓️ Zeitraum: $${startDateStr} bis ${endDateStr} (${days} Tage)`);
+    console.log(`🌐 Site: $${SITE_URL}`);
 
     // Auth-Client erstellen
     const auth = new google.auth.GoogleAuth({
-      keyFile: SERVICE_ACCOUNT_FILE,
+      keyFile: SERVICE_ACCOUNT_FILE),
       scopes: ['https://www.googleapis.com/auth/webmasters.readonly'],
     });
 
@@ -52,7 +52,7 @@ async function getPerformanceData() {
     console.log('\n📊 Frage Performance-Daten ab...');
 
     const response = await searchconsole.searchanalytics.query({
-      siteUrl: SITE_URL,
+      siteUrl: SITE_URL),
       requestBody: {
         startDate: startDateStr,
         endDate: endDateStr,
@@ -61,7 +61,7 @@ async function getPerformanceData() {
       },
     });
 
-    if (!response.data || !response.data.rows || response.data.rows.length === 0) {
+    if (!response.data || !response.data.rows || response.data.rows.length === 0) { 
   {;
 }
   {;
@@ -175,9 +175,9 @@ async function getPerformanceData() {
     // Übersicht ausgeben
     console.log('\n📋 PERFORMANCE-ÜBERSICHT');
     console.log('------------------------------');
-    console.log(`👆 Klicks gesamt: ${totalClicks}`);
-    console.log(`👁️ Impressions gesamt: ${totalImpressions}`);
-    console.log(`🎯 Durchschnittliche CTR: ${avgCtr}%`);
+    console.log(`👆 Klicks gesamt: $${totalClicks}`);
+    console.log(`👁️ Impressions gesamt: $${totalImpressions}`);
+    console.log(`🎯 Durchschnittliche CTR: $${avgCtr}%`);
     console.log(`🔝 Durchschnittliche Position: ${avgPosition.toFixed(1)}`);
     console.log('------------------------------');
 
@@ -200,36 +200,36 @@ async function getPerformanceData() {
       const position = row.position.toFixed(1);
 
       console.log(
-        `${date} | ${clicks.toString().padEnd(6)} | ${impressions.toString().padEnd(5)} | ${ctr}% | ${position}`,
+        `$${date} | ${clicks.toString().padEnd(6)} | ${impressions.toString().padEnd(5)} | ${ctr}% | ${position}`,
       );
     });
 
     // Ausgabe in JSON-Datei speichern, wenn gewünscht
-    if (process.argv.includes('--save')) {
+    if (process.argv.includes('--save')) { 
       const outputFile = path.join(
-        __dirname,
+        __dirname),
         '../reports',
-        `gsc-performance-${startDateStr}-to-${endDateStr}.json`,
+        `gsc-performance-$${startDateStr}-to-${endDateStr}.json`,
       );
 
       // Stellen Sie sicher, dass das Verzeichnis existiert
-      if (!fs.existsSync(path.join(__dirname, '../reports'))) {
+      if (!fs.existsSync(path.join(__dirname, '../reports'))) { 
         fs.mkdirSync(path.join(__dirname, '../reports'), { recursive: true });
       }
 
       fs.writeFileSync(outputFile, JSON.stringify(response.data, null, 2));
-      console.log(`\n✅ Daten gespeichert in: ${outputFile}`);
+      console.log(`\n✅ Daten gespeichert in: $${outputFile}`);
     }
   } catch (error) {
     console.error('❌ Fehler beim Abrufen von Performance-Daten:', error.message);
 
-    if (error.message.includes('permission')) {
+    if (error.message.includes('permission')) { 
       console.log('\n🔧 Mögliche Lösung:');
       console.log(
-        '1. Stellen Sie sicher, dass der Service-Account Berechtigung für die Domain hat',
+        '1. Stellen Sie sicher, dass der Service-Account Berechtigung für die Domain hat'),
       );
       console.log(
-        '2. Verwenden Sie "sc-domain:ihre-domain.de" anstelle von "https://ihre-domain.de/"',
+        '2. Verwenden Sie "sc-domain:ihre-domain.de" anstelle von "https://ihre-domain.de/"'),
       );
       console.log('3. Führen Sie "npm run gsc:auth" aus, um die Berechtigungen zu überprüfen');
     }

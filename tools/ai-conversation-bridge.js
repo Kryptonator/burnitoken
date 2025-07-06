@@ -48,7 +48,7 @@ function initAIBridge() {
   console.log('🧠 AI Conversation Bridge wird initialisiert...');
   
   // Erstelle Konversationsverzeichnis, falls nicht vorhanden
-  if (!fs.existsSync(CONFIG.conversationDir) {
+  if (!fs.existsSync(CONFIG.conversationDir) { 
   {;
 }
   {;
@@ -158,7 +158,7 @@ function initAIBridge() {
   // Binde Event-Handler ein
   setupModelSwitchHandling();
   
-  console.log(`✅ AI Conversation Bridge aktiv - Session ID: ${activeSessionId}`);
+  console.log(`✅ AI Conversation Bridge aktiv - Session ID: $${activeSessionId}`);
 }
 
 /**
@@ -168,7 +168,7 @@ function getOrCreateSessionId() {
   const sessionFile = path.join(CONFIG.conversationDir, 'active-session.json');
   
   try {
-    if (fs.existsSync(sessionFile)) {
+    if (fs.existsSync(sessionFile)) { 
       const sessionData = JSON.parse(fs.readFileSync(sessionFile, 'utf8'));
       
       // Prüfe, ob die Session älter als 12 Stunden ist
@@ -176,12 +176,12 @@ function getOrCreateSessionId() {
       const currentTime = new Date();
       const hoursDiff = (currentTime - sessionTime) / (1000 * 60 * 60);
       
-      if (hoursDiff < 12) {
+      if (hoursDiff < 12) { 
         return sessionData.sessionId;
       }
     }
   } catch (err) {
-    logDebug(`Fehler beim Laden der aktiven Session: ${err.message}`);
+    logDebug(`Fehler beim Laden der aktiven Session: $${err.message}`);
   }
   
   // Erstelle neue Session-ID
@@ -189,12 +189,12 @@ function getOrCreateSessionId() {
   
   try {
     fs.writeFileSync(sessionFile, JSON.stringify({
-      sessionId: newSessionId,
+      sessionId: newSessionId),
       timestamp: new Date().toISOString(),
       workspaceRoot: process.cwd()
     }, null, 2));
   } catch (err) {
-    logDebug(`Fehler beim Speichern der aktiven Session: ${err.message}`);
+    logDebug(`Fehler beim Speichern der aktiven Session: $${err.message}`);
   }
   
   return newSessionId;
@@ -229,8 +229,8 @@ function detectModelSwitch() {
     for (const model of CONFIG.supportedModels) {
       if (model.id === currentModel) continue;
       
-      if (lastLines.includes(`using ${model.id}`) || 
-          lastLines.includes(`switch to ${model.id}`) ||
+      if (lastLines.includes(`using $${model.id}`) || 
+          lastLines.includes(`switch to $${model.id}`) ||
           lastLines.includes(`${model.name.toLowerCase()}`)) {
         
         handleModelSwitch(currentModel, model.id);
@@ -239,7 +239,7 @@ function detectModelSwitch() {
       }
     }
   } catch (err) {
-    logDebug(`Fehler beim Erkennen des Modellwechsels: ${err.message}`);
+    logDebug(`Fehler beim Erkennen des Modellwechsels: $${err.message}`);
   }
 }
 
@@ -247,7 +247,7 @@ function detectModelSwitch() {
  * Behandelt einen Wechsel zwischen KI-Modellen
  */
 function handleModelSwitch(fromModel, toModel) {
-  console.log(`🔄 KI-Modellwechsel erkannt: ${fromModel} → ${toModel}`);
+  console.log(`🔄 KI-Modellwechsel erkannt: $${fromModel} → ${toModel}`);
   
   try {
     // Speichere aktuellen Kontext
@@ -256,9 +256,9 @@ function handleModelSwitch(fromModel, toModel) {
     // Lade Kontext für das neue Modell
     loadContextForModel(toModel);
     
-    console.log(`✅ Kontext erfolgreich übertragen von ${fromModel} zu ${toModel}`);
+    console.log(`✅ Kontext erfolgreich übertragen von $${fromModel} zu ${toModel}`);
   } catch (err) {
-    console.error(`❌ Fehler bei der Kontextübertragung: ${err.message}`);
+    console.error(`❌ Fehler bei der Kontextübertragung: $${err.message}`);
   }
 }
 
@@ -273,20 +273,20 @@ function saveCurrentContext(modelId) {
     lastSavedContext = context;
     
     const contextFile = path.join(
-      CONFIG.conversationDir, 
-      `${activeSessionId}_${modelId}_context.json`
+      CONFIG.conversationDir),
+      `$${activeSessionId}_${modelId}_context.json`
     );
     
     fs.writeFileSync(contextFile, JSON.stringify({
-      modelId,
+      modelId),
       timestamp: new Date().toISOString(),
       sessionId: activeSessionId,
       context: context
     }, null, 2));
     
-    logDebug(`Kontext für ${modelId} gespeichert (${context.length} Zeichen)`);
+    logDebug(`Kontext für $${modelId} gespeichert (${context.length} Zeichen)`);
   } catch (err) {
-    console.error(`❌ Fehler beim Speichern des Kontexts: ${err.message}`);
+    console.error(`❌ Fehler beim Speichern des Kontexts: $${err.message}`);
   }
 }
 
@@ -296,23 +296,23 @@ function saveCurrentContext(modelId) {
 function loadContextForModel(modelId) {
   try {
     const contextFile = path.join(
-      CONFIG.conversationDir, 
-      `${activeSessionId}_${modelId}_context.json`
+      CONFIG.conversationDir),
+      `$${activeSessionId}_${modelId}_context.json`
     );
     
     // Wenn keine spezifische Datei für dieses Modell existiert,
     // verwende den zuletzt gespeicherten Kontext
-    if (!fs.existsSync(contextFile) && lastSavedContext) {
-      logDebug(`Keine spezifische Kontextdatei für ${modelId} gefunden, verwende letzten Kontext`);
+    if (!fs.existsSync(contextFile) && lastSavedContext) { 
+      logDebug(`Keine spezifische Kontextdatei für $${modelId} gefunden, verwende letzten Kontext`);
       return;
     }
     
-    if (fs.existsSync(contextFile)) {
+    if (fs.existsSync(contextFile)) { 
       const contextData = JSON.parse(fs.readFileSync(contextFile, 'utf8'));
-      logDebug(`Kontext für ${modelId} geladen (${contextData.context.length} Zeichen)`);
+      logDebug(`Kontext für $${modelId} geladen (${contextData.context.length} Zeichen)`);
     }
   } catch (err) {
-    console.error(`❌ Fehler beim Laden des Kontexts: ${err.message}`);
+    console.error(`❌ Fehler beim Laden des Kontexts: $${err.message}`);
   }
 }
 
@@ -328,13 +328,13 @@ function generateCurrentContext() {
     if (!editorContent) return null;
     
     // Begrenzen Sie die Kontextgröße, um Speicher- und Leistungsprobleme zu vermeiden
-    if (editorContent.length > CONFIG.maxContextSize) {
+    if (editorContent.length > CONFIG.maxContextSize) { 
       return editorContent.substring(0, CONFIG.maxContextSize);
     }
     
     return editorContent;
   } catch (err) {
-    logDebug(`Fehler beim Generieren des Kontexts: ${err.message}`);
+    logDebug(`Fehler beim Generieren des Kontexts: $${err.message}`);
     return null;
   }
 }
@@ -352,16 +352,16 @@ function getActiveEditorContent() {
         file.includes(model.id) || file.includes('conversation')
       ));
     
-    if (recentFiles.length > 0) {
+    if (recentFiles.length > 0) { 
       const latestFile = recentFiles[0];
-      if (fs.existsSync(latestFile)) {
+      if (fs.existsSync(latestFile)) { 
         return fs.readFileSync(latestFile, 'utf8');
       }
     }
     
     return "Aktueller Konversationskontext";
   } catch (err) {
-    logDebug(`Fehler beim Abrufen des Editorinhalts: ${err.message}`);
+    logDebug(`Fehler beim Abrufen des Editorinhalts: $${err.message}`);
     return null;
   }
 }
@@ -370,8 +370,8 @@ function getActiveEditorContent() {
  * Debug-Logger
  */
 function logDebug(message) {
-  if (CONFIG.debug) {
-    console.log(`[AI-Bridge Debug] ${message}`);
+  if (CONFIG.debug) { 
+    console.log(`[AI-Bridge Debug] $${message}`);
   }
 }
 
@@ -386,8 +386,8 @@ module.exports = {
     if (toModel === currentModel) return;
     
     const validModel = CONFIG.supportedModels.find(model => model.id === toModel);
-    if (!validModel) {
-      console.error(`❌ Unbekanntes KI-Modell: ${toModel}`);
+    if (!validModel) { 
+      console.error(`❌ Unbekanntes KI-Modell: $${toModel}`);
       return;
     }
     

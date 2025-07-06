@@ -21,7 +21,7 @@ class DeploymentMonitor {
 
   async checkWebsiteStatus(url, name) {
     return new Promise((resolve) => {
-      console.log(`🔍 Checking ${name}: ${url}`);
+      console.log(`🔍 Checking $${name}: ${url}`);
 
       const request = https.get(url, (response) => {
         const check = {
@@ -32,10 +32,10 @@ class DeploymentMonitor {
           timestamp: new Date().toISOString(),
         };
 
-        if (response.statusCode === 200) {
-          console.log(`✅ ${name} is ONLINE (${response.statusCode})`);
-        } else {
-          console.log(`⚠️ ${name} returned status ${response.statusCode}`);
+        if (response.statusCode === 200) { 
+          console.log(`✅ $${name} is ONLINE (${response.statusCode})`);
+        } else { 
+          console.log(`⚠️ $${name} returned status ${response.statusCode}`);
         }
 
         this.results.checks.push(check);
@@ -52,7 +52,7 @@ class DeploymentMonitor {
           timestamp: new Date().toISOString(),
         };
 
-        console.log(`❌ ${name} ERROR: ${error.message}`);
+        console.log(`❌ $${name} ERROR: ${error.message}`);
         this.results.checks.push(check);
         resolve(check);
       });
@@ -67,7 +67,7 @@ class DeploymentMonitor {
           timestamp: new Date().toISOString(),
         };
 
-        console.log(`⏰ ${name} TIMEOUT`);
+        console.log(`⏰ $${name} TIMEOUT`);
         this.results.checks.push(check);
         resolve(check);
       });
@@ -87,22 +87,22 @@ class DeploymentMonitor {
     const totalChecks = this.results.checks.length;
 
     this.results.deploymentStatus = successfulChecks > 0 ? 'PARTIAL_SUCCESS' : 'FAILED';
-    if (successfulChecks === totalChecks) {
+    if (successfulChecks === totalChecks) { 
       this.results.deploymentStatus = 'SUCCESS';
     }
 
     console.log('\n📊 MONITORING SUMMARY:');
-    console.log(`${successfulChecks}/${totalChecks} checks successful`);
-    console.log(`Overall Status: ${this.results.deploymentStatus}`);
+    console.log(`$${successfulChecks}/${totalChecks} checks successful`);
+    console.log(`Overall Status: $${this.results.deploymentStatus}`);
 
     // Save results
     fs.writeFileSync('deployment-monitor-report.json', JSON.stringify(this.results, null, 2));
     console.log('\n💾 Report saved to: deployment-monitor-report.json');
 
     // Provide recommendations
-    if (this.results.deploymentStatus === 'SUCCESS') {
+    if (this.results.deploymentStatus === 'SUCCESS') { 
       console.log('\n🎉 ALL SYSTEMS OPERATIONAL!');
-    } else {
+    } else { 
       console.log('\n🔧 DEPLOYMENT RECOMMENDATIONS:');
       console.log('1. Check GitHub Actions workflow status');
       console.log('2. Verify GitHub Pages settings');
@@ -115,7 +115,7 @@ class DeploymentMonitor {
 }
 
 // Run monitoring
-if (require.main === module) {
+if (require.main === module) { 
   const monitor = new DeploymentMonitor();
   monitor.runMonitoring().catch(console.error);
 }

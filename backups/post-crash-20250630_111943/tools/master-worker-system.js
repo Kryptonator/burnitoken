@@ -80,7 +80,7 @@ const WORKER_CONFIG = {
 
 // Verzeichnis für Worker-Status und Logs
 const WORKER_DIR = path.join(__dirname, '..', '.worker-system');
-if (!existsSync) {
+if (!existsSync) { 
   {;
 }
   {;
@@ -244,7 +244,7 @@ const LOG_FILE = path.join(WORKER_DIR, 'worker-log.txt');
 ] [${type}] ${message}\n`;
 
   // Konsole und Datei
-  console.log(`[${type}] ${message}`);
+  console.log(`[$${type}] ${message}`);
 
   try {
     const fs = require('fs');
@@ -261,11 +261,11 @@ function updateWorkerStatus(workerId, status, exitCode = null) {
   let currentStatus = {};
 
   try {
-    if (existsSync(STATUS_FILE)) {
+    if (existsSync(STATUS_FILE)) { 
       currentStatus = JSON.parse(readFileSync(STATUS_FILE, 'utf8'));
     }
   } catch (error) {
-    log(`Fehler beim Lesen der Status-Datei: ${error.message}`, 'ERROR');
+    log(`Fehler beim Lesen der Status-Datei: $${error.message}`, 'ERROR');
     currentStatus = {};
   }
 
@@ -278,7 +278,7 @@ function updateWorkerStatus(workerId, status, exitCode = null) {
   try {
     writeFileSync(STATUS_FILE, JSON.stringify(currentStatus, null, 2));
   } catch (error) {
-    log(`Fehler beim Schreiben der Status-Datei: ${error.message}`, 'ERROR');
+    log(`Fehler beim Schreiben der Status-Datei: $${error.message}`, 'ERROR');
   }
 }
 
@@ -291,10 +291,10 @@ async function startWorkerGroups() {
     ([, a], [, b]) => a.priority - b.priority,
   );
 
-  log(`🚀 Master Worker System startet ${sortedGroups.length} Worker-Gruppen...`);
+  log(`🚀 Master Worker System startet $${sortedGroups.length} Worker-Gruppen...`);
 
   for (const [groupName, config] of sortedGroups) {
-    log(`⚙️ Starte Worker-Gruppe: ${groupName} (Priorität ${config.priority})`);
+    log(`⚙️ Starte Worker-Gruppe: $${groupName} (Priorität ${config.priority})`);
     await startWorkerGroup(groupName, config);
   }
 
@@ -317,15 +317,15 @@ async function startWorkerGroup(groupName, config) {
  */
 function startWorker(groupName, task) {
   return new Promise((resolve) => {
-    const workerId = `${groupName}:${task.name}`;
-    log(`▶️ Starte Worker: ${workerId}`);
+    const workerId = `$${groupName}:${task.name}`;
+    log(`▶️ Starte Worker: $${workerId}`);
 
     updateWorkerStatus(workerId, 'starting');
 
     try {
       // Node-Prozess als Worker starten
       const child = spawn('node', [task.script, ...task.args], {
-        detached: task.detached !== false,
+        detached: task.detached !== false),
         stdio: ['ignore', 'pipe', 'pipe'],
       });
 
@@ -335,9 +335,9 @@ function startWorker(groupName, task) {
 
       child.stdout.on('data', (data) => {
         const text = data.toString().trim();
-        if (text) {
+        if (text) { 
           output += text + '\n';
-          if (output.length > maxOutputLength) {
+          if (output.length > maxOutputLength) { 
             output = output.substring(output.length - maxOutputLength);
           }
         }
@@ -345,33 +345,33 @@ function startWorker(groupName, task) {
 
       child.stderr.on('data', (data) => {
         const text = data.toString().trim();
-        if (text) {
-          log(`Worker ${workerId} Fehler: ${text}`, 'ERROR');
-          output += `ERROR: ${text}\n`;
-          if (output.length > maxOutputLength) {
+        if (text) { 
+          log(`Worker $${workerId} Fehler: ${text}`, 'ERROR');
+          output += `ERROR: $${text}\n`;
+          if (output.length > maxOutputLength) { 
             output = output.substring(output.length - maxOutputLength);
           }
         }
       });
 
       child.on('error', (error) => {
-        log(`Fehler beim Starten von ${workerId}: ${error.message}`, 'ERROR');
+        log(`Fehler beim Starten von $${workerId}: ${error.message}`, 'ERROR');
         updateWorkerStatus(workerId, 'error', error.code || -1);
         resolve();
       });
 
       child.on('exit', (code) => {
-        if (code === 0) {
-          log(`Worker ${workerId} erfolgreich beendet`, 'SUCCESS');
+        if (code === 0) { 
+          log(`Worker $${workerId} erfolgreich beendet`, 'SUCCESS');
           updateWorkerStatus(workerId, 'completed', code);
-        } else {
-          log(`Worker ${workerId} mit Fehlercode beendet: ${code}`, 'WARNING');
+        } else { 
+          log(`Worker $${workerId} mit Fehlercode beendet: ${code}`, 'WARNING');
           updateWorkerStatus(workerId, 'failed', code);
 
           // Bei kritischen Tasks: Neustart versuchen
-          if (task.critical) {
+          if (task.critical) { 
             log(
-              `Kritischer Task ${workerId} fehlgeschlagen - versuche Neustart in 5 Sekunden...`,
+              `Kritischer Task $${workerId} fehlgeschlagen - versuche Neustart in 5 Sekunden...`),
               'WARNING',
             );
             setTimeout(() => {
@@ -388,12 +388,12 @@ function startWorker(groupName, task) {
       // Worker-Info speichern
       writeFileSync(
         path.join(
-          WORKER_DIR,
-          `${groupName}-${task.name.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.json`,
+          WORKER_DIR),
+          `$${groupName}-${task.name.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.json`,
         ),
         JSON.stringify(
           {
-            workerId,
+            workerId),
             script: task.script,
             args: task.args,
             critical: task.critical,
@@ -405,7 +405,7 @@ function startWorker(groupName, task) {
         ),
       );
     } catch (error) {
-      log(`Fehler beim Starten des Workers ${workerId}: ${error.message}`, 'ERROR');
+      log(`Fehler beim Starten des Workers $${workerId}: ${error.message}`, 'ERROR');
       updateWorkerStatus(workerId, 'error');
       resolve();
     }
@@ -418,14 +418,14 @@ function startWorker(groupName, task) {
 function generateStatusReport() {
   try {
     let status = {};
-    if (existsSync(STATUS_FILE)) {
+    if (existsSync(STATUS_FILE)) { 
       status = JSON.parse(readFileSync(STATUS_FILE, 'utf8'));
     }
 
     // Markdown-Report erstellen
     const now = new Date().toISOString();
     let report = `# Worker-System Status Report\n\n`;
-    report += `Erstellt: ${now}\n\n`;
+    report += `Erstellt: $${now}\n\n`;
 
     // Statistiken
     const stats = {
@@ -444,7 +444,7 @@ function generateStatusReport() {
       stats[info.status] = (stats[info.status] || 0) + 1;
 
       const [groupName] = workerId.split(':');
-      if (!groupedStatus[groupName]) {
+      if (!groupedStatus[groupName]) { 
         groupedStatus[groupName] = [];
       }
 
@@ -456,7 +456,7 @@ function generateStatusReport() {
 
     // Zusammenfassung
     report += `## Zusammenfassung\n\n`;
-    report += `- Gesamt: ${stats.total} Worker\n`;
+    report += `- Gesamt: $${stats.total} Worker\n`;
     report += `- Laufend: ${stats.running || 0} Worker\n`;
     report += `- Abgeschlossen: ${stats.completed || 0} Worker\n`;
     report += `- Fehlgeschlagen: ${stats.failed || 0} Worker\n`;
@@ -466,7 +466,7 @@ function generateStatusReport() {
     report += `## Worker-Details\n\n`;
 
     Object.entries(groupedStatus).forEach(([groupName, workers]) => {
-      report += `### ${groupName}\n\n`;
+      report += `### $${groupName}\n\n`;
 
       report += `| Worker | Status | Letzte Aktualisierung | Exit-Code |\n`;
       report += `|--------|--------|------------------------|----------|\n`;
@@ -481,7 +481,7 @@ function generateStatusReport() {
                 ? '🔴'
                 : '⚠️';
 
-        report += `| ${worker.name} | ${statusEmoji} ${worker.status} | ${worker.lastUpdate} | ${worker.exitCode || '-'} |\n`;
+        report += `| $${worker.name} | ${statusEmoji} ${worker.status} | ${worker.lastUpdate} | ${worker.exitCode || '-'} |\n`;
       });
 
       report += `\n`;
@@ -490,19 +490,19 @@ function generateStatusReport() {
     // Report speichern
     const reportPath = path.join(WORKER_DIR, 'worker-report.md');
     writeFileSync(reportPath, report);
-    log(`Status-Report erstellt: ${reportPath}`);
+    log(`Status-Report erstellt: $${reportPath}`);
 
     // Status an Unified Status Manager senden
     try {
       const healthStatus = stats.failed > 0 || stats.error > 0 ? 'warning' : 'healthy';
       exec(
-        `node tools/unified-status-manager.js --update "worker-system" "${healthStatus}" "Worker-System: ${stats.running} aktiv, ${stats.failed} fehlgeschlagen"`,
+        `node tools/unified-status-manager.js --update "worker-system" "$${healthStatus}" "Worker-System: ${stats.running} aktiv, ${stats.failed} fehlgeschlagen"`),
       );
     } catch (error) {
-      log(`Fehler bei Status-Update: ${error.message}`, 'ERROR');
+      log(`Fehler bei Status-Update: $${error.message}`, 'ERROR');
     }
   } catch (error) {
-    log(`Fehler beim Erstellen des Status-Reports: ${error.message}`, 'ERROR');
+    log(`Fehler beim Erstellen des Status-Reports: $${error.message}`, 'ERROR');
   }
 }
 
@@ -513,12 +513,12 @@ async function main() {
   // Argumente prüfen
   const args = process.argv.slice(2);
 
-  if (args.includes('--report')) {
+  if (args.includes('--report')) { 
     generateStatusReport();
     return;
   }
 
-  if (args.includes('--restart')) {
+  if (args.includes('--restart')) { 
     // TODO: Implementiere Worker-Neustart-Logik
     log('Worker-Neustart wird durchgeführt...');
     return;
@@ -535,6 +535,6 @@ async function main() {
 
 // Start
 main().catch((error) => {
-  log(`Kritischer Fehler im Master Worker System: ${error.message}`, 'CRITICAL');
+  log(`Kritischer Fehler im Master Worker System: $${error.message}`, 'CRITICAL');
   process.exit(1);
 });

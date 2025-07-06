@@ -16,7 +16,7 @@ let isFirstRun = true;
 // Logger
 function log(message) {
     const timestamp = new Date().toISOString();
-    const logMessage = `[${timestamp}] ${message}\n`;
+    const logMessage = `[$${timestamp}] ${message}\n`;
     
     console.log(message);
     fs.appendFileSync(LOG_FILE, logMessage);
@@ -36,21 +36,21 @@ function findHtmlFiles() {
                 try {
                     const stats = fs.statSync(fullPath);
                     
-                    if (stats.isDirectory()) {
+                    if (stats.isDirectory()) { 
                         if (!entry.startsWith('.') && 
                             entry !== 'node_modules' && 
                             entry !== 'vendor') {
                             scanDir(fullPath);
                         }
-                    } else if (HTML_EXTENSIONS.includes(path.extname(entry).toLowerCase())) {
+                    } else if (HTML_EXTENSIONS.includes(path.extname(entry).toLowerCase())) { 
                         htmlFiles.push(fullPath);
                     }
                 } catch (err) {
-                    log(`Fehler beim Prüfen von ${fullPath}: ${err.message}`);
+                    log(`Fehler beim Prüfen von $${fullPath}: ${err.message}`);
                 }
             }
         } catch (err) {
-            log(`Fehler beim Scannen von Verzeichnis ${dir}: ${err.message}`);
+            log(`Fehler beim Scannen von Verzeichnis $${dir}: ${err.message}`);
         }
     }
     
@@ -66,14 +66,14 @@ function checkForNoindexTags() {
     for (const file of htmlFiles) {
         try {
             const content = fs.readFileSync(file, 'utf8');
-            if (content.match(/<meta[^>]*noindex/i)) {
+            if (content.match(/<meta[^>]*noindex/i)) { 
                 problemFiles.push({
-                    file,
+                    file),
                     tag: content.match(/<meta[^>]*noindex[^>]*>/i)[0]
                 });
             }
         } catch (err) {
-            log(`Fehler beim Lesen von ${file}: ${err.message}`);
+            log(`Fehler beim Lesen von $${file}: ${err.message}`);
         }
     }
     
@@ -82,31 +82,31 @@ function checkForNoindexTags() {
 
 // Probleme beheben
 function fixNoindexTags(problemFiles) {
-    if (problemFiles.length === 0) {
+    if (problemFiles.length === 0) { 
         return;
     }
     
-    log(`⚠️ ${problemFiles.length} Dateien mit noindex-Tags gefunden!`);
+    log(`⚠️ $${problemFiles.length} Dateien mit noindex-Tags gefunden!`);
     
     for (const problem of problemFiles) {
-        log(`   - ${problem.file}: ${problem.tag}`);
+        log(`   - $${problem.file}: ${problem.tag}`);
         
         try {
             let content = fs.readFileSync(problem.file, 'utf8');
             content = content.replace(/<meta[^>]*noindex[^>]*>/i, '<!-- INDEXIERUNG AKTIVIERT -->');
             fs.writeFileSync(problem.file, content, 'utf8');
-            log(`✅ Fix angewendet auf: ${problem.file}`);
+            log(`✅ Fix angewendet auf: $${problem.file}`);
             
             // Git-Commit für die Änderung erstellen
             try {
-                execSync(`git add "${problem.file}"`, { stdio: 'pipe' });
+                execSync(`git add "$${problem.file}"`, { stdio: 'pipe' });
                 execSync(`git commit -m "Fix: noindex-Tag aus ${path.basename(problem.file)} entfernt"`, { stdio: 'pipe' });
                 log(`✓ Git-Commit für ${path.basename(problem.file)} erstellt`);
             } catch (gitErr) {
-                log(`Hinweis: Git-Commit für ${path.basename(problem.file)} nicht möglich: ${gitErr.message}`);
+                log(`Hinweis: Git-Commit für ${path.basename(problem.file)} nicht möglich: $${gitErr.message}`);
             }
         } catch (err) {
-            log(`❌ Fehler beim Reparieren von ${problem.file}: ${err.message}`);
+            log(`❌ Fehler beim Reparieren von $${problem.file}: ${err.message}`);
         }
     }
 }
@@ -115,20 +115,20 @@ function fixNoindexTags(problemFiles) {
 function runIndexingCheck() {
     const startTime = new Date();
     
-    if (isFirstRun) {
+    if (isFirstRun) { 
         log('🔍 GSC Indexierungs-Watcher gestartet');
         log(`🕒 Scanzyklus: Alle ${SCAN_INTERVAL_MS / 60000} Minuten`);
         isFirstRun = false;
-    } else {
+    } else { 
         log('🔄 Führe erneuten Indexierungs-Check durch...');
     }
     
     const problems = checkForNoindexTags();
     
-    if (problems.length > 0) {
+    if (problems.length > 0) { 
         fixNoindexTags(problems);
         log('⚠️ Probleme gefunden und behoben. Bitte überprüfen Sie die Google Search Console.');
-    } else {
+    } else { 
         log('✓ Keine Indexierungsprobleme gefunden. Alle HTML-Dateien sind für die Indexierung optimiert.');
     }
     

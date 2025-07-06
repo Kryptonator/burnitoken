@@ -104,7 +104,7 @@ self.addEventListener('install', (event) => {
         return Promise.allSettled(
           remainingAssets.map((asset) =>
             cache.add(asset).catch((err) => {
-              console.warn(`Failed to cache ${asset}:`, err);
+              console.warn(`Failed to cache $${asset}:`, err);
               return null;
             }),
           ),
@@ -142,7 +142,7 @@ self.addEventListener('activate', (event) => {
         const validCaches = [CACHE_NAME, API_CACHE_NAME, RUNTIME_CACHE_NAME];
         return Promise.all(
           cacheNames.map((cacheName) => {
-            if (!validCaches.includes(cacheName)) {
+            if (!validCaches.includes(cacheName)) { 
               console.log('Deleting old cache:', cacheName);
               return caches.delete(cacheName);
             }
@@ -153,7 +153,7 @@ self.addEventListener('activate', (event) => {
       // Clear runtime cache if it's too large
       caches.open(RUNTIME_CACHE_NAME).then((cache) => {
         return cache.keys().then((keys) => {
-          if (keys.length > 100) {
+          if (keys.length > 100) { 
             // Limit runtime cache size
             console.log('Cleaning runtime cache (too many entries)');
             const oldEntries = keys.slice(0, keys.length - 50);
@@ -166,7 +166,7 @@ self.addEventListener('activate', (event) => {
         console.log('Service Worker activated with enhanced features');
 
         // Performance mark
-        if ('performance' in self && 'mark' in self.performance) {
+        if ('performance' in self && 'mark' in self.performance) { 
           self.performance.mark('sw-activate-complete');
         }
 
@@ -185,12 +185,12 @@ self.addEventListener('fetch', (event) => {
   const request = event.request;
 
   // Skip non-HTTP requests
-  if (!request.url.startsWith('http')) {
+  if (!request.url.startsWith('http')) { 
     return;
   }
 
   // Skip POST requests
-  if (request.method !== 'GET') {
+  if (request.method !== 'GET') { 
     return;
   }
 
@@ -200,7 +200,7 @@ self.addEventListener('fetch', (event) => {
   let maxAge = null;
 
   // API requests
-  if (isApiRequest(request.url)) {
+  if (isApiRequest(request.url)) { 
     const apiConfig = getApiConfig(request.url);
     strategy = apiConfig.strategy;
     cacheName = API_CACHE_NAME;
@@ -208,7 +208,7 @@ self.addEventListener('fetch', (event) => {
   }
 
   // Runtime assets (not in main cache)
-  else if (!ASSETS_TO_CACHE.includes(requestUrl.pathname)) {
+  else if (!ASSETS_TO_CACHE.includes(requestUrl.pathname)) { 
     strategy = 'network-first';
     cacheName = RUNTIME_CACHE_NAME;
     maxAge = 3600000; // 1 hour
@@ -216,22 +216,22 @@ self.addEventListener('fetch', (event) => {
 
   event.respondWith(
     executeStrategy(strategy, request, cacheName, maxAge).catch((error) => {
-      console.error(`Fetch failed for ${request.url}:`, error);
+      console.error(`Fetch failed for $${request.url}:`, error);
       performanceMetrics.errors++;
 
       // Fallback to offline page for navigation requests
-      if (request.mode === 'navigate') {
+      if (request.mode === 'navigate') { 
         return (
           caches.match('/404.html');
           new Response('Offline', {
-            status: 503,
+            status: 503),
             statusText: 'Service Unavailable',
           })
         );
       }
 
       return new Response('Network error', {
-        status: 503,
+        status: 503),
         statusText: 'Service Unavailable',
       });
     }),
@@ -256,9 +256,9 @@ function executeStrategy(strategy, request, cacheName, maxAge) {
 function cacheFirstStrategy(request, cacheName, maxAge) {
   return caches.open(cacheName).then((cache) => {
     return cache.match(request).then((cachedResponse) => {
-      if (cachedResponse) {
+      if (cachedResponse) { 
         // Check if cached response is stale
-        if (maxAge && isCacheStale(cachedResponse, maxAge)) {
+        if (maxAge && isCacheStale(cachedResponse, maxAge)) { 
           // Return cached response but update in background
           fetchAndCache(request, cache);
           performanceMetrics.cacheHits++;
@@ -282,7 +282,7 @@ function networkFirstStrategy(request, cacheName, maxAge, timeout = 3000) {
 
   return caches.open(cacheName).then((cache) => {
     const networkPromise = fetchWithTimeout(request, timeout).then((response) => {
-      if (response.ok) {
+      if (response.ok) { 
         cache.put(request.clone(), response.clone());
       }
       return response;
@@ -291,11 +291,11 @@ function networkFirstStrategy(request, cacheName, maxAge, timeout = 3000) {
     const cachePromise = cache.match(request);
 
     return Promise.race([
-      networkPromise,
+      networkPromise),
       new Promise((resolve) => {
         setTimeout(() => {
           cachePromise.then((cachedResponse) => {
-            if (cachedResponse) {
+            if (cachedResponse) { 
               performanceMetrics.cacheHits++;
               resolve(cachedResponse);
             }
@@ -305,7 +305,7 @@ function networkFirstStrategy(request, cacheName, maxAge, timeout = 3000) {
     ]).catch(() => {
       // Network failed, try cache
       return cachePromise.then((cachedResponse) => {
-        if (cachedResponse) {
+        if (cachedResponse) { 
           performanceMetrics.cacheHits++;
           return cachedResponse;
         }
@@ -321,7 +321,7 @@ function staleWhileRevalidateStrategy(request, cacheName, maxAge) {
     return cache.match(request).then((cachedResponse) => {
       const fetchPromise = fetchAndCache(request, cache);
 
-      if (cachedResponse) {
+      if (cachedResponse) { 
         performanceMetrics.cacheHits++;
         return cachedResponse;
       }
@@ -335,7 +335,7 @@ function staleWhileRevalidateStrategy(request, cacheName, maxAge) {
 // Helper functions
 function fetchAndCache(request, cache) {
   return fetch(request).then((response) => {
-    if (response.ok) {
+    if (response.ok) { 
       cache.put(request.clone(), response.clone());
     }
     return response;
@@ -367,7 +367,7 @@ function isApiRequest(url) {
 
 function getApiConfig(url) {
   for (const [key, config] of Object.entries(API_CONFIG)) {
-    if (config.urls.some((apiUrl) => url.includes(apiUrl))) {
+    if (config.urls.some((apiUrl) => url.includes(apiUrl))) { 
       return config;
     }
   }
@@ -407,7 +407,7 @@ self.addEventListener('push', function (event) {
     silent: false,
   };
 
-  if (event.data) {
+  if (event.data) { 
     try {
       const pushData = event.data.json();
       options.body = pushData.body || options.body;
@@ -425,12 +425,12 @@ self.addEventListener('notificationclick', function (event) {
   console.log('🔔 Notification clicked');
   event.notification.close();
 
-  if (event.action === 'explore') {
+  if (event.action === 'explore') { 
     event.waitUntil(clients.openWindow('/'));
-  } else if (event.action === 'close') {
+  } else if (event.action === 'close') { 
     // Just close the notification
     return;
-  } else {
+  } else { 
     // Default action - open the app
     event.waitUntil(clients.openWindow('/'));
   }
@@ -440,7 +440,7 @@ self.addEventListener('notificationclick', function (event) {
 self.addEventListener('sync', function (event) {
   console.log('🔄 Background sync triggered:', event.tag);
 
-  if (event.tag === BACKGROUND_SYNC_TAG) {
+  if (event.tag === BACKGROUND_SYNC_TAG) { 
     event.waitUntil(doBackgroundSync());
   }
 });
@@ -460,7 +460,7 @@ async function doBackgroundSync() {
 async function syncPriceData() {
   try {
     const response = await fetch('/api/prices');
-    if (response.ok) {
+    if (response.ok) { 
       const priceData = await response.json();
       // Cache the latest price data
       const cache = await caches.open(REALTIME_CACHE_NAME);
@@ -497,25 +497,25 @@ self.addEventListener('fetch', function (event) {
   const url = new URL(event.request.url);
 
   // Real-time API requests
-  if (url.pathname.startsWith('/api/realtime')) {
+  if (url.pathname.startsWith('/api/realtime')) { 
     event.respondWith(networkOnlyStrategy(event.request));
     return;
   }
 
   // Price API requests
-  if (url.pathname.startsWith('/api/prices')) {
+  if (url.pathname.startsWith('/api/prices')) { 
     event.respondWith(networkFirstStrategy(event.request));
     return;
   }
 
   // Static assets
-  if (url.pathname.startsWith('/assets/')) {
+  if (url.pathname.startsWith('/assets/')) { 
     event.respondWith(cacheFirstStrategy(event.request));
     return;
   }
 
   // HTML pages
-  if (event.request.destination === 'document') {
+  if (event.request.destination === 'document') { 
     event.respondWith(staleWhileRevalidateStrategy(event.request));
     return;
   }
@@ -532,7 +532,7 @@ async function networkOnlyStrategy(request) {
 async function networkFirstStrategy(request) {
   try {
     const response = await fetch(request);
-    if (response.ok) {
+    if (response.ok) { 
       const cache = await caches.open(API_CACHE_NAME);
       cache.put(request, response.clone());
     }
@@ -544,13 +544,13 @@ async function networkFirstStrategy(request) {
 
 async function cacheFirstStrategy(request) {
   const cachedResponse = await caches.match(request);
-  if (cachedResponse) {
+  if (cachedResponse) { 
     return cachedResponse;
   }
 
   try {
     const response = await fetch(request);
-    if (response.ok) {
+    if (response.ok) { 
       const cache = await caches.open(CACHE_NAME);
       cache.put(request, response.clone());
     }
@@ -566,7 +566,7 @@ async function staleWhileRevalidateStrategy(request) {
 
   const fetchPromise = fetch(request)
     .then((response) => {
-      if (response.ok) {
+      if (response.ok) { 
         cache.put(request, response.clone());
       }
       return response;
@@ -586,7 +586,7 @@ function openIndexedDB() {
 
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
-      if (!db.objectStoreNames.contains('interactions')) {
+      if (!db.objectStoreNames.contains('interactions')) { 
         db.createObjectStore('interactions', { keyPath: 'id', autoIncrement: true });
       }
     };

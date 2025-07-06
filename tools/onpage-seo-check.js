@@ -14,12 +14,12 @@ let hasError = false;
 
 function logIssue(file, msg) {
   hasError = true;
-  console.error(`[${file}] ${msg}`);
+  console.error(`[$${file}] ${msg}`);
 }
 
 function checkHeadings(dom, file) {
   const headings = Array.from(dom.window.document.querySelectorAll('h1, h2, h3, h4, h5, h6'));
-  if (!headings.some) {=> h.tagName === 'H1')) {
+  if (!headings.some) { => h.tagName === 'H1')) {
 }
 }
 }
@@ -75,8 +75,8 @@ function checkHeadings(dom, file) {
   let lastLevel = 0;
   headings.forEach((h) => {
     const level = parseInt(h.tagName[1]);
-    if (lastLevel && level > lastLevel + 1) {
-      logIssue(file, `Heading level jumps from h${lastLevel} to h${level}.`);
+    if (lastLevel && level > lastLevel + 1) { 
+      logIssue(file, `Heading level jumps from h$${lastLevel} to h${level}.`);
     }
     lastLevel = level;
   });
@@ -85,7 +85,7 @@ function checkHeadings(dom, file) {
 function checkAltTexts(dom, file) {
   const imgs = Array.from(dom.window.document.querySelectorAll('img'));
   imgs.forEach((img) => {
-    if (!img.hasAttribute('alt') || img.getAttribute('alt').trim() === '') {
+    if (!img.hasAttribute('alt') || img.getAttribute('alt').trim() === '') { 
       logIssue(file, `<img> missing alt text.`);
     }
   });
@@ -96,14 +96,14 @@ function checkInternalLinks(dom, file) {
   const internal = links.filter(
     (a) => a.getAttribute('href').startsWith('/') || a.getAttribute('href').startsWith('#'),
   );
-  if (internal.length === 0) {
+  if (internal.length === 0) { 
     logIssue(file, 'No internal links found.');
   }
 }
 
 function checkStructuredData(dom, file) {
   const ldJson = dom.window.document.querySelector('script[type="application/ld+json"]');
-  if (!ldJson) {
+  if (!ldJson) { 
     logIssue(file, 'No structured data (ld+json) found.');
   }
 }
@@ -119,10 +119,10 @@ htmlFiles.forEach((file) => {
   checkStructuredData(dom, file);
 });
 
-if (hasError) {
+if (hasError) { 
   console.error('OnPage SEO checks failed.');
   process.exit(1);
-} else {
+} else { 
   console.log('All OnPage SEO checks passed!');
   process.exit(0);
 }

@@ -1,123 +1,118 @@
-# Node.js
+# Created by Copilot to fix the repository state.
+
+# Standard ignores
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-# Logs
-logs/
-*.log
-*.log.*
-log-aggregator.log
-master-task-manager.log
-git-status-log.txt
-*.json.log
-
-# Backups & Emergency
-.backups/
-.emergency-backup-syntax/
-.emergency-saves/
-.recovery-data/
-.recovery-dashboard/
-.vscode-backup/
-*.bak
-*.tmp
-*.swp
-
-# Reports & Status
-.reports/
-.status/
-.web-vitals-reports/
-.meta-reports/
-changes-reports/
-performance-reports/
-tools/changes-reports/
-tools/performance-reports/
-tools/bot-status.json
-tools/master-task-status.json
-tools/master-status.json
-tools/powerfix-monitoring-status.json
-tools/auto-recovery-status.json
-tools/dependency-security-status.json
-tools/deployment-status.json
-tools/gsc-integration-status.json
-tools/system-status.json
-tools/website-status.json
-*.html
-!index.html
-!404.html
-!500.html
-!status-dashboard.html
-!live-dashboard.html
-!live-monitor.html
-!monitoring-dashboard.html
-!bot-dashboard.html
-!lightweight-dashboard.html
-!extension-validator.html
-!simple-browser-test.html
-!google-analytics-integration.html
-
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# Build output
 dist/
 build/
-out/
-coverage/
-.next/
-.nuxt/
-.svelte-kit/
+.env
+.env*.local
 
-# PID files
+# Log files and directories
+*.log
+logs/
+tools/logs/
+tools/changes-logs/
+git-status-log.txt
+
+# Backup directories
+.backups/
+.dependency-backups/
+.emergency-backup-syntax/
+tools/.emergency-saves/
+tools/.vscode-backup/
+
+# Cache and temporary files
+.cache/
+cache/
+cache-manifest.json
 *.pid
+tools/dashboard.pid
 tools/bot-pids/
 
-# ToDo files
+# Report and status directories/files
+.reports/
+.status/
+.recovery-dashboard/
+.recovery-data/
 .todos/
-
-# Worker System
 .worker-system/
-
-# Other
 .devcontainer/
+reports/
+public/
+tools/.meta-reports/
+tools/.web-vitals-reports/
+tools/performance-reports/
 
-# Ignore all json files by default
+# Generated status and report files (JSON, HTML, MD)
+# Ignore all JSON files...
 *.json
-# But DO include these specific json files
+# ...but DO NOT ignore these specific important ones.
 !package.json
 !package-lock.json
 !tsconfig.json
-!jsconfig.json
-!lighthouserc.json
 !lighthouserc-*.js
+!manifest.json
 !jest.config.js
 !playwright.config.js
-!tailwind.config.js
 !postcss.config.js
-!prettierrc
-!manifest.json
-!cspell.json
-!extensions.json
-!launch.json
-!settings.json
-!tasks.json
-!jfrog-config.json
-!security-policy.yaml
-!optimization-knowledge-base.json
-!resource-hints.json
-!performance-budget.json
-!assets/translations.json
-!commit_message.txt
-!status-report-template.html
-!tools/gsc-service-account.example.json
-!tools/vscode-keybindings.json
-!tools/vscode-settings.json
+
+# Ignore all HTML files...
+*.html
+# ...but DO NOT ignore these.
+!index.html
+!404.html
+!500.html
+
+# Ignore all Markdown files...
+*.md
+# ...but DO NOT ignore these.
+!README.md
+!*.md
+
+# Specific generated files by name that should be ignored
+CICD_STATUS.json
+EXTENSION_STATUS.json
+FINAL-SUCCESS-METRICS.json
+GSC_INTEGRATION_STATUS.json
+LIGHTHOUSE_REPORT.html
+MONITOR_STATUS.json
+NOTFALL-DASHBOARD.html
+VSCODE_HEALTH_REPORT.json
+dashboard-repariert.html
+live-deployment-dashboard.html
+recovery-history.json
+tools/accessibility-checker-status.json
+tools/ai-auth-check.js
+tools/api-health-checker-status.json
+tools/asset-optimizer-status.json
+tools/auto-recovery-status.json
+tools/bot-status.json
+tools/changes-bot-status.json
+tools/changesbot-status.json
+tools/dependency-security-status.json
+tools/deployment-status.json
+tools/deployment-watcher-status.json
+tools/extension-status.json
+tools/gsc-status.json
+tools/health-status.json
+tools/log-aggregator-status.json
+tools/master-status.json
+tools/master-task-status.json
+tools/orchestrator-status.json
+tools/powerfix-monitoring-status.json
+tools/recovery-state.json
+tools/recovery-status.json
+tools/safe-task-status.json
+tools/system-status.json
+tools/unified-monitoring-status.json
+tools/website-dom-snapshot.html
+tools/website-status.json
+tools/auto-commit-manager.js
+tools/auto-git-manager.js
+tools/master-logic-engine.js
+tools/master-self-healing-controller.js
+tools/repo-cleanup-orchestrator.js
+tools/security-scanner.js
+tools/website-status-report.md
+tools/deployment-status.md
+status-dashboard.html

@@ -37,7 +37,7 @@ async function checkSystemDaemons() {
 
   return new Promise((resolve) => {
     exec(command, (error, stdout, stderr) => {
-      if (error) {
+      if (error) { 
   {;
 }
   {;
@@ -136,13 +136,13 @@ async function checkSystemDaemons() {
 }
   {;
 }
-  console.error(`Fehler beim Ausführen von "${command}":`, stderr);
+  console.error(`Fehler beim Ausführen von "$${command}":`, stderr);
 };
         status.status = 'FAIL';
         status.details.push({
-          daemon: 'ALL',
+          daemon: 'ALL'),
           status: 'STOPPED',
-          error: `Fehler beim Abrufen der Prozessliste: ${stderr}`,
+          error: `Fehler beim Abrufen der Prozessliste: $${stderr}`,
         });
         DAEMONS.forEach((d) => status.stopped.push(d));
         resolve(status);
@@ -157,26 +157,26 @@ async function checkSystemDaemons() {
         // Überprüft, ob eine der Zeilen den Daemon-Namen enthält.
         const isRunning = lines.some((line) => line.toLowerCase().includes(daemonLower));
 
-        if (isRunning) {
+        if (isRunning) { 
           status.running.push(daemon);
           status.details.push({ daemon, status: 'RUNNING' });
-          console.log(`✅ ${daemon} läuft.`);
-        } else {
+          console.log(`✅ $${daemon} läuft.`);
+        } else { 
           status.stopped.push(daemon);
           status.details.push({
-            daemon,
+            daemon),
             status: 'STOPPED',
             error: 'Prozess nicht in der Taskliste gefunden',
           });
-          console.error(`❌ ${daemon} läuft NICHT.`);
+          console.error(`❌ $${daemon} läuft NICHT.`);
         }
       }
 
-      if (status.stopped.length > 0) {
+      if (status.stopped.length > 0) { 
         status.status = 'FAIL';
       }
 
-      console.log(`Daemon-Check abgeschlossen. Status: ${status.status}`);
+      console.log(`Daemon-Check abgeschlossen. Status: $${status.status}`);
       resolve(status);
     });
   });

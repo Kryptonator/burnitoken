@@ -42,14 +42,14 @@ class SimpleBrowserDoctor {
     console.log('📁 Scanne HTML-Dateien...');
 
     const htmlFiles = this.findHTMLFiles(this.baseDir);
-    console.log(`   Gefunden: ${htmlFiles.length} HTML-Dateien`);
+    console.log(`   Gefunden: $${htmlFiles.length} HTML-Dateien`);
 
     for (const file of htmlFiles) {
       try {
         const content = fs.readFileSync(file, 'utf8');
         this.analyzeHTMLContent(file, content);
       } catch (error) {
-        console.log(`   ❌ Fehler beim Lesen von ${file}: ${error.message}`);
+        console.log(`   ❌ Fehler beim Lesen von $${file}: ${error.message}`);
       }
     }
   }
@@ -220,12 +220,12 @@ class SimpleBrowserDoctor {
           !['node_modules', 'coverage', 'test-results'].includes(item)
         ) {
           files.push(...this.findHTMLFiles(fullPath));
-        } else if (item.endsWith('.html')) {
+        } else if (item.endsWith('.html')) { 
           files.push(fullPath);
         }
       }
     } catch (error) {
-      console.log(`   ⚠️  Fehler beim Scannen von ${dir}: ${error.message}`);
+      console.log(`   ⚠️  Fehler beim Scannen von $${dir}: ${error.message}`);
     }
 
     return files;
@@ -241,13 +241,13 @@ class SimpleBrowserDoctor {
     };
 
     // CSP Policy Check
-    if (content.includes('Content-Security-Policy')) {
+    if (content.includes('Content-Security-Policy')) { 
       const cspMatch = content.match(/Content-Security-Policy[^>]*content="([^"]+)"/i);
-      if (cspMatch) {
+      if (cspMatch) { 
         const cspContent = cspMatch[1];
-        if (cspContent.includes("'none'") || !cspContent.includes("'unsafe-inline'")) {
+        if (cspContent.includes("'none'") || !cspContent.includes("'unsafe-inline'")) { 
           analysis.issues.push({
-            type: 'CSP_TOO_RESTRICTIVE',
+            type: 'CSP_TOO_RESTRICTIVE'),
             severity: 'HIGH',
             description: 'Content Security Policy zu restriktiv für Simple Browser',
             line: this.findLineNumber(content, cspMatch[0]),
@@ -262,11 +262,11 @@ class SimpleBrowserDoctor {
       ...content.matchAll(/href="https?:\/\/[^"]+"/gi),
     ];
 
-    if (externalResources.length > 0) {
+    if (externalResources.length > 0) { 
       analysis.issues.push({
-        type: 'EXTERNAL_RESOURCES',
+        type: 'EXTERNAL_RESOURCES'),
         severity: 'MEDIUM',
-        description: `${externalResources.length} externe Ressourcen gefunden`,
+        description: `$${externalResources.length} externe Ressourcen gefunden`,
         count: externalResources.length,
       });
     }
@@ -281,48 +281,48 @@ class SimpleBrowserDoctor {
         script.includes('document.write'),
     );
 
-    if (complexScripts.length > 0) {
+    if (complexScripts.length > 0) { 
       analysis.issues.push({
-        type: 'COMPLEX_SCRIPTS',
+        type: 'COMPLEX_SCRIPTS'),
         severity: 'MEDIUM',
-        description: `${complexScripts.length} komplexe Inline-Scripts gefunden`,
+        description: `$${complexScripts.length} komplexe Inline-Scripts gefunden`,
       });
     }
 
     // Missing DOCTYPE Check
-    if (!content.trim().startsWith('<!DOCTYPE html>')) {
+    if (!content.trim().startsWith('<!DOCTYPE html>')) { 
       analysis.issues.push({
-        type: 'MISSING_DOCTYPE',
+        type: 'MISSING_DOCTYPE'),
         severity: 'LOW',
         description: 'DOCTYPE HTML5 fehlt',
       });
     }
 
     // Meta Viewport Check
-    if (!content.includes('name="viewport"')) {
+    if (!content.includes('name="viewport"')) { 
       analysis.issues.push({
-        type: 'MISSING_VIEWPORT',
+        type: 'MISSING_VIEWPORT'),
         severity: 'LOW',
         description: 'Viewport Meta-Tag fehlt',
       });
     }
 
     // Large File Size Check
-    if (content.length > 100000) {
+    if (content.length > 100000) { 
       analysis.issues.push({
-        type: 'LARGE_FILE',
+        type: 'LARGE_FILE'),
         severity: 'MEDIUM',
         description: `Datei sehr groß (${Math.round(content.length / 1024)}KB)`,
       });
     }
 
-    if (analysis.issues.length > 0) {
+    if (analysis.issues.length > 0) { 
       this.issuesFound.push(analysis);
     }
 
     // Test if file works in Simple Browser
     this.testFiles.push({
-      file: filePath,
+      file: filePath),
       fileName: fileName,
       size: content.length,
       issues: analysis.issues.length,
@@ -332,7 +332,7 @@ class SimpleBrowserDoctor {
   findLineNumber(content, searchText) {
     const lines = content.split('\n');
     for (let i = 0; i < lines.length; i++) {
-      if (lines[i].includes(searchText)) {
+      if (lines[i].includes(searchText)) { 
         return i + 1;
       }
     }
@@ -365,10 +365,10 @@ class SimpleBrowserDoctor {
       }
     }
 
-    console.log(`   📊 Gesamt: ${totalIssues} Probleme gefunden`);
-    console.log(`      🔴 Hoch: ${highSeverity}`);
-    console.log(`      🟡 Mittel: ${mediumSeverity}`);
-    console.log(`      🟢 Niedrig: ${lowSeverity}`);
+    console.log(`   📊 Gesamt: $${totalIssues} Probleme gefunden`);
+    console.log(`      🔴 Hoch: $${highSeverity}`);
+    console.log(`      🟡 Mittel: $${mediumSeverity}`);
+    console.log(`      🟢 Niedrig: $${lowSeverity}`);
   }
 
   async generateFixes() {
@@ -381,7 +381,7 @@ class SimpleBrowserDoctor {
         switch (issue.type) {
           case 'CSP_TOO_RESTRICTIVE':
             fixes.push({
-              type: 'FIX_CSP',
+              type: 'FIX_CSP'),
               description: 'CSP für Simple Browser lockern',
               action: 'CSP mit unsafe-inline und erweiterten Quellen ersetzen',
             });
@@ -389,7 +389,7 @@ class SimpleBrowserDoctor {
 
           case 'EXTERNAL_RESOURCES':
             fixes.push({
-              type: 'FIX_EXTERNAL',
+              type: 'FIX_EXTERNAL'),
               description: 'Externe Ressourcen lokalisieren oder CDN erlauben',
               action: 'CSP für externe CDNs erweitern oder Ressourcen lokal hosten',
             });
@@ -397,7 +397,7 @@ class SimpleBrowserDoctor {
 
           case 'COMPLEX_SCRIPTS':
             fixes.push({
-              type: 'FIX_SCRIPTS',
+              type: 'FIX_SCRIPTS'),
               description: 'Scripts vereinfachen oder auslagern',
               action: 'Komplexe Scripts in externe Dateien verschieben',
             });
@@ -405,7 +405,7 @@ class SimpleBrowserDoctor {
 
           case 'MISSING_DOCTYPE':
             fixes.push({
-              type: 'ADD_DOCTYPE',
+              type: 'ADD_DOCTYPE'),
               description: 'DOCTYPE HTML5 hinzufügen',
               action: '<!DOCTYPE html> am Dateianfang einfügen',
             });
@@ -413,7 +413,7 @@ class SimpleBrowserDoctor {
 
           case 'MISSING_VIEWPORT':
             fixes.push({
-              type: 'ADD_VIEWPORT',
+              type: 'ADD_VIEWPORT'),
               description: 'Viewport Meta-Tag hinzufügen',
               action:
                 '<meta name="viewport" content="width=device-width, initial-scale=1.0"> einfügen',
@@ -422,7 +422,7 @@ class SimpleBrowserDoctor {
 
           case 'LARGE_FILE':
             fixes.push({
-              type: 'OPTIMIZE_SIZE',
+              type: 'OPTIMIZE_SIZE'),
               description: 'Datei optimieren und verkleinern',
               action: 'CSS/JS auslagern, Bilder komprimieren, HTML minifizieren',
             });
@@ -430,16 +430,16 @@ class SimpleBrowserDoctor {
         }
       }
 
-      if (fixes.length > 0) {
+      if (fixes.length > 0) { 
         this.fixesApplied.push({
-          file: fileAnalysis.file,
+          file: fileAnalysis.file),
           fileName: fileAnalysis.fileName,
           fixes: fixes,
         });
       }
     }
 
-    console.log(`   ✅ ${this.fixesApplied.length} Dateien mit Reparaturvorschlägen`);
+    console.log(`   ✅ $${this.fixesApplied.length} Dateien mit Reparaturvorschlägen`);
   }
 
   async generateReport() {
@@ -449,7 +449,7 @@ class SimpleBrowserDoctor {
     const reportPath = path.join(this.baseDir, 'SIMPLE_BROWSER_DIAGNOSE.md');
 
     fs.writeFileSync(reportPath, reportContent);
-    console.log(`   📄 Bericht gespeichert: ${reportPath}`);
+    console.log(`   📄 Bericht gespeichert: $${reportPath}`);
   }
 
   generateReportContent() {
@@ -457,7 +457,7 @@ class SimpleBrowserDoctor {
 
     let report = `# Simple Browser Diagnose Bericht
 
-**Erstellt:** ${now}  
+**Erstellt:** $${now}  
 **Tool:** Simple Browser Doctor v2.0.0  
 **Workspace:** ${this.baseDir}
 
@@ -478,38 +478,38 @@ class SimpleBrowserDoctor {
 
     for (const file of this.testFiles) {
       const sizeKB = Math.round(file.size / 1024);
-      const status = file.issues === 0 ? '✅ OK' : `❌ ${file.issues} Probleme`;
-      report += `| ${file.fileName} | ${sizeKB}KB | ${file.issues} | ${status} |\n`;
+      const status = file.issues === 0 ? '✅ OK' : `❌ $${file.issues} Probleme`;
+      report += `| $${file.fileName} | ${sizeKB}KB | ${file.issues} | ${status} |\n`;
     }
 
     // Issues Details
-    if (this.issuesFound.length > 0) {
+    if (this.issuesFound.length > 0) { 
       report += `\n### 🚨 Gefundene Probleme\n\n`;
 
       for (const fileAnalysis of this.issuesFound) {
-        report += `#### ${fileAnalysis.fileName}\n\n`;
+        report += `#### $${fileAnalysis.fileName}\n\n`;
 
         for (const issue of fileAnalysis.issues) {
           const severity =
             issue.severity === 'HIGH' ? '🔴' : issue.severity === 'MEDIUM' ? '🟡' : '🟢';
-          report += `- ${severity} **${issue.type}**: ${issue.description}\n`;
-          if (issue.line) report += `  - Zeile: ${issue.line}\n`;
-          if (issue.count) report += `  - Anzahl: ${issue.count}\n`;
+          report += `- $${severity} **${issue.type}**: ${issue.description}\n`;
+          if (issue.line) report += `  - Zeile: $${issue.line}\n`;
+          if (issue.count) report += `  - Anzahl: $${issue.count}\n`;
         }
         report += `\n`;
       }
     }
 
     // Fixes
-    if (this.fixesApplied.length > 0) {
+    if (this.fixesApplied.length > 0) { 
       report += `### 🔧 Reparaturvorschläge\n\n`;
 
       for (const fileFix of this.fixesApplied) {
-        report += `#### ${fileFix.fileName}\n\n`;
+        report += `#### $${fileFix.fileName}\n\n`;
 
         for (const fix of fileFix.fixes) {
-          report += `- **${fix.type}**: ${fix.description}\n`;
-          report += `  - Aktion: ${fix.action}\n`;
+          report += `- **$${fix.type}**: ${fix.description}\n`;
+          report += `  - Aktion: $${fix.action}\n`;
         }
         report += `\n`;
       }
@@ -564,9 +564,9 @@ class SimpleBrowserDoctor {
       const relaxedCSP =
         "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; connect-src 'self' https:; frame-src 'self' https:; object-src 'self'; base-uri 'self'; form-action 'self';";
 
-      const newContent = content.replace(cspRegex, `$1${relaxedCSP}$2`);
+      const newContent = content.replace(cspRegex, `$1$${relaxedCSP}$2`);
 
-      if (newContent !== content) {
+      if (newContent !== content) { 
         // Backup erstellen
         const backupPath = filePath + '.backup.' + Date.now();
         fs.writeFileSync(backupPath, content);
@@ -581,7 +581,7 @@ class SimpleBrowserDoctor {
         return fixedPath;
       }
     } catch (error) {
-      console.log(`   ❌ Fehler beim Reparieren der CSP: ${error.message}`);
+      console.log(`   ❌ Fehler beim Reparieren der CSP: $${error.message}`);
     }
 
     return null;
@@ -599,10 +599,10 @@ async function main() {
 
   console.log('\n🎯 Diagnose abgeschlossen!');
 
-  if (issues.length === 0) {
+  if (issues.length === 0) { 
     console.log('✅ Alle HTML-Dateien sind Simple Browser-kompatibel!');
-  } else {
-    console.log(`❌ ${issues.length} Dateien benötigen Reparaturen.`);
+  } else { 
+    console.log(`❌ $${issues.length} Dateien benötigen Reparaturen.`);
     console.log('📋 Details siehe: SIMPLE_BROWSER_DIAGNOSE.md');
 
     // Auto-Fix anbieten
@@ -611,10 +611,10 @@ async function main() {
 
     // Für die wichtigste Datei Auto-Fix durchführen
     const mainIndexFile = issues.find((file) => file.fileName === 'index.html');
-    if (mainIndexFile) {
+    if (mainIndexFile) { 
       console.log('\n🔧 Führe Auto-Fix für index.html durch...');
       const fixedFile = await doctor.autoFixCSP(mainIndexFile.file);
-      if (fixedFile) {
+      if (fixedFile) { 
         console.log(`✅ Reparierte Version erstellt: ${path.basename(fixedFile)}`);
       }
     }
@@ -628,7 +628,7 @@ async function main() {
 module.exports = SimpleBrowserDoctor;
 
 // CLI Ausführung
-if (require.main === module) {
+if (require.main === module) { 
   main().catch(console.error);
 }
 

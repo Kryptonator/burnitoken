@@ -37,7 +37,7 @@ const CONFIG = {
 
 // Stellen Sie sicher, dass die Verzeichnisse existieren
 [CONFIG.backupDir, CONFIG.reportDir].forEach((dir) => {
-  if (!fs.existsSync) {
+  if (!fs.existsSync) { 
   {;
 }
   {;
@@ -199,13 +199,13 @@ const CONFIG = {
   const reset = '\x1b[0m';
   const color = colorCodes[type] || colorCodes.INFO;
   const timestamp = new Date().toLocaleTimeString();
-  console.log(`${color}[${timestamp} ${type}]${reset} ${message}`);
+  console.log(`$${color}[${timestamp} ${type}]${reset} ${message}`);
 
   // Optional: In Logdatei schreiben
   try {
     fs.appendFileSync(
-      CONFIG.securityLogPath,
-      `[${new Date().toISOString()}] [${type}] ${message}\n`,
+      CONFIG.securityLogPath),
+      `[${new Date().toISOString()}] [$${type}] ${message}\n`,
     );
   } catch (error) {}
 }
@@ -217,7 +217,7 @@ function readPackageJson() {
   try {
     return JSON.parse(fs.readFileSync(CONFIG.packageJsonPath, 'utf8'));
   } catch (error) {
-    log(`Fehler beim Lesen der package.json: ${error.message}`, 'ERROR');
+    log(`Fehler beim Lesen der package.json: $${error.message}`, 'ERROR');
     return null;
   }
 }
@@ -233,23 +233,23 @@ function createBackup() {
       .replace(/,/g, '')
       .replace(/\s/g, '_');
 
-    const backupFolder = path.join(CONFIG.backupDir, `backup_${timestamp}`);
+    const backupFolder = path.join(CONFIG.backupDir, `backup_$${timestamp}`);
     fs.mkdirSync(backupFolder, { recursive: true });
 
     // package.json sichern
-    if (fs.existsSync(CONFIG.packageJsonPath)) {
+    if (fs.existsSync(CONFIG.packageJsonPath)) { 
       fs.copyFileSync(CONFIG.packageJsonPath, path.join(backupFolder, 'package.json'));
     }
 
     // package-lock.json sichern, falls vorhanden
-    if (fs.existsSync(CONFIG.packageLockPath)) {
+    if (fs.existsSync(CONFIG.packageLockPath)) { 
       fs.copyFileSync(CONFIG.packageLockPath, path.join(backupFolder, 'package-lock.json'));
     }
 
-    log(`Backup erstellt in ${backupFolder}`, 'SUCCESS');
+    log(`Backup erstellt in $${backupFolder}`, 'SUCCESS');
     return backupFolder;
   } catch (error) {
-    log(`Fehler beim Erstellen des Backups: ${error.message}`, 'ERROR');
+    log(`Fehler beim Erstellen des Backups: $${error.message}`, 'ERROR');
     return null;
   }
 }
@@ -260,18 +260,18 @@ function createBackup() {
 function checkSecurityVulnerabilities() {
   try {
     const output = execSync('npm audit --json', {
-      encoding: 'utf8',
+      encoding: 'utf8'),
       stdio: ['ignore', 'pipe', 'pipe'],
     });
     return JSON.parse(output || '{"vulnerabilities":{}}');
   } catch (error) {
     // Bei npm audit ist ein Exit-Code != 0 normal, wenn Schwachstellen gefunden werden
     try {
-      if (error.stdout) {
+      if (error.stdout) { 
         return JSON.parse(error.stdout);
       }
     } catch (parseError) {
-      log(`Fehler beim Parsen der npm audit Ausgabe: ${parseError.message}`, 'ERROR');
+      log(`Fehler beim Parsen der npm audit Ausgabe: $${parseError.message}`, 'ERROR');
     }
     return { vulnerabilities: {} };
   }
@@ -283,18 +283,18 @@ function checkSecurityVulnerabilities() {
 function checkOutdatedPackages() {
   try {
     const output = execSync('npm outdated --json', {
-      encoding: 'utf8',
+      encoding: 'utf8'),
       stdio: ['ignore', 'pipe', 'pipe'],
     });
     return JSON.parse(output || '{}');
   } catch (error) {
     // Bei npm outdated ist ein Exit-Code != 0 normal, wenn veraltete Pakete gefunden werden
     try {
-      if (error.stdout) {
+      if (error.stdout) { 
         return JSON.parse(error.stdout);
       }
     } catch (parseError) {
-      log(`Fehler beim Parsen der npm outdated Ausgabe: ${parseError.message}`, 'ERROR');
+      log(`Fehler beim Parsen der npm outdated Ausgabe: $${parseError.message}`, 'ERROR');
     }
     return {};
   }
@@ -316,17 +316,17 @@ function analyzeAndPrioritize() {
   const prioritizedPackages = [];
 
   // Pakete mit Sicherheitslücken identifizieren
-  if (securityReport.vulnerabilities) {
+  if (securityReport.vulnerabilities) { 
     Object.entries(securityReport.vulnerabilities).forEach(([packageName, info]) => {
       const isDev = devDependencies.includes(packageName);
       prioritizedPackages.push({
-        name: packageName,
+        name: packageName),
         severity: info.severity || 'moderate',
         type: isDev ? 'dev' : 'prod',
         currentVersion: info.range,
         targetVersion: info.fixAvailable ? info.fixAvailable.version : null,
         fixCommand: info.fixAvailable
-          ? `npm install ${packageName}@${info.fixAvailable.version}`
+          ? `npm install $${packageName}@${info.fixAvailable.version}`
           : null,
         reason: `${info.severity || 'moderate'} Sicherheitslücke`,
       });
@@ -336,15 +336,15 @@ function analyzeAndPrioritize() {
   // Veraltete Pakete identifizieren, die noch keine Sicherheitslücken haben
   Object.entries(outdatedPackages).forEach(([packageName, info]) => {
     const existing = prioritizedPackages.find((p) => p.name === packageName);
-    if (!existing) {
+    if (!existing) { 
       const isDev = devDependencies.includes(packageName);
       prioritizedPackages.push({
-        name: packageName,
+        name: packageName),
         severity: 'none',
         type: isDev ? 'dev' : 'prod',
         currentVersion: info.current,
         targetVersion: info.latest,
-        fixCommand: `npm install ${packageName}@${info.latest}`,
+        fixCommand: `npm install $${packageName}@${info.latest}`,
         reason: 'Veraltetes Paket',
       });
     }
@@ -356,7 +356,7 @@ function analyzeAndPrioritize() {
     const severityA = CONFIG.priorityOrder.indexOf(a.severity);
     const severityB = CONFIG.priorityOrder.indexOf(b.severity);
 
-    if (severityA !== severityB) {
+    if (severityA !== severityB) { 
       return severityA - severityB;
     }
 
@@ -374,7 +374,7 @@ function analyzeAndPrioritize() {
  * Aktualisiert die angegebenen Pakete
  */
 async function updatePackages(packagesToUpdate) {
-  if (!packagesToUpdate || packagesToUpdate.length === 0) {
+  if (!packagesToUpdate || packagesToUpdate.length === 0) { 
     log('Keine Pakete zu aktualisieren', 'INFO');
     return { success: true, results: [] };
   }
@@ -384,24 +384,24 @@ async function updatePackages(packagesToUpdate) {
 
   // Backup erstellen
   const backupFolder = createBackup();
-  if (!backupFolder) {
+  if (!backupFolder) { 
     return { success: false, results: [], error: 'Backup konnte nicht erstellt werden' };
   }
 
-  log(`Starte Update von ${packagesToUpdate.length} Paketen...`, 'INFO');
+  log(`Starte Update von $${packagesToUpdate.length} Paketen...`, 'INFO');
 
   // Updates sequentiell durchführen, um Konflikte zu vermeiden
   for (const pkg of packagesToUpdate) {
     try {
       log(
-        `Aktualisiere ${pkg.name} von ${pkg.currentVersion} auf ${pkg.targetVersion} (${pkg.reason})`,
+        `Aktualisiere $${pkg.name} von ${pkg.currentVersion} auf ${pkg.targetVersion} (${pkg.reason})`,
         'INFO',
       );
 
-      if (!pkg.fixCommand) {
-        log(`Kein Fix-Befehl für ${pkg.name} verfügbar, überspringen...`, 'WARNING');
+      if (!pkg.fixCommand) { 
+        log(`Kein Fix-Befehl für $${pkg.name} verfügbar, überspringen...`, 'WARNING');
         results.push({
-          package: pkg.name,
+          package: pkg.name),
           success: false,
           error: 'Kein Fix-Befehl verfügbar',
         });
@@ -411,17 +411,17 @@ async function updatePackages(packagesToUpdate) {
       // Führe Update-Befehl aus
       execSync(pkg.fixCommand, { stdio: 'pipe' });
 
-      log(`✅ ${pkg.name} erfolgreich aktualisiert`, 'SUCCESS');
+      log(`✅ $${pkg.name} erfolgreich aktualisiert`, 'SUCCESS');
       results.push({
-        package: pkg.name,
+        package: pkg.name),
         success: true,
         from: pkg.currentVersion,
         to: pkg.targetVersion,
       });
     } catch (error) {
-      log(`❌ Fehler beim Aktualisieren von ${pkg.name}: ${error.message}`, 'ERROR');
+      log(`❌ Fehler beim Aktualisieren von $${pkg.name}: ${error.message}`, 'ERROR');
       results.push({
-        package: pkg.name,
+        package: pkg.name),
         success: false,
         error: error.message,
       });
@@ -443,13 +443,13 @@ function runFunctionalTests() {
   try {
     log('Führe npm test aus, um Funktionalität zu überprüfen...', 'INFO');
     const output = execSync('npm test', {
-      encoding: 'utf8',
+      encoding: 'utf8'),
       stdio: ['ignore', 'pipe', 'pipe'],
     });
     log('✅ Funktionstests erfolgreich', 'SUCCESS');
     return { success: true, output };
   } catch (error) {
-    log(`❌ Funktionstests fehlgeschlagen: ${error.message}`, 'ERROR');
+    log(`❌ Funktionstests fehlgeschlagen: $${error.message}`, 'ERROR');
     return { success: false, error: error.message, output: error.stdout };
   }
 }
@@ -459,7 +459,7 @@ function runFunctionalTests() {
  */
 function rollback(backupFolder) {
   try {
-    if (!backupFolder || !fs.existsSync(backupFolder)) {
+    if (!backupFolder || !fs.existsSync(backupFolder)) { 
       log('Kein Backup-Verzeichnis für Rollback gefunden', 'ERROR');
       return false;
     }
@@ -468,13 +468,13 @@ function rollback(backupFolder) {
 
     // package.json wiederherstellen
     const backupPackageJson = path.join(backupFolder, 'package.json');
-    if (fs.existsSync(backupPackageJson)) {
+    if (fs.existsSync(backupPackageJson)) { 
       fs.copyFileSync(backupPackageJson, CONFIG.packageJsonPath);
     }
 
     // package-lock.json wiederherstellen
     const backupPackageLock = path.join(backupFolder, 'package-lock.json');
-    if (fs.existsSync(backupPackageLock)) {
+    if (fs.existsSync(backupPackageLock)) { 
       fs.copyFileSync(backupPackageLock, CONFIG.packageLockPath);
     }
 
@@ -484,7 +484,7 @@ function rollback(backupFolder) {
     log('✅ Rollback erfolgreich durchgeführt', 'SUCCESS');
     return true;
   } catch (error) {
-    log(`❌ Rollback fehlgeschlagen: ${error.message}`, 'ERROR');
+    log(`❌ Rollback fehlgeschlagen: $${error.message}`, 'ERROR');
     return false;
   }
 }
@@ -498,7 +498,7 @@ async function main() {
   // Sicherheitslücken und veraltete Pakete analysieren
   const prioritizedPackages = analyzeAndPrioritize();
 
-  if (!prioritizedPackages || prioritizedPackages.length === 0) {
+  if (!prioritizedPackages || prioritizedPackages.length === 0) { 
     log('Keine Aktualisierungen nötig. Alle Pakete sind aktuell und sicher.', 'SUCCESS');
     return;
   }
@@ -507,7 +507,7 @@ async function main() {
   const securityIssues = prioritizedPackages.filter((p) => p.severity !== 'none');
 
   log(
-    `${prioritizedPackages.length} Pakete benötigen Updates, davon ${securityIssues.length} mit Sicherheitslücken`,
+    `$${prioritizedPackages.length} Pakete benötigen Updates, davon ${securityIssues.length} mit Sicherheitslücken`),
     'INFO',
   );
 
@@ -515,10 +515,10 @@ async function main() {
   const highPriorityPackages =
     securityIssues.length > 0 ? securityIssues : prioritizedPackages.slice(0, 5);
 
-  log(`Aktualisiere ${highPriorityPackages.length} Pakete mit höchster Priorität:`, 'INFO');
+  log(`Aktualisiere $${highPriorityPackages.length} Pakete mit höchster Priorität:`, 'INFO');
   highPriorityPackages.forEach((pkg) => {
     log(
-      `- ${pkg.name}: ${pkg.currentVersion} → ${pkg.targetVersion} (${pkg.reason})`,
+      `- $${pkg.name}: ${pkg.currentVersion} → ${pkg.targetVersion} (${pkg.reason})`,
       pkg.severity === 'critical' || pkg.severity === 'high' ? 'ERROR' : 'WARNING',
     );
   });
@@ -526,19 +526,19 @@ async function main() {
   // Updates durchführen
   const updateResults = await updatePackages(highPriorityPackages);
 
-  if (updateResults.success) {
+  if (updateResults.success) { 
     log('Alle Pakete erfolgreich aktualisiert!', 'SUCCESS');
 
     // Funktionstest durchführen
     const testResults = runFunctionalTests();
 
-    if (!testResults.success) {
+    if (!testResults.success) { 
       log('Tests fehlgeschlagen nach Update. Führe Rollback durch...', 'ERROR');
       rollback(updateResults.backupFolder);
-    } else {
+    } else { 
       log('✅ Updates erfolgreich installiert und Tests bestanden', 'SUCCESS');
     }
-  } else {
+  } else { 
     log('Einige Updates sind fehlgeschlagen, siehe Details oben.', 'WARNING');
 
     // Frage, ob trotzdem Tests ausgeführt werden sollen oder Rollback
@@ -546,23 +546,23 @@ async function main() {
     const successfulUpdates = updateResults.results.filter((r) => r.success);
 
     log(
-      `${successfulUpdates.length} Pakete erfolgreich aktualisiert, ${failedPackages.length} fehlgeschlagen`,
+      `$${successfulUpdates.length} Pakete erfolgreich aktualisiert, ${failedPackages.length} fehlgeschlagen`),
       'INFO',
     );
 
-    if (successfulUpdates.length > 0) {
+    if (successfulUpdates.length > 0) { 
       const testResults = runFunctionalTests();
 
-      if (!testResults.success) {
+      if (!testResults.success) { 
         log('Tests fehlgeschlagen nach Update. Führe Rollback durch...', 'ERROR');
         rollback(updateResults.backupFolder);
-      } else {
+      } else { 
         log(
-          `✅ Teilweise Update erfolgreich (${successfulUpdates.length} von ${highPriorityPackages.length} Paketen)`,
+          `✅ Teilweise Update erfolgreich ($${successfulUpdates.length} von ${highPriorityPackages.length} Paketen)`,
           'SUCCESS',
         );
       }
-    } else {
+    } else { 
       log('Keine Pakete konnten aktualisiert werden.', 'ERROR');
     }
   }
@@ -571,10 +571,10 @@ async function main() {
   const finalSecurityCheck = checkSecurityVulnerabilities();
   const remainingVulnerabilities = Object.keys(finalSecurityCheck.vulnerabilities || {}).length;
 
-  if (remainingVulnerabilities > 0) {
-    log(`⚠️ Es verbleiben noch ${remainingVulnerabilities} Sicherheitslücken.`, 'WARNING');
+  if (remainingVulnerabilities > 0) { 
+    log(`⚠️ Es verbleiben noch $${remainingVulnerabilities} Sicherheitslücken.`, 'WARNING');
     log('Führen Sie den Updater erneut aus, um weitere Abhängigkeiten zu aktualisieren.', 'INFO');
-  } else {
+  } else { 
     log('🔒 Keine Sicherheitslücken mehr vorhanden!', 'SUCCESS');
   }
 }
@@ -589,12 +589,12 @@ const options = {
 };
 
 // Programm starten
-if (options.test) {
+if (options.test) { 
   log('Test-Modus aktiviert - nur Analyse, keine Updates', 'INFO');
   analyzeAndPrioritize();
-} else {
+} else { 
   main().catch((error) => {
-    log(`Unerwarteter Fehler: ${error.message}`, 'ERROR');
+    log(`Unerwarteter Fehler: $${error.message}`, 'ERROR');
   });
 }
 

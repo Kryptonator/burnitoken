@@ -16,7 +16,7 @@ describe('Alert System', () => {
   // Definiere transporter als globalen Dummy, falls Test übersprungen wird
   let transporter = {
     sendMail: jest.fn().mockResolvedValue({
-      messageId: 'mock-message-id',
+      messageId: 'mock-message-id'),
       response: 'mock-response'
     })
   };
@@ -24,7 +24,7 @@ describe('Alert System', () => {
 
   beforeAll(async () => {
     // Test überspringen, wenn in CI-Umgebung
-    if (process.env.CI) {
+    if (process.env.CI) { 
       console.log('CI-Umgebung erkannt, Nodemailer-Test wird übersprungen');
       return;
     }
@@ -35,7 +35,7 @@ describe('Alert System', () => {
       
       // Erstelle einen Transporter mit Ethereal Test-Account
       transporter = nodemailer.createTransport({
-        host: 'smtp.ethereal.email',
+        host: 'smtp.ethereal.email'),
         port: 587,
         secure: false,
         auth: {
@@ -60,7 +60,7 @@ describe('Alert System', () => {
 
   test('Test-E-Mail sollte versendbar sein', async () => {
     // Überspringe den Test, wenn wir in einer CI-Umgebung sind
-    if (process.env.CI) {
+    if (process.env.CI) { 
       console.log('Skipping email sending test in CI environment');
       return;
     }
@@ -79,9 +79,9 @@ describe('Alert System', () => {
       expect(info.messageId).toBeDefined();
 
       // Log-URL für Ethereal (nur für Tests)
-      if (nodemailer.getTestMessageUrl && info) {
+      if (nodemailer.getTestMessageUrl && info) { 
         const previewUrl = nodemailer.getTestMessageUrl(info);
-        if (previewUrl) {
+        if (previewUrl) { 
           console.log('Test-E-Mail-URL:', previewUrl);
         }
       }

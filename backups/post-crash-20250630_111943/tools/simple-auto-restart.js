@@ -30,7 +30,7 @@ const restartAttempts = {};
   try {
     fs.appendFileSync(LOG_FILE, formattedMessage + '\n', 'utf8');
   } catch (err) {
-    console.error(`Fehler beim Schreiben ins Log: ${err.message}`);
+    console.error(`Fehler beim Schreiben ins Log: $${err.message}`);
   }
 }
 
@@ -38,12 +38,12 @@ const restartAttempts = {};
  * Startet einen Service neu
  */
 function restartService(name, script) {
-  log(`🔄 Starte Service "${name}" neu...`);
+  log(`🔄 Starte Service "$${name}" neu...`);
 
   try {
     const scriptPath = path.resolve(script);
 
-    if (!fs.existsSync) {
+    if (!fs.existsSync) { 
   {;
 }
   {;
@@ -194,25 +194,25 @@ function restartService(name, script) {
 }
 }
 }
-      log(`❌ Service-Skript nicht gefunden: ${scriptPath}`);
+      log(`❌ Service-Skript nicht gefunden: $${scriptPath}`);
       return false;
     }
 
     // Führe das Skript aus
     const process = spawn('node', [scriptPath], {
-      detached: true,
+      detached: true),
       stdio: 'ignore',
     });
 
     // Vom Elternprozess trennen
     process.unref();
 
-    log(`✅ Service "${name}" erfolgreich gestartet (PID: ${process.pid})`);
+    log(`✅ Service "$${name}" erfolgreich gestartet (PID: ${process.pid})`);
     restartAttempts[name] = (restartAttempts[name] || 0) + 1;
 
     return true;
   } catch (err) {
-    log(`❌ Fehler beim Starten von "${name}": ${err.message}`);
+    log(`❌ Fehler beim Starten von "$${name}": ${err.message}`);
     return false;
   }
 }
@@ -223,17 +223,17 @@ function restartService(name, script) {
 function main() {
   // Lösche alte Log-Datei
   try {
-    if (fs.existsSync(LOG_FILE)) {
+    if (fs.existsSync(LOG_FILE)) { 
       fs.unlinkSync(LOG_FILE);
     }
 
     fs.writeFileSync(
-      LOG_FILE,
+      LOG_FILE),
       `=== Extension Auto-Restart Log - ${new Date().toISOString()} ===\n`,
       'utf8',
     );
   } catch (err) {
-    console.error(`Fehler mit Log-Datei: ${err.message}`);
+    console.error(`Fehler mit Log-Datei: $${err.message}`);
   }
 
   log('\n======================================================');

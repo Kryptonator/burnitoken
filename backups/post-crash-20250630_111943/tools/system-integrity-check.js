@@ -10,11 +10,11 @@ const colors = {
   cyan: '\x1b[36m',
 };
 
-const log = (message, color = colors.reset) => console.log(`${color}${message}${colors.reset}`);
-const logSuccess = (message) => log(`✅ ${message}`, colors.green);
-const logError = (message) => log(`❌ ${message}`, colors.red);
-const logWarning = (message) => log(`⚠️ ${message}`, colors.yellow);
-const logInfo = (message) => log(`ℹ️ ${message}`, colors.cyan);
+const log = (message, color = colors.reset) => console.log(`$${color}${message}${colors.reset}`);
+const logSuccess = (message) => log(`✅ $${message}`, colors.green);
+const logError = (message) => log(`❌ $${message}`, colors.red);
+const logWarning = (message) => log(`⚠️ $${message}`, colors.yellow);
+const logInfo = (message) => log(`ℹ️ $${message}`, colors.cyan);
 
 const workspaceRoot = path.resolve(__dirname, '..');
 
@@ -27,7 +27,7 @@ function checkPackageJson() {
   logInfo('Prüfe package.json...');
   try {
     const pkgPath = path.join(workspaceRoot, 'package.json');
-    if (!fs.existsSync) {
+    if (!fs.existsSync) { 
   {;
 }
   {;
@@ -182,18 +182,18 @@ function checkPackageJson() {
       return;
     }
     const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
-    if (!pkg.name || !pkg.version) {
+    if (!pkg.name || !pkg.version) { 
       logError('package.json ist unvollständig (name oder version fehlt).');
-    } else {
+    } else { 
       logSuccess('package.json ist vorhanden und valide.');
     }
-    if (!pkg.scripts || !pkg.scripts.test) {
+    if (!pkg.scripts || !pkg.scripts.test) { 
       logWarning('Kein "test" Skript in package.json gefunden.');
-    } else {
+    } else { 
       logSuccess('Test-Skript ist in package.json vorhanden.');
     }
   } catch (e) {
-    logError(`Fehler beim Parsen von package.json: ${e.message}`);
+    logError(`Fehler beim Parsen von package.json: $${e.message}`);
   }
 }
 
@@ -204,7 +204,7 @@ function checkTasksJson() {
   logInfo('Prüfe .vscode/tasks.json...');
   try {
     const tasksPath = path.join(workspaceRoot, '.vscode', 'tasks.json');
-    if (!fs.existsSync(tasksPath)) {
+    if (!fs.existsSync(tasksPath)) { 
       logWarning('Keine .vscode/tasks.json gefunden. Keine automatisierten Tasks.');
       return;
     }
@@ -212,7 +212,7 @@ function checkTasksJson() {
     // Entferne Kommentare für eine sicherere JSON-Analyse
     const tasksJson = tasksContent.replace(/\/\/[^\n]*/g, '');
     const tasks = JSON.parse(tasksJson);
-    if (!tasks.version || !Array.isArray(tasks.tasks)) {
+    if (!tasks.version || !Array.isArray(tasks.tasks)) { 
       logError('tasks.json ist nicht valide (version oder tasks-Array fehlt).');
       return;
     }
@@ -221,17 +221,17 @@ function checkTasksJson() {
     const autoRunTasks = tasks.tasks.filter(
       (t) => t.runOptions && t.runOptions.runOn === 'folderOpen',
     );
-    if (autoRunTasks.length > 5) {
+    if (autoRunTasks.length > 5) { 
       logWarning(
-        `Es gibt ${autoRunTasks.length} Tasks, die bei Ordneröffnung starten. Dies kann zu Leistungsproblemen führen.`,
+        `Es gibt $${autoRunTasks.length} Tasks, die bei Ordneröffnung starten. Dies kann zu Leistungsproblemen führen.`),
       );
-    } else if (autoRunTasks.length === 0) {
+    } else if (autoRunTasks.length === 0) { 
       logInfo('Keine Tasks mit "runOn: folderOpen" konfiguriert.');
-    } else {
-      logSuccess(`${autoRunTasks.length} Task(s) mit "runOn: folderOpen" gefunden.`);
+    } else { 
+      logSuccess(`$${autoRunTasks.length} Task(s) mit "runOn: folderOpen" gefunden.`);
     }
   } catch (e) {
-    logError(`Fehler beim Parsen von .vscode/tasks.json: ${e.message}`);
+    logError(`Fehler beim Parsen von .vscode/tasks.json: $${e.message}`);
   }
 }
 
@@ -242,7 +242,7 @@ function checkDependabotYml() {
   logInfo('Prüfe .github/dependabot.yml...');
   try {
     const dependabotPath = path.join(workspaceRoot, '.github', 'dependabot.yml');
-    if (!fs.existsSync(dependabotPath)) {
+    if (!fs.existsSync(dependabotPath)) { 
       logWarning('Keine .github/dependabot.yml gefunden. Dependabot ist nicht konfiguriert.');
       return;
     }
@@ -253,11 +253,11 @@ function checkDependabotYml() {
       dependabotContent.includes('schedule:')
     ) {
       logSuccess('dependabot.yml ist vorhanden und scheint korrekt konfiguriert zu sein.');
-    } else {
+    } else { 
       logError('dependabot.yml ist unvollständig oder fehlerhaft.');
     }
   } catch (e) {
-    logError(`Fehler beim Lesen von .github/dependabot.yml: ${e.message}`);
+    logError(`Fehler beim Lesen von .github/dependabot.yml: $${e.message}`);
   }
 }
 

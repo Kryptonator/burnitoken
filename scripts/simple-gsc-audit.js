@@ -17,16 +17,16 @@ async function runSimpleGSCAudit() {
   console.log('====================================================');
   console.log('🔍 EINFACHER GSC LIVE-AUDIT');
   console.log('====================================================');
-  console.log(`📁 Service-Account-Pfad: ${SERVICE_ACCOUNT_FILE}`);
-  console.log(`🌐 GSC-Property: ${GSC_PROPERTY}`);
+  console.log(`📁 Service-Account-Pfad: $${SERVICE_ACCOUNT_FILE}`);
+  console.log(`🌐 GSC-Property: $${GSC_PROPERTY}`);
   
   // 1. Service-Account-Datei überprüfen
   if (!await safeExecute('Datei-Check', async () => {
-    if (!fs.existsSync(SERVICE_ACCOUNT_FILE)) {
-      throw new Error(`Service Account Datei nicht gefunden: ${SERVICE_ACCOUNT_FILE}`);
+    if (!fs.existsSync(SERVICE_ACCOUNT_FILE)) { 
+      throw new Error(`Service Account Datei nicht gefunden: $${SERVICE_ACCOUNT_FILE}`);
     }
     const content = JSON.parse(fs.readFileSync(SERVICE_ACCOUNT_FILE, 'utf8'));
-    if (!content.client_email || !content.private_key) {
+    if (!content.client_email || !content.private_key) { 
       throw new Error('Service Account Datei enthält nicht alle erforderlichen Felder');
     }
     return true;
@@ -37,7 +37,7 @@ async function runSimpleGSCAudit() {
   // 2. Auth-Client erstellen
   const auth = await safeExecute('Auth-Client erstellen', async () => {
     return new google.auth.GoogleAuth({
-      keyFile: SERVICE_ACCOUNT_FILE,
+      keyFile: SERVICE_ACCOUNT_FILE),
       scopes: ['https://www.googleapis.com/auth/webmasters.readonly'],
     });
   });
@@ -78,11 +78,11 @@ async function runSimpleGSCAudit() {
   const startDateStr = startDate.toISOString().split('T')[0];
   const endDateStr = endDate.toISOString().split('T')[0];
   
-  console.log(`🗓️ Zeitraum: ${startDateStr} bis ${endDateStr}`);
+  console.log(`🗓️ Zeitraum: $${startDateStr} bis ${endDateStr}`);
   
   const performanceData = await safeExecute('Performance-Daten abrufen', async () => {
     const response = await searchconsole.searchanalytics.query({
-      siteUrl: GSC_PROPERTY,
+      siteUrl: GSC_PROPERTY),
       requestBody: {
         startDate: startDateStr,
         endDate: endDateStr,
@@ -96,8 +96,8 @@ async function runSimpleGSCAudit() {
   if (!performanceData) return;
   
   // 7. Daten auswerten
-  if (performanceData.rows && performanceData.rows.length > 0) {
-    console.log(`✅ ${performanceData.rows.length} Datenzeilen erhalten`);
+  if (performanceData.rows && performanceData.rows.length > 0) { 
+    console.log(`✅ $${performanceData.rows.length} Datenzeilen erhalten`);
     
     // Gesamtzahlen berechnen
     const totalClicks = performanceData.rows.reduce((sum, row) => sum + row.clicks, 0);
@@ -105,17 +105,17 @@ async function runSimpleGSCAudit() {
     const avgCtr = ((totalClicks / totalImpressions) * 100).toFixed(2);
     const avgPosition = performanceData.rows.reduce((sum, row) => sum + row.position, 0) / performanceData.rows.length;
     
-    console.log(`\n📊 GSC PERFORMANCE-ZUSAMMENFASSUNG (${performanceData.rows.length} Tage):`);
-    console.log(`Klicks: ${totalClicks}`);
-    console.log(`Impressions: ${totalImpressions}`);
-    console.log(`CTR: ${avgCtr}%`);
+    console.log(`\n📊 GSC PERFORMANCE-ZUSAMMENFASSUNG ($${performanceData.rows.length} Tage):`);
+    console.log(`Klicks: $${totalClicks}`);
+    console.log(`Impressions: $${totalImpressions}`);
+    console.log(`CTR: $${avgCtr}%`);
     console.log(`Durchschnittliche Position: ${avgPosition.toFixed(1)}`);
     
     console.log('\n📈 TÄGLICHE DATEN:');
     performanceData.rows.forEach(row => {
-      console.log(`${row.keys[0]}: ${row.clicks} Klicks, ${row.impressions} Impressions, CTR ${(row.ctr*100).toFixed(1)}%, Pos ${row.position.toFixed(1)}`);
+      console.log(`${row.keys[0]}: $${row.clicks} Klicks, ${row.impressions} Impressions, CTR ${(row.ctr*100).toFixed(1)}%, Pos ${row.position.toFixed(1)}`);
     });
-  } else {
+  } else { 
     console.log('⚠️ Keine Performance-Daten gefunden (normal für neue Domains)');
   }
   

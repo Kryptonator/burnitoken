@@ -17,7 +17,7 @@ test.describe('Language Switcher E2E Tests', () => {
       () => window.initNavigationAndLanguage && window.initNavigationAndLanguage(),
     );
     // Warte für WebKit explizit länger, damit das JS garantiert initialisiert ist
-    if (browserName === 'webkit') {
+    if (browserName === 'webkit') { 
       await page.waitForTimeout(1000);
     }
     // Wait for page to be fully loaded
@@ -27,11 +27,11 @@ test.describe('Language Switcher E2E Tests', () => {
   test('Language switcher updates all translatable elements', async ({ page }) => {
     // Check if main.js loaded
     const mainJsLoaded = await page.evaluate(() => window.mainJsLoaded);
-    console.log(`Main.js loaded: ${mainJsLoaded}`);
+    console.log(`Main.js loaded: $${mainJsLoaded}`);
 
     // Check if inline script loaded
     const inlineScriptLoaded = await page.evaluate(() => window.inlineScriptLoaded);
-    console.log(`Inline script loaded: ${inlineScriptLoaded}`);
+    console.log(`Inline script loaded: $${inlineScriptLoaded}`);
 
     // Check if the language select works
     const langSelect = page.locator('#lang-select');
@@ -40,11 +40,11 @@ test.describe('Language Switcher E2E Tests', () => {
     // Check initial state
     const homeNavElement = page.locator('[data-i18n="nav_home"]').first();
     const initialText = await homeNavElement.textContent();
-    console.log(`Initial text: "${initialText}"`);
+    console.log(`Initial text: "$${initialText}"`);
 
     // Check current language selector value
     const currentValue = await langSelect.inputValue();
-    console.log(`Current language selector value: "${currentValue}"`);
+    console.log(`Current language selector value: "$${currentValue}"`);
 
     // Test German translation
     console.log('Selecting German language...');

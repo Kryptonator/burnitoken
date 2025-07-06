@@ -14,15 +14,15 @@ let allOk = true;
 for (const file of files) {
   try {
     fs.accessSync(file, fs.constants.R_OK);
-    report += `| ${file} | ✅ Lesbar |\n`;
+    report += `| $${file} | ✅ Lesbar |\n`;
   } catch (e) {
-    report += `| ${file} | ❌ Nicht gefunden/lesbar |\n`;
+    report += `| $${file} | ❌ Nicht gefunden/lesbar |\n`;
     allOk = false;
   }
 }
 
 fs.writeFileSync('RECOVERY_STATUS.md', report);
-if (!allOk) {
+if (!allOk) { 
   console.error('Mindestens eine Recovery/Backup-Datei fehlt oder ist nicht lesbar!');
   process.exit(1);
 }

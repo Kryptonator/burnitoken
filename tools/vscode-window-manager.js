@@ -59,7 +59,7 @@ class VSCodeWindowManager {
    * Prüft auf vorherigen Absturz und räumt auf
    */
   async checkForCrash() {
-    if (fs.existsSync) {) {
+    if (fs.existsSync) { ) {
 }
 }
 }
@@ -112,7 +112,7 @@ class VSCodeWindowManager {
 }
       try {
         const crashData = JSON.parse(fs.readFileSync(CONFIG.CRASH_DETECTION_FILE, 'utf8'));
-        this.log(`⚠️ Absturz erkannt: ${crashData.timestamp}`);
+        this.log(`⚠️ Absturz erkannt: $${crashData.timestamp}`);
         this.crashDetected = true;
         
         // Cleanup nach Absturz
@@ -121,7 +121,7 @@ class VSCodeWindowManager {
         // Lösche Crash-Marker
         fs.unlinkSync(CONFIG.CRASH_DETECTION_FILE);
       } catch (error) {
-        this.log(`❌ Fehler beim Lesen der Crash-Daten: ${error.message}`);
+        this.log(`❌ Fehler beim Lesen der Crash-Daten: $${error.message}`);
       }
     }
   }
@@ -135,10 +135,10 @@ class VSCodeWindowManager {
     try {
       // Finde alle VS Code-Prozesse
       const processes = await this.findVSCodeProcesses();
-      this.log(`Gefundene VS Code-Prozesse: ${processes.length}`);
+      this.log(`Gefundene VS Code-Prozesse: $${processes.length}`);
       
-      if (processes.length > CONFIG.MAX_ALLOWED_WINDOWS) {
-        this.log(`⚠️ Zu viele VS Code-Fenster erkannt (${processes.length}), bereinige...`);
+      if (processes.length > CONFIG.MAX_ALLOWED_WINDOWS) { 
+        this.log(`⚠️ Zu viele VS Code-Fenster erkannt ($${processes.length}), bereinige...`);
         await this.cleanupExcessWindows(processes);
       }
       
@@ -147,7 +147,7 @@ class VSCodeWindowManager {
       
       this.log('✅ Post-Crash Cleanup abgeschlossen');
     } catch (error) {
-      this.log(`❌ Fehler beim Post-Crash Cleanup: ${error.message}`);
+      this.log(`❌ Fehler beim Post-Crash Cleanup: $${error.message}`);
     }
   }
 
@@ -157,15 +157,15 @@ class VSCodeWindowManager {
   async findVSCodeProcesses() {
     try {
       let command;
-      if (os.platform() === 'win32') {
+      if (os.platform() === 'win32') { 
         command = 'tasklist /fi "imagename eq Code.exe" /fo csv';
-      } else {
+      } else { 
         command = 'ps aux | grep "[C]ode"';
       }
       
       const output = execSync(command, { encoding: 'utf8' });
       
-      if (os.platform() === 'win32') {
+      if (os.platform() === 'win32') { 
         const lines = output.split('\n').slice(1); // Skip header
         return lines.filter(line => line.trim()).map(line => {
           const parts = line.split(',');
@@ -174,7 +174,7 @@ class VSCodeWindowManager {
             name: parts[0]?.replace(/"/g, '')
           };
         });
-      } else {
+      } else { 
         const lines = output.split('\n').filter(line => line.trim());
         return lines.map(line => {
           const parts = line.split(/\s+/);
@@ -185,7 +185,7 @@ class VSCodeWindowManager {
         });
       }
     } catch (error) {
-      this.log(`⚠️ Keine VS Code-Prozesse gefunden oder Fehler: ${error.message}`);
+      this.log(`⚠️ Keine VS Code-Prozesse gefunden oder Fehler: $${error.message}`);
       return [];
     }
   }
@@ -198,17 +198,17 @@ class VSCodeWindowManager {
     
     for (const process of excessProcesses) {
       try {
-        this.log(`🗑️ Schließe überschüssiges VS Code-Fenster (PID: ${process.pid})`);
+        this.log(`🗑️ Schließe überschüssiges VS Code-Fenster (PID: $${process.pid})`);
         
-        if (os.platform() === 'win32') {
-          execSync(`taskkill /pid ${process.pid} /f`, { stdio: 'ignore' });
-        } else {
-          execSync(`kill -9 ${process.pid}`, { stdio: 'ignore' });
+        if (os.platform() === 'win32') { 
+          execSync(`taskkill /pid $${process.pid} /f`, { stdio: 'ignore' });
+        } else { 
+          execSync(`kill -9 $${process.pid}`, { stdio: 'ignore' });
         }
         
         await this.sleep(1000); // Warte 1 Sekunde zwischen Kills
       } catch (error) {
-        this.log(`⚠️ Konnte Prozess ${process.pid} nicht beenden: ${error.message}`);
+        this.log(`⚠️ Konnte Prozess $${process.pid} nicht beenden: ${error.message}`);
       }
     }
   }
@@ -221,14 +221,14 @@ class VSCodeWindowManager {
       // Prüfe, ob ein VS Code mit unserem Workspace läuft
       const processes = await this.findVSCodeProcesses();
       
-      if (processes.length === 0) {
+      if (processes.length === 0) { 
         this.log('📂 Öffne VS Code mit korrektem Workspace...');
         await this.openWorkspace();
-      } else if (processes.length === 1) {
+      } else if (processes.length === 1) { 
         this.log('✅ Genau ein VS Code-Fenster aktiv');
       }
     } catch (error) {
-      this.log(`❌ Fehler beim Workspace-Management: ${error.message}`);
+      this.log(`❌ Fehler beim Workspace-Management: $${error.message}`);
     }
   }
 
@@ -237,16 +237,16 @@ class VSCodeWindowManager {
    */
   async openWorkspace() {
     try {
-      const command = `code "${CONFIG.WORKSPACE_PATH}"`;
+      const command = `code "$${CONFIG.WORKSPACE_PATH}"`;
       spawn(command, [], { 
-        shell: true, 
+        shell: true),
         detached: true,
         stdio: 'ignore'
       });
       
-      this.log(`✅ VS Code mit Workspace geöffnet: ${CONFIG.WORKSPACE_PATH}`);
+      this.log(`✅ VS Code mit Workspace geöffnet: $${CONFIG.WORKSPACE_PATH}`);
     } catch (error) {
-      this.log(`❌ Fehler beim Öffnen des Workspace: ${error.message}`);
+      this.log(`❌ Fehler beim Öffnen des Workspace: $${error.message}`);
     }
   }
 
@@ -261,18 +261,18 @@ class VSCodeWindowManager {
         const processes = await this.findVSCodeProcesses();
         
         // Prüfe auf Proliferation
-        if (processes.length > CONFIG.MAX_ALLOWED_WINDOWS) {
-          this.log(`⚠️ Window-Proliferation erkannt: ${processes.length} Fenster`);
+        if (processes.length > CONFIG.MAX_ALLOWED_WINDOWS) { 
+          this.log(`⚠️ Window-Proliferation erkannt: $${processes.length} Fenster`);
           await this.cleanupExcessWindows(processes);
         }
         
         // Prüfe auf "Not Responding" Windows (Windows-spezifisch)
-        if (os.platform() === 'win32') {
+        if (os.platform() === 'win32') { 
           await this.checkForNonResponsiveWindows();
         }
         
       } catch (error) {
-        this.log(`❌ Monitoring-Fehler: ${error.message}`);
+        this.log(`❌ Monitoring-Fehler: $${error.message}`);
       }
       
       // Schedule nächsten Check
@@ -290,7 +290,7 @@ class VSCodeWindowManager {
       const command = 'tasklist /fi "imagename eq Code.exe" /fi "status eq Not Responding" /fo csv';
       const output = execSync(command, { encoding: 'utf8' });
       
-      if (output.includes('Code.exe')) {
+      if (output.includes('Code.exe')) { 
         this.log('⚠️ Nicht reagierendes VS Code-Fenster erkannt');
         
         // Erstelle Crash-Marker für nächsten Start
@@ -308,19 +308,19 @@ class VSCodeWindowManager {
    * Recovery von nicht reagierenden Fenstern
    */
   async recoverFromNonResponsive() {
-    if (this.recoveryAttempts >= this.maxRecoveryAttempts) {
+    if (this.recoveryAttempts >= this.maxRecoveryAttempts) { 
       this.log('❌ Maximale Recovery-Versuche erreicht');
       return;
     }
     
     this.recoveryAttempts++;
-    this.log(`🔄 Recovery-Versuch ${this.recoveryAttempts}/${this.maxRecoveryAttempts}`);
+    this.log(`🔄 Recovery-Versuch $${this.recoveryAttempts}/${this.maxRecoveryAttempts}`);
     
     try {
       // Beende alle VS Code-Prozesse sanft
       const processes = await this.findVSCodeProcesses();
       for (const process of processes) {
-        execSync(`taskkill /pid ${process.pid}`, { stdio: 'ignore' });
+        execSync(`taskkill /pid $${process.pid}`, { stdio: 'ignore' });
       }
       
       // Warte kurz
@@ -331,7 +331,7 @@ class VSCodeWindowManager {
       
       this.log('✅ Recovery erfolgreich');
     } catch (error) {
-      this.log(`❌ Recovery fehlgeschlagen: ${error.message}`);
+      this.log(`❌ Recovery fehlgeschlagen: $${error.message}`);
     }
   }
 
@@ -346,7 +346,7 @@ class VSCodeWindowManager {
     };
     
     fs.writeFileSync(CONFIG.CRASH_DETECTION_FILE, JSON.stringify(crashData, null, 2));
-    this.log(`📝 Crash-Marker erstellt: ${reason}`);
+    this.log(`📝 Crash-Marker erstellt: $${reason}`);
   }
 
   /**
@@ -384,7 +384,7 @@ class VSCodeWindowManager {
    */
   log(message) {
     const timestamp = new Date().toISOString();
-    const logMessage = `[${timestamp}] ${message}`;
+    const logMessage = `[$${timestamp}] ${message}`;
     
     console.log(logMessage);
     
@@ -401,24 +401,24 @@ class VSCodeWindowManager {
 }
 
 // Starte Window Manager wenn direkt ausgeführt
-if (require.main === module) {
+if (require.main === module) { 
   const manager = new VSCodeWindowManager();
   
   // Handle Command Line Arguments
   const args = process.argv.slice(2);
   
-  if (args.includes('--cleanup')) {
+  if (args.includes('--cleanup')) { 
     manager.postCrashCleanup().then(() => {
       console.log('✅ Cleanup abgeschlossen');
       process.exit(0);
     });
-  } else if (args.includes('--check')) {
+  } else if (args.includes('--check')) { 
     manager.findVSCodeProcesses().then(processes => {
-      console.log(`VS Code-Prozesse: ${processes.length}`);
-      processes.forEach(p => console.log(`  PID: ${p.pid}, Name: ${p.name}`));
+      console.log(`VS Code-Prozesse: $${processes.length}`);
+      processes.forEach(p => console.log(`  PID: $${p.pid}, Name: ${p.name}`));
       process.exit(0);
     });
-  } else {
+  } else { 
     manager.start().catch(error => {
       console.error('❌ Window Manager Fehler:', error);
       process.exit(1);

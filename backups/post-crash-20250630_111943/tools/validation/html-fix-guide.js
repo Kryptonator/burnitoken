@@ -37,8 +37,8 @@ const fixes = [
 
 console.log('📋 FIXES TO APPLY:');
 fixes.forEach((fix, index) => {
-  console.log(`${index + 1}. ${fix.name}`);
-  console.log(`   📝 ${fix.description}`);
+  console.log(`${index + 1}. $${fix.name}`);
+  console.log(`   📝 $${fix.description}`);
 });
 
 console.log('\n⚠️ MANUAL FIXES REQUIRED:');

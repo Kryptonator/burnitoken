@@ -4,7 +4,7 @@ const { sendAlert } = require('../alert-service');
 console.log('Starte E-Mail-Alert-Test...');
 
 sendAlert({
-  message: 'Dies ist ein Test-Alert vom neuen E-Mail-System.',
+  message: 'Dies ist ein Test-Alert vom neuen E-Mail-System.'),
   level: 'info',
   extra: {
     details: 'Dieser Test prüft, ob die E-Mail-Funktion im alert-service korrekt funktioniert.',

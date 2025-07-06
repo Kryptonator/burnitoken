@@ -18,9 +18,9 @@ const NETLIFY_FUNCTIONS_DIR = path.join(__dirname, '..', 'netlify', 'functions')
 async function ensureDirectoryExists(dir) {
   try {
     await fs.mkdir(dir, { recursive: true });
-    console.log(`✅ Verzeichnis existiert oder wurde erstellt: ${dir}`);
+    console.log(`✅ Verzeichnis existiert oder wurde erstellt: $${dir}`);
   } catch (error) 
-    console.error(`❌ Fehler beim Erstellen von Verzeichnis ${dir}: ${error.message}`);
+    console.error(`❌ Fehler beim Erstellen von Verzeichnis $${dir}: ${error.message}`);
   }
 }
 
@@ -39,7 +39,7 @@ async function checkAndRestoreJFrogConfig() {
     } catch (error) {
       // Erstellen einer einfachen README.md
       await fs.writeFile(
-        readmePath,
+        readmePath),
         '# JFrog Integration\n\n' +
           'Dieses Verzeichnis enthält die JFrog-Konfiguration für Sicherheitsscans und Artifact-Management.\n\n' +
           '## Struktur\n\n' +
@@ -57,12 +57,12 @@ async function checkAndRestoreJFrogConfig() {
     } catch (error) {
       // Erstellen einer Basiskonfiguration
       await fs.writeFile(
-        configPath,
+        configPath),
         JSON.stringify(
           {
             artifactory: {
-              url: 'https://burnitoken.jfrog.io/artifactory',
-              user: '${JFROG_USER}',
+              url: 'https://burnitoken.jfrog.io/artifactory'),
+              user: '$${JFROG_USER}',
               password: '${JFROG_PASSWORD}',
             },
             security: {
@@ -100,7 +100,7 @@ async function checkAndRestoreHuskyPreCommit() {
     } catch (error) {
       // Erstellen eines einfachen pre-commit hooks
       await fs.writeFile(
-        preCommitPath,
+        preCommitPath),
         '#!/bin/sh\n' +
           '. "$(dirname "$0")/_/husky.sh"\n\n' +
           'npm run lint:check && npm run test:unit\n',
@@ -110,7 +110,7 @@ async function checkAndRestoreHuskyPreCommit() {
     }
   } catch (error) {
     console.error(
-      `❌ Fehler beim Überprüfen/Wiederherstellen des Husky pre-commit Hooks: ${error.message}`,
+      `❌ Fehler beim Überprüfen/Wiederherstellen des Husky pre-commit Hooks: $${error.message}`),
     );
   }
 }
@@ -127,7 +127,7 @@ async function createNetlifySecurityFunction() {
     } catch (error) {
       // Erstellen der Funktion
       await fs.writeFile(
-        securityFunctionPath,
+        securityFunctionPath),
         `// Netlify Function: Security Report aus JFrog-Scans
 // Endpunkt: /.netlify/functions/security-report
 
@@ -172,7 +172,7 @@ exports.handler = async (event, context) => {
       statusCode: 500,
       headers,
       body: JSON.stringify({ 
-        error: "Fehler beim Abrufen des Sicherheitsberichts", 
+        error: "Fehler beim Abrufen des Sicherheitsberichts"),
         message: error.toString() 
       })
     };
@@ -183,7 +183,7 @@ exports.handler = async (event, context) => {
     }
   } catch (error) {
     console.error(
-      `❌ Fehler beim Erstellen der Netlify Security-Report Funktion: ${error.message}`,
+      `❌ Fehler beim Erstellen der Netlify Security-Report Funktion: $${error.message}`),
     );
   }
 }
@@ -196,7 +196,7 @@ async function integrateJFrogReports() {
     // Hier könnten JFrog-Berichte in das Berichtsverzeichnis kopiert oder generiert werden
     console.log('✅ Berichtsverzeichnis bereit für JFrog-Integrationen');
   } catch (error) {
-    console.error(`❌ Fehler bei der Integration von JFrog-Berichten: ${error.message}`);
+    console.error(`❌ Fehler bei der Integration von JFrog-Berichten: $${error.message}`);
   }
 }
 
@@ -212,7 +212,7 @@ async function integrateJFrogWithNetlify() {
 
     console.log('✅ JFrog-Netlify Integration erfolgreich abgeschlossen!');
   } catch (error) {
-    console.error(`❌ JFrog-Netlify Integration fehlgeschlagen: ${error.message}`);
+    console.error(`❌ JFrog-Netlify Integration fehlgeschlagen: $${error.message}`);
     process.exit(1);
   }
 }

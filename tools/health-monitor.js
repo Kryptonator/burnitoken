@@ -100,7 +100,7 @@ class HealthCheckMonitor {
    * Startet den Health Check Monitor
    */
   start() {
-    if (this.state.running) {
+    if (this.state.running) { 
       this.log('❌ Health Monitor läuft bereits');
       return;
     }
@@ -129,7 +129,7 @@ class HealthCheckMonitor {
 
     this.state.running = false;
 
-    if (this.checkInterval) {
+    if (this.checkInterval) { 
       clearInterval(this.checkInterval);
     }
 
@@ -177,7 +177,7 @@ class HealthCheckMonitor {
     };
 
     this.log(
-      `✅ Health Check abgeschlossen: ${healthyCount}/${totalCount} Services gesund (${this.state.lastFullCheck.healthScore}%) in ${duration}ms`,
+      `✅ Health Check abgeschlossen: $${healthyCount}/${totalCount} Services gesund (${this.state.lastFullCheck.healthScore}%) in ${duration}ms`,
     );
 
     // Alerts prüfen
@@ -187,9 +187,9 @@ class HealthCheckMonitor {
     this.saveStatus();
 
     // Webhook benachrichtigen
-    if (this.state.lastFullCheck.healthScore >= 80) {
+    if (this.state.lastFullCheck.healthScore >= 80) { 
       this.sendWebhook('success', this.state.lastFullCheck);
-    } else if (this.state.lastFullCheck.healthScore < 50) {
+    } else if (this.state.lastFullCheck.healthScore < 50) { 
       this.sendWebhook('alert', this.state.lastFullCheck);
     }
   }
@@ -203,12 +203,12 @@ class HealthCheckMonitor {
     try {
       let result;
 
-      if (service.type === 'http') {
+      if (service.type === 'http') { 
         result = await this.checkHTTPService(service);
-      } else if (service.type === 'command') {
+      } else if (service.type === 'command') { 
         result = await this.checkCommandService(service);
-      } else {
-        throw new Error(`Unbekannter Service-Typ: ${service.type}`);
+      } else { 
+        throw new Error(`Unbekannter Service-Typ: $${service.type}`);
       }
 
       const responseTime = Date.now() - startTime;
@@ -262,8 +262,8 @@ class HealthCheckMonitor {
         res.on('end', () => {
           try {
             // Status Code prüfen
-            if (res.statusCode !== service.expectedStatus) {
-              return reject(new Error(`HTTP ${res.statusCode}: Unerwarteter Status Code`));
+            if (res.statusCode !== service.expectedStatus) { 
+              return reject(new Error(`HTTP $${res.statusCode}: Unerwarteter Status Code`));
             }
 
             // Response prüfen
@@ -274,29 +274,29 @@ class HealthCheckMonitor {
               parsedData = data; // Falls keine JSON, rohe Daten verwenden
             }
 
-            if (service.healthyResponse && !service.healthyResponse(parsedData)) {
+            if (service.healthyResponse && !service.healthyResponse(parsedData)) { 
               return reject(new Error('Unhealthy response data'));
             }
 
             resolve({
-              statusCode: res.statusCode,
+              statusCode: res.statusCode),
               contentLength: data.length,
               contentType: res.headers['content-type'],
               responseValid: true,
             });
           } catch (error) {
-            reject(new Error(`Response validation failed: ${error.message}`));
+            reject(new Error(`Response validation failed: $${error.message}`));
           }
         });
       });
 
       req.on('timeout', () => {
         req.destroy();
-        reject(new Error(`Timeout nach ${service.timeout}ms`));
+        reject(new Error(`Timeout nach $${service.timeout}ms`));
       });
 
       req.on('error', (error) => {
-        reject(new Error(`Network error: ${error.message}`));
+        reject(new Error(`Network error: $${error.message}`));
       });
 
       req.end();
@@ -310,12 +310,12 @@ class HealthCheckMonitor {
     return new Promise((resolve, reject) => {
       try {
         const output = execSync(service.command, {
-          encoding: 'utf8',
+          encoding: 'utf8'),
           timeout: 5000,
           stdio: 'pipe',
         });
 
-        if (service.healthyResponse && !service.healthyResponse(output)) {
+        if (service.healthyResponse && !service.healthyResponse(output)) { 
           return reject(new Error('Command output indicates unhealthy state'));
         }
 
@@ -324,7 +324,7 @@ class HealthCheckMonitor {
           exitCode: 0,
         });
       } catch (error) {
-        reject(new Error(`Command failed: ${error.message}`));
+        reject(new Error(`Command failed: $${error.message}`));
       }
     });
   }
@@ -335,19 +335,19 @@ class HealthCheckMonitor {
   updateServiceState(serviceName, result) {
     const currentFailures = this.state.consecutiveFailures.get(serviceName) || 0;
 
-    if (result.healthy) {
+    if (result.healthy) { 
       // Service ist gesund - Reset der Fehleranzahl
-      if (currentFailures > 0) {
-        this.log(`✅ ${serviceName} ist wieder gesund (war ${currentFailures}x ausgefallen)`);
+      if (currentFailures > 0) { 
+        this.log(`✅ $${serviceName} ist wieder gesund (war ${currentFailures}x ausgefallen)`);
         this.sendWebhook('recovery', { service: serviceName, failures: currentFailures });
       }
       this.state.consecutiveFailures.set(serviceName, 0);
-    } else {
+    } else { 
       // Service ist ungesund - Fehleranzahl erhöhen
       const newFailures = currentFailures + 1;
       this.state.consecutiveFailures.set(serviceName, newFailures);
 
-      if (newFailures >= this.config.alertThreshold) {
+      if (newFailures >= this.config.alertThreshold) { 
         this.triggerAlert(serviceName, result, newFailures);
       }
     }
@@ -361,16 +361,16 @@ class HealthCheckMonitor {
   processAlerts(results) {
     const failedServices = results.filter((r) => !r.healthy);
 
-    if (failedServices.length > 0) {
-      this.log(`⚠️ ${failedServices.length} Services sind ungesund:`);
+    if (failedServices.length > 0) { 
+      this.log(`⚠️ $${failedServices.length} Services sind ungesund:`);
       failedServices.forEach((service) => {
-        this.log(`   - ${service.service}: ${service.error}`);
+        this.log(`   - $${service.service}: ${service.error}`);
       });
     }
   }
 
   triggerAlert(serviceName, result, failureCount) {
-    this.log(`🚨 ALERT: ${serviceName} ist ${failureCount}x in Folge ausgefallen!`);
+    this.log(`🚨 ALERT: $${serviceName} ist ${failureCount}x in Folge ausgefallen!`);
 
     const alert = {
       service: serviceName,
@@ -382,7 +382,7 @@ class HealthCheckMonitor {
 
     this.state.alerts.set(serviceName, alert);
     this.sendWebhook('alert', alert);
-    sendAlert(`Health Check Failure: ${serviceName}`, alert, alert.severity);
+    sendAlert(`Health Check Failure: $${serviceName}`, alert, alert.severity);
 
     // Auto-Recovery versuchen
     this.attemptAutoRecovery(serviceName, alert);
@@ -392,8 +392,8 @@ class HealthCheckMonitor {
    * Auto-Recovery Mechanismen
    */
   async attemptAutoRecovery(serviceName, alert) {
-    this.log(`🔧 Versuche Auto-Recovery für ${serviceName}...`);
-    todoManager.createTodo(`Attempt auto-recovery for ${serviceName}`, 'Operations', serviceName);
+    this.log(`🔧 Versuche Auto-Recovery für $${serviceName}...`);
+    todoManager.createTodo(`Attempt auto-recovery for $${serviceName}`, 'Operations', serviceName);
 
     try {
       switch (serviceName) {
@@ -408,14 +408,22 @@ class HealthCheckMonitor {
           break;
 
         default:
-          this.log(`⚠️ Kein Auto-Recovery für ${serviceName} verfügbar`);
+          this.log(`⚠️ Kein Auto-Recovery für $${serviceName} verfügbar`);
       }
 
-      this.log(`✅ Auto-Recovery für ${serviceName} abgeschlossen`);
+      this.log(`✅ Auto-Recovery für $${serviceName} abgeschlossen`);
     } catch (error) {
-      this.log(`❌ Auto-Recovery für ${serviceName} fehlgeschlagen: ${error.message}`);
-      alertService.createAlert(`Auto-Recovery Failed: ${serviceName}`, { error: error.message }, 'critical');
-      todoManager.createTodo(`Manual intervention required for ${serviceName} recovery`, 'Operations', serviceName);
+      this.log(`❌ Auto-Recovery für $${serviceName} fehlgeschlagen: ${error.message}`);
+      alertService.createAlert(
+        `Auto-Recovery Failed: $${serviceName}`),
+        { error: error.message },
+        'critical',
+      );
+      todoManager.createTodo(
+        `Manual intervention required for $${serviceName} recovery`),
+        'Operations',
+        serviceName,
+      );
     }
   }
 
@@ -436,9 +444,9 @@ class HealthCheckMonitor {
 
       // Hier würde der Webhook-Call implementiert werden
       // Für Demo-Zwecke nur Logging
-      this.log(`📡 Webhook (${type}): ${JSON.stringify(payload, null, 2)}`);
+      this.log(`📡 Webhook ($${type}): ${JSON.stringify(payload, null, 2)}`);
     } catch (error) {
-      this.log(`❌ Webhook-Fehler (${type}): ${error.message}`);
+      this.log(`❌ Webhook-Fehler ($${type}): ${error.message}`);
     }
   }
 
@@ -458,20 +466,20 @@ class HealthCheckMonitor {
     try {
       fs.writeFileSync(this.statusFile, JSON.stringify(status, null, 2));
     } catch (error) {
-      this.log(`❌ Status-Speicherung fehlgeschlagen: ${error.message}`);
+      this.log(`❌ Status-Speicherung fehlgeschlagen: $${error.message}`);
     }
   }
 
   loadStatus() {
     try {
-      if (fs.existsSync(this.statusFile)) {
+      if (fs.existsSync(this.statusFile)) { 
         const status = JSON.parse(fs.readFileSync(this.statusFile, 'utf8'));
         // Nur persistente Daten laden
         this.state.consecutiveFailures = new Map(Object.entries(status.consecutiveFailures || {}));
         this.log('📁 Status erfolgreich geladen');
       }
     } catch (error) {
-      this.log(`⚠️ Status-Laden fehlgeschlagen: ${error.message}`);
+      this.log(`⚠️ Status-Laden fehlgeschlagen: $${error.message}`);
     }
   }
 
@@ -499,7 +507,7 @@ class HealthCheckMonitor {
    */
   log(message) {
     const timestamp = new Date().toISOString();
-    const logEntry = `[${timestamp}] ${message}`;
+    const logEntry = `[$${timestamp}] ${message}`;
 
     console.log(logEntry);
 
@@ -512,7 +520,7 @@ class HealthCheckMonitor {
 }
 
 // CLI Interface
-if (require.main === module) {
+if (require.main === module) { 
   const command = process.argv[2];
   const monitor = new HealthCheckMonitor();
 
@@ -539,7 +547,7 @@ if (require.main === module) {
       monitor.runFullHealthCheck().then(() => {
         const report = monitor.getHealthReport();
         console.log('✅ Einmaliger Health Check abgeschlossen');
-        console.log(`Gesundheit: ${report.overallHealth}%`);
+        console.log(`Gesundheit: $${report.overallHealth}%`);
         process.exit(report.overallHealth >= 80 ? 0 : 1);
       });
       break;

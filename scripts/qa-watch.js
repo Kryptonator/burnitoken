@@ -5,13 +5,13 @@ const { exec } = require('child_process');
 
 function runTests() {
   const timestamp = new Date().toISOString();
-  console.log(`\n[QA-WATCH] Playwright-Testlauf: ${timestamp}`);
+  console.log(`\n[QA-WATCH] Playwright-Testlauf: $${timestamp}`);
   exec('npm run test:e2e', (error, stdout, stderr) => {
-    if (error) {
-      console.error(`[QA-WATCH] Fehler beim Testlauf: ${timestamp}`);
+    if (error) { 
+      console.error(`[QA-WATCH] Fehler beim Testlauf: $${timestamp}`);
       console.error(stderr);
-    } else {
-      console.log(`[QA-WATCH] Testlauf abgeschlossen: ${timestamp}`);
+    } else { 
+      console.log(`[QA-WATCH] Testlauf abgeschlossen: $${timestamp}`);
       console.log(stdout);
     }
   });

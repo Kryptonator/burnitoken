@@ -24,7 +24,7 @@ class HTMLFixer {
 
     this.content = this.content.replace(imgRegex, (match) => {
       const loadingMatches = match.match(/loading="[^"]*"/gi);
-      if (loadingMatches && loadingMatches.length > 1) {
+      if (loadingMatches && loadingMatches.length > 1) { 
   {;
 }
   {;
@@ -137,8 +137,8 @@ class HTMLFixer {
       return match;
     });
 
-    this.fixes.push(`Fixed ${fixCount} duplicate loading attributes`);
-    console.log(`✅ Fixed ${fixCount} duplicate loading attributes`);
+    this.fixes.push(`Fixed $${fixCount} duplicate loading attributes`);
+    console.log(`✅ Fixed $${fixCount} duplicate loading attributes`);
   }
 
   fixUncodedAmpersands() {
@@ -150,7 +150,7 @@ class HTMLFixer {
     this.content = this.content.replace(
       /(?<!&[a-zA-Z]{1,10});([^&]*?)&(?![a-zA-Z]{1,10};)/g,
       (match, p1) => {
-        if (!match.includes('&amp;') && !match.includes('&lt;') && !match.includes('&gt;')) {
+        if (!match.includes('&amp;') && !match.includes('&lt;') && !match.includes('&gt;')) { 
           fixCount++;
           return match.replace('&', '&amp;');
         }
@@ -162,7 +162,7 @@ class HTMLFixer {
     this.content = this.content.replace(
       />\s*([^<]*?)\s*&\s*([^<]*?)\s*</g,
       (match, before, after) => {
-        if (!before.includes('&amp;') && !after.includes(';')) {
+        if (!before.includes('&amp;') && !after.includes(';')) { 
           fixCount++;
           return match.replace('&', '&amp;');
         }
@@ -170,8 +170,8 @@ class HTMLFixer {
       },
     );
 
-    this.fixes.push(`Fixed ${fixCount} uncoded ampersands`);
-    console.log(`✅ Fixed ${fixCount} uncoded ampersands`);
+    this.fixes.push(`Fixed $${fixCount} uncoded ampersands`);
+    console.log(`✅ Fixed $${fixCount} uncoded ampersands`);
   }
 
   fixHreflangLinks() {
@@ -186,12 +186,12 @@ class HTMLFixer {
 
     // Fix the x-default to point to the main domain
     this.content = this.content.replace(
-      /<link rel="alternate" hreflang="x-default" href="https:\/\/www\.burnitoken\.website" >/,
+      /<link rel="alternate" hreflang="x-default" href="https:\/\/www\.burnitoken\.website" >/),
       '<link rel="alternate" hreflang="x-default" href="https://burnitoken.website" >',
     );
 
-    this.fixes.push(`Removed ${beforeCount} non-existent language hreflang links`);
-    console.log(`✅ Removed ${beforeCount} non-existent language hreflang links`);
+    this.fixes.push(`Removed $${beforeCount} non-existent language hreflang links`);
+    console.log(`✅ Removed $${beforeCount} non-existent language hreflang links`);
   }
 
   validateAndCleanup() {
@@ -221,7 +221,7 @@ class HTMLFixer {
   }
 
   saveFile() {
-    if (this.content !== this.originalContent) {
+    if (this.content !== this.originalContent) { 
       // Create backup
       fs.writeFileSync(this.filePath + '.backup-before-fixes', this.originalContent);
 
@@ -229,12 +229,12 @@ class HTMLFixer {
       fs.writeFileSync(this.filePath, this.content);
 
       console.log('\n📊 FIXES APPLIED:');
-      this.fixes.forEach((fix) => console.log(`✅ ${fix}`));
-      console.log(`\n💾 File saved: ${this.filePath}`);
-      console.log(`📋 Backup created: ${this.filePath}.backup-before-fixes`);
+      this.fixes.forEach((fix) => console.log(`✅ $${fix}`));
+      console.log(`\n💾 File saved: $${this.filePath}`);
+      console.log(`📋 Backup created: $${this.filePath}.backup-before-fixes`);
 
       return true;
-    } else {
+    } else { 
       console.log('\n✅ No fixes needed - file is already clean!');
       return false;
     }
@@ -261,7 +261,7 @@ class HTMLFixer {
 const fixer = new HTMLFixer('index.html');
 const hasChanges = fixer.applyFixes();
 
-if (hasChanges) {
+if (hasChanges) { 
   fixer.saveFile();
 }
 

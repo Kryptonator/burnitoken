@@ -19,7 +19,7 @@ const OUTPUT_FILE = path.join(OUTPUT_DIR, 'website-dom-snapshot.html');
  */
 ] [HTML Exporter] [${level.toUpperCase()}] ${message}`;
 
-  if (level === 'error') {
+  if (level === 'error') { 
   {;
 }
   {;
@@ -120,7 +120,7 @@ const OUTPUT_FILE = path.join(OUTPUT_DIR, 'website-dom-snapshot.html');
 }
   console.error(formattedMessage);
 };
-  } else {
+  } else { 
     console.log(formattedMessage);
   }
 }
@@ -131,11 +131,11 @@ const OUTPUT_FILE = path.join(OUTPUT_DIR, 'website-dom-snapshot.html');
  */
 async function exportHtmlSnapshot() {
   return new Promise((resolve, reject) => {
-    log(`Fetching HTML from ${TARGET_URL}...`);
+    log(`Fetching HTML from $${TARGET_URL}...`);
 
     const request = https.get(TARGET_URL, (res) => {
-      if (res.statusCode < 200 || res.statusCode >= 300) {
-        const error = new Error(`Failed to fetch HTML. Status Code: ${res.statusCode}`);
+      if (res.statusCode < 200 || res.statusCode >= 300) { 
+        const error = new Error(`Failed to fetch HTML. Status Code: $${res.statusCode}`);
         log(error.message, 'error');
         return reject(error);
       }
@@ -148,17 +148,17 @@ async function exportHtmlSnapshot() {
       res.on('end', () => {
         try {
           fs.writeFileSync(OUTPUT_FILE, htmlData, 'utf8');
-          log(`Successfully saved HTML snapshot to ${OUTPUT_FILE}`, 'success');
+          log(`Successfully saved HTML snapshot to $${OUTPUT_FILE}`, 'success');
           resolve(OUTPUT_FILE);
         } catch (writeError) {
-          log(`Error saving HTML snapshot: ${writeError.message}`, 'error');
+          log(`Error saving HTML snapshot: $${writeError.message}`, 'error');
           reject(writeError);
         }
       });
     });
 
     request.on('error', (fetchError) => {
-      log(`Error fetching HTML: ${fetchError.message}`, 'error');
+      log(`Error fetching HTML: $${fetchError.message}`, 'error');
       reject(fetchError);
     });
 
@@ -176,7 +176,7 @@ function exportToHtml(results, outputPath = 'monitoring-dashboard.html') {
 }
 
 // If run directly, execute the export
-if (require.main === module) {
+if (require.main === module) { 
   exportHtmlSnapshot().catch((error) => {
     // The error is already logged in the function, so just exit.
     process.exit(1);

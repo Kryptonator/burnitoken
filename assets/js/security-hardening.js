@@ -129,22 +129,22 @@ class SecurityHardening {
 
     try {
       // Setup CSP
-      if (this.config.csp.enabled) {
+      if (this.config.csp.enabled) { 
         this.setupCSP();
       }
 
       // Setup Rate Limiting
-      if (this.config.rateLimit.enabled) {
+      if (this.config.rateLimit.enabled) { 
         this.setupRateLimit();
       }
 
       // Setup Bot Detection
-      if (this.config.botDetection.enabled) {
+      if (this.config.botDetection.enabled) { 
         this.setupBotDetection();
       }
 
       // Setup Threat Monitoring
-      if (this.config.threatMonitoring.enabled) {
+      if (this.config.threatMonitoring.enabled) { 
         this.setupThreatMonitoring();
       }
 
@@ -163,7 +163,7 @@ class SecurityHardening {
     const cspString = this.generateCSPString();
 
     // Set CSP header (browser environment)
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined') { 
       const metaCSP = document.createElement('meta');
       metaCSP.httpEquiv = 'Content-Security-Policy';
       metaCSP.content = cspString;
@@ -182,10 +182,10 @@ class SecurityHardening {
     const directives = [];
 
     for (const [directive, sources] of Object.entries(this.config.csp.directives)) {
-      if (sources.length === 0) {
+      if (sources.length === 0) { 
         directives.push(directive);
-      } else {
-        directives.push(`${directive} ${sources.join(' ')}`);
+      } else { 
+        directives.push(`$${directive} ${sources.join(' ')}`);
       }
     }
 
@@ -208,7 +208,7 @@ class SecurityHardening {
 
   setupRateLimit() {
     // Client-side rate limiting simulation
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined') { 
       const requests = new Map();
 
       // Intercept fetch requests to track rates
@@ -218,7 +218,7 @@ class SecurityHardening {
         const now = Date.now();
 
         // Track request rate
-        if (!requests.has(url)) {
+        if (!requests.has(url)) { 
           requests.set(url, []);
         }
 
@@ -232,9 +232,9 @@ class SecurityHardening {
         }
 
         // Check rate limit
-        if (urlRequests.length > this.config.rateLimit.maxRequests) {
+        if (urlRequests.length > this.config.rateLimit.maxRequests) { 
           this.reportSecurityIncident('RATE_LIMIT_EXCEEDED', {
-            url,
+            url),
             requestCount: urlRequests.length,
             timeWindow: this.config.rateLimit.windowMs,
           });
@@ -266,12 +266,12 @@ class SecurityHardening {
 
   setupHoneypots() {
     this.config.botDetection.honeypots.forEach((honeypot) => {
-      if (honeypot.type === 'form') {
+      if (honeypot.type === 'form') { 
         // Create invisible form fields
         const inputs = document.querySelectorAll('input, textarea');
         inputs.forEach((input) => {
           const form = input.closest('form');
-          if (form && !form.querySelector('.honeypot')) {
+          if (form && !form.querySelector('.honeypot')) { 
             const honeypotField = document.createElement('input');
             honeypotField.type = 'text';
             honeypotField.name = 'website';
@@ -285,16 +285,16 @@ class SecurityHardening {
             // Monitor honeypot field
             honeypotField.addEventListener('input', () => {
               this.triggerHoneypot('form_honeypot', {
-                form: form.action || window.location.href,
+                form: form.action || window.location.href),
                 value: honeypotField.value,
               });
             });
           }
         });
-      } else if (honeypot.type === 'path') {
+      } else if (honeypot.type === 'path') { 
         // Monitor for requests to honeypot paths
         // This would typically be handled server-side
-        console.log(`🍯 Honeypot path configured: ${honeypot.path}`);
+        console.log(`🍯 Honeypot path configured: $${honeypot.path}`);
       }
     });
   }
@@ -303,9 +303,9 @@ class SecurityHardening {
     const userAgent = navigator.userAgent;
 
     for (const pattern of this.config.botDetection.userAgentPatterns) {
-      if (pattern.test(userAgent)) {
+      if (pattern.test(userAgent)) { 
         this.detectBot('user_agent', {
-          userAgent,
+          userAgent),
           pattern: pattern.toString(),
         });
         break;
@@ -323,14 +323,14 @@ class SecurityHardening {
       const now = Date.now();
       clickCount++;
 
-      if (now - lastAction < 1000) {
-        if (clickCount > this.config.botDetection.behaviorAnalysis.maxClicksPerSecond) {
+      if (now - lastAction < 1000) { 
+        if (clickCount > this.config.botDetection.behaviorAnalysis.maxClicksPerSecond) { 
           this.detectBot('suspicious_clicks', {
-            clicksPerSecond: clickCount,
+            clicksPerSecond: clickCount),
             threshold: this.config.botDetection.behaviorAnalysis.maxClicksPerSecond,
           });
         }
-      } else {
+      } else { 
         clickCount = 1;
       }
 
@@ -347,12 +347,12 @@ class SecurityHardening {
       const scrollDiff = Math.abs(currentScrollY - lastScrollY);
       const timeDiff = now - lastScrollTime;
 
-      if (timeDiff > 0) {
+      if (timeDiff > 0) { 
         scrollSpeed = scrollDiff / timeDiff;
 
-        if (scrollSpeed > this.config.botDetection.behaviorAnalysis.maxScrollSpeed) {
+        if (scrollSpeed > this.config.botDetection.behaviorAnalysis.maxScrollSpeed) { 
           this.detectBot('suspicious_scroll', {
-            scrollSpeed,
+            scrollSpeed),
             threshold: this.config.botDetection.behaviorAnalysis.maxScrollSpeed,
           });
         }
@@ -403,9 +403,9 @@ class SecurityHardening {
       (event) => event.timestamp > oneMinuteAgo,
     );
 
-    if (recentEvents.length > this.config.threatMonitoring.alertThreshold) {
+    if (recentEvents.length > this.config.threatMonitoring.alertThreshold) { 
       this.reportSecurityIncident('HIGH_THREAT_LEVEL', {
-        eventCount: recentEvents.length,
+        eventCount: recentEvents.length),
         threshold: this.config.threatMonitoring.alertThreshold,
         events: recentEvents.slice(-5), // Last 5 events
       });
@@ -450,10 +450,10 @@ class SecurityHardening {
     for (const [ip, requests] of this.state.requestCounts.entries()) {
       const recentRequests = requests.filter((timestamp) => timestamp > now - 60000);
 
-      if (recentRequests.length > 50) {
+      if (recentRequests.length > 50) { 
         // Threshold for suspicion
         this.reportSecurityIncident('SUSPICIOUS_REQUEST_PATTERN', {
-          ip,
+          ip),
           requestCount: recentRequests.length,
           timeWindow: '1 minute',
         });
@@ -472,7 +472,7 @@ class SecurityHardening {
     };
 
     // Send to monitoring system
-    if (window.burniMonitoring) {
+    if (window.burniMonitoring) { 
       window.burniMonitoring.recordMetric('security_metrics', metrics);
     }
   }
@@ -492,10 +492,10 @@ class SecurityHardening {
     this.state.suspiciousEvents.push(incident);
 
     // Alert monitoring system
-    if (window.burniMonitoring) {
+    if (window.burniMonitoring) { 
       window.burniMonitoring.createAlert({
-        type: 'security_incident',
-        message: `Security incident: ${type}`,
+        type: 'security_incident'),
+        message: `Security incident: $${type}`,
         severity: incident.severity,
         data: incident,
       });
@@ -504,7 +504,7 @@ class SecurityHardening {
     console.warn('🚨 Security incident:', incident);
 
     // Keep only last 100 incidents
-    if (this.state.securityIncidents.length > 100) {
+    if (this.state.securityIncidents.length > 100) { 
       this.state.securityIncidents.splice(0, this.state.securityIncidents.length - 100);
     }
   }
@@ -553,12 +553,12 @@ class SecurityHardening {
   blockIP(ip, reason) {
     this.state.blockedIPs.add(ip);
     this.reportSecurityIncident('IP_BLOCKED', { ip, reason });
-    console.warn(`🚫 IP blocked: ${ip} (${reason})`);
+    console.warn(`🚫 IP blocked: $${ip} (${reason})`);
   }
 
   unblockIP(ip) {
     this.state.blockedIPs.delete(ip);
-    console.log(`✅ IP unblocked: ${ip}`);
+    console.log(`✅ IP unblocked: $${ip}`);
   }
 
   destroy() {
@@ -583,7 +583,7 @@ class SecurityHardening {
 window.SecurityHardening = SecurityHardening;
 
 // Auto-initialize in browser
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined') { 
   window.addEventListener('DOMContentLoaded', () => {
     window.burniSecurity = new SecurityHardening();
   });

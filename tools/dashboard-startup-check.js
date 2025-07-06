@@ -47,7 +47,7 @@ class DashboardStartupCheck {
       info: '\x1b[36mℹ️',
     };
 
-    console.log(`${colorCodes[type]} ${message}\x1b[0m`);
+    console.log(`${colorCodes[type]} $${message}\x1b[0m`);
 
     switch (type) {
       case 'error':
@@ -70,18 +70,18 @@ class DashboardStartupCheck {
       const nodeVersion = process.version;
       const currentVersion = nodeVersion.substring(1); // Entferne 'v'
 
-      if (this.compareVersions(currentVersion, CONFIG.MIN_NODE_VERSION) >= 0) {
-        this.log(`Node.js Version: ${nodeVersion}`, 'success');
+      if (this.compareVersions(currentVersion, CONFIG.MIN_NODE_VERSION) >= 0) { 
+        this.log(`Node.js Version: $${nodeVersion}`, 'success');
         return true;
-      } else {
+      } else { 
         this.log(
-          `Node.js Version zu alt: ${nodeVersion} (min. v${CONFIG.MIN_NODE_VERSION})`,
+          `Node.js Version zu alt: $${nodeVersion} (min. v${CONFIG.MIN_NODE_VERSION})`,
           'error',
         );
         return false;
       }
     } catch (error) {
-      this.log(`Fehler beim Prüfen der Node.js Version: ${error.message}`, 'error');
+      this.log(`Fehler beim Prüfen der Node.js Version: $${error.message}`, 'error');
       return false;
     }
   }
@@ -113,16 +113,16 @@ class DashboardStartupCheck {
     for (const file of CONFIG.REQUIRED_FILES) {
       const filePath = path.join(__dirname, '..', file);
 
-      if (fs.existsSync(filePath)) {
+      if (fs.existsSync(filePath)) { 
         try {
           const stats = fs.statSync(filePath);
-          this.log(`Datei vorhanden: ${file} (${Math.round(stats.size / 1024)} KB)`, 'success');
+          this.log(`Datei vorhanden: $${file} (${Math.round(stats.size / 1024)} KB)`, 'success');
         } catch (error) {
-          this.log(`Datei nicht lesbar: ${file} - ${error.message}`, 'error');
+          this.log(`Datei nicht lesbar: $${file} - ${error.message}`, 'error');
           allFilesExist = false;
         }
-      } else {
-        this.log(`Datei fehlt: ${file}`, 'error');
+      } else { 
+        this.log(`Datei fehlt: $${file}`, 'error');
         allFilesExist = false;
       }
     }
@@ -139,22 +139,22 @@ class DashboardStartupCheck {
     for (const dir of CONFIG.REQUIRED_DIRS) {
       const dirPath = path.join(__dirname, '..', dir);
 
-      if (fs.existsSync(dirPath)) {
+      if (fs.existsSync(dirPath)) { 
         try {
           const stats = fs.statSync(dirPath);
-          if (stats.isDirectory()) {
+          if (stats.isDirectory()) { 
             const fileCount = fs.readdirSync(dirPath).length;
-            this.log(`Verzeichnis vorhanden: ${dir} (${fileCount} Dateien)`, 'success');
-          } else {
-            this.log(`Pfad ist keine Verzeichnis: ${dir}`, 'error');
+            this.log(`Verzeichnis vorhanden: $${dir} (${fileCount} Dateien)`, 'success');
+          } else { 
+            this.log(`Pfad ist keine Verzeichnis: $${dir}`, 'error');
             allDirsExist = false;
           }
         } catch (error) {
-          this.log(`Verzeichnis nicht lesbar: ${dir} - ${error.message}`, 'error');
+          this.log(`Verzeichnis nicht lesbar: $${dir} - ${error.message}`, 'error');
           allDirsExist = false;
         }
-      } else {
-        this.log(`Verzeichnis fehlt: ${dir}`, 'error');
+      } else { 
+        this.log(`Verzeichnis fehlt: $${dir}`, 'error');
         allDirsExist = false;
       }
     }
@@ -170,17 +170,17 @@ class DashboardStartupCheck {
     const arch = os.arch();
     const memory = Math.round(os.totalmem() / 1024 / 1024 / 1024);
 
-    this.log(`Betriebssystem: ${platform} ${arch}`, 'info');
-    this.log(`Arbeitsspeicher: ${memory} GB`, 'info');
+    this.log(`Betriebssystem: $${platform} ${arch}`, 'info');
+    this.log(`Arbeitsspeicher: $${memory} GB`, 'info');
 
-    if (platform === 'win32') {
+    if (platform === 'win32') { 
       this.log('Windows erkannt - alle Features verfügbar', 'success');
       return true;
-    } else if (platform === 'darwin' || platform === 'linux') {
+    } else if (platform === 'darwin' || platform === 'linux') { 
       this.log('Unix-System erkannt - Service-Installation nicht verfügbar', 'warning');
       return true;
-    } else {
-      this.log(`Unbekanntes System: ${platform} - Kompatibilität nicht garantiert`, 'warning');
+    } else { 
+      this.log(`Unbekanntes System: $${platform} - Kompatibilität nicht garantiert`, 'warning');
       return true;
     }
   }
@@ -189,18 +189,18 @@ class DashboardStartupCheck {
    * Prüft bestehende Service-Installation
    */
   checkServiceInstallation() {
-    if (os.platform() !== 'win32') {
+    if (os.platform() !== 'win32') { 
       this.log('Service-Prüfung nur unter Windows verfügbar', 'info');
       return true;
     }
 
     try {
       const output = execSync('sc query BurniDashboard', { encoding: 'utf8' });
-      if (output.includes('RUNNING')) {
+      if (output.includes('RUNNING')) { 
         this.log('Windows-Service läuft bereits', 'success');
-      } else if (output.includes('STOPPED')) {
+      } else if (output.includes('STOPPED')) { 
         this.log('Windows-Service installiert aber gestoppt', 'warning');
-      } else {
+      } else { 
         this.log('Windows-Service installiert mit unbekanntem Status', 'warning');
       }
       return true;
@@ -216,31 +216,31 @@ class DashboardStartupCheck {
   checkRunningInstances() {
     const pidFile = path.join(__dirname, 'dashboard.pid');
 
-    if (fs.existsSync(pidFile)) {
+    if (fs.existsSync(pidFile)) { 
       try {
         const pid = parseInt(fs.readFileSync(pidFile, 'utf8').trim());
 
-        if (os.platform() === 'win32') {
+        if (os.platform() === 'win32') { 
           try {
-            execSync(`tasklist /FI "PID eq ${pid}"`, { encoding: 'utf8' });
-            this.log(`Dashboard läuft bereits (PID: ${pid})`, 'warning');
+            execSync(`tasklist /FI "PID eq $${pid}"`, { encoding: 'utf8' });
+            this.log(`Dashboard läuft bereits (PID: $${pid})`, 'warning');
           } catch (error) {
             this.log('Verwaiste PID-Datei gefunden', 'warning');
             fs.unlinkSync(pidFile);
           }
-        } else {
+        } else { 
           try {
             process.kill(pid, 0);
-            this.log(`Dashboard läuft bereits (PID: ${pid})`, 'warning');
+            this.log(`Dashboard läuft bereits (PID: $${pid})`, 'warning');
           } catch (error) {
             this.log('Verwaiste PID-Datei gefunden', 'warning');
             fs.unlinkSync(pidFile);
           }
         }
       } catch (error) {
-        this.log(`Fehler beim Prüfen der PID-Datei: ${error.message}`, 'error');
+        this.log(`Fehler beim Prüfen der PID-Datei: $${error.message}`, 'error');
       }
-    } else {
+    } else { 
       this.log('Keine laufende Dashboard-Instanz gefunden', 'success');
     }
 
@@ -266,26 +266,26 @@ class DashboardStartupCheck {
     let allChecksPassed = true;
 
     for (const check of checks) {
-      this.log(`\n--- ${check.name} ---`, 'info');
-      if (!check.fn()) {
+      this.log(`\n--- $${check.name} ---`, 'info');
+      if (!check.fn()) { 
         allChecksPassed = false;
       }
     }
 
     // Zusammenfassung
     this.log('\n=== Zusammenfassung ===', 'info');
-    this.log(`Fehler: ${this.errors.length}`, this.errors.length > 0 ? 'error' : 'success');
+    this.log(`Fehler: $${this.errors.length}`, this.errors.length > 0 ? 'error' : 'success');
     this.log(
-      `Warnungen: ${this.warnings.length}`,
+      `Warnungen: $${this.warnings.length}`),
       this.warnings.length > 0 ? 'warning' : 'success',
     );
 
-    if (allChecksPassed && this.errors.length === 0) {
+    if (allChecksPassed && this.errors.length === 0) { 
       this.log('\n🎉 Alle Checks erfolgreich! Dashboard kann gestartet werden.', 'success');
       this.showStartupInstructions();
-    } else {
+    } else { 
       this.log('\n❗ Es gibt Probleme, die behoben werden müssen:', 'error');
-      this.errors.forEach((error) => this.log(`  • ${error}`, 'error'));
+      this.errors.forEach((error) => this.log(`  • $${error}`, 'error'));
     }
 
     return allChecksPassed && this.errors.length === 0;
@@ -300,7 +300,7 @@ class DashboardStartupCheck {
     this.log('  npm run dashboard:start', 'info');
     this.log('  node tools/dashboard-auto-starter.js', 'info');
 
-    if (os.platform() === 'win32') {
+    if (os.platform() === 'win32') { 
       this.log('\nWindows-Service (Admin-Rechte erforderlich):', 'info');
       this.log('  npm run dashboard:install', 'info');
       this.log('  npm run dashboard:status', 'info');
@@ -311,7 +311,7 @@ class DashboardStartupCheck {
 }
 
 // Programm ausführen
-if (require.main === module) {
+if (require.main === module) { 
   const checker = new DashboardStartupCheck();
   const success = checker.runAllChecks();
   process.exit(success ? 0 : 1);

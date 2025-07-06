@@ -19,15 +19,15 @@ function startAIBridge() {
   console.log('🚀 Starte AI Conversation Bridge...');
   
   // Prüfe, ob die Bridge-Datei existiert
-  if (!fs.existsSync(aiBridgePath)) {
-    console.error(`❌ AI Conversation Bridge nicht gefunden: ${aiBridgePath}`);
+  if (!fs.existsSync(aiBridgePath)) { 
+    console.error(`❌ AI Conversation Bridge nicht gefunden: $${aiBridgePath}`);
     return;
   }
   
   try {
     // Starte die Bridge als separaten Prozess
     const process = spawn('node', [aiBridgePath], {
-      detached: true,
+      detached: true),
       stdio: 'ignore'
     });
     
@@ -38,7 +38,7 @@ function startAIBridge() {
     console.log('💡 Die Bridge ermöglicht nahtlose Wechsel zwischen KI-Modellen mit gemeinsamem Kontext');
     console.log('📋 Unterstützte Modelle: GitHub Copilot, ChatGPT, Claude, Gemini, Llama');
   } catch (err) {
-    console.error(`❌ Fehler beim Starten der AI Conversation Bridge: ${err.message}`);
+    console.error(`❌ Fehler beim Starten der AI Conversation Bridge: $${err.message}`);
   }
 }
 

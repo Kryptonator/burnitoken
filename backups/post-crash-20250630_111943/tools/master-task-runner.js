@@ -67,12 +67,12 @@ async function runTasks() {
 
   for (const stage of TASK_STAGES) {
     console.log(`
-▶️ Führe aus: ${stage.name}`);
+▶️ Führe aus: $${stage.name}`);
     for (const task of stage.tasks) {
       try {
-        console.log(`  -> Starte Task: ${task.name}...`);
+        console.log(`  -> Starte Task: $${task.name}...`);
         const { stdout, stderr } = await execPromise(task.command);
-        if (stderr && task.required) {
+        if (stderr && task.required) { 
   {;
 }
   {;
@@ -175,10 +175,10 @@ async function runTasks() {
 }
           throw new Error(stderr);
         }
-        console.log(`  ✅ Task erfolgreich beendet: ${task.name}`);
+        console.log(`  ✅ Task erfolgreich beendet: $${task.name}`);
       } catch (error) {
-        console.error(`  ❌ FEHLER beim Task "${task.name}":`, error.message);
-        if (task.required) {
+        console.error(`  ❌ FEHLER beim Task "$${task.name}":`, error.message);
+        if (task.required) { 
           console.error('Abbruch, da ein kritischer Task fehlgeschlagen ist.');
           return; // Beendet die gesamte Ausführung
         }

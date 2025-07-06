@@ -45,15 +45,15 @@ const orchestratorStatus = {
  */
 function readJsonFile(filePath) {
   try {
-    if (fs.existsSync(filePath)) {
+    if (fs.existsSync(filePath)) { 
       const data = fs.readFileSync(filePath, 'utf8');
       return JSON.parse(data);
     }
     return null;
   } catch (err) {
-    console.error(`Fehler beim Lesen von ${filePath}:`, err.message);
+    console.error(`Fehler beim Lesen von $${filePath}:`, err.message);
     sendAlert({
-      message: `Fehler beim Lesen der Konfigurationsdatei: ${filePath}`,
+      message: `Fehler beim Lesen der Konfigurationsdatei: $${filePath}`),
       level: 'error',
       extra: { error: err.message }
     });
@@ -67,15 +67,15 @@ function readJsonFile(filePath) {
 function writeJsonFile(filePath, data) {
   try {
     const dirPath = path.dirname(filePath);
-    if (!fs.existsSync(dirPath)) {
+    if (!fs.existsSync(dirPath)) { 
       fs.mkdirSync(dirPath, { recursive: true });
     }
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
     return true;
   } catch (err) {
-    console.error(`Fehler beim Schreiben von ${filePath}:`, err.message);
+    console.error(`Fehler beim Schreiben von $${filePath}:`, err.message);
     sendAlert({
-      message: `Fehler beim Schreiben der Konfigurationsdatei: ${filePath}`,
+      message: `Fehler beim Schreiben der Konfigurationsdatei: $${filePath}`),
       level: 'error',
       extra: { error: err.message }
     });
@@ -97,7 +97,7 @@ function analyzeExtensions() {
     orchestratorStatus.extensions.total = installedExtensions.length;
     orchestratorStatus.extensions.enabled = installedExtensions.length; // Vereinfacht: alle installiert = aktiviert
     
-    console.log(`✅ Gefunden: ${installedExtensions.length} installierte Extensions`);
+    console.log(`✅ Gefunden: $${installedExtensions.length} installierte Extensions`);
     
     // Prüfe Integration mit wichtigen Technologien
     orchestratorStatus.integration = {
@@ -112,12 +112,12 @@ function analyzeExtensions() {
     };
     
     // Performance-Einschätzung
-    if (installedExtensions.length > 40) {
+    if (installedExtensions.length > 40) { 
       orchestratorStatus.performance.startupImpact = 'high';
       orchestratorStatus.performance.recommendations.push(
         'Reduzieren Sie die Anzahl der Extensions auf unter 40 für bessere Performance'
       );
-    } else if (installedExtensions.length > 25) {
+    } else if (installedExtensions.length > 25) { 
       orchestratorStatus.performance.startupImpact = 'medium';
       orchestratorStatus.performance.recommendations.push(
         'Erwägen Sie, nicht genutzte Extensions zu deaktivieren'
@@ -144,37 +144,37 @@ function optimizeIntegration() {
       orchestratorStatus.integration.prettier) {
     
     // Stelle sicher, dass Tailwind-Klassen nicht von Prettier umgebrochen werden
-    if (!settings['prettier.htmlWhitespaceSensitivity']) {
+    if (!settings['prettier.htmlWhitespaceSensitivity']) { 
       settings['prettier.htmlWhitespaceSensitivity'] = 'css';
       updated = true;
     }
     
     // Stelle sicher, dass ESLint Tailwind-Klassen nicht als zu lang markiert
-    if (!settings['eslint.rules.max-len']) {
+    if (!settings['eslint.rules.max-len']) { 
       settings['eslint.rules.max-len'] = 'off';
       updated = true;
     }
   }
   
   // Optimiere Git + GitHub Integration
-  if (orchestratorStatus.integration.git) {
-    if (!settings['git.enableSmartCommit']) {
+  if (orchestratorStatus.integration.git) { 
+    if (!settings['git.enableSmartCommit']) { 
       settings['git.enableSmartCommit'] = true;
       updated = true;
     }
     
-    if (!settings['git.autofetch']) {
+    if (!settings['git.autofetch']) { 
       settings['git.autofetch'] = true;
       updated = true;
     }
   }
   
   // Speichere aktualisierte Einstellungen
-  if (updated) {
-    if (writeJsonFile(SETTINGS_PATH, settings)) {
+  if (updated) { 
+    if (writeJsonFile(SETTINGS_PATH, settings)) { 
       console.log('✅ Extension-Integration optimiert');
     }
-  } else {
+  } else { 
     console.log('✓ Extension-Integration bereits optimal');
   }
 }
@@ -207,12 +207,12 @@ function updateExtensionsJson() {
     
     // Zusammenführen der bestehenden und kritischen Empfehlungen
     extensionsJson.recommendations = [...new Set([
-      ...extensionsJson.recommendations, 
+      ...extensionsJson.recommendations),
       ...criticalExtensions
     ])];
     
     // Speichern der aktualisierten Konfiguration
-    if (writeJsonFile(EXTENSIONS_PATH, extensionsJson)) {
+    if (writeJsonFile(EXTENSIONS_PATH, extensionsJson)) { 
       console.log('✅ extensions.json aktualisiert');
     }
   } catch (err) {
@@ -226,7 +226,7 @@ function updateExtensionsJson() {
 function saveStatus() {
   console.log('💾 Speichere Extension-Status...');
   
-  if (writeJsonFile(STATUS_PATH, orchestratorStatus)) {
+  if (writeJsonFile(STATUS_PATH, orchestratorStatus)) { 
     console.log('✅ Extension-Status gespeichert');
   }
 }
@@ -237,18 +237,18 @@ function saveStatus() {
 function generateReport() {
   console.log('\n📊 Extension Management Bericht:');
   console.log('==============================');
-  console.log(`Installierte Extensions: ${orchestratorStatus.extensions.total}`);
-  console.log(`Startup-Performance: ${orchestratorStatus.performance.startupImpact}`);
+  console.log(`Installierte Extensions: $${orchestratorStatus.extensions.total}`);
+  console.log(`Startup-Performance: $${orchestratorStatus.performance.startupImpact}`);
   
   console.log('\nTechnologie-Integration:');
   Object.entries(orchestratorStatus.integration).forEach(([tech, enabled]) => {
-    console.log(`- ${tech}: ${enabled ? '✅' : '❌'}`);
+    console.log(`- $${tech}: ${enabled ? '✅' : '❌'}`);
   });
   
-  if (orchestratorStatus.performance.recommendations.length > 0) {
+  if (orchestratorStatus.performance.recommendations.length > 0) { 
     console.log('\nEmpfehlungen:');
     orchestratorStatus.performance.recommendations.forEach(rec => {
-      console.log(`- ${rec}`);
+      console.log(`- $${rec}`);
     });
   }
   
@@ -291,7 +291,7 @@ async function runOrchestrator() {
     updateStatusFile();
     console.log('✅ Master Extension Orchestrator erfolgreich durchgelaufen.');
     sendAlert({
-      message: 'Master Extension Orchestrator erfolgreich ausgeführt.',
+      message: 'Master Extension Orchestrator erfolgreich ausgeführt.'),
       level: 'info'
     });
   } catch (error) {
@@ -299,7 +299,7 @@ async function runOrchestrator() {
     orchestratorStatus.extensions.failed++;
     updateStatusFile();
     sendAlert({
-      message: 'KRITISCHER FEHLER im Master Extension Orchestrator!',
+      message: 'KRITISCHER FEHLER im Master Extension Orchestrator!'),
       level: 'error',
       extra: { error: error.message, stack: error.stack }
     });

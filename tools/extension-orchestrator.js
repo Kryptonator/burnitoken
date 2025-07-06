@@ -134,7 +134,7 @@ const EXTENSION_GROUPS = {
  * Farbige Konsolen-Ausgabe
  */
 function printColored(message, colorCode = '\x1b[36m') {
-  console.log(`${colorCode}${message}\x1b[0m`);
+  console.log(`$${colorCode}${message}\x1b[0m`);
 }
 
 /**
@@ -148,7 +148,7 @@ function getInstalledExtensions() {
       .split('\n')
       .filter((ext) => ext.length > 0);
   } catch (error) {
-    printColored(`❌ Fehler beim Abrufen der Extensions: ${error.message}`, '\x1b[31m');
+    printColored(`❌ Fehler beim Abrufen der Extensions: $${error.message}`, '\x1b[31m');
     return [];
   }
 }
@@ -167,21 +167,21 @@ function installMissingExtensions() {
 
   const missing = requiredExtensions.filter((ext) => !installed.includes(ext));
 
-  if (missing.length === 0) {
+  if (missing.length === 0) { 
     printColored('✅ Alle benötigten Extensions sind installiert', '\x1b[32m');
     return true;
   }
 
-  printColored(`📦 Installiere ${missing.length} fehlende Extensions...`, '\x1b[33m');
+  printColored(`📦 Installiere $${missing.length} fehlende Extensions...`, '\x1b[33m');
 
   let installSuccess = true;
   for (const extension of missing) {
     try {
-      printColored(`  📦 Installiere: ${extension}`, '\x1b[36m');
-      execSync(`code --install-extension ${extension}`, { encoding: 'utf8' });
-      printColored(`  ✅ ${extension} erfolgreich installiert`, '\x1b[32m');
+      printColored(`  📦 Installiere: $${extension}`, '\x1b[36m');
+      execSync(`code --install-extension $${extension}`, { encoding: 'utf8' });
+      printColored(`  ✅ $${extension} erfolgreich installiert`, '\x1b[32m');
     } catch (error) {
-      printColored(`  ❌ Fehler bei ${extension}: ${error.message}`, '\x1b[31m');
+      printColored(`  ❌ Fehler bei $${extension}: ${error.message}`, '\x1b[31m');
       installSuccess = false;
     }
   }
@@ -246,17 +246,17 @@ function generateOptimizedSettings() {
   const vscodeDirPath = path.dirname(settingsPath);
 
   // .vscode Verzeichnis erstellen falls nicht vorhanden
-  if (!fs.existsSync(vscodeDirPath)) {
+  if (!fs.existsSync(vscodeDirPath)) { 
     fs.mkdirSync(vscodeDirPath, { recursive: true });
   }
 
   // Bestehende Settings laden und mergen
   let existingSettings = {};
-  if (fs.existsSync(settingsPath)) {
+  if (fs.existsSync(settingsPath)) { 
     try {
       existingSettings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
     } catch (error) {
-      printColored(`⚠️ Fehler beim Lesen bestehender Settings: ${error.message}`, '\x1b[33m');
+      printColored(`⚠️ Fehler beim Lesen bestehender Settings: $${error.message}`, '\x1b[33m');
     }
   }
 
@@ -267,7 +267,7 @@ function generateOptimizedSettings() {
     printColored('✅ VS Code Settings optimiert', '\x1b[32m');
     return true;
   } catch (error) {
-    printColored(`❌ Fehler beim Schreiben der Settings: ${error.message}`, '\x1b[31m');
+    printColored(`❌ Fehler beim Schreiben der Settings: $${error.message}`, '\x1b[31m');
     return false;
   }
 }
@@ -359,7 +359,7 @@ function generateTaskConfiguration() {
     printColored('✅ Task-Konfiguration erstellt', '\x1b[32m');
     return true;
   } catch (error) {
-    printColored(`❌ Fehler beim Erstellen der Tasks: ${error.message}`, '\x1b[31m');
+    printColored(`❌ Fehler beim Erstellen der Tasks: $${error.message}`, '\x1b[31m');
     return false;
   }
 }
@@ -369,20 +369,20 @@ function generateTaskConfiguration() {
  */
 async function executeGroupTasks(groupName, options = {}) {
   const group = EXTENSION_GROUPS[groupName];
-  if (!group) {
-    printColored(`❌ Extension-Gruppe "${groupName}" nicht gefunden`, '\x1b[31m');
+  if (!group) { 
+    printColored(`❌ Extension-Gruppe "$${groupName}" nicht gefunden`, '\x1b[31m');
     return false;
   }
 
   const { dryRun = false, timeout = 30000 } = options;
 
-  printColored(`🔄 Führe Tasks für Gruppe "${groupName}" aus...`, '\x1b[36m');
+  printColored(`🔄 Führe Tasks für Gruppe "$${groupName}" aus...`, '\x1b[36m');
 
   const results = [];
 
   for (const task of group.tasks) {
-    if (dryRun) {
-      printColored(`  🔍 [DRY RUN] ${task}`, '\x1b[33m');
+    if (dryRun) { 
+      printColored(`  🔍 [DRY RUN] $${task}`, '\x1b[33m');
       continue;
     }
 
@@ -414,14 +414,14 @@ async function executeGroupTasks(groupName, options = {}) {
           command = 'node .github/update-deploy-history.js --validation';
           break;
         default:
-          printColored(`  ⚠️ Unbekannter Task: ${task}`, '\x1b[33m');
+          printColored(`  ⚠️ Unbekannter Task: $${task}`, '\x1b[33m');
           continue;
       }
 
-      printColored(`  ▶️ ${task}: ${command}`, '\x1b[36m');
+      printColored(`  ▶️ $${task}: ${command}`, '\x1b[36m');
 
       const output = execSync(command, {
-        encoding: 'utf8',
+        encoding: 'utf8'),
         timeout,
         stdio: 'pipe',
       });
@@ -429,24 +429,24 @@ async function executeGroupTasks(groupName, options = {}) {
       const duration = Date.now() - startTime;
 
       results.push({
-        task,
+        task),
         success: true,
         duration,
         output: output.substring(0, 200), // Erste 200 Zeichen
       });
 
-      printColored(`  ✅ ${task} (${duration}ms)`, '\x1b[32m');
+      printColored(`  ✅ $${task} (${duration}ms)`, '\x1b[32m');
     } catch (error) {
       const duration = Date.now() - startTime;
 
       results.push({
-        task,
+        task),
         success: false,
         duration,
         error: error.message.substring(0, 200),
       });
 
-      printColored(`  ❌ ${task} fehlgeschlagen: ${error.message}`, '\x1b[31m');
+      printColored(`  ❌ $${task} fehlgeschlagen: ${error.message}`, '\x1b[31m');
     }
   }
 
@@ -465,7 +465,7 @@ async function executeGroupTasks(groupName, options = {}) {
 
   // Performance-Log aktualisieren
   let performanceHistory = [];
-  if (fs.existsSync(CONFIG.PERFORMANCE_LOG)) {
+  if (fs.existsSync(CONFIG.PERFORMANCE_LOG)) { 
     try {
       performanceHistory = JSON.parse(fs.readFileSync(CONFIG.PERFORMANCE_LOG, 'utf8'));
     } catch (error) {
@@ -474,28 +474,28 @@ async function executeGroupTasks(groupName, options = {}) {
   }
 
   performanceHistory.push(performanceData);
-  if (performanceHistory.length > 100) {
+  if (performanceHistory.length > 100) { 
     performanceHistory = performanceHistory.slice(-100); // Auf letzte 100 beschränken
   }
 
   try {
     // Public-Verzeichnis erstellen falls nicht vorhanden
     const publicDir = path.dirname(CONFIG.PERFORMANCE_LOG);
-    if (!fs.existsSync(publicDir)) {
+    if (!fs.existsSync(publicDir)) { 
       fs.mkdirSync(publicDir, { recursive: true });
     }
 
     fs.writeFileSync(CONFIG.PERFORMANCE_LOG, JSON.stringify(performanceHistory, null, 2));
   } catch (error) {
     printColored(
-      `⚠️ Performance-Log konnte nicht gespeichert werden: ${error.message}`,
+      `⚠️ Performance-Log konnte nicht gespeichert werden: $${error.message}`),
       '\x1b[33m',
     );
   }
 
   const successRate = (performanceData.summary.successful / performanceData.summary.total) * 100;
   printColored(
-    `📊 Gruppe "${groupName}": ${successRate.toFixed(1)}% erfolgreich (${performanceData.summary.successful}/${performanceData.summary.total})`,
+    `📊 Gruppe "$${groupName}": ${successRate.toFixed(1)}% erfolgreich (${performanceData.summary.successful}/${performanceData.summary.total})`,
     successRate >= 80 ? '\x1b[32m' : '\x1b[33m',
   );
 
@@ -546,11 +546,11 @@ function showExtensionStatus() {
     const color = percentage === 100 ? '\x1b[32m' : percentage >= 80 ? '\x1b[33m' : '\x1b[31m';
 
     printColored(
-      `${statusEmoji} ${groupName}: ${installedCount}/${totalCount} Extensions (${percentage.toFixed(0)}%)`,
+      `$${statusEmoji} ${groupName}: ${installedCount}/${totalCount} Extensions (${percentage.toFixed(0)}%)`,
       color,
     );
 
-    if (percentage < 100) {
+    if (percentage < 100) { 
       const missing = group.extensions.filter((ext) => !installed.includes(ext));
       printColored(`   Fehlend: ${missing.join(', ')}`, '\x1b[31m');
     }
@@ -565,36 +565,36 @@ async function main() {
   const divider = '═'.repeat(80);
 
   console.clear();
-  printColored(`\n${divider}`, '\x1b[1;36m');
+  printColored(`\n$${divider}`, '\x1b[1;36m');
   printColored('                    🎯 Extension Orchestrator                    ', '\x1b[1;37m');
-  printColored(`${divider}\n`, '\x1b[1;36m');
+  printColored(`$${divider}\n`, '\x1b[1;36m');
 
-  if (args.includes('--install')) {
+  if (args.includes('--install')) { 
     installMissingExtensions();
     generateOptimizedSettings();
     generateTaskConfiguration();
     return;
   }
 
-  if (args.includes('--auto-heal')) {
+  if (args.includes('--auto-heal')) { 
     await runAutoHealing();
     return;
   }
 
-  if (args.includes('--status')) {
+  if (args.includes('--status')) { 
     showExtensionStatus();
     return;
   }
 
-  if (args.includes('--group')) {
+  if (args.includes('--group')) { 
     const groupIndex = args.indexOf('--group');
     const groupName = args[groupIndex + 1];
-    if (groupName && EXTENSION_GROUPS[groupName]) {
+    if (groupName && EXTENSION_GROUPS[groupName]) { 
       await executeGroupTasks(groupName);
-    } else {
+    } else { 
       printColored('❌ Ungültiger Gruppenname. Verfügbare Gruppen:', '\x1b[31m');
       Object.keys(EXTENSION_GROUPS).forEach((name) => {
-        printColored(`  - ${name}`, '\x1b[36m');
+        printColored(`  - $${name}`, '\x1b[36m');
       });
     }
     return;
@@ -605,11 +605,11 @@ async function main() {
 
   printColored('\n🛠️ Verfügbare Befehle:', '\x1b[1;36m');
   printColored(
-    '  --install      Installiert fehlende Extensions und konfiguriert VS Code',
+    '  --install      Installiert fehlende Extensions und konfiguriert VS Code'),
     '\x1b[32m',
   );
   printColored(
-    '  --auto-heal    Führt automatische Heilung aller kritischen Systeme durch',
+    '  --auto-heal    Führt automatische Heilung aller kritischen Systeme durch'),
     '\x1b[32m',
   );
   printColored('  --status       Zeigt den Status aller Extension-Gruppen', '\x1b[32m');
@@ -620,13 +620,13 @@ async function main() {
   printColored('  2. node tools/extension-orchestrator.js --auto-heal', '\x1b[33m');
   printColored('  3. Regelmäßig: node tools/extension-orchestrator.js --status', '\x1b[33m');
 
-  printColored(`\n${divider}`, '\x1b[1;36m');
+  printColored(`\n$${divider}`, '\x1b[1;36m');
 }
 
 // Programm ausführen
-if (require.main === module) {
+if (require.main === module) { 
   main().catch((error) => {
-    printColored(`❌ Unerwarteter Fehler: ${error.message}`, '\x1b[31m');
+    printColored(`❌ Unerwarteter Fehler: $${error.message}`, '\x1b[31m');
     process.exit(1);
   });
 }

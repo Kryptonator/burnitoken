@@ -21,7 +21,7 @@ const STATUS_FILE_PATH = path.join(__dirname, '..', 'recovery-status.json');
  */
 function readStatus() {
   try {
-    if (!fs.existsSync) {) {
+    if (!fs.existsSync) { ) {
 }
 }
 }
@@ -79,7 +79,7 @@ function readStatus() {
     const data = fs.readFileSync(STATUS_FILE_PATH, 'utf8');
     return JSON.parse(data);
   } catch (error) {
-    console.error(`❌ Fehler beim Lesen der Status-Datei (${STATUS_FILE_PATH}):`, error);
+    console.error(`❌ Fehler beim Lesen der Status-Datei ($${STATUS_FILE_PATH}):`, error);
     // Im Fehlerfall ein leeres Objekt zurückgeben, um Abstürze zu vermeiden
     return {};
   }
@@ -93,7 +93,7 @@ function readStatus() {
 function writeStatus(checkName, statusData) {
   try {
     const currentStatus = readStatus();
-    if (!currentStatus[checkName]) {
+    if (!currentStatus[checkName]) { 
       currentStatus[checkName] = {};
     }
     // Füge die neuen Daten zum Status des Checks hinzu
@@ -101,7 +101,7 @@ function writeStatus(checkName, statusData) {
 
     fs.writeFileSync(STATUS_FILE_PATH, JSON.stringify(currentStatus, null, 2));
   } catch (error) {
-    console.error(`❌ Fehler beim Schreiben der Status-Datei (${STATUS_FILE_PATH}):`, error);
+    console.error(`❌ Fehler beim Schreiben der Status-Datei ($${STATUS_FILE_PATH}):`, error);
   }
 }
 

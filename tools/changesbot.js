@@ -119,7 +119,7 @@ class ChangesBot {
 
       this.log('✅ Initialer Zustand erfasst');
     } catch (error) {
-      this.log(`❌ Fehler beim Erfassen des initialen Zustands: ${error.message}`);
+      this.log(`❌ Fehler beim Erfassen des initialen Zustands: $${error.message}`);
     }
   }
 
@@ -143,7 +143,7 @@ class ChangesBot {
           (this.status.performance.avgCheckTime + checkTime) / 2;
       } catch (error) {
         this.status.performance.errors++;
-        this.log(`❌ Fehler beim Change-Check: ${error.message}`);
+        this.log(`❌ Fehler beim Change-Check: $${error.message}`);
       }
 
       this.saveStatus();
@@ -158,9 +158,9 @@ class ChangesBot {
 
     // Git Changes
     const currentGitHash = this.getGitHash();
-    if (currentGitHash !== this.lastStates.gitHash) {
+    if (currentGitHash !== this.lastStates.gitHash) { 
       changes.push({
-        type: 'git',
+        type: 'git'),
         description: 'Git commit detected',
         oldValue: this.lastStates.gitHash,
         newValue: currentGitHash,
@@ -171,10 +171,10 @@ class ChangesBot {
 
     // File Count Changes
     const currentFileCount = this.getFileCount();
-    if (currentFileCount !== this.lastStates.fileCount) {
+    if (currentFileCount !== this.lastStates.fileCount) { 
       changes.push({
-        type: 'files',
-        description: `File count changed: ${this.lastStates.fileCount} → ${currentFileCount}`,
+        type: 'files'),
+        description: `File count changed: $${this.lastStates.fileCount} → ${currentFileCount}`,
         oldValue: this.lastStates.fileCount,
         newValue: currentFileCount,
         impact: 'medium',
@@ -184,9 +184,9 @@ class ChangesBot {
 
     // Package.json Changes
     const currentPackageHash = this.getFileHash('package.json');
-    if (currentPackageHash !== this.lastStates.packageJsonHash) {
+    if (currentPackageHash !== this.lastStates.packageJsonHash) { 
       changes.push({
-        type: 'dependencies',
+        type: 'dependencies'),
         description: 'package.json modified',
         oldValue: this.lastStates.packageJsonHash,
         newValue: currentPackageHash,
@@ -197,9 +197,9 @@ class ChangesBot {
 
     // Index.html Changes
     const currentIndexHash = this.getFileHash('index.html');
-    if (currentIndexHash !== this.lastStates.indexHtmlHash) {
+    if (currentIndexHash !== this.lastStates.indexHtmlHash) { 
       changes.push({
-        type: 'website',
+        type: 'website'),
         description: 'index.html modified',
         oldValue: this.lastStates.indexHtmlHash,
         newValue: currentIndexHash,
@@ -210,10 +210,10 @@ class ChangesBot {
 
     // Extensions Changes
     const currentExtensionsCount = this.getExtensionsCount();
-    if (currentExtensionsCount !== this.lastStates.extensionsCount) {
+    if (currentExtensionsCount !== this.lastStates.extensionsCount) { 
       changes.push({
-        type: 'extensions',
-        description: `Extensions count changed: ${this.lastStates.extensionsCount} → ${currentExtensionsCount}`,
+        type: 'extensions'),
+        description: `Extensions count changed: $${this.lastStates.extensionsCount} → ${currentExtensionsCount}`,
         oldValue: this.lastStates.extensionsCount,
         newValue: currentExtensionsCount,
         impact: 'medium',
@@ -222,7 +222,7 @@ class ChangesBot {
     }
 
     // Änderungen verarbeiten
-    if (changes.length > 0) {
+    if (changes.length > 0) { 
       this.processChanges(changes);
     }
   }
@@ -241,16 +241,16 @@ class ChangesBot {
       };
 
       this.changeHistory.push(changeEntry);
-      this.log(`🔄 Change detected: ${change.description}`);
+      this.log(`🔄 Change detected: $${change.description}`);
 
       // Alert bei kritischen Änderungen
-      if (change.impact === 'high') {
+      if (change.impact === 'high') { 
         this.createAlert(change);
       }
     });
 
     // History-Limit
-    if (this.changeHistory.length > 100) {
+    if (this.changeHistory.length > 100) { 
       this.changeHistory = this.changeHistory.slice(-100);
     }
 
@@ -266,7 +266,7 @@ class ChangesBot {
       id: Date.now(),
       type: 'change_detected',
       level: change.impact === 'high' ? 'WARNING' : 'INFO',
-      message: `High-impact change: ${change.description}`,
+      message: `High-impact change: $${change.description}`,
       timestamp: new Date().toISOString(),
       change: change,
     };
@@ -274,11 +274,11 @@ class ChangesBot {
     this.status.alerts.push(alert);
 
     // Alert-Limit
-    if (this.status.alerts.length > 10) {
+    if (this.status.alerts.length > 10) { 
       this.status.alerts = this.status.alerts.slice(-10);
     }
 
-    this.log(`🚨 Alert: ${alert.message}`);
+    this.log(`🚨 Alert: $${alert.message}`);
   }
 
   /**
@@ -290,30 +290,30 @@ class ChangesBot {
     console.log('═'.repeat(50));
     console.log(`Status: ${this.status.isRunning ? '🟢 RUNNING' : '🔴 STOPPED'}`);
     console.log(`Uptime: ${this.getUptime()}`);
-    console.log(`Changes Detected: ${this.status.changesDetected}`);
-    console.log(`Active Alerts: ${this.status.alerts.length}`);
+    console.log(`Changes Detected: $${this.status.changesDetected}`);
+    console.log(`Active Alerts: $${this.status.alerts.length}`);
     console.log(
-      `Performance: ${this.status.performance.checks} checks, ${this.status.performance.errors} errors`,
+      `Performance: $${this.status.performance.checks} checks, ${this.status.performance.errors} errors`),
     );
     console.log(`Avg Check Time: ${Math.round(this.status.performance.avgCheckTime)}ms`);
     console.log('═'.repeat(50));
 
     // Recent Changes
-    if (this.changeHistory.length > 0) {
+    if (this.changeHistory.length > 0) { 
       console.log('\n📋 Recent Changes:');
       this.changeHistory.slice(-5).forEach((change) => {
         const time = new Date(change.timestamp).toLocaleTimeString();
         const impact = change.impact === 'high' ? '🔴' : change.impact === 'medium' ? '🟡' : '🟢';
-        console.log(`  ${impact} ${time} - ${change.description}`);
+        console.log(`  $${impact} ${time} - ${change.description}`);
       });
     }
 
     // Active Alerts
-    if (this.status.alerts.length > 0) {
+    if (this.status.alerts.length > 0) { 
       console.log('\n🚨 Active Alerts:');
       this.status.alerts.slice(-3).forEach((alert) => {
         const time = new Date(alert.timestamp).toLocaleTimeString();
-        console.log(`  ⚠️  ${time} - ${alert.message}`);
+        console.log(`  ⚠️  $${time} - ${alert.message}`);
       });
     }
 
@@ -325,7 +325,7 @@ class ChangesBot {
    * Dashboard Update (alle 10 Checks)
    */
   updateDashboard() {
-    if (this.status.performance.checks % 10 === 0) {
+    if (this.status.performance.checks % 10 === 0) { 
       this.showDashboard();
     }
   }
@@ -362,11 +362,11 @@ class ChangesBot {
 
     items.forEach((item) => {
       const fullPath = path.join(dir, item);
-      if (fs.statSync(fullPath).isDirectory()) {
-        if (!item.startsWith('.') && item !== 'node_modules') {
+      if (fs.statSync(fullPath).isDirectory()) { 
+        if (!item.startsWith('.') && item !== 'node_modules') { 
           files = files.concat(this.getAllFiles(fullPath));
         }
-      } else {
+      } else { 
         files.push(fullPath);
       }
     });
@@ -412,7 +412,7 @@ class ChangesBot {
     const minutes = Math.floor((diff % 3600) / 60);
     const seconds = diff % 60;
 
-    return `${hours}h ${minutes}m ${seconds}s`;
+    return `$${hours}h ${minutes}m ${seconds}s`;
   }
 
   /**
@@ -428,7 +428,7 @@ class ChangesBot {
 
   loadStatus() {
     try {
-      if (fs.existsSync(this.config.statusFile)) {
+      if (fs.existsSync(this.config.statusFile)) { 
         const data = fs.readFileSync(this.config.statusFile, 'utf8');
         this.status = { ...this.status, ...JSON.parse(data) };
       }
@@ -447,7 +447,7 @@ class ChangesBot {
 
   loadChangeHistory() {
     try {
-      if (fs.existsSync(this.config.changeHistoryFile)) {
+      if (fs.existsSync(this.config.changeHistoryFile)) { 
         const data = fs.readFileSync(this.config.changeHistoryFile, 'utf8');
         this.changeHistory = JSON.parse(data);
       }
@@ -458,7 +458,7 @@ class ChangesBot {
 
   log(message) {
     const timestamp = new Date().toISOString();
-    const logEntry = `[${timestamp}] ${message}`;
+    const logEntry = `[$${timestamp}] ${message}`;
 
     console.log(logEntry);
 
@@ -471,7 +471,7 @@ class ChangesBot {
 }
 
 // CLI Interface
-if (require.main === module) {
+if (require.main === module) { 
   const command = process.argv[2];
   const bot = new ChangesBot();
 

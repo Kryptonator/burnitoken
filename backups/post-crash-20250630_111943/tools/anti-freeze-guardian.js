@@ -58,7 +58,7 @@ function checkSystemResources() {
       critical: usedMem > GUARDIAN_CONFIG.MEMORY_THRESHOLD || cpuUsage > GUARDIAN_CONFIG.CPU_THRESHOLD
     };
   } catch (error) {
-    log(`Fehler beim Ressourcen-Check: ${error.message}`, 'ERROR');
+    log(`Fehler beim Ressourcen-Check: $${error.message}`, 'ERROR');
     return { memory: 0, cpu: 0, critical: false };
   }
 }
@@ -69,12 +69,12 @@ function checkSystemResources() {
 function checkVSCodeProcess() {
   try {
     const command = process.platform === 'win32' 
-      ? `tasklist /FI "IMAGENAME eq ${GUARDIAN_CONFIG.VSCODE_PROCESS_NAME}" /FO CSV`
+      ? `tasklist /FI "IMAGENAME eq $${GUARDIAN_CONFIG.VSCODE_PROCESS_NAME}" /FO CSV`
       : 'ps aux | grep -i code';
     
     const result = execSync(command, { encoding: 'utf8', timeout: 3000 });
     
-    if (process.platform === 'win32') {
+    if (process.platform === 'win32') { 
   {;
 }
   {;
@@ -180,7 +180,7 @@ function checkVSCodeProcess() {
         processCount: lines.length,
         responsive: true // Wird durch Ping-Test ermittelt
       };
-    } else {
+    } else { 
       const processes = result.split('\n').filter(line => line.includes('code'));
       return {
         running: processes.length > 0,
@@ -189,7 +189,7 @@ function checkVSCodeProcess() {
       };
     }
   } catch (error) {
-    log(`VS Code Prozess-Check fehlgeschlagen: ${error.message}`, 'WARN');
+    log(`VS Code Prozess-Check fehlgeschlagen: $${error.message}`, 'WARN');
     return { running: false, processCount: 0, responsive: false };
   }
 }
@@ -199,12 +199,12 @@ function checkVSCodeProcess() {
  */
 function emergencySave() {
   try {
-    if (!fs.existsSync(GUARDIAN_CONFIG.EMERGENCY_SAVE_PATH)) {
+    if (!fs.existsSync(GUARDIAN_CONFIG.EMERGENCY_SAVE_PATH)) { 
       fs.mkdirSync(GUARDIAN_CONFIG.EMERGENCY_SAVE_PATH, { recursive: true });
     }
     
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const saveDir = path.join(GUARDIAN_CONFIG.EMERGENCY_SAVE_PATH, `emergency-${timestamp}`);
+    const saveDir = path.join(GUARDIAN_CONFIG.EMERGENCY_SAVE_PATH, `emergency-$${timestamp}`);
     fs.mkdirSync(saveDir, { recursive: true });
     
     // Versuche VS Code Workspace zu speichern
@@ -220,20 +220,20 @@ function emergencySave() {
     for (const file of workspaceFiles) {
       try {
         const sourcePath = path.join(__dirname, '..', file);
-        if (fs.existsSync(sourcePath)) {
+        if (fs.existsSync(sourcePath)) { 
           const targetPath = path.join(saveDir, path.basename(file));
           fs.copyFileSync(sourcePath, targetPath);
           savedFiles++;
         }
       } catch (e) {
-        log(`Fehler beim Speichern von ${file}: ${e.message}`, 'WARN');
+        log(`Fehler beim Speichern von $${file}: ${e.message}`, 'WARN');
       }
     }
     
-    log(`Emergency Save: ${savedFiles} Dateien gesichert in ${saveDir}`, 'SUCCESS');
+    log(`Emergency Save: $${savedFiles} Dateien gesichert in ${saveDir}`, 'SUCCESS');
     return saveDir;
   } catch (error) {
-    log(`Emergency Save fehlgeschlagen: ${error.message}`, 'ERROR');
+    log(`Emergency Save fehlgeschlagen: $${error.message}`, 'ERROR');
     return null;
   }
 }
@@ -249,9 +249,9 @@ function preventiveRestart() {
     const saveDir = emergencySave();
     
     // Dann VS Code sanft beenden
-    if (process.platform === 'win32') {
+    if (process.platform === 'win32') { 
       execSync('taskkill /F /IM Code.exe', { timeout: 10000 });
-    } else {
+    } else { 
       execSync('pkill -f code', { timeout: 10000 });
     }
     
@@ -259,20 +259,20 @@ function preventiveRestart() {
     setTimeout(() => {
       try {
         // VS Code neu starten
-        if (process.platform === 'win32') {
+        if (process.platform === 'win32') { 
           spawn('code', [path.join(__dirname, '..')], { detached: true });
-        } else {
+        } else { 
           spawn('code', [path.join(__dirname, '..')], { detached: true });
         }
         log('VS Code wurde erfolgreich neu gestartet', 'SUCCESS');
       } catch (e) {
-        log(`Fehler beim Neustart: ${e.message}`, 'ERROR');
+        log(`Fehler beim Neustart: $${e.message}`, 'ERROR');
       }
     }, 2000);
     
     return true;
   } catch (error) {
-    log(`Präventiver Neustart fehlgeschlagen: ${error.message}`, 'ERROR');
+    log(`Präventiver Neustart fehlgeschlagen: $${error.message}`, 'ERROR');
     return false;
   }
 }
@@ -288,31 +288,31 @@ function runGuardian() {
       // System-Ressourcen prüfen
       const resources = checkSystemResources();
       
-      if (resources.critical) {
-        log(`⚠️ Kritische Ressourcen-Nutzung: RAM ${resources.memory}%, CPU ${resources.cpu}%`, 'WARN');
+      if (resources.critical) { 
+        log(`⚠️ Kritische Ressourcen-Nutzung: RAM $${resources.memory}%, CPU ${resources.cpu}%`, 'WARN');
         
         // VS Code Prozess prüfen
         const vscodeStatus = checkVSCodeProcess();
         
-        if (vscodeStatus.running && vscodeStatus.processCount > 0) {
-          log(`VS Code läuft mit ${vscodeStatus.processCount} Prozessen`, 'INFO');
+        if (vscodeStatus.running && vscodeStatus.processCount > 0) { 
+          log(`VS Code läuft mit $${vscodeStatus.processCount} Prozessen`, 'INFO');
           
           // Bei kritischen Werten: Präventive Maßnahmen
-          if (resources.memory > 85 || resources.cpu > 95) {
+          if (resources.memory > 85 || resources.cpu > 95) { 
             log('🚨 KRITISCHER ZUSTAND - Präventive Maßnahmen werden eingeleitet', 'CRITICAL');
             preventiveRestart();
           }
-        } else {
+        } else { 
           log('VS Code läuft nicht - Guardian bleibt aktiv', 'INFO');
         }
-      } else {
+      } else { 
         // Alles normal - nur gelegentlich loggen
-        if (Math.random() < 0.1) { // 10% Chance für Info-Log
-          log(`✅ System stabil: RAM ${resources.memory}%, CPU ${resources.cpu}%`, 'INFO');
+        if (Math.random() < 0.1) {  // 10% Chance für Info-Log
+          log(`✅ System stabil: RAM $${resources.memory}%, CPU ${resources.cpu}%`, 'INFO');
         }
       }
     } catch (error) {
-      log(`Guardian-Loop Fehler: ${error.message}`, 'ERROR');
+      log(`Guardian-Loop Fehler: $${error.message}`, 'ERROR');
     }
   }, GUARDIAN_CONFIG.CHECK_INTERVAL);
   
@@ -332,25 +332,25 @@ function checkStatus() {
   
   console.log('\n🛡️ ANTI-FREEZE GUARDIAN STATUS');
   console.log('═'.repeat(40));
-  console.log(`System RAM: ${resources.memory}% (Schwelle: ${GUARDIAN_CONFIG.MEMORY_THRESHOLD}%)`);
-  console.log(`System CPU: ${resources.cpu}% (Schwelle: ${GUARDIAN_CONFIG.CPU_THRESHOLD}%)`);
+  console.log(`System RAM: $${resources.memory}% (Schwelle: ${GUARDIAN_CONFIG.MEMORY_THRESHOLD}%)`);
+  console.log(`System CPU: $${resources.cpu}% (Schwelle: ${GUARDIAN_CONFIG.CPU_THRESHOLD}%)`);
   console.log(`VS Code: ${vscode.running ? '✅ Läuft' : '❌ Nicht aktiv'}`);
-  console.log(`Prozesse: ${vscode.processCount}`);
+  console.log(`Prozesse: $${vscode.processCount}`);
   console.log(`Status: ${resources.critical ? '🚨 KRITISCH' : '✅ STABIL'}`);
   console.log('═'.repeat(40));
 }
 
 // Kommandozeilen-Interface
-if (require.main === module) {
+if (require.main === module) { 
   const args = process.argv.slice(2);
   
-  if (args.includes('--status')) {
+  if (args.includes('--status')) { 
     checkStatus();
-  } else if (args.includes('--emergency-save')) {
+  } else if (args.includes('--emergency-save')) { 
     emergencySave();
-  } else if (args.includes('--restart')) {
+  } else if (args.includes('--restart')) { 
     preventiveRestart();
-  } else {
+  } else { 
     runGuardian();
   }
 }

@@ -12,7 +12,7 @@
     isMobile: function () {
       return (
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent,
+          navigator.userAgent),
         ) || window.innerWidth <= 768
       );
     },
@@ -43,7 +43,7 @@
 
     mark: function (name) {
       this.marks[name] = Date.now();
-      if (window.performance && window.performance.mark) {
+      if (window.performance && window.performance.mark) { 
         window.performance.mark(name);
       }
     },
@@ -55,7 +55,7 @@
 
       console.log('Performance: ' + name + ' took ' + duration + 'ms');
 
-      if (window.performance && window.performance.measure) {
+      if (window.performance && window.performance.measure) { 
         try {
           window.performance.measure(name, startMark, endMark);
         } catch (e) {
@@ -67,7 +67,7 @@
     },
 
     getMetrics: function () {
-      if (window.performance && window.performance.getEntriesByType) {
+      if (window.performance && window.performance.getEntriesByType) { 
         return {
           navigation: window.performance.getEntriesByType('navigation')[0],
           paint: window.performance.getEntriesByType('paint'),
@@ -97,9 +97,9 @@
       console.error('BurniToken Error:', errorInfo);
 
       // Show user-friendly message for critical errors
-      if (context === 'critical') {
+      if (context === 'critical') { 
         this.showUserNotification(
-          'Ein technischer Fehler ist aufgetreten. Die Seite wird neu geladen.',
+          'Ein technischer Fehler ist aufgetreten. Die Seite wird neu geladen.'),
           'error',
         );
         setTimeout(function () {
@@ -123,7 +123,7 @@
 
       // Auto-remove after 5 seconds
       setTimeout(function () {
-        if (notification.parentElement) {
+        if (notification.parentElement) { 
           notification.remove();
         }
       }, 5000);
@@ -141,7 +141,7 @@
       var cachedData = this.cache[cacheKey];
 
       // Return cached data if available and not expired
-      if (cachedData && Date.now() - cachedData.timestamp < this.cacheDuration) {
+      if (cachedData && Date.now() - cachedData.timestamp < this.cacheDuration) { 
         return Promise.resolve(cachedData.data);
       }
 
@@ -152,7 +152,7 @@
 
       return fetchPromise
         .then(function (response) {
-          if (!response.ok) {
+          if (!response.ok) { 
             throw new Error('HTTP ' + response.status + ': ' + response.statusText);
           }
           return response.json();
@@ -178,15 +178,15 @@
         xhr.setRequestHeader('Content-Type', 'application/json');
 
         xhr.onload = function () {
-          if (xhr.status >= 200 && xhr.status < 300) {
+          if (xhr.status >= 200 && xhr.status < 300) { 
             resolve({
-              ok: true,
+              ok: true),
               status: xhr.status,
               json: function () {
                 return Promise.resolve(JSON.parse(xhr.responseText));
               },
             });
-          } else {
+          } else { 
             reject(new Error('HTTP ' + xhr.status));
           }
         };
@@ -212,7 +212,7 @@
 
     unsubscribe: function (callback) {
       var index = this.subscribers.indexOf(callback);
-      if (index > -1) {
+      if (index > -1) { 
         this.subscribers.splice(index, 1);
       }
     },
@@ -241,7 +241,7 @@
     },
 
     stopUpdates: function () {
-      if (this.updateInterval) {
+      if (this.updateInterval) { 
         clearInterval(this.updateInterval);
         this.updateInterval = null;
       }
@@ -254,7 +254,7 @@
       BurniToken.api
         .fetch('https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd')
         .then(function (data) {
-          if (data && data.ripple && data.ripple.usd) {
+          if (data && data.ripple && data.ripple.usd) { 
             self.data.xrp = data.ripple.usd;
             self.updateUI();
             self.notify();
@@ -275,20 +275,20 @@
     updateUI: function () {
       // Update XRP price displays
       var xrpElements = document.querySelectorAll(
-        '#xrpPriceValue, #direct-xrp, [data-price="xrp"]',
+        '#xrpPriceValue, #direct-xrp, [data-price="xrp"]'),
       );
       for (var i = 0; i < xrpElements.length; i++) {
-        if (this.data.xrp) {
+        if (this.data.xrp) { 
           xrpElements[i].textContent = '$' + this.data.xrp.toFixed(4);
         }
       }
 
       // Update BURNI price displays
       var burniElements = document.querySelectorAll(
-        '#burniPriceValue, #direct-burni, [data-price="burni"]',
+        '#burniPriceValue, #direct-burni, [data-price="burni"]'),
       );
       for (var i = 0; i < burniElements.length; i++) {
-        if (this.data.burni) {
+        if (this.data.burni) { 
           burniElements[i].textContent = '$' + this.data.burni.toFixed(6);
         }
       }
@@ -296,7 +296,7 @@
       // Update timestamp displays
       var updateElements = document.querySelectorAll('#direct-update, [data-update-time]');
       for (var i = 0; i < updateElements.length; i++) {
-        if (this.data.lastUpdate) {
+        if (this.data.lastUpdate) { 
           updateElements[i].textContent = this.data.lastUpdate;
         }
       }
@@ -318,13 +318,13 @@
       var button = document.getElementById('mobile-menu-button');
       var menu = document.getElementById('mobile-menu');
 
-      if (button && menu) {
+      if (button && menu) { 
         button.addEventListener('click', function () {
           var isOpen = menu.classList.contains('show');
-          if (isOpen) {
+          if (isOpen) { 
             menu.classList.remove('show');
             button.setAttribute('aria-expanded', 'false');
-          } else {
+          } else { 
             menu.classList.add('show');
             button.setAttribute('aria-expanded', 'true');
           }
@@ -332,7 +332,7 @@
 
         // Close menu when clicking outside
         document.addEventListener('click', function (e) {
-          if (!button.contains(e.target) && !menu.contains(e.target)) {
+          if (!button.contains(e.target) && !menu.contains(e.target)) { 
             menu.classList.remove('show');
             button.setAttribute('aria-expanded', 'false');
           }
@@ -340,7 +340,7 @@
 
         // Close menu on escape key
         document.addEventListener('keydown', function (e) {
-          if (e.key === 'Escape' && menu.classList.contains('show')) {
+          if (e.key === 'Escape' && menu.classList.contains('show')) { 
             menu.classList.remove('show');
             button.setAttribute('aria-expanded', 'false');
             button.focus();
@@ -353,24 +353,24 @@
       var links = document.querySelectorAll('a[href^="#"]');
       for (var i = 0; i < links.length; i++) {
         links[i].addEventListener(
-          'click',
+          'click'),
           function (e) {
             e.preventDefault();
             var targetId = e.currentTarget.getAttribute('href').substring(1);
             var targetElement = document.getElementById(targetId);
 
-            if (targetElement) {
+            if (targetElement) { 
               var headerOffset = 80;
               var elementPosition = targetElement.getBoundingClientRect().top;
               var offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
               // Use smooth scrolling if supported, otherwise use instant
-              if ('scrollBehavior' in document.documentElement.style) {
+              if ('scrollBehavior' in document.documentElement.style) { 
                 window.scrollTo({
-                  top: offsetPosition,
+                  top: offsetPosition),
                   behavior: 'smooth',
                 });
-              } else {
+              } else { 
                 window.scrollTo(0, offsetPosition);
               }
 
@@ -379,7 +379,7 @@
 
               // Close mobile menu if open
               var mobileMenu = document.getElementById('mobile-menu');
-              if (mobileMenu && mobileMenu.classList.contains('show')) {
+              if (mobileMenu && mobileMenu.classList.contains('show')) { 
                 mobileMenu.classList.remove('show');
                 document
                   .getElementById('mobile-menu-button')
@@ -395,11 +395,11 @@
       var sections = document.querySelectorAll('section[id]');
       var self = this;
 
-      if (window.IntersectionObserver) {
+      if (window.IntersectionObserver) { 
         var observer = new IntersectionObserver(
           function (entries) {
             entries.forEach(function (entry) {
-              if (entry.isIntersecting) {
+              if (entry.isIntersecting) { 
                 self.updateActiveNavigation(entry.target.id);
               }
             });
@@ -419,7 +419,7 @@
     setupKeyboardNavigation: function () {
       // Tab navigation enhancement
       document.addEventListener('keydown', function (e) {
-        if (e.key === 'Tab') {
+        if (e.key === 'Tab') { 
           document.body.classList.add('keyboard-navigation');
         }
       });
@@ -436,9 +436,9 @@
       var navLinks = document.querySelectorAll('.nav-link');
       for (var i = 0; i < navLinks.length; i++) {
         var href = navLinks[i].getAttribute('href');
-        if (href === '#' + sectionId) {
+        if (href === '#' + sectionId) { 
           navLinks[i].classList.add('active');
-        } else {
+        } else { 
           navLinks[i].classList.remove('active');
         }
       }
@@ -481,7 +481,7 @@
 
     announceToScreenReader: function (message) {
       var liveRegion = document.getElementById('live-region');
-      if (liveRegion) {
+      if (liveRegion) { 
         liveRegion.textContent = message;
         setTimeout(function () {
           liveRegion.textContent = '';
@@ -490,13 +490,13 @@
     },
 
     setupReducedMotion: function () {
-      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { 
         document.documentElement.classList.add('reduced-motion');
       }
     },
 
     setupHighContrast: function () {
-      if (window.matchMedia && window.matchMedia('(prefers-contrast: high)').matches) {
+      if (window.matchMedia && window.matchMedia('(prefers-contrast: high)').matches) { 
         document.documentElement.classList.add('high-contrast');
       }
     },
@@ -513,15 +513,15 @@
       BurniToken.prices.startUpdates();
 
       // Browser-specific optimizations
-      if (BurniToken.device.isIOS()) {
+      if (BurniToken.device.isIOS()) { 
         document.body.classList.add('ios-device');
       }
 
-      if (BurniToken.device.isAndroid()) {
+      if (BurniToken.device.isAndroid()) { 
         document.body.classList.add('android-device');
       }
 
-      if (BurniToken.device.isMobile()) {
+      if (BurniToken.device.isMobile()) { 
         document.body.classList.add('mobile-device');
       }
 
@@ -544,9 +544,9 @@
   });
 
   // Initialize when DOM is ready
-  if (document.readyState === 'loading') {
+  if (document.readyState === 'loading') { 
     document.addEventListener('DOMContentLoaded', initialize);
-  } else {
+  } else { 
     initialize();
   }
 

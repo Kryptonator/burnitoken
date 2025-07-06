@@ -66,18 +66,18 @@ function startSessionSaver() {
   setupFileWatchers();
   
   // Initialisiere KI-Modell-Integration, falls aktiviert
-  if (CONFIG.ai && CONFIG.ai.enabled) {
+  if (CONFIG.ai && CONFIG.ai.enabled) { 
     try {
       // Versuche, die AI Conversation Bridge zu importieren und zu starten
       const aiBridge = require('./ai-conversation-bridge');
       console.log('🧠 KI-Modell-Integration aktiviert - Konversationskontext bleibt bei Modellwechsel erhalten');
     } catch (err) {
-      console.warn(`⚠️ KI-Modell-Integration konnte nicht aktiviert werden: ${err.message}`);
+      console.warn(`⚠️ KI-Modell-Integration konnte nicht aktiviert werden: $${err.message}`);
     }
   }
   
   console.log(`✅ Session-Saver aktiv - Automatische Sicherung alle ${CONFIG.saveInterval / 1000} Sekunden`);
-  console.log(`💾 Sicherungen werden gespeichert in: ${CONFIG.backupDir}`);
+  console.log(`💾 Sicherungen werden gespeichert in: $${CONFIG.backupDir}`);
 }
 
 /**
@@ -85,7 +85,7 @@ function startSessionSaver() {
  */
 function ensureBackupDirExists() {
   try {
-    if (!fs.existsSync(CONFIG.backupDir)) {
+    if (!fs.existsSync(CONFIG.backupDir)) { 
       fs.mkdirSync(CONFIG.backupDir, { recursive: true });
     }
     
@@ -94,9 +94,9 @@ function ensureBackupDirExists() {
     fs.mkdirSync(sessionDir, { recursive: true });
     CONFIG.currentSessionDir = sessionDir;
     
-    logDebug(`Backup-Verzeichnis erstellt: ${sessionDir}`);
+    logDebug(`Backup-Verzeichnis erstellt: $${sessionDir}`);
   } catch (err) {
-    console.error(`❌ Fehler beim Erstellen des Backup-Verzeichnisses: ${err.message}`);
+    console.error(`❌ Fehler beim Erstellen des Backup-Verzeichnisses: $${err.message}`);
   }
 }
 
@@ -109,7 +109,7 @@ function setupAutomaticBackup() {
     if (savingInProgress) return;
     
     // Wenn keine Änderungen vorliegen, überspringe diese Iteration
-    if (modifiedFiles.size === 0) {
+    if (modifiedFiles.size === 0) { 
       logDebug('Keine Änderungen seit letzter Sicherung');
       return;
     }
@@ -129,20 +129,20 @@ function setupAutomaticBackup() {
 function setupFileWatchers() {
   try {
     // Beobachte .vscode-Verzeichnis
-    if (fs.existsSync('.vscode')) {
+    if (fs.existsSync('.vscode')) { 
       fs.watch('.vscode', { recursive: true }, (eventType, filename) => {
-        if (filename) {
+        if (filename) { 
           const fullPath = path.join('.vscode', filename);
           modifiedFiles.add(fullPath);
-          logDebug(`Änderung erkannt: ${fullPath}`);
+          logDebug(`Änderung erkannt: $${fullPath}`);
         }
       });
     }
     
     // Beobachte wichtige Dateien im Workspace-Root
     fs.readdir('.', (err, files) => {
-      if (err) {
-        console.error(`❌ Fehler beim Lesen des Verzeichnisses: ${err.message}`);
+      if (err) { 
+        console.error(`❌ Fehler beim Lesen des Verzeichnisses: $${err.message}`);
         return;
       }
       
@@ -152,7 +152,7 @@ function setupFileWatchers() {
             !CONFIG.ignoreFolders.includes(file)) {
           fs.watch(file, () => {
             modifiedFiles.add(file);
-            logDebug(`Änderung erkannt: ${file}`);
+            logDebug(`Änderung erkannt: $${file}`);
           });
         }
       });
@@ -160,7 +160,7 @@ function setupFileWatchers() {
     
     logDebug('Datei-Watcher eingerichtet');
   } catch (err) {
-    console.error(`❌ Fehler beim Einrichten der Datei-Watcher: ${err.message}`);
+    console.error(`❌ Fehler beim Einrichten der Datei-Watcher: $${err.message}`);
   }
 }
 
@@ -173,7 +173,7 @@ function saveSession() {
   
   try {
     const backupTime = Date.now();
-    const backupDir = path.join(CONFIG.currentSessionDir, `backup-${backupTime}`);
+    const backupDir = path.join(CONFIG.currentSessionDir, `backup-$${backupTime}`);
     
     // Erstelle Unterverzeichnis für diesen Sicherungspunkt
     fs.mkdirSync(backupDir, { recursive: true });
@@ -181,20 +181,20 @@ function saveSession() {
     // Kopiere geänderte Dateien
     for (const file of modifiedFiles) {
       try {
-        if (fs.existsSync(file)) {
+        if (fs.existsSync(file)) { 
           // Erstelle Zielverzeichnis mit Verzeichnisstruktur
           const targetDir = path.join(backupDir, path.dirname(file));
-          if (!fs.existsSync(targetDir)) {
+          if (!fs.existsSync(targetDir)) { 
             fs.mkdirSync(targetDir, { recursive: true });
           }
           
           // Kopiere die Datei
           const targetPath = path.join(backupDir, file);
           fs.copyFileSync(file, targetPath);
-          logDebug(`Datei gesichert: ${file} -> ${targetPath}`);
+          logDebug(`Datei gesichert: $${file} -> ${targetPath}`);
         }
       } catch (fileErr) {
-        console.error(`⚠️ Konnte Datei nicht sichern: ${file} - ${fileErr.message}`);
+        console.error(`⚠️ Konnte Datei nicht sichern: $${file} - ${fileErr.message}`);
       }
     }
     
@@ -214,7 +214,7 @@ function saveSession() {
       JSON.stringify(metadata, null, 2)
     );
     
-    console.log(`💾 Session gesichert: ${new Date(backupTime).toLocaleTimeString()} - ${modifiedFiles.size} Dateien`);
+    console.log(`💾 Session gesichert: ${new Date(backupTime).toLocaleTimeString()} - $${modifiedFiles.size} Dateien`);
     
     // Aktualisiere letzten Sicherungszeitpunkt und Zähler
     lastSaveTime = backupTime;
@@ -226,7 +226,7 @@ function saveSession() {
     // Setze Liste der geänderten Dateien zurück
     modifiedFiles.clear();
   } catch (err) {
-    console.error(`❌ Fehler beim Sichern der Session: ${err.message}`);
+    console.error(`❌ Fehler beim Sichern der Session: $${err.message}`);
   } finally {
     // Setze Flag zurück
     savingInProgress = false;
@@ -240,8 +240,8 @@ function cleanupOldBackups() {
   try {
     const sessionDir = CONFIG.currentSessionDir;
     fs.readdir(sessionDir, (err, files) => {
-      if (err) {
-        console.error(`❌ Fehler beim Lesen des Session-Verzeichnisses: ${err.message}`);
+      if (err) { 
+        console.error(`❌ Fehler beim Lesen des Session-Verzeichnisses: $${err.message}`);
         return;
       }
       
@@ -249,27 +249,27 @@ function cleanupOldBackups() {
       const backupDirs = files
         .filter(file => file.startsWith('backup-'))
         .map(file => ({
-          name: file,
+          name: file),
           path: path.join(sessionDir, file),
           time: parseInt(file.split('-')[1])
         }))
         .sort((a, b) => b.time - a.time); // Neueste zuerst
       
       // Lösche ältere Backups, wenn zu viele existieren
-      if (backupDirs.length > CONFIG.maxBackups) {
+      if (backupDirs.length > CONFIG.maxBackups) { 
         const dirsToDelete = backupDirs.slice(CONFIG.maxBackups);
         dirsToDelete.forEach(dir => {
           try {
             deleteFolderRecursive(dir.path);
-            logDebug(`Alte Sicherung gelöscht: ${dir.name}`);
+            logDebug(`Alte Sicherung gelöscht: $${dir.name}`);
           } catch (delErr) {
-            console.error(`❌ Konnte alte Sicherung nicht löschen: ${dir.path} - ${delErr.message}`);
+            console.error(`❌ Konnte alte Sicherung nicht löschen: $${dir.path} - ${delErr.message}`);
           }
         });
       }
     });
   } catch (err) {
-    console.error(`❌ Fehler beim Aufräumen alter Sicherungen: ${err.message}`);
+    console.error(`❌ Fehler beim Aufräumen alter Sicherungen: $${err.message}`);
   }
 }
 
@@ -277,13 +277,13 @@ function cleanupOldBackups() {
  * Löscht ein Verzeichnis rekursiv
  */
 function deleteFolderRecursive(folderPath) {
-  if (fs.existsSync(folderPath)) {
+  if (fs.existsSync(folderPath)) { 
     fs.readdirSync(folderPath).forEach((file) => {
       const curPath = path.join(folderPath, file);
-      if (fs.lstatSync(curPath).isDirectory()) {
+      if (fs.lstatSync(curPath).isDirectory()) { 
         // Rekursiver Aufruf für Unterverzeichnisse
         deleteFolderRecursive(curPath);
-      } else {
+      } else { 
         // Lösche Datei
         fs.unlinkSync(curPath);
       }
@@ -297,8 +297,8 @@ function deleteFolderRecursive(folderPath) {
  * Logger für Debug-Ausgaben
  */
 function logDebug(message) {
-  if (CONFIG.debug) {
-    console.log(`[DEBUG] ${message}`);
+  if (CONFIG.debug) { 
+    console.log(`[DEBUG] $${message}`);
   }
 }
 
@@ -317,7 +317,7 @@ module.exports = {
   // Sicherungsverlauf anzeigen
   showBackupHistory: () => {
     const sessionDir = CONFIG.currentSessionDir;
-    if (fs.existsSync(sessionDir)) {
+    if (fs.existsSync(sessionDir)) { 
       const backups = fs.readdirSync(sessionDir)
         .filter(file => file.startsWith('backup-'))
         .map(file => {
@@ -333,9 +333,9 @@ module.exports = {
       
       console.log('\n📋 Sicherungsverlauf:');
       backups.forEach((backup, index) => {
-        console.log(`${index + 1}. ${backup.date} - ${backup.id}`);
+        console.log(`${index + 1}. $${backup.date} - ${backup.id}`);
       });
-    } else {
+    } else { 
       console.log('❌ Keine Sicherungen gefunden');
     }
   },

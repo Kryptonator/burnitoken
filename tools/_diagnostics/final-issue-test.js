@@ -17,7 +17,7 @@ async function runFinalTest() {
     console.error('❌ FINAL TEST FAILED: GITHUB_TOKEN not found after loading .env file.');
     return;
   }
-  if (!process.env.GITHUB_REPO) {
+  if (!process.env.GITHUB_REPO) { 
     console.error('❌ FINAL TEST FAILED: GITHUB_REPO not found after loading .env file.');
     return;
   }

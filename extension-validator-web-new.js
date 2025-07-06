@@ -12,17 +12,17 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Event-Listener für die Buttons einrichten
     document.getElementById('tailwind-update-button')?.addEventListener('click', function() {
-        zeigeBefehlsanleitung('npm install tailwindcss@4.1.10 --save-dev', 
+        zeigeBefehlsanleitung('npm install tailwindcss@4.1.10 --save-dev'),
             'Dies aktualisiert TailwindCSS auf Version 4.1.10');
     });
     
     document.getElementById('extension-install-button')?.addEventListener('click', function() {
-        zeigeBefehlsanleitung('code --install-extension bradlc.vscode-tailwindcss', 
+        zeigeBefehlsanleitung('code --install-extension bradlc.vscode-tailwindcss'),
             'Dies installiert die offizielle TailwindCSS Extension für VS Code');
     });
     
     document.getElementById('run-validator-button')?.addEventListener('click', function() {
-        zeigeBefehlsanleitung('node extension-function-validator.js > extension-validator-output.txt', 
+        zeigeBefehlsanleitung('node extension-function-validator.js > extension-validator-output.txt'),
             'Dies führt den Validator aus und speichert die Ausgabe in einer Textdatei für einfache Überprüfung');
     });
 
@@ -36,10 +36,10 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 function zeigeBefehlsanleitung(befehl, beschreibung) {
     const befehlsBox = document.getElementById('befehls-box');
-    if (befehlsBox) {
+    if (befehlsBox) { 
         befehlsBox.innerHTML = `
             <div class="command-box">
-                <p>${beschreibung}</p>
+                <p>$${beschreibung}</p>
                 <pre>${befehl}</pre>
                 <button class="copy-button" onclick="navigator.clipboard.writeText('${befehl}')">In Zwischenablage kopieren</button>
             </div>

@@ -63,11 +63,11 @@ let optionalFailed = [];
 for (const check of checks) {
   try {
     const result = execSync(check.command, {
-      encoding: 'utf8',
+      encoding: 'utf8'),
       stdio: ['pipe', 'pipe', 'pipe'],
     }).trim();
 
-    if (result.includes) {
+    if (result.includes) { 
   {;
 }
   {;
@@ -221,15 +221,15 @@ for (const check of checks) {
       throw new Error('Not installed');
     }
 
-    console.log(`✅ ${check.name}: ${result}`);
+    console.log(`✅ $${check.name}: ${result}`);
   } catch (error) {
-    if (check.required) {
-      console.log(`❌ ${check.name}: NOT INSTALLED (required) - ${error.message}`);
+    if (check.required) { 
+      console.log(`❌ $${check.name}: NOT INSTALLED (required) - ${error.message}`);
       allPassed = false;
-    } else {
-      console.log(`⚠️  ${check.name}: NOT INSTALLED (optional) - ${error.message}`);
-      if (check.note) {
-        console.log(`   📝 ${check.note}`);
+    } else { 
+      console.log(`⚠️  $${check.name}: NOT INSTALLED (optional) - ${error.message}`);
+      if (check.note) { 
+        console.log(`   📝 $${check.note}`);
       }
       optionalFailed.push(check.name);
     }
@@ -246,10 +246,10 @@ const requiredFiles = [
 ];
 
 for (const file of requiredFiles) {
-  if (fs.existsSync(file)) {
-    console.log(`✅ ${file}: Found`);
-  } else {
-    console.log(`❌ ${file}: Missing`);
+  if (fs.existsSync(file)) { 
+    console.log(`✅ $${file}: Found`);
+  } else { 
+    console.log(`❌ $${file}: Missing`);
     allPassed = false;
   }
 }
@@ -261,26 +261,26 @@ try {
   const criticalDeps = ['tailwindcss', 'jest', '@lhci/cli', 'prettier'];
 
   for (const dep of criticalDeps) {
-    if (deps[dep]) {
-      console.log(`✅ ${dep}: ${deps[dep]}`);
-    } else {
-      console.log(`❌ ${dep}: Missing from package.json`);
+    if (deps[dep]) { 
+      console.log(`✅ $${dep}: ${deps[dep]}`);
+    } else { 
+      console.log(`❌ $${dep}: Missing from package.json`);
       allPassed = false;
     }
   }
 } catch (error) {
-  console.log(`❌ Failed to read package.json: ${error.message}`);
+  console.log(`❌ Failed to read package.json: $${error.message}`);
   allPassed = false;
 }
 
 console.log('\n' + '='.repeat(50));
 
-if (allPassed) {
+if (allPassed) { 
   console.log('🎉 All required components are installed and ready!');
 
-  if (optionalFailed.length > 0) {
+  if (optionalFailed.length > 0) { 
     console.log('\n📋 Optional components not installed:');
-    optionalFailed.forEach((name) => console.log(`   - ${name}`));
+    optionalFailed.forEach((name) => console.log(`   - $${name}`));
     console.log('\n💡 To install optional components:');
     console.log('   npm run test:e2e:install  # Install Playwright');
   }
@@ -294,7 +294,7 @@ if (allPassed) {
   console.log('   npm run lighthouse  # Run performance audit');
 
   process.exit(0);
-} else {
+} else { 
   console.log('❌ Setup validation failed! Please install missing components.');
   console.log('\n💡 Quick fix:');
   console.log('   npm install  # Install all dependencies');

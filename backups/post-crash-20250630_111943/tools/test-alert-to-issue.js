@@ -18,5 +18,5 @@ const testError = {
 sendAlert(testError);
 
 console.log(
-  '✅ Test-Alert wurde ausgelöst. Überprüfen Sie die Konsolenausgabe und Ihr GitHub Repository.',
+  '✅ Test-Alert wurde ausgelöst. Überprüfen Sie die Konsolenausgabe und Ihr GitHub Repository.'),
 );

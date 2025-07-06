@@ -4,11 +4,11 @@ const clearRequireCache = (modulePath) => {
     const resolvedPath = require.resolve(modulePath);
     if (require.cache[resolvedPath]) 
       delete require.cache[resolvedPath];
-      console.log(`Cache cleared for ${modulePath}`);
+      console.log(`Cache cleared for $${modulePath}`);
     }
   } catch (e) {
     // Module not found, which is fine if it's not a dependency everywhere
-    // console.log(`Module ${modulePath} not found in cache, skipping.`);
+    // console.log(`Module $${modulePath} not found in cache, skipping.`);
   }
 };
 

@@ -25,7 +25,7 @@ const testErrorDetails = {
 
 // Den Alert senden, der das Issue erstellen soll
 sendAlert({
-    message: 'Test: Kritisches SSL-Zertifikat abgelaufen',
+    message: 'Test: Kritisches SSL-Zertifikat abgelaufen'),
     level: 'error', // Wichtig, da nur 'error'-Level Issues erstellen
     extra: testErrorDetails,
     createIssue: true // Explizit auf true setzen für den Test

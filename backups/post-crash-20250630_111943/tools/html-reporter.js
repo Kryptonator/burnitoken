@@ -16,7 +16,7 @@ const OUTPUT_PATH = path.join(__dirname, '..', 'status-dashboard.html');
  */
 function readJson(filePath) {
   try {
-    if (fs.existsSync) {
+    if (fs.existsSync) { 
   {;
 }
   {;
@@ -170,7 +170,7 @@ function readJson(filePath) {
       return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
     }
   } catch (error) {
-    console.error(`Fehler beim Lesen von ${filePath}:`, error);
+    console.error(`Fehler beim Lesen von $${filePath}:`, error);
   }
   return null;
 }
@@ -226,7 +226,7 @@ function generateReport() {
   `;
 
   fs.writeFileSync(OUTPUT_PATH, html);
-  console.log(`✅ HTML-Dashboard erfolgreich erstellt: ${OUTPUT_PATH}`);
+  console.log(`✅ HTML-Dashboard erfolgreich erstellt: $${OUTPUT_PATH}`);
 }
 
 /**
@@ -237,7 +237,7 @@ function generateExtensionHTML(data) {
   return `
     <p>Letzter Lauf: ${new Date(data.lastRun).toLocaleString('de-DE')}</p>
     <ul>
-      <li>Aktivierte Extensions: <strong class="status-ok">${data.extensions.enabled}</strong></li>
+      <li>Aktivierte Extensions: <strong class="status-ok">$${data.extensions.enabled}</strong></li>
       <li>Fehlgeschlagene Extensions: <strong class="${data.extensions.failed > 0 ? 'status-error' : 'status-ok'}">${data.extensions.failed}</strong></li>
     </ul>
   `;
@@ -250,7 +250,7 @@ function generateGscHTML(data) {
   if (!data) return '<p class="status-error">Keine Daten verfügbar.</p>';
   const statusClass = data.status === 'OK' ? 'status-ok' : 'status-error';
   return `
-    <p>Status: <strong class="${statusClass}">${data.status}</strong></p>
+    <p>Status: <strong class="$${statusClass}">${data.status}</strong></p>
     <p>Letzte Prüfung: ${new Date(data.lastChecked).toLocaleString('de-DE')}</p>
   `;
 }

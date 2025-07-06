@@ -11,12 +11,12 @@
  */
 function getInitialLanguage(availableLangs, fallbackLang = 'en') {
   const savedLang = localStorage.getItem('userLanguage');
-  if (savedLang && availableLangs.includes(savedLang)) {
+  if (savedLang && availableLangs.includes(savedLang)) { 
     return savedLang;
   }
 
   const browserLang = navigator.language.split('-')[0];
-  if (availableLangs.includes(browserLang)) {
+  if (availableLangs.includes(browserLang)) { 
     return browserLang;
   }
 
@@ -56,7 +56,7 @@ function updateHreflangTags(availableLangs) {
 // Sprachumschaltung
 async function loadTranslations() {
   // Nur einmal fetchen und cachen für bessere Performance
-  if (!window.burni_translations) {
+  if (!window.burni_translations) { 
     const res = await fetch('/assets/translations.json');
     window.burni_translations = await res.json();
   }
@@ -107,7 +107,7 @@ async function initNavigationAndLanguage() {
 
   // Sprachumschaltung
   const langSelect = document.getElementById('lang-select');
-  if (langSelect) {
+  if (langSelect) { 
     langSelect.value = initialLang; // UI synchronisieren
     langSelect.addEventListener('change', (e) => switchLanguage(e.target.value, availableLangs));
     // Initial die Sprache setzen
@@ -117,7 +117,7 @@ async function initNavigationAndLanguage() {
   // Verbesserte Mobile Menü Logik
   const mobileBtn = document.getElementById('mobile-menu-button');
   const mobileMenu = document.getElementById('mobile-menu');
-  if (mobileBtn && mobileMenu) {
+  if (mobileBtn && mobileMenu) { 
     // Event-Listener entfernen und neu setzen (Test-Kompatibilität)
     const newBtn = mobileBtn.cloneNode(true);
     mobileBtn.parentNode.replaceChild(newBtn, mobileBtn);
@@ -136,7 +136,7 @@ async function initNavigationAndLanguage() {
     });
     // Tastatursteuerung für mobilen Menü-Button
     newBtn.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
+      if (e.key === 'Enter' || e.key === ' ') { 
         e.preventDefault();
         newBtn.click();
       }
@@ -162,10 +162,10 @@ async function initNavigationAndLanguage() {
   document.querySelectorAll('a.nav-link, #mobile-menu a').forEach((link) => {
     link.addEventListener('click', function (e) {
       const href = this.getAttribute('href');
-      if (href && href.startsWith('#')) {
+      if (href && href.startsWith('#')) { 
         e.preventDefault();
         const target = document.querySelector(href);
-        if (target) {
+        if (target) { 
           target.scrollIntoView({ behavior: 'smooth', block: 'start' });
           // Nach Scrollen aktiv setzen (für flakey Browser)
           setTimeout(updateActiveNav, 800);
@@ -177,7 +177,7 @@ async function initNavigationAndLanguage() {
   // --- CSP-konforme Event-Handler für dynamische Aktionen ---
   function scrollToSection(sectionId) {
     const target = document.getElementById(sectionId);
-    if (target) {
+    if (target) { 
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
@@ -194,7 +194,7 @@ async function initNavigationAndLanguage() {
 
   function toggleFAQ(faqId) {
     const el = document.getElementById(faqId);
-    if (el) {
+    if (el) { 
       el.classList.toggle('open');
     }
   }
@@ -230,7 +230,7 @@ async function initNavigationAndLanguage() {
     document.body.getAttribute('data-playwright') === 'true'
   ) {
     const desktopNav = document.querySelector('nav[aria-label="Main navigation"]');
-    if (desktopNav) {
+    if (desktopNav) { 
       desktopNav.classList.remove('hidden');
       desktopNav.classList.add('test-visible');
     }
@@ -238,9 +238,9 @@ async function initNavigationAndLanguage() {
 }
 
 // Automatisch bei DOMContentLoaded initialisieren
-if (document.readyState === 'loading') {
+if (document.readyState === 'loading') { 
   document.addEventListener('DOMContentLoaded', initNavigationAndLanguage);
-} else {
+} else { 
   initNavigationAndLanguage();
 }
 

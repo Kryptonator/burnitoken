@@ -13,7 +13,7 @@ window.AnalyticsDashboard = {
 
 // Auto-initialize
 document.addEventListener('DOMContentLoaded', function () {
-  if (window.AnalyticsDashboard) {
+  if (window.AnalyticsDashboard) { 
     window.AnalyticsDashboard.init();
   }
 });

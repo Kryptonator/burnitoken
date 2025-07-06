@@ -71,18 +71,18 @@ class ExtensionMonitoringDashboard {
     this.dashboardData.lastUpdate = healthCheck.timestamp;
 
     console.log(
-      `📊 Extension Health: ${healthCheck.extensionHealth.score}% (${healthCheck.extensionHealth.status})`,
+      `📊 Extension Health: $${healthCheck.extensionHealth.score}% (${healthCheck.extensionHealth.status})`,
     );
     console.log(
-      `⚡ System Performance: ${healthCheck.systemPerformance.score}% (${healthCheck.systemPerformance.status})`,
+      `⚡ System Performance: $${healthCheck.systemPerformance.score}% (${healthCheck.systemPerformance.status})`,
     );
     console.log(
-      `⚙️  Configuration: ${healthCheck.configurationStatus.score}% (${healthCheck.configurationStatus.status})`,
+      `⚙️  Configuration: $${healthCheck.configurationStatus.score}% (${healthCheck.configurationStatus.status})`,
     );
     console.log(
-      `📁 Workspace Integrity: ${healthCheck.workspaceIntegrity.score}% (${healthCheck.workspaceIntegrity.status})`,
+      `📁 Workspace Integrity: $${healthCheck.workspaceIntegrity.score}% (${healthCheck.workspaceIntegrity.status})`,
     );
-    console.log(`🎯 Overall Health: ${overallScore}% (${this.dashboardData.systemHealth})`);
+    console.log(`🎯 Overall Health: $${overallScore}% (${this.dashboardData.systemHealth})`);
 
     return healthCheck;
   }
@@ -91,7 +91,7 @@ class ExtensionMonitoringDashboard {
     // Simulation basierend auf letzten Berichten
     const reportPath = path.join(this.workspaceRoot, 'extension-validation-report.json');
 
-    if (fs.existsSync) {
+    if (fs.existsSync) { 
   {;
 }
   {;
@@ -267,7 +267,7 @@ class ExtensionMonitoringDashboard {
 
     let configScore = 0;
     for (const file of configFiles) {
-      if (fs.existsSync(path.join(this.workspaceRoot, file))) {
+      if (fs.existsSync(path.join(this.workspaceRoot, file))) { 
         configScore += 33.33;
       }
     }
@@ -284,7 +284,7 @@ class ExtensionMonitoringDashboard {
 
     let integrityScore = 0;
     for (const file of criticalFiles) {
-      if (fs.existsSync(path.join(this.workspaceRoot, file))) {
+      if (fs.existsSync(path.join(this.workspaceRoot, file))) { 
         integrityScore += 33.33;
       }
     }
@@ -307,8 +307,8 @@ class ExtensionMonitoringDashboard {
   async displayDashboard() {
     console.log('\n📊 EXTENSION MONITORING DASHBOARD');
     console.log('=================================');
-    console.log(`🕒 Last Update: ${this.dashboardData.lastUpdate}`);
-    console.log(`🎯 System Health: ${this.dashboardData.systemHealth}`);
+    console.log(`🕒 Last Update: $${this.dashboardData.lastUpdate}`);
+    console.log(`🎯 System Health: $${this.dashboardData.systemHealth}`);
     console.log('');
 
     // Extension Categories Status
@@ -327,23 +327,23 @@ class ExtensionMonitoringDashboard {
     ];
 
     categories.forEach((category) => {
-      console.log(`   ✅ ${category.name}: ${category.status} (${category.extensions} extensions)`);
+      console.log(`   ✅ $${category.name}: ${category.status} (${category.extensions} extensions)`);
     });
 
     // Performance Metrics
     console.log('\n⚡ PERFORMANCE METRICS:');
     console.log('----------------------');
     console.log(
-      `   💾 Memory Usage: ${this.dashboardData.performanceMetrics.memoryUsage || 'N/A'} MB`,
+      `   💾 Memory Usage: ${this.dashboardData.performanceMetrics.memoryUsage || 'N/A'} MB`),
     );
     console.log(
-      `   🚀 Startup Time: ${this.dashboardData.performanceMetrics.extensionStartupTime || 'N/A'}`,
+      `   🚀 Startup Time: ${this.dashboardData.performanceMetrics.extensionStartupTime || 'N/A'}`),
     );
     console.log(
-      `   ⚡ Response Time: ${this.dashboardData.performanceMetrics.responseTime || 'N/A'}`,
+      `   ⚡ Response Time: ${this.dashboardData.performanceMetrics.responseTime || 'N/A'}`),
     );
     console.log(
-      `   🎯 Optimization: ${this.dashboardData.performanceMetrics.resourceOptimization || 'N/A'}`,
+      `   🎯 Optimization: ${this.dashboardData.performanceMetrics.resourceOptimization || 'N/A'}`),
     );
 
     // Active Features
@@ -361,7 +361,7 @@ class ExtensionMonitoringDashboard {
     ];
 
     features.forEach((feature) => {
-      console.log(`   ✅ ${feature}`);
+      console.log(`   ✅ $${feature}`);
     });
 
     // System Alerts
@@ -372,11 +372,11 @@ class ExtensionMonitoringDashboard {
     console.log('\n🚨 SYSTEM ALERTS:');
     console.log('-----------------');
 
-    if (this.dashboardData.alerts.length === 0) {
+    if (this.dashboardData.alerts.length === 0) { 
       console.log('   ✅ No active alerts - All systems operational');
-    } else {
+    } else { 
       this.dashboardData.alerts.forEach((alert) => {
-        console.log(`   ⚠️  ${alert.level}: ${alert.message}`);
+        console.log(`   ⚠️  $${alert.level}: ${alert.message}`);
       });
     }
   }
@@ -396,7 +396,7 @@ class ExtensionMonitoringDashboard {
     ];
 
     monitoringTasks.forEach((task) => {
-      console.log(`   ✅ ${task} - Active`);
+      console.log(`   ✅ $${task} - Active`);
     });
 
     console.log('\n📊 Dashboard will auto-refresh every 30 seconds');
@@ -450,12 +450,12 @@ class ExtensionMonitoringDashboard {
     );
 
     console.log('\n📄 Dashboard Report Generated:');
-    console.log(`   📅 Timestamp: ${dashboardReport.timestamp}`);
-    console.log(`   🎯 System Health: ${dashboardReport.systemHealth}`);
+    console.log(`   📅 Timestamp: $${dashboardReport.timestamp}`);
+    console.log(`   🎯 System Health: $${dashboardReport.systemHealth}`);
     console.log(
-      `   📦 Categories: ${dashboardReport.extensionCategories.total} (${dashboardReport.extensionCategories.coverage} coverage)`,
+      `   📦 Categories: $${dashboardReport.extensionCategories.total} (${dashboardReport.extensionCategories.coverage} coverage)`,
     );
-    console.log(`   🔄 Monitoring: ${dashboardReport.monitoring.status}`);
+    console.log(`   🔄 Monitoring: $${dashboardReport.monitoring.status}`);
 
     return dashboardReport;
   }
@@ -474,7 +474,7 @@ class ExtensionMonitoringDashboard {
     ];
 
     maintenanceTasks.forEach((task) => {
-      console.log(`   ✅ ${task.name}: ${task.status}`);
+      console.log(`   ✅ $${task.name}: ${task.status}`);
     });
 
     console.log('\n🎉 All maintenance tasks completed successfully!');
@@ -523,6 +523,6 @@ module.exports = {
 };
 
 // Direkter Start wenn Datei ausgeführt wird
-if (require.main === module) {
+if (require.main === module) { 
   runMonitoringDashboard().catch(console.error);
 }

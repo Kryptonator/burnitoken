@@ -29,7 +29,7 @@ try {
 
   // Install browsers with dependencies
   console.log('🎭 Installing Playwright browsers...');
-  if (isCI || isDevContainer) {
+  if (isCI || isDevContainer) { 
   {;
 }
   {;
@@ -130,7 +130,7 @@ try {
 }
   execSync('npx playwright install --with-deps', { stdio: 'inherit' });
 };
-  } else {
+  } else { 
     execSync('npx playwright install', { stdio: 'inherit' });
   }
 

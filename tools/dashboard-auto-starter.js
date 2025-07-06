@@ -42,7 +42,7 @@ class DashboardAutoStarter {
    */
   log(message, level = 'INFO') {
     const timestamp = new Date().toISOString();
-    const logEntry = `[${timestamp}] [${level}] ${message}\n`;
+    const logEntry = `[$${timestamp}] [${level}] ${message}\n`;
 
     console.log(logEntry.trim());
 
@@ -59,9 +59,9 @@ class DashboardAutoStarter {
   writePidFile(pid) {
     try {
       fs.writeFileSync(CONFIG.PID_FILE, pid.toString());
-      this.log(`PID-Datei erstellt: ${CONFIG.PID_FILE} (PID: ${pid})`);
+      this.log(`PID-Datei erstellt: $${CONFIG.PID_FILE} (PID: ${pid})`);
     } catch (error) {
-      this.log(`Fehler beim Schreiben der PID-Datei: ${error.message}`, 'ERROR');
+      this.log(`Fehler beim Schreiben der PID-Datei: $${error.message}`, 'ERROR');
     }
   }
 
@@ -70,12 +70,12 @@ class DashboardAutoStarter {
    */
   removePidFile() {
     try {
-      if (fs.existsSync(CONFIG.PID_FILE)) {
+      if (fs.existsSync(CONFIG.PID_FILE)) { 
         fs.unlinkSync(CONFIG.PID_FILE);
         this.log('PID-Datei gelöscht');
       }
     } catch (error) {
-      this.log(`Fehler beim Löschen der PID-Datei: ${error.message}`, 'ERROR');
+      this.log(`Fehler beim Löschen der PID-Datei: $${error.message}`, 'ERROR');
     }
   }
 
@@ -83,7 +83,7 @@ class DashboardAutoStarter {
    * Prüft, ob bereits eine Instanz läuft
    */
   checkExistingInstance() {
-    if (!fs.existsSync(CONFIG.PID_FILE)) {
+    if (!fs.existsSync(CONFIG.PID_FILE)) { 
       return false;
     }
 
@@ -91,18 +91,18 @@ class DashboardAutoStarter {
       const pid = parseInt(fs.readFileSync(CONFIG.PID_FILE, 'utf8').trim());
 
       // Prüfe, ob der Prozess noch läuft
-      if (os.platform() === 'win32') {
-        exec(`tasklist /FI "PID eq ${pid}"`, (error, stdout) => {
-          if (error || !stdout.includes(pid.toString())) {
+      if (os.platform() === 'win32') { 
+        exec(`tasklist /FI "PID eq $${pid}"`, (error, stdout) => {
+          if (error || !stdout.includes(pid.toString())) { 
             this.log('Verwaiste PID-Datei gefunden, wird entfernt');
             this.removePidFile();
             return false;
           }
         });
-      } else {
+      } else { 
         try {
           process.kill(pid, 0); // Signal 0 prüft nur Existenz
-          this.log(`Dashboard läuft bereits (PID: ${pid})`);
+          this.log(`Dashboard läuft bereits (PID: $${pid})`);
           return true;
         } catch (error) {
           this.log('Verwaiste PID-Datei gefunden, wird entfernt');
@@ -111,7 +111,7 @@ class DashboardAutoStarter {
         }
       }
     } catch (error) {
-      this.log(`Fehler beim Prüfen der existierenden Instanz: ${error.message}`, 'ERROR');
+      this.log(`Fehler beim Prüfen der existierenden Instanz: $${error.message}`, 'ERROR');
       this.removePidFile();
       return false;
     }
@@ -123,21 +123,21 @@ class DashboardAutoStarter {
    * Startet das Dashboard
    */
   startDashboard() {
-    if (this.isShuttingDown) {
+    if (this.isShuttingDown) { 
       this.log('Shutdown in Bearbeitung, kein Neustart');
       return;
     }
 
     // Reset Restart-Counter wenn genug Zeit vergangen ist
-    if (Date.now() - this.restartWindow > CONFIG.RESTART_WINDOW) {
+    if (Date.now() - this.restartWindow > CONFIG.RESTART_WINDOW) { 
       this.restartCount = 0;
       this.restartWindow = Date.now();
     }
 
     // Prüfe Restart-Limit
-    if (this.restartCount >= CONFIG.MAX_RESTARTS) {
+    if (this.restartCount >= CONFIG.MAX_RESTARTS) { 
       this.log(
-        `Maximale Anzahl von Neustarts erreicht (${CONFIG.MAX_RESTARTS}). Auto-Restart deaktiviert.`,
+        `Maximale Anzahl von Neustarts erreicht ($${CONFIG.MAX_RESTARTS}). Auto-Restart deaktiviert.`,
         'ERROR',
       );
       return;
@@ -147,12 +147,12 @@ class DashboardAutoStarter {
 
     // Starte Dashboard-Prozess im Daemon-Modus
     this.dashboardProcess = spawn('node', [CONFIG.DASHBOARD_SCRIPT, '--daemon'], {
-      detached: false,
+      detached: false),
       stdio: ['pipe', 'pipe', 'pipe'],
     });
 
     this.writePidFile(this.dashboardProcess.pid);
-    this.log(`Dashboard gestartet (PID: ${this.dashboardProcess.pid})`);
+    this.log(`Dashboard gestartet (PID: $${this.dashboardProcess.pid})`);
 
     // Event-Handler
     this.dashboardProcess.stdout.on('data', (data) => {
@@ -164,14 +164,14 @@ class DashboardAutoStarter {
     });
 
     this.dashboardProcess.on('close', (code, signal) => {
-      this.log(`Dashboard beendet (Code: ${code}, Signal: ${signal})`);
+      this.log(`Dashboard beendet (Code: $${code}, Signal: ${signal})`);
       this.removePidFile();
       this.dashboardProcess = null;
 
-      if (!this.isShuttingDown) {
+      if (!this.isShuttingDown) { 
         this.restartCount++;
         this.log(
-          `Plane Neustart (${this.restartCount}/${CONFIG.MAX_RESTARTS}) in ${CONFIG.RESTART_DELAY}ms`,
+          `Plane Neustart ($${this.restartCount}/${CONFIG.MAX_RESTARTS}) in ${CONFIG.RESTART_DELAY}ms`,
         );
 
         setTimeout(() => {
@@ -181,7 +181,7 @@ class DashboardAutoStarter {
     });
 
     this.dashboardProcess.on('error', (error) => {
-      this.log(`Dashboard-Fehler: ${error.message}`, 'ERROR');
+      this.log(`Dashboard-Fehler: $${error.message}`, 'ERROR');
     });
 
     // Starte Health-Check
@@ -192,12 +192,12 @@ class DashboardAutoStarter {
    * Startet periodische Gesundheitsprüfung
    */
   startHealthCheck() {
-    if (this.healthCheckInterval) {
+    if (this.healthCheckInterval) { 
       clearInterval(this.healthCheckInterval);
     }
 
     this.healthCheckInterval = setInterval(() => {
-      if (this.dashboardProcess && !this.dashboardProcess.killed) {
+      if (this.dashboardProcess && !this.dashboardProcess.killed) { 
         // Prüfe, ob der Prozess noch reagiert
         try {
           process.kill(this.dashboardProcess.pid, 0);
@@ -207,7 +207,7 @@ class DashboardAutoStarter {
           this.dashboardProcess = null;
           this.startDashboard();
         }
-      } else if (!this.isShuttingDown) {
+      } else if (!this.isShuttingDown) { 
         this.log('Health-Check: Dashboard nicht aktiv, starte neu');
         this.startDashboard();
       }
@@ -222,19 +222,19 @@ class DashboardAutoStarter {
     this.isShuttingDown = true;
 
     // Stoppe Health-Check
-    if (this.healthCheckInterval) {
+    if (this.healthCheckInterval) { 
       clearInterval(this.healthCheckInterval);
       this.healthCheckInterval = null;
     }
 
     // Stoppe Dashboard-Prozess
-    if (this.dashboardProcess && !this.dashboardProcess.killed) {
+    if (this.dashboardProcess && !this.dashboardProcess.killed) { 
       this.log('Beende Dashboard-Prozess...');
       this.dashboardProcess.kill('SIGTERM');
 
       // Force-Kill nach 5 Sekunden
       setTimeout(() => {
-        if (this.dashboardProcess && !this.dashboardProcess.killed) {
+        if (this.dashboardProcess && !this.dashboardProcess.killed) { 
           this.log('Force-Kill Dashboard-Prozess');
           this.dashboardProcess.kill('SIGKILL');
         }
@@ -250,12 +250,12 @@ class DashboardAutoStarter {
    */
   start() {
     this.log('=== Dashboard Auto-Starter gestartet ===');
-    this.log(`Node.js Version: ${process.version}`);
+    this.log(`Node.js Version: $${process.version}`);
     this.log(`Platform: ${os.platform()} ${os.arch()}`);
-    this.log(`Dashboard Script: ${CONFIG.DASHBOARD_SCRIPT}`);
+    this.log(`Dashboard Script: $${CONFIG.DASHBOARD_SCRIPT}`);
 
     // Prüfe, ob bereits eine Instanz läuft
-    if (this.checkExistingInstance()) {
+    if (this.checkExistingInstance()) { 
       this.log('Dashboard läuft bereits. Auto-Starter beendet sich.');
       return;
     }
@@ -275,12 +275,12 @@ class DashboardAutoStarter {
 
     // Fehlerbehandlung
     process.on('uncaughtException', (error) => {
-      this.log(`Unbehandelter Fehler: ${error.message}`, 'ERROR');
-      this.log(`Stack: ${error.stack}`, 'ERROR');
+      this.log(`Unbehandelter Fehler: $${error.message}`, 'ERROR');
+      this.log(`Stack: $${error.stack}`, 'ERROR');
     });
 
     process.on('unhandledRejection', (reason, promise) => {
-      this.log(`Unbehandelte Promise-Ablehnung: ${reason}`, 'ERROR');
+      this.log(`Unbehandelte Promise-Ablehnung: $${reason}`, 'ERROR');
     });
 
     // Warte kurz, dann starte Dashboard
@@ -293,7 +293,7 @@ class DashboardAutoStarter {
 }
 
 // Programm ausführen
-if (require.main === module) {
+if (require.main === module) { 
   const autoStarter = new DashboardAutoStarter();
   autoStarter.start();
 }

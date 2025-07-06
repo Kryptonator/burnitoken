@@ -24,11 +24,11 @@ const CONFIG = {
  */
 function log(message) {
   const timestamp = new Date().toISOString();
-  const logEntry = `[${timestamp}] ${message}\n`;
+  const logEntry = `[$${timestamp}] ${message}\n`;
   console.log(message);
 
   try {
-    if (!fs.existsSync(path.dirname(CONFIG.RECOVERY_LOG))) {
+    if (!fs.existsSync(path.dirname(CONFIG.RECOVERY_LOG))) { 
       fs.mkdirSync(path.dirname(CONFIG.RECOVERY_LOG), { recursive: true });
     }
     fs.appendFileSync(CONFIG.RECOVERY_LOG, logEntry);
@@ -44,7 +44,7 @@ function killVSCodeProcesses() {
   log('🚨 NOTFALL: Beende alle VS Code-Prozesse...');
 
   try {
-    if (os.platform() === 'win32') {
+    if (os.platform() === 'win32') { 
       // Windows: Alle Code.exe Prozesse beenden
       try {
         execSync('taskkill /F /IM Code.exe', { stdio: 'pipe' });
@@ -60,7 +60,7 @@ function killVSCodeProcesses() {
       } catch (e) {
         log('⚠️ Keine VS Code Extension-Prozesse gefunden');
       }
-    } else {
+    } else { 
       // Unix/Linux/Mac
       try {
         execSync('pkill -f "Visual Studio Code"', { stdio: 'pipe' });
@@ -77,7 +77,7 @@ function killVSCodeProcesses() {
       // Blocking wait
     }
   } catch (error) {
-    log(`❌ Fehler beim Beenden der VS Code-Prozesse: ${error.message}`);
+    log(`❌ Fehler beim Beenden der VS Code-Prozesse: $${error.message}`);
   }
 }
 
@@ -88,12 +88,12 @@ function createEmergencyBackup() {
   log('💾 Erstelle Notfall-Backup...');
 
   try {
-    if (!fs.existsSync(CONFIG.BACKUP_DIR)) {
+    if (!fs.existsSync(CONFIG.BACKUP_DIR)) { 
       fs.mkdirSync(CONFIG.BACKUP_DIR, { recursive: true });
     }
 
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const backupFolder = path.join(CONFIG.BACKUP_DIR, `backup-${timestamp}`);
+    const backupFolder = path.join(CONFIG.BACKUP_DIR, `backup-$${timestamp}`);
     fs.mkdirSync(backupFolder, { recursive: true });
 
     // Wichtige Dateien/Ordner kopieren
@@ -113,26 +113,26 @@ function createEmergencyBackup() {
       const sourcePath = path.join(rootDir, importantPath);
       const targetPath = path.join(backupFolder, importantPath);
 
-      if (fs.existsSync(sourcePath)) {
+      if (fs.existsSync(sourcePath)) { 
         try {
           // Verzeichnis oder Datei kopieren
-          if (fs.statSync(sourcePath).isDirectory()) {
+          if (fs.statSync(sourcePath).isDirectory()) { 
             copyDirRecursive(sourcePath, targetPath);
-          } else {
+          } else { 
             fs.mkdirSync(path.dirname(targetPath), { recursive: true });
             fs.copyFileSync(sourcePath, targetPath);
           }
-          log(`✅ Backup erstellt: ${importantPath}`);
+          log(`✅ Backup erstellt: $${importantPath}`);
         } catch (e) {
-          log(`⚠️ Backup fehlgeschlagen für: ${importantPath} - ${e.message}`);
+          log(`⚠️ Backup fehlgeschlagen für: $${importantPath} - ${e.message}`);
         }
       }
     }
 
-    log(`✅ Notfall-Backup erstellt in: ${backupFolder}`);
+    log(`✅ Notfall-Backup erstellt in: $${backupFolder}`);
     return backupFolder;
   } catch (error) {
-    log(`❌ Fehler beim Erstellen des Notfall-Backups: ${error.message}`);
+    log(`❌ Fehler beim Erstellen des Notfall-Backups: $${error.message}`);
     return null;
   }
 }
@@ -141,7 +141,7 @@ function createEmergencyBackup() {
  * Hilfsfunktion: Verzeichnis rekursiv kopieren
  */
 function copyDirRecursive(src, dest) {
-  if (!fs.existsSync(dest)) {
+  if (!fs.existsSync(dest)) { 
     fs.mkdirSync(dest, { recursive: true });
   }
 
@@ -151,9 +151,9 @@ function copyDirRecursive(src, dest) {
     const srcPath = path.join(src, entry.name);
     const destPath = path.join(dest, entry.name);
 
-    if (entry.isDirectory()) {
+    if (entry.isDirectory()) { 
       copyDirRecursive(srcPath, destPath);
-    } else {
+    } else { 
       fs.copyFileSync(srcPath, destPath);
     }
   }
@@ -171,16 +171,16 @@ function handleMassiveChanges() {
 
     // Aktuellen Branch ermitteln
     const currentBranch = execSync('git branch --show-current', { encoding: 'utf8' }).trim();
-    log(`📍 Aktueller Branch: ${currentBranch}`);
+    log(`📍 Aktueller Branch: $${currentBranch}`);
 
     // Git-Status abrufen
     const statusOutput = execSync('git status --porcelain', { encoding: 'utf8' });
     const changes = statusOutput.split('\n').filter((line) => line.trim().length > 0);
 
-    log(`📊 Gefunden: ${changes.length} offene Changes`);
+    log(`📊 Gefunden: $${changes.length} offene Changes`);
 
     // Immer committen und pushen für sauberes Repository
-    if (changes.length > 0) {
+    if (changes.length > 0) { 
       log(`� Starte professionelles Git-Management...`);
 
       // Alle Changes stagen
@@ -188,21 +188,21 @@ function handleMassiveChanges() {
       log('✅ Alle Changes gestaged');
 
       // Commit mit aussagekräftiger Nachricht
-      const commitMessage = `[EMERGENCY-RECOVERY] Auto-commit von ${changes.length} Changes - Stabilisierung nach VS Code Hänger - ${new Date().toISOString()}`;
-      execSync(`git commit -m "${commitMessage}"`, { encoding: 'utf8' });
+      const commitMessage = `[EMERGENCY-RECOVERY] Auto-commit von $${changes.length} Changes - Stabilisierung nach VS Code Hänger - ${new Date().toISOString()}`;
+      execSync(`git commit -m "$${commitMessage}"`, { encoding: 'utf8' });
       log('✅ Emergency-Commit erstellt');
 
       // Push zum aktuellen Branch
       try {
-        execSync(`git push origin ${currentBranch}`, { encoding: 'utf8' });
-        log(`✅ Changes zu ${currentBranch} gepusht`);
+        execSync(`git push origin $${currentBranch}`, { encoding: 'utf8' });
+        log(`✅ Changes zu $${currentBranch} gepusht`);
       } catch (e) {
-        log(`⚠️ Push zu ${currentBranch} fehlgeschlagen: ${e.message} - Commit bleibt lokal`);
+        log(`⚠️ Push zu $${currentBranch} fehlgeschlagen: ${e.message} - Commit bleibt lokal`);
       }
     }
 
     // Branch-Management: Zu main wechseln für Stabilität
-    if (currentBranch !== 'main' && currentBranch !== 'master') {
+    if (currentBranch !== 'main' && currentBranch !== 'master') { 
       log('🔄 Wechsle zu main Branch für maximale Stabilität...');
 
       try {
@@ -218,7 +218,7 @@ function handleMassiveChanges() {
             execSync('git pull origin main', { encoding: 'utf8' });
             log('✅ main Branch aktualisiert');
           } catch (e) {
-            log(`⚠️ main Branch Update fehlgeschlagen: ${e.message}`);
+            log(`⚠️ main Branch Update fehlgeschlagen: $${e.message}`);
           }
         } catch (e) {
           // main existiert nicht, prüfe master
@@ -233,7 +233,7 @@ function handleMassiveChanges() {
               execSync('git pull origin master', { encoding: 'utf8' });
               log('✅ master Branch aktualisiert');
             } catch (e) {
-              log(`⚠️ master Branch Update fehlgeschlagen: ${e.message}`);
+              log(`⚠️ master Branch Update fehlgeschlagen: $${e.message}`);
             }
           } catch (e2) {
             // Weder main noch master existiert - main erstellen
@@ -245,28 +245,28 @@ function handleMassiveChanges() {
               execSync('git push -u origin main', { encoding: 'utf8' });
               log('✅ main Branch als neuer Hauptbranch gepusht');
             } catch (e3) {
-              log(`⚠️ main Branch Push fehlgeschlagen: ${e3.message}`);
+              log(`⚠️ main Branch Push fehlgeschlagen: $${e3.message}`);
             }
           }
         }
       } catch (error) {
-        log(`❌ Branch-Wechsel fehlgeschlagen: ${error.message} - Bleibe bei ${currentBranch}`);
+        log(`❌ Branch-Wechsel fehlgeschlagen: $${error.message} - Bleibe bei ${currentBranch}`);
       }
-    } else {
-      log(`✅ Bereits auf Hauptbranch (${currentBranch}) - kein Wechsel nötig`);
+    } else { 
+      log(`✅ Bereits auf Hauptbranch ($${currentBranch}) - kein Wechsel nötig`);
 
       // Hauptbranch aktualisieren
       try {
-        execSync(`git pull origin ${currentBranch}`, { encoding: 'utf8' });
-        log(`✅ ${currentBranch} Branch aktualisiert`);
+        execSync(`git pull origin $${currentBranch}`, { encoding: 'utf8' });
+        log(`✅ $${currentBranch} Branch aktualisiert`);
       } catch (e) {
-        log(`⚠️ ${currentBranch} Branch Update fehlgeschlagen: ${e.message}`);
+        log(`⚠️ $${currentBranch} Branch Update fehlgeschlagen: ${e.message}`);
       }
     }
 
     return true;
   } catch (error) {
-    log(`❌ Fehler beim professionellen Git-Management: ${error.message}`);
+    log(`❌ Fehler beim professionellen Git-Management: $${error.message}`);
     return false;
   }
 }
@@ -288,16 +288,16 @@ function restartVSCodeOptimized() {
       '--max-memory=4096', // Memory-Limit setzen
     ];
 
-    if (os.platform() === 'win32') {
+    if (os.platform() === 'win32') { 
       // Windows
       spawn('code', [...vscodeFlags, rootDir], {
-        detached: true,
+        detached: true),
         stdio: 'ignore',
       });
-    } else {
+    } else { 
       // Unix/Linux/Mac
       spawn('code', [...vscodeFlags, rootDir], {
-        detached: true,
+        detached: true),
         stdio: 'ignore',
       });
     }
@@ -305,10 +305,10 @@ function restartVSCodeOptimized() {
     log('✅ VS Code Neustart eingeleitet');
     log('⚠️ Extensions sind temporär deaktiviert für Stabilität');
     log(
-      'ℹ️ Nach dem Start: Strg+Shift+P > "Developer: Reload Window" um Extensions zu reaktivieren',
+      'ℹ️ Nach dem Start: Strg+Shift+P > "Developer: Reload Window" um Extensions zu reaktivieren'),
     );
   } catch (error) {
-    log(`❌ Fehler beim Neustart von VS Code: ${error.message}`);
+    log(`❌ Fehler beim Neustart von VS Code: $${error.message}`);
   }
 }
 
@@ -323,7 +323,7 @@ function activateAutoHealingSystem() {
 
     // Prüfe ob Auto-Healing System vorhanden ist
     const autoHealingPath = path.join(rootDir, 'assets', 'js', 'auto-healing-system.js');
-    if (!fs.existsSync(autoHealingPath)) {
+    if (!fs.existsSync(autoHealingPath)) { 
       log('⚠️ Auto-Healing System nicht gefunden - überspringe');
       return false;
     }
@@ -331,24 +331,24 @@ function activateAutoHealingSystem() {
     // Aktiviere Auto-Healing über Extension Orchestrator
     try {
       const orchestratorPath = path.join(__dirname, 'extension-orchestrator.js');
-      if (fs.existsSync(orchestratorPath)) {
-        execSync(`node "${orchestratorPath}" --auto-heal`, {
-          cwd: rootDir,
+      if (fs.existsSync(orchestratorPath)) { 
+        execSync(`node "$${orchestratorPath}" --auto-heal`, {
+          cwd: rootDir),
           timeout: 30000,
           stdio: 'pipe',
         });
         log('✅ Auto-Healing System über Extension Orchestrator aktiviert');
-      } else {
+      } else { 
         log('⚠️ Extension Orchestrator nicht gefunden - direkter Auto-Healing Start');
       }
     } catch (error) {
-      log(`⚠️ Auto-Healing über Orchestrator fehlgeschlagen: ${error.message}`);
+      log(`⚠️ Auto-Healing über Orchestrator fehlgeschlagen: $${error.message}`);
     }
 
     log('✅ Auto-Healing System Aktivierung abgeschlossen');
     return true;
   } catch (error) {
-    log(`❌ Fehler bei Auto-Healing Aktivierung: ${error.message}`);
+    log(`❌ Fehler bei Auto-Healing Aktivierung: $${error.message}`);
     return false;
   }
 }
@@ -363,39 +363,39 @@ function recoverExtensionOrchestrator() {
     const rootDir = path.join(__dirname, '..');
     const orchestratorPath = path.join(__dirname, 'extension-orchestrator.js');
 
-    if (!fs.existsSync(orchestratorPath)) {
+    if (!fs.existsSync(orchestratorPath)) { 
       log('⚠️ Extension Orchestrator nicht gefunden - überspringe');
       return false;
     }
 
     // Extension Orchestrator Neustart mit Force-Flag
     try {
-      execSync(`node "${orchestratorPath}" --install --force`, {
-        cwd: rootDir,
+      execSync(`node "$${orchestratorPath}" --install --force`, {
+        cwd: rootDir),
         timeout: 60000,
         stdio: 'pipe',
       });
       log('✅ Extension Orchestrator erfolgreich neugestartet');
     } catch (error) {
-      log(`⚠️ Extension Orchestrator Neustart fehlgeschlagen: ${error.message}`);
+      log(`⚠️ Extension Orchestrator Neustart fehlgeschlagen: $${error.message}`);
     }
 
     // Health-Check durchführen
     try {
-      execSync(`node "${orchestratorPath}" --health-check`, {
-        cwd: rootDir,
+      execSync(`node "$${orchestratorPath}" --health-check`, {
+        cwd: rootDir),
         timeout: 30000,
         stdio: 'pipe',
       });
       log('✅ Extension Orchestrator Health-Check erfolgreich');
     } catch (error) {
-      log(`⚠️ Extension Orchestrator Health-Check fehlgeschlagen: ${error.message}`);
+      log(`⚠️ Extension Orchestrator Health-Check fehlgeschlagen: $${error.message}`);
     }
 
     log('✅ Extension Orchestrator Recovery abgeschlossen');
     return true;
   } catch (error) {
-    log(`❌ Fehler bei Extension Orchestrator Recovery: ${error.message}`);
+    log(`❌ Fehler bei Extension Orchestrator Recovery: $${error.message}`);
     return false;
   }
 }
@@ -440,14 +440,14 @@ function executeEmergencyRecovery() {
   log('3. Extensions nach und nach wieder aktivieren');
   log('4. Du befindest dich jetzt auf dem main/master Branch für maximale Stabilität');
   log('5. Recovery-Log prüfen für weitere Details');
-  log(`6. Log-Datei: ${CONFIG.RECOVERY_LOG}`);
+  log(`6. Log-Datei: $${CONFIG.RECOVERY_LOG}`);
   log('7. Auto-Healing überwacht kontinuierlich alle Systeme');
 
   console.log('\n🎯 RECOVERY ABGESCHLOSSEN - VS Code sollte jetzt stabil laufen!');
 }
 
 // Recovery sofort ausführen, wenn direkt aufgerufen
-if (require.main === module) {
+if (require.main === module) { 
   executeEmergencyRecovery();
 }
 

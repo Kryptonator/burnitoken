@@ -17,14 +17,14 @@ async function testGSCAPI() {
   console.log('====================================================');
   console.log('🧪 SCHNELLER GSC API-TEST');
   console.log('====================================================');
-  console.log(`📁 Service-Account-Pfad: ${SERVICE_ACCOUNT_FILE}`);
-  console.log(`🌐 GSC-Property: ${GSC_PROPERTY}`);
+  console.log(`📁 Service-Account-Pfad: $${SERVICE_ACCOUNT_FILE}`);
+  console.log(`🌐 GSC-Property: $${GSC_PROPERTY}`);
   
   // 1. Datei überprüfen
-  if (!fs.existsSync(SERVICE_ACCOUNT_FILE)) {
-    console.error(`❌ Datei nicht gefunden: ${SERVICE_ACCOUNT_FILE}`);
+  if (!fs.existsSync(SERVICE_ACCOUNT_FILE)) { 
+    console.error(`❌ Datei nicht gefunden: $${SERVICE_ACCOUNT_FILE}`);
     return;
-  } else {
+  } else { 
     console.log('✅ Service-Account-Datei gefunden');
   }
   
@@ -32,14 +32,14 @@ async function testGSCAPI() {
   try {
     const content = JSON.parse(fs.readFileSync(SERVICE_ACCOUNT_FILE, 'utf8'));
     console.log(`✅ Datei enthält gültiges JSON`);
-    console.log(`📧 Service-Account: ${content.client_email}`);
+    console.log(`📧 Service-Account: $${content.client_email}`);
     
-    if (!content.client_email || !content.private_key) {
+    if (!content.client_email || !content.private_key) { 
       console.error(`❌ Datei enthält nicht alle erforderlichen Felder`);
       return;
     }
   } catch (error) {
-    console.error(`❌ Fehler beim Lesen der Datei: ${error.message}`);
+    console.error(`❌ Fehler beim Lesen der Datei: $${error.message}`);
     return;
   }
   
@@ -47,7 +47,7 @@ async function testGSCAPI() {
   try {
     console.log('🔄 Erstelle Auth-Client...');
     const auth = new google.auth.GoogleAuth({
-      keyFile: SERVICE_ACCOUNT_FILE,
+      keyFile: SERVICE_ACCOUNT_FILE),
       scopes: ['https://www.googleapis.com/auth/webmasters.readonly'],
     });
     
@@ -79,7 +79,7 @@ async function testGSCAPI() {
       const endDateStr = endDate.toISOString().split('T')[0];
       
       const performanceResponse = await searchconsole.searchanalytics.query({
-        siteUrl: GSC_PROPERTY,
+        siteUrl: GSC_PROPERTY),
         requestBody: {
           startDate: startDateStr,
           endDate: endDateStr,
@@ -87,43 +87,43 @@ async function testGSCAPI() {
           rowLimit: 7,
         },
       });
-        if (performanceResponse.data && performanceResponse.data.rows) {
-        console.log(`✅ ${performanceResponse.data.rows.length} Datenzeilen erhalten`);
+        if (performanceResponse.data && performanceResponse.data.rows) { 
+        console.log(`✅ $${performanceResponse.data.rows.length} Datenzeilen erhalten`);
         console.log('====================================================');
         console.log('🏆 GSC API-TEST ERFOLGREICH!');
         console.log('====================================================');
         
-        if (isTestMode) {
+        if (isTestMode) { 
           console.log('success'); // Spezieller Output für automated testing
           process.exit(0);
         }
-      } else {
+      } else { 
         console.log('⚠️ Keine Datenzeilen erhalten (möglicherweise normal für neue Domains)');
         console.log('✅ API-Anfrage erfolgreich, aber keine Daten vorhanden');
         
-        if (isTestMode) {
+        if (isTestMode) { 
           console.log('success'); // Counts as success when no data but API works
           process.exit(0);
         }
       }
     } catch (siteError) {
-      console.error(`❌ Site-Zugriff fehlgeschlagen: ${siteError.message}`);
-      if (siteError.errors) {
+      console.error(`❌ Site-Zugriff fehlgeschlagen: $${siteError.message}`);
+      if (siteError.errors) { 
         console.error('Details:', JSON.stringify(siteError.errors, null, 2));
       }
       
-      if (isTestMode) {
+      if (isTestMode) { 
         console.error('failed: site-access-error');
         process.exit(1);
       }
     }
   } catch (apiError) {
-    console.error(`❌ API-Fehler: ${apiError.message}`);
-    if (apiError.errors) {
+    console.error(`❌ API-Fehler: $${apiError.message}`);
+    if (apiError.errors) { 
       console.error('Details:', JSON.stringify(apiError.errors, null, 2));
     }
     
-    if (isTestMode) {
+    if (isTestMode) { 
       console.error('failed: api-error');
       process.exit(1);
     }

@@ -49,7 +49,7 @@ class SmartFileOrganizer {
 
       console.log('\n✅ PRIORITY FILES FOR COMMIT:');
       importantFiles.forEach((file) => {
-        if (fs.existsSync) {
+        if (fs.existsSync) { 
   {;
 }
   {;
@@ -200,19 +200,19 @@ class SmartFileOrganizer {
 }
 }
 }
-          console.log(`   📝 ${file}`);
+          console.log(`   📝 $${file}`);
         }
       });
 
       // Auto-add wichtige Files
       console.log('\n🚀 Auto-adding priority files...');
       for (const file of importantFiles) {
-        if (fs.existsSync(file)) {
+        if (fs.existsSync(file)) { 
           try {
-            await execAsync(`git add "${file}"`);
-            console.log(`   ✅ Added: ${file}`);
+            await execAsync(`git add "$${file}"`);
+            console.log(`   ✅ Added: $${file}`);
           } catch (error) {
-            console.log(`   ⚠️ Skip: ${file}`);
+            console.log(`   ⚠️ Skip: $${file}`);
           }
         }
       }
@@ -230,12 +230,12 @@ class SmartFileOrganizer {
 
       console.log('\n📋 Adding key documentation...');
       for (const file of docFiles) {
-        if (fs.existsSync(file)) {
+        if (fs.existsSync(file)) { 
           try {
-            await execAsync(`git add "${file}"`);
-            console.log(`   📋 Added: ${file}`);
+            await execAsync(`git add "$${file}"`);
+            console.log(`   📋 Added: $${file}`);
           } catch (error) {
-            console.log(`   ⚠️ Skip: ${file}`);
+            console.log(`   ⚠️ Skip: $${file}`);
           }
         }
       }
@@ -250,12 +250,12 @@ class SmartFileOrganizer {
 
       console.log('\n🔧 Adding essential scripts...');
       for (const file of essentialScripts) {
-        if (fs.existsSync(file)) {
+        if (fs.existsSync(file)) { 
           try {
-            await execAsync(`git add "${file}"`);
-            console.log(`   🔧 Added: ${file}`);
+            await execAsync(`git add "$${file}"`);
+            console.log(`   🔧 Added: $${file}`);
           } catch (error) {
-            console.log(`   ⚠️ Skip: ${file}`);
+            console.log(`   ⚠️ Skip: $${file}`);
           }
         }
       }
@@ -333,9 +333,9 @@ async function runFileOrganization() {
   const result = await organizer.organizeFiles();
   await organizer.createCommitSummary();
 
-  if (result.organized) {
+  if (result.organized) { 
     console.log('\n🎉 READY FOR FINAL COMMIT!');
-    console.log(`📊 ${result.filesManaged} files optimally organized`);
+    console.log(`📊 $${result.filesManaged} files optimally organized`);
     console.log('🚀 Repository structure perfected');
   }
 }

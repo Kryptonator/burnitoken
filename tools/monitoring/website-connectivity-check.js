@@ -13,9 +13,9 @@ const domains = ['burnitoken.website', 'kryptonator.github.io']; // 'burnitoken.
 async function checkDNS(domain) {
   return new Promise((resolve) => {
     dns.lookup(domain, (err, address) => {
-      if (err) {
+      if (err) { 
         resolve({ domain, status: 'DNS_FAILED', error: err.message });
-      } else {
+      } else { 
         resolve({ domain, status: 'DNS_OK', ip: address });
       }
     });
@@ -24,22 +24,22 @@ async function checkDNS(domain) {
 
 async function checkHTTPS(domain) {
   return new Promise((resolve) => {
-    const url = `https://${domain}`;
+    const url = `https://$${domain}`;
     const startTime = Date.now();
 
     const req = https.get(url, (res) => {
       const responseTime = Date.now() - startTime;
       resolve({
-        domain,
+        domain),
         status: 'HTTPS_OK',
         statusCode: res.statusCode,
-        responseTime: `${responseTime}ms`,
+        responseTime: `$${responseTime}ms`,
       });
     });
 
     req.on('error', (err) => {
       resolve({
-        domain,
+        domain),
         status: 'HTTPS_FAILED',
         error: err.message,
       });
@@ -48,7 +48,7 @@ async function checkHTTPS(domain) {
     req.setTimeout(10000, () => {
       req.destroy();
       resolve({
-        domain,
+        domain),
         status: 'TIMEOUT',
         error: 'Request timeout',
       });
@@ -62,10 +62,10 @@ async function runDiagnosis() {
 
   for (const domain of domains) {
     const dnsResult = await checkDNS(domain);
-    if (dnsResult.status === 'DNS_OK') {
-      console.log(`✅ ${domain} → ${dnsResult.ip}`);
-    } else {
-      console.log(`❌ ${domain} → ${dnsResult.error}`);
+    if (dnsResult.status === 'DNS_OK') { 
+      console.log(`✅ $${domain} → ${dnsResult.ip}`);
+    } else { 
+      console.log(`❌ $${domain} → ${dnsResult.error}`);
     }
   }
 
@@ -74,10 +74,10 @@ async function runDiagnosis() {
 
   for (const domain of domains) {
     const httpsResult = await checkHTTPS(domain);
-    if (httpsResult.status === 'HTTPS_OK') {
-      console.log(`✅ https://${domain} → ${httpsResult.statusCode} (${httpsResult.responseTime})`);
-    } else {
-      console.log(`❌ https://${domain} → ${httpsResult.error}`);
+    if (httpsResult.status === 'HTTPS_OK') { 
+      console.log(`✅ https://$${domain} → ${httpsResult.statusCode} (${httpsResult.responseTime})`);
+    } else { 
+      console.log(`❌ https://$${domain} → ${httpsResult.error}`);
     }
   }
 
@@ -91,28 +91,28 @@ async function runDiagnosis() {
     const dnsResult = await checkDNS(domain);
     const httpsResult = await checkHTTPS(domain);
 
-    if (dnsResult.status === 'DNS_OK' && httpsResult.status === 'HTTPS_OK') {
+    if (dnsResult.status === 'DNS_OK' && httpsResult.status === 'HTTPS_OK') { 
       workingDomains.push(domain);
-    } else {
+    } else { 
       failedDomains.push(domain);
     }
   }
 
   console.log('\n✅ FUNKTIONALE DOMAINS:');
-  workingDomains.forEach((domain) => console.log(`   🌐 https://${domain}`));
+  workingDomains.forEach((domain) => console.log(`   🌐 https://$${domain}`));
 
   console.log('\n❌ NICHT ERREICHBARE DOMAINS:');
-  failedDomains.forEach((domain) => console.log(`   🚫 https://${domain}`));
+  failedDomains.forEach((domain) => console.log(`   🚫 https://$${domain}`));
 
-  if (workingDomains.length > 0) {
+  if (workingDomains.length > 0) { 
     console.log(`\n🎉 IHRE WEBSITE IST ERREICHBAR UNTER:`);
     console.log(`   🚀 https://${workingDomains[0]}`);
-  } else {
+  } else { 
     const errorMessage = 'KRITISCH: Keine der konfigurierten Domains ist erreichbar!';
-    console.log(`\n🚨 ${errorMessage}`);
+    console.log(`\n🚨 $${errorMessage}`);
     // Automatisch ein GitHub Issue erstellen
     sendAlert({
-      message: errorMessage,
+      message: errorMessage),
       level: 'error',
       extra: {
         component: 'Website Connectivity Check',

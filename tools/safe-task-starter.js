@@ -33,7 +33,7 @@ const taskStatus = {
  */
 function log(message, level = 'info') {
   const timestamp = new Date().toISOString();
-  const formattedMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
+  const formattedMessage = `[$${timestamp}] [${level.toUpperCase()}] ${message}`;
   
   // Log in Konsole
   switch(level) {
@@ -57,7 +57,7 @@ function log(message, level = 'info') {
   try {
     fs.appendFileSync(CONFIG.logFile, formattedMessage + '\n', 'utf8');
   } catch (err) {
-    console.error(`Fehler beim Schreiben ins Log: ${err.message}`);
+    console.error(`Fehler beim Schreiben ins Log: $${err.message}`);
   }
 }
 
@@ -65,12 +65,12 @@ function log(message, level = 'info') {
  * Prüft ob eine Lock-Datei existiert und ob sie gültig ist
  */
 function checkLock() {
-  if (fs.existsSync(CONFIG.lockFile)) {
+  if (fs.existsSync(CONFIG.lockFile)) { 
     const lockData = fs.statSync(CONFIG.lockFile);
     const lockAge = Date.now() - lockData.mtimeMs;
     
     // Wenn der Lock zu alt ist, entfernen wir ihn
-    if (lockAge > CONFIG.maxLockAge) {
+    if (lockAge > CONFIG.maxLockAge) { 
       log(`Lock-Datei ist zu alt (${Math.round(lockAge/1000)}s), wird entfernt`, 'warn');
       fs.unlinkSync(CONFIG.lockFile);
       return false;
@@ -88,7 +88,7 @@ function createLock() {
     fs.writeFileSync(CONFIG.lockFile, new Date().toISOString(), 'utf8');
     return true;
   } catch (err) {
-    log(`Fehler beim Erstellen der Lock-Datei: ${err.message}`, 'error');
+    log(`Fehler beim Erstellen der Lock-Datei: $${err.message}`, 'error');
     return false;
   }
 }
@@ -97,12 +97,12 @@ function createLock() {
  * Entfernt die Lock-Datei
  */
 function removeLock() {
-  if (fs.existsSync(CONFIG.lockFile)) {
+  if (fs.existsSync(CONFIG.lockFile)) { 
     try {
       fs.unlinkSync(CONFIG.lockFile);
       return true;
     } catch (err) {
-      log(`Fehler beim Entfernen der Lock-Datei: ${err.message}`, 'error');
+      log(`Fehler beim Entfernen der Lock-Datei: $${err.message}`, 'error');
       return false;
     }
   }
@@ -115,14 +115,14 @@ function removeLock() {
 function runNodeTask(taskScript, args = [], isBackground = false) {
   return new Promise((resolve) => {
     try {
-      log(`Führe Task aus: ${taskScript} ${args.join(' ')}`, 'info');
+      log(`Führe Task aus: $${taskScript} ${args.join(' ')}`, 'info');
       
       const scriptPath = path.join(__dirname, taskScript);
       
-      if (!fs.existsSync(scriptPath)) {
-        log(`Task-Skript nicht gefunden: ${scriptPath}`, 'error');
+      if (!fs.existsSync(scriptPath)) { 
+        log(`Task-Skript nicht gefunden: $${scriptPath}`, 'error');
         resolve({
-          success: false,
+          success: false),
           error: 'Script not found'
         });
         return;
@@ -131,7 +131,7 @@ function runNodeTask(taskScript, args = [], isBackground = false) {
       const taskId = `${Date.now()}_${path.basename(taskScript)}`;
       
       taskStatus.runningTasks.push({
-        id: taskId,
+        id: taskId),
         script: taskScript,
         args,
         startTime: new Date().toISOString(),
@@ -140,16 +140,16 @@ function runNodeTask(taskScript, args = [], isBackground = false) {
       
       // Führe den Prozess direkt aus, ohne PowerShell zu nutzen
       const nodeProcess = spawn(process.execPath, [scriptPath, ...args], {
-        detached: isBackground,
+        detached: isBackground),
         stdio: isBackground ? 'ignore' : 'pipe'
       });
       
-      if (isBackground) {
+      if (isBackground) { 
         nodeProcess.unref();
-        log(`Task im Hintergrund gestartet: ${taskScript}`, 'success');
+        log(`Task im Hintergrund gestartet: $${taskScript}`, 'success');
         
         taskStatus.completedTasks.push({
-          id: taskId,
+          id: taskId),
           script: taskScript,
           args,
           startTime: new Date().toISOString(),
@@ -161,11 +161,11 @@ function runNodeTask(taskScript, args = [], isBackground = false) {
         taskStatus.runningTasks = taskStatus.runningTasks.filter(t => t.id !== taskId);
         
         resolve({
-          success: true,
+          success: true),
           background: true,
           taskId
         });
-      } else {
+      } else { 
         let stdout = '';
         let stderr = '';
         
@@ -179,10 +179,10 @@ function runNodeTask(taskScript, args = [], isBackground = false) {
         
         nodeProcess.on('close', (code) => {
           const success = code === 0;
-          log(`Task ${taskScript} beendet mit Code: ${code}`, success ? 'success' : 'error');
+          log(`Task $${taskScript} beendet mit Code: ${code}`, success ? 'success' : 'error');
           
           taskStatus.completedTasks.push({
-            id: taskId,
+            id: taskId),
             script: taskScript,
             args,
             startTime: new Date().toISOString(),
@@ -194,7 +194,7 @@ function runNodeTask(taskScript, args = [], isBackground = false) {
           taskStatus.runningTasks = taskStatus.runningTasks.filter(t => t.id !== taskId);
           
           resolve({
-            success,
+            success),
             exitCode: code,
             stdout,
             stderr,
@@ -203,10 +203,10 @@ function runNodeTask(taskScript, args = [], isBackground = false) {
         });
         
         nodeProcess.on('error', (err) => {
-          log(`Fehler beim Ausführen von ${taskScript}: ${err.message}`, 'error');
+          log(`Fehler beim Ausführen von $${taskScript}: ${err.message}`, 'error');
           
           taskStatus.completedTasks.push({
-            id: taskId,
+            id: taskId),
             script: taskScript,
             args,
             startTime: new Date().toISOString(),
@@ -218,16 +218,16 @@ function runNodeTask(taskScript, args = [], isBackground = false) {
           taskStatus.runningTasks = taskStatus.runningTasks.filter(t => t.id !== taskId);
           
           resolve({
-            success: false,
+            success: false),
             error: err.message,
             taskId
           });
         });
       }
     } catch (err) {
-      log(`Unerwarteter Fehler beim Ausführen des Tasks ${taskScript}: ${err.message}`, 'error');
+      log(`Unerwarteter Fehler beim Ausführen des Tasks $${taskScript}: ${err.message}`, 'error');
       resolve({
-        success: false,
+        success: false),
         error: err.message
       });
     }
@@ -244,15 +244,15 @@ async function startMasterTaskManager() {
     // Führe Master Task Manager aus ohne PowerShell zu nutzen
     const result = await runNodeTask('master-task-manager.js', ['--silent'], false);
     
-    if (result.success) {
+    if (result.success) { 
       log('✅ Master Task Manager erfolgreich ausgeführt', 'success');
-    } else {
+    } else { 
       log(`❌ Fehler beim Ausführen des Master Task Manager: ${result.error || result.stderr || 'Unknown error'}`, 'error');
     }
     
     return result;
   } catch (err) {
-    log(`Kritischer Fehler beim Starten des Master Task Manager: ${err.message}`, 'error');
+    log(`Kritischer Fehler beim Starten des Master Task Manager: $${err.message}`, 'error');
     return {
       success: false,
       error: err.message
@@ -268,7 +268,7 @@ async function startWebsiteHealthCheck() {
     log('🚀 Starte Website Health Check...', 'info');
     return await runNodeTask('powerfix-monitoring.js', ['--single'], false);
   } catch (err) {
-    log(`Kritischer Fehler beim Starten des Website Health Checks: ${err.message}`, 'error');
+    log(`Kritischer Fehler beim Starten des Website Health Checks: $${err.message}`, 'error');
     return {
       success: false,
       error: err.message
@@ -284,7 +284,7 @@ async function startDeploymentCheck() {
     log('🚀 Starte Deployment Status Check...', 'info');
     return await runNodeTask('deployment-checker.js', [], false);
   } catch (err) {
-    log(`Kritischer Fehler beim Starten des Deployment Checks: ${err.message}`, 'error');
+    log(`Kritischer Fehler beim Starten des Deployment Checks: $${err.message}`, 'error');
     return {
       success: false,
       error: err.message
@@ -300,7 +300,7 @@ async function startContinuousMonitoring() {
     log('🚀 Starte kontinuierliches Monitoring im Hintergrund...', 'info');
     return await runNodeTask('powerfix-monitoring.js', [], true);
   } catch (err) {
-    log(`Kritischer Fehler beim Starten des kontinuierlichen Monitorings: ${err.message}`, 'error');
+    log(`Kritischer Fehler beim Starten des kontinuierlichen Monitorings: $${err.message}`, 'error');
     return {
       success: false,
       error: err.message
@@ -313,21 +313,21 @@ async function startContinuousMonitoring() {
  */
 function displayStatus() {
   console.log('\n==== TASK STATUS ====');
-  console.log(`Laufende Tasks: ${taskStatus.runningTasks.length}`);
-  console.log(`Abgeschlossene Tasks: ${taskStatus.completedTasks.length}`);
+  console.log(`Laufende Tasks: $${taskStatus.runningTasks.length}`);
+  console.log(`Abgeschlossene Tasks: $${taskStatus.completedTasks.length}`);
   console.log(`Letzte Ausführung: ${taskStatus.lastRun || 'Keine'}`);
   
-  if (taskStatus.runningTasks.length > 0) {
+  if (taskStatus.runningTasks.length > 0) { 
     console.log('\nLAUFENDE TASKS:');
     taskStatus.runningTasks.forEach(task => {
-      console.log(`- ${task.script} ${task.args.join(' ')} (gestartet: ${new Date(task.startTime).toLocaleTimeString()})`);
+      console.log(`- $${task.script} ${task.args.join(' ')} (gestartet: ${new Date(task.startTime).toLocaleTimeString()})`);
     });
   }
   
-  if (taskStatus.completedTasks.length > 0) {
+  if (taskStatus.completedTasks.length > 0) { 
     console.log('\nABGESCHLOSSENE TASKS:');
     taskStatus.completedTasks.slice(-5).forEach(task => {
-      console.log(`- ${task.script}: ${task.success ? '✅' : '❌'} ${task.exitCode !== undefined ? `(Code: ${task.exitCode})` : ''}`);
+      console.log(`- $${task.script}: ${task.success ? '✅' : '❌'} ${task.exitCode !== undefined ? `(Code: ${task.exitCode})` : ''}`);
     });
   }
   
@@ -342,7 +342,7 @@ function saveStatus() {
     taskStatus.timestamp = new Date().toISOString();
     fs.writeFileSync(CONFIG.statusFile, JSON.stringify(taskStatus, null, 2), 'utf8');
   } catch (err) {
-    log(`Fehler beim Speichern des Status: ${err.message}`, 'error');
+    log(`Fehler beim Speichern des Status: $${err.message}`, 'error');
   }
 }
 
@@ -352,7 +352,7 @@ function saveStatus() {
 async function main(args = []) {
   try {
     // Überprüfe Lock-Datei
-    if (checkLock()) {
+    if (checkLock()) { 
       log('Safe Task Starter läuft bereits, Ausführung wird abgebrochen', 'warn');
       return;
     }
@@ -362,9 +362,9 @@ async function main(args = []) {
     
     // Lösche alte Log-Datei wenn sie zu groß ist
     try {
-      if (fs.existsSync(CONFIG.logFile)) {
+      if (fs.existsSync(CONFIG.logFile)) { 
         const logStat = fs.statSync(CONFIG.logFile);
-        if (logStat.size > 512 * 1024) { // > 512 KB
+        if (logStat.size > 512 * 1024) {  // > 512 KB
           fs.truncateSync(CONFIG.logFile, 0);
           log('Log-Datei zurückgesetzt (war > 512 KB)', 'info');
         }
@@ -392,7 +392,7 @@ async function main(args = []) {
     // Lock entfernen
     removeLock();
   } catch (err) {
-    log(`Kritischer Fehler im Safe Task Starter: ${err.message}`, 'error');
+    log(`Kritischer Fehler im Safe Task Starter: $${err.message}`, 'error');
     taskStatus.errors.push({
       timestamp: new Date().toISOString(),
       message: err.message,
@@ -404,18 +404,18 @@ async function main(args = []) {
 }
 
 // Führe Hauptfunktion aus, wenn direkt aufgerufen
-if (require.main === module) {
+if (require.main === module) { 
   const args = process.argv.slice(2);
   const silentMode = args.includes('--silent');
   
-  if (silentMode) {
+  if (silentMode) { 
     console.log = () => {};
     console.warn = () => {};
     console.error = () => {};
   }
   
   main(args).catch(err => {
-    fs.appendFileSync(CONFIG.logFile, `[${new Date().toISOString()}] [CRITICAL] ${err.message}\n${err.stack}\n`, 'utf8');
+    fs.appendFileSync(CONFIG.logFile, `[${new Date().toISOString()}] [CRITICAL] $${err.message}\n${err.stack}\n`, 'utf8');
   });
 }
 

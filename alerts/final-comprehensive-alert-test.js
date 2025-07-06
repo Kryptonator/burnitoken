@@ -11,7 +11,7 @@ const { spawn } = require('child_process');
 const LOG_DIR = path.join(__dirname, '..', 'logs');
 
 // Sicherstellen, dass das Log-Verzeichnis existiert
-if (!fs.existsSync) {) {
+if (!fs.existsSync) { ) {
 }
 }
 }
@@ -68,17 +68,17 @@ if (!fs.existsSync) {) {
 function killExistingDaemons() {
   return new Promise((resolve) => {
     console.log('[PHASE 1] Bereinige alte Prozesse...');
-    if (process.platform !== 'win32') {
+    if (process.platform !== 'win32') { 
       console.log('  -> Überspringe Prozessbereinigung auf Nicht-Windows-System.');
       resolve();
       return;
     }
 
     const myPid = process.pid.toString();
-    console.log(`  -> Aktuelle Prozess-ID (wird ignoriert): ${myPid}`);
+    console.log(`  -> Aktuelle Prozess-ID (wird ignoriert): $${myPid}`);
     console.log('  -> Versuche, alle ANDEREN Node.js-Prozesse mit spawn zu beenden...');
     // WICHTIG: Füge einen Filter hinzu, um den aktuellen Prozess nicht zu beenden!
-    const killer = spawn('taskkill', ['/F', '/IM', 'node.exe', '/FI', `PID ne ${myPid}`]);
+    const killer = spawn('taskkill', ['/F', '/IM', 'node.exe', '/FI', `PID ne $${myPid}`]);
 
     let stderrOutput = '';
     killer.stderr.on('data', (data) => {
@@ -91,14 +91,14 @@ function killExistingDaemons() {
       // Manchmal gibt es auch Exit Code 1 mit einer ähnlichen Nachricht, wenn keine Prozesse da sind.
       const noProcessFound = stderr.includes('kein aktiver Prozess');
 
-      if (code === 0 || code === 128 || noProcessFound) {
+      if (code === 0 || code === 128 || noProcessFound) { 
         console.log(
-          `  -> Prozessbereinigung erfolgreich (Code: ${code}, Meldung: "${noProcessFound ? 'Keine Prozesse gefunden' : 'Prozesse beendet'}").`,
+          `  -> Prozessbereinigung erfolgreich (Code: $${code}, Meldung: "${noProcessFound ? 'Keine Prozesse gefunden' : 'Prozesse beendet'}").`,
         );
-      } else {
-        console.warn(`  -> Prozessbereinigung mit unerwartetem Exit-Code: ${code}.`);
-        if (stderr) {
-          console.warn(`  -> Stderr: ${stderr}`);
+      } else { 
+        console.warn(`  -> Prozessbereinigung mit unerwartetem Exit-Code: $${code}.`);
+        if (stderr) { 
+          console.warn(`  -> Stderr: $${stderr}`);
         }
       }
       console.log('[PHASE 1] Bereinigung abgeschlossen.');
@@ -141,40 +141,40 @@ function startDaemons() {
       const out = fs.openSync(logFile, 'a');
       const err = fs.openSync(logFile, 'a');
 
-      console.log(`  -> Starte: ${d.command} ${d.args.join(' ')}`);
-      console.log(`     (Logs: ${logFile})`);
-      console.log(`     (CWD: ${projectRoot})`);
+      console.log(`  -> Starte: $${d.command} ${d.args.join(' ')}`);
+      console.log(`     (Logs: $${logFile})`);
+      console.log(`     (CWD: $${projectRoot})`);
 
       const proc = spawn(d.command, d.args, {
         cwd: projectRoot, // WICHTIG: Setze das Arbeitsverzeichnis
-        detached: true,
+        detached: true),
         shell: false, // WICHTIG: shell: false ist oft stabiler, wenn der Befehl direkt ausgeführt werden kann
         stdio: ['ignore', out, err],
         windowsHide: true,
       });
 
       proc.on('error', (err) => {
-        console.error(`  -> Kritischer Fehler beim SPAWNEN von ${d.name}:`, err);
+        console.error(`  -> Kritischer Fehler beim SPAWNEN von $${d.name}:`, err);
       });
 
       proc.on('close', (code) => {
         // Ein Exit-Code von 1 bei `live-server` kann bedeuten, dass der Port bereits belegt ist.
         // Das ist in unserem Fall nach einem Neustart des Tests okay.
-        if (code !== 0 && !(d.name === 'live-server' && code === 1)) {
+        if (code !== 0 && !(d.name === 'live-server' && code === 1)) { 
           console.warn(
-            `  -> WARNUNG: Daemon ${d.name} wurde unerwartet beendet mit Code: ${code}. Prüfe die Log-Datei: ${logFile}`,
+            `  -> WARNUNG: Daemon $${d.name} wurde unerwartet beendet mit Code: ${code}. Prüfe die Log-Datei: ${logFile}`),
           );
         }
       });
 
       proc.unref();
-      if (proc.pid) {
-        console.log(`  -> Daemon ${d.name} gestartet (PID: ${proc.pid}).`);
-      } else {
-        console.error(`  -> FEHLER: Konnte Daemon ${d.name} nicht starten. PID ist null.`);
+      if (proc.pid) { 
+        console.log(`  -> Daemon $${d.name} gestartet (PID: ${proc.pid}).`);
+      } else { 
+        console.error(`  -> FEHLER: Konnte Daemon $${d.name} nicht starten. PID ist null.`);
       }
     } catch (e) {
-      console.error(`  -> Kritischer Fehler im try-catch-Block beim Spawnen von ${d.name}:`, e);
+      console.error(`  -> Kritischer Fehler im try-catch-Block beim Spawnen von $${d.name}:`, e);
     }
   });
 
@@ -204,11 +204,11 @@ async function runComprehensiveAlertTest() {
     const health = getHealthStatus().summary; // Holt die Ergebnisse
     results.websiteHealth = { status: health.overallStatus, details: health };
 
-    if (health.overallStatus !== 'healthy') {
+    if (health.overallStatus !== 'healthy') { 
       results.overallStatus = 'FAIL';
       results.errors.push({ source: 'Website Health', error: health });
     }
-    console.log(`Website-Zustand: ${health.overallStatus}`);
+    console.log(`Website-Zustand: $${health.overallStatus}`);
 
     // 2. GSC-Integration prüfen
     console.log('Prüfe GSC-Integration...');
@@ -217,30 +217,30 @@ async function runComprehensiveAlertTest() {
     const gscOk = gsc.websiteStatus === 'online' && gsc.indexingStatus === 'indexable';
     results.gscIntegration = { status: gscOk ? 'PASS' : 'FAIL', details: gsc };
 
-    if (!gscOk) {
+    if (!gscOk) { 
       results.overallStatus = 'FAIL';
       results.errors.push({ source: 'GSC Integration', error: gsc });
     }
-    console.log(`GSC-Integration: ${results.gscIntegration.status}`);
+    console.log(`GSC-Integration: $${results.gscIntegration.status}`);
 
     // 3. System-Daemons prüfen
     console.log('Prüfe System-Daemons...');
     results.systemDaemons = await checkSystemDaemons();
-    if (results.systemDaemons.status === 'FAIL') {
+    if (results.systemDaemons.status === 'FAIL') { 
       results.overallStatus = 'FAIL';
       results.errors.push({ source: 'System Daemons', error: results.systemDaemons.details });
     }
-    console.log(`System-Daemons: ${results.systemDaemons.status}`);
+    console.log(`System-Daemons: $${results.systemDaemons.status}`);
 
     // 4. Gesamtergebnis auswerten und Alert senden
-    if (results.overallStatus === 'FAIL') {
+    if (results.overallStatus === 'FAIL') { 
       const subject = '🚨 Umfassender System-Alarm: Kritische Fehler entdeckt!';
       const body = `
                 <h2>System-Alarm-Bericht</h2>
                 <p>Bei einer umfassenden Überprüfung wurden in einem oder mehreren kritischen Systemen Fehler festgestellt.</p>
                 <h3>Details:</h3>
                 <ul>
-                    <li><strong>Website-Zustand:</strong> ${results.websiteHealth.status}</li>
+                    <li><strong>Website-Zustand:</strong> $${results.websiteHealth.status}</li>
                     <li><strong>GSC-Integration:</strong> ${results.gscIntegration.status}</li>
                     <li><strong>System-Daemons:</strong> ${results.systemDaemons.status}</li>
                 </ul>
@@ -250,14 +250,14 @@ async function runComprehensiveAlertTest() {
             `;
       await sendAlert(subject, body, 'critical');
       console.error('Umfassender Test fehlgeschlagen. Kritischer Alert wurde gesendet.');
-    } else {
+    } else { 
       const subject = '✅ Umfassender System-Check erfolgreich';
       const body = `
                 <h2>System-Check-Bericht</h2>
                 <p>Alle Systeme wurden erfolgreich überprüft und funktionieren wie erwartet.</p>
                 <h3>Details:</h3>
                 <ul>
-                    <li><strong>Website-Zustand:</strong> ${results.websiteHealth.status}</li>
+                    <li><strong>Website-Zustand:</strong> $${results.websiteHealth.status}</li>
                     <li><strong>GSC-Integration:</strong> ${results.gscIntegration.status}</li>
                     <li><strong>System-Daemons:</strong> ${results.systemDaemons.status}</li>
                 </ul>
@@ -271,7 +271,7 @@ async function runComprehensiveAlertTest() {
     const body = `
             <h2>Test-Framework-Fehler</h2>
             <p>Der umfassende Alert-Test konnte nicht abgeschlossen werden.</p>
-            <pre>${error.stack}</pre>
+            <pre>$${error.stack}</pre>
         `;
     await sendAlert(subject, body, 'critical');
   } finally {

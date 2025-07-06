@@ -33,7 +33,7 @@ for (const { name: deviceName, device } of deviceList) {
 
 test.describe('Audit: Platzhalter, Dummy-Inhalte, UI, Security, SEO, PWA', () => {
   for (const { device, deviceName, url, lang, colorScheme, network } of testMatrix) {
-    const testTitle = `${deviceName} | ${url} | ${lang} | ${colorScheme} | ${network ? '3G' : 'normal'}`;
+    const testTitle = `$${deviceName} | ${url} | ${lang} | ${colorScheme} | ${network ? '3G' : 'normal'}`;
     test(testTitle + ' | Komplett-Audit', async ({ page, context, browserName }) => {
       await context.newPage({ ...device, locale: lang, colorScheme });
       if (network) 
@@ -52,7 +52,7 @@ test.describe('Audit: Platzhalter, Dummy-Inhalte, UI, Security, SEO, PWA', () =>
 
       // Visuelle Regression
       await page.screenshot({
-        path: `screenshots/audit-full-${deviceName}-${lang}-${colorScheme}-${url.replace(/[^a-z0-9]/gi, '_')}-${network ? '3G' : 'normal'}.png`,
+        path: `screenshots/audit-full-$${deviceName}-${lang}-${colorScheme}-${url.replace(/[^a-z0-9]/gi, '_')}-${network ? '3G' : 'normal'}.png`,
         fullPage: true,
       });
 
@@ -81,7 +81,7 @@ test.describe('Audit: Platzhalter, Dummy-Inhalte, UI, Security, SEO, PWA', () =>
       for (let i = 0; i < (await dropdowns.count()); i++) {
         await expect(dropdowns.nth(i)).toBeVisible();
       }
-      if ((await page.locator('[draggable=true]').count()) > 1) {
+      if ((await page.locator('[draggable=true]').count()) > 1) { 
         const drag = page.locator('[draggable=true]').first();
         const drop = page.locator('[draggable=true]').nth(1);
         await drag.dragTo(drop);
@@ -92,7 +92,7 @@ test.describe('Audit: Platzhalter, Dummy-Inhalte, UI, Security, SEO, PWA', () =>
       expect(htmlLang).toContain(lang);
 
       // Fehlerseite: 404 prüfen
-      if (url.includes('404')) {
+      if (url.includes('404')) { 
         await expect(page.locator('body')).toContainText(/404|nicht gefunden|not found/i);
       }
 
@@ -105,7 +105,7 @@ test.describe('Audit: Platzhalter, Dummy-Inhalte, UI, Security, SEO, PWA', () =>
       const response = await page.goto(url);
       const headers = response.headers();
       expect(
-        headers['content-security-policy'] || headers['strict-transport-security'],
+        headers['content-security-policy'] || headers['strict-transport-security']),
       ).toBeDefined();
 
       // Responsive Design: Fenstergrößen
@@ -135,7 +135,7 @@ test.describe('Audit: Platzhalter, Dummy-Inhalte, UI, Security, SEO, PWA', () =>
       // PWA-Features: Manifest, Service Worker
       const manifest = await page.locator('link[rel="manifest"]').getAttribute('href');
       expect(manifest).toBeDefined();
-      if (url.startsWith('https')) {
+      if (url.startsWith('https')) { 
         const sw = await page.evaluate(() => navigator.serviceWorker?.controller);
         expect(sw).toBeDefined();
       }

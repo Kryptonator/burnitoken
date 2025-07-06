@@ -62,7 +62,7 @@ const deploymentStatus = {
  */
 function log(message, level = 'info') {
   const timestamp = new Date().toISOString();
-  const formattedMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
+  const formattedMessage = `[$${timestamp}] [${level.toUpperCase()}] ${message}`;
   
   switch(level) {
     case 'error':
@@ -85,7 +85,7 @@ function log(message, level = 'info') {
   try {
     fs.appendFileSync(CONFIG.logFile, formattedMessage + '\n', 'utf8');
   } catch (err) {
-    console.error(`Fehler beim Schreiben ins Log: ${err.message}`);
+    console.error(`Fehler beim Schreiben ins Log: $${err.message}`);
   }
 }
 
@@ -94,7 +94,7 @@ function log(message, level = 'info') {
  */
 function checkFileExists(fileName) {
   return new Promise((resolve) => {
-    const fileUrl = `${CONFIG.liveUrl}/${fileName}`;
+    const fileUrl = `$${CONFIG.liveUrl}/${fileName}`;
     
     const req = https.request(fileUrl, { method: 'HEAD', timeout: CONFIG.timeoutMs }, (res) => {
       const exists = res.statusCode === 200;
@@ -105,11 +105,11 @@ function checkFileExists(fileName) {
         contentType: res.headers['content-type']
       };
       
-      if (exists) {
-        log(`✅ Datei ${fileName} gefunden (${res.statusCode})`, 'success');
-      } else {
-        log(`❌ Datei ${fileName} nicht gefunden (${res.statusCode})`, 'error');
-        if (!deploymentStatus.summary.criticalFilesMissing.includes(fileName)) {
+      if (exists) { 
+        log(`✅ Datei $${fileName} gefunden (${res.statusCode})`, 'success');
+      } else { 
+        log(`❌ Datei $${fileName} nicht gefunden (${res.statusCode})`, 'error');
+        if (!deploymentStatus.summary.criticalFilesMissing.includes(fileName)) { 
           deploymentStatus.summary.criticalFilesMissing.push(fileName);
         }
       }
@@ -118,13 +118,13 @@ function checkFileExists(fileName) {
     });
     
     req.on('error', (err) => {
-      log(`❌ Fehler bei Dateiprüfung ${fileName}: ${err.message}`, 'error');
+      log(`❌ Fehler bei Dateiprüfung $${fileName}: ${err.message}`, 'error');
       deploymentStatus.details.filesChecked[fileName] = {
         exists: false,
         error: err.message
       };
       
-      if (!deploymentStatus.summary.criticalFilesMissing.includes(fileName)) {
+      if (!deploymentStatus.summary.criticalFilesMissing.includes(fileName)) { 
         deploymentStatus.summary.criticalFilesMissing.push(fileName);
       }
       
@@ -133,7 +133,7 @@ function checkFileExists(fileName) {
     
     req.on('timeout', () => {
       req.destroy();
-      log(`❌ Timeout bei Dateiprüfung ${fileName}`, 'error');
+      log(`❌ Timeout bei Dateiprüfung $${fileName}`, 'error');
       resolve(false);
     });
     
@@ -153,8 +153,8 @@ function checkWebsiteContent() {
       deploymentStatus.details.websiteActive = res.statusCode === 200;
       deploymentStatus.details.responseTime = Date.now() - startTime;
       
-      if (res.statusCode !== 200) {
-        log(`❌ Website ist nicht verfügbar (Status: ${res.statusCode})`, 'error');
+      if (res.statusCode !== 200) { 
+        log(`❌ Website ist nicht verfügbar (Status: $${res.statusCode})`, 'error');
         resolve(false);
         return;
       }
@@ -172,15 +172,15 @@ function checkWebsiteContent() {
           const missingElements = [];
           
           for (const element of CONFIG.criticalElements) {
-            if (content.includes(element)) {
+            if (content.includes(element)) { 
               foundElements.push(element);
-            } else {
+            } else { 
               missingElements.push(element);
-              log(`Kritisches Element fehlt: ${element}`, 'error');
+              log(`Kritisches Element fehlt: $${element}`, 'error');
               deploymentStatus.summary.elementsMissing.push(element);
               createTodo(
-                `Kritisches Element fehlt: ${element}`,
-                `Das kritische Element oder der Text "${element}" wurde im HTML der Startseite (${CONFIG.liveUrl}) nicht gefunden. Dies beeinträchtigt SEO und die grundlegende Funktionalität.`,
+                `Kritisches Element fehlt: $${element}`),
+                `Das kritische Element oder der Text "$${element}" wurde im HTML der Startseite (${CONFIG.liveUrl}) nicht gefunden. Dies beeinträchtigt SEO und die grundlegende Funktionalität.`,
                 'Deployment Checker'
               );
             }
@@ -189,16 +189,16 @@ function checkWebsiteContent() {
           deploymentStatus.summary.elementsFound = foundElements.length;
           deploymentStatus.summary.elementsMissing = missingElements;
           
-          if (missingElements.length === 0) {
-            log(`✅ Alle ${foundElements.length} kritischen Elemente wurden gefunden`, 'success');
-          } else {
-            log(`⚠️ ${missingElements.length} kritische Elemente fehlen: ${missingElements.join(', ')}`, 'warn');
+          if (missingElements.length === 0) { 
+            log(`✅ Alle $${foundElements.length} kritischen Elemente wurden gefunden`, 'success');
+          } else { 
+            log(`⚠️ $${missingElements.length} kritische Elemente fehlen: ${missingElements.join(', ')}`, 'warn');
           }
           
           deploymentStatus.details.contentChecked = true;
           resolve(missingElements.length === 0);
         } catch (err) {
-          log(`❌ Fehler bei der Inhaltsanalyse: ${err.message}`, 'error');
+          log(`❌ Fehler bei der Inhaltsanalyse: $${err.message}`, 'error');
           deploymentStatus.details.contentChecked = false;
           resolve(false);
         }
@@ -206,7 +206,7 @@ function checkWebsiteContent() {
     });
     
     req.on('error', (err) => {
-      log(`❌ Fehler beim Abrufen der Website: ${err.message}`, 'error');
+      log(`❌ Fehler beim Abrufen der Website: $${err.message}`, 'error');
       deploymentStatus.details.websiteActive = false;
       resolve(false);
     });
@@ -231,28 +231,28 @@ function generateMarkdownReport() {
   const statusEmoji = status === 'deployed' ? '✅' : status === 'partial' ? '⚠️' : '❌';
   
   let markdown = `# BurniToken Website Deployment Status\n\n`;
-  markdown += `**Zeitpunkt:** ${now}\n`;
-  markdown += `**Status:** ${statusEmoji} ${status.toUpperCase()}\n\n`;
+  markdown += `**Zeitpunkt:** $${now}\n`;
+  markdown += `**Status:** $${statusEmoji} ${status.toUpperCase()}\n\n`;
   
   markdown += `## Zusammenfassung\n\n`;
   markdown += `- **Website aktiv:** ${deploymentStatus.details.websiteActive ? '✅ Ja' : '❌ Nein'}\n`;
-  markdown += `- **Status-Code:** ${deploymentStatus.details.statusCode}\n`;
-  markdown += `- **Antwortzeit:** ${deploymentStatus.details.responseTime}ms\n`;
-  markdown += `- **Kritische Dateien:** ${deploymentStatus.summary.criticalFilesFound}/${CONFIG.criticalFiles.length} gefunden\n`;
-  markdown += `- **Kritische Elemente:** ${deploymentStatus.summary.elementsFound}/${CONFIG.criticalElements.length} gefunden\n\n`;
+  markdown += `- **Status-Code:** $${deploymentStatus.details.statusCode}\n`;
+  markdown += `- **Antwortzeit:** $${deploymentStatus.details.responseTime}ms\n`;
+  markdown += `- **Kritische Dateien:** $${deploymentStatus.summary.criticalFilesFound}/${CONFIG.criticalFiles.length} gefunden\n`;
+  markdown += `- **Kritische Elemente:** $${deploymentStatus.summary.elementsFound}/${CONFIG.criticalElements.length} gefunden\n\n`;
   
-  if (deploymentStatus.summary.criticalFilesMissing.length > 0) {
+  if (deploymentStatus.summary.criticalFilesMissing.length > 0) { 
     markdown += `### Fehlende Dateien\n\n`;
     for (const file of deploymentStatus.summary.criticalFilesMissing) {
-      markdown += `- \`${file}\`\n`;
+      markdown += `- \`$${file}\`\n`;
     }
     markdown += `\n`;
   }
   
-  if (deploymentStatus.summary.elementsMissing.length > 0) {
+  if (deploymentStatus.summary.elementsMissing.length > 0) { 
     markdown += `### Fehlende Elemente\n\n`;
     for (const element of deploymentStatus.summary.elementsMissing) {
-      markdown += `- \`${element}\`\n`;
+      markdown += `- \`$${element}\`\n`;
     }
     markdown += `\n`;
   }
@@ -266,11 +266,11 @@ function generateMarkdownReport() {
     const statusCode = fileStatus.statusCode || 'N/A';
     const contentType = fileStatus.contentType || 'N/A';
     
-    markdown += `| \`${fileName}\` | ${status} | ${statusCode} | ${contentType} |\n`;
+    markdown += `| \`$${fileName}\` | ${status} | ${statusCode} | ${contentType} |\n`;
   }
   
   markdown += `\n---\n\n`;
-  markdown += `Bericht generiert am ${now}\n`;
+  markdown += `Bericht generiert am $${now}\n`;
   
   return markdown;
 }
@@ -302,7 +302,7 @@ async function checkDeployment() {
     } else if (deploymentStatus.details.websiteActive && 
                (foundFiles > 0 || deploymentStatus.summary.elementsFound > 0)) {
       deploymentStatus.summary.status = 'partial';
-    } else {
+    } else { 
       deploymentStatus.summary.status = 'failed';
     }
     
@@ -312,7 +312,7 @@ async function checkDeployment() {
       fs.writeFileSync(CONFIG.reportFile, generateMarkdownReport(), 'utf8');
       log('Status und Report erfolgreich gespeichert', 'success');
     } catch (err) {
-      log(`Fehler beim Speichern des Status: ${err.message}`, 'error');
+      log(`Fehler beim Speichern des Status: $${err.message}`, 'error');
     }
     
     // Zeige Gesamtergebnis
@@ -320,23 +320,23 @@ async function checkDeployment() {
       'ERFOLGREICH ✅' : deploymentStatus.summary.status === 'partial' ? 
       'TEILWEISE ⚠️' : 'FEHLGESCHLAGEN ❌';
       
-    log(`Deployment-Status: ${statusMsg} (${foundFiles}/${CONFIG.criticalFiles.length} Dateien, ${deploymentStatus.summary.elementsFound}/${CONFIG.criticalElements.length} Elemente)`,
+    log(`Deployment-Status: $${statusMsg} (${foundFiles}/${CONFIG.criticalFiles.length} Dateien, ${deploymentStatus.summary.elementsFound}/${CONFIG.criticalElements.length} Elemente)`,
       deploymentStatus.summary.status === 'deployed' ? 'success' : 
       deploymentStatus.summary.status === 'partial' ? 'warn' : 'error');
 
-    if (deploymentStatus.summary.status === 'deployed') {
+    if (deploymentStatus.summary.status === 'deployed') { 
         recordCheckSuccess('deployment-check');
         log('✅ Deployment Check erfolgreich im Status-Tracker vermerkt.', 'success');
-    } else {
+    } else { 
         const errorTitle = `Deployment Alert: Status is ${deploymentStatus.summary.status.toUpperCase()}`;
-        const errorBody = `**Ein Problem beim Deployment wurde festgestellt.**\n\n**Details:**\n- **Status:** ${statusMsg}\n- **Fehlende Dateien:** ${deploymentStatus.summary.criticalFilesMissing.join(', ') || 'Keine'}\n- **Fehlende Elemente:** ${deploymentStatus.summary.elementsMissing.join(', ') || 'Keine'}\n\nBitte überprüfen Sie die Deployment-Logs und den [Status-Report](deployment-status.md) für weitere Informationen.`
+        const errorBody = `**Ein Problem beim Deployment wurde festgestellt.**\n\n**Details:**\n- **Status:** $${statusMsg}\n- **Fehlende Dateien:** ${deploymentStatus.summary.criticalFilesMissing.join(', ') || 'Keine'}\n- **Fehlende Elemente:** ${deploymentStatus.summary.elementsMissing.join(', ') || 'Keine'}\n\nBitte überprüfen Sie die Deployment-Logs und den [Status-Report](deployment-status.md) für weitere Informationen.`
         await sendAlert(errorTitle, errorBody, ['critical', 'deployment']);
     }
       
     log('Deployment-Check abgeschlossen.', 'success');
     return deploymentStatus.summary.status;
   } catch (err) {
-    log(`Unerwarteter Fehler beim Deployment-Check: ${err.message}`, 'error');
+    log(`Unerwarteter Fehler beim Deployment-Check: $${err.message}`, 'error');
     deploymentStatus.summary.status = 'error';
     return 'error';
   }
@@ -348,27 +348,27 @@ async function checkDeployment() {
 async function main() {
   try {
     // Initialisiere Log-Datei
-    if (!fs.existsSync(path.dirname(CONFIG.logFile))) {
+    if (!fs.existsSync(path.dirname(CONFIG.logFile))) { 
       fs.mkdirSync(path.dirname(CONFIG.logFile), { recursive: true });
     }
     
     // Lösche alte Log-Datei
-    if (fs.existsSync(CONFIG.logFile)) {
+    if (fs.existsSync(CONFIG.logFile)) { 
       fs.truncateSync(CONFIG.logFile, 0);
     }
     
     // Führe Deployment-Check durch
     await checkDeployment();
   } catch (err) {
-    log(`Kritischer Fehler: ${err.message}`, 'error');
+    log(`Kritischer Fehler: $${err.message}`, 'error');
     console.error(err);
   }
 }
 
 // Führe Hauptfunktion aus, wenn direkt aufgerufen
-if (require.main === module) {
+if (require.main === module) { 
   main().catch(err => {
-    console.error(`Kritischer Fehler: ${err.message}`, 'error');
+    console.error(`Kritischer Fehler: $${err.message}`, 'error');
   });
 }
 

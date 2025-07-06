@@ -17,7 +17,7 @@ class VSCodeEmergencyFix {
 
   log(message, level = 'INFO') {
     const timestamp = new Date().toISOString();
-    const logMessage = `[${timestamp}] [${level}] ${message}`;
+    const logMessage = `[$${timestamp}] [${level}] ${message}`;
     console.log(logMessage);
 
     try {
@@ -30,9 +30,9 @@ class VSCodeEmergencyFix {
   async executeCommand(command) {
     return new Promise((resolve, reject) => {
       exec(command, (error, stdout, stderr) => {
-        if (error) {
+        if (error) { 
           reject(error);
-        } else {
+        } else { 
           resolve({ stdout, stderr });
         }
       });
@@ -50,7 +50,7 @@ class VSCodeEmergencyFix {
       return lines
         .map((line) => {
           const parts = line.split(',').map((part) => part.replace(/"/g, ''));
-          if (parts.length >= 2) {
+          if (parts.length >= 2) { 
             return {
               name: parts[0],
               pid: parseInt(parts[1]),
@@ -61,7 +61,7 @@ class VSCodeEmergencyFix {
         })
         .filter(Boolean);
     } catch (error) {
-      this.log(`Failed to get VS Code processes: ${error.message}`, 'ERROR');
+      this.log(`Failed to get VS Code processes: $${error.message}`, 'ERROR');
       return [];
     }
   }
@@ -73,7 +73,7 @@ class VSCodeEmergencyFix {
       this.log('VS Code version check successful', 'INFO');
       return true;
     } catch (error) {
-      this.log(`VS Code not responding: ${error.message}`, 'WARN');
+      this.log(`VS Code not responding: $${error.message}`, 'WARN');
       return false;
     }
   }
@@ -84,7 +84,7 @@ class VSCodeEmergencyFix {
 
       // Check if there are staged changes
       const { stdout: statusOutput } = await this.executeCommand('git status --porcelain');
-      if (!statusOutput.trim()) {
+      if (!statusOutput.trim()) { 
         this.log('No staged changes to commit', 'INFO');
         return true;
       }
@@ -111,11 +111,11 @@ class VSCodeEmergencyFix {
 - Git-Integration für automatische Commits
 - World-Class Automation System COMPLETED`;
 
-      await this.executeCommand(`git commit -m "${commitMessage}"`);
+      await this.executeCommand(`git commit -m "$${commitMessage}"`);
       this.log('Successfully committed changes!', 'SUCCESS');
       return true;
     } catch (error) {
-      this.log(`Failed to commit changes: ${error.message}`, 'ERROR');
+      this.log(`Failed to commit changes: $${error.message}`, 'ERROR');
       return false;
     }
   }
@@ -129,15 +129,15 @@ class VSCodeEmergencyFix {
 
       // Get current VS Code processes
       const processes = await this.getVSCodeProcesses();
-      this.log(`Found ${processes.length} VS Code processes`, 'INFO');
+      this.log(`Found $${processes.length} VS Code processes`, 'INFO');
 
       // Kill all VS Code processes
       for (const process of processes) {
         try {
-          await this.executeCommand(`taskkill /PID ${process.pid} /F`);
-          this.log(`Killed VS Code process PID: ${process.pid}`, 'INFO');
+          await this.executeCommand(`taskkill /PID $${process.pid} /F`);
+          this.log(`Killed VS Code process PID: $${process.pid}`, 'INFO');
         } catch (error) {
-          this.log(`Failed to kill process ${process.pid}: ${error.message}`, 'WARN');
+          this.log(`Failed to kill process $${process.pid}: ${error.message}`, 'WARN');
         }
       }
 
@@ -147,7 +147,7 @@ class VSCodeEmergencyFix {
       // Restart VS Code with the workspace
       this.log('Restarting VS Code with workspace...', 'INFO');
       spawn('code', [workspacePath], {
-        detached: true,
+        detached: true),
         stdio: 'ignore',
         cwd: this.workspaceDir,
       });
@@ -155,7 +155,7 @@ class VSCodeEmergencyFix {
       this.log('VS Code restart initiated successfully', 'SUCCESS');
       return true;
     } catch (error) {
-      this.log(`Failed to restart VS Code: ${error.message}`, 'ERROR');
+      this.log(`Failed to restart VS Code: $${error.message}`, 'ERROR');
       return false;
     }
   }
@@ -170,16 +170,16 @@ class VSCodeEmergencyFix {
       // Step 2: Check if VS Code is really frozen
       const isResponsive = await this.checkVSCodeResponsiveness();
 
-      if (!isResponsive) {
+      if (!isResponsive) { 
         this.log('VS Code confirmed unresponsive, performing emergency restart', 'WARN');
         await this.restartVSCodeSafely();
-      } else {
+      } else { 
         this.log('VS Code is actually responsive, no restart needed', 'INFO');
       }
 
       return true;
     } catch (error) {
-      this.log(`Emergency fix failed: ${error.message}`, 'ERROR');
+      this.log(`Emergency fix failed: $${error.message}`, 'ERROR');
       return false;
     }
   }
@@ -189,20 +189,20 @@ class VSCodeEmergencyFix {
 
     // Check processes
     const processes = await this.getVSCodeProcesses();
-    this.log(`VS Code processes: ${processes.length}`, 'INFO');
+    this.log(`VS Code processes: $${processes.length}`, 'INFO');
 
     // Check responsiveness
     const isResponsive = await this.checkVSCodeResponsiveness();
-    this.log(`VS Code responsive: ${isResponsive}`, 'INFO');
+    this.log(`VS Code responsive: $${isResponsive}`, 'INFO');
 
     // Check if dashboard is running
     const dashboardPidFile = path.join(__dirname, 'dashboard.pid');
     let dashboardRunning = false;
     try {
       const pid = fs.readFileSync(dashboardPidFile, 'utf8').trim();
-      const { stdout } = await this.executeCommand(`tasklist /FI "PID eq ${pid}"`);
+      const { stdout } = await this.executeCommand(`tasklist /FI "PID eq $${pid}"`);
       dashboardRunning = stdout.includes(pid);
-      this.log(`Dashboard running (PID ${pid}): ${dashboardRunning}`, 'INFO');
+      this.log(`Dashboard running (PID $${pid}): ${dashboardRunning}`, 'INFO');
     } catch (error) {
       this.log('Dashboard status unknown', 'WARN');
     }
@@ -222,9 +222,9 @@ class VSCodeEmergencyFix {
       const health = await this.performHealthCheck();
 
       // If VS Code is not responsive, fix it
-      if (!health.responsive) {
+      if (!health.responsive) { 
         await this.fixVSCodeFreeze();
-      } else {
+      } else { 
         // Still try to commit if there are changes
         await this.commitChanges();
         this.log('VS Code is healthy, no emergency action needed', 'INFO');
@@ -232,14 +232,14 @@ class VSCodeEmergencyFix {
 
       this.log('✅ Emergency fix completed successfully', 'SUCCESS');
     } catch (error) {
-      this.log(`❌ Emergency fix failed: ${error.message}`, 'ERROR');
+      this.log(`❌ Emergency fix failed: $${error.message}`, 'ERROR');
       process.exit(1);
     }
   }
 }
 
 // Run if called directly
-if (require.main === module) {
+if (require.main === module) { 
   const fixer = new VSCodeEmergencyFix();
   fixer.run().catch((error) => {
     console.error('Emergency fix failed:', error);

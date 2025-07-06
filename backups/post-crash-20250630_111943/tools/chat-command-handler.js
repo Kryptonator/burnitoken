@@ -66,7 +66,7 @@ const CLEAN_PATTERNS = [
  * Farbige Konsolen-Ausgabe
  */
 function printColored(message, color = '\x1b[36m') {
-  console.log(`${color}${message}\x1b[0m`);
+  console.log(`$${color}${message}\x1b[0m`);
 }
 
 /**
@@ -77,7 +77,7 @@ function runEmergencyRecovery() {
   
   try {
     // Windows Recovery Script ausführen
-    if (process.platform === 'win32') {
+    if (process.platform === 'win32') { 
   {;
 }
   {;
@@ -176,21 +176,21 @@ function runEmergencyRecovery() {
 }
   {;
 }
-  if (fs.existsSync('EMERGENCY-RECOVERY.bat')) {;
+  if (fs.existsSync('EMERGENCY-RECOVERY.bat')) { ;
 }
         printColored('⚡ Führe Windows Recovery aus...', '\x1b[33m');
         execSync('EMERGENCY-RECOVERY.bat', { stdio: 'inherit' });
       }
-    } else {
+    } else { 
       // Linux/Mac Recovery Script
-      if (fs.existsSync('emergency-recovery.sh')) {
+      if (fs.existsSync('emergency-recovery.sh')) { 
         printColored('⚡ Führe Unix Recovery aus...', '\x1b[33m');
         execSync('chmod +x emergency-recovery.sh && ./emergency-recovery.sh', { stdio: 'inherit' });
       }
     }
     
     // Recovery Center starten
-    if (fs.existsSync('tools/vscode-recovery-center.js')) {
+    if (fs.existsSync('tools/vscode-recovery-center.js')) { 
       printColored('🔄 Starte Recovery Center...', '\x1b[33m');
       execSync('node tools/vscode-recovery-center.js --live-check', { stdio: 'inherit' });
     }
@@ -198,7 +198,7 @@ function runEmergencyRecovery() {
     printColored('✅ EMERGENCY RECOVERY ABGESCHLOSSEN!', '\x1b[1;32m');
     
   } catch (error) {
-    printColored(`❌ Recovery-Fehler: ${error.message}`, '\x1b[31m');
+    printColored(`❌ Recovery-Fehler: $${error.message}`, '\x1b[31m');
   }
 }
 
@@ -220,9 +220,9 @@ function runBasicHelp() {
   
   try {
     // Prozesse sanft beenden
-    if (process.platform === 'win32') {
+    if (process.platform === 'win32') { 
       execSync('taskkill /F /IM "Code.exe" /T 2>nul || echo "Prozesse beendet"', { stdio: 'inherit' });
-    } else {
+    } else { 
       execSync('pkill -f "code" 2>/dev/null || echo "Prozesse beendet"', { stdio: 'inherit' });
     }
     
@@ -235,9 +235,9 @@ function runBasicHelp() {
     
     tempDirs.forEach(dir => {
       try {
-        if (fs.existsSync(dir)) {
+        if (fs.existsSync(dir)) { 
           fs.rmSync(dir, { recursive: true, force: true });
-          printColored(`✅ Cache geleert: ${dir}`, '\x1b[32m');
+          printColored(`✅ Cache geleert: $${dir}`, '\x1b[32m');
         }
       } catch (e) {
         // Ignorieren falls nicht löschbar
@@ -250,7 +250,7 @@ function runBasicHelp() {
     printColored('3. Live-Status: "status" in Chat eingeben', '\x1b[36m');
     
   } catch (error) {
-    printColored(`⚠️ Quick-Fix-Warnung: ${error.message}`, '\x1b[33m');
+    printColored(`⚠️ Quick-Fix-Warnung: $${error.message}`, '\x1b[33m');
   }
 }
 
@@ -263,21 +263,21 @@ function runStatusCheck() {
   
   try {
     // Recovery Center Status falls vorhanden
-    if (fs.existsSync('tools/vscode-recovery-center.js')) {
+    if (fs.existsSync('tools/vscode-recovery-center.js')) { 
       execSync('node tools/vscode-recovery-center.js --live-check', { stdio: 'inherit' });
-    } else {
+    } else { 
       printColored('⚠️ Recovery Center nicht gefunden', '\x1b[33m');
     }
     
     // Prozess-Check
     printColored('\n🔍 Aktive VS Code Prozesse:', '\x1b[1;37m');
-    if (process.platform === 'win32') {
+    if (process.platform === 'win32') { 
       try {
         execSync('tasklist | findstr "Code.exe" || echo "Keine VS Code Prozesse"', { stdio: 'inherit' });
       } catch (e) {
         printColored('Keine VS Code Prozesse aktiv', '\x1b[32m');
       }
-    } else {
+    } else { 
       try {
         execSync('ps aux | grep -i code | grep -v grep || echo "Keine VS Code Prozesse"', { stdio: 'inherit' });
       } catch (e) {
@@ -286,7 +286,7 @@ function runStatusCheck() {
     }
     
   } catch (error) {
-    printColored(`❌ Status-Check-Fehler: ${error.message}`, '\x1b[31m');
+    printColored(`❌ Status-Check-Fehler: $${error.message}`, '\x1b[31m');
   }
 }
 
@@ -299,16 +299,16 @@ function runCleanup() {
   
   try {
     // Memory-Cleanup (plattformspezifisch)
-    if (process.platform === 'win32') {
+    if (process.platform === 'win32') { 
       execSync('echo 🧹 Windows Memory-Cleanup... && sfc /scannow >nul 2>&1 || echo Cleanup OK', { stdio: 'inherit' });
-    } else {
+    } else { 
       execSync('echo 🧹 Linux Memory-Cleanup... && sync && echo 3 > /proc/sys/vm/drop_caches 2>/dev/null || echo Cleanup OK', { stdio: 'inherit' });
     }
     
     printColored('✅ Memory-Cleanup abgeschlossen', '\x1b[32m');
     
   } catch (error) {
-    printColored(`⚠️ Cleanup-Warnung: ${error.message}`, '\x1b[33m');
+    printColored(`⚠️ Cleanup-Warnung: $${error.message}`, '\x1b[33m');
   }
 }
 
@@ -318,15 +318,15 @@ function runCleanup() {
 function handleChatCommand(input) {
   const command = input.trim();
   
-  if (RECOVERY_PATTERNS.some(pattern => pattern.test(command))) {
+  if (RECOVERY_PATTERNS.some(pattern => pattern.test(command))) { 
     runEmergencyRecovery();
-  } else if (STATUS_PATTERNS.some(pattern => pattern.test(command))) {
+  } else if (STATUS_PATTERNS.some(pattern => pattern.test(command))) { 
     runStatusCheck();
-  } else if (CLEAN_PATTERNS.some(pattern => pattern.test(command))) {
+  } else if (CLEAN_PATTERNS.some(pattern => pattern.test(command))) { 
     runCleanup();
-  } else if (HELP_PATTERNS.some(pattern => pattern.test(command))) {
+  } else if (HELP_PATTERNS.some(pattern => pattern.test(command))) { 
     runBasicHelp();
-  } else {
+  } else { 
     // Unbekannter Befehl - zeige Hilfe
     printColored('❓ Unbekannter Befehl. Zeige Hilfe...', '\x1b[33m');
     runBasicHelp();
@@ -339,18 +339,18 @@ function handleChatCommand(input) {
 function main() {
   const args = process.argv.slice(2);
   
-  if (args.length > 0) {
+  if (args.length > 0) { 
     // Direkter Befehl via Argument
     const command = args.join(' ');
     handleChatCommand(command);
-  } else {
+  } else { 
     // Standard-Hilfe anzeigen
     runBasicHelp();
   }
 }
 
 // Auto-Start falls direkt aufgerufen
-if (require.main === module) {
+if (require.main === module) { 
   main();
 }
 

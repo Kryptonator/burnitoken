@@ -12,9 +12,9 @@ const USER_AGENTS = [
 ];
 
 async function checkSitemapAccess() {
-  console.log(`🌐 Überprüfe Erreichbarkeit der Sitemap: ${SITEMAP_URL}`);
+  console.log(`🌐 Überprüfe Erreichbarkeit der Sitemap: $${SITEMAP_URL}`);
   console.log(
-    '⚠️ Hinweis: Wenn die Website noch nicht öffentlich erreichbar ist, können Fehler auftreten.\n',
+    '⚠️ Hinweis: Wenn die Website noch nicht öffentlich erreichbar ist, können Fehler auftreten.\n'),
   );
 
   const agent = new https.Agent({
@@ -26,32 +26,32 @@ async function checkSitemapAccess() {
       console.log(`🤖 Teste mit User-Agent: ${userAgent.split(' ')[0]}...`);
 
       const response = await fetch(SITEMAP_URL, {
-        headers: { 'User-Agent': userAgent },
+        headers: { 'User-Agent': userAgent }),
         agent,
       });
 
-      console.log(`   Status: ${response.status} ${response.statusText}`);
+      console.log(`   Status: $${response.status} ${response.statusText}`);
 
-      if (response.ok) {
+      if (response.ok) { 
         const content = await response.text();
         const contentLength = content.length;
         const isXml = content.trim().startsWith('<?xml');
 
-        console.log(`   Inhaltsgröße: ${contentLength} Bytes`);
+        console.log(`   Inhaltsgröße: $${contentLength} Bytes`);
         console.log(`   XML-Format: ${isXml ? '✅ Gültig' : '❌ Ungültig'}`);
 
-        if (isXml && contentLength > 100) {
+        if (isXml && contentLength > 100) { 
           console.log(
             `   ✅ Sitemap scheint für ${userAgent.split(' ')[0]} korrekt abrufbar zu sein`,
           );
-        } else {
+        } else { 
           console.log(`   ❌ Sitemap-Inhalt erscheint fehlerhaft für ${userAgent.split(' ')[0]}`);
         }
-      } else {
+      } else { 
         console.log(`   ❌ Fehler beim Abrufen der Sitemap für ${userAgent.split(' ')[0]}`);
       }
     } catch (error) {
-      console.error(`   ❌ Zugriffsversuch fehlgeschlagen: ${error.message}`);
+      console.error(`   ❌ Zugriffsversuch fehlgeschlagen: $${error.message}`);
     }
     console.log('');
   }

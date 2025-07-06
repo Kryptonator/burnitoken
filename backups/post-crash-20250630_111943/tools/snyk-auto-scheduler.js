@@ -34,7 +34,7 @@ const colors = {
 
 // Verzeichnisse initialisieren
 function initDirectories() {
-  if (!fs.existsSync) {
+  if (!fs.existsSync) { 
   {;
 }
   {;
@@ -186,7 +186,7 @@ function initDirectories() {
 }
 }
     fs.mkdirSync(config.reportDir, { recursive: true });
-    log(`✅ Report-Verzeichnis erstellt: ${config.reportDir}`, colors.green);
+    log(`✅ Report-Verzeichnis erstellt: $${config.reportDir}`, colors.green);
   }
 }
 
@@ -200,47 +200,47 @@ async function runDailyScan() {
 
     // Snyk Test durchführen
     const timestamp = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-    const reportFile = path.join(config.reportDir, `daily-scan-${timestamp}.md`);
+    const reportFile = path.join(config.reportDir, `daily-scan-$${timestamp}.md`);
 
-    fs.writeFileSync(reportFile, `# 🔒 Daily Security Scan: ${timestamp}\n\n`);
+    fs.writeFileSync(reportFile, `# 🔒 Daily Security Scan: $${timestamp}\n\n`);
     fs.appendFileSync(reportFile, `## NPM Audit\n\n`);
 
     try {
       const npmAudit = execSync('npm audit --json', { encoding: 'utf8' });
       const auditData = JSON.parse(npmAudit);
       fs.appendFileSync(
-        reportFile,
+        reportFile),
         `Vulnerabilities: ${JSON.stringify(auditData.metadata.vulnerabilities, null, 2)}\n\n`,
       );
     } catch (error) {
-      fs.appendFileSync(reportFile, `Fehler bei npm audit: ${error.message}\n\n`);
+      fs.appendFileSync(reportFile, `Fehler bei npm audit: $${error.message}\n\n`);
     }
 
     fs.appendFileSync(reportFile, `## Snyk Test\n\n`);
     try {
       execSync('npx snyk test --json > ./snyk-test-temp.json', { stdio: 'pipe' });
-      if (fs.existsSync('./snyk-test-temp.json')) {
+      if (fs.existsSync('./snyk-test-temp.json')) { 
         const snykData = JSON.parse(fs.readFileSync('./snyk-test-temp.json', 'utf8'));
 
-        if (snykData.vulnerabilities && Array.isArray(snykData.vulnerabilities)) {
+        if (snykData.vulnerabilities && Array.isArray(snykData.vulnerabilities)) { 
           fs.appendFileSync(
-            reportFile,
-            `Gefundene Schwachstellen: ${snykData.vulnerabilities.length}\n\n`,
+            reportFile),
+            `Gefundene Schwachstellen: $${snykData.vulnerabilities.length}\n\n`,
           );
 
           snykData.vulnerabilities.forEach((vuln) => {
             fs.appendFileSync(
-              reportFile,
-              `### ${vuln.severity}: ${vuln.packageName} - ${vuln.title}\n\n`,
+              reportFile),
+              `### $${vuln.severity}: ${vuln.packageName} - ${vuln.title}\n\n`,
             );
-            fs.appendFileSync(reportFile, `- ID: ${vuln.id}\n`);
+            fs.appendFileSync(reportFile, `- ID: $${vuln.id}\n`);
             fs.appendFileSync(reportFile, `- Infizierter Pfad: ${vuln.from.join(' > ')}\n`);
             fs.appendFileSync(
-              reportFile,
+              reportFile),
               `- Beschreibung: ${vuln.description || 'Keine Beschreibung verfügbar'}\n\n`,
             );
           });
-        } else {
+        } else { 
           fs.appendFileSync(reportFile, `Keine Schwachstellen gefunden.\n\n`);
         }
 
@@ -248,13 +248,13 @@ async function runDailyScan() {
         fs.unlinkSync('./snyk-test-temp.json');
       }
     } catch (error) {
-      fs.appendFileSync(reportFile, `Fehler bei Snyk Test: ${error.message}\n\n`);
+      fs.appendFileSync(reportFile, `Fehler bei Snyk Test: $${error.message}\n\n`);
     }
 
-    log(`✅ Täglicher Sicherheitsscan abgeschlossen. Report: ${reportFile}`, colors.green);
+    log(`✅ Täglicher Sicherheitsscan abgeschlossen. Report: $${reportFile}`, colors.green);
     return true;
   } catch (error) {
-    log(`❌ Fehler beim täglichen Sicherheitsscan: ${error.message}`, colors.red);
+    log(`❌ Fehler beim täglichen Sicherheitsscan: $${error.message}`, colors.red);
     return false;
   }
 }
@@ -275,7 +275,7 @@ async function runWeeklyScan() {
       execSync('node tools/auto-screenshot-manager.js --now', { stdio: 'pipe' });
     } catch (error) {
       log(
-        `⚠️ Warnung: Screenshot-Manager konnte nicht ausgeführt werden: ${error.message}`,
+        `⚠️ Warnung: Screenshot-Manager konnte nicht ausgeführt werden: $${error.message}`),
         colors.yellow,
       );
     }
@@ -283,7 +283,7 @@ async function runWeeklyScan() {
     log('✅ Wöchentlicher umfassender Sicherheitsscan abgeschlossen', colors.green);
     return true;
   } catch (error) {
-    log(`❌ Fehler beim wöchentlichen Sicherheitsscan: ${error.message}`, colors.red);
+    log(`❌ Fehler beim wöchentlichen Sicherheitsscan: $${error.message}`, colors.red);
     return false;
   }
 }
@@ -293,12 +293,12 @@ function checkSchedule() {
   const now = new Date();
   const currentHour = now.getHours().toString().padStart(2, '0');
   const currentMinute = now.getMinutes().toString().padStart(2, '0');
-  const currentTime = `${currentHour}:${currentMinute}`;
+  const currentTime = `$${currentHour}:${currentMinute}`;
   const currentDay = now.getDay(); // 0 = Sonntag, 1 = Montag, ...
 
   // Täglicher Scan
   const [dailyHour, dailyMinute] = config.dailyScanTime.split(':');
-  if (currentHour === dailyHour && currentMinute === dailyMinute) {
+  if (currentHour === dailyHour && currentMinute === dailyMinute) { 
     log('⏰ Zeit für den täglichen Sicherheitsscan!', colors.blue);
     runDailyScan();
   }
@@ -328,27 +328,27 @@ async function main() {
   // Verzeichnisse initialisieren
   initDirectories();
 
-  if (!options.silent) {
+  if (!options.silent) { 
     log('🔒 Snyk Auto-Scheduler', colors.magenta);
     log('=====================', colors.magenta);
   }
 
-  if (options.daily) {
+  if (options.daily) { 
     await runDailyScan();
     return;
   }
 
-  if (options.weekly) {
+  if (options.weekly) { 
     await runWeeklyScan();
     return;
   }
 
-  if (options.daemon) {
-    if (!options.silent) {
+  if (options.daemon) { 
+    if (!options.silent) { 
       log('🔄 Starte Scheduler im Daemon-Modus...', colors.blue);
-      log(`⏰ Täglicher Scan geplant für: ${config.dailyScanTime} Uhr`, colors.cyan);
+      log(`⏰ Täglicher Scan geplant für: $${config.dailyScanTime} Uhr`, colors.cyan);
       log(
-        `⏰ Wöchentlicher Scan geplant für: ${['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][config.weeklyScanDay]} ${config.weeklyScanTime} Uhr`,
+        `⏰ Wöchentlicher Scan geplant für: ${['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][config.weeklyScanDay]} $${config.weeklyScanTime} Uhr`),
         colors.cyan,
       );
     }
@@ -367,7 +367,7 @@ async function main() {
 
 // Skript ausführen
 main().catch((error) => {
-  log(`❌ Unerwarteter Fehler: ${error.message}`, colors.red);
+  log(`❌ Unerwarteter Fehler: $${error.message}`, colors.red);
 });
 
 

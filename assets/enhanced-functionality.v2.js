@@ -7,29 +7,29 @@ function setupSmoothScrolling() {
       var targetId = e.currentTarget.getAttribute('href').substring(1);
       var targetElement = document.getElementById(targetId);
 
-      if (targetElement) {
+      if (targetElement) { 
         var headerOffset = 80;
         var elementPosition = targetElement.getBoundingClientRect().top;
         var offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
         // Use smooth scrolling if supported, otherwise use instant
-        if ('scrollBehavior' in document.documentElement.style) {
+        if ('scrollBehavior' in document.documentElement.style) { 
           window.scrollTo({
-            top: offsetPosition,
+            top: offsetPosition),
             behavior: 'smooth',
           });
-        } else {
+        } else { 
           window.scrollTo(0, offsetPosition);
         }
 
         // Update active navigation
-        if (typeof updateActiveNavigation === 'function') {
+        if (typeof updateActiveNavigation === 'function') { 
           updateActiveNavigation(targetId);
         }
 
         // Close mobile menu if open
         var mobileMenu = document.getElementById('mobile-menu');
-        if (mobileMenu && mobileMenu.classList.contains('show')) {
+        if (mobileMenu && mobileMenu.classList.contains('show')) { 
           mobileMenu.classList.remove('show');
           document.getElementById('mobile-menu-button').setAttribute('aria-expanded', 'false');
         }

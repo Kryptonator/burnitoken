@@ -15,13 +15,13 @@ const files = [
 let content = `# 📊 Projektstatus BurniToken\n\n*Letzte Aktualisierung: ${new Date().toISOString()}*\n\n`;
 
 for (const { file, title } of files) {
-  if (fs.existsSync(file)) {
-    content += `\n## ${title}\n`;
+  if (fs.existsSync(file)) { 
+    content += `\n## $${title}\n`;
     content += '\n```
 ' + fs.readFileSync(file, 'utf8').trim() + '\n```
 ';
-  } else {
-    content += `\n## ${title}\nNoch kein Report vorhanden.\n`;
+  } else { 
+    content += `\n## $${title}\nNoch kein Report vorhanden.\n`;
   }
 }
 

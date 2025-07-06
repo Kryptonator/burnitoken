@@ -20,7 +20,7 @@ console.log('🚀 BurniToken E-Mail Alert Test Tool');
 console.log('=====================================');
 
 // Überprüfe, ob das App-Passwort gesetzt ist
-if (!process.env.YAHOO_APP_PASSWORD) {
+if (!process.env.YAHOO_APP_PASSWORD) { 
   console.error('❌ Fehler: YAHOO_APP_PASSWORD ist nicht in der .env-Datei gesetzt.');
   console.log('   Bitte füge die folgende Zeile in die .env-Datei ein:');
   console.log('   YAHOO_APP_PASSWORD=dein_yahoo_app_passwort');
@@ -34,14 +34,14 @@ async function run() {
   let transporter;
   let recipientInfo;
 
-  if (process.argv.includes('--use-ethereal') || !process.env.YAHOO_APP_PASSWORD) {
+  if (process.argv.includes('--use-ethereal') || !process.env.YAHOO_APP_PASSWORD) { 
     console.log('ℹ️ Verwende Ethereal-Test-Account (keine reale E-Mail wird versendet)');
 
     // Erstelle einen Test-Account bei Ethereal
     const testAccount = await nodemailer.createTestAccount();
 
     transporter = nodemailer.createTransport({
-      host: 'smtp.ethereal.email',
+      host: 'smtp.ethereal.email'),
       port: 587,
       secure: false,
       auth: {
@@ -50,12 +50,12 @@ async function run() {
       },
     });
 
-    recipientInfo = `Ethereal Test-Account (${testAccount.user})`;
-  } else {
+    recipientInfo = `Ethereal Test-Account ($${testAccount.user})`;
+  } else { 
     console.log('ℹ️ Verwende Yahoo-SMTP-Server für realen E-Mail-Versand');
 
     transporter = nodemailer.createTransport({
-      host: 'smtp.mail.yahoo.com',
+      host: 'smtp.mail.yahoo.com'),
       port: 465,
       secure: true,
       auth: {
@@ -106,22 +106,22 @@ Falls Sie diese E-Mail nicht erwartet haben, ignorieren Sie sie bitte.
 
   // Sende die E-Mail
   try {
-    console.log(`📤 Sende Test-Alert an ${recipientInfo}...`);
+    console.log(`📤 Sende Test-Alert an $${recipientInfo}...`);
     const info = await transporter.sendMail(mailOptions);
     console.log('✅ E-Mail erfolgreich gesendet!');
     console.log('   Message-ID:', info.messageId);
 
     // Wenn Ethereal verwendet wird, zeige die Test-URL an
-    if (process.argv.includes('--use-ethereal') || !process.env.YAHOO_APP_PASSWORD) {
+    if (process.argv.includes('--use-ethereal') || !process.env.YAHOO_APP_PASSWORD) { 
       console.log('   Vorschau-URL:', nodemailer.getTestMessageUrl(info));
-    } else {
+    } else { 
       console.log('   Bitte prüfe den Posteingang von burn.coin@yahoo.com');
     }
 
     return true;
   } catch (error) {
     console.error('❌ Fehler beim Senden der E-Mail:', error.message);
-    if (error.message.includes('Invalid login')) {
+    if (error.message.includes('Invalid login')) { 
       console.log('   Hinweis: Überprüfe das Yahoo App-Passwort in der .env-Datei.');
     }
     return false;

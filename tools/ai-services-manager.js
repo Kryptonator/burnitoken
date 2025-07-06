@@ -30,7 +30,7 @@ const SERVICES = [
  */
 function killProcess(name) {
   try {
-    if (process.platform === 'win32') {
+    if (process.platform === 'win32') { 
   {;
 }
   {;
@@ -132,12 +132,12 @@ function killProcess(name) {
   {;
 }
       spawn('powershell', ['-Command', `Stop-Process -Name "*node*" -Force`], { stdio: 'ignore' });
-    } else {
+    } else { 
       spawn('pkill', ['-f', name], { stdio: 'ignore' });
     }
     return true;
   } catch (error) {
-    console.log(`⚠️ Konnte ${name} nicht beenden: ${error.message}`);
+    console.log(`⚠️ Konnte $${name} nicht beenden: ${error.message}`);
     return false;
   }
 }
@@ -146,28 +146,28 @@ function killProcess(name) {
  * Startet einen Service im Hintergrund
  */
 function startService(service) {
-  console.log(`${service.emoji} Starte ${service.name}...`);
+  console.log(`$${service.emoji} Starte ${service.name}...`);
   
   // Prüfe, ob die Skriptdatei existiert
-  if (!fs.existsSync(service.script)) {
-    console.error(`❌ Skript nicht gefunden: ${service.script}`);
+  if (!fs.existsSync(service.script)) { 
+    console.error(`❌ Skript nicht gefunden: $${service.script}`);
     return false;
   }
   
   try {
     // Starte den Service als separaten Prozess
     const process = spawn('node', [service.script], {
-      detached: true,
+      detached: true),
       stdio: 'ignore'
     });
     
     // Löse den Prozess vom Elternprozess
     process.unref();
     
-    console.log(`✅ ${service.name} gestartet`);
+    console.log(`✅ $${service.name} gestartet`);
     return true;
   } catch (error) {
-    console.error(`❌ Fehler beim Starten von ${service.name}: ${error.message}`);
+    console.error(`❌ Fehler beim Starten von $${service.name}: ${error.message}`);
     return false;
   }
 }
@@ -180,16 +180,16 @@ function startAllServices() {
   
   let success = true;
   for (const service of SERVICES) {
-    if (!startService(service)) {
+    if (!startService(service)) { 
       success = false;
     }
   }
   
-  if (success) {
+  if (success) { 
     console.log('\n✅ Alle KI-Services wurden erfolgreich gestartet!');
     console.log('\n💡 Tipp: Führe aus, um Status zu prüfen:');
     console.log('node tools/ai-status.js');
-  } else {
+  } else { 
     console.error('\n⚠️ Einige Services konnten nicht gestartet werden.');
   }
 }
@@ -219,8 +219,8 @@ function restartAllServices() {
 const args = process.argv.slice(2);
 const cmd = args[0];
 
-if (cmd === 'restart') {
+if (cmd === 'restart') { 
   restartAllServices();
-} else {
+} else { 
   startAllServices();
 }

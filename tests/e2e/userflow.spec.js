@@ -21,7 +21,7 @@ const navLinks = [
 ];
 
 for (const link of navLinks) 
-  test(`Navigation zu ${link.target} funktioniert`, async ({ page }) => {
+  test(`Navigation zu $${link.target} funktioniert`, async ({ page }) => {
     await page.goto('http://localhost:8080');
     await page.click(link.selector);
     await expect(page.locator(link.target)).toBeVisible();

@@ -1,0 +1,257 @@
+// tools/gsc-crawl-stats.js
+// Google Search Console Crawling-Statistiken Report
+// 2025-06-22: Aktualisiert mit robusterer Fehlerbehandlung
+
+const { google } = require('googleapis');
+const fs = require('fs');
+const path = require('path');
+
+// SICHERHEITSHINWEIS: Die Service-Account-Datei enthält private Schlüssel und muss sicher verwahrt werden
+// Diese Datei sollte in .gitignore aufgenommen sein
+const SERVICE_ACCOUNT_FILE = path.join(__dirname, 'gsc-service-account.json');
+
+// Domain-Property verwenden, für die der Service-Account berechtigt ist
+const SITE_URL = 'sc-domain:burnitoken.website';
+
+// Test-Modus-Flag
+const TEST_MODE = process.argv.includes('--test');
+
+async function getCrawlStats() {
+  console.log('====================================================');
+  console.log('🕸️ GOOGLE SEARCH CONSOLE CRAWLING-STATISTIKEN');
+  console.log('====================================================');
+
+  try {
+    console.log(`🌐 Site: ${SITE_URL}`);
+
+    // Auth-Client erstellen
+    const auth = new google.auth.GoogleAuth({
+      keyFile: SERVICE_ACCOUNT_FILE,
+      scopes: ['https://www.googleapis.com/auth/webmasters.readonly'],
+    });
+
+    const authClient = await auth.getClient();
+    const searchconsole = google.searchconsole({ version: 'v1', auth: authClient });
+
+    // Crawling-Probleme abfragen
+    console.log('\n🔍 Frage Crawling-Probleme ab...');
+
+    try {
+      // Versuche zuerst die URL-Crawler-API
+      const urlCrawlErrorsResponse = await searchconsole.urlcrawlerrorssamples.list({
+        siteUrl: SITE_URL,
+        category: 'notFound',
+        platform: 'web',
+      });
+
+      console.log('\n📋 CRAWLING-PROBLEME (404 Fehler):');
+      console.log('------------------------------');
+
+      if (
+        !urlCrawlErrorsResponse?.data?.urlCrawlErrorSample ||
+        urlCrawlErrorsResponse.data.urlCrawlErrorSample.length === 0
+      ) {
+        console.log('✅ Keine 404-Fehler gefunden.');
+      } else {
+        // Zeige die gefundenen Fehler an
+        const errorSamples = urlCrawlErrorsResponse.data.urlCrawlErrorSample;
+        errorSamples.forEach((sample, index) => {
+          console.log(`${index + 1}. ${sample.pageUrl}`);
+          console.log(`   Entdeckt: ${new Date(sample.first_detected).toLocaleDateString()}`);
+          console.log(`   Zuletzt geprüft: ${new Date(sample.last_crawled).toLocaleDateString()}`);
+        });
+      }
+    } catch (urlApiError) {
+      // Fallback-Methode, wenn die URL-Crawler-API fehlschlägt
+      console.log('⚠️ Die URL-Crawler-Fehler-API ist möglicherweise veraltet oder nicht verfügbar.');
+      console.log('💡 Verwende alternative Methode zur Erfassung von Crawling-Problemen...');
+      
+      // Verwende die Search Analytics API als Alternative
+      const oneMonthAgo = new Date();
+      oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);
+      
+      const searchAnalyticsQuery = await searchconsole.searchanalytics.query({
+        siteUrl: SITE_URL,
+        requestBody: {
+          startDate: oneMonthAgo.toISOString().split('T')[0],
+          endDate: new Date().toISOString().split('T')[0],
+          dimensions: ['page'],
+          rowLimit: 500
+        }
+      });
+      
+      console.log('\n📋 ALTERNATIVE CRAWLING-INFORMATIONEN:');
+      console.log('------------------------------');
+      
+      if (!searchAnalyticsQuery?.data?.rows || searchAnalyticsQuery.data.rows.length === 0) {
+        console.log('✅ Keine Crawling-Probleme in Suchanalysen identifiziert.');
+      } else {
+        // Zeige relevante Seiteninformationen
+        const rows = searchAnalyticsQuery.data.rows;
+        console.log(`Gefunden: ${rows.length} indexierte URLs`);
+        
+        // Zeige Top 5 Seiten mit niedrigen Klickraten an
+        console.log('\n📉 TOP 5 SEITEN MIT NIEDRIGEN KLICKRATEN:');
+        const lowCtrPages = [...rows]
+          .filter(row => row.impressions > 10) // Nur Seiten mit genügend Impressions
+          .sort((a, b) => a.ctr - b.ctr) // Sortiere nach CTR aufsteigend
+          .slice(0, 5); // Nimm die Top 5
+        
+        if (lowCtrPages.length > 0) {
+          lowCtrPages.forEach((page, index) => {
+            console.log(`${index + 1}. ${page.keys[0]}`);
+            console.log(`   CTR: ${(page.ctr * 100).toFixed(2)}%, Pos: ${page.position.toFixed(1)}, Impr: ${page.impressions}`);
+          });
+        } else {
+          console.log('Keine Seiten mit niedriger Klickrate identifiziert.');
+        }
+      }
+    }
+      const errors = urlCrawlErrorsResponse.data.urlCrawlErrorSample;
+
+      console.log(`❌ Gefundene 404-Fehler: ${errors.length}`);
+      console.log('URL                                       | Entdeckt am     | Letzte Prüfung');
+      console.log('------------------------------------------|----------------|----------------');
+
+      errors.forEach((error) => {
+        const url =
+          error.pageUrl.length > 40
+            ? error.pageUrl.substring(0, 37) + '...'
+            : error.pageUrl.padEnd(40);
+        const firstDetected = new Date(error.firstDetected).toLocaleDateString();
+        const lastCrawled = new Date(error.lastCrawled).toLocaleDateString();
+
+        console.log(`${url} | ${firstDetected.padEnd(14)} | ${lastCrawled}`);
+      });
+    }
+
+    // Auch andere Error-Kategorien prüfen
+    const errorCategories = ['serverError', 'soft404', 'roboted', 'authPermissions'];
+
+    for (const category of errorCategories) {
+      try {
+        const response = await searchconsole.urlcrawlerrorssamples.list({
+          siteUrl: SITE_URL,
+          category: category,
+          platform: 'web',
+        });
+
+        const errorCount = response.data.urlCrawlErrorSample
+          ? response.data.urlCrawlErrorSample.length
+          : 0;
+
+        console.log(
+          `\n${category}: ${errorCount === 0 ? '✅ Keine Fehler' : `❌ ${errorCount} Fehler gefunden`}`,
+        );
+
+        if (errorCount > 0 && category === 'serverError') {
+          // Details zu Server-Fehlern anzeigen, da diese oft kritisch sind
+          console.log('URL                                       | Fehlercode');
+          console.log('------------------------------------------|----------');
+
+          response.data.urlCrawlErrorSample.forEach((error) => {
+            const url =
+              error.pageUrl.length > 40
+                ? error.pageUrl.substring(0, 37) + '...'
+                : error.pageUrl.padEnd(40);
+            const responseCode = error.responseCode || 'Unbekannt';
+
+            console.log(`${url} | ${responseCode}`);
+          });
+        }
+      } catch (err) {
+        // Manche APIs unterstützen nicht alle Error-Kategorien, daher Fehler ignorieren
+        console.log(`\n${category}: API nicht verfügbar für diese Kategorie`);
+      }
+    }
+
+    // Sitemap-Status prüfen
+    console.log('\n🗺️ SITEMAP-STATUS:');
+    console.log('------------------------------');
+
+    try {
+      const sitemapsResponse = await searchconsole.sitemaps.list({
+        siteUrl: SITE_URL,
+      });
+
+      if (!sitemapsResponse.data.sitemap || sitemapsResponse.data.sitemap.length === 0) {
+        console.log('❓ Keine Sitemaps in der GSC gefunden.');
+      } else {
+        sitemapsResponse.data.sitemap.forEach((sitemap) => {
+          console.log(`URL: ${sitemap.path}`);
+          console.log(
+            `Status: ${sitemap.lastDownloaded ? '✅ Erfolgreich verarbeitet' : '❓ Noch nicht verarbeitet'}`,
+          );
+
+          if (sitemap.lastDownloaded) {
+            console.log(
+              `Letzte Verarbeitung: ${new Date(sitemap.lastDownloaded).toLocaleString()}`,
+            );
+          }
+
+          if (sitemap.warnings) console.log(`⚠️ Warnungen: ${sitemap.warnings}`);
+          if (sitemap.errors) console.log(`❌ Fehler: ${sitemap.errors}`);
+          console.log('------------------------------');
+        });
+      }
+    } catch (err) {
+      console.log(`❓ Fehler beim Abrufen des Sitemap-Status: ${err.message}`);
+    }
+
+    // Indexierungs-Abdeckung-Hinweis
+    console.log('\n📝 HINWEIS ZUR INDEXIERUNGS-ABDECKUNG:');
+    console.log('Die detaillierte Indexierungs-Abdeckung (Index Coverage) kann über die GSC API');
+    console.log('nicht direkt abgefragt werden. Bitte prüfen Sie diese in der Search Console UI:');
+    console.log('https://search.google.com/search-console/index');
+
+    if (process.argv.includes('--save')) {
+      // Erstelle Report-Verzeichnis, falls es nicht existiert
+      if (!fs.existsSync(path.join(__dirname, '../reports'))) {
+        fs.mkdirSync(path.join(__dirname, '../reports'), { recursive: true });
+      }
+
+      // Speichere Crawling-Fehler in JSON-Datei
+      const today = new Date().toISOString().split('T')[0];
+      const outputFile = path.join(__dirname, '../reports', `gsc-crawl-errors-${today}.json`);
+
+      // Sammle alle Fehler
+      const crawlingReport = {
+        date: new Date().toISOString(),
+        site: SITE_URL,
+        errors: {},
+      };
+
+      for (const category of ['notFound', 'serverError', 'soft404', 'roboted', 'authPermissions']) {
+        try {
+          const response = await searchconsole.urlcrawlerrorssamples.list({
+            siteUrl: SITE_URL,
+            category: category,
+            platform: 'web',
+          });
+
+          crawlingReport.errors[category] = response.data.urlCrawlErrorSample || [];
+        } catch (err) {
+          crawlingReport.errors[category] = { error: err.message };
+        }
+      }
+
+      fs.writeFileSync(outputFile, JSON.stringify(crawlingReport, null, 2));
+      console.log(`\n✅ Crawling-Bericht gespeichert in: ${outputFile}`);
+    }
+  } catch (error) {
+    console.error('❌ Fehler beim Abrufen von Crawling-Daten:', error.message);
+
+    if (error.message.includes('permission')) {
+      console.log('\n🔧 Mögliche Lösung:');
+      console.log(
+        '1. Stellen Sie sicher, dass der Service-Account Berechtigung für die Domain hat',
+      );
+      console.log(
+        '2. Verwenden Sie "sc-domain:ihre-domain.de" anstelle von "https://ihre-domain.de/"',
+      );
+      console.log('3. Führen Sie "npm run gsc:auth" aus, um die Berechtigungen zu überprüfen');
+    }
+  }
+}
+
+getCrawlStats();

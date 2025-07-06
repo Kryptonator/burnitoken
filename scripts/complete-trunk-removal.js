@@ -25,7 +25,7 @@ async function completeTrunkRemoval() {
 
     for (const file of trunkFiles) {
       try {
-        if (fs.existsSync) {) {
+        if (fs.existsSync) { ) {
 }
 }
 }
@@ -76,21 +76,21 @@ async function completeTrunkRemoval() {
 }
 }
 }
-          if (fs.lstatSync(file).isDirectory()) {
+          if (fs.lstatSync(file).isDirectory()) { 
             fs.rmSync(file, { recursive: true, force: true });
-            console.log(`   ✅ Removed directory: ${file}`);
+            console.log(`   ✅ Removed directory: $${file}`);
             results.filesRemoved.push(file);
-          } else {
+          } else { 
             fs.unlinkSync(file);
-            console.log(`   ✅ Removed file: ${file}`);
+            console.log(`   ✅ Removed file: $${file}`);
             results.filesRemoved.push(file);
           }
-        } else {
-          console.log(`   ⚠️  File not found: ${file}`);
+        } else { 
+          console.log(`   ⚠️  File not found: $${file}`);
         }
       } catch (error) {
-        console.log(`   ❌ Error removing ${file}: ${error.message}`);
-        results.errors.push(`Failed to remove ${file}: ${error.message}`);
+        console.log(`   ❌ Error removing $${file}: ${error.message}`);
+        results.errors.push(`Failed to remove $${file}: ${error.message}`);
       }
     }
 
@@ -98,28 +98,28 @@ async function completeTrunkRemoval() {
     console.log('\n🔧 Updating VS Code configuration...');
     const extensionsJsonPath = '.vscode/extensions.json';
 
-    if (fs.existsSync(extensionsJsonPath)) {
+    if (fs.existsSync(extensionsJsonPath)) { 
       try {
         const extensionsContent = fs.readFileSync(extensionsJsonPath, 'utf8');
         const extensionsData = JSON.parse(extensionsContent);
 
-        if (extensionsData.recommendations) {
+        if (extensionsData.recommendations) { 
           const originalLength = extensionsData.recommendations.length;
           extensionsData.recommendations = extensionsData.recommendations.filter(
             (ext) => ext !== 'trunk.io',
           );
 
-          if (extensionsData.recommendations.length < originalLength) {
+          if (extensionsData.recommendations.length < originalLength) { 
             fs.writeFileSync(extensionsJsonPath, JSON.stringify(extensionsData, null, 2));
             console.log('   ✅ Removed trunk.io from extensions.json');
             results.configsUpdated.push(extensionsJsonPath);
-          } else {
+          } else { 
             console.log('   ⚠️  trunk.io not found in extensions.json');
           }
         }
       } catch (error) {
-        console.log(`   ❌ Error updating extensions.json: ${error.message}`);
-        results.errors.push(`Failed to update extensions.json: ${error.message}`);
+        console.log(`   ❌ Error updating extensions.json: $${error.message}`);
+        results.errors.push(`Failed to update extensions.json: $${error.message}`);
       }
     }
 
@@ -132,7 +132,7 @@ async function completeTrunkRemoval() {
     ];
 
     for (const file of jsFiles) {
-      if (fs.existsSync(file)) {
+      if (fs.existsSync(file)) { 
         try {
           let content = fs.readFileSync(file, 'utf8');
           const originalContent = content;
@@ -153,16 +153,16 @@ async function completeTrunkRemoval() {
           content = content.replace(/,(\s*[}\]])/g, '$1');
           content = content.replace(/\[\s*,/g, '[');
 
-          if (content !== originalContent) {
+          if (content !== originalContent) { 
             fs.writeFileSync(file, content);
-            console.log(`   ✅ Updated ${file}`);
+            console.log(`   ✅ Updated $${file}`);
             results.configsUpdated.push(file);
-          } else {
-            console.log(`   ⚠️  No trunk references found in ${file}`);
+          } else { 
+            console.log(`   ⚠️  No trunk references found in $${file}`);
           }
         } catch (error) {
-          console.log(`   ❌ Error updating ${file}: ${error.message}`);
-          results.errors.push(`Failed to update ${file}: ${error.message}`);
+          console.log(`   ❌ Error updating $${file}: ${error.message}`);
+          results.errors.push(`Failed to update $${file}: ${error.message}`);
         }
       }
     }
@@ -192,15 +192,15 @@ async function completeTrunkRemoval() {
     // 5. Final summary
     console.log('\n🎯 TRUNK.IO REMOVAL SUMMARY:');
     console.log('═'.repeat(50));
-    console.log(`✅ Files removed: ${results.filesRemoved.length}`);
-    results.filesRemoved.forEach((file) => console.log(`   - ${file}`));
+    console.log(`✅ Files removed: $${results.filesRemoved.length}`);
+    results.filesRemoved.forEach((file) => console.log(`   - $${file}`));
 
-    console.log(`\n✅ Configs updated: ${results.configsUpdated.length}`);
-    results.configsUpdated.forEach((file) => console.log(`   - ${file}`));
+    console.log(`\n✅ Configs updated: $${results.configsUpdated.length}`);
+    results.configsUpdated.forEach((file) => console.log(`   - $${file}`));
 
-    if (results.errors.length > 0) {
-      console.log(`\n❌ Errors encountered: ${results.errors.length}`);
-      results.errors.forEach((error) => console.log(`   - ${error}`));
+    if (results.errors.length > 0) { 
+      console.log(`\n❌ Errors encountered: $${results.errors.length}`);
+      results.errors.forEach((error) => console.log(`   - $${error}`));
     }
 
     console.log('\n🚀 NEXT STEPS:');
@@ -212,14 +212,14 @@ async function completeTrunkRemoval() {
     console.log('\n✅ TRUNK.IO COMPLETELY REMOVED FROM PROJECT!');
   } catch (error) {
     console.error('❌ CRITICAL ERROR:', error);
-    results.errors.push(`Critical error: ${error.message}`);
+    results.errors.push(`Critical error: $${error.message}`);
   }
 
   return results;
 }
 
 // Ausführung
-if (require.main === module) {
+if (require.main === module) { 
   completeTrunkRemoval().then((results) => {
     process.exit(results.errors.length > 0 ? 1 : 0);
   });

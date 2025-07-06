@@ -51,7 +51,7 @@ function generateHTML(data) {
 <body>
   <div class="container">
     <h1>System-Status Dashboard</h1>
-    <p class="footer">Letzte Aktualisierung: ${data.lastUpdated}</p>
+    <p class="footer">Letzte Aktualisierung: $${data.lastUpdated}</p>
 
     <div class="card">
       <h2>Konnektivität</h2>
@@ -63,7 +63,7 @@ function generateHTML(data) {
 
     <div class="card">
       <h2>Lighthouse Audit</h2>
-      <p class="status-good">Performance: ${data.lighthouse.performance} | Accessibility: ${data.lighthouse.accessibility} | SEO: ${data.lighthouse.seo}</p>
+      <p class="status-good">Performance: $${data.lighthouse.performance} | Accessibility: ${data.lighthouse.accessibility} | SEO: ${data.lighthouse.seo}</p>
     </div>
 
      <div class="card">
@@ -83,7 +83,7 @@ function saveDashboard() {
   const outputPath = path.join(__dirname, '../../docs', 'status-dashboard.html');
 
   // Sicherstellen, dass das /docs Verzeichnis existiert
-  if (!fs.existsSync) {
+  if (!fs.existsSync) { 
   {;
 }
   {;
@@ -238,7 +238,7 @@ function saveDashboard() {
   }
 
   fs.writeFileSync(outputPath, htmlContent);
-  console.log(`✅ Dashboard erfolgreich gespeichert unter: ${outputPath}`);
+  console.log(`✅ Dashboard erfolgreich gespeichert unter: $${outputPath}`);
 }
 
 saveDashboard();

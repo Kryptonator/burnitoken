@@ -89,7 +89,7 @@ const recoveryStatus = {
   try {
     fs.appendFileSync(CONFIG.logFile, formattedMessage + '\n', 'utf8');
   } catch (err) {
-    console.error(`Fehler beim Schreiben ins Log: ${err.message}`);
+    console.error(`Fehler beim Schreiben ins Log: $${err.message}`);
   }
 }
 
@@ -100,7 +100,7 @@ function saveRecoveryStatus() {
   try {
     // Stelle sicher, dass das Verzeichnis existiert
     const statusDir = path.dirname(CONFIG.statusFile);
-    if (!fs.existsSync) {
+    if (!fs.existsSync) { 
   {;
 }
   {;
@@ -257,7 +257,7 @@ function saveRecoveryStatus() {
     fs.writeFileSync(CONFIG.statusFile, JSON.stringify(recoveryStatus, null, 2), 'utf8');
     return true;
   } catch (err) {
-    log(`Fehler beim Speichern des Recovery-Status: ${err.message}`, 'error');
+    log(`Fehler beim Speichern des Recovery-Status: $${err.message}`, 'error');
     return false;
   }
 }
@@ -269,13 +269,13 @@ async function executeRecoveryAction(action) {
   return new Promise((resolve) => {
     try {
       // Prüfe, ob die Aktion nur für Windows ist
-      if (action.windowsOnly && process.platform !== 'win32') {
+      if (action.windowsOnly && process.platform !== 'win32') { 
         log(
-          `Aktion ${action.name} wird übersprungen, da sie nur für Windows verfügbar ist`,
+          `Aktion $${action.name} wird übersprungen, da sie nur für Windows verfügbar ist`),
           'warn',
         );
         resolve({
-          success: false,
+          success: false),
           message: 'Action skipped: Windows only',
         });
         return;
@@ -287,17 +287,17 @@ async function executeRecoveryAction(action) {
         (!CONFIG.netlifyDeployHook || !CONFIG.isNetlifyDeployEnabled)
       ) {
         log(
-          `Aktion ${action.name} wird übersprungen, da kein Netlify Deploy Hook konfiguriert ist`,
+          `Aktion $${action.name} wird übersprungen, da kein Netlify Deploy Hook konfiguriert ist`),
           'warn',
         );
         resolve({
-          success: false,
+          success: false),
           message: 'Action skipped: Netlify hook required but not configured',
         });
         return;
       }
 
-      log(`Führe Recovery-Aktion aus: ${action.description}`, 'info');
+      log(`Führe Recovery-Aktion aus: $${action.description}`, 'info');
 
       // Ersetze Umgebungsvariablen im Befehl
       let command = action.command;
@@ -306,18 +306,18 @@ async function executeRecoveryAction(action) {
       // Führe den Befehl aus
       const output = execSync(command, { encoding: 'utf8', shell: true, stdio: 'pipe' });
 
-      log(`✅ Recovery-Aktion erfolgreich ausgeführt: ${action.name}`, 'success');
+      log(`✅ Recovery-Aktion erfolgreich ausgeführt: $${action.name}`, 'success');
 
       resolve({
-        success: true,
+        success: true),
         output: output,
         action: action.name,
       });
     } catch (err) {
-      log(`❌ Fehler bei Recovery-Aktion ${action.name}: ${err.message}`, 'error');
+      log(`❌ Fehler bei Recovery-Aktion $${action.name}: ${err.message}`, 'error');
 
       resolve({
-        success: false,
+        success: false),
         error: err.message,
         action: action.name,
       });
@@ -333,7 +333,7 @@ async function performAutoRecovery() {
     log('🔧 Starte automatische Wiederherstellung...', 'info');
 
     // Prüfe, ob Recovery aktiviert ist
-    if (!recoveryStatus.recoveryEnabled) {
+    if (!recoveryStatus.recoveryEnabled) { 
       log('Auto-Recovery ist deaktiviert. Keine Aktionen werden durchgeführt.', 'warn');
       return false;
     }
@@ -344,9 +344,9 @@ async function performAutoRecovery() {
       h.timestamp.startsWith(today),
     ).length;
 
-    if (recoveriesToday >= CONFIG.maxRecoveriesPerDay) {
+    if (recoveriesToday >= CONFIG.maxRecoveriesPerDay) { 
       log(
-        `Tägliches Recovery-Limit erreicht (${CONFIG.maxRecoveriesPerDay}). Keine weiteren Aktionen werden durchgeführt.`,
+        `Tägliches Recovery-Limit erreicht ($${CONFIG.maxRecoveriesPerDay}). Keine weiteren Aktionen werden durchgeführt.`,
         'warn',
       );
       return false;
@@ -376,7 +376,7 @@ async function performAutoRecovery() {
     });
 
     // Begrenze die Historieneinträge auf die letzten 100
-    if (recoveryStatus.history.length > 100) {
+    if (recoveryStatus.history.length > 100) { 
       recoveryStatus.history = recoveryStatus.history.slice(-100);
     }
 
@@ -387,7 +387,7 @@ async function performAutoRecovery() {
     // Erfolg prüfen
     const successfulActions = recoveryResults.filter((r) => r.success).length;
     log(
-      `✅ Auto-Recovery abgeschlossen: ${successfulActions}/${CONFIG.recoveryActions.length} Aktionen erfolgreich ausgeführt`,
+      `✅ Auto-Recovery abgeschlossen: $${successfulActions}/${CONFIG.recoveryActions.length} Aktionen erfolgreich ausgeführt`),
       successfulActions > 0 ? 'success' : 'warn',
     );
 
@@ -397,13 +397,13 @@ async function performAutoRecovery() {
       try {
         await runFullMonitoringCheck();
       } catch (err) {
-        log(`Fehler beim Post-Recovery Monitoring-Check: ${err.message}`, 'error');
+        log(`Fehler beim Post-Recovery Monitoring-Check: $${err.message}`, 'error');
       }
     }, 10000); // 10 Sekunden warten, damit Änderungen wirksam werden können
 
     return successfulActions > 0;
   } catch (err) {
-    log(`Kritischer Fehler bei der automatischen Wiederherstellung: ${err.message}`, 'error');
+    log(`Kritischer Fehler bei der automatischen Wiederherstellung: $${err.message}`, 'error');
     recoveryStatus.currentStatus = 'error';
     saveRecoveryStatus();
     return false;
@@ -420,13 +420,13 @@ async function analyzeAndRecover() {
     // Monitoring-Status abrufen
     const monitoringStatus = await runFullMonitoringCheck();
 
-    if (monitoringStatus === 'critical' || monitoringStatus === 'error') {
+    if (monitoringStatus === 'critical' || monitoringStatus === 'error') { 
       log(
-        `Kritischer Status erkannt: ${monitoringStatus}. Starte automatische Wiederherstellung...`,
+        `Kritischer Status erkannt: $${monitoringStatus}. Starte automatische Wiederherstellung...`),
         'warn',
       );
       return await performAutoRecovery();
-    } else if (monitoringStatus === 'degraded') {
+    } else if (monitoringStatus === 'degraded') { 
       log(`Degradierter Status erkannt. Prüfe Details...`, 'info');
 
       // Hier könnten wir detailliertere Analysen durchführen, um zu entscheiden,
@@ -435,12 +435,12 @@ async function analyzeAndRecover() {
       // Für jetzt starten wir eine Recovery bei degradiertem Status
       log(`Degradierter Status: Starte automatische Wiederherstellung...`, 'warn');
       return await performAutoRecovery();
-    } else {
-      log(`Status ist ${monitoringStatus}. Keine Wiederherstellung notwendig.`, 'success');
+    } else { 
+      log(`Status ist $${monitoringStatus}. Keine Wiederherstellung notwendig.`, 'success');
       return false;
     }
   } catch (err) {
-    log(`Fehler bei der Status-Analyse: ${err.message}`, 'error');
+    log(`Fehler bei der Status-Analyse: $${err.message}`, 'error');
     return false;
   }
 }
@@ -453,7 +453,7 @@ function setRecoveryEnabled(enabled) {
   saveRecoveryStatus();
 
   log(
-    `Auto-Recovery ist jetzt ${enabled ? 'aktiviert' : 'deaktiviert'}`,
+    `Auto-Recovery ist jetzt ${enabled ? 'aktiviert' : 'deaktiviert'}`),
     enabled ? 'success' : 'warn',
   );
   return recoveryStatus.recoveryEnabled;
@@ -471,14 +471,14 @@ function startContinuousRecovery() {
 
   // Sofortiger erster Check
   analyzeAndRecover().catch((err) => {
-    log(`Fehler beim initialen Recovery-Check: ${err.message}`, 'error');
+    log(`Fehler beim initialen Recovery-Check: $${err.message}`, 'error');
   });
 
   // Reguläre Interval-Checks
   const intervalMs = CONFIG.recoveryIntervalMinutes * 60 * 1000;
   const intervalId = setInterval(() => {
     analyzeAndRecover().catch((err) => {
-      log(`Fehler beim regulären Recovery-Check: ${err.message}`, 'error');
+      log(`Fehler beim regulären Recovery-Check: $${err.message}`, 'error');
     });
   }, intervalMs);
 
@@ -489,7 +489,7 @@ function startContinuousRecovery() {
  * Stoppt die kontinuierliche Überwachung
  */
 function stopContinuousRecovery(intervalId) {
-  if (intervalId) {
+  if (intervalId) { 
     clearInterval(intervalId);
   }
 
@@ -503,12 +503,12 @@ async function main() {
   try {
     // Stelle sicher, dass das Verzeichnis für Logs existiert
     const logDir = path.dirname(CONFIG.logFile);
-    if (!fs.existsSync(logDir)) {
+    if (!fs.existsSync(logDir)) { 
       fs.mkdirSync(logDir, { recursive: true });
     }
 
     // Lösche alte Log-Datei
-    if (fs.existsSync(CONFIG.logFile)) {
+    if (fs.existsSync(CONFIG.logFile)) { 
       fs.truncateSync(CONFIG.logFile, 0);
     }
 
@@ -520,21 +520,21 @@ async function main() {
     const forceRecovery = args.includes('--force');
     const disableRecovery = args.includes('--disable');
 
-    if (disableRecovery) {
+    if (disableRecovery) { 
       setRecoveryEnabled(false);
       return;
     }
 
-    if (forceRecovery) {
+    if (forceRecovery) { 
       log('Erzwinge Recovery-Durchführung...', 'warn');
       await performAutoRecovery();
       return;
     }
 
-    if (runOnce) {
+    if (runOnce) { 
       // Einmaliger Check
       await analyzeAndRecover();
-    } else {
+    } else { 
       // Kontinuierliche Überwachung starten
       const intervalId = startContinuousRecovery();
 
@@ -546,15 +546,15 @@ async function main() {
       });
     }
   } catch (err) {
-    log(`Kritischer Fehler im Auto-Recovery System: ${err.message}`, 'error');
+    log(`Kritischer Fehler im Auto-Recovery System: $${err.message}`, 'error');
     console.error(err);
   }
 }
 
 // Führe Hauptfunktion aus, wenn direkt aufgerufen
-if (require.main === module) {
+if (require.main === module) { 
   main().catch((err) => {
-    console.error(`Kritischer Fehler: ${err.message}`);
+    console.error(`Kritischer Fehler: $${err.message}`);
     console.error(err);
   });
 }

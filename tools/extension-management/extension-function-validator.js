@@ -20,7 +20,7 @@ class ExtensionFunctionValidator {
   initializeTestSuites() {
     // Core Development Extensions Tests
     this.testSuites.set('core', {
-      name: 'Core Development',
+      name: 'Core Development'),
       tests: [
         {
           extension: 'github.copilot',
@@ -54,7 +54,7 @@ class ExtensionFunctionValidator {
 
     // Web Development Extensions Tests
     this.testSuites.set('web', {
-      name: 'Web Development',
+      name: 'Web Development'),
       tests: [
         {
           extension: 'bradlc.vscode-tailwindcss',
@@ -88,7 +88,7 @@ class ExtensionFunctionValidator {
 
     // Quality & Testing Extensions Tests
     this.testSuites.set('quality', {
-      name: 'Quality & Testing',
+      name: 'Quality & Testing'),
       tests: [
         {
           extension: 'maxvanderschee.web-accessibility',
@@ -122,7 +122,7 @@ class ExtensionFunctionValidator {
 
     // Git & Deployment Extensions Tests
     this.testSuites.set('git', {
-      name: 'Git & Deployment',
+      name: 'Git & Deployment'),
       tests: [
         {
           extension: 'github.vscode-github-actions',
@@ -157,11 +157,11 @@ class ExtensionFunctionValidator {
     let failedTests = 0;
 
     for (const [suiteKey, suite] of this.testSuites) {
-      console.log(`\n📂 ${suite.name} Extensions:`);
+      console.log(`\n📂 $${suite.name} Extensions:`);
       console.log('─'.repeat(50));
 
       for (const extensionTest of suite.tests) {
-        console.log(`\n🔧 ${extensionTest.extension}:`);
+        console.log(`\n🔧 $${extensionTest.extension}:`);
 
         const extensionResults = [];
 
@@ -171,10 +171,10 @@ class ExtensionFunctionValidator {
 
           if (result.passed) 
             passedTests++;
-            console.log(`   ✅ ${test} - ${result.message}`);
-          } else {
+            console.log(`   ✅ $${test} - ${result.message}`);
+          } else { 
             failedTests++;
-            console.log(`   ❌ ${test} - ${result.message}`);
+            console.log(`   ❌ $${test} - ${result.message}`);
           }
 
           extensionResults.push(result);
@@ -189,15 +189,15 @@ class ExtensionFunctionValidator {
 
     console.log('\n📊 VALIDATION SUMMARY:');
     console.log('======================');
-    console.log(`✅ Passed: ${passedTests}/${totalTests} tests (${successRate}%)`);
-    console.log(`❌ Failed: ${failedTests}/${totalTests} tests`);
-    console.log(`📦 Extensions tested: ${this.validationResults.size}`);
+    console.log(`✅ Passed: $${passedTests}/${totalTests} tests (${successRate}%)`);
+    console.log(`❌ Failed: $${failedTests}/${totalTests} tests`);
+    console.log(`📦 Extensions tested: $${this.validationResults.size}`);
 
-    if (successRate >= 90) {
+    if (successRate >= 90) { 
       console.log('\n🎉 EXCELLENT: Extension ecosystem is highly functional!');
-    } else if (successRate >= 75) {
+    } else if (successRate >= 75) { 
       console.log('\n👍 GOOD: Most extensions are working well');
-    } else {
+    } else { 
       console.log('\n⚠️  WARNING: Some extensions need attention');
     }
 
@@ -328,14 +328,14 @@ class ExtensionFunctionValidator {
     let passedBurnitokenTests = 0;
 
     for (const test of burnitokenTests) {
-      console.log(`\n🔧 ${test.name} (${test.category}):`);
+      console.log(`\n🔧 $${test.name} (${test.category}):`);
       const result = await test.test();
 
-      if (result.passed) {
+      if (result.passed) { 
         passedBurnitokenTests++;
-        console.log(`   ✅ ${result.message}`);
-      } else {
-        console.log(`   ❌ ${result.message}`);
+        console.log(`   ✅ $${result.message}`);
+      } else { 
+        console.log(`   ❌ $${result.message}`);
       }
     }
 
@@ -345,7 +345,7 @@ class ExtensionFunctionValidator {
 
     console.log('\n🪙 BURNITOKEN FUNCTIONALITY SUMMARY:');
     console.log(
-      `   ✅ ${passedBurnitokenTests}/${burnitokenTests.length} tests passed (${burnitokenSuccessRate}%)`,
+      `   ✅ $${passedBurnitokenTests}/${burnitokenTests.length} tests passed (${burnitokenSuccessRate}%)`,
     );
 
     return {
@@ -422,11 +422,11 @@ class ExtensionFunctionValidator {
     );
 
     console.log('\n📄 VALIDATION REPORT GENERATED:');
-    console.log(`   📅 Timestamp: ${report.timestamp}`);
-    console.log(`   🎯 Project: ${report.project}`);
-    console.log(`   📊 Extensions: ${report.summary.totalExtensions}`);
-    console.log(`   🧪 Tests: ${report.summary.totalTests}`);
-    console.log(`   ✅ Status: ${report.summary.overallStatus}`);
+    console.log(`   📅 Timestamp: $${report.timestamp}`);
+    console.log(`   🎯 Project: $${report.project}`);
+    console.log(`   📊 Extensions: $${report.summary.totalExtensions}`);
+    console.log(`   🧪 Tests: $${report.summary.totalTests}`);
+    console.log(`   ✅ Status: $${report.summary.overallStatus}`);
 
     return report;
   }
@@ -480,6 +480,6 @@ module.exports = {
 };
 
 // Direkter Start wenn Datei ausgeführt wird
-if (require.main === module) {
+if (require.main === module) { 
   runExtensionValidation().catch(console.error);
 }

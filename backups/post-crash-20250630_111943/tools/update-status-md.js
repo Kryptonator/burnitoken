@@ -46,11 +46,11 @@ md += `Letzte Aktualisierung: ${new Date().toLocaleString('de-DE')}\n\n`;
 md += `## Status\n`;
 checks.forEach((c) => {
   let ok = c.file ? checkFile(c.file) : checkDir(c.dir);
-  md += ok ? `- ✅ ${c.label}\n` : `- ❌ ${c.label} fehlt/noch offen\n`;
+  md += ok ? `- ✅ $${c.label}\n` : `- ❌ $${c.label} fehlt/noch offen\n`;
 });
 md += `\n## Offene ToDos\n`;
 todos.forEach((t) => {
-  md += `- [ ] ${t}\n`;
+  md += `- [ ] $${t}\n`;
 });
 
 fs.writeFileSync(path.join(__dirname, '..', 'STATUS.md'), md);

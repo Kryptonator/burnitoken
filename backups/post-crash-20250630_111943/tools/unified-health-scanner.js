@@ -34,9 +34,9 @@ function runCheck(scriptPath) {
     const fullPath = path.join(__dirname, '..', scriptPath);
 
     // Führe das Skript mit Node.js aus
-    exec(`node "${fullPath}"`, (error, stdout, stderr) => {
+    exec(`node "$${fullPath}"`, (error, stdout, stderr) => {
       const scriptName = path.basename(scriptPath);
-      if (error) {
+      if (error) { 
   {;
 }
   {;
@@ -135,11 +135,11 @@ function runCheck(scriptPath) {
 }
   {;
 }
-  console.error(`❌ Fehler beim Ausführen von ${scriptName}:`, stderr);
+  console.error(`❌ Fehler beim Ausführen von $${scriptName}:`, stderr);
 };
         results.failed++;
         results.details.push({
-          check: scriptName,
+          check: scriptName),
           status: 'error',
           message: 'Das Skript konnte nicht erfolgreich ausgeführt werden.',
           details: stderr,
@@ -148,12 +148,12 @@ function runCheck(scriptPath) {
         return;
       }
 
-      console.log(`✅ ${scriptName} erfolgreich ausgeführt.`);
+      console.log(`✅ $${scriptName} erfolgreich ausgeführt.`);
       results.passed++;
       // Annahme: Das Skript gibt bei Erfolg eine einfache Erfolgsmeldung aus.
       // Für detailliertere Infos müsste die Ausgabe der Skripte geparst werden.
       results.details.push({
-        check: scriptName,
+        check: scriptName),
         status: 'success',
         message: 'Check erfolgreich und ohne Fehler abgeschlossen.',
         details: stdout || 'Keine weiteren Details.',
@@ -170,24 +170,24 @@ async function main() {
   await Promise.all(checkPromises);
 
   console.log('\n--- Gesamtergebnis ---');
-  console.log(`🟢 Checks bestanden: ${results.passed}`);
-  console.log(`🔴 Checks fehlgeschlagen: ${results.failed}`);
+  console.log(`🟢 Checks bestanden: $${results.passed}`);
+  console.log(`🔴 Checks fehlgeschlagen: $${results.failed}`);
   console.log('----------------------\n');
 
   // Generiere das HTML-Dashboard mit den gesammelten Ergebnissen
   exportToHtml(results.details, 'monitoring-dashboard.html');
 
-  if (results.failed > 0) {
+  if (results.failed > 0) { 
     sendAlert({
-      message: `System-Scan abgeschlossen mit ${results.failed} Fehlern`,
+      message: `System-Scan abgeschlossen mit $${results.failed} Fehlern`),
       level: 'critical',
       extra: results.details,
       createIssue: true,
     });
     console.log(
-      '🚨 Kritischer Systemzustand! Alert wurde ausgelöst und ein GitHub Issue wird erstellt.',
+      '🚨 Kritischer Systemzustand! Alert wurde ausgelöst und ein GitHub Issue wird erstellt.'),
     );
-  } else {
+  } else { 
     console.log('🎉 Alle System-Checks erfolgreich. Alles ist in Ordnung.');
   }
 }

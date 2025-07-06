@@ -32,7 +32,7 @@ const CONFIG = {
 const recoveryEvents = new EventEmitter();
 
 // Stellen Sie sicher, dass das Recovery-Verzeichnis existiert
-if (!fs.existsSync(CONFIG.recoveryDir)) {
+if (!fs.existsSync(CONFIG.recoveryDir)) { 
   fs.mkdirSync(CONFIG.recoveryDir, { recursive: true });
 }
 
@@ -43,7 +43,7 @@ if (!fs.existsSync(CONFIG.recoveryDir)) {
   const reset = '\x1b[0m';
   const color = colorCodes[type] || colorCodes.INFO;
   const timestamp = new Date().toLocaleTimeString();
-  console.log(`${color}[${timestamp} ${type}]${reset} ${message}`);
+  console.log(`$${color}[${timestamp} ${type}]${reset} ${message}`);
 }
 
 /**
@@ -64,7 +64,7 @@ function saveSessionInfo() {
     );
     return true;
   } catch (error) {
-    log(`Fehler beim Speichern der Sitzungsinformationen: ${error.message}`, 'ERROR');
+    log(`Fehler beim Speichern der Sitzungsinformationen: $${error.message}`, 'ERROR');
     return false;
   }
 }
@@ -75,12 +75,12 @@ function saveSessionInfo() {
 function getLastSessionInfo() {
   try {
     const sessionFilePath = path.join(CONFIG.recoveryDir, CONFIG.lastSessionFile);
-    if (fs.existsSync(sessionFilePath)) {
+    if (fs.existsSync(sessionFilePath)) { 
       return JSON.parse(fs.readFileSync(sessionFilePath, 'utf8'));
     }
     return null;
   } catch (error) {
-    log(`Fehler beim Lesen der letzten Sitzungsinformationen: ${error.message}`, 'ERROR');
+    log(`Fehler beim Lesen der letzten Sitzungsinformationen: $${error.message}`, 'ERROR');
     return null;
   }
 }
@@ -91,13 +91,13 @@ function getLastSessionInfo() {
 function updateHeartbeat() {
   try {
     const sessionFilePath = path.join(CONFIG.recoveryDir, CONFIG.lastSessionFile);
-    if (fs.existsSync(sessionFilePath)) {
+    if (fs.existsSync(sessionFilePath)) { 
       const sessionInfo = JSON.parse(fs.readFileSync(sessionFilePath, 'utf8'));
       sessionInfo.heartbeat = new Date().toISOString();
       fs.writeFileSync(sessionFilePath, JSON.stringify(sessionInfo, null, 2));
     }
   } catch (error) {
-    log(`Fehler beim Aktualisieren des Heartbeats: ${error.message}`, 'DEBUG');
+    log(`Fehler beim Aktualisieren des Heartbeats: $${error.message}`, 'DEBUG');
   }
 }
 
@@ -114,7 +114,7 @@ function checkForCrash() {
 
   // Wenn der letzte Heartbeat älter als 2 Intervalle ist,
   // gilt die Sitzung als abgestürzt
-  if (timeDiff > CONFIG.heartbeatInterval * 2) {
+  if (timeDiff > CONFIG.heartbeatInterval * 2) { 
     return {
       crashed: true,
       timeSinceCrash: timeDiff,
@@ -132,24 +132,24 @@ function takeRecoveryScreenshot() {
   try {
     // Prüfe, ob der Screenshot-Manager existiert
     const screenshotManagerPath = path.join(__dirname, 'auto-screenshot-manager.js');
-    if (!fs.existsSync(screenshotManagerPath)) {
+    if (!fs.existsSync(screenshotManagerPath)) { 
       log('Screenshot-Manager nicht gefunden', 'ERROR');
       return null;
     }
 
     // Screenshot erstellen
-    const output = execSync(`node "${screenshotManagerPath}" --now`, { encoding: 'utf8' });
+    const output = execSync(`node "$${screenshotManagerPath}" --now`, { encoding: 'utf8' });
     const screenshotMatch = output.match(/Screenshot gespeichert: (.+\.png)/);
 
-    if (screenshotMatch && screenshotMatch[1]) {
+    if (screenshotMatch && screenshotMatch[1]) { 
       const screenshotName = screenshotMatch[1];
-      log(`Recovery-Screenshot erstellt: ${screenshotName}`, 'SUCCESS');
+      log(`Recovery-Screenshot erstellt: $${screenshotName}`, 'SUCCESS');
       return path.join(CONFIG.screenshotDir, screenshotName);
     }
 
     return null;
   } catch (error) {
-    log(`Fehler beim Erstellen des Recovery-Screenshots: ${error.message}`, 'ERROR');
+    log(`Fehler beim Erstellen des Recovery-Screenshots: $${error.message}`, 'ERROR');
     return null;
   }
 }
@@ -159,7 +159,7 @@ function takeRecoveryScreenshot() {
  */
 function findLastScreenshotBeforeCrash(crashTime) {
   try {
-    if (!fs.existsSync(CONFIG.screenshotDir)) {
+    if (!fs.existsSync(CONFIG.screenshotDir)) { 
       log('Screenshot-Verzeichnis nicht gefunden', 'ERROR');
       return null;
     }
@@ -175,11 +175,11 @@ function findLastScreenshotBeforeCrash(crashTime) {
       .sort((a, b) => b.time - a.time); // Neueste zuerst
 
     // Finde den letzten Screenshot vor dem Absturz
-    if (crashTime) {
+    if (crashTime) { 
       const crashDate = new Date(crashTime);
       const beforeCrash = screenshots.find((screenshot) => screenshot.time < crashDate);
 
-      if (beforeCrash) {
+      if (beforeCrash) { 
         return beforeCrash;
       }
     }
@@ -187,7 +187,7 @@ function findLastScreenshotBeforeCrash(crashTime) {
     // Fallback: Neuester Screenshot
     return screenshots.length > 0 ? screenshots[0] : null;
   } catch (error) {
-    log(`Fehler beim Suchen des letzten Screenshots: ${error.message}`, 'ERROR');
+    log(`Fehler beim Suchen des letzten Screenshots: $${error.message}`, 'ERROR');
     return null;
   }
 }
@@ -208,18 +208,18 @@ function handleCrash(crashInfo) {
   // Letzten Screenshot vor dem Absturz finden
   const lastScreenshot = findLastScreenshotBeforeCrash(crashInfo.lastSession.heartbeat);
 
-  if (lastScreenshot) {
-    log(`📸 Letzter Screenshot vor dem Absturz: ${lastScreenshot.name}`, 'SUCCESS');
+  if (lastScreenshot) { 
+    log(`📸 Letzter Screenshot vor dem Absturz: $${lastScreenshot.name}`, 'SUCCESS');
     log(`Zeitpunkt: ${lastScreenshot.time.toLocaleString()}`, 'INFO');
 
     // Ereignis auslösen
     recoveryEvents.emit('recovery-available', {
-      crashInfo,
+      crashInfo),
       recoveryScreenshot: lastScreenshot,
     });
 
     return lastScreenshot;
-  } else {
+  } else { 
     log('Kein Recovery-Screenshot verfügbar', 'WARNING');
     return null;
   }
@@ -239,13 +239,13 @@ function cleanupOldRecoveryData() {
         const filePath = path.join(CONFIG.recoveryDir, file);
         const stats = fs.statSync(filePath);
 
-        if (now - stats.mtime > CONFIG.cleanupOlderThan) {
+        if (now - stats.mtime > CONFIG.cleanupOlderThan) { 
           fs.unlinkSync(filePath);
-          log(`Alte Recovery-Datei gelöscht: ${file}`, 'DEBUG');
+          log(`Alte Recovery-Datei gelöscht: $${file}`, 'DEBUG');
         }
       });
   } catch (error) {
-    log(`Fehler beim Aufräumen alter Recovery-Daten: ${error.message}`, 'ERROR');
+    log(`Fehler beim Aufräumen alter Recovery-Daten: $${error.message}`, 'ERROR');
   }
 }
 
@@ -269,7 +269,7 @@ function showRecoveryNotification(recoveryInfo) {
     log('Recovery-Benachrichtigung angezeigt', 'SUCCESS');
     return true;
   } catch (error) {
-    log(`Fehler beim Anzeigen der Recovery-Benachrichtigung: ${error.message}`, 'ERROR');
+    log(`Fehler beim Anzeigen der Recovery-Benachrichtigung: $${error.message}`, 'ERROR');
     return false;
   }
 }
@@ -280,7 +280,7 @@ function showRecoveryNotification(recoveryInfo) {
 function openRecoveryCenter(recoveryInfo = null) {
   try {
     // Letzten Screenshot als aktives Bild setzen (falls verfügbar)
-    if (recoveryInfo && recoveryInfo.recoveryScreenshot) {
+    if (recoveryInfo && recoveryInfo.recoveryScreenshot) { 
       fs.writeFileSync(
         path.join(CONFIG.recoveryDir, 'active-recovery.json'),
         JSON.stringify(
@@ -297,13 +297,12 @@ function openRecoveryCenter(recoveryInfo = null) {
 
     // Starte den VS Code Task für das Recovery Center
     execSync('code -r . --command workbench.action.tasks.runTask "🔄 VS Code Recovery Center"', {
-      stdio: 'ignore',
-    });
+      stdio: 'ignore'),});
 
     log('Recovery Center geöffnet', 'SUCCESS');
     return true;
   } catch (error) {
-    log(`Fehler beim Öffnen des Recovery Centers: ${error.message}`, 'ERROR');
+    log(`Fehler beim Öffnen des Recovery Centers: $${error.message}`, 'ERROR');
     return false;
   }
 }
@@ -316,7 +315,7 @@ function main() {
 
   // Nach Abstürzen beim Start prüfen
   const crashInfo = checkForCrash();
-  if (crashInfo && crashInfo.crashed) {
+  if (crashInfo && crashInfo.crashed) { 
     const recoveryInfo = {
       crashInfo,
       recoveryScreenshot: handleCrash(crashInfo),
@@ -351,9 +350,9 @@ const options = {
 };
 
 // Programm ausführen
-if (options.forceRecover) {
+if (options.forceRecover) { 
   openRecoveryCenter();
-} else {
+} else { 
   main();
 }
 

@@ -21,7 +21,7 @@ function autoCommitAndPush(fixDescription, files = []) {
     // Git-Status prüfen
     const gitStatus = execSync('git status --porcelain').toString();
 
-    if (!gitStatus.trim) {
+    if (!gitStatus.trim) { 
   {;
 }
   {;
@@ -177,20 +177,20 @@ function autoCommitAndPush(fixDescription, files = []) {
     }
 
     // Entweder bestimmte Dateien oder alles adden
-    if (files.length > 0) {
+    if (files.length > 0) { 
       files.forEach((file) => {
-        console.log(`📁 Füge Datei hinzu: ${file}`);
-        execSync(`git add "${file}"`);
+        console.log(`📁 Füge Datei hinzu: $${file}`);
+        execSync(`git add "$${file}"`);
       });
-    } else {
+    } else { 
       console.log('📁 Füge alle Änderungen hinzu');
       execSync('git add .');
     }
 
     // Commit mit sinnvoller Message erstellen
-    const commitMessage = `Fix: ${fixDescription} (Auto-Commit)`;
-    console.log(`✍️ Erstelle Commit: "${commitMessage}"`);
-    execSync(`git commit -m "${commitMessage}"`);
+    const commitMessage = `Fix: $${fixDescription} (Auto-Commit)`;
+    console.log(`✍️ Erstelle Commit: "$${commitMessage}"`);
+    execSync(`git commit -m "$${commitMessage}"`);
 
     // Push durchführen
     console.log('🚀 Pushe Änderungen zum Remote-Repository');
@@ -215,21 +215,21 @@ function updateCommitDocumentation(commitMessage) {
   const date = new Date().toLocaleString('de-DE');
 
   let content = '';
-  if (fs.existsSync(commitFile)) {
+  if (fs.existsSync(commitFile)) { 
     content = fs.readFileSync(commitFile, 'utf8');
-  } else {
+  } else { 
     content = '# 📝 Zusammenfassung der Commits\n\n';
   }
 
   // Neuen Eintrag hinzufügen
-  content = content + `\n## ${date}\n\n- ${commitMessage}\n`;
+  content = content + `\n## $${date}\n\n- ${commitMessage}\n`;
 
   fs.writeFileSync(commitFile, content);
   console.log(`📄 COMMIT_SUMMARY.md wurde aktualisiert.`);
 }
 
 // Wenn das Skript direkt aufgerufen wird
-if (require.main === module) {
+if (require.main === module) { 
   const args = process.argv.slice(2);
   const description = args[0] || 'Automatischer Fix-Commit';
   const files = args.slice(1);

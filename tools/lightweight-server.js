@@ -22,18 +22,18 @@ class LightweightDashboardServer {
       res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-      if (req.method === 'OPTIONS') {
+      if (req.method === 'OPTIONS') { 
         res.writeHead(200);
         res.end();
         return;
       }
 
       // Route Handler
-      if (req.url === '/' || req.url === '/dashboard') {
+      if (req.url === '/' || req.url === '/dashboard') { 
         this.serveDashboard(res);
-      } else if (req.url.startsWith('/api/')) {
+      } else if (req.url.startsWith('/api/')) { 
         this.handleAPI(req, res);
-      } else {
+      } else { 
         res.writeHead(404, { 'Content-Type': 'text/plain' });
         res.end('Not Found');
       }
@@ -43,7 +43,7 @@ class LightweightDashboardServer {
       console.log(`
 🚀 LIGHTWEIGHT DASHBOARD SERVER GESTARTET!
 
-📊 Dashboard URL: http://localhost:${this.port}
+📊 Dashboard URL: http://localhost:$${this.port}
 🎯 Status: STABIL & PERFORMANT
 ⚡ Memory: MINIMAL
 🔧 Features: ALLE BOTS SICHTBAR
@@ -54,11 +54,11 @@ class LightweightDashboardServer {
 
     // Fehlerbehandlung
     server.on('error', (err) => {
-      if (err.code === 'EADDRINUSE') {
-        console.log(`Port ${this.port} belegt, versuche ${this.port + 1}...`);
+      if (err.code === 'EADDRINUSE') { 
+        console.log(`Port $${this.port} belegt, versuche ${this.port + 1}...`);
         this.port++;
         setTimeout(() => this.start(), 1000);
-      } else {
+      } else { 
         console.error('Server Fehler:', err.message);
       }
     });

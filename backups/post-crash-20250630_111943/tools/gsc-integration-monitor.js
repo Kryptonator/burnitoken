@@ -82,7 +82,7 @@ const monitorStatus = {
   try {
     fs.appendFileSync(LOG_FILE_PATH, formattedMessage + '\n', 'utf8');
   } catch (err) {
-    console.error(`Fehler beim Schreiben ins Log: ${err.message}`);
+    console.error(`Fehler beim Schreiben ins Log: $${err.message}`);
   }
 }
 
@@ -93,7 +93,7 @@ function updateStatusFile() {
   try {
     fs.writeFileSync(STATUS_FILE_PATH, JSON.stringify(monitorStatus, null, 2), 'utf8');
   } catch (err) {
-    log(`Fehler beim Schreiben der Status-Datei: ${err.message}`, 'error');
+    log(`Fehler beim Schreiben der Status-Datei: $${err.message}`, 'error');
   }
 }
 
@@ -103,7 +103,7 @@ function updateStatusFile() {
 function checkServiceAccountFile() {
   log('Prüfe GSC Service Account Datei...');
 
-  if (!fs.existsSync) {
+  if (!fs.existsSync) { 
   {;
 }
   {;
@@ -254,7 +254,7 @@ function checkServiceAccountFile() {
 }
 }
 }
-    log(`Service Account Datei nicht gefunden: ${SERVICE_ACCOUNT_FILE}`, 'error');
+    log(`Service Account Datei nicht gefunden: $${SERVICE_ACCOUNT_FILE}`, 'error');
     monitorStatus.gscStatus.errors.push('Service Account Datei fehlt');
     monitorStatus.recommendations.push('Service Account JSON-Datei wiederherstellen');
     return false;
@@ -262,19 +262,19 @@ function checkServiceAccountFile() {
 
   try {
     const serviceAccountData = JSON.parse(fs.readFileSync(SERVICE_ACCOUNT_FILE, 'utf8'));
-    if (!serviceAccountData.client_email || !serviceAccountData.private_key) {
+    if (!serviceAccountData.client_email || !serviceAccountData.private_key) { 
       log('Service Account Datei ist ungültig oder unvollständig', 'error');
       monitorStatus.gscStatus.errors.push('Service Account Datei ungültig');
       monitorStatus.recommendations.push('Neue Service Account JSON-Datei herunterladen');
       return false;
     }
 
-    log(`Service Account E-Mail: ${serviceAccountData.client_email}`, 'info');
+    log(`Service Account E-Mail: $${serviceAccountData.client_email}`, 'info');
     log('Service Account Datei ist gültig', 'success');
     return true;
   } catch (err) {
-    log(`Fehler beim Lesen der Service Account Datei: ${err.message}`, 'error');
-    monitorStatus.gscStatus.errors.push(`Service Account Fehler: ${err.message}`);
+    log(`Fehler beim Lesen der Service Account Datei: $${err.message}`, 'error');
+    monitorStatus.gscStatus.errors.push(`Service Account Fehler: $${err.message}`);
     monitorStatus.recommendations.push('Service Account JSON-Datei reparieren oder neu erstellen');
     return false;
   }
@@ -288,7 +288,7 @@ async function testGSCConnection() {
 
   try {
     const auth = new google.auth.GoogleAuth({
-      keyFile: SERVICE_ACCOUNT_FILE,
+      keyFile: SERVICE_ACCOUNT_FILE),
       scopes: ['https://www.googleapis.com/auth/webmasters.readonly'],
     });
 
@@ -306,26 +306,26 @@ async function testGSCConnection() {
     const sites = siteList.data.siteEntry || [];
     const targetSite = sites.find((site) => site.siteUrl === SITE_URL);
 
-    if (targetSite) {
-      log(`Site "${SITE_URL}" gefunden mit Berechtigung: ${targetSite.permissionLevel}`, 'success');
+    if (targetSite) { 
+      log(`Site "$${SITE_URL}" gefunden mit Berechtigung: ${targetSite.permissionLevel}`, 'success');
       monitorStatus.gscStatus.connected = true;
       monitorStatus.gscStatus.lastSuccessfulConnection = new Date().toISOString();
       return true;
-    } else {
-      log(`Site "${SITE_URL}" nicht in der GSC-Kontoliste gefunden`, 'warn');
+    } else { 
+      log(`Site "$${SITE_URL}" nicht in der GSC-Kontoliste gefunden`, 'warn');
       monitorStatus.gscStatus.errors.push('Site nicht gefunden');
       monitorStatus.recommendations.push('Site-Berechtigung in der GSC prüfen');
       return false;
     }
   } catch (err) {
-    log(`GSC API-Verbindungsfehler: ${err.message}`, 'error');
-    monitorStatus.gscStatus.errors.push(`API-Fehler: ${err.message}`);
+    log(`GSC API-Verbindungsfehler: $${err.message}`, 'error');
+    monitorStatus.gscStatus.errors.push(`API-Fehler: $${err.message}`);
 
-    if (err.code === 401 || err.code === 403) {
+    if (err.code === 401 || err.code === 403) { 
       monitorStatus.recommendations.push('Berechtigungen in der GSC überprüfen');
-    } else if (err.code === 404) {
+    } else if (err.code === 404) { 
       monitorStatus.recommendations.push('Sicherstellen, dass die Site in der GSC registriert ist');
-    } else {
+    } else { 
       monitorStatus.recommendations.push('Netzwerkverbindung und Firewall-Einstellungen prüfen');
     }
 
@@ -348,39 +348,39 @@ async function checkGSCTools() {
   for (const tool of GSC_TOOLS) {
     const toolPath = path.join(__dirname, tool);
 
-    if (!fs.existsSync(toolPath)) {
-      log(`GSC-Tool nicht gefunden: ${tool}`, 'warn');
+    if (!fs.existsSync(toolPath)) { 
+      log(`GSC-Tool nicht gefunden: $${tool}`, 'warn');
       monitorStatus.tools.notTested++;
       continue;
     }
 
-    log(`Teste GSC-Tool: ${tool}...`);
+    log(`Teste GSC-Tool: $${tool}...`);
 
     try {
       // Führe den GSC-Tool-Test aus (Timeout nach 30 Sekunden)
-      const result = execSync(`node "${toolPath}" --test`, {
-        timeout: 30000,
+      const result = execSync(`node "$${toolPath}" --test`, {
+        timeout: 30000),
         encoding: 'utf8',
         stdio: ['ignore', 'pipe', 'pipe'],
       });
 
-      if (result.includes('success') || result.includes('erfolgreich')) {
-        log(`✅ GSC-Tool funktioniert: ${tool}`, 'success');
+      if (result.includes('success') || result.includes('erfolgreich')) { 
+        log(`✅ GSC-Tool funktioniert: $${tool}`, 'success');
         monitorStatus.tools.working++;
-      } else {
-        log(`⚠️ GSC-Tool hat unklaren Status: ${tool}`, 'warn');
+      } else { 
+        log(`⚠️ GSC-Tool hat unklaren Status: $${tool}`, 'warn');
         monitorStatus.tools.notTested++;
       }
     } catch (err) {
-      log(`❌ GSC-Tool fehlgeschlagen: ${tool} - ${err.message}`, 'error');
+      log(`❌ GSC-Tool fehlgeschlagen: $${tool} - ${err.message}`, 'error');
       monitorStatus.tools.failed++;
 
       // Prüfe auf spezifische Fehlermeldungen
       const errorOutput = err.stderr ? err.stderr.toString() : '';
-      if (errorOutput.includes('credentials') || errorOutput.includes('authentication')) {
-        monitorStatus.recommendations.push(`Authentication-Problem in ${tool} beheben`);
-      } else if (errorOutput.includes('permission')) {
-        monitorStatus.recommendations.push(`Berechtigungsproblem in ${tool} beheben`);
+      if (errorOutput.includes('credentials') || errorOutput.includes('authentication')) { 
+        monitorStatus.recommendations.push(`Authentication-Problem in $${tool} beheben`);
+      } else if (errorOutput.includes('permission')) { 
+        monitorStatus.recommendations.push(`Berechtigungsproblem in $${tool} beheben`);
       }
     }
   }
@@ -389,8 +389,8 @@ async function checkGSCTools() {
   for (const tool of AUDIT_TOOLS) {
     const toolPath = path.join(__dirname, tool);
 
-    if (!fs.existsSync(toolPath)) {
-      log(`Audit-Tool nicht gefunden: ${tool}`, 'warn');
+    if (!fs.existsSync(toolPath)) { 
+      log(`Audit-Tool nicht gefunden: $${tool}`, 'warn');
       monitorStatus.tools.notTested++;
       continue;
     }
@@ -400,22 +400,22 @@ async function checkGSCTools() {
       const content = fs.readFileSync(toolPath, 'utf8');
 
       // Prüfe, ob das Audit-Tool auf die GSC-Service-Account-Datei verweist
-      if (content.includes('gsc-service-account') || content.includes('searchconsole')) {
+      if (content.includes('gsc-service-account') || content.includes('searchconsole')) { 
         log(`✅ GSC-Integration gefunden in: ${path.basename(tool)}`, 'success');
         monitorStatus.tools.working++;
-      } else {
+      } else { 
         log(`⚠️ Keine GSC-Integration gefunden in: ${path.basename(tool)}`, 'warn');
         monitorStatus.tools.notTested++;
         monitorStatus.recommendations.push(`GSC-Integration in ${path.basename(tool)} prüfen`);
       }
     } catch (err) {
-      log(`❌ Fehler beim Prüfen von ${path.basename(tool)}: ${err.message}`, 'error');
+      log(`❌ Fehler beim Prüfen von ${path.basename(tool)}: $${err.message}`, 'error');
       monitorStatus.tools.failed++;
     }
   }
 
   log(
-    `\nZusammenfassung GSC-Tools: ${monitorStatus.tools.working} funktionieren, ${monitorStatus.tools.failed} fehlerhaft, ${monitorStatus.tools.notTested} nicht getestet`,
+    `\nZusammenfassung GSC-Tools: $${monitorStatus.tools.working} funktionieren, ${monitorStatus.tools.failed} fehlerhaft, ${monitorStatus.tools.notTested} nicht getestet`),
     monitorStatus.tools.failed > 0 ? 'warn' : 'success',
   );
 }
@@ -428,7 +428,7 @@ async function ensureGSCMonitoringTasks() {
 
   try {
     // Prüfe, ob tasks.json existiert
-    if (!fs.existsSync(tasksPath)) {
+    if (!fs.existsSync(tasksPath)) { 
       log('tasks.json nicht gefunden. Kann GSC-Monitoring-Tasks nicht erstellen.', 'warn');
       monitorStatus.recommendations.push('tasks.json erstellen für automatisches GSC-Monitoring');
       return;
@@ -437,7 +437,7 @@ async function ensureGSCMonitoringTasks() {
     // Lese tasks.json
     const tasksData = JSON.parse(fs.readFileSync(tasksPath, 'utf8'));
 
-    if (!tasksData.tasks) {
+    if (!tasksData.tasks) { 
       tasksData.tasks = [];
     }
 
@@ -482,27 +482,27 @@ async function ensureGSCMonitoringTasks() {
     // Füge Tasks hinzu, wenn sie nicht existieren
     let updated = false;
 
-    if (!hasMonitorTask) {
+    if (!hasMonitorTask) { 
       tasksData.tasks.push(gscMonitorTask);
       updated = true;
       log('GSC Monitor Task zu tasks.json hinzugefügt', 'success');
     }
 
-    if (!hasAuthCheckTask) {
+    if (!hasAuthCheckTask) { 
       tasksData.tasks.push(gscAuthCheckTask);
       updated = true;
       log('GSC Auth Check Task (Auto-Start) zu tasks.json hinzugefügt', 'success');
     }
 
     // Schreibe aktualisierte tasks.json
-    if (updated) {
+    if (updated) { 
       fs.writeFileSync(tasksPath, JSON.stringify(tasksData, null, 2), 'utf8');
       log('tasks.json erfolgreich aktualisiert', 'success');
-    } else {
+    } else { 
       log('GSC-Monitoring-Tasks sind bereits konfiguriert', 'info');
     }
   } catch (err) {
-    log(`Fehler beim Aktualisieren der tasks.json: ${err.message}`, 'error');
+    log(`Fehler beim Aktualisieren der tasks.json: $${err.message}`, 'error');
     monitorStatus.recommendations.push('tasks.json manuell für GSC-Monitoring aktualisieren');
   }
 }
@@ -513,7 +513,7 @@ async function ensureGSCMonitoringTasks() {
 async function updateExtensionValidator() {
   const validatorPath = path.join(__dirname, '..', 'extension-function-validator.js');
 
-  if (!fs.existsSync(validatorPath)) {
+  if (!fs.existsSync(validatorPath)) { 
     log('Extension Function Validator nicht gefunden', 'warn');
     return;
   }
@@ -522,16 +522,16 @@ async function updateExtensionValidator() {
     let content = fs.readFileSync(validatorPath, 'utf8');
 
     // Prüfe, ob GSC_TOOLS bereits definiert sind
-    if (content.includes('GSC_TOOLS')) {
+    if (content.includes('GSC_TOOLS')) { 
       log('GSC-Tools sind bereits im Extension Validator definiert', 'info');
       return;
     }
 
     // Finde die Stelle, an der die AI_INTEGRATION_FILES definiert werden
     const aiFilesEndPosition = content.indexOf('AI_INTEGRATION_FILES');
-    if (aiFilesEndPosition === -1) {
+    if (aiFilesEndPosition === -1) { 
       log(
-        'AI_INTEGRATION_FILES nicht gefunden, kann Extension Validator nicht aktualisieren',
+        'AI_INTEGRATION_FILES nicht gefunden, kann Extension Validator nicht aktualisieren'),
         'warn',
       );
       return;
@@ -539,7 +539,7 @@ async function updateExtensionValidator() {
 
     // Finde das Ende der AI_INTEGRATION_FILES-Definition
     const aiFilesBlockEnd = content.indexOf('];', aiFilesEndPosition);
-    if (aiFilesBlockEnd === -1) {
+    if (aiFilesBlockEnd === -1) { 
       log('Ende der AI_INTEGRATION_FILES nicht gefunden', 'warn');
       return;
     }
@@ -566,7 +566,7 @@ const GSC_TOOLS = [
 
     // Finde eine geeignete Stelle, um die GSC-Tools-Prüfung einzufügen
     const checkFunctionsPosition = content.lastIndexOf('function checkAIIntegration()');
-    if (checkFunctionsPosition === -1) {
+    if (checkFunctionsPosition === -1) { 
       log('checkAIIntegration-Funktion nicht gefunden', 'warn');
       return;
     }
@@ -585,35 +585,35 @@ function checkGSCIntegration() {
   
   // Prüfe Service-Account-Datei
   const serviceAccountPath = path.join(__dirname, 'tools', 'gsc-service-account.json');
-  if (!fileExists(serviceAccountPath)) {
+  if (!fileExists(serviceAccountPath)) { 
     log('⚠️ GSC Service-Account-Datei fehlt', 'warn');
     extensionStatus.recommendations.push('GSC Service-Account-Datei wiederherstellen');
     gscStatusOK = false;
-  } else {
+  } else { 
     log('✅ GSC Service-Account-Datei gefunden');
   }
   
   // Prüfe GSC-Tools
   for (const tool of GSC_TOOLS) {
     const toolPath = path.join(__dirname, tool);
-    if (!fileExists(toolPath)) {
+    if (!fileExists(toolPath)) { 
       missingGSCTools.push(path.basename(tool));
     }
   }
   
-  if (missingGSCTools.length > 0) {
+  if (missingGSCTools.length > 0) { 
     log(\`⚠️ Fehlende GSC-Tools: \${missingGSCTools.join(', ')}\`, 'warn');
     extensionStatus.recommendations.push(\`GSC-Tools wiederherstellen: \${missingGSCTools.join(', ')}\`);
     gscStatusOK = false;
-  } else {
+  } else { 
     log('✅ Alle GSC-Tools sind vorhanden');
   }
   
   // Prüfe GSC-Integration in Tasks
   const tasksPath = path.join(__dirname, '.vscode', 'tasks.json');
-  if (fileExists(tasksPath)) {
+  if (fileExists(tasksPath)) { 
     const tasksConfig = readJsonFile(tasksPath);
-    if (tasksConfig && Array.isArray(tasksConfig.tasks)) {
+    if (tasksConfig && Array.isArray(tasksConfig.tasks)) { 
       const hasGSCAuthTask = tasksConfig.tasks.some(t => 
         t.label && t.label.includes('GSC Auth');
         t.runOptions && t.runOptions.runOn === 'folderOpen');
@@ -621,20 +621,20 @@ function checkGSCIntegration() {
       const hasGSCMonitorTask = tasksConfig.tasks.some(t => 
         t.label && t.label.includes('GSC Integration Monitor'));
       
-      if (!hasGSCAuthTask || !hasGSCMonitorTask) {
+      if (!hasGSCAuthTask || !hasGSCMonitorTask) { 
         log('⚠️ GSC-Tasks fehlen oder sind nicht korrekt konfiguriert', 'warn');
         extensionStatus.recommendations.push('GSC-Tasks in tasks.json konfigurieren');
         gscStatusOK = false;
-      } else {
+      } else { 
         log('✅ GSC-Tasks sind korrekt konfiguriert');
       }
     }
   }
   
-  if (gscStatusOK) {
+  if (gscStatusOK) { 
     log('✅ GSC-Integration scheint vollständig zu sein');
     extensionStatus.healthy.push('gsc-integration');
-  } else {
+  } else { 
     extensionStatus.issues.push('gsc-integration');
     log('⚠️ GSC-Integration hat Probleme');
   }
@@ -648,7 +648,7 @@ function checkGSCIntegration() {
 
     // Finde eine Stelle, an der die GSC-Prüfung aufgerufen werden soll
     const callAIIntegrationPos = content.indexOf('checkAIIntegration();');
-    if (callAIIntegrationPos === -1) {
+    if (callAIIntegrationPos === -1) { 
       log('Aufrufspunkt für checkAIIntegration nicht gefunden', 'warn');
       return;
     }
@@ -661,9 +661,9 @@ function checkGSCIntegration() {
     fs.writeFileSync(validatorPath, content, 'utf8');
     log('Extension Function Validator erfolgreich um GSC-Integration erweitert', 'success');
   } catch (err) {
-    log(`Fehler beim Aktualisieren des Extension Function Validators: ${err.message}`, 'error');
+    log(`Fehler beim Aktualisieren des Extension Function Validators: $${err.message}`, 'error');
     monitorStatus.recommendations.push(
-      'Extension Function Validator manuell um GSC-Integration erweitern',
+      'Extension Function Validator manuell um GSC-Integration erweitern'),
     );
   }
 }
@@ -675,12 +675,12 @@ async function main() {
   // Initialisiere Log-Datei
   try {
     fs.writeFileSync(
-      LOG_FILE_PATH,
+      LOG_FILE_PATH),
       `=== GSC Integration Monitor Log - ${new Date().toISOString()} ===\n`,
       'utf8',
     );
   } catch (err) {
-    console.error(`Fehler beim Erstellen der Log-Datei: ${err.message}`);
+    console.error(`Fehler beim Erstellen der Log-Datei: $${err.message}`);
   }
 
   log('========================================================================');
@@ -691,7 +691,7 @@ async function main() {
   // Führe alle Prüfungen durch
   const serviceAccountValid = checkServiceAccountFile();
 
-  if (serviceAccountValid) {
+  if (serviceAccountValid) { 
     await testGSCConnection();
   }
 
@@ -704,18 +704,18 @@ async function main() {
   log('📊 ZUSAMMENFASSUNG');
   log('========================================================================');
 
-  if (monitorStatus.gscStatus.connected) {
+  if (monitorStatus.gscStatus.connected) { 
     log('✅ Google Search Console API-Verbindung: AKTIV', 'success');
-  } else {
+  } else { 
     log('❌ Google Search Console API-Verbindung: FEHLERHAFT', 'error');
   }
 
-  log(`✓ Funktionsfähige Tools: ${monitorStatus.tools.working}/${monitorStatus.tools.total}`);
+  log(`✓ Funktionsfähige Tools: $${monitorStatus.tools.working}/${monitorStatus.tools.total}`);
 
-  if (monitorStatus.recommendations.length > 0) {
+  if (monitorStatus.recommendations.length > 0) { 
     log('\n📋 EMPFEHLUNGEN:');
     monitorStatus.recommendations.forEach((rec, i) => {
-      log(`${i + 1}. ${rec}`);
+      log(`${i + 1}. $${rec}`);
     });
   }
 
@@ -724,12 +724,12 @@ async function main() {
 
   const isHealthy = monitorStatus.gscStatus.connected && monitorStatus.tools.failed === 0;
 
-  if (isHealthy) {
+  if (isHealthy) { 
     recordCheckSuccess('gsc-integration-monitor');
     log('✅ GSC Integration Check erfolgreich im Status-Tracker vermerkt.', 'success');
-  } else {
+  } else { 
     const errorTitle = `GSC Integration Alert: Status is ${isHealthy ? 'OK' : 'FAILED'}`;
-    const errorBody = `**Die GSC-Integration hat Probleme festgestellt.**\n\n**Details:**\n- **API Verbunden:** ${monitorStatus.gscStatus.connected}\n- **Tools fehlerhaft:** ${monitorStatus.tools.failed}/${monitorStatus.tools.total}\n- **Empfehlungen:** ${monitorStatus.recommendations.join(', ') || 'Keine'}\n\nBitte die Logs prüfen.`;
+    const errorBody = `**Die GSC-Integration hat Probleme festgestellt.**\n\n**Details:**\n- **API Verbunden:** $${monitorStatus.gscStatus.connected}\n- **Tools fehlerhaft:** ${monitorStatus.tools.failed}/${monitorStatus.tools.total}\n- **Empfehlungen:** ${monitorStatus.recommendations.join(', ') || 'Keine'}\n\nBitte die Logs prüfen.`;
     await sendAlert(errorTitle, errorBody, ['high', 'gsc']);
   }
 
@@ -744,7 +744,7 @@ main()
     console.log('GSC Integration Monitor erfolgreich ausgeführt');
   })
   .catch((err) => {
-    console.error(`Fehler bei der Ausführung des GSC Integration Monitors: ${err.message}`);
+    console.error(`Fehler bei der Ausführung des GSC Integration Monitors: $${err.message}`);
   });
 
 // Für Tests exportieren

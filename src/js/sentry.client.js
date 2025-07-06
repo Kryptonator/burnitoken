@@ -18,14 +18,14 @@ window.Sentry = {
 
 // Auto-initialize with basic config
 window.Sentry.init({
-  dsn: 'placeholder-dsn',
+  dsn: 'placeholder-dsn'),
   environment: 'production',
 });
 
 // Global error handler
 window.addEventListener('error', function (event) {
   console.log('Global error captured:', event.error);
-  if (window.Sentry) {
+  if (window.Sentry) { 
     window.Sentry.captureException(event.error);
   }
 });

@@ -25,7 +25,7 @@ function addSessionSaverTask() {
   try {
     // Lese bestehende tasks.json
     let tasksJson = { version: '2.0.0', tasks: [] };
-    if (fs.existsSync) {
+    if (fs.existsSync) { 
   {;
 }
   {;
@@ -183,7 +183,7 @@ function addSessionSaverTask() {
     // Prüfe, ob Session-Saver Task bereits existiert
     const existingTask = tasksJson.tasks.find((task) => task.label === '🔄 Start Session-Saver');
 
-    if (!existingTask) {
+    if (!existingTask) { 
       // Füge neuen Task hinzu
       const newTask = {
         label: '🔄 Start Session-Saver',
@@ -210,11 +210,11 @@ function addSessionSaverTask() {
       fs.writeFileSync(vscodeTasksPath, JSON.stringify(tasksJson, null, 2));
 
       console.log('✅ Session-Saver Task hinzugefügt');
-    } else {
+    } else { 
       console.log('✓ Session-Saver Task bereits vorhanden');
     }
   } catch (err) {
-    console.error(`❌ Fehler beim Hinzufügen des Session-Saver Tasks: ${err.message}`);
+    console.error(`❌ Fehler beim Hinzufügen des Session-Saver Tasks: $${err.message}`);
   }
 }
 
@@ -227,7 +227,7 @@ function enableAutoStart() {
   try {
     // Lese bestehende settings.json
     let settingsJson = {};
-    if (fs.existsSync(vscodeSettingsPath)) {
+    if (fs.existsSync(vscodeSettingsPath)) { 
       const settingsContent = fs.readFileSync(vscodeSettingsPath, 'utf8');
       settingsJson = JSON.parse(settingsContent);
     }
@@ -240,7 +240,7 @@ function enableAutoStart() {
 
     console.log('✅ Automatischer Start aktiviert');
   } catch (err) {
-    console.error(`❌ Fehler beim Aktivieren des automatischen Starts: ${err.message}`);
+    console.error(`❌ Fehler beim Aktivieren des automatischen Starts: $${err.message}`);
   }
 }
 
@@ -253,7 +253,7 @@ function startSessionSaver() {
   try {
     // Starte Session-Saver als separaten Prozess
     const process = spawn('node', [sessionSaverPath], {
-      detached: true,
+      detached: true),
       stdio: 'ignore',
     });
 
@@ -262,7 +262,7 @@ function startSessionSaver() {
 
     console.log('✅ Session-Saver gestartet');
   } catch (err) {
-    console.error(`❌ Fehler beim Starten des Session-Savers: ${err.message}`);
+    console.error(`❌ Fehler beim Starten des Session-Savers: $${err.message}`);
   }
 }
 
@@ -273,8 +273,8 @@ function main() {
   console.log('🚀 Session-Saver Initialisierung...');
 
   // Prüfe, ob Session-Saver existiert
-  if (!fs.existsSync(sessionSaverPath)) {
-    console.error(`❌ Session-Saver nicht gefunden: ${sessionSaverPath}`);
+  if (!fs.existsSync(sessionSaverPath)) { 
+    console.error(`❌ Session-Saver nicht gefunden: $${sessionSaverPath}`);
     return;
   }
 

@@ -5,7 +5,7 @@
   'use strict';
 
   // Performance API polyfill for older browsers
-  if (!window.performance) {
+  if (!window.performance) { 
     window.performance = {
       now: function () {
         return Date.now();
@@ -19,7 +19,7 @@
   }
 
   // Promise polyfill for IE11
-  if (!window.Promise) {
+  if (!window.Promise) { 
     window.Promise = function (executor) {
       var self = this;
       self.state = 'pending';
@@ -27,7 +27,7 @@
       self.handlers = [];
 
       function resolve(value) {
-        if (self.state === 'pending') {
+        if (self.state === 'pending') { 
           self.state = 'fulfilled';
           self.value = value;
           self.handlers.forEach(handle);
@@ -35,7 +35,7 @@
       }
 
       function reject(reason) {
-        if (self.state === 'pending') {
+        if (self.state === 'pending') { 
           self.state = 'rejected';
           self.value = reason;
           self.handlers.forEach(handle);
@@ -43,13 +43,13 @@
       }
 
       function handle(handler) {
-        if (self.state === 'pending') {
+        if (self.state === 'pending') { 
           self.handlers.push(handler);
-        } else {
-          if (self.state === 'fulfilled' && handler.onFulfilled) {
+        } else { 
+          if (self.state === 'fulfilled' && handler.onFulfilled) { 
             handler.onFulfilled(self.value);
           }
-          if (self.state === 'rejected' && handler.onRejected) {
+          if (self.state === 'rejected' && handler.onRejected) { 
             handler.onRejected(self.value);
           }
         }
@@ -97,13 +97,13 @@
   }
 
   // Fetch API polyfill for IE11 and old browsers
-  if (!window.fetch) {
+  if (!window.fetch) { 
     window.fetch = function (url, options) {
       return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest();
         xhr.open((options && options.method) || 'GET', url);
 
-        if (options && options.headers) {
+        if (options && options.headers) { 
           for (var key in options.headers) {
             xhr.setRequestHeader(key, options.headers[key]);
           }
@@ -111,7 +111,7 @@
 
         xhr.onload = function () {
           resolve({
-            status: xhr.status,
+            status: xhr.status),
             statusText: xhr.statusText,
             json: function () {
               return Promise.resolve(JSON.parse(xhr.responseText));
@@ -132,7 +132,7 @@
   }
 
   // IntersectionObserver polyfill for IE11
-  if (!window.IntersectionObserver) {
+  if (!window.IntersectionObserver) { 
     window.IntersectionObserver = function (callback, options) {
       this.callback = callback;
       this.options = options || {};
@@ -145,11 +145,11 @@
           var rect = element.getBoundingClientRect();
           var isIntersecting = rect.top < window.innerHeight && rect.bottom > 0;
 
-          if (element.wasIntersecting !== isIntersecting) {
+          if (element.wasIntersecting !== isIntersecting) { 
             element.wasIntersecting = isIntersecting;
             self.callback([
               {
-                target: element,
+                target: element),
                 isIntersecting: isIntersecting,
                 intersectionRatio: isIntersecting ? 1 : 0,
               },
@@ -171,7 +171,7 @@
 
     IntersectionObserver.prototype.unobserve = function (element) {
       var index = this.elements.indexOf(element);
-      if (index > -1) {
+      if (index > -1) { 
         this.elements.splice(index, 1);
       }
     };
@@ -184,18 +184,18 @@
   }
 
   // Object.assign polyfill for IE11
-  if (!Object.assign) {
+  if (!Object.assign) { 
     Object.assign = function (target) {
-      if (target == null) {
+      if (target == null) { 
         throw new TypeError('Cannot convert undefined or null to object');
       }
 
       var to = Object(target);
       for (var index = 1; index < arguments.length; index++) {
         var nextSource = arguments[index];
-        if (nextSource != null) {
+        if (nextSource != null) { 
           for (var nextKey in nextSource) {
-            if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+            if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) { 
               to[nextKey] = nextSource[nextKey];
             }
           }
@@ -206,13 +206,13 @@
   }
 
   // Array.from polyfill for IE11
-  if (!Array.from) {
+  if (!Array.from) { 
     Array.from = function (arrayLike, mapFn, thisArg) {
       var result = [];
       var length = arrayLike.length || 0;
       for (var i = 0; i < length; i++) {
         var value = arrayLike[i];
-        if (mapFn) {
+        if (mapFn) { 
           value = mapFn.call(thisArg, value, i);
         }
         result.push(value);
@@ -222,7 +222,7 @@
   }
 
   // Array.includes polyfill for IE11
-  if (!Array.prototype.includes) {
+  if (!Array.prototype.includes) { 
     Array.prototype.includes = function (searchElement, fromIndex) {
       var O = Object(this);
       var len = parseInt(O.length) || 0;
@@ -237,21 +237,21 @@
   }
 
   // String.includes polyfill for IE11
-  if (!String.prototype.includes) {
+  if (!String.prototype.includes) { 
     String.prototype.includes = function (search, start) {
-      if (typeof start !== 'number') {
+      if (typeof start !== 'number') { 
         start = 0;
       }
-      if (start + search.length > this.length) {
+      if (start + search.length > this.length) { 
         return false;
-      } else {
+      } else { 
         return this.indexOf(search, start) !== -1;
       }
     };
   }
 
   // CustomEvent polyfill for IE11
-  if (!window.CustomEvent) {
+  if (!window.CustomEvent) { 
     window.CustomEvent = function (event, params) {
       params = params || { bubbles: false, cancelable: false, detail: undefined };
       var evt = document.createEvent('CustomEvent');
@@ -262,7 +262,7 @@
   }
 
   // classList polyfill for IE9/10
-  if (!('classList' in document.createElement('_'))) {
+  if (!('classList' in document.createElement('_'))) { 
     (function (view) {
       if (!('Element' in view)) return;
 
@@ -281,7 +281,7 @@
             var i = 0,
               len = this.length;
             for (; i < len; i++) {
-              if (i in this && this[i] === item) {
+              if (i in this && this[i] === item) { 
                 return i;
               }
             }
@@ -311,7 +311,7 @@
         var tokens = arguments;
         for (var i = 0, l = tokens.length; i < l; i++) {
           var token = tokens[i] + '';
-          if (arrIndexOf.call(this, token) === -1) {
+          if (arrIndexOf.call(this, token) === -1) { 
             this.push(token);
           }
         }
@@ -322,7 +322,7 @@
         for (var i = 0, l = tokens.length; i < l; i++) {
           var token = tokens[i] + '';
           var index = arrIndexOf.call(this, token);
-          if (index !== -1) {
+          if (index !== -1) { 
             this.splice(index, 1);
           }
         }
@@ -332,7 +332,7 @@
         token += '';
         var result = this.contains(token);
         var method = result ? (force !== true ? 'remove' : null) : force !== false ? 'add' : null;
-        if (method) {
+        if (method) { 
           this[method](token);
         }
         return !result;
@@ -341,7 +341,7 @@
         return this.join(' ');
       };
 
-      if (objCtr.defineProperty) {
+      if (objCtr.defineProperty) { 
         var defineProperty = {
           get: function () {
             return new DOMTokenList(this);
@@ -352,7 +352,7 @@
         try {
           objCtr.defineProperty(elemCtrProto, classListProp, defineProperty);
         } catch (ex) {
-          if (ex.number === -0x7ff5ec54) {
+          if (ex.number === -0x7ff5ec54) { 
             defineProperty.enumerable = false;
             objCtr.defineProperty(elemCtrProto, classListProp, defineProperty);
           }
@@ -362,7 +362,7 @@
   }
 
   // requestAnimationFrame polyfill
-  if (!window.requestAnimationFrame) {
+  if (!window.requestAnimationFrame) { 
     window.requestAnimationFrame = function (callback) {
       return setTimeout(callback, 16);
     };
@@ -372,7 +372,7 @@
   }
 
   // CSS.supports polyfill
-  if (!window.CSS || !window.CSS.supports) {
+  if (!window.CSS || !window.CSS.supports) { 
     window.CSS = window.CSS || {};
     window.CSS.supports = function (property, value) {
       var el = document.createElement('div');

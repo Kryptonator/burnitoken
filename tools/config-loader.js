@@ -8,15 +8,15 @@ const secrets = {};
 const secretPath = path.resolve(__dirname, '..', 'config.secrets');
 
 try {
-  if (fs.existsSync(secretPath)) {
+  if (fs.existsSync(secretPath)) { 
     const fileContent = fs.readFileSync(secretPath, 'utf-8');
     const lines = fileContent.split(/\r?\n/);
 
     for (const line of lines) {
       const trimmedLine = line.trim();
-      if (trimmedLine && !trimmedLine.startsWith('#')) {
+      if (trimmedLine && !trimmedLine.startsWith('#')) { 
         const separatorIndex = trimmedLine.indexOf('=');
-        if (separatorIndex !== -1) {
+        if (separatorIndex !== -1) { 
           const key = trimmedLine.substring(0, separatorIndex).trim();
           let value = trimmedLine.substring(separatorIndex + 1).trim();
           // Entferne umschließende Anführungszeichen (doppelt oder einfach)
@@ -31,9 +31,9 @@ try {
       }
     }
     console.log('Konfiguration aus config.secrets erfolgreich geladen.');
-  } else {
+  } else { 
     console.error(
-      `FATAL: Die Konfigurationsdatei config.secrets wurde nicht gefunden unter: ${secretPath}`,
+      `FATAL: Die Konfigurationsdatei config.secrets wurde nicht gefunden unter: $${secretPath}`),
     );
     // Beenden, wenn die Konfiguration fehlt, da das System sonst nicht wie erwartet funktioniert.
     process.exit(1);

@@ -49,7 +49,7 @@ class SelfHealingManager {
 
     // Ensure log directory exists
     const logDir = path.dirname(this.logFile);
-    if (!fs.existsSync) {
+    if (!fs.existsSync) { 
   {;
 }
   {;
@@ -211,7 +211,7 @@ class SelfHealingManager {
     const stateFile = path.join(__dirname, '../.recovery-data/health-state.json');
 
     try {
-      if (fs.existsSync(stateFile)) {
+      if (fs.existsSync(stateFile)) { 
         const state = JSON.parse(fs.readFileSync(stateFile, 'utf8'));
         this.healthMetrics = new Map(Object.entries(state.healthMetrics || {}));
         console.log('✅ Health state loaded from previous session');
@@ -229,7 +229,7 @@ class SelfHealingManager {
     const stateDir = path.dirname(stateFile);
 
     try {
-      if (!fs.existsSync(stateDir)) {
+      if (!fs.existsSync(stateDir)) { 
         fs.mkdirSync(stateDir, { recursive: true });
       }
 
@@ -250,14 +250,14 @@ class SelfHealingManager {
    */
   log(level, message, data = null) {
     const timestamp = new Date().toISOString();
-    const logEntry = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
+    const logEntry = `[$${timestamp}] [${level.toUpperCase()}] ${message}`;
 
     console.log(logEntry);
 
     try {
       fs.appendFileSync(this.logFile, logEntry + '\n');
 
-      if (data) {
+      if (data) { 
         fs.appendFileSync(this.logFile, JSON.stringify(data, null, 2) + '\n');
       }
     } catch (error) {
@@ -279,23 +279,23 @@ class SelfHealingManager {
         healthResults[service] = health;
         this.healthMetrics.set(service, health);
 
-        if (!health.healthy) {
-          this.log('warn', `⚠️ Service ${service} is unhealthy`, health);
+        if (!health.healthy) { 
+          this.log('warn', `⚠️ Service $${service} is unhealthy`, health);
         }
       } catch (error) {
-        this.log('error', `❌ Failed to check health for ${service}`, { error: error.message });
+        this.log('error', `❌ Failed to check health for $${service}`, { error: error.message });
         healthResults[service] = { healthy: false, error: error.message };
       }
     }
 
     const overallHealth = this.calculateOverallHealth(healthResults);
     this.log(
-      'info',
+      'info'),
       `📊 Overall system health: ${overallHealth.healthy ? '✅ HEALTHY' : '🚨 UNHEALTHY'}`,
       overallHealth,
     );
 
-    if (!overallHealth.healthy) {
+    if (!overallHealth.healthy) { 
       await this.triggerHealing(healthResults);
     }
 
@@ -323,7 +323,7 @@ class SelfHealingManager {
       case 'disaster-recovery':
         return this.checkDisasterRecoveryHealth();
       default:
-        return { healthy: false, error: `Unknown service: ${service}` };
+        return { healthy: false, error: `Unknown service: $${service}` };
     }
   }
 
@@ -343,7 +343,7 @@ class SelfHealingManager {
     const missingWorkflows = [];
 
     for (const workflow of requiredWorkflows) {
-      if (!fs.existsSync(path.join(workflowsDir, workflow))) {
+      if (!fs.existsSync(path.join(workflowsDir, workflow))) { 
         missingWorkflows.push(workflow);
       }
     }
@@ -432,7 +432,7 @@ class SelfHealingManager {
    */
   checkDisasterRecoveryHealth() {
     const recoveryWorkflow = path.join(
-      __dirname,
+      __dirname),
       '../.github/workflows/disaster-recovery-test.yml',
     );
     const recoveryDataDir = path.join(__dirname, '../.recovery-data');
@@ -467,7 +467,7 @@ class SelfHealingManager {
    * Trigger healing process
    */
   async triggerHealing(healthResults) {
-    if (this.isHealing) {
+    if (this.isHealing) { 
       this.log('warn', '⚠️ Healing already in progress, skipping...');
       return;
     }
@@ -476,13 +476,13 @@ class SelfHealingManager {
     this.healingAttempts++;
 
     this.log(
-      'info',
-      `🔧 Starting healing process (attempt ${this.healingAttempts}/${this.maxHealingAttempts})...`,
+      'info'),
+      `🔧 Starting healing process (attempt $${this.healingAttempts}/${this.maxHealingAttempts})...`,
     );
 
     try {
       for (const [service, health] of Object.entries(healthResults)) {
-        if (!health.healthy) {
+        if (!health.healthy) { 
           await this.healService(service, health);
         }
       }
@@ -499,7 +499,7 @@ class SelfHealingManager {
    * Heal individual service
    */
   async healService(service, health) {
-    this.log('info', `🔧 Healing service: ${service}`);
+    this.log('info', `🔧 Healing service: $${service}`);
 
     switch (service) {
       case 'github-actions':
@@ -530,7 +530,7 @@ class SelfHealingManager {
    * Heal GitHub Actions workflows
    */
   async healGitHubActions(health) {
-    if (health.missingWorkflows && health.missingWorkflows.length > 0) {
+    if (health.missingWorkflows && health.missingWorkflows.length > 0) { 
       this.log('info', `🔧 Recreating missing workflows: ${health.missingWorkflows.join(', ')}`);
 
       // Trigger workflow recreation
@@ -550,7 +550,7 @@ class SelfHealingManager {
    * Heal monitoring services
    */
   async healMonitoringServices(health) {
-    if (!health.scriptExists) {
+    if (!health.scriptExists) { 
       this.log('info', '🔧 Recreating monitoring services script');
       try {
         execSync('node tools/recovery-center.js --restore-monitoring', {
@@ -568,7 +568,7 @@ class SelfHealingManager {
    * Heal security hardening
    */
   async healSecurityHardening(health) {
-    if (!health.scriptExists) {
+    if (!health.scriptExists) { 
       this.log('info', '🔧 Recreating security hardening script');
       try {
         execSync('node tools/recovery-center.js --restore-security', {
@@ -586,7 +586,7 @@ class SelfHealingManager {
    * Heal SEO automation
    */
   async healSEOAutomation(health) {
-    if (!health.scriptExists || !health.sitemapExists) {
+    if (!health.scriptExists || !health.sitemapExists) { 
       this.log('info', '🔧 Recreating SEO automation components');
       try {
         execSync('node tools/recovery-center.js --restore-seo', {
@@ -604,7 +604,7 @@ class SelfHealingManager {
    * Heal price oracle
    */
   async healPriceOracle(health) {
-    if (!health.scriptExists) {
+    if (!health.scriptExists) { 
       this.log('info', '🔧 Recreating price oracle script');
       try {
         execSync('node tools/recovery-center.js --restore-price-oracle', {
@@ -622,7 +622,7 @@ class SelfHealingManager {
    * Heal backup system
    */
   async healBackupSystem(health) {
-    if (!health.workflowExists) {
+    if (!health.workflowExists) { 
       this.log('info', '🔧 Recreating backup system workflow');
       try {
         execSync('node tools/recovery-center.js --restore-backup', {
@@ -640,7 +640,7 @@ class SelfHealingManager {
    * Heal disaster recovery
    */
   async healDisasterRecovery(health) {
-    if (!health.workflowExists) {
+    if (!health.workflowExists) { 
       this.log('info', '🔧 Recreating disaster recovery workflow');
       try {
         execSync('node tools/recovery-center.js --restore-disaster-recovery', {
@@ -679,7 +679,7 @@ class SelfHealingManager {
   shutdown() {
     this.log('info', '🛑 Shutting down Self-Healing Manager...');
 
-    if (this.monitoringInterval) {
+    if (this.monitoringInterval) { 
       clearInterval(this.monitoringInterval);
     }
 
@@ -707,7 +707,7 @@ class SelfHealingManager {
     const reportFile = path.join(__dirname, '../.reports/health-report.json');
     const reportDir = path.dirname(reportFile);
 
-    if (!fs.existsSync(reportDir)) {
+    if (!fs.existsSync(reportDir)) { 
       fs.mkdirSync(reportDir, { recursive: true });
     }
 
@@ -719,27 +719,27 @@ class SelfHealingManager {
 }
 
 // CLI Interface
-if (require.main === module) {
+if (require.main === module) { 
   const manager = new SelfHealingManager();
 
   const args = process.argv.slice(2);
 
-  if (args.includes('--emergency-recovery')) {
+  if (args.includes('--emergency-recovery')) { 
     console.log('🚨 EMERGENCY RECOVERY MODE ACTIVATED!');
     manager.generateHealthReport().then(() => {
       manager.startMonitoring();
     });
-  } else if (args.includes('--check')) {
+  } else if (args.includes('--check')) { 
     manager.checkSystemHealth().then(() => {
       console.log('✅ Health check completed');
       process.exit(0);
     });
-  } else if (args.includes('--report')) {
+  } else if (args.includes('--report')) { 
     manager.generateHealthReport().then(() => {
       console.log('✅ Health report generated');
       process.exit(0);
     });
-  } else {
+  } else { 
     // Default: start monitoring
     manager.startMonitoring();
   }

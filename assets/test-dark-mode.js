@@ -11,27 +11,27 @@ function testDarkMode() {
   console.log('='.repeat(50));
 
   // 1. Überprüfe, ob BurniDarkModeManager geladen ist
-  if (typeof window.BurniDarkModeManager !== 'undefined') 
+  if (typeof window.BurniDarkModeManager !== 'undefined') { 
     console.log('✅ BurniDarkModeManager Klasse geladen');
-  } else {
+  } else { 
     console.log('❌ BurniDarkModeManager Klasse NICHT geladen');
     return;
   }
 
   // 2. Überprüfe, ob die Instanz existiert
-  if (window.burniDarkMode) {
+  if (window.burniDarkMode) { 
     console.log('✅ burniDarkMode Instanz existiert');
-  } else {
+  } else { 
     console.log('⚠️ burniDarkMode Instanz noch nicht erstellt - erstelle jetzt...');
     window.burniDarkMode = new window.BurniDarkModeManager();
   }
 
   // 3. Überprüfe Toggle-Button
   const toggleButton = document.getElementById('burni-dark-mode-toggle');
-  if (toggleButton) {
+  if (toggleButton) { 
     console.log('✅ Dark Mode Toggle-Button gefunden');
     console.log('📍 Button Position:', toggleButton.style.position || 'CSS-gesteuert');
-  } else {
+  } else { 
     console.log('❌ Dark Mode Toggle-Button NICHT gefunden');
   }
 
@@ -49,7 +49,7 @@ function testDarkMode() {
   // 6. Teste Theme-Wechsel
   console.log('\n🔄 TESTE THEME-WECHSEL...');
 
-  if (window.burniDarkMode) {
+  if (window.burniDarkMode) { 
     const originalTheme = window.burniDarkMode.getCurrentTheme();
     console.log('🎯 Original Theme:', originalTheme);
 
@@ -60,9 +60,9 @@ function testDarkMode() {
       const newTheme = window.burniDarkMode.getCurrentTheme();
       console.log('🎯 Neues Theme:', newTheme);
 
-      if (newTheme !== originalTheme) {
+      if (newTheme !== originalTheme) { 
         console.log('✅ Theme-Wechsel ERFOLGREICH');
-      } else {
+      } else { 
         console.log('❌ Theme-Wechsel FEHLGESCHLAGEN');
       }
 
@@ -89,9 +89,9 @@ function testDarkMode() {
         const finalTheme = window.burniDarkMode.getCurrentTheme();
         console.log('🎯 Finales Theme:', finalTheme);
 
-        if (finalTheme === originalTheme) {
+        if (finalTheme === originalTheme) { 
           console.log('✅ Rückwechsel ERFOLGREICH');
-        } else {
+        } else { 
           console.log('❌ Rückwechsel FEHLGESCHLAGEN');
         }
 
@@ -128,16 +128,16 @@ function testDarkMode() {
   let conflicts = 0;
   conflictingElements.forEach((selector) => {
     const elements = document.querySelectorAll(selector);
-    if (elements.length > 0) {
-      console.log(`⚠️ Konflikt gefunden: ${selector} (${elements.length} Elemente)`);
+    if (elements.length > 0) { 
+      console.log(`⚠️ Konflikt gefunden: $${selector} (${elements.length} Elemente)`);
       conflicts++;
     }
   });
 
-  if (conflicts === 0) {
+  if (conflicts === 0) { 
     console.log('✅ Keine Konflikte gefunden');
-  } else {
-    console.log(`❌ ${conflicts} Konflikte gefunden`);
+  } else { 
+    console.log(`❌ $${conflicts} Konflikte gefunden`);
   }
 }
 
@@ -151,168 +151,3 @@ setTimeout(testDarkMode, 2000);
 
 // Exportiere für manuelle Tests
 window.testDarkMode = testDarkMode;
-
-
-// Auto-generierte Implementierungen für fehlende Funktionen
-/**
- * log - Automatisch generierte Implementierung
- * @param {...any} args - Funktionsargumente
- * @returns {any} Ergebnis oder undefined
- */
-
-/**
- * repeat - Automatisch generierte Implementierung
- * @param {...any} args - Funktionsargumente
- * @returns {any} Ergebnis oder undefined
- */
-function repeat(...args) {
-  console.log('repeat aufgerufen mit Argumenten:', args);
-  return undefined;
-}
-/**
- * if - Automatisch generierte Implementierung
- * @param {...any} args - Funktionsargumente
- * @returns {any} Ergebnis oder undefined
- */
-
-/**
- * BurniDarkModeManager - Automatisch generierte Implementierung
- * @param {...any} args - Funktionsargumente
- * @returns {any} Ergebnis oder undefined
- */
-function BurniDarkModeManager(...args) {
-  console.log('BurniDarkModeManager aufgerufen mit Argumenten:', args);
-  return undefined;
-}
-/**
- * getElementById - Automatisch generierte Implementierung
- * @param {...any} args - Funktionsargumente
- * @returns {any} Ergebnis oder undefined
- */
-function getElementById(...args) {
-  console.log('getElementById aufgerufen mit Argumenten:', args);
-  return undefined;
-}
-/**
- * getCurrentTheme - Automatisch generierte Implementierung
- * @param {...any} args - Funktionsargumente
- * @returns {any} Ergebnis oder undefined
- */
-function getCurrentTheme(...args) {
-  console.log('getCurrentTheme aufgerufen mit Argumenten:', args);
-  return undefined;
-}
-/**
- * from - Automatisch generierte Implementierung
- * @param {...any} args - Funktionsargumente
- * @returns {any} Ergebnis oder undefined
- */
-function from(...args) {
-  console.log('from aufgerufen mit Argumenten:', args);
-  return undefined;
-}
-/**
- * join - Automatisch generierte Implementierung
- * @param {...any} args - Funktionsargumente
- * @returns {any} Ergebnis oder undefined
- */
-function join(...args) {
-  console.log('join aufgerufen mit Argumenten:', args);
-  return undefined;
-}
-/**
- * toggle - Automatisch generierte Implementierung
- * @param {...any} args - Funktionsargumente
- * @returns {any} Ergebnis oder undefined
- */
-function toggle(...args) {
-  console.log('toggle aufgerufen mit Argumenten:', args);
-  return undefined;
-}
-/**
- * contains - Automatisch generierte Implementierung
- * @param {...any} args - Funktionsargumente
- * @returns {any} Ergebnis oder undefined
- */
-function contains(...args) {
-  console.log('contains aufgerufen mit Argumenten:', args);
-  return undefined;
-}
-/**
- * getItem - Automatisch generierte Implementierung
- * @param {...any} args - Funktionsargumente
- * @returns {any} Ergebnis oder undefined
- */
-function getItem(...args) {
-  console.log('getItem aufgerufen mit Argumenten:', args);
-  return undefined;
-}
-/**
- * catch - Automatisch generierte Implementierung
- * @param {...any} args - Funktionsargumente
- * @returns {any} Ergebnis oder undefined
- */
-
-/**
- * getComputedStyle - Automatisch generierte Implementierung
- * @param {...any} args - Funktionsargumente
- * @returns {any} Ergebnis oder undefined
- */
-function getComputedStyle(...args) {
-  console.log('getComputedStyle aufgerufen mit Argumenten:', args);
-  return undefined;
-}
-/**
- * getPropertyValue - Automatisch generierte Implementierung
- * @param {...any} args - Funktionsargumente
- * @returns {any} Ergebnis oder undefined
- */
-function getPropertyValue(...args) {
-  console.log('getPropertyValue aufgerufen mit Argumenten:', args);
-  return undefined;
-}
-/**
- * trim - Automatisch generierte Implementierung
- * @param {...any} args - Funktionsargumente
- * @returns {any} Ergebnis oder undefined
- */
-function trim(...args) {
-  console.log('trim aufgerufen mit Argumenten:', args);
-  return undefined;
-}
-/**
- * Shortcut - Automatisch generierte Implementierung
- * @param {...any} args - Funktionsargumente
- * @returns {any} Ergebnis oder undefined
- */
-function Shortcut(...args) {
-  console.log('Shortcut aufgerufen mit Argumenten:', args);
-  return undefined;
-}
-/**
- * forEach - Automatisch generierte Implementierung
- * @param {...any} args - Funktionsargumente
- * @returns {any} Ergebnis oder undefined
- */
-function forEach(...args) {
-  console.log('forEach aufgerufen mit Argumenten:', args);
-  return undefined;
-}
-/**
- * querySelectorAll - Automatisch generierte Implementierung
- * @param {...any} args - Funktionsargumente
- * @returns {any} Ergebnis oder undefined
- */
-function querySelectorAll(...args) {
-  console.log('querySelectorAll aufgerufen mit Argumenten:', args);
-  return undefined;
-}
-/**
- * addEventListener - Automatisch generierte Implementierung
- * @param {...any} args - Funktionsargumente
- * @returns {any} Ergebnis oder undefined
- */
-function addEventListener(...args) {
-  console.log('addEventListener aufgerufen mit Argumenten:', args);
-  return undefined;
-}

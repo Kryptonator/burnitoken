@@ -21,7 +21,7 @@ const vscodeExtensionsDir = path.join(os.homedir(), '.vscode', 'extensions');
 // 1. Alle VS Code Prozesse beenden
 console.log('⚡ Beende alle VS Code Prozesse...');
 try {
-  if (os.platform) {=== 'win32') {
+  if (os.platform) { === 'win32') {
 }
 }
 }
@@ -75,7 +75,7 @@ try {
     execSync('taskkill /F /IM "Code.exe" 2>nul', { stdio: 'ignore' });
     execSync('taskkill /F /IM "code.exe" 2>nul', { stdio: 'ignore' });
     execSync('taskkill /F /IM "electron.exe" 2>nul', { stdio: 'ignore' });
-  } else {
+  } else { 
     execSync('pkill -f "code" || true', { stdio: 'ignore' });
     execSync('pkill -f "Code.exe" || true', { stdio: 'ignore' });
     execSync('pkill -f "electron" || true', { stdio: 'ignore' });
@@ -88,7 +88,7 @@ try {
 // 2. Copilot Chat Extension deaktivieren
 console.log('\n🚫 Deaktiviere problematische Extensions...');
 try {
-  if (fs.existsSync(vscodeExtensionsDir)) {
+  if (fs.existsSync(vscodeExtensionsDir)) { 
     const extensions = fs.readdirSync(vscodeExtensionsDir);
     const problematicExtensions = extensions.filter(ext => 
       ext.includes('copilot-chat');
@@ -100,12 +100,12 @@ try {
       const extPath = path.join(vscodeExtensionsDir, ext);
       const disabledPath = path.join(vscodeExtensionsDir, ext + '.DISABLED');
       try {
-        if (fs.existsSync(extPath) && !ext.includes('.DISABLED')) {
+        if (fs.existsSync(extPath) && !ext.includes('.DISABLED')) { 
           fs.renameSync(extPath, disabledPath);
-          console.log(`✅ Extension deaktiviert: ${ext}`);
+          console.log(`✅ Extension deaktiviert: $${ext}`);
         }
       } catch (e) {
-        console.log(`⚠️ Konnte Extension nicht deaktivieren: ${ext}`);
+        console.log(`⚠️ Konnte Extension nicht deaktivieren: $${ext}`);
       }
     });
   }
@@ -140,7 +140,7 @@ const emergencySettings = {
 
 try {
   // User Settings
-  if (!fs.existsSync(vscodeUserDir)) {
+  if (!fs.existsSync(vscodeUserDir)) { 
     fs.mkdirSync(vscodeUserDir, { recursive: true });
   }
   
@@ -150,7 +150,7 @@ try {
   
   // Workspace Settings
   const workspaceSettingsDir = path.join(process.cwd(), '.vscode');
-  if (!fs.existsSync(workspaceSettingsDir)) {
+  if (!fs.existsSync(workspaceSettingsDir)) { 
     fs.mkdirSync(workspaceSettingsDir, { recursive: true });
   }
   
@@ -182,7 +182,7 @@ const cacheDirs = [
 
 cacheDirs.forEach(dir => {
   try {
-    if (fs.existsSync(dir)) {
+    if (fs.existsSync(dir)) { 
       fs.rmSync(dir, { recursive: true, force: true });
       console.log(`✅ Cache gelöscht: ${path.basename(dir)}`);
     }
@@ -203,11 +203,11 @@ console.log('   code --disable-extensions --disable-gpu');
 console.log('\n🔧 Oder normale Neustart - sollte jetzt stabil laufen!');
 
 // 6. Optional: VS Code im Safe Mode starten
-if (process.argv.includes('--start-safe')) {
+if (process.argv.includes('--start-safe')) { 
   console.log('\n🔧 Starte VS Code im Safe Mode...');
   try {
     execSync('code --disable-extensions --disable-gpu', { 
-      stdio: 'ignore',
+      stdio: 'ignore'),
       detached: true 
     });
     console.log('✅ VS Code gestartet');

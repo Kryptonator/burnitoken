@@ -25,7 +25,7 @@ class AdvancedLazyLoader {
   }
 
   init() {
-    if (!('IntersectionObserver' in window)) {
+    if (!('IntersectionObserver' in window)) { 
       // Fallback für ältere Browser
       this.loadAllImages();
       return;
@@ -41,7 +41,7 @@ class AdvancedLazyLoader {
     this.imageObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting) { 
             this.loadImage(entry.target);
             this.imageObserver.unobserve(entry.target);
           }
@@ -58,7 +58,7 @@ class AdvancedLazyLoader {
     this.sectionObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting) { 
             this.loadSectionContent(entry.target);
             this.sectionObserver.unobserve(entry.target);
           }
@@ -97,7 +97,7 @@ class AdvancedLazyLoader {
       // Preload für bessere Performance
       const preloadImg = new Image();
 
-      if (srcset) {
+      if (srcset) { 
         preloadImg.srcset = srcset;
       }
 
@@ -117,7 +117,7 @@ class AdvancedLazyLoader {
       img.style.opacity = '0';
 
       // Bild setzen
-      if (srcset) {
+      if (srcset) { 
         img.srcset = srcset;
       }
       img.src = src;
@@ -142,11 +142,11 @@ class AdvancedLazyLoader {
     try {
       const content = section.dataset.lazySection;
 
-      if (content === 'chart') {
+      if (content === 'chart') { 
         this.loadChartSection(section);
-      } else if (content === 'video') {
+      } else if (content === 'video') { 
         this.loadVideoSection(section);
-      } else if (content === 'interactive') {
+      } else if (content === 'interactive') { 
         this.loadInteractiveSection(section);
       }
     } catch (error) {
@@ -156,14 +156,14 @@ class AdvancedLazyLoader {
 
   loadChartSection(section) {
     // Chart.js lazy loading
-    if (!window.Chart) {
+    if (!window.Chart) { 
       const script = document.createElement('script');
       script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
       script.onload = () => {
         this.initializeChart(section);
       };
       document.head.appendChild(script);
-    } else {
+    } else { 
       this.initializeChart(section);
     }
   }
@@ -177,7 +177,7 @@ class AdvancedLazyLoader {
       video.load();
 
       // Autoplay nur wenn in viewport und bevorzugt
-      if (this.shouldAutoplay(video)) {
+      if (this.shouldAutoplay(video)) { 
         video.play().catch(() => {
           // Autoplay failed - zeige Play-Button
           this.showPlayButton(video);
@@ -193,9 +193,9 @@ class AdvancedLazyLoader {
     widgets.forEach((widget) => {
       const type = widget.dataset.interactive;
 
-      if (type === 'price-widget') {
+      if (type === 'price-widget') { 
         this.activatePriceWidget(widget);
-      } else if (type === 'calculator') {
+      } else if (type === 'calculator') { 
         this.activateCalculator(widget);
       }
     });
@@ -209,7 +209,7 @@ class AdvancedLazyLoader {
 
     // Fallback-Bild setzen
     const fallback = img.dataset.fallback;
-    if (fallback) {
+    if (fallback) { 
       img.src = fallback;
     }
 
@@ -245,7 +245,7 @@ class AdvancedLazyLoader {
 
   activatePriceWidget(widget) {
     // Price Widget aktivieren
-    if (window.burniOracle) {
+    if (window.burniOracle) { 
       window.burniOracle.refresh();
     }
   }
@@ -255,7 +255,7 @@ class AdvancedLazyLoader {
     const inputs = widget.querySelectorAll('input');
     const calculate = widget.querySelector('[data-calculate]');
 
-    if (calculate) {
+    if (calculate) { 
       calculate.addEventListener('click', () => {
         this.performCalculation(widget, inputs);
       });
@@ -268,14 +268,14 @@ class AdvancedLazyLoader {
     const result = values.reduce((sum, val) => sum + val, 0) * 0.97; // 3% Burn
 
     const output = widget.querySelector('[data-result]');
-    if (output) {
+    if (output) { 
       output.textContent = result.toFixed(2);
     }
   }
 
   trackImageLoad(img, success) {
     // Performance-Tracking für Monitoring
-    if ('performance' in window && 'measure' in window.performance) {
+    if ('performance' in window && 'measure' in window.performance) { 
       try {
         const metric = success ? 'image-load-success' : 'image-load-error';
 
@@ -283,7 +283,7 @@ class AdvancedLazyLoader {
         window.dispatchEvent(
           new CustomEvent('lazy-load-metric', {
             detail: {
-              type: metric,
+              type: metric),
               src: img.src || img.dataset.src,
               timestamp: Date.now(),
             },
@@ -311,11 +311,11 @@ class AdvancedLazyLoader {
   }
 
   destroy() {
-    if (this.imageObserver) {
+    if (this.imageObserver) { 
       this.imageObserver.disconnect();
     }
 
-    if (this.sectionObserver) {
+    if (this.sectionObserver) { 
       this.sectionObserver.disconnect();
     }
   }
@@ -404,7 +404,7 @@ const lazyLoadCSS = `
 `;
 
 // CSS automatisch einfügen
-if (typeof document !== 'undefined') {
+if (typeof document !== 'undefined') { 
   const style = document.createElement('style');
   style.textContent = lazyLoadCSS;
   document.head.appendChild(style);
@@ -413,9 +413,9 @@ if (typeof document !== 'undefined') {
 // Auto-Initialisierung
 let lazyLoader = null;
 
-if (typeof document !== 'undefined') {
+if (typeof document !== 'undefined') { 
   const initLazyLoader = () => {
-    if (lazyLoader) {
+    if (lazyLoader) { 
       lazyLoader.destroy();
     }
 
@@ -423,14 +423,14 @@ if (typeof document !== 'undefined') {
     window.lazyLoader = lazyLoader;
   };
 
-  if (document.readyState === 'loading') {
+  if (document.readyState === 'loading') { 
     document.addEventListener('DOMContentLoaded', initLazyLoader);
-  } else {
+  } else { 
     initLazyLoader();
   }
 }
 
 // Export für Module
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== 'undefined' && module.exports) { 
   module.exports = AdvancedLazyLoader;
 }

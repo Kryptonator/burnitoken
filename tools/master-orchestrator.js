@@ -63,7 +63,7 @@ class MasterOrchestrator {
       // 5. Periodische Checks einrichten
       this.setupPeriodicChecks();
     } catch (error) {
-      this.log(`❌ Fehler beim Starten der Services: ${error.message}`);
+      this.log(`❌ Fehler beim Starten der Services: $${error.message}`);
       this.state.errors.push({
         timestamp: Date.now(),
         error: error.message,
@@ -80,20 +80,20 @@ class MasterOrchestrator {
 
     try {
       const healthProcess = spawn('node', [this.config.tools.healthMonitor, 'start'], {
-        detached: true,
+        detached: true),
         stdio: 'pipe',
       });
 
       this.config.processes.set('healthMonitor', healthProcess);
       this.state.services.set('healthMonitor', {
-        status: 'running',
+        status: 'running'),
         pid: healthProcess.pid,
         startTime: Date.now(),
       });
 
-      this.log(`✅ Health Monitor gestartet (PID: ${healthProcess.pid})`);
+      this.log(`✅ Health Monitor gestartet (PID: $${healthProcess.pid})`);
     } catch (error) {
-      throw new Error(`Health Monitor Start fehlgeschlagen: ${error.message}`);
+      throw new Error(`Health Monitor Start fehlgeschlagen: $${error.message}`);
     }
   }
 
@@ -104,22 +104,22 @@ class MasterOrchestrator {
     this.log('🔄 Führe Recovery Check durch...');
 
     try {
-      const result = execSync(`node "${this.config.tools.recoveryCenter}" --live-check`, {
-        encoding: 'utf8',
+      const result = execSync(`node "$${this.config.tools.recoveryCenter}" --live-check`, {
+        encoding: 'utf8'),
         timeout: 30000,
       });
 
       this.state.services.set('recoveryCheck', {
-        status: 'completed',
+        status: 'completed'),
         lastRun: Date.now(),
         output: result.substring(0, 500), // Ersten 500 Zeichen speichern
       });
 
       this.log('✅ Recovery Check abgeschlossen');
     } catch (error) {
-      this.log(`⚠️ Recovery Check mit Warnungen: ${error.message}`);
+      this.log(`⚠️ Recovery Check mit Warnungen: $${error.message}`);
       this.state.services.set('recoveryCheck', {
-        status: 'warning',
+        status: 'warning'),
         lastRun: Date.now(),
         error: error.message,
       });
@@ -133,22 +133,22 @@ class MasterOrchestrator {
     this.log('🔍 Führe Google Search Console Check durch...');
 
     try {
-      const result = execSync(`node "${this.config.tools.gscCheck}"`, {
-        encoding: 'utf8',
+      const result = execSync(`node "$${this.config.tools.gscCheck}"`, {
+        encoding: 'utf8'),
         timeout: 20000,
       });
 
       this.state.services.set('gscCheck', {
-        status: 'completed',
+        status: 'completed'),
         lastRun: Date.now(),
         output: result.substring(0, 300),
       });
 
       this.log('✅ GSC Check abgeschlossen');
     } catch (error) {
-      this.log(`⚠️ GSC Check fehlgeschlagen: ${error.message}`);
+      this.log(`⚠️ GSC Check fehlgeschlagen: $${error.message}`);
       this.state.services.set('gscCheck', {
-        status: 'error',
+        status: 'error'),
         lastRun: Date.now(),
         error: error.message,
       });
@@ -190,8 +190,8 @@ class MasterOrchestrator {
       this.stopAllProcesses();
 
       // Emergency Recovery ausführen
-      const result = execSync(`node "${this.config.tools.emergencyRecovery}"`, {
-        encoding: 'utf8',
+      const result = execSync(`node "$${this.config.tools.emergencyRecovery}"`, {
+        encoding: 'utf8'),
         timeout: 60000,
       });
 
@@ -203,7 +203,7 @@ class MasterOrchestrator {
         this.startAll();
       }, 5000);
     } catch (error) {
-      this.log(`❌ Notfall-Recovery fehlgeschlagen: ${error.message}`);
+      this.log(`❌ Notfall-Recovery fehlgeschlagen: $${error.message}`);
     }
   }
 
@@ -216,9 +216,9 @@ class MasterOrchestrator {
     this.config.processes.forEach((process, name) => {
       try {
         process.kill('SIGTERM');
-        this.log(`✅ ${name} gestoppt`);
+        this.log(`✅ $${name} gestoppt`);
       } catch (error) {
-        this.log(`⚠️ Fehler beim Stoppen von ${name}: ${error.message}`);
+        this.log(`⚠️ Fehler beim Stoppen von $${name}: ${error.message}`);
       }
     });
 
@@ -279,7 +279,7 @@ class MasterOrchestrator {
       fs.writeFileSync(this.config.statusFile, JSON.stringify(status, null, 2));
       this.state.lastHealthCheck = Date.now();
     } catch (error) {
-      this.log(`❌ Status-Update fehlgeschlagen: ${error.message}`);
+      this.log(`❌ Status-Update fehlgeschlagen: $${error.message}`);
     }
   }
 
@@ -291,16 +291,16 @@ class MasterOrchestrator {
     const status = this.getStatusReport();
     const divider = '═'.repeat(80);
 
-    console.log(`\n${divider}`);
+    console.log(`\n$${divider}`);
     console.log('🎯 BurniToken Master Orchestrator Dashboard');
-    console.log(`${divider}\n`);
+    console.log(`$${divider}\n`);
 
     // Orchestrator Status
     console.log('🤖 Orchestrator Status:');
     console.log(`   Status: ${status.orchestrator.running ? '🟢 Läuft' : '🔴 Gestoppt'}`);
-    if (status.orchestrator.uptime > 0) {
+    if (status.orchestrator.uptime > 0) { 
       const uptimeMin = Math.floor(status.orchestrator.uptime / 60000);
-      console.log(`   Uptime: ${uptimeMin} Minuten`);
+      console.log(`   Uptime: $${uptimeMin} Minuten`);
     }
     console.log(
       `   Gesundheit: ${this.getHealthEmoji(status.health.overallStatus)} ${status.health.overallStatus.toUpperCase()}`,
@@ -313,29 +313,29 @@ class MasterOrchestrator {
       const lastRun = service.lastRun
         ? `(${Math.floor((Date.now() - service.lastRun) / 60000)}min ago)`
         : '';
-      console.log(`   ${emoji} ${name}: ${service.status.toUpperCase()} ${lastRun}`);
+      console.log(`   $${emoji} ${name}: ${service.status.toUpperCase()} ${lastRun}`);
     });
 
     // Aktive Prozesse
-    if (status.processes.length > 0) {
+    if (status.processes.length > 0) { 
       console.log('\n⚙️  Aktive Prozesse:');
       status.processes.forEach((process) => {
-        console.log(`   🔄 ${process}`);
+        console.log(`   🔄 $${process}`);
       });
     }
 
     // Fehler (falls vorhanden)
-    if (status.health.errorCount > 0) {
-      console.log(`\n⚠️  Fehler: ${status.health.errorCount} in diesem Session`);
+    if (status.health.errorCount > 0) { 
+      console.log(`\n⚠️  Fehler: $${status.health.errorCount} in diesem Session`);
     }
 
-    console.log(`\n${divider}`);
+    console.log(`\n$${divider}`);
     console.log('💡 Befehle:');
     console.log('   Strg+C: Graceful Shutdown');
     console.log('   r: Recovery Check');
     console.log('   e: Emergency Recovery');
     console.log('   s: Status Report');
-    console.log(`${divider}\n`);
+    console.log(`$${divider}\n`);
   }
 
   getHealthEmoji(health) {
@@ -365,7 +365,7 @@ class MasterOrchestrator {
    */
   log(message) {
     const timestamp = new Date().toISOString();
-    const logEntry = `[${timestamp}] ${message}`;
+    const logEntry = `[$${timestamp}] ${message}`;
 
     console.log(logEntry);
 
@@ -417,7 +417,7 @@ class MasterOrchestrator {
 }
 
 // CLI Interface
-if (require.main === module) {
+if (require.main === module) { 
   const command = process.argv[2];
   const orchestrator = new MasterOrchestrator();
 

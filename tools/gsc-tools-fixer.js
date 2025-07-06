@@ -68,22 +68,22 @@ const STANDARD_FIXES = {
     type: 'dependency',
     fix: (file, errorDetails) => {
       const module = errorDetails.match(/'([^']+)'/)[1];
-      console.log(`Fehlende Abhängigkeit erkannt: ${module}`);
+      console.log(`Fehlende Abhängigkeit erkannt: $${module}`);
       
       // Prüfen, ob es sich um einen lokalen Pfad handelt
-      if (module.startsWith('./') || module.startsWith('../')) {
+      if (module.startsWith('./') || module.startsWith('../')) { 
         // Lokale Datei fehlt
         const localPath = path.join(path.dirname(file), module);
-        console.log(`Lokale Datei fehlt: ${localPath}`);
+        console.log(`Lokale Datei fehlt: $${localPath}`);
         return false;
-      } else {
+      } else { 
         // NPM-Paket fehlt
         try {
-          console.log(`Installiere fehlendes Paket: ${module}`);
-          execSync(`npm install --save ${module}`, { stdio: 'inherit' });
+          console.log(`Installiere fehlendes Paket: $${module}`);
+          execSync(`npm install --save $${module}`, { stdio: 'inherit' });
           return true;
         } catch (err) {
-          console.error(`Fehler beim Installieren von ${module}:`, err.message);
+          console.error(`Fehler beim Installieren von $${module}:`, err.message);
           return false;
         }
       }
@@ -93,13 +93,13 @@ const STANDARD_FIXES = {
     type: 'undefined',
     fix: (file, errorDetails, content) => {
       const varName = errorDetails.split(' ')[0];
-      console.log(`Undefinierte Variable erkannt: ${varName}`);
+      console.log(`Undefinierte Variable erkannt: $${varName}`);
       
       // Wenn die Variable in einem anderen Teil des Codes definiert ist
-      if (content.includes(`const ${varName}`) || 
-          content.includes(`let ${varName}`) || 
-          content.includes(`var ${varName}`)) {
-        console.log(`Variable ${varName} ist im Code definiert, aber wahrscheinlich im falschen Scope`);
+      if (content.includes(`const $${varName}`) || 
+          content.includes(`let $${varName}`) || 
+          content.includes(`var $${varName}`)) {
+        console.log(`Variable $${varName} ist im Code definiert, aber wahrscheinlich im falschen Scope`);
       }
       
       return false; // Manuelle Prüfung erforderlich
@@ -109,7 +109,7 @@ const STANDARD_FIXES = {
     type: 'file_not_found',
     fix: (file, errorDetails) => {
       const missingFile = errorDetails.match(/'([^']+)'/);
-      if (missingFile && missingFile[1]) {
+      if (missingFile && missingFile[1]) { 
         console.log(`Fehlende Datei erkannt: ${missingFile[1]}`);
       }
       return false; // Manuelle Prüfung erforderlich
@@ -121,7 +121,7 @@ const STANDARD_FIXES = {
 function log(message, logToFile = true) {
   console.log(message);
   
-  if (logToFile) {
+  if (logToFile) { 
     try {
       fs.appendFileSync(LOG_FILE, message + '\n');
     } catch (err) {
@@ -144,7 +144,7 @@ function fileExists(filePath) {
   try {
     return fs.existsSync(filePath);
   } catch (err) {
-    console.error(`Fehler beim Prüfen der Datei ${filePath}: ${err.message}`);
+    console.error(`Fehler beim Prüfen der Datei $${filePath}: ${err.message}`);
     return false;
   }
 }
@@ -153,30 +153,30 @@ function fileExists(filePath) {
  * Tool im Test-Modus ausführen
  */
 function testTool(tool) {
-  if (!fileExists(tool.file)) {
-    log(`❌ Tool '${tool.name}' nicht gefunden!`);
+  if (!fileExists(tool.file)) { 
+    log(`❌ Tool '$${tool.name}' nicht gefunden!`);
     tool.status = 'missing';
     return;
   }
   
   tool.status = 'found';
   
-  if (!tool.testable) {
-    log(`ℹ️ Tool '${tool.name}' ist nicht testbar (kein Test-Flag konfiguriert)`);
+  if (!tool.testable) { 
+    log(`ℹ️ Tool '$${tool.name}' ist nicht testbar (kein Test-Flag konfiguriert)`);
     tool.status = 'not_testable';
     return;
   }
   
   try {
-    log(`🧪 Teste '${tool.name}'...`);
-    const testCommand = `node ${tool.file} ${tool.testFlag}`;
+    log(`🧪 Teste '$${tool.name}'...`);
+    const testCommand = `node $${tool.file} ${tool.testFlag}`;
     
     const output = execSync(testCommand, { encoding: 'utf8' });
-    log(`✅ Test für '${tool.name}' erfolgreich\n`);
+    log(`✅ Test für '$${tool.name}' erfolgreich\n`);
     tool.status = 'ok';
     tool.output = output;
   } catch (error) {
-    log(`❌ Fehler beim Testen von '${tool.name}': ${error.message}`);
+    log(`❌ Fehler beim Testen von '$${tool.name}': ${error.message}`);
     tool.status = 'error';
     tool.error = error.message;
     
@@ -190,14 +190,14 @@ function testTool(tool) {
  */
 function retestAfterFix(tool) {
   try {
-    const testCommand = `node ${tool.file} ${tool.testFlag}`;
+    const testCommand = `node $${tool.file} ${tool.testFlag}`;
     const output = execSync(testCommand, { encoding: 'utf8' });
-    log(`✅ Tool '${tool.name}' funktioniert nach Fix`);
+    log(`✅ Tool '$${tool.name}' funktioniert nach Fix`);
     tool.status = 'fixed';
     tool.output = output;
     return true;
   } catch (newError) {
-    log(`⚠️ Tool '${tool.name}' hat immer noch Fehler nach Fix: ${newError.message}`);
+    log(`⚠️ Tool '$${tool.name}' hat immer noch Fehler nach Fix: ${newError.message}`);
     tool.error = newError.message;
     return false;
   }
@@ -209,16 +209,16 @@ function retestAfterFix(tool) {
 function applyFix(tool, errorPattern, fix, content) {
   try {
     const fixSuccess = fix.fix(tool.file, tool.error, content);
-    if (!fixSuccess) {
-      log(`⚠️ Fix für "${errorPattern}" konnte nicht automatisch angewendet werden`);
+    if (!fixSuccess) { 
+      log(`⚠️ Fix für "$${errorPattern}" konnte nicht automatisch angewendet werden`);
       tool.status = 'needs_manual_fix';
       return false;
     }
     
-    log(`🔧 Fix für "${errorPattern}" in ${tool.name} angewendet`);
+    log(`🔧 Fix für "$${errorPattern}" in ${tool.name} angewendet`);
     return retestAfterFix(tool);
   } catch (fixError) {
-    log(`❌ Fehler beim Anwenden des Fixes für ${tool.name}: ${fixError.message}`);
+    log(`❌ Fehler beim Anwenden des Fixes für $${tool.name}: ${fixError.message}`);
     tool.status = 'fix_error';
     return false;
   }
@@ -235,15 +235,15 @@ function findAndApplyFix(tool) {
   
   // Überprüfe bekannte Fehlermuster
   for (const [errorPattern, fix] of Object.entries(STANDARD_FIXES)) {
-    if (tool.error.includes(errorPattern)) {
-      log(`🔍 Bekanntes Fehlermuster gefunden: "${errorPattern}" in ${tool.name}`);
+    if (tool.error.includes(errorPattern)) { 
+      log(`🔍 Bekanntes Fehlermuster gefunden: "$${errorPattern}" in ${tool.name}`);
       fixApplied = applyFix(tool, errorPattern, fix, content);
       if (fixApplied) break;
     }
   }
   
-  if (!fixApplied) {
-    log(`ℹ️ Kein passender Standard-Fix für ${tool.name} gefunden`);
+  if (!fixApplied) { 
+    log(`ℹ️ Kein passender Standard-Fix für $${tool.name} gefunden`);
     tool.status = 'unknown_error';
   }
 }
@@ -256,7 +256,7 @@ function generateManualFixGuide() {
     ['error', 'needs_manual_fix', 'unknown_error', 'fix_error'].includes(tool.status)
   );
   
-  if (toolsNeedingFix.length === 0) {
+  if (toolsNeedingFix.length === 0) { 
     log('\n✅ Alle GSC-Tools sind funktionsfähig');
     return;
   }
@@ -265,24 +265,24 @@ function generateManualFixGuide() {
   log('============================');
   
   toolsNeedingFix.forEach(tool => {
-    log(`\n📌 Tool: ${tool.name}`);
-    log(`   Status: ${tool.status}`);
-    log(`   Fehler: ${tool.error}`);
+    log(`\n📌 Tool: $${tool.name}`);
+    log(`   Status: $${tool.status}`);
+    log(`   Fehler: $${tool.error}`);
     
     // Fehleranalyse und Empfehlungen
-    if (tool.error.includes('Cannot find module')) {
+    if (tool.error.includes('Cannot find module')) { 
       const module = tool.error.match(/'([^']+)'/)[1];
-      log(`   Empfehlung: Fehlende Abhängigkeit '${module}' installieren oder Pfad korrigieren.`);
-      log(`   Möglicher Befehl: npm install --save ${module}`);
+      log(`   Empfehlung: Fehlende Abhängigkeit '$${module}' installieren oder Pfad korrigieren.`);
+      log(`   Möglicher Befehl: npm install --save $${module}`);
     } 
-    else if (tool.error.includes('ENOENT')) {
+    else if (tool.error.includes('ENOENT')) { 
       log(`   Empfehlung: Fehlende Datei erstellen oder Pfad korrigieren.`);
     }
-    else if (tool.error.includes('is not defined')) {
+    else if (tool.error.includes('is not defined')) { 
       const variable = tool.error.split(' ')[0];
-      log(`   Empfehlung: Undefinierte Variable '${variable}' definieren oder Scope korrigieren.`);
+      log(`   Empfehlung: Undefinierte Variable '$${variable}' definieren oder Scope korrigieren.`);
     }
-    else {
+    else { 
       log(`   Empfehlung: Code überprüfen und Fehler manuell beheben.`);
     }
   });
@@ -295,13 +295,13 @@ function generateManualFixGuide() {
     .map(t => t.error.match(/'([^']+)'/)[1])
     .filter(m => !m.startsWith('./') && !m.startsWith('../'));
   
-  if (missingDependencies.length > 0) {
+  if (missingDependencies.length > 0) { 
     log(`\n📦 Fehlende NPM-Pakete installieren:`);
     log(`npm install --save ${missingDependencies.join(' ')}`);
   }
   
   log('\n🧰 Manuelle Code-Überprüfung für:');
-  toolsNeedingFix.forEach(tool => log(`- ${tool.name}`));
+  toolsNeedingFix.forEach(tool => log(`- $${tool.name}`));
   
   // Fix-Guide Datei speichern
   try {
@@ -332,12 +332,12 @@ async function main() {
   
   GSC_TOOLS.forEach(tool => {
   let statusIcon = '❌';
-    if (tool.status === 'ok' || tool.status === 'fixed') {
+    if (tool.status === 'ok' || tool.status === 'fixed') { 
       statusIcon = '✅';
-    } else if (tool.status === 'not_testable') {
+    } else if (tool.status === 'not_testable') { 
       statusIcon = 'ℹ️';
     }
-    log(`${statusIcon} ${tool.name}: ${tool.status}`);
+    log(`$${statusIcon} ${tool.name}: ${tool.status}`);
   });
   
   // Manuelle Fix-Anleitung generieren
@@ -346,5 +346,5 @@ async function main() {
 
 // Ausführen
 main().catch(err => {
-  log(`❌ Unerwarteter Fehler: ${err.message}`);
+  log(`❌ Unerwarteter Fehler: $${err.message}`);
 });

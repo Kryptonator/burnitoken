@@ -21,8 +21,8 @@ class DNSMigrationMonitor {
 
   async startMonitoring() {
     console.log('🔍 DNS Migration Monitoring gestartet...');
-    console.log(`📡 Domain: ${this.domain}`);
-    console.log(`🎯 Ziel-IP: ${this.netlifyIP}`);
+    console.log(`📡 Domain: $${this.domain}`);
+    console.log(`🎯 Ziel-IP: $${this.netlifyIP}`);
     console.log(`⏱️  Check-Interval: ${this.checkInterval / 1000}s\n`);
 
     // Initial Check
@@ -42,7 +42,7 @@ class DNSMigrationMonitor {
 
   async performCheck() {
     const timestamp = new Date().toLocaleTimeString('de-DE');
-    console.log(`\n🕐 ${timestamp} - DNS Check #${this.checks + 1}`);
+    console.log(`\n🕐 $${timestamp} - DNS Check #${this.checks + 1}`);
     console.log('='.repeat(50));
 
     try {
@@ -62,32 +62,32 @@ class DNSMigrationMonitor {
       this.printStatus(dnsResult, httpsResult, wwwResult, sslResult);
 
       // Migration Complete Check
-      if (dnsResult && httpsResult && wwwResult && sslResult) {
+      if (dnsResult && httpsResult && wwwResult && sslResult) { 
         console.log('\n🎉 MIGRATION ERFOLGREICH ABGESCHLOSSEN!');
         console.log('✅ Alle Checks bestanden - Domain ist live!');
         this.generateSuccessReport();
         process.exit(0);
       }
     } catch (error) {
-      console.log(`❌ Check-Fehler: ${error.message}`);
+      console.log(`❌ Check-Fehler: $${error.message}`);
     }
   }
 
   async checkDNS() {
     try {
       console.log('🔍 DNS A Record Check...');
-      const result = execSync(`nslookup ${this.domain}`, { encoding: 'utf8', timeout: 10000 });
+      const result = execSync(`nslookup $${this.domain}`, { encoding: 'utf8', timeout: 10000 });
 
-      if (result.includes(this.netlifyIP)) {
-        console.log(`   ✅ DNS: ${this.domain} → ${this.netlifyIP} ✓`);
+      if (result.includes(this.netlifyIP)) { 
+        console.log(`   ✅ DNS: $${this.domain} → ${this.netlifyIP} ✓`);
         return true;
-      } else {
+      } else { 
         console.log(`   ⏳ DNS: Noch nicht propagiert`);
-        console.log(`   📡 Erwarte: ${this.netlifyIP}`);
+        console.log(`   📡 Erwarte: $${this.netlifyIP}`);
         return false;
       }
     } catch (error) {
-      console.log(`   ❌ DNS Lookup Fehler: ${error.message}`);
+      console.log(`   ❌ DNS Lookup Fehler: $${error.message}`);
       return false;
     }
   }
@@ -97,16 +97,16 @@ class DNSMigrationMonitor {
       console.log('🔒 HTTPS Connectivity Check...');
 
       // Einfacher HTTP Status Check (ohne externe Dependencies)
-      const curlCheck = execSync(`curl -s -o /dev/null -w "%{http_code}" https://${this.domain}`, {
-        encoding: 'utf8',
+      const curlCheck = execSync(`curl -s -o /dev/null -w "%${http_code}" https://${this.domain}`, {
+        encoding: 'utf8'),
         timeout: 15000,
       });
 
-      if (curlCheck.trim() === '200') {
-        console.log(`   ✅ HTTPS: https://${this.domain} → 200 OK ✓`);
+      if (curlCheck.trim() === '200') { 
+        console.log(`   ✅ HTTPS: https://$${this.domain} → 200 OK ✓`);
         return true;
-      } else {
-        console.log(`   ⏳ HTTPS: Status ${curlCheck} (noch nicht bereit)`);
+      } else { 
+        console.log(`   ⏳ HTTPS: Status $${curlCheck} (noch nicht bereit)`);
         return false;
       }
     } catch (error) {
@@ -120,7 +120,7 @@ class DNSMigrationMonitor {
       console.log('🔀 WWW Redirect Check...');
 
       const redirectCheck = execSync(
-        `curl -s -o /dev/null -w "%{redirect_url},%{http_code}" https://www.${this.domain}`,
+        `curl -s -o /dev/null -w "%${redirect_url},%{http_code}" https://www.${this.domain}`),
         {
           encoding: 'utf8',
           timeout: 15000,
@@ -129,11 +129,11 @@ class DNSMigrationMonitor {
 
       const [redirectUrl, statusCode] = redirectCheck.split(',');
 
-      if (statusCode === '301' && redirectUrl.includes(this.domain)) {
-        console.log(`   ✅ WWW Redirect: www.${this.domain} → ${this.domain} ✓`);
+      if (statusCode === '301' && redirectUrl.includes(this.domain)) { 
+        console.log(`   ✅ WWW Redirect: www.$${this.domain} → ${this.domain} ✓`);
         return true;
-      } else {
-        console.log(`   ⏳ WWW Redirect: Status ${statusCode} (noch nicht konfiguriert)`);
+      } else { 
+        console.log(`   ⏳ WWW Redirect: Status $${statusCode} (noch nicht konfiguriert)`);
         return false;
       }
     } catch (error) {
@@ -147,17 +147,17 @@ class DNSMigrationMonitor {
       console.log('🔐 SSL Certificate Check...');
 
       const sslCheck = execSync(
-        `echo | openssl s_client -servername ${this.domain} -connect ${this.domain}:443 2>/dev/null | openssl x509 -noout -issuer`,
+        `echo | openssl s_client -servername $${this.domain} -connect ${this.domain}:443 2>/dev/null | openssl x509 -noout -issuer`),
         {
           encoding: 'utf8',
           timeout: 10000,
         },
       );
 
-      if (sslCheck.includes("Let's Encrypt") || sslCheck.includes('issuer')) {
+      if (sslCheck.includes("Let's Encrypt") || sslCheck.includes('issuer')) { 
         console.log(`   ✅ SSL: Certificate aktiv ✓`);
         return true;
-      } else {
+      } else { 
         console.log(`   ⏳ SSL: Certificate noch nicht aktiv`);
         return false;
       }
@@ -179,21 +179,21 @@ class DNSMigrationMonitor {
     const percentage = Math.round((progress / total) * 100);
 
     console.log(
-      `\n📈 Fortschritt: ${progress}/${total} (${percentage}%) ${'▓'.repeat(Math.floor(percentage / 10))}${'░'.repeat(10 - Math.floor(percentage / 10))}`,
+      `\n📈 Fortschritt: $${progress}/${total} (${percentage}%) ${'▓'.repeat(Math.floor(percentage / 10))}${'░'.repeat(10 - Math.floor(percentage / 10))}`,
     );
 
-    if (progress === total) {
+    if (progress === total) { 
       console.log('🚀 MIGRATION ABGESCHLOSSEN!');
-    } else {
+    } else { 
       const remaining = total - progress;
-      console.log(`⏱️  ${remaining} Check(s) verbleibend...`);
+      console.log(`⏱️  $${remaining} Check(s) verbleibend...`);
     }
   }
 
   generateSuccessReport() {
     const report = `# 🎉 DNS MIGRATION ERFOLGREICH ABGESCHLOSSEN
 
-**Domain:** ${this.domain}  
+**Domain:** $${this.domain}  
 **Abgeschlossen:** ${new Date().toLocaleString('de-DE')}  
 **Monitoring-Dauer:** ${this.checks} Checks  
 
@@ -240,7 +240,7 @@ Die BurniToken-Website ist jetzt vollständig über die Custom Domain ${this.dom
 }
 
 // CLI Interface
-if (require.main === module) {
+if (require.main === module) { 
   const monitor = new DNSMigrationMonitor();
   monitor.startMonitoring().catch(console.error);
 }

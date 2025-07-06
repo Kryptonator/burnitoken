@@ -34,7 +34,7 @@ describe('Advanced Features', () => {
     `;
 
     dom = new JSDOM(html, {
-      url: 'http://localhost:8080',
+      url: 'http://localhost:8080'),
       pretendToBeVisual: true,
       resources: 'usable',
     });
@@ -141,7 +141,7 @@ describe('Advanced Features', () => {
 
         loadThemePreference() {
           const saved = localStorage.getItem(this.storageKey);
-          if (saved && ['light', 'dark', 'auto'].includes(saved)) {
+          if (saved && ['light', 'dark', 'auto'].includes(saved)) { 
             this.currentTheme = saved;
             return saved;
           }
@@ -149,7 +149,7 @@ describe('Advanced Features', () => {
         }
 
         setTheme(theme) {
-          if (['light', 'dark', 'auto'].includes(theme)) {
+          if (['light', 'dark', 'auto'].includes(theme)) { 
             this.currentTheme = theme;
             localStorage.setItem(this.storageKey, theme);
             this.applyTheme(theme);
@@ -225,7 +225,7 @@ describe('Advanced Features', () => {
 
         trackCustomEvent(eventName, eventData = {}) {
           this.events.push({
-            type: 'custom_event',
+            type: 'custom_event'),
             name: eventName,
             data: eventData,
             timestamp: Date.now(),
@@ -235,7 +235,7 @@ describe('Advanced Features', () => {
 
         trackError(error, context = {}) {
           this.events.push({
-            type: 'error',
+            type: 'error'),
             message: error.message,
             stack: error.stack,
             context,
@@ -338,7 +338,7 @@ describe('Advanced Features', () => {
         loadSettings() {
           try {
             const saved = localStorage.getItem(this.storageKey);
-            if (saved) {
+            if (saved) { 
               this.settings = { ...this.settings, ...JSON.parse(saved) };
             }
           } catch (error) {
@@ -355,7 +355,7 @@ describe('Advanced Features', () => {
         }
 
         updateSetting(key, value) {
-          if (key in this.settings) {
+          if (key in this.settings) { 
             this.settings[key] = value;
             this.saveSettings();
             this.applySetting(key, value);
@@ -369,12 +369,12 @@ describe('Advanced Features', () => {
               break;
             case 'fontSize':
               document.body.classList.remove(
-                'font-small',
+                'font-small'),
                 'font-normal',
                 'font-large',
                 'font-xlarge',
               );
-              document.body.classList.add(`font-${value}`);
+              document.body.classList.add(`font-$${value}`);
               break;
             case 'reducedMotion':
               document.body.classList.toggle('reduced-motion', value);
@@ -494,7 +494,7 @@ describe('Advanced Features', () => {
           const scores = [];
 
           Object.keys(this.thresholds).forEach((metric) => {
-            if (this.metrics[metric] !== undefined) {
+            if (this.metrics[metric] !== undefined) { 
               const score = this.scoreMetric(metric, this.metrics[metric]);
               scores.push(score);
             }
@@ -625,7 +625,7 @@ describe('Advanced Features', () => {
 
       // Mock event system
       window.addEventListener = jest.fn((event, callback) => {
-        if (event === 'themeChanged') {
+        if (event === 'themeChanged') { 
           listeners.push(callback);
         }
       });
@@ -643,8 +643,7 @@ describe('Advanced Features', () => {
 
       // Trigger theme change
       window.dispatchEvent({
-        detail: { theme: 'dark' },
-      });
+        detail: { theme: 'dark' }),});
 
       expect(currentTheme).toBe('dark');
     });

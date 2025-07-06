@@ -14,7 +14,7 @@ window.CommunityFeatures = {
 
 // Auto-initialize
 document.addEventListener('DOMContentLoaded', function () {
-  if (window.CommunityFeatures) {
+  if (window.CommunityFeatures) { 
     window.CommunityFeatures.init();
   }
 });

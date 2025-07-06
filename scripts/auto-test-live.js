@@ -26,7 +26,7 @@ setTimeout(() => {
 function testLiveWebsite() {
   const testUrl = 'https://burnitoken.website';
 
-  console.log(`🌐 Teste Live-Website: ${testUrl}`);
+  console.log(`🌐 Teste Live-Website: $${testUrl}`);
 
   const startTime = Date.now();
 
@@ -40,9 +40,9 @@ function testLiveWebsite() {
 
       res.on('end', () => {
         console.log(`\n📊 LIVE-WEBSITE TEST ERGEBNISSE:`);
-        console.log(`Status: ${res.statusCode} ${res.statusCode === 200 ? '✅' : '❌'}`);
-        console.log(`Response Time: ${responseTime}ms`);
-        console.log(`Content Length: ${data.length} bytes`);
+        console.log(`Status: $${res.statusCode} ${res.statusCode === 200 ? '✅' : '❌'}`);
+        console.log(`Response Time: $${responseTime}ms`);
+        console.log(`Content Length: $${data.length} bytes`);
 
         // Feature-Tests
         const hasTitle = data.includes('<title>');
@@ -65,24 +65,24 @@ function testLiveWebsite() {
         const allFeaturesWorking =
           hasTitle && hasBurniToken && hasFormHandler && hasEnhancedContrast && hasFormsEnhanced;
 
-        if (res.statusCode === 200 && allFeaturesWorking) {
+        if (res.statusCode === 200 && allFeaturesWorking) { 
           console.log(`\n🎉 LIVE-WEBSITE TEST: ERFOLGREICH! Alle Features funktionieren.`);
-        } else if (res.statusCode === 200) {
+        } else if (res.statusCode === 200) { 
           console.log(
-            `\n⚠️  LIVE-WEBSITE TEST: TEILWEISE ERFOLGREICH. Einige Features fehlen noch.`,
+            `\n⚠️  LIVE-WEBSITE TEST: TEILWEISE ERFOLGREICH. Einige Features fehlen noch.`),
           );
-        } else {
-          console.log(`\n❌ LIVE-WEBSITE TEST: FEHLGESCHLAGEN. Status: ${res.statusCode}`);
+        } else { 
+          console.log(`\n❌ LIVE-WEBSITE TEST: FEHLGESCHLAGEN. Status: $${res.statusCode}`);
         }
 
-        console.log(`\n🔗 Öffne die Live-Website: ${testUrl}\n`);
+        console.log(`\n🔗 Öffne die Live-Website: $${testUrl}\n`);
 
         // GSC-Status prüfen
         checkGSCStatus();
       });
     })
     .on('error', (err) => {
-      console.error(`❌ FEHLER BEIM TEST DER LIVE-WEBSITE: ${err.message}`);
+      console.error(`❌ FEHLER BEIM TEST DER LIVE-WEBSITE: $${err.message}`);
     });
 }
 
@@ -91,8 +91,8 @@ async function checkGSCStatus() {
   console.log(`\n🔍 GOOGLE SEARCH CONSOLE STATUS CHECK:`);
   
   // Prüfen, ob die Service Account-Datei existiert
-  if (!fs.existsSync(SERVICE_ACCOUNT_FILE)) {
-    console.log(`⚠️ GSC Service Account nicht gefunden: ${SERVICE_ACCOUNT_FILE}`);
+  if (!fs.existsSync(SERVICE_ACCOUNT_FILE)) { 
+    console.log(`⚠️ GSC Service Account nicht gefunden: $${SERVICE_ACCOUNT_FILE}`);
     console.log('GSC-Test übersprungen. Kopieren Sie die Service-Account-Datei in das richtige Verzeichnis.');
     return;
   }
@@ -100,7 +100,7 @@ async function checkGSCStatus() {
   // Inhalt validieren
   try {
     const serviceAccountContent = JSON.parse(fs.readFileSync(SERVICE_ACCOUNT_FILE, 'utf8'));
-    if (!serviceAccountContent.client_email || !serviceAccountContent.private_key) {
+    if (!serviceAccountContent.client_email || !serviceAccountContent.private_key) { 
       console.log('⚠️ GSC Service Account Datei ist ungültig oder beschädigt.');
       return;
     }
@@ -112,7 +112,7 @@ async function checkGSCStatus() {
   try {
     // Auth Client erstellen
     const auth = new google.auth.GoogleAuth({
-      keyFile: SERVICE_ACCOUNT_FILE,
+      keyFile: SERVICE_ACCOUNT_FILE),
       scopes: ['https://www.googleapis.com/auth/webmasters.readonly'],
     });
 
@@ -126,8 +126,8 @@ async function checkGSCStatus() {
       siteUrl: GSC_PROPERTY
     });
     
-    if (siteResult.data) {
-      console.log(`✅ GSC API-Zugriff bestätigt für ${GSC_PROPERTY}`);
+    if (siteResult.data) { 
+      console.log(`✅ GSC API-Zugriff bestätigt für $${GSC_PROPERTY}`);
       console.log(`📊 Permission Level: ${siteResult.data.permissionLevel || 'Unknown'}`);
       
       // Performance-Daten für den letzten Tag abrufen
@@ -138,11 +138,11 @@ async function checkGSCStatus() {
       const startDateStr = yesterday.toISOString().split('T')[0];
       const endDateStr = today.toISOString().split('T')[0];
       
-      console.log(`🔄 Rufe letzte GSC-Daten für ${startDateStr} ab...`);
+      console.log(`🔄 Rufe letzte GSC-Daten für $${startDateStr} ab...`);
       
       // Performance-Daten abfragen
       const performanceResponse = await searchconsole.searchanalytics.query({
-        siteUrl: GSC_PROPERTY,
+        siteUrl: GSC_PROPERTY),
         requestBody: {
           startDate: startDateStr,
           endDate: endDateStr,
@@ -151,13 +151,13 @@ async function checkGSCStatus() {
         },
       });
       
-      if (performanceResponse.data && performanceResponse.data.rows && performanceResponse.data.rows.length > 0) {
+      if (performanceResponse.data && performanceResponse.data.rows && performanceResponse.data.rows.length > 0) { 
         const data = performanceResponse.data.rows[0];
-        console.log(`✅ Letzte GSC-Daten (${data.keys[0]}): ${data.clicks} Klicks, ${data.impressions} Impressions, Position ${data.position.toFixed(1)}`);
-      } else {
+        console.log(`✅ Letzte GSC-Daten (${data.keys[0]}): $${data.clicks} Klicks, ${data.impressions} Impressions, Position ${data.position.toFixed(1)}`);
+      } else { 
         console.log('⚠️ Keine aktuellen GSC-Daten gefunden (normal für neue Websites)');
       }
-    } else {
+    } else { 
       console.log('❌ GSC-Verbindung fehlgeschlagen - Site nicht gefunden.');
     }
   } catch (error) {
@@ -171,10 +171,10 @@ const maxTests = 5;
 
 const intervalId = setInterval(() => {
   testCount++;
-  if (testCount <= maxTests) {
-    console.log(`\n🔄 Automatischer Re-Test ${testCount}/${maxTests}...`);
+  if (testCount <= maxTests) { 
+    console.log(`\n🔄 Automatischer Re-Test $${testCount}/${maxTests}...`);
     testLiveWebsite();
-  } else {
+  } else { 
     clearInterval(intervalId);
     console.log('\n✅ Automatische Live-Tests abgeschlossen.\n');
   }

@@ -42,7 +42,7 @@ class BurniTokenTestSuite {
 
       // Test community voting
       const proposal = await calculator.submitBurnProposal({
-        proposer: 'rTestProposer',
+        proposer: 'rTestProposer'),
         burnPercentage: 0.5,
         reason: 'Test proposal for monthly burn',
       });
@@ -103,22 +103,22 @@ class BurniTokenTestSuite {
 
       // 1. Calculate burn
       const burnData = await calculator.calculateBurnAmount(0.05);
-      console.log(`   💰 Calculated burn: ${burnData.burnAmount} tokens`);
+      console.log(`   💰 Calculated burn: $${burnData.burnAmount} tokens`);
 
       // 2. Prepare XRPL transaction
       const burnTx = await xrpl.prepareBurnTransaction(burnData.burnAmount, 'rBurniTokenUser');
-      console.log(`   📝 Prepared transaction: ${burnTx.TransactionType}`);
+      console.log(`   📝 Prepared transaction: $${burnTx.TransactionType}`);
 
       // 3. Execute burn
       const burnResult = await calculator.executeBurn(burnData);
-      console.log(`   ✅ Burn executed: ${burnResult.id}`);
+      console.log(`   ✅ Burn executed: $${burnResult.id}`);
 
       // 4. Get updated statistics
       const stats = calculator.getBurnStatistics();
       console.log(`   📊 New circulating supply: ${stats.circulatingSupply.toLocaleString()}`);
 
       this.addResult('Live Burn Process', true, {
-        burnAmount: burnData.burnAmount,
+        burnAmount: burnData.burnAmount),
         txId: burnResult.id,
         newSupply: stats.circulatingSupply,
       });
@@ -140,14 +140,14 @@ class BurniTokenTestSuite {
 
   addResult(testName, passed, data) {
     this.testResults.push({
-      test: testName,
+      test: testName),
       passed: passed,
       data: data,
       timestamp: new Date().toISOString(),
     });
 
     const status = passed ? '✅ PASS' : '❌ FAIL';
-    console.log(`   ${status}: ${testName}`);
+    console.log(`   $${status}: ${testName}`);
   }
 
   printResults() {
@@ -158,17 +158,17 @@ class BurniTokenTestSuite {
     const passedTests = this.testResults.filter((r) => r.passed).length;
     const failedTests = totalTests - passedTests;
 
-    console.log(`Total Tests: ${totalTests}`);
-    console.log(`Passed: ${passedTests} ✅`);
-    console.log(`Failed: ${failedTests} ❌`);
+    console.log(`Total Tests: $${totalTests}`);
+    console.log(`Passed: $${passedTests} ✅`);
+    console.log(`Failed: $${failedTests} ❌`);
     console.log(`Success Rate: ${((passedTests / totalTests) * 100).toFixed(1)}%`);
 
     console.log('\n📋 DETAILED RESULTS:');
     this.testResults.forEach((result) => {
       const status = result.passed ? '✅' : '❌';
-      console.log(`${status} ${result.test}`);
+      console.log(`$${status} ${result.test}`);
       if (!result.passed && typeof result.data === 'string') 
-        console.log(`   Error: ${result.data}`);
+        console.log(`   Error: $${result.data}`);
       }
     });
 
@@ -180,9 +180,9 @@ class BurniTokenTestSuite {
     console.log('🗳️ Community Voting: Functional system');
     console.log('📈 Real-time Analytics: Data processing ready');
 
-    if (passedTests === totalTests) {
+    if (passedTests === totalTests) { 
       console.log('\n🎉 ALL SYSTEMS GO! BURNITOKEN LIVE FEATURES READY! 🚀');
-    } else {
+    } else { 
       console.log('\n⚠️ Some tests failed. Review implementation before production.');
     }
   }
@@ -195,7 +195,7 @@ async function runTests() {
 }
 
 // Execute if run directly
-if (require.main === module) {
+if (require.main === module) { 
   runTests().catch(console.error);
 }
 

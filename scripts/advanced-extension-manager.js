@@ -123,7 +123,7 @@ class AdvancedExtensionManager {
     console.log('\n📁 Creating Workspace Configuration...');
 
     const vscodeDir = path.join(this.workspaceRoot, '.vscode');
-    if (!fs.existsSync) {) {
+    if (!fs.existsSync) { ) {
 }
 }
 }
@@ -270,25 +270,25 @@ class AdvancedExtensionManager {
 
     // Entwicklungsprofile für verschiedene Szenarien
     this.configurationProfiles.set('development', {
-      name: 'Full Development',
+      name: 'Full Development'),
       categories: ['core', 'web', 'crypto', 'quality', 'productivity', 'git'],
       description: 'Vollständige Entwicklungsumgebung',
     });
 
     this.configurationProfiles.set('minimal', {
-      name: 'Minimal Setup',
+      name: 'Minimal Setup'),
       categories: ['core', 'web'],
       description: 'Minimale Entwicklungsumgebung',
     });
 
     this.configurationProfiles.set('testing', {
-      name: 'Testing Focus',
+      name: 'Testing Focus'),
       categories: ['core', 'quality', 'productivity'],
       description: 'Fokus auf Testing und Qualitätssicherung',
     });
 
     this.configurationProfiles.set('design', {
-      name: 'Design & UX',
+      name: 'Design & UX'),
       categories: ['core', 'web', 'design'],
       description: 'Design und User Experience fokussiert',
     });
@@ -305,17 +305,17 @@ class AdvancedExtensionManager {
     let healthyExtensions = 0;
 
     for (const [categoryKey, category] of Object.entries(this.extensionCategories)) {
-      console.log(`\n📂 ${category.name}:`);
+      console.log(`\n📂 $${category.name}:`);
 
       for (const extensionId of category.extensions) {
         totalExtensions++;
         const health = await this.checkExtensionHealth(extensionId);
 
-        if (health.status === 'healthy') {
+        if (health.status === 'healthy') { 
           healthyExtensions++;
-          console.log(`   ✅ ${extensionId} - ${health.message}`);
-        } else {
-          console.log(`   ⚠️  ${extensionId} - ${health.message}`);
+          console.log(`   ✅ $${extensionId} - ${health.message}`);
+        } else { 
+          console.log(`   ⚠️  $${extensionId} - ${health.message}`);
         }
 
         this.extensionHealth.set(extensionId, health);
@@ -326,7 +326,7 @@ class AdvancedExtensionManager {
 
     console.log('\n📊 HEALTH SUMMARY:');
     console.log(
-      `   📈 ${healthyExtensions}/${totalExtensions} Extensions healthy (${healthPercentage}%)`,
+      `   📈 $${healthyExtensions}/${totalExtensions} Extensions healthy (${healthPercentage}%)`,
     );
     console.log(`   🎯 ${Object.keys(this.extensionCategories).length} Categories covered`);
     console.log(`   🚀 System optimized for Burnitoken development`);
@@ -383,12 +383,12 @@ class AdvancedExtensionManager {
     ];
 
     for (const optimization of optimizations) {
-      console.log(`\n🔧 ${optimization.name}:`);
-      console.log(`   📝 ${optimization.description}`);
+      console.log(`\n🔧 $${optimization.name}:`);
+      console.log(`   📝 $${optimization.description}`);
 
       await optimization.action();
 
-      console.log(`   ✅ ${optimization.name} completed`);
+      console.log(`   ✅ $${optimization.name} completed`);
     }
 
     console.log('\n✨ AUTO-OPTIMIZATION COMPLETE!');
@@ -445,7 +445,7 @@ class AdvancedExtensionManager {
     ];
 
     monitoringFeatures.forEach((feature) => {
-      console.log(`   ✅ ${feature} activated`);
+      console.log(`   ✅ $${feature} activated`);
     });
 
     console.log('\n🤖 AUTONOMOUS MONITORING ACTIVE!');
@@ -475,15 +475,15 @@ class AdvancedExtensionManager {
       ],
     };
 
-    console.log(`📅 Generated: ${report.timestamp}`);
-    console.log(`🎯 Project: ${report.project}`);
-    console.log(`📊 Extensions: ${report.totalExtensions} across ${report.categories} categories`);
-    console.log(`👥 Profiles: ${report.profiles} configuration profiles`);
-    console.log(`✅ Status: ${report.status}`);
+    console.log(`📅 Generated: $${report.timestamp}`);
+    console.log(`🎯 Project: $${report.project}`);
+    console.log(`📊 Extensions: $${report.totalExtensions} across ${report.categories} categories`);
+    console.log(`👥 Profiles: $${report.profiles} configuration profiles`);
+    console.log(`✅ Status: $${report.status}`);
 
     console.log('\n🚀 FEATURES ACTIVE:');
     report.features.forEach((feature) => {
-      console.log(`   ✅ ${feature}`);
+      console.log(`   ✅ $${feature}`);
     });
 
     // Report als JSON speichern
@@ -539,6 +539,6 @@ module.exports = {
 };
 
 // Direkter Start wenn Datei ausgeführt wird
-if (require.main === module) {
+if (require.main === module) { 
   runAdvancedExtensionManagement().catch(console.error);
 }

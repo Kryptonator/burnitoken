@@ -16,7 +16,7 @@ async function executeSmartCleanup() {
 
     // Archive-Ordner erstellen
     console.log('📁 Erstelle Archive-Ordner...');
-    if (!fs.existsSync) {) {
+    if (!fs.existsSync) { ) {
 }
 }
 }
@@ -69,10 +69,10 @@ async function executeSmartCleanup() {
 }
       fs.mkdirSync('archive');
     }
-    if (!fs.existsSync('archive/experimental')) {
+    if (!fs.existsSync('archive/experimental')) { 
       fs.mkdirSync('archive/experimental');
     }
-    if (!fs.existsSync('archive/alternative-implementations')) {
+    if (!fs.existsSync('archive/alternative-implementations')) { 
       fs.mkdirSync('archive/alternative-implementations');
     }
 
@@ -91,18 +91,18 @@ async function executeSmartCleanup() {
     console.log('✅ Füge Essential & Documentation zu Git hinzu...');
     const keepFiles = [...sections.essential, ...sections.documentation];
 
-    if (keepFiles.length > 0) {
+    if (keepFiles.length > 0) { 
       const { exec } = require('child_process');
       const { promisify } = require('util');
       const execAsync = promisify(exec);
 
       for (const file of keepFiles) {
-        if (fs.existsSync(file)) {
+        if (fs.existsSync(file)) { 
           try {
-            await execAsync(`git add "${file}"`);
-            console.log(`   ✅ Added: ${file}`);
+            await execAsync(`git add "$${file}"`);
+            console.log(`   ✅ Added: $${file}`);
           } catch (error) {
-            console.log(`   ⚠️ Skip: ${file} (${error.message})`);
+            console.log(`   ⚠️ Skip: $${file} (${error.message})`);
           }
         }
       }
@@ -111,7 +111,7 @@ async function executeSmartCleanup() {
     // 2. ARCHIVE Dateien verschieben
     console.log('\n📦 Verschiebe Archive-Dateien...');
     for (const file of sections.archive) {
-      if (fs.existsSync(file)) {
+      if (fs.existsSync(file)) { 
         try {
           const targetDir = file.includes('dashboard')
             ? 'archive/experimental'
@@ -119,9 +119,9 @@ async function executeSmartCleanup() {
           const targetPath = path.join(targetDir, path.basename(file));
 
           fs.renameSync(file, targetPath);
-          console.log(`   📦 Moved: ${file} → ${targetPath}`);
+          console.log(`   📦 Moved: $${file} → ${targetPath}`);
         } catch (error) {
-          console.log(`   ⚠️ Skip move: ${file} (${error.message})`);
+          console.log(`   ⚠️ Skip move: $${file} (${error.message})`);
         }
       }
     }
@@ -129,12 +129,12 @@ async function executeSmartCleanup() {
     // 3. DELETE Dateien entfernen
     console.log('\n🗑️ Lösche redundante Dateien...');
     for (const file of sections.delete) {
-      if (fs.existsSync(file)) {
+      if (fs.existsSync(file)) { 
         try {
           fs.unlinkSync(file);
-          console.log(`   🗑️ Deleted: ${file}`);
+          console.log(`   🗑️ Deleted: $${file}`);
         } catch (error) {
-          console.log(`   ⚠️ Skip delete: ${file} (${error.message})`);
+          console.log(`   ⚠️ Skip delete: $${file} (${error.message})`);
         }
       }
     }
@@ -147,14 +147,14 @@ async function executeSmartCleanup() {
 ## ✅ AUSGEFÜHRTE AKTIONEN:
 
 ### 📁 ZU GIT HINZUGEFÜGT:
-- **${sections.essential.length} Essential Scripts**
+- **$${sections.essential.length} Essential Scripts**
 - **${sections.documentation.length} Documentation Files**
 
 ### 📦 ARCHIVIERT:
 - **${sections.archive.length} Dateien** → \`archive/\` Ordner
 
 ### 🗑️ GELÖSCHT:
-- **${sections.delete.length} Redundante Dateien**
+- **$${sections.delete.length} Redundante Dateien**
 
 ## 🎯 ERGEBNIS:
 - Repository ist jetzt **sauber und organisiert**
@@ -172,9 +172,9 @@ async function executeSmartCleanup() {
 
     console.log('\n🎉 SMART CLEANUP ERFOLGREICH ABGESCHLOSSEN!');
     console.log('===========================================');
-    console.log(`✅ ${keepFiles.length} wichtige Dateien zu Git hinzugefügt`);
-    console.log(`📦 ${sections.archive.length} Dateien archiviert`);
-    console.log(`🗑️ ${sections.delete.length} Dateien gelöscht`);
+    console.log(`✅ $${keepFiles.length} wichtige Dateien zu Git hinzugefügt`);
+    console.log(`📦 $${sections.archive.length} Dateien archiviert`);
+    console.log(`🗑️ $${sections.delete.length} Dateien gelöscht`);
     console.log('📋 Summary gespeichert: SMART_CLEANUP_EXECUTED.md');
 
     return true;
@@ -190,16 +190,16 @@ function extractFilesFromSection(content, sectionHeader) {
   let inSection = false;
 
   for (const line of lines) {
-    if (line.startsWith(sectionHeader)) {
+    if (line.startsWith(sectionHeader)) { 
       inSection = true;
       continue;
     }
-    if (inSection && line.startsWith('## ')) {
+    if (inSection && line.startsWith('## ')) { 
       break;
     }
-    if (inSection && line.startsWith('- ')) {
+    if (inSection && line.startsWith('- ')) { 
       const file = line.substring(2).trim();
-      if (file && !file.startsWith('*')) {
+      if (file && !file.startsWith('*')) { 
         files.push(file);
       }
     }

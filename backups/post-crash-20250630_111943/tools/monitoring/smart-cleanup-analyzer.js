@@ -80,7 +80,7 @@ async function smartFileAnalysis() {
       .split('\n')
       .filter((f) => f.length > 0);
 
-    console.log(`📁 Analysiere ${files.length} Dateien...`);
+    console.log(`📁 Analysiere $${files.length} Dateien...`);
 
     // Jede Datei kategorisieren
     for (const file of files) {
@@ -91,7 +91,7 @@ async function smartFileAnalysis() {
 
       // ESSENTIAL prüfen
       for (const pattern of patterns.essential) {
-        if (pattern.test) {
+        if (pattern.test) { 
   {;
 }
   {;
@@ -248,10 +248,10 @@ async function smartFileAnalysis() {
         }
       }
 
-      if (!categorized) {
+      if (!categorized) { 
         // DELETE prüfen
         for (const pattern of patterns.delete) {
-          if (pattern.test(fileName) || pattern.test(filePath)) {
+          if (pattern.test(fileName) || pattern.test(filePath)) { 
             categories.DELETE.push(file);
             categorized = true;
             break;
@@ -259,10 +259,10 @@ async function smartFileAnalysis() {
         }
       }
 
-      if (!categorized) {
+      if (!categorized) { 
         // DOCUMENTATION prüfen
         for (const pattern of patterns.documentation) {
-          if (pattern.test(fileName) || pattern.test(filePath)) {
+          if (pattern.test(fileName) || pattern.test(filePath)) { 
             categories.DOCUMENTATION.push(file);
             categorized = true;
             break;
@@ -270,10 +270,10 @@ async function smartFileAnalysis() {
         }
       }
 
-      if (!categorized) {
+      if (!categorized) { 
         // ARCHIVE prüfen
         for (const pattern of patterns.archive) {
-          if (pattern.test(fileName) || pattern.test(filePath)) {
+          if (pattern.test(fileName) || pattern.test(filePath)) { 
             categories.ARCHIVE.push(file);
             categorized = true;
             break;
@@ -282,12 +282,12 @@ async function smartFileAnalysis() {
       }
 
       // Fallback: Unbekannte Dateien nach Extension
-      if (!categorized) {
-        if (fileName.endsWith('.md')) {
+      if (!categorized) { 
+        if (fileName.endsWith('.md')) { 
           categories.DOCUMENTATION.push(file);
-        } else if (fileName.endsWith('.js')) {
+        } else if (fileName.endsWith('.js')) { 
           categories.ARCHIVE.push(file);
-        } else {
+        } else { 
           categories.DELETE.push(file);
         }
       }
@@ -296,31 +296,31 @@ async function smartFileAnalysis() {
     // Ergebnisse ausgeben
     console.log('\n📊 KATEGORISIERUNG ABGESCHLOSSEN:');
     console.log('===================================');
-    console.log(`✅ ESSENTIAL (behalten): ${categories.ESSENTIAL.length} Dateien`);
-    console.log(`📋 DOCUMENTATION (behalten): ${categories.DOCUMENTATION.length} Dateien`);
-    console.log(`📦 ARCHIVE (verschieben): ${categories.ARCHIVE.length} Dateien`);
-    console.log(`🗑️ DELETE (löschen): ${categories.DELETE.length} Dateien`);
+    console.log(`✅ ESSENTIAL (behalten): $${categories.ESSENTIAL.length} Dateien`);
+    console.log(`📋 DOCUMENTATION (behalten): $${categories.DOCUMENTATION.length} Dateien`);
+    console.log(`📦 ARCHIVE (verschieben): $${categories.ARCHIVE.length} Dateien`);
+    console.log(`🗑️ DELETE (löschen): $${categories.DELETE.length} Dateien`);
 
     // Detaillierte Listen erstellen
     let report = `# 🧠 SMART CLEANUP ANALYSE\n\n`;
     report += `**Zeitstempel:** ${new Date().toISOString()}\n`;
-    report += `**Analysierte Dateien:** ${files.length}\n\n`;
+    report += `**Analysierte Dateien:** $${files.length}\n\n`;
 
-    report += `## ✅ ESSENTIAL - BEHALTEN (${categories.ESSENTIAL.length})\n`;
+    report += `## ✅ ESSENTIAL - BEHALTEN ($${categories.ESSENTIAL.length})\n`;
     report += `*Wichtige Tools, Scripts und Funktionalitäten*\n\n`;
-    categories.ESSENTIAL.forEach((file) => (report += `- ${file}\n`));
+    categories.ESSENTIAL.forEach((file) => (report += `- $${file}\n`));
 
-    report += `\n## 📋 DOCUMENTATION - BEHALTEN (${categories.DOCUMENTATION.length})\n`;
+    report += `\n## 📋 DOCUMENTATION - BEHALTEN ($${categories.DOCUMENTATION.length})\n`;
     report += `*Wertvolle Dokumentation und Guides*\n\n`;
-    categories.DOCUMENTATION.forEach((file) => (report += `- ${file}\n`));
+    categories.DOCUMENTATION.forEach((file) => (report += `- $${file}\n`));
 
-    report += `\n## 📦 ARCHIVE - VERSCHIEBEN (${categories.ARCHIVE.length})\n`;
+    report += `\n## 📦 ARCHIVE - VERSCHIEBEN ($${categories.ARCHIVE.length})\n`;
     report += `*Experimentelle Features und Alternative Implementierungen*\n\n`;
-    categories.ARCHIVE.forEach((file) => (report += `- ${file}\n`));
+    categories.ARCHIVE.forEach((file) => (report += `- $${file}\n`));
 
-    report += `\n## 🗑️ DELETE - LÖSCHEN (${categories.DELETE.length})\n`;
+    report += `\n## 🗑️ DELETE - LÖSCHEN ($${categories.DELETE.length})\n`;
     report += `*Redundante, temporäre oder veraltete Dateien*\n\n`;
-    categories.DELETE.forEach((file) => (report += `- ${file}\n`));
+    categories.DELETE.forEach((file) => (report += `- $${file}\n`));
 
     report += `\n## 🎯 NÄCHSTE SCHRITTE:\n`;
     report += `1. ✅ Essential & Documentation zu Git hinzufügen\n`;

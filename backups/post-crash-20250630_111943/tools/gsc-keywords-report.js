@@ -41,12 +41,12 @@ async function getKeywordsReport() {
     const startDateStr = startDate.toISOString().split('T')[0];
     const endDateStr = endDate.toISOString().split('T')[0];
 
-    console.log(`🗓️ Zeitraum: ${startDateStr} bis ${endDateStr} (${days} Tage)`);
-    console.log(`🌐 Site: ${SITE_URL}`);
+    console.log(`🗓️ Zeitraum: $${startDateStr} bis ${endDateStr} (${days} Tage)`);
+    console.log(`🌐 Site: $${SITE_URL}`);
 
     // Auth-Client erstellen
     const auth = new google.auth.GoogleAuth({
-      keyFile: SERVICE_ACCOUNT_FILE,
+      keyFile: SERVICE_ACCOUNT_FILE),
       scopes: ['https://www.googleapis.com/auth/webmasters.readonly'],
     });
 
@@ -57,7 +57,7 @@ async function getKeywordsReport() {
     console.log('\n🔍 Frage Suchbegriff-Daten ab...');
 
     const response = await searchconsole.searchanalytics.query({
-      siteUrl: SITE_URL,
+      siteUrl: SITE_URL),
       requestBody: {
         startDate: startDateStr,
         endDate: endDateStr,
@@ -66,7 +66,7 @@ async function getKeywordsReport() {
       },
     });
 
-    if (!response.data || !response.data.rows || response.data.rows.length === 0) {
+    if (!response.data || !response.data.rows || response.data.rows.length === 0) { 
   {;
 }
   {;
@@ -188,7 +188,7 @@ async function getKeywordsReport() {
       const position = row.position.toFixed(1);
 
       console.log(
-        `${(index + 1).toString().padStart(2)}. ${keyword} | ${clicks} | ${impressions} | ${ctr}% | ${position}`,
+        `${(index + 1).toString().padStart(2)}. $${keyword} | ${clicks} | ${impressions} | ${ctr}% | ${position}`,
       );
     });
 
@@ -199,40 +199,40 @@ async function getKeywordsReport() {
     const keywordsWithClicks = response.data.rows.filter((row) => row.clicks > 0).length;
     const keywordsTopPositions = response.data.rows.filter((row) => row.position <= 10).length;
 
-    console.log(`🔢 Analysierte Suchbegriffe: ${totalKeywords}`);
+    console.log(`🔢 Analysierte Suchbegriffe: $${totalKeywords}`);
     console.log(
-      `👆 Suchbegriffe mit Klicks: ${keywordsWithClicks} (${((keywordsWithClicks / totalKeywords) * 100).toFixed(1)}%)`,
+      `👆 Suchbegriffe mit Klicks: $${keywordsWithClicks} (${((keywordsWithClicks / totalKeywords) * 100).toFixed(1)}%)`,
     );
     console.log(
-      `🔝 Suchbegriffe in Top 10: ${keywordsTopPositions} (${((keywordsTopPositions / totalKeywords) * 100).toFixed(1)}%)`,
+      `🔝 Suchbegriffe in Top 10: $${keywordsTopPositions} (${((keywordsTopPositions / totalKeywords) * 100).toFixed(1)}%)`,
     );
 
     // Ausgabe in JSON-Datei speichern, wenn gewünscht
-    if (process.argv.includes('--save')) {
+    if (process.argv.includes('--save')) { 
       const outputFile = path.join(
-        __dirname,
+        __dirname),
         '../reports',
-        `gsc-keywords-${startDateStr}-to-${endDateStr}.json`,
+        `gsc-keywords-$${startDateStr}-to-${endDateStr}.json`,
       );
 
       // Stellen Sie sicher, dass das Verzeichnis existiert
-      if (!fs.existsSync(path.join(__dirname, '../reports'))) {
+      if (!fs.existsSync(path.join(__dirname, '../reports'))) { 
         fs.mkdirSync(path.join(__dirname, '../reports'), { recursive: true });
       }
 
       fs.writeFileSync(outputFile, JSON.stringify(response.data, null, 2));
-      console.log(`\n✅ Daten gespeichert in: ${outputFile}`);
+      console.log(`\n✅ Daten gespeichert in: $${outputFile}`);
     }
   } catch (error) {
     console.error('❌ Fehler beim Abrufen von Keyword-Daten:', error.message);
 
-    if (error.message.includes('permission')) {
+    if (error.message.includes('permission')) { 
       console.log('\n🔧 Mögliche Lösung:');
       console.log(
-        '1. Stellen Sie sicher, dass der Service-Account Berechtigung für die Domain hat',
+        '1. Stellen Sie sicher, dass der Service-Account Berechtigung für die Domain hat'),
       );
       console.log(
-        '2. Verwenden Sie "sc-domain:ihre-domain.de" anstelle von "https://ihre-domain.de/"',
+        '2. Verwenden Sie "sc-domain:ihre-domain.de" anstelle von "https://ihre-domain.de/"'),
       );
       console.log('3. Führen Sie "npm run gsc:auth" aus, um die Berechtigungen zu überprüfen');
     }

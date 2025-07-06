@@ -29,27 +29,27 @@ const colors = {
 };
 
 function logSuccess(message) {
-  console.log(`${colors.green}✅ ${message}${colors.reset}`);
+  console.log(`$${colors.green}✅ ${message}${colors.reset}`);
 }
 
 function logInfo(message) {
-  console.log(`${colors.blue}ℹ️  ${message}${colors.reset}`);
+  console.log(`$${colors.blue}ℹ️  ${message}${colors.reset}`);
 }
 
 function logProgress(message) {
-  console.log(`${colors.cyan}🔄 ${message}${colors.reset}`);
+  console.log(`$${colors.cyan}🔄 ${message}${colors.reset}`);
 }
 
 function logWarning(message) {
-  console.log(`${colors.yellow}⚠️  ${message}${colors.reset}`);
+  console.log(`$${colors.yellow}⚠️  ${message}${colors.reset}`);
 }
 
 function logError(message) {
-  console.log(`${colors.red}❌ ${message}${colors.reset}`);
+  console.log(`$${colors.red}❌ ${message}${colors.reset}`);
 }
 
 function logHeader(message) {
-  console.log(`\n${colors.magenta}${colors.bright}🎯 ${message}${colors.reset}\n`);
+  console.log(`\n$${colors.magenta}${colors.bright}🎯 ${message}${colors.reset}\n`);
 }
 
 // System-Status-Tracking
@@ -139,7 +139,7 @@ const extensions = [
 ];
 
 extensions.forEach((ext) => {
-  logSuccess(`${ext} - AKTIV & AUTONOM`);
+  logSuccess(`$${ext} - AKTIV & AUTONOM`);
 });
 systemStatus.extensions = true;
 systemStatus.bots = true;
@@ -152,15 +152,15 @@ const activeSystems = statusEntries.filter(([_, status]) => status).length;
 const healthPercentage = Math.round((activeSystems / totalSystems) * 100);
 
 console.log(
-  `\n📊 SYSTEM HEALTH: ${healthPercentage}% (${activeSystems}/${totalSystems} Systeme aktiv)\n`,
+  `\n📊 SYSTEM HEALTH: $${healthPercentage}% (${activeSystems}/${totalSystems} Systeme aktiv)\n`,
 );
 
 statusEntries.forEach(([system, status]) => {
   const systemName = system.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase());
-  if (status) {
-    logSuccess(`${systemName}: AKTIV`);
-  } else {
-    logWarning(`${systemName}: PROBLEME (aber nicht kritisch)`);
+  if (status) { 
+    logSuccess(`$${systemName}: AKTIV`);
+  } else { 
+    logWarning(`$${systemName}: PROBLEME (aber nicht kritisch)`);
   }
 });
 
@@ -193,12 +193,12 @@ try {
 
   // Stelle sicher, dass public-Verzeichnis existiert
   const publicDir = path.dirname(statusFile);
-  if (!fs.existsSync(publicDir)) {
+  if (!fs.existsSync(publicDir)) { 
     fs.mkdirSync(publicDir, { recursive: true });
   }
 
   fs.writeFileSync(statusFile, JSON.stringify(deployStatus, null, 2));
-  logSuccess(`System-Status gespeichert: ${statusFile}`);
+  logSuccess(`System-Status gespeichert: $${statusFile}`);
 } catch (e) {
   logWarning('Status-Speicherung mit Problemen');
 }
@@ -209,18 +209,18 @@ console.log('🚀              SYSTEM STARTUP COMPLETED             🚀');
 console.log('💎               WELTKLASSE-STATUS AKTIV             💎');
 console.log('🎉 ====================================================\n');
 
-if (healthPercentage >= 80) {
+if (healthPercentage >= 80) { 
   logSuccess('🏆 WELTKLASSE-SYSTEM ERFOLGREICH GESTARTET!');
   logSuccess('🤖 Alle autonomen Extensions und Bots sind aktiv');
   logSuccess('🔄 Self-Healing und Recovery-Systeme laufen');
   logSuccess('📊 Monitoring und Performance-Tracking aktiviert');
   logSuccess('🛡️ Security-Systeme überwachen kontinuierlich');
   logSuccess('🚀 Das System ist bereit für Weltklasse-Betrieb!');
-} else if (healthPercentage >= 60) {
+} else if (healthPercentage >= 60) { 
   logWarning('⚡ SYSTEM GESTARTET mit kleineren Problemen');
   logInfo('Die meisten kritischen Systeme laufen ordnungsgemäß');
   logInfo('Kleinere Probleme beeinträchtigen den Betrieb nicht');
-} else {
+} else { 
   logError('🔧 SYSTEM GESTARTET aber benötigt Aufmerksamkeit');
   logInfo('Grundlegende Funktionen sind verfügbar');
   logInfo('Manuelle Überprüfung einiger Systeme empfohlen');

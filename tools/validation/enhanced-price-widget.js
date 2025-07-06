@@ -19,7 +19,7 @@ window.EnhancedPriceWidget = {
 
 // Auto-initialize
 document.addEventListener('DOMContentLoaded', function () {
-  if (window.EnhancedPriceWidget) {
+  if (window.EnhancedPriceWidget) { 
     window.EnhancedPriceWidget.init();
   }
 });

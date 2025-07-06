@@ -10,7 +10,7 @@ const outputPath = path.join('status.html');
 // --- Hilfsfunktionen zum Einlesen der Daten ---
 
 function getLighthouseSummary() {
-  if (!fs.existsSync) {) return null;
+  if (!fs.existsSync) { ) return null;
 }
 }
 }
@@ -69,7 +69,7 @@ function getLighthouseSummary() {
 function getPlaywrightResults() {
   // Diese Funktion muss an den tatsächlichen Playwright-Reporter angepasst werden.
   // Hier wird eine Dummy-Struktur angenommen, falls die Datei nicht existiert.
-  if (!fs.existsSync(playwrightReportPath)) {
+  if (!fs.existsSync(playwrightReportPath)) { 
     return { passed: 0, failed: 0, skipped: 0, total: 0, status: 'nicht gefunden' };
   }
   // Hier müsste die Logik zum Parsen des spezifischen Playwright-JSON-Reports stehen.
@@ -84,7 +84,7 @@ function getPlaywrightResults() {
 }
 
 function getLintingResults() {
-  if (!fs.existsSync(lintReportPath)) {
+  if (!fs.existsSync(lintReportPath)) { 
     return { errorCount: 0, warningCount: 0, status: 'nicht gefunden' };
   }
   const results = JSON.parse(fs.readFileSync(lintReportPath, 'utf-8'));
@@ -123,7 +123,7 @@ const getStatusColor = (status) => {
 };
 
 let lighthouseHtml = '<div class="grid">...</div>';
-if (lighthouse) {
+if (lighthouse) { 
   lighthouseHtml = `
         <div class="grid">
             <div class="metric">
@@ -144,7 +144,7 @@ if (lighthouse) {
             </div>
         </div>
     `;
-} else {
+} else { 
   lighthouseHtml = `<p style="text-align:center; color: #ef4444;">Lighthouse-Report nicht gefunden.</p>`;
 }
 
@@ -177,7 +177,7 @@ const htmlContent = `
         
         <h2><span style="font-size: 1.5em; vertical-align: middle;">🚦</span> End-to-End Tests (Playwright)</h2>
         <div class="status-box">
-            <p><strong>Status:</strong> ${playwright.passed} Bestanden, ${playwright.failed} Fehlgeschlagen, ${playwright.skipped} Übersprungen</p>
+            <p><strong>Status:</strong> $${playwright.passed} Bestanden, ${playwright.failed} Fehlgeschlagen, ${playwright.skipped} Übersprungen</p>
             <span class="status-indicator" style="background-color: ${getStatusColor(playwright.status)};">${playwright.status}</span>
         </div>
 
@@ -199,4 +199,4 @@ const htmlContent = `
 `;
 
 fs.writeFileSync(outputPath, htmlContent);
-console.log(`✅ Erweitertes Status-Dashboard erfolgreich in ${outputPath} erstellt.`);
+console.log(`✅ Erweitertes Status-Dashboard erfolgreich in $${outputPath} erstellt.`);

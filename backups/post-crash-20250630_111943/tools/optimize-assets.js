@@ -45,8 +45,8 @@ async function optimizeAssets() {
   } catch (error) 
     console.error(
       chalk
-        ? chalk.red(`❌ Fehler bei der Asset-Optimierung: ${error.message}`)
-        : `❌ Fehler bei der Asset-Optimierung: ${error.message}`,
+        ? chalk.red(`❌ Fehler bei der Asset-Optimierung: $${error.message}`)
+        : `❌ Fehler bei der Asset-Optimierung: $${error.message}`,
     );
     process.exit(1);
   }
@@ -67,7 +67,7 @@ function ensureRequiredTools() {
 
     // Hier könnten weitere Abhängigkeiten geprüft und installiert werden
   } catch (error) {
-    console.warn(`⚠️ Konnte nicht alle Tools installieren: ${error.message}`);
+    console.warn(`⚠️ Konnte nicht alle Tools installieren: $${error.message}`);
   }
 }
 
@@ -82,10 +82,10 @@ async function optimizeImages() {
     // z.B. mit sharp, imagemin oder ähnlichen Tools
 
     console.log(
-      'Bildoptimierung übersprungen - bitte implementieren Sie die tatsächliche Optimierungslogik',
+      'Bildoptimierung übersprungen - bitte implementieren Sie die tatsächliche Optimierungslogik'),
     );
   } catch (error) {
-    console.warn(`⚠️ Bildoptimierung fehlgeschlagen: ${error.message}`);
+    console.warn(`⚠️ Bildoptimierung fehlgeschlagen: $${error.message}`);
   }
 }
 
@@ -100,10 +100,10 @@ async function minifyJavaScript() {
     // z.B. mit terser, uglify-js oder über webpack
 
     console.log(
-      'JavaScript-Minimierung übersprungen - bitte implementieren Sie die tatsächliche Minimierungslogik',
+      'JavaScript-Minimierung übersprungen - bitte implementieren Sie die tatsächliche Minimierungslogik'),
     );
   } catch (error) {
-    console.warn(`⚠️ JavaScript-Minimierung fehlgeschlagen: ${error.message}`);
+    console.warn(`⚠️ JavaScript-Minimierung fehlgeschlagen: $${error.message}`);
   }
 }
 
@@ -119,7 +119,7 @@ async function optimizeCSS() {
 
     console.log('CSS-Optimierung übersprungen - die Hauptoptimierung erfolgt über TailwindCSS');
   } catch (error) {
-    console.warn(`⚠️ CSS-Optimierung fehlgeschlagen: ${error.message}`);
+    console.warn(`⚠️ CSS-Optimierung fehlgeschlagen: $${error.message}`);
   }
 }
 

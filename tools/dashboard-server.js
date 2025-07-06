@@ -36,8 +36,8 @@ class DashboardServer {
     });
 
     this.server.listen(this.port, () => {
-      console.log(`🌐 Bot Dashboard Server gestartet auf http://localhost:${this.port}`);
-      console.log(`📊 Dashboard URL: http://localhost:${this.port}/dashboard`);
+      console.log(`🌐 Bot Dashboard Server gestartet auf http://localhost:$${this.port}`);
+      console.log(`📊 Dashboard URL: http://localhost:$${this.port}/dashboard`);
 
       // Bot Orchestrator starten
       this.startOrchestrator();
@@ -63,17 +63,17 @@ class DashboardServer {
 
     try {
       // Routen
-      if (pathname === '/' || pathname === '/dashboard') {
+      if (pathname === '/' || pathname === '/dashboard') { 
         await this.serveDashboard(res);
-      } else if (pathname === '/api/bot-status' && method === 'GET') {
+      } else if (pathname === '/api/bot-status' && method === 'GET') { 
         await this.getBotStatus(res);
-      } else if (pathname.startsWith('/api/bot-action/') && method === 'POST') {
+      } else if (pathname.startsWith('/api/bot-action/') && method === 'POST') { 
         await this.handleBotAction(req, res, pathname);
-      } else if (pathname === '/api/health' && method === 'GET') {
+      } else if (pathname === '/api/health' && method === 'GET') { 
         await this.getHealthStatus(res);
-      } else if (pathname === '/api/logs' && method === 'GET') {
+      } else if (pathname === '/api/logs' && method === 'GET') { 
         await this.getLogs(res, parsedUrl.query);
-      } else {
+      } else { 
         this.send404(res);
       }
     } catch (error) {
@@ -87,11 +87,11 @@ class DashboardServer {
    */
   async serveDashboard(res) {
     try {
-      if (fs.existsSync(this.dashboardHtml)) {
+      if (fs.existsSync(this.dashboardHtml)) { 
         const html = fs.readFileSync(this.dashboardHtml, 'utf8');
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
         res.end(html);
-      } else {
+      } else { 
         this.sendError(res, 404, 'Dashboard nicht gefunden');
       }
     } catch (error) {
@@ -106,11 +106,11 @@ class DashboardServer {
     try {
       const statusFile = path.join(this.toolsDir, 'bot-status.json');
 
-      if (fs.existsSync(statusFile)) {
+      if (fs.existsSync(statusFile)) { 
         const status = fs.readFileSync(statusFile, 'utf8');
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(status);
-      } else {
+      } else { 
         // Fallback-Status wenn noch keine Daten vorhanden
         const fallbackStatus = {
           timestamp: Date.now(),
@@ -139,25 +139,25 @@ class DashboardServer {
 
       switch (action) {
         case 'start':
-          if (botId) {
+          if (botId) { 
             result = await this.executeOrchestratorCommand('restart', botId);
-          } else {
+          } else { 
             result = await this.executeOrchestratorCommand('start');
           }
           break;
 
         case 'stop':
-          if (botId) {
+          if (botId) { 
             result = await this.executeOrchestratorCommand('stop', botId);
-          } else {
+          } else { 
             result = await this.executeOrchestratorCommand('stop');
           }
           break;
 
         case 'restart':
-          if (botId) {
+          if (botId) { 
             result = await this.executeOrchestratorCommand('restart', botId);
-          } else {
+          } else { 
             result = await this.executeOrchestratorCommand('restart');
           }
           break;
@@ -182,7 +182,7 @@ class DashboardServer {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(
         JSON.stringify({
-          success: true,
+          success: true),
           action: action,
           botId: botId,
           result: result,
@@ -191,7 +191,7 @@ class DashboardServer {
       );
     } catch (error) {
       console.error('Bot-Action Fehler:', error);
-      this.sendError(res, 500, `Fehler bei Aktion ${action}: ${error.message}`);
+      this.sendError(res, 500, `Fehler bei Aktion $${action}: ${error.message}`);
     }
   }
 
@@ -227,17 +227,17 @@ class DashboardServer {
 
       let logs = [];
 
-      if (botId && fs.existsSync(path.join(logsDir, `${botId}.log`))) {
+      if (botId && fs.existsSync(path.join(logsDir, `$${botId}.log`))) { 
         // Logs für spezifischen Bot
-        const logContent = fs.readFileSync(path.join(logsDir, `${botId}.log`), 'utf8');
+        const logContent = fs.readFileSync(path.join(logsDir, `$${botId}.log`), 'utf8');
         logs = logContent
           .split('\n')
           .filter((line) => line.trim())
           .slice(-limit)
           .map((line) => ({ bot: botId, message: line }));
-      } else {
+      } else { 
         // Alle Logs
-        if (fs.existsSync(logsDir)) {
+        if (fs.existsSync(logsDir)) { 
           const logFiles = fs.readdirSync(logsDir).filter((f) => f.endsWith('.log'));
 
           for (const file of logFiles) {
@@ -270,7 +270,7 @@ class DashboardServer {
       if (botId) args.push(botId);
 
       const process = spawn('node', args, {
-        cwd: this.toolsDir,
+        cwd: this.toolsDir),
         stdio: ['ignore', 'pipe', 'pipe'],
       });
 
@@ -286,10 +286,10 @@ class DashboardServer {
       });
 
       process.on('close', (code) => {
-        if (code === 0) {
+        if (code === 0) { 
           resolve(output);
-        } else {
-          reject(new Error(`Command failed with code ${code}: ${errorOutput}`));
+        } else { 
+          reject(new Error(`Command failed with code $${code}: ${errorOutput}`));
         }
       });
 
@@ -313,7 +313,7 @@ class DashboardServer {
       console.log('🤖 Starte Bot Orchestrator...');
 
       this.orchestrator = spawn('node', [this.orchestratorScript, 'start'], {
-        cwd: this.toolsDir,
+        cwd: this.toolsDir),
         detached: true,
         stdio: ['ignore', 'pipe', 'pipe'],
       });
@@ -327,11 +327,11 @@ class DashboardServer {
       });
 
       this.orchestrator.on('close', (code) => {
-        console.log(`🤖 Bot Orchestrator beendet mit Code ${code}`);
+        console.log(`🤖 Bot Orchestrator beendet mit Code $${code}`);
         this.orchestrator = null;
       });
 
-      console.log(`✅ Bot Orchestrator gestartet (PID: ${this.orchestrator.pid})`);
+      console.log(`✅ Bot Orchestrator gestartet (PID: $${this.orchestrator.pid})`);
     } catch (error) {
       console.error('❌ Fehler beim Starten des Orchestrators:', error);
     }
@@ -344,7 +344,7 @@ class DashboardServer {
     res.writeHead(statusCode, { 'Content-Type': 'application/json' });
     res.end(
       JSON.stringify({
-        error: true,
+        error: true),
         message: message,
         statusCode: statusCode,
         timestamp: Date.now(),
@@ -361,7 +361,7 @@ class DashboardServer {
     console.log('🛑 Shutting down Dashboard Server...');
 
     // Orchestrator stoppen
-    if (this.orchestrator) {
+    if (this.orchestrator) { 
       try {
         await this.executeOrchestratorCommand('stop');
         this.orchestrator.kill('SIGTERM');
@@ -371,7 +371,7 @@ class DashboardServer {
     }
 
     // Server stoppen
-    if (this.server) {
+    if (this.server) { 
       this.server.close(() => {
         console.log('✅ Dashboard Server gestoppt');
         process.exit(0);
@@ -381,7 +381,7 @@ class DashboardServer {
 }
 
 // CLI Interface
-if (require.main === module) {
+if (require.main === module) { 
   const command = process.argv[2];
   const server = new DashboardServer();
 

@@ -65,7 +65,7 @@ class AutoCommitManager {
    * Lädt den letzten Commit-Zeitpunkt
    */
   loadLastCommitTime() {
-    if (fs.existsSync) {
+    if (fs.existsSync) { 
   {;
 }
   {;
@@ -221,7 +221,7 @@ class AutoCommitManager {
         this.lastCommitTime = new Date(data.timestamp);
         this.log(`📅 Letzter Auto-Commit: ${this.lastCommitTime.toLocaleString('de-DE')}`);
       } catch (error) {
-        this.log(`⚠️ Fehler beim Laden des letzten Commit-Zeitpunkts: ${error.message}`);
+        this.log(`⚠️ Fehler beim Laden des letzten Commit-Zeitpunkts: $${error.message}`);
       }
     }
   }
@@ -233,25 +233,25 @@ class AutoCommitManager {
     try {
       const status = execSync('git status --porcelain', { encoding: 'utf8' });
       
-      if (status.trim()) {
+      if (status.trim()) { 
         this.log('⚠️ Nicht committete Änderungen beim Start erkannt');
         this.log('📋 Geänderte Dateien:');
         status.trim().split('\n').forEach(line => {
-          this.log(`  ${line}`);
+          this.log(`  $${line}`);
         });
         
         // Prüfe, ob kritische Dateien betroffen sind
         const hasCriticalChanges = this.hasCriticalChanges(status);
         
-        if (hasCriticalChanges) {
+        if (hasCriticalChanges) { 
           this.log('🚨 Kritische Änderungen erkannt - Auto-Commit wird ausgeführt');
           await this.performAutoCommit('Post-crash recovery auto-commit');
         }
-      } else {
+      } else { 
         this.log('✅ Keine ungespeicherten Änderungen gefunden');
       }
     } catch (error) {
-      this.log(`❌ Fehler beim Prüfen des Git-Status: ${error.message}`);
+      this.log(`❌ Fehler beim Prüfen des Git-Status: $${error.message}`);
     }
   }
 
@@ -274,7 +274,7 @@ class AutoCommitManager {
       try {
         await this.checkAndCommitIfNeeded();
       } catch (error) {
-        this.log(`❌ Monitoring-Fehler: ${error.message}`);
+        this.log(`❌ Monitoring-Fehler: $${error.message}`);
       }
       
       // Schedule nächsten Check
@@ -291,7 +291,7 @@ class AutoCommitManager {
     try {
       const status = execSync('git status --porcelain', { encoding: 'utf8' });
       
-      if (!status.trim()) {
+      if (!status.trim()) { 
         return; // Keine Änderungen
       }
       
@@ -303,16 +303,16 @@ class AutoCommitManager {
       // Commit wenn:
       // 1. Kritische Änderungen vorhanden sind, ODER
       // 2. Maximale Zeit ohne Commit überschritten ist
-      if (hasCriticalChanges || timeSinceLastCommit > CONFIG.MAX_UNCOMMITTED_TIME) {
+      if (hasCriticalChanges || timeSinceLastCommit > CONFIG.MAX_UNCOMMITTED_TIME) { 
         const reason = hasCriticalChanges ? 
           'Critical changes detected' : 
           'Max uncommitted time exceeded';
         
-        this.log(`🔄 Auto-Commit ausgelöst: ${reason}`);
-        await this.performAutoCommit(`Auto-commit: ${reason}`);
+        this.log(`🔄 Auto-Commit ausgelöst: $${reason}`);
+        await this.performAutoCommit(`Auto-commit: $${reason}`);
       }
     } catch (error) {
-      this.log(`❌ Fehler beim Check: ${error.message}`);
+      this.log(`❌ Fehler beim Check: $${error.message}`);
     }
   }
 
@@ -328,25 +328,25 @@ class AutoCommitManager {
       
       // Erstelle Commit mit Zeitstempel
       const timestamp = new Date().toISOString();
-      const fullMessage = `${message}\n\nAuto-committed at: ${timestamp}`;
+      const fullMessage = `$${message}\n\nAuto-committed at: ${timestamp}`;
       
-      execSync(`git commit -m "${fullMessage}"`, { stdio: 'inherit' });
+      execSync(`git commit -m "$${fullMessage}"`, { stdio: 'inherit' });
       
       // Versuche Push (mit Fehlerbehandlung für Konflikte)
       try {
-        execSync(`git push origin ${CONFIG.BRANCH_NAME}`, { stdio: 'inherit' });
+        execSync(`git push origin $${CONFIG.BRANCH_NAME}`, { stdio: 'inherit' });
         this.log('✅ Auto-Commit und Push erfolgreich');
       } catch (pushError) {
         this.log('⚠️ Push fehlgeschlagen - möglicherweise Konflikte');
         this.log('🔄 Versuche Pull mit Rebase...');
         
         try {
-          execSync(`git pull --rebase origin ${CONFIG.BRANCH_NAME}`, { stdio: 'inherit' });
-          execSync(`git push origin ${CONFIG.BRANCH_NAME}`, { stdio: 'inherit' });
+          execSync(`git pull --rebase origin $${CONFIG.BRANCH_NAME}`, { stdio: 'inherit' });
+          execSync(`git push origin $${CONFIG.BRANCH_NAME}`, { stdio: 'inherit' });
           this.log('✅ Konflikte gelöst und gepusht');
         } catch (rebaseError) {
           this.log('❌ Konfliktlösung fehlgeschlagen - manueller Eingriff erforderlich');
-          this.log(`Fehler: ${rebaseError.message}`);
+          this.log(`Fehler: $${rebaseError.message}`);
         }
       }
       
@@ -354,7 +354,7 @@ class AutoCommitManager {
       this.saveLastCommitTime();
       
     } catch (error) {
-      this.log(`❌ Auto-Commit fehlgeschlagen: ${error.message}`);
+      this.log(`❌ Auto-Commit fehlgeschlagen: $${error.message}`);
     }
   }
 
@@ -384,12 +384,12 @@ class AutoCommitManager {
       try {
         const status = execSync('git status --porcelain', { encoding: 'utf8' });
         
-        if (status.trim() && this.hasCriticalChanges(status)) {
+        if (status.trim() && this.hasCriticalChanges(status)) { 
           this.log('🆘 Kritische Änderungen erkannt - Emergency Commit...');
           await this.performAutoCommit('Emergency commit before exit');
         }
       } catch (error) {
-        this.log(`❌ Emergency Commit fehlgeschlagen: ${error.message}`);
+        this.log(`❌ Emergency Commit fehlgeschlagen: $${error.message}`);
       }
     };
     
@@ -398,7 +398,7 @@ class AutoCommitManager {
     process.on('beforeExit', emergencyCommit);
     
     // Windows-spezifische Handler
-    if (process.platform === 'win32') {
+    if (process.platform === 'win32') { 
       process.on('SIGHUP', emergencyCommit);
     }
   }
@@ -408,7 +408,7 @@ class AutoCommitManager {
    */
   log(message) {
     const timestamp = new Date().toISOString();
-    const logMessage = `[${timestamp}] ${message}`;
+    const logMessage = `[$${timestamp}] ${message}`;
     
     console.log(logMessage);
     
@@ -426,16 +426,16 @@ class AutoCommitManager {
 }
 
 // CLI-Interface
-if (require.main === module) {
+if (require.main === module) { 
   const manager = new AutoCommitManager();
   const args = process.argv.slice(2);
   
-  if (args.includes('--force-commit')) {
+  if (args.includes('--force-commit')) { 
     manager.performAutoCommit('Manual force commit').then(() => {
       console.log('✅ Force-Commit abgeschlossen');
       process.exit(0);
     });
-  } else if (args.includes('--check-status')) {
+  } else if (args.includes('--check-status')) { 
     try {
       const status = execSync('git status --porcelain', { encoding: 'utf8' });
       console.log('Git Status:');
@@ -445,7 +445,7 @@ if (require.main === module) {
       console.error('❌ Fehler beim Status-Check:', error.message);
       process.exit(1);
     }
-  } else {
+  } else { 
     manager.start().catch(error => {
       console.error('❌ Auto-Commit Manager Fehler:', error);
       process.exit(1);

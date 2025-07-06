@@ -49,7 +49,7 @@ class PriceOracleRecovery {
 
     // Listen for page visibility changes
     document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) {
+      if (!document.hidden) { 
         this.checkOracleHealth();
       }
     });
@@ -140,7 +140,7 @@ class PriceOracleRecovery {
 
     // Find first valid backup
     for (const backup of sortedBackups) {
-      if (this.validateBackup(backup)) {
+      if (this.validateBackup(backup)) { 
         return backup;
       }
     }
@@ -161,7 +161,7 @@ class PriceOracleRecovery {
     if (age > this.maxBackupAge) return false;
 
     // Check if backup has valid price data
-    if (backup.state.data && backup.state.data.price) {
+    if (backup.state.data && backup.state.data.price) { 
       const price = parseFloat(backup.state.data.price);
       if (isNaN(price) || price <= 0 || price > 10000) return false;
     }
@@ -176,20 +176,20 @@ class PriceOracleRecovery {
     try {
       const backupData = backup || this.getLatestValidBackup();
 
-      if (!backupData) {
+      if (!backupData) { 
         throw new Error('No valid backup found');
       }
 
       console.log('🔄 Restoring Oracle from backup...');
 
       // Reinitialize Oracle if needed
-      if (!window.xrpOracle) {
+      if (!window.xrpOracle) { 
         window.initXRPPriceOracle();
         await this.sleep(2000); // Wait for initialization
       }
 
       // Restore cache data
-      if (backupData.cacheSnapshot && window.xrpOracle.cache) {
+      if (backupData.cacheSnapshot && window.xrpOracle.cache) { 
         window.xrpOracle.cache.clear();
         Object.entries(backupData.cacheSnapshot).forEach(([key, value]) => {
           window.xrpOracle.cache.set(key, value);
@@ -197,9 +197,9 @@ class PriceOracleRecovery {
       }
 
       // Restore state
-      if (backupData.state && backupData.state.data) {
+      if (backupData.state && backupData.state.data) { 
         window.xrpOracle.updateState({
-          status: 'success',
+          status: 'success'),
           data: backupData.state.data,
           currentApi: backupData.state.currentApi || 'Backup',
           lastUpdate: backupData.timestamp,
@@ -208,7 +208,7 @@ class PriceOracleRecovery {
       }
 
       // Force UI update
-      if (window.xrpOracle.updateUI) {
+      if (window.xrpOracle.updateUI) { 
         window.xrpOracle.updateUI();
       }
 
@@ -216,7 +216,7 @@ class PriceOracleRecovery {
 
       // Trigger immediate refresh to get fresh data
       setTimeout(() => {
-        if (window.xrpOracle && window.xrpOracle.fetchPrice) {
+        if (window.xrpOracle && window.xrpOracle.fetchPrice) { 
           window.xrpOracle.fetchPrice().catch(console.error);
         }
       }, 1000);
@@ -234,25 +234,25 @@ class PriceOracleRecovery {
   async handleOracleAlert(alertDetail) {
     console.log('🚨 Recovery system handling alert:', alertDetail);
 
-    if (alertDetail.type === 'consecutive_failures' && alertDetail.count >= 3) {
+    if (alertDetail.type === 'consecutive_failures' && alertDetail.count >= 3) { 
       console.log('🔄 Triggering automatic recovery...');
 
       this.recoveryAttempts++;
 
-      if (this.recoveryAttempts <= this.maxRecoveryAttempts) {
+      if (this.recoveryAttempts <= this.maxRecoveryAttempts) { 
         const restored = await this.restoreFromBackup();
 
-        if (restored) {
+        if (restored) { 
           console.log('✅ Automatic recovery successful');
           this.recoveryAttempts = 0; // Reset counter on success
-        } else {
+        } else { 
           console.error('❌ Automatic recovery failed');
 
-          if (this.recoveryAttempts >= this.maxRecoveryAttempts) {
+          if (this.recoveryAttempts >= this.maxRecoveryAttempts) { 
             this.activateEmergencyMode();
           }
         }
-      } else {
+      } else { 
         console.error('🚨 Max recovery attempts reached - activating emergency mode');
         this.activateEmergencyMode();
       }
@@ -264,7 +264,7 @@ class PriceOracleRecovery {
    */
   async checkOracleHealth() {
     try {
-      if (!window.xrpOracle) {
+      if (!window.xrpOracle) { 
         console.log('🔄 Oracle not found - attempting to restore...');
         await this.restoreFromBackup();
         return;
@@ -272,11 +272,11 @@ class PriceOracleRecovery {
 
       const health = window.getXRPOracleHealth();
 
-      if (!health || !health.healthy) {
+      if (!health || !health.healthy) { 
         console.log('🔄 Oracle unhealthy - attempting recovery...');
 
         // Try to restart the oracle first
-        if (window.xrpOracle.stop && window.xrpOracle.start) {
+        if (window.xrpOracle.stop && window.xrpOracle.start) { 
           window.xrpOracle.stop();
           await this.sleep(2000);
           window.xrpOracle.start();
@@ -285,7 +285,7 @@ class PriceOracleRecovery {
           await this.sleep(5000);
           const newHealth = window.getXRPOracleHealth();
 
-          if (!newHealth || !newHealth.healthy) {
+          if (!newHealth || !newHealth.healthy) { 
             // Restart didn't work, try backup restoration
             await this.restoreFromBackup();
           }
@@ -305,10 +305,10 @@ class PriceOracleRecovery {
     // Get the most recent backup for emergency data
     const backup = this.getLatestValidBackup();
 
-    if (backup && backup.state && backup.state.data) {
+    if (backup && backup.state && backup.state.data) { 
       // Create a static display with emergency data
       this.displayEmergencyData(backup.state.data, backup.timestamp);
-    } else {
+    } else { 
       // Absolute fallback - show error state
       this.displayEmergencyError();
     }
@@ -336,12 +336,12 @@ class PriceOracleRecovery {
       const priceElement = widget.querySelector('.price-value, .price');
       const statusElement = widget.querySelector('.price-status, .status');
 
-      if (priceElement) {
+      if (priceElement) { 
         priceElement.innerHTML = `$${data.price.toFixed(6)}`;
         priceElement.style.opacity = '0.7';
       }
 
-      if (statusElement) {
+      if (statusElement) { 
         statusElement.innerHTML = '🚨 Emergency Mode';
         statusElement.className = 'price-status status-emergency';
         statusElement.title = `Last update: ${new Date(timestamp).toLocaleString()}`;
@@ -404,7 +404,7 @@ class PriceOracleRecovery {
 
     // Auto-remove after 10 seconds
     setTimeout(() => {
-      if (notification.parentNode) {
+      if (notification.parentNode) { 
         notification.parentNode.removeChild(notification);
       }
     }, 10000);
@@ -422,7 +422,7 @@ class PriceOracleRecovery {
         (backup) => backup.timestamp > cutoffTime && this.validateBackup(backup),
       );
 
-      if (validBackups.length < backups.length) {
+      if (validBackups.length < backups.length) { 
         localStorage.setItem(this.backupKey, JSON.stringify(validBackups));
         console.log(`🧹 Cleaned up ${backups.length - validBackups.length} old backups`);
       }
@@ -458,13 +458,13 @@ class PriceOracleRecovery {
    */
   importBackups(backupData) {
     try {
-      if (!backupData || !backupData.backups || !Array.isArray(backupData.backups)) {
+      if (!backupData || !backupData.backups || !Array.isArray(backupData.backups)) { 
         throw new Error('Invalid backup data format');
       }
 
       const validBackups = backupData.backups.filter((backup) => this.validateBackup(backup));
 
-      if (validBackups.length === 0) {
+      if (validBackups.length === 0) { 
         throw new Error('No valid backups found in import data');
       }
 
@@ -482,7 +482,7 @@ class PriceOracleRecovery {
 
       localStorage.setItem(this.backupKey, JSON.stringify(uniqueBackups));
 
-      console.log(`✅ Imported ${validBackups.length} valid backups`);
+      console.log(`✅ Imported $${validBackups.length} valid backups`);
       return true;
     } catch (error) {
       console.error('❌ Backup import failed:', error);

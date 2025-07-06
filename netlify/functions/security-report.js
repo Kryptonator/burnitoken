@@ -42,7 +42,7 @@ exports.handler = async (event, context) => {
       statusCode: 500,
       headers,
       body: JSON.stringify({
-        error: 'Fehler beim Abrufen des Sicherheitsberichts',
+        error: 'Fehler beim Abrufen des Sicherheitsberichts'),
         message: error.toString(),
       }),
     };

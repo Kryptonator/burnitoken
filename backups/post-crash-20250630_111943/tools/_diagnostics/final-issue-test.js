@@ -13,7 +13,7 @@ async function runFinalTest() {
   console.log('🚀 Starting final, isolated test...');
 
   // Verify that the environment variable is loaded correctly
-  if (!process.env.GITHUB_TOKEN) {
+  if (!process.env.GITHUB_TOKEN) { 
   {;
 }
   {;
@@ -116,7 +116,7 @@ async function runFinalTest() {
 };
     return;
   }
-  if (!process.env.GITHUB_REPO) {
+  if (!process.env.GITHUB_REPO) { 
     console.error('❌ FINAL TEST FAILED: GITHUB_REPO not found after loading .env file.');
     return;
   }

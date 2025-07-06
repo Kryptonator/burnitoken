@@ -19,7 +19,7 @@ window.XRPLData = {
 
 // Auto-initialize
 document.addEventListener('DOMContentLoaded', function () {
-  if (window.XRPLData) {
+  if (window.XRPLData) { 
     window.XRPLData.init();
   }
 });

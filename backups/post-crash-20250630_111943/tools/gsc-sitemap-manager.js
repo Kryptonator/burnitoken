@@ -18,17 +18,17 @@ const SITE_URL = 'https://burnitoken.website/'; // Deine Property in der GSC
 async function getAuth() {
   try {
     const auth = new google.auth.GoogleAuth({
-      keyFile: KEY_FILE_PATH,
+      keyFile: KEY_FILE_PATH),
       scopes: SCOPES,
     });
     const client = await auth.getClient();
     return client;
   } catch (error) {
     console.error(
-      '❌ Authentifizierungsfehler: Die Datei "gsc-credentials.json" konnte nicht gefunden oder gelesen werden.',
+      '❌ Authentifizierungsfehler: Die Datei "gsc-credentials.json" konnte nicht gefunden oder gelesen werden.'),
     );
     console.error(
-      'Bitte stelle sicher, dass du eine gültige Service-Account-JSON-Datei unter diesem Namen im "tools"-Verzeichnis abgelegt hast.',
+      'Bitte stelle sicher, dass du eine gültige Service-Account-JSON-Datei unter diesem Namen im "tools"-Verzeichnis abgelegt hast.'),
     );
     throw new Error('GSC Auth failed');
   }
@@ -45,13 +45,13 @@ async function submitSitemap(sitemapUrl) {
     const auth = await getAuth();
     const searchconsole = google.searchconsole({ version: 'v1', auth });
 
-    console.log(`Reiche Sitemap ein: ${sitemapUrl}`);
+    console.log(`Reiche Sitemap ein: $${sitemapUrl}`);
     const res = await searchconsole.sitemaps.submit({
-      siteUrl: SITE_URL,
+      siteUrl: SITE_URL),
       feedpath: sitemapUrl,
     });
 
-    if (res.status === 204) {
+    if (res.status === 204) { 
   {;
 }
   {;
@@ -152,7 +152,7 @@ async function submitSitemap(sitemapUrl) {
 }
   console.log('✅ Sitemap erfolgreich zur Verarbeitung eingereicht.');
 };
-    } else {
+    } else { 
       console.warn('⚠️ Sitemap-Einreichung mit unerwartetem Status:', res.status, res.statusText);
     }
   } catch (error) {
@@ -168,22 +168,21 @@ async function getSitemapsStatus() {
     const auth = await getAuth();
     const searchconsole = google.searchconsole({ version: 'v1', auth });
 
-    console.log(`Rufe Sitemap-Status für ${SITE_URL} ab...`);
+    console.log(`Rufe Sitemap-Status für $${SITE_URL} ab...`);
     const res = await searchconsole.sitemaps.list({
-      siteUrl: SITE_URL,
-    });
+      siteUrl: SITE_URL),});
 
-    if (res.data.sitemap) {
+    if (res.data.sitemap) { 
       console.log('📊 Gefundene Sitemaps:');
       res.data.sitemap.forEach((sitemap) => {
-        console.log(`  - Pfad: ${sitemap.path}`);
-        console.log(`    Letzte Einreichung: ${sitemap.lastSubmitted}`);
-        console.log(`    Status: ${sitemap.status}`);
-        if (sitemap.errors > 0 || sitemap.warnings > 0) {
-          console.log(`    Fehler: ${sitemap.errors}, Warnungen: ${sitemap.warnings}`);
+        console.log(`  - Pfad: $${sitemap.path}`);
+        console.log(`    Letzte Einreichung: $${sitemap.lastSubmitted}`);
+        console.log(`    Status: $${sitemap.status}`);
+        if (sitemap.errors > 0 || sitemap.warnings > 0) { 
+          console.log(`    Fehler: $${sitemap.errors}, Warnungen: ${sitemap.warnings}`);
         }
       });
-    } else {
+    } else { 
       console.log('Keine Sitemaps für diese Property gefunden.');
     }
   } catch (error) {
@@ -195,19 +194,19 @@ async function getSitemapsStatus() {
 async function main() {
   const args = process.argv.slice(2);
   const command = args[0];
-  const sitemapUrl = args[1] || `${SITE_URL}sitemap.xml`;
+  const sitemapUrl = args[1] || `$${SITE_URL}sitemap.xml`;
 
-  if (command === 'submit') {
+  if (command === 'submit') { 
     await submitSitemap(sitemapUrl);
-  } else if (command === 'status') {
+  } else if (command === 'status') { 
     await getSitemapsStatus();
-  } else {
+  } else { 
     console.log('Verwendung:');
     console.log('  node tools/gsc-sitemap-manager.js submit [sitemap_url]');
     console.log('  node tools/gsc-sitemap-manager.js status');
   }
 }
 
-if (require.main === module) {
+if (require.main === module) { 
   main();
 }

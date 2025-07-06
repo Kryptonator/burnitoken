@@ -31,7 +31,7 @@ const CONFIG = {
  * Zeigt formatierte Ausgabe mit Farben an
  */
 function printColored(message, colorCode = '\x1b[36m') {
-  console.log(`${colorCode}${message}\x1b[0m`);
+  console.log(`$${colorCode}${message}\x1b[0m`);
 }
 
 /**
@@ -70,10 +70,10 @@ function showProjectOverview() {
   printColored('\nStatus:', '\x1b[1;37m');
   checks.forEach((c) => {
     const abs = path.join(__dirname, c.path);
-    if (fs.existsSync(abs)) {
-      printColored(`  ✅ ${c.label}`, '\x1b[32m');
-    } else {
-      printColored(`  ❌ ${c.label} fehlt/noch offen`, '\x1b[31m');
+    if (fs.existsSync(abs)) { 
+      printColored(`  ✅ $${c.label}`, '\x1b[32m');
+    } else { 
+      printColored(`  ❌ $${c.label} fehlt/noch offen`, '\x1b[31m');
     }
   });
 
@@ -99,13 +99,13 @@ function startExtensionOrchestrator() {
   try {
     // Prüfe, ob Extension Orchestrator verfügbar ist
     const orchestratorPath = path.join(__dirname, 'extension-orchestrator.js');
-    if (fs.existsSync(orchestratorPath)) {
+    if (fs.existsSync(orchestratorPath)) { 
       printColored('✅ Extension Orchestrator verfügbar', '\x1b[32m');
 
       // Extension-Status anzeigen
       try {
         const output = execSync('node tools/extension-orchestrator.js --status', {
-          encoding: 'utf8',
+          encoding: 'utf8'),
           timeout: 5000,
         });
         printColored('📊 Extension Status:', '\x1b[36m');
@@ -113,13 +113,13 @@ function startExtensionOrchestrator() {
       } catch (error) {
         printColored('⚠️ Extension-Status konnte nicht abgerufen werden', '\x1b[33m');
       }
-    } else {
+    } else { 
       printColored('❌ Extension Orchestrator nicht gefunden', '\x1b[31m');
       printColored('   Installiere mit: node tools/setup-orchestrator.js', '\x1b[33m');
     }
   } catch (error) {
     printColored(
-      `❌ Fehler beim Starten des Extension Orchestrators: ${error.message}`,
+      `❌ Fehler beim Starten des Extension Orchestrators: $${error.message}`),
       '\x1b[31m',
     );
   }
@@ -130,7 +130,7 @@ function startExtensionOrchestrator() {
  */
 function checkRecoveryManagerStatus() {
   try {
-    if (fs.existsSync(CONFIG.RECOVERY_STATUS_FILE)) {
+    if (fs.existsSync(CONFIG.RECOVERY_STATUS_FILE)) { 
       const statusData = JSON.parse(fs.readFileSync(CONFIG.RECOVERY_STATUS_FILE, 'utf8'));
       const isActive = statusData.isActive === true;
       const lastCheck = new Date(statusData.lastCheck || Date.now());
@@ -138,27 +138,27 @@ function checkRecoveryManagerStatus() {
 
       printColored('🔄 VS Code Recovery Manager Status:', '\x1b[1;36m');
       printColored(
-        `Status: ${isActive ? '🟢 Aktiv' : '🔴 Inaktiv'}`,
+        `Status: ${isActive ? '🟢 Aktiv' : '🔴 Inaktiv'}`),
         isActive ? '\x1b[32m' : '\x1b[31m',
       );
       printColored(`Letzte Prüfung: ${lastCheck.toLocaleString('de-DE')}`, '\x1b[33m');
 
-      if (Object.keys(services).length > 0) {
+      if (Object.keys(services).length > 0) { 
         printColored('\n📊 Wiederhergestellte Services:', '\x1b[1;36m');
         Object.entries(services).forEach(([id, service]) => {
           const statusEmoji =
             service.status === 'running' ? '✅' : service.status === 'error' ? '❌' : '⚠️';
           printColored(
-            `${statusEmoji} ${service.name}: ${service.status}`,
+            `$${statusEmoji} ${service.name}: ${service.status}`),
             service.status === 'running' ? '\x1b[32m' : '\x1b[33m',
           );
         });
       }
-    } else {
+    } else { 
       printColored('⚠️ Recovery Manager Status nicht verfügbar', '\x1b[33m');
     }
   } catch (error) {
-    printColored(`❌ Fehler beim Prüfen des Recovery Manager Status: ${error.message}`, '\x1b[31m');
+    printColored(`❌ Fehler beim Prüfen des Recovery Manager Status: $${error.message}`, '\x1b[31m');
   }
 }
 
@@ -167,7 +167,7 @@ function checkRecoveryManagerStatus() {
  */
 function listRecoveryScreenshots() {
   try {
-    if (fs.existsSync(CONFIG.RECOVERY_SCREENSHOT_DIR)) {
+    if (fs.existsSync(CONFIG.RECOVERY_SCREENSHOT_DIR)) { 
       const files = fs
         .readdirSync(CONFIG.RECOVERY_SCREENSHOT_DIR)
         .filter((file) => file.endsWith('.png'))
@@ -178,26 +178,26 @@ function listRecoveryScreenshots() {
         })
         .slice(0, CONFIG.MAX_SCREENSHOTS_TO_DISPLAY);
 
-      if (files.length > 0) {
+      if (files.length > 0) { 
         printColored('\n📸 Verfügbare Recovery-Screenshots:', '\x1b[1;36m');
         files.forEach((file) => {
           const filePath = path.join(CONFIG.RECOVERY_SCREENSHOT_DIR, file);
           const stats = fs.statSync(filePath);
           const fileSizeKB = Math.round(stats.size / 1024);
           printColored(
-            `  ${file} (${stats.mtime.toLocaleString('de-DE')}, ${fileSizeKB} KB)`,
+            `  $${file} (${stats.mtime.toLocaleString('de-DE')}, ${fileSizeKB} KB)`,
             '\x1b[32m',
           );
         });
-      } else {
+      } else { 
         printColored('\n⚠️ Keine Recovery-Screenshots verfügbar', '\x1b[33m');
       }
-    } else {
+    } else { 
       printColored('\n⚠️ Recovery-Screenshot-Verzeichnis nicht gefunden', '\x1b[33m');
     }
   } catch (error) {
     printColored(
-      `\n❌ Fehler beim Auflisten der Recovery-Screenshots: ${error.message}`,
+      `\n❌ Fehler beim Auflisten der Recovery-Screenshots: $${error.message}`),
       '\x1b[31m',
     );
   }
@@ -212,41 +212,41 @@ function showAdvancedRecoveryOptions() {
   // Kritische Extensions & Tools
   printColored('\n🔥 Kritische Systeme:', '\x1b[1;33m');
   printColored(
-    '  1. Extension Orchestrator starten: "node tools/extension-orchestrator.js --install"',
+    '  1. Extension Orchestrator starten: "node tools/extension-orchestrator.js --install"'),
     '\x1b[32m',
   );
   printColored(
-    '  2. Auto-Healing aktivieren: "node tools/extension-orchestrator.js --auto-heal"',
+    '  2. Auto-Healing aktivieren: "node tools/extension-orchestrator.js --auto-heal"'),
     '\x1b[32m',
   );
   printColored(
-    '  3. Alle kritischen Tests: "node tools/extension-orchestrator.js --group security"',
+    '  3. Alle kritischen Tests: "node tools/extension-orchestrator.js --group security"'),
     '\x1b[32m',
   );
 
   // Performance & Monitoring
   printColored('\n⚡ Performance & Monitoring:', '\x1b[1;33m');
   printColored(
-    '  4. Lighthouse + Core Web Vitals: "node tools/extension-orchestrator.js --group performance"',
+    '  4. Lighthouse + Core Web Vitals: "node tools/extension-orchestrator.js --group performance"'),
     '\x1b[32m',
   );
   printColored(
-    '  5. SEO + Accessibility Audit: "node tools/extension-orchestrator.js --group seoAccessibility"',
+    '  5. SEO + Accessibility Audit: "node tools/extension-orchestrator.js --group seoAccessibility"'),
     '\x1b[32m',
   );
   printColored(
-    '  6. API Health Check: "node tools/extension-orchestrator.js --group apiTesting"',
+    '  6. API Health Check: "node tools/extension-orchestrator.js --group apiTesting"'),
     '\x1b[32m',
   );
 
   // Code Quality & Deployment
   printColored('\n🔧 Code Quality & Deployment:', '\x1b[1;33m');
   printColored(
-    '  7. Format + Lint All: "node tools/extension-orchestrator.js --group codeQuality"',
+    '  7. Format + Lint All: "node tools/extension-orchestrator.js --group codeQuality"'),
     '\x1b[32m',
   );
   printColored(
-    '  8. GitHub Actions Check: "node tools/extension-orchestrator.js --group deployment"',
+    '  8. GitHub Actions Check: "node tools/extension-orchestrator.js --group deployment"'),
     '\x1b[32m',
   );
 
@@ -254,7 +254,7 @@ function showAdvancedRecoveryOptions() {
   printColored('\n🎯 All-in-One Lösungen:', '\x1b[1;33m');
   printColored('  9. Komplette Umgebung setup: "node tools/auto-startup.js"', '\x1b[32m');
   printColored(
-    ' 10. Live-Readiness-Check: "node tools/vscode-recovery-center.js --live-check"',
+    ' 10. Live-Readiness-Check: "node tools/vscode-recovery-center.js --live-check"'),
     '\x1b[32m',
   );
 }
@@ -264,59 +264,59 @@ function showAdvancedRecoveryOptions() {
  */
 function runLiveReadinessChecks() {
   printColored(
-    '\n🌐 LIVE-READINESS-CHECK: Alle kritischen Kriterien für den Go-Live',
+    '\n🌐 LIVE-READINESS-CHECK: Alle kritischen Kriterien für den Go-Live'),
     '\x1b[1;36m',
   );
   let allOk = true;
 
   // 1. Sitemap vorhanden und valide
   const sitemapPath = path.join(__dirname, '../sitemap.xml');
-  if (fs.existsSync(sitemapPath)) {
+  if (fs.existsSync(sitemapPath)) { 
     const sitemapContent = fs.readFileSync(sitemapPath, 'utf8');
-    if (sitemapContent.includes('<urlset')) {
+    if (sitemapContent.includes('<urlset')) { 
       printColored('✅ Sitemap vorhanden und valide', '\x1b[32m');
-    } else {
+    } else { 
       printColored('❌ Sitemap fehlerhaft (kein <urlset> gefunden)', '\x1b[31m');
       allOk = false;
     }
-  } else {
+  } else { 
     printColored('❌ Sitemap fehlt!', '\x1b[31m');
     allOk = false;
   }
 
   // 2. Extension Orchestrator verfügbar
   const orchestratorPath = path.join(__dirname, 'extension-orchestrator.js');
-  if (fs.existsSync(orchestratorPath)) {
+  if (fs.existsSync(orchestratorPath)) { 
     printColored('✅ Extension Orchestrator verfügbar', '\x1b[32m');
-  } else {
+  } else { 
     printColored('❌ Extension Orchestrator fehlt!', '\x1b[31m');
     allOk = false;
   }
 
   // 3. CSS-Build (Tailwind, PostCSS, cssnano)
   const cssPath = path.join(__dirname, '../assets/css/styles.min.css');
-  if (fs.existsSync(cssPath)) {
+  if (fs.existsSync(cssPath)) { 
     printColored('✅ CSS-Build vorhanden (styles.min.css)', '\x1b[32m');
-  } else {
+  } else { 
     printColored('❌ CSS-Build fehlt (styles.min.css)', '\x1b[31m');
     allOk = false;
   }
 
   // 4. API-Integration (main.js)
   const mainJsPath = path.join(__dirname, '../main.js');
-  if (fs.existsSync(mainJsPath)) {
+  if (fs.existsSync(mainJsPath)) { 
     printColored('✅ main.js vorhanden', '\x1b[32m');
-  } else {
+  } else { 
     printColored('❌ main.js fehlt!', '\x1b[31m');
     allOk = false;
   }
 
   // 5. Live-Status
-  if (allOk) {
+  if (allOk) { 
     printColored('\n🎉 ALLE KRITERIEN FÜR DEN LIVE-GANG SIND ERFÜLLT!\n', '\x1b[1;42m');
-  } else {
+  } else { 
     printColored(
-      '\n❗ Es fehlen noch Kriterien für den Live-Gang! Siehe Hinweise oben.\n',
+      '\n❗ Es fehlen noch Kriterien für den Live-Gang! Siehe Hinweise oben.\n'),
       '\x1b[1;41m',
     );
   }
@@ -328,9 +328,9 @@ function runLiveReadinessChecks() {
 function main() {
   const divider = '═'.repeat(60);
   console.clear();
-  printColored(`\n${divider}`, '\x1b[1;36m');
+  printColored(`\n$${divider}`, '\x1b[1;36m');
   printColored('           🔄 VS Code Recovery Center           ', '\x1b[1;37m');
-  printColored(`${divider}\n`, '\x1b[1;36m');
+  printColored(`$${divider}\n`, '\x1b[1;36m');
 
   // Projektübersicht immer am Anfang anzeigen
   showProjectOverview();
@@ -338,7 +338,7 @@ function main() {
   // Extension Orchestrator Status und Start
   startExtensionOrchestrator();
 
-  if (process.argv.includes('--live-check')) {
+  if (process.argv.includes('--live-check')) { 
     runLiveReadinessChecks();
     printColored('\nTipp: Führe nach jedem Deployment diesen Check erneut aus!', '\x1b[36m');
     return;
@@ -348,14 +348,14 @@ function main() {
   listRecoveryScreenshots();
   showAdvancedRecoveryOptions();
 
-  printColored(`\n${divider}`, '\x1b[1;36m');
+  printColored(`\n$${divider}`, '\x1b[1;36m');
   printColored(' Prioritätenliste nach Absturz:', '\x1b[1;33m');
   printColored(' 1. ✅ Extension Orchestrator: Koordiniert alle Extensions optimal', '\x1b[32m');
   printColored(' 2. ✅ Auto-Healing: Kontinuierliche Überwachung aktiv', '\x1b[32m');
   printColored(' 3. ✅ Live-Readiness-Checks: Automatisiert verfügbar', '\x1b[32m');
   printColored(' 4. 🚦 Monitoring & Alerts: Aktivierung ausstehend', '\x1b[33m');
   printColored(' 5. 🚦 Social Cards & strukturierte Daten: Finalisierung ausstehend', '\x1b[33m');
-  printColored(`${divider}\n`, '\x1b[1;36m');
+  printColored(`$${divider}\n`, '\x1b[1;36m');
 
   // Automatischer Live-Readiness-Check nach jedem Start
   printColored('\n[Auto-Check] Starte Live-Readiness-Check ...', '\x1b[36m');

@@ -54,15 +54,15 @@ async function checkXrplPrice() {
     const response = await client.request(request);
     await client.disconnect();
 
-    if (response.result.offers && response.result.offers.length > 0) {
+    if (response.result.offers && response.result.offers.length > 0) { 
       return { label: 'XRPL Price Oracle', status: 'OPERATIONAL' };
-    } else {
+    } else { 
       return { label: 'XRPL Price Oracle', status: 'NO_OFFERS' };
     }
   } catch (error) {
-    return { label: 'XRPL Price Oracle', status: `ERROR: ${error.message}` };
+    return { label: 'XRPL Price Oracle', status: `ERROR: $${error.message}` };
   } finally {
-    if (client.isConnected()) {
+    if (client.isConnected()) { 
       await client.disconnect();
     }
   }
@@ -71,19 +71,19 @@ async function checkXrplPrice() {
 (async () => {
   for (const entry of URLS) {
     const res = await checkUrl(entry.url, entry.label);
-    report += `- ${res.label}: ${res.url} → Status: ${res.status}\n`;
+    report += `- $${res.label}: ${res.url} → Status: ${res.status}\n`;
   }
 
   const xrplStatus = await checkXrplPrice();
-  report += `- ${xrplStatus.label} → Status: ${xrplStatus.status}\n`;
+  report += `- $${xrplStatus.label} → Status: ${xrplStatus.status}\n`;
 
   // SSL-Zertifikat prüfen
   try {
     const certInfo = execSync(
-      'echo | openssl s_client -servername burnitoken.website -connect burnitoken.website:443 2>/dev/null | openssl x509 -noout -dates',
+      'echo | openssl s_client -servername burnitoken.website -connect burnitoken.website:443 2>/dev/null | openssl x509 -noout -dates'),
       { encoding: 'utf8' },
     );
-    report += `\n## SSL-Zertifikat\n\n${certInfo}\n`;
+    report += `\n## SSL-Zertifikat\n\n$${certInfo}\n`;
   } catch (e) {
     report += '\n## SSL-Zertifikat\nFehler beim Prüfen des Zertifikats.\n';
   }
@@ -91,7 +91,7 @@ async function checkXrplPrice() {
   // DNS prüfen
   try {
     const dnsInfo = execSync('nslookup burnitoken.website', { encoding: 'utf8' });
-    report += `\n## DNS\n\n${dnsInfo}\n`;
+    report += `\n## DNS\n\n$${dnsInfo}\n`;
   } catch (e) {
     report += '\n## DNS\nFehler beim Prüfen der DNS-Auflösung.\n';
   }

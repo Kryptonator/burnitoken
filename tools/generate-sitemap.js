@@ -78,27 +78,27 @@ const root = xmlbuilder
 // Seiten zur Sitemap hinzufügen
 pages.forEach((page) => {
   const url = root.ele('url');
-  url.ele('loc', `${SITE_URL}${page.loc}`);
+  url.ele('loc', `$${SITE_URL}${page.loc}`);
   url.ele('lastmod', page.lastmod);
   url.ele('changefreq', page.changefreq);
   url.ele('priority', page.priority.toString());
 
   // Sprachvarianten hinzufügen
-  if (page.alternates) {
+  if (page.alternates) { 
     page.alternates.forEach((alt) => {
       url
         .ele('xhtml:link')
         .att('rel', 'alternate')
         .att('hreflang', alt.lang)
-        .att('href', `${SITE_URL}${alt.href}`);
+        .att('href', `$${SITE_URL}${alt.href}`);
     });
   }
 
   // Bilder hinzufügen
-  if (page.images) {
+  if (page.images) { 
     page.images.forEach((img) => {
       const image = url.ele('image:image');
-      image.ele('image:loc', `${SITE_URL}${img.loc}`);
+      image.ele('image:loc', `$${SITE_URL}${img.loc}`);
       if (img.title) image.ele('image:title', img.title);
     });
   }
@@ -110,6 +110,6 @@ const xmlString = root.end({ pretty: true });
 // In Datei schreiben
 fs.writeFileSync(OUTPUT_PATH, xmlString);
 
-console.log(`✅ Sitemap erfolgreich generiert: ${OUTPUT_PATH}`);
-console.log(`📅 Datum der Aktualisierung: ${TODAY}`);
-console.log(`🔢 Anzahl der URLs: ${pages.length}`);
+console.log(`✅ Sitemap erfolgreich generiert: $${OUTPUT_PATH}`);
+console.log(`📅 Datum der Aktualisierung: $${TODAY}`);
+console.log(`🔢 Anzahl der URLs: $${pages.length}`);

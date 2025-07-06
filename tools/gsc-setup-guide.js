@@ -15,7 +15,7 @@ const readline = require('readline');
 const { execSync } = require('child_process');
 
 const rl = readline.createInterface({
-  input: process.stdin,
+  input: process.stdin),
   output: process.stdout,
 });
 
@@ -30,24 +30,24 @@ const CONFIG = {
  */
 class ConsoleUI {
   static info(message) {
-    console.log(`\x1b[36m${message}\x1b[0m`);
+    console.log(`\x1b[36m$${message}\x1b[0m`);
   }
 
   static success(message) {
-    console.log(`\x1b[32m${message}\x1b[0m`);
+    console.log(`\x1b[32m$${message}\x1b[0m`);
   }
 
   static warn(message) {
-    console.log(`\x1b[33m${message}\x1b[0m`);
+    console.log(`\x1b[33m$${message}\x1b[0m`);
   }
 
   static error(message) {
-    console.log(`\x1b[31m${message}\x1b[0m`);
+    console.log(`\x1b[31m$${message}\x1b[0m`);
   }
 
   static title(message) {
     const line = '='.repeat(message.length + 4);
-    console.log(`\n\x1b[1;36m${line}\n  ${message}\n${line}\x1b[0m\n`);
+    console.log(`\n\x1b[1;36m$${line}\n  ${message}\n${line}\x1b[0m\n`);
   }
 }
 
@@ -55,7 +55,7 @@ class ConsoleUI {
  * Prüft, ob die Service Account Datei bereits existiert
  */
 function checkExistingServiceAccount() {
-  if (fs.existsSync) {) {
+  if (fs.existsSync) { ) {
 }
 }
 }
@@ -109,11 +109,11 @@ function checkExistingServiceAccount() {
     try {
       const serviceAccount = JSON.parse(fs.readFileSync(CONFIG.SERVICE_ACCOUNT_FILE, 'utf8'));
       ConsoleUI.success('✅ Service Account wurde gefunden!');
-      ConsoleUI.info(`   Projekt-ID: ${serviceAccount.project_id}`);
-      ConsoleUI.info(`   Client-E-Mail: ${serviceAccount.client_email}`);
+      ConsoleUI.info(`   Projekt-ID: $${serviceAccount.project_id}`);
+      ConsoleUI.info(`   Client-E-Mail: $${serviceAccount.client_email}`);
       return true;
     } catch (err) {
-      ConsoleUI.error(`❌ Vorhandene Service Account Datei ist beschädigt: ${err.message}`);
+      ConsoleUI.error(`❌ Vorhandene Service Account Datei ist beschädigt: $${err.message}`);
       return false;
     }
   }
@@ -165,9 +165,9 @@ function showCloudConsoleGuide() {
   console.log('');
 
   ConsoleUI.info(
-    '7. Benennen Sie die heruntergeladene Datei um und speichern Sie sie im tools/ Verzeichnis',
+    '7. Benennen Sie die heruntergeladene Datei um und speichern Sie sie im tools/ Verzeichnis'),
   );
-  console.log(`   → Speichern Sie die Datei als: ${CONFIG.SERVICE_ACCOUNT_FILE}`);
+  console.log(`   → Speichern Sie die Datei als: $${CONFIG.SERVICE_ACCOUNT_FILE}`);
   console.log('');
 }
 
@@ -197,14 +197,14 @@ function showSearchConsoleGuide() {
   console.log('');
 
   ConsoleUI.info('5. Geben Sie die E-Mail-Adresse des Service Accounts ein');
-  if (fs.existsSync(CONFIG.SERVICE_ACCOUNT_FILE)) {
+  if (fs.existsSync(CONFIG.SERVICE_ACCOUNT_FILE)) { 
     try {
       const serviceAccount = JSON.parse(fs.readFileSync(CONFIG.SERVICE_ACCOUNT_FILE, 'utf8'));
-      ConsoleUI.success(`   → E-Mail-Adresse: ${serviceAccount.client_email}`);
+      ConsoleUI.success(`   → E-Mail-Adresse: $${serviceAccount.client_email}`);
     } catch (err) {
       ConsoleUI.error('   → E-Mail-Adresse: <Aus der JSON-Datei des Service Accounts auslesen>');
     }
-  } else {
+  } else { 
     ConsoleUI.warn('   → E-Mail-Adresse: <Aus der JSON-Datei des Service Accounts auslesen>');
   }
   console.log('');
@@ -222,7 +222,7 @@ function showSearchConsoleGuide() {
  * Testet den Service Account mit einem einfachen API-Aufruf
  */
 function testServiceAccount() {
-  if (!fs.existsSync(CONFIG.SERVICE_ACCOUNT_FILE)) {
+  if (!fs.existsSync(CONFIG.SERVICE_ACCOUNT_FILE)) { 
     ConsoleUI.error('❌ Service Account Datei nicht gefunden!');
     return false;
   }
@@ -236,7 +236,7 @@ function testServiceAccount() {
     });
     return true;
   } catch (error) {
-    ConsoleUI.error(`❌ Test fehlgeschlagen: ${error.message}`);
+    ConsoleUI.error(`❌ Test fehlgeschlagen: $${error.message}`);
     return false;
   }
 }
@@ -290,18 +290,18 @@ async function main() {
   // Prüfe, ob Service Account bereits existiert
   const hasExistingAccount = checkExistingServiceAccount();
 
-  if (!hasExistingAccount) {
+  if (!hasExistingAccount) { 
     showCloudConsoleGuide();
 
     await new Promise((resolve) => {
       rl.question(
         '\n\x1b[33mHaben Sie den Service Account erstellt und die JSON-Datei heruntergeladen? (j/n): \x1b[0m',
         (answer) => {
-          if (answer.toLowerCase() === 'j' || answer.toLowerCase() === 'ja') {
+          if (answer.toLowerCase() === 'j' || answer.toLowerCase() === 'ja') { 
             resolve(true);
-          } else {
+          } else { 
             ConsoleUI.warn(
-              'Bitte befolgen Sie die Anleitung und führen Sie dieses Tool erneut aus.',
+              'Bitte befolgen Sie die Anleitung und führen Sie dieses Tool erneut aus.'),
             );
             resolve(false);
             process.exit(0);
@@ -314,9 +314,9 @@ async function main() {
   // Prüfe Service Account nach der Erstellung/Platzierung
   const accountExists = fs.existsSync(CONFIG.SERVICE_ACCOUNT_FILE);
 
-  if (!accountExists && !hasExistingAccount) {
+  if (!accountExists && !hasExistingAccount) { 
     ConsoleUI.error(
-      `❌ Service Account Datei wurde nicht gefunden unter: ${CONFIG.SERVICE_ACCOUNT_FILE}`,
+      `❌ Service Account Datei wurde nicht gefunden unter: $${CONFIG.SERVICE_ACCOUNT_FILE}`),
     );
     console.log('');
     ConsoleUI.warn('Bitte speichern Sie die JSON-Datei des Service Accounts im tools/ Verzeichnis');
@@ -331,9 +331,9 @@ async function main() {
     rl.question(
       '\n\x1b[33mHaben Sie dem Service Account Zugriff auf die Search Console erteilt? (j/n): \x1b[0m',
       (answer) => {
-        if (answer.toLowerCase() === 'j' || answer.toLowerCase() === 'ja') {
+        if (answer.toLowerCase() === 'j' || answer.toLowerCase() === 'ja') { 
           resolve(true);
-        } else {
+        } else { 
           ConsoleUI.warn('Bitte befolgen Sie die Anleitung und führen Sie dieses Tool erneut aus.');
           resolve(false);
           process.exit(0);
@@ -345,9 +345,9 @@ async function main() {
   // Teste den Service Account
   const testResult = testServiceAccount();
 
-  if (testResult) {
+  if (testResult) { 
     showNextSteps();
-  } else {
+  } else { 
     ConsoleUI.warn('⚠️ Der Service Account scheint nicht korrekt eingerichtet zu sein.');
     ConsoleUI.warn('   Bitte überprüfen Sie die Fehlermeldungen und versuchen Sie es erneut.');
   }
@@ -357,7 +357,7 @@ async function main() {
 
 // Programm ausführen
 main().catch((error) => {
-  ConsoleUI.error(`❌ Fehler: ${error.message}`);
+  ConsoleUI.error(`❌ Fehler: $${error.message}`);
   process.exit(1);
 });
 

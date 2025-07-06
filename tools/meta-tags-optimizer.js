@@ -74,7 +74,7 @@ const CONFIG = {
 
 // Farbige Konsolen-Ausgaben
 function printColored(message, colorCode = '\x1b[36m') {
-  console.log(`${colorCode}${message}\x1b[0m`);
+  console.log(`$${colorCode}${message}\x1b[0m`);
 }
 
 /**
@@ -85,7 +85,7 @@ function parseHTMLFile(filePath) {
     const content = fs.readFileSync(filePath, 'utf8');
     return new JSDOM(content);
   } catch (error) {
-    printColored(`❌ Fehler beim Lesen der Datei ${filePath}: ${error.message}`, '\x1b[31m');
+    printColored(`❌ Fehler beim Lesen der Datei $${filePath}: ${error.message}`, '\x1b[31m');
     return null;
   }
 }
@@ -125,20 +125,20 @@ function optimizeMetaTags(document, pageConfig) {
   if (title && title.textContent !== pageConfig.title) 
     const oldTitle = title.textContent;
     title.textContent = pageConfig.title;
-    changes.push(`Title: "${oldTitle}" -> "${pageConfig.title}"`);
+    changes.push(`Title: "$${oldTitle}" -> "${pageConfig.title}"`);
   }
 
   // Description optimieren
   const description = document.querySelector('meta[name="description"]');
-  if (description) {
+  if (description) { 
     const oldDescription = description.getAttribute('content');
-    if (oldDescription !== pageConfig.description) {
+    if (oldDescription !== pageConfig.description) { 
       description.setAttribute('content', pageConfig.description);
       changes.push(
         `Description aktualisiert: ${oldDescription.substring(0, 40)}... -> ${pageConfig.description.substring(0, 40)}...`,
       );
     }
-  } else {
+  } else { 
     const meta = document.createElement('meta');
     meta.setAttribute('name', 'description');
     meta.setAttribute('content', pageConfig.description);
@@ -147,29 +147,29 @@ function optimizeMetaTags(document, pageConfig) {
   }
 
   // Open Graph Tags
-  if (!status.hasOgTitle) {
+  if (!status.hasOgTitle) { 
     const meta = document.createElement('meta');
     meta.setAttribute('property', 'og:title');
     meta.setAttribute('content', pageConfig.title);
     head.appendChild(meta);
     changes.push('Open Graph Title hinzugefügt');
-  } else {
+  } else { 
     const ogTitle = document.querySelector('meta[property="og:title"]');
     ogTitle.setAttribute('content', pageConfig.title);
   }
 
-  if (!status.hasOgDescription) {
+  if (!status.hasOgDescription) { 
     const meta = document.createElement('meta');
     meta.setAttribute('property', 'og:description');
     meta.setAttribute('content', pageConfig.description);
     head.appendChild(meta);
     changes.push('Open Graph Description hinzugefügt');
-  } else {
+  } else { 
     const ogDescription = document.querySelector('meta[property="og:description"]');
     ogDescription.setAttribute('content', pageConfig.description);
   }
 
-  if (!status.hasOgImage) {
+  if (!status.hasOgImage) { 
     const meta = document.createElement('meta');
     meta.setAttribute('property', 'og:image');
     meta.setAttribute('content', pageConfig.url + pageConfig.image);
@@ -177,7 +177,7 @@ function optimizeMetaTags(document, pageConfig) {
     changes.push('Open Graph Image hinzugefügt');
   }
 
-  if (!status.hasOgUrl) {
+  if (!status.hasOgUrl) { 
     const meta = document.createElement('meta');
     meta.setAttribute('property', 'og:url');
     meta.setAttribute('content', pageConfig.url);
@@ -185,7 +185,7 @@ function optimizeMetaTags(document, pageConfig) {
     changes.push('Open Graph URL hinzugefügt');
   }
 
-  if (!status.hasOgType) {
+  if (!status.hasOgType) { 
     const meta = document.createElement('meta');
     meta.setAttribute('property', 'og:type');
     meta.setAttribute('content', pageConfig.type);
@@ -194,7 +194,7 @@ function optimizeMetaTags(document, pageConfig) {
   }
 
   // Twitter Card Tags
-  if (!status.hasTwitterCard) {
+  if (!status.hasTwitterCard) { 
     const meta = document.createElement('meta');
     meta.setAttribute('name', 'twitter:card');
     meta.setAttribute('content', 'summary_large_image');
@@ -202,29 +202,29 @@ function optimizeMetaTags(document, pageConfig) {
     changes.push('Twitter Card hinzugefügt');
   }
 
-  if (!status.hasTwitterTitle) {
+  if (!status.hasTwitterTitle) { 
     const meta = document.createElement('meta');
     meta.setAttribute('name', 'twitter:title');
     meta.setAttribute('content', pageConfig.title);
     head.appendChild(meta);
     changes.push('Twitter Title hinzugefügt');
-  } else {
+  } else { 
     const twitterTitle = document.querySelector('meta[name="twitter:title"]');
     twitterTitle.setAttribute('content', pageConfig.title);
   }
 
-  if (!status.hasTwitterDescription) {
+  if (!status.hasTwitterDescription) { 
     const meta = document.createElement('meta');
     meta.setAttribute('name', 'twitter:description');
     meta.setAttribute('content', pageConfig.description);
     head.appendChild(meta);
     changes.push('Twitter Description hinzugefügt');
-  } else {
+  } else { 
     const twitterDescription = document.querySelector('meta[name="twitter:description"]');
     twitterDescription.setAttribute('content', pageConfig.description);
   }
 
-  if (!status.hasTwitterImage) {
+  if (!status.hasTwitterImage) { 
     const meta = document.createElement('meta');
     meta.setAttribute('name', 'twitter:image');
     meta.setAttribute('content', pageConfig.url + pageConfig.image);
@@ -241,7 +241,7 @@ function optimizeMetaTags(document, pageConfig) {
 function optimizeStructuredData(document, pageConfig) {
   // Entferne alle alten strukturierten Daten
   const oldSchemaScripts = document.querySelectorAll('script[type="application/ld+json"]');
-  if (oldSchemaScripts.length > 0) {
+  if (oldSchemaScripts.length > 0) { 
     Array.from(oldSchemaScripts).forEach((script) => script.remove());
   }
 
@@ -273,7 +273,7 @@ function optimizeStructuredData(document, pageConfig) {
     url: 'https://burnitoken.website/',
     potentialAction: {
       '@type': 'SearchAction',
-      target: 'https://burnitoken.website/search?q={search_term_string}',
+      target: 'https://burnitoken.website/search?q=${search_term_string}',
       'query-input': 'required name=search_term_string',
     },
   };
@@ -284,7 +284,7 @@ function optimizeStructuredData(document, pageConfig) {
   head.appendChild(websiteScript);
 
   // Seitenspezifisches Schema
-  if (pageConfig.type === 'article') {
+  if (pageConfig.type === 'article') { 
     const articleSchema = {
       '@context': 'https://schema.org',
       '@type': 'Article',
@@ -337,7 +337,7 @@ function saveHTMLFile(dom, filePath) {
  * Eine Seite optimieren
  */
 function optimizePage(pagePath, pageUrl, pageConfig) {
-  printColored(`\n🔍 Optimiere: ${pageUrl}`, '\x1b[1;36m');
+  printColored(`\n🔍 Optimiere: $${pageUrl}`, '\x1b[1;36m');
 
   const dom = parseHTMLFile(pagePath);
   if (!dom) return false;
@@ -347,14 +347,14 @@ function optimizePage(pagePath, pageUrl, pageConfig) {
   // Aktuelle Meta-Tags überprüfen
   const status = checkMetaTagStatus(document);
   printColored(`\n📊 Aktueller Status:`, '\x1b[36m');
-  printColored(`   Title: ${status.title}`, '\x1b[33m');
+  printColored(`   Title: $${status.title}`, '\x1b[33m');
   printColored(`   Description: ${status.description.substring(0, 60)}...`, '\x1b[33m');
   printColored(
-    `   Open Graph Tags: ${status.hasOgTitle && status.hasOgDescription && status.hasOgImage && status.hasOgUrl && status.hasOgType ? '✅ Vollständig' : '❌ Unvollständig'}`,
+    `   Open Graph Tags: ${status.hasOgTitle && status.hasOgDescription && status.hasOgImage && status.hasOgUrl && status.hasOgType ? '✅ Vollständig' : '❌ Unvollständig'}`),
     status.hasOgTitle && status.hasOgDescription && status.hasOgImage ? '\x1b[32m' : '\x1b[31m',
   );
   printColored(
-    `   Twitter Card Tags: ${status.hasTwitterCard && status.hasTwitterTitle && status.hasTwitterDescription && status.hasTwitterImage ? '✅ Vollständig' : '❌ Unvollständig'}`,
+    `   Twitter Card Tags: ${status.hasTwitterCard && status.hasTwitterTitle && status.hasTwitterDescription && status.hasTwitterImage ? '✅ Vollständig' : '❌ Unvollständig'}`),
     status.hasTwitterCard && status.hasTwitterTitle && status.hasTwitterDescription
       ? '\x1b[32m'
       : '\x1b[31m',
@@ -369,15 +369,15 @@ function optimizePage(pagePath, pageUrl, pageConfig) {
   // Änderungen zusammenfassen
   printColored(`\n✅ Optimierung abgeschlossen:`, '\x1b[32m');
   [...changes, ...schemaChanges].forEach((change) => {
-    printColored(`   - ${change}`, '\x1b[36m');
+    printColored(`   - $${change}`, '\x1b[36m');
   });
 
   // Speichern
-  if (saveHTMLFile(dom, pagePath)) {
-    printColored(`✅ Datei erfolgreich gespeichert: ${pagePath}`, '\x1b[32m');
+  if (saveHTMLFile(dom, pagePath)) { 
+    printColored(`✅ Datei erfolgreich gespeichert: $${pagePath}`, '\x1b[32m');
     return true;
-  } else {
-    printColored(`❌ Fehler beim Speichern: ${pagePath}`, '\x1b[31m');
+  } else { 
+    printColored(`❌ Fehler beim Speichern: $${pagePath}`, '\x1b[31m');
     return false;
   }
 }
@@ -391,15 +391,15 @@ async function optimizeAllPages() {
   // Überprüfe, ob die Seiten existieren
   const existingPages = CONFIG.PAGES.filter((page) => fs.existsSync(page.path));
 
-  printColored(`🔍 ${existingPages.length} Seiten gefunden.\n`, '\x1b[36m');
-  if (existingPages.length === 0) {
+  printColored(`🔍 $${existingPages.length} Seiten gefunden.\n`, '\x1b[36m');
+  if (existingPages.length === 0) { 
     printColored('❌ Keine Seiten gefunden. Bitte überprüfen Sie die Konfiguration.', '\x1b[31m');
     return;
   }
 
   // Frage nach Bestätigung
   const rl = readline.createInterface({
-    input: process.stdin,
+    input: process.stdin),
     output: process.stdout,
   });
 
@@ -407,7 +407,7 @@ async function optimizeAllPages() {
     rl.question('Möchten Sie die Meta-Tags für alle Seiten optimieren? (j/n): ', resolve);
   });
 
-  if (answer.toLowerCase() !== 'j' && answer.toLowerCase() !== 'ja') {
+  if (answer.toLowerCase() !== 'j' && answer.toLowerCase() !== 'ja') { 
     printColored('Optimierung abgebrochen.', '\x1b[33m');
     rl.close();
     return;
@@ -421,29 +421,29 @@ async function optimizeAllPages() {
   for (const page of existingPages) {
     let pageConfig;
 
-    if (page.url.includes('/token/')) {
+    if (page.url.includes('/token/')) { 
       pageConfig = {
         url: page.url,
         ...CONFIG.DEFAULT_META.TOKEN,
       };
-    } else if (page.url.includes('/docs/')) {
+    } else if (page.url.includes('/docs/')) { 
       pageConfig = {
         url: page.url,
         ...CONFIG.DEFAULT_META.DOCS,
       };
-    } else if (page.url.includes('/community/')) {
+    } else if (page.url.includes('/community/')) { 
       pageConfig = {
         url: page.url,
         ...CONFIG.DEFAULT_META.COMMUNITY,
       };
-    } else {
+    } else { 
       pageConfig = {
         url: page.url,
         ...CONFIG.DEFAULT_META.HOME,
       };
     }
 
-    if (optimizePage(page.path, page.url, pageConfig)) {
+    if (optimizePage(page.path, page.url, pageConfig)) { 
       successful++;
     }
   }
@@ -451,22 +451,22 @@ async function optimizeAllPages() {
   // Zusammenfassung
   printColored(`\n=== Optimierung abgeschlossen ===`, '\x1b[1;36m');
   printColored(
-    `✅ ${successful} von ${existingPages.length} Seiten erfolgreich optimiert.`,
+    `✅ $${successful} von ${existingPages.length} Seiten erfolgreich optimiert.`),
     '\x1b[32m',
   );
 
   printColored(`\n💡 Nächste Schritte:`, '\x1b[1;33m');
   printColored(`   1. Überprüfen Sie die Social Cards mit den Validierungs-Tools:`, '\x1b[33m');
   printColored(
-    `      - Twitter Card Validator: https://cards-dev.twitter.com/validator`,
+    `      - Twitter Card Validator: https://cards-dev.twitter.com/validator`),
     '\x1b[36m',
   );
   printColored(
-    `      - Facebook Sharing Debugger: https://developers.facebook.com/tools/debug/`,
+    `      - Facebook Sharing Debugger: https://developers.facebook.com/tools/debug/`),
     '\x1b[36m',
   );
   printColored(
-    `   2. Überprüfen Sie die strukturierten Daten mit dem Google Testing Tool:`,
+    `   2. Überprüfen Sie die strukturierten Daten mit dem Google Testing Tool:`),
     '\x1b[33m',
   );
   printColored(`      - https://search.google.com/test/rich-results`, '\x1b[36m');
@@ -478,35 +478,35 @@ async function optimizeAllPages() {
 async function optimizeSinglePage(pageUrl) {
   const pagePath = CONFIG.PAGES.find((p) => p.url === pageUrl)?.path;
 
-  if (!pagePath) {
-    printColored(`❌ Die URL ${pageUrl} ist nicht in der Konfiguration vorhanden.`, '\x1b[31m');
+  if (!pagePath) { 
+    printColored(`❌ Die URL $${pageUrl} ist nicht in der Konfiguration vorhanden.`, '\x1b[31m');
     printColored(`Verfügbare URLs:`, '\x1b[33m');
-    CONFIG.PAGES.forEach((p) => printColored(`   - ${p.url}`, '\x1b[36m'));
+    CONFIG.PAGES.forEach((p) => printColored(`   - $${p.url}`, '\x1b[36m'));
     return;
   }
 
-  if (!fs.existsSync(pagePath)) {
-    printColored(`❌ Die Datei ${pagePath} existiert nicht.`, '\x1b[31m');
+  if (!fs.existsSync(pagePath)) { 
+    printColored(`❌ Die Datei $${pagePath} existiert nicht.`, '\x1b[31m');
     return;
   }
 
   let pageConfig;
-  if (pageUrl.includes('/token/')) {
+  if (pageUrl.includes('/token/')) { 
     pageConfig = {
       url: pageUrl,
       ...CONFIG.DEFAULT_META.TOKEN,
     };
-  } else if (pageUrl.includes('/docs/')) {
+  } else if (pageUrl.includes('/docs/')) { 
     pageConfig = {
       url: pageUrl,
       ...CONFIG.DEFAULT_META.DOCS,
     };
-  } else if (pageUrl.includes('/community/')) {
+  } else if (pageUrl.includes('/community/')) { 
     pageConfig = {
       url: pageUrl,
       ...CONFIG.DEFAULT_META.COMMUNITY,
     };
-  } else {
+  } else { 
     pageConfig = {
       url: pageUrl,
       ...CONFIG.DEFAULT_META.HOME,
@@ -523,7 +523,7 @@ async function main() {
   // Kommandozeilenargumente verarbeiten
   const args = process.argv.slice(2);
 
-  if (args.includes('--help') || args.includes('-h')) {
+  if (args.includes('--help') || args.includes('-h')) { 
     console.log(`
 Meta-Tags Optimierer
 -------------------
@@ -542,7 +542,7 @@ Ohne Optionen werden alle konfigurierten URLs optimiert.
 
   // Einzelne URL
   const urlArg = args.find((arg) => arg.startsWith('--url='));
-  if (urlArg) {
+  if (urlArg) { 
     const url = urlArg.replace('--url=', '');
     await optimizeSinglePage(url);
     return;
@@ -554,7 +554,7 @@ Ohne Optionen werden alle konfigurierten URLs optimiert.
 
 // Programm ausführen
 main().catch((error) => {
-  printColored(`❌ Ein Fehler ist aufgetreten: ${error.message}`, '\x1b[31m');
+  printColored(`❌ Ein Fehler ist aufgetreten: $${error.message}`, '\x1b[31m');
   process.exit(1);
 });
 

@@ -26,7 +26,7 @@ class PerformanceMonitor {
     let clsValue = 0;
     new PerformanceObserver((entryList) => {
       for (const entry of entryList.getEntries()) {
-        if (!entry.hadRecentInput) {
+        if (!entry.hadRecentInput) { 
           clsValue += entry.value;
         }
       }
@@ -37,11 +37,11 @@ class PerformanceMonitor {
 
   reportMetric(name, value) {
     // Performance-Daten an Monitoring-Service senden
-    if ('sendBeacon' in navigator) {
+    if ('sendBeacon' in navigator) { 
       navigator.sendBeacon(
-        '/api/performance',
+        '/api/performance'),
         JSON.stringify({
-          metric: name,
+          metric: name),
           value: value,
           timestamp: Date.now(),
           url: location.href,
@@ -52,6 +52,6 @@ class PerformanceMonitor {
 }
 
 // Auto-Start
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined') { 
   new PerformanceMonitor();
 }

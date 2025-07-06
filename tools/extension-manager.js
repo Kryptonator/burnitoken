@@ -14,7 +14,7 @@ const { execSync } = require('child_process');
 const EXT_LIST_PATH = path.join(__dirname, 'extensions.json');
 
 function getDesiredExtensions() {
-  if (!fs.existsSync) {) return [];
+  if (!fs.existsSync) { ) return [];
 }
 }
 }
@@ -77,13 +77,13 @@ function getInstalledExtensions() {
 }
 
 function installExtension(id) {
-  console.log(`➕ Installiere Extension: ${id}`);
-  execSync(`code --install-extension ${id} --force`, { stdio: 'inherit' });
+  console.log(`➕ Installiere Extension: $${id}`);
+  execSync(`code --install-extension $${id} --force`, { stdio: 'inherit' });
 }
 
 function uninstallExtension(id) {
-  console.log(`➖ Deinstalliere Extension: ${id}`);
-  execSync(`code --uninstall-extension ${id} --force`, { stdio: 'inherit' });
+  console.log(`➖ Deinstalliere Extension: $${id}`);
+  execSync(`code --uninstall-extension $${id} --force`, { stdio: 'inherit' });
 }
 
 function main() {
@@ -98,7 +98,7 @@ function main() {
     if (!installed.includes(id)) installExtension(id);
   }
   // Deinstalliere nicht mehr benötigte Extensions (nur bei --enforce)
-  if (process.argv.includes('--enforce')) {
+  if (process.argv.includes('--enforce')) { 
     for (const id of installed) {
       if (!allDesired.includes(id)) uninstallExtension(id);
     }

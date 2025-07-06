@@ -29,7 +29,7 @@ const CONFIG = {
 };
 
 // Stelle sicher, dass das Screenshot-Verzeichnis existiert
-if (!fs.existsSync(CONFIG.screenshotDir)) {
+if (!fs.existsSync(CONFIG.screenshotDir)) { 
   fs.mkdirSync(CONFIG.screenshotDir, { recursive: true });
 }
 
@@ -40,7 +40,7 @@ if (!fs.existsSync(CONFIG.screenshotDir)) {
   const reset = '\x1b[0m';
   const color = colorCodes[type] || colorCodes.INFO;
   const timestamp = new Date().toLocaleTimeString();
-  console.log(`${color}[${timestamp} ${type}]${reset} ${message}`);
+  console.log(`$${color}[${timestamp} ${type}]${reset} ${message}`);
 }
 
 /**
@@ -54,7 +54,7 @@ function takeScreenshot() {
       .replace(/,/g, '')
       .replace(/\s/g, '_');
 
-    const filename = `vscode_recovery_${timestamp}.png`;
+    const filename = `vscode_recovery_$${timestamp}.png`;
     const filePath = path.join(CONFIG.screenshotDir, filename);
 
     // PowerShell-Befehl zum Erstellen eines Screenshots
@@ -75,14 +75,14 @@ function takeScreenshot() {
       stdio: 'ignore',
     });
 
-    log(`Screenshot gespeichert: ${filename}`, 'SUCCESS');
+    log(`Screenshot gespeichert: $${filename}`, 'SUCCESS');
 
     // Alte Screenshots aufräumen
     cleanupOldScreenshots();
 
     return filePath;
   } catch (error) {
-    log(`Fehler beim Erstellen des Screenshots: ${error.message}`, 'ERROR');
+    log(`Fehler beim Erstellen des Screenshots: $${error.message}`, 'ERROR');
     return null;
   }
 }
@@ -113,10 +113,10 @@ function cleanupOldScreenshots() {
 
     // 1. Lösche zu alte Screenshots
     const tooOldFiles = files.filter((file) => file.age > maxAgeMs);
-    if (tooOldFiles.length > 0) {
+    if (tooOldFiles.length > 0) { 
       tooOldFiles.forEach((file) => {
         fs.unlinkSync(file.path);
-        log(`Zu alter Screenshot gelöscht (>${CONFIG.maxAgeMinutes} Min.): ${file.name}`, 'DEBUG');
+        log(`Zu alter Screenshot gelöscht (>$${CONFIG.maxAgeMinutes} Min.): ${file.name}`, 'DEBUG');
       });
     }
 
@@ -124,12 +124,12 @@ function cleanupOldScreenshots() {
     const remainingFiles = files.filter((file) => file.age <= maxAgeMs);
 
     // 2. Lösche überzählige Screenshots, wenn mehr als maxScreenshotsToKeep vorhanden sind
-    if (remainingFiles.length > CONFIG.maxScreenshotsToKeep) {
+    if (remainingFiles.length > CONFIG.maxScreenshotsToKeep) { 
       const filesToDelete = remainingFiles.slice(CONFIG.maxScreenshotsToKeep);
       filesToDelete.forEach((file) => {
         fs.unlinkSync(file.path);
         log(
-          `Screenshot gelöscht (über Limit von ${CONFIG.maxScreenshotsToKeep}): ${file.name}`,
+          `Screenshot gelöscht (über Limit von $${CONFIG.maxScreenshotsToKeep}): ${file.name}`,
           'DEBUG',
         );
       });
@@ -150,9 +150,9 @@ function cleanupOldScreenshots() {
     const totalSizeInBytes = updatedFiles.reduce((total, file) => total + file.size, 0);
     const totalSizeInGB = totalSizeInBytes / (1024 * 1024 * 1024);
 
-    if (totalSizeInGB > CONFIG.maxStorageGB) {
+    if (totalSizeInGB > CONFIG.maxStorageGB) { 
       log(
-        `Speicherplatzgrenze erreicht (${totalSizeInGB.toFixed(2)} GB / ${CONFIG.maxStorageGB} GB)`,
+        `Speicherplatzgrenze erreicht (${totalSizeInGB.toFixed(2)} GB / $${CONFIG.maxStorageGB} GB)`,
         'WARNING',
       );
 
@@ -179,9 +179,9 @@ function cleanupOldScreenshots() {
       }, 0) /
       (1024 * 1024);
 
-    log(`Aktueller Status: ${finalFiles.length} Screenshots, ${finalSize.toFixed(2)} MB`, 'DEBUG');
+    log(`Aktueller Status: $${finalFiles.length} Screenshots, ${finalSize.toFixed(2)} MB`, 'DEBUG');
   } catch (error) {
-    log(`Fehler beim Aufräumen alter Screenshots: ${error.message}`, 'ERROR');
+    log(`Fehler beim Aufräumen alter Screenshots: $${error.message}`, 'ERROR');
   }
 }
 
@@ -200,20 +200,20 @@ function parseCommandLineArguments() {
 
   // Interval in Sekunden auslesen (--interval=X oder -i=X)
   const intervalArg = args.find((arg) => arg.startsWith('--interval=') || arg.startsWith('-i='));
-  if (intervalArg) {
+  if (intervalArg) { 
     const intervalValue = intervalArg.split('=')[1];
-    if (!isNaN(intervalValue)) {
+    if (!isNaN(intervalValue)) { 
       options.intervalSeconds = parseInt(intervalValue);
     }
   }
 
   // High-Frequency Mode (1 Sekunde)
-  if (options.highFrequency) {
+  if (options.highFrequency) { 
     options.intervalSeconds = 1;
   }
 
   // Low-Frequency Mode (30 Sekunden)
-  if (options.lowFrequency) {
+  if (options.lowFrequency) { 
     options.intervalSeconds = 30;
   }
 
@@ -224,23 +224,23 @@ function parseCommandLineArguments() {
  * Startet das Hauptprogramm
  */
 function main(options = {}) {
-  if (!options.silent) {
+  if (!options.silent) { 
     log(`Auto Screenshot Manager gestartet`, 'INFO');
     log(
-      `Screenshots werden alle ${options.intervalSeconds || CONFIG.screenshotIntervalSeconds} Sekunden erstellt`,
+      `Screenshots werden alle ${options.intervalSeconds || CONFIG.screenshotIntervalSeconds} Sekunden erstellt`),
       'INFO',
     );
-    log(`Maximale Anzahl Screenshots: ${CONFIG.maxScreenshotsToKeep}`, 'INFO');
-    log(`Maximaler Speicherplatz: ${CONFIG.maxStorageGB} GB`, 'INFO');
-    log(`Maximales Alter: ${CONFIG.maxAgeMinutes} Minuten`, 'INFO');
-    log(`Speicherort: ${CONFIG.screenshotDir}`, 'INFO');
+    log(`Maximale Anzahl Screenshots: $${CONFIG.maxScreenshotsToKeep}`, 'INFO');
+    log(`Maximaler Speicherplatz: $${CONFIG.maxStorageGB} GB`, 'INFO');
+    log(`Maximales Alter: $${CONFIG.maxAgeMinutes} Minuten`, 'INFO');
+    log(`Speicherort: $${CONFIG.screenshotDir}`, 'INFO');
   }
 
   // Screenshot sofort erstellen
   takeScreenshot();
 
   // Regelmäßig Screenshots erstellen, außer im now-Modus
-  if (!options.now) {
+  if (!options.now) { 
     const intervalMs = (options.intervalSeconds || CONFIG.screenshotIntervalSeconds) * 1000;
     setInterval(takeScreenshot, intervalMs);
 
@@ -256,9 +256,9 @@ function main(options = {}) {
 const cliOptions = parseCommandLineArguments();
 
 // Programm starten
-if (cliOptions.now) {
+if (cliOptions.now) { 
   // Nur einmal ausführen und beenden
   takeScreenshot();
-} else {
+} else { 
   main(cliOptions);
 }

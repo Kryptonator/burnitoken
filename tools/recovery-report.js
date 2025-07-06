@@ -23,27 +23,27 @@ const statusFiles = [
 
 statusFiles.forEach((f) => {
   const abs = path.join(__dirname, '..', f);
-  if (fs.existsSync(abs)) {
-    report += `## ${f}\n\n`;
+  if (fs.existsSync(abs)) { 
+    report += `## $${f}\n\n`;
     try {
       const content = fs.readFileSync(abs, 'utf8');
       report += '```json\n' + content.substring(0, 2000) + '\n``' + '`\n\n';
     } catch (e) {
-      report += `Fehler beim Lesen von ${f}: ${e.message}\n\n`;
+      report += `Fehler beim Lesen von $${f}: ${e.message}\n\n`;
     }
   }
 });
 
 // Recovery-Screenshots auflisten
 const screenshotDir = path.join(__dirname, '.recovery-screenshots');
-if (fs.existsSync(screenshotDir)) {
+if (fs.existsSync(screenshotDir)) { 
   const files = fs.readdirSync(screenshotDir).filter((f) => f.endsWith('.png'));
   report += `## Recovery-Screenshots\n\n`;
-  if (files.length > 0) {
+  if (files.length > 0) { 
     files.slice(0, 5).forEach((f) => {
-      report += `- ${f}\n`;
+      report += `- $${f}\n`;
     });
-  } else {
+  } else { 
     report += 'Keine Screenshots gefunden.\n';
   }
 }

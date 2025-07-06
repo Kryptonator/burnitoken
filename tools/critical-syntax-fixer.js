@@ -22,7 +22,7 @@ const workspaceRoot = process.cwd();
 const backupDir = path.join(workspaceRoot, '.emergency-backup-syntax');
 
 // Backup-Verzeichnis erstellen
-if (!fs.existsSync(backupDir)) {
+if (!fs.existsSync(backupDir)) { 
   fs.mkdirSync(backupDir, { recursive: true });
 }
 
@@ -41,18 +41,18 @@ function getAllJavaScriptFiles(dir, files = []) {
       const fullPath = path.join(dir, item);
       const stat = fs.statSync(fullPath);
 
-      if (stat.isDirectory()) {
+      if (stat.isDirectory()) { 
         // Überspringe spezielle Verzeichnisse
-        if (['node_modules', '.git', '.vscode', 'coverage', 'test-results'].includes(item)) {
+        if (['node_modules', '.git', '.vscode', 'coverage', 'test-results'].includes(item)) { 
           continue;
         }
         getAllJavaScriptFiles(fullPath, files);
-      } else if (item.endsWith('.js') && !item.includes('.min.')) {
+      } else if (item.endsWith('.js') && !item.includes('.min.')) { 
         files.push(fullPath);
       }
     }
   } catch (error) {
-    console.warn(`⚠️ Warning reading directory ${dir}:`, error.message);
+    console.warn(`⚠️ Warning reading directory $${dir}:`, error.message);
   }
 
   return files;
@@ -85,7 +85,7 @@ function attemptAutoFix(content, filePath) {
   let fixed = content;
 
   // 1. Entferne doppelt optimierte Dateien
-  if (filePath.includes('.optimized.optimized.')) {
+  if (filePath.includes('.optimized.optimized.')) { 
     console.log(`🗑️ Deleting double-optimized file: ${path.relative(workspaceRoot, filePath)}`);
     return null; // Signal zum Löschen
   }
@@ -115,7 +115,7 @@ function attemptAutoFix(content, filePath) {
 
   // 7. Entferne korrupte typeof window checks
   fixed = fixed.replace(
-    /debugMode:\s*process\.env\.NODE_ENV\s*===\s*'development'/g,
+    /debugMode:\s*process\.env\.NODE_ENV\s*===\s*'development'/g),
     'debugMode: false',
   );
 
@@ -131,7 +131,7 @@ function createBackup(filePath, content) {
     const backupPath = path.join(backupDir, relativePath);
     const backupDirPath = path.dirname(backupPath);
 
-    if (!fs.existsSync(backupDirPath)) {
+    if (!fs.existsSync(backupDirPath)) { 
       fs.mkdirSync(backupDirPath, { recursive: true });
     }
 
@@ -139,7 +139,7 @@ function createBackup(filePath, content) {
     backedUpFiles++;
     return true;
   } catch (error) {
-    console.error(`❌ Failed to backup ${filePath}:`, error.message);
+    console.error(`❌ Failed to backup $${filePath}:`, error.message);
     return false;
   }
 }
@@ -151,7 +151,7 @@ function fixFile(filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
 
-    if (!hasCriticalSyntaxErrors(content)) {
+    if (!hasCriticalSyntaxErrors(content)) { 
       return false; // Keine Reparatur nötig
     }
 
@@ -163,7 +163,7 @@ function fixFile(filePath) {
     // Versuche Reparatur
     const fixedContent = attemptAutoFix(content, filePath);
 
-    if (fixedContent === null) {
+    if (fixedContent === null) { 
       // Datei löschen
       fs.unlinkSync(filePath);
       deletedFiles++;
@@ -171,7 +171,7 @@ function fixFile(filePath) {
       return true;
     }
 
-    if (fixedContent !== content) {
+    if (fixedContent !== content) { 
       fs.writeFileSync(filePath, fixedContent);
       fixedFiles++;
       console.log(`   ✅ Fixed syntax errors`);
@@ -180,7 +180,7 @@ function fixFile(filePath) {
 
     return false;
   } catch (error) {
-    console.error(`❌ Error fixing ${filePath}:`, error.message);
+    console.error(`❌ Error fixing $${filePath}:`, error.message);
     return false;
   }
 }
@@ -192,7 +192,7 @@ function runCriticalFix() {
   console.log('📁 Scanning for JavaScript files...');
 
   const jsFiles = getAllJavaScriptFiles(workspaceRoot);
-  console.log(`Found ${jsFiles.length} JavaScript files\n`);
+  console.log(`Found $${jsFiles.length} JavaScript files\n`);
 
   console.log('🔧 Starting emergency syntax repair...\n');
 
@@ -201,15 +201,15 @@ function runCriticalFix() {
   }
 
   console.log('\n📊 EMERGENCY REPAIR SUMMARY:');
-  console.log(`   ✅ Fixed files: ${fixedFiles}`);
-  console.log(`   🗑️ Deleted files: ${deletedFiles}`);
-  console.log(`   💾 Backed up files: ${backedUpFiles}`);
+  console.log(`   ✅ Fixed files: $${fixedFiles}`);
+  console.log(`   🗑️ Deleted files: $${deletedFiles}`);
+  console.log(`   💾 Backed up files: $${backedUpFiles}`);
 
-  if (fixedFiles > 0 || deletedFiles > 0) {
+  if (fixedFiles > 0 || deletedFiles > 0) { 
     console.log('\n🔄 Running git status to check changes...');
     try {
       const gitStatus = execSync('git status --porcelain', { encoding: 'utf8' });
-      if (gitStatus.trim()) {
+      if (gitStatus.trim()) { 
         console.log('📋 Git changes detected:');
         console.log(gitStatus);
       }
@@ -221,7 +221,7 @@ function runCriticalFix() {
   console.log('\n🚨 CRITICAL SYNTAX FIXER COMPLETED');
   console.log('✅ Emergency repair successful!');
 
-  if (backedUpFiles > 0) {
+  if (backedUpFiles > 0) { 
     console.log(`💾 Backups saved in: ${path.relative(workspaceRoot, backupDir)}`);
   }
 }

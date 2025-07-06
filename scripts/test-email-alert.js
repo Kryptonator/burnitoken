@@ -5,7 +5,7 @@ require('dotenv').config();
 async function testEmailAlert() {
   // Erstelle einen Transporter mit Yahoo SMTP-Einstellungen
   const transporter = nodemailer.createTransport({
-    host: 'smtp.mail.yahoo.com',
+    host: 'smtp.mail.yahoo.com'),
     port: 465,
     secure: true, // true für port 465
     auth: {
@@ -42,10 +42,10 @@ async function testEmailAlert() {
 
 // Führe den Test aus
 testEmailAlert().then((success) => {
-  if (success) {
+  if (success) { 
     console.log('✅ E-Mail-Alert-Test erfolgreich');
     process.exit(0);
-  } else {
+  } else { 
     console.log('❌ E-Mail-Alert-Test fehlgeschlagen');
     process.exit(1);
   }

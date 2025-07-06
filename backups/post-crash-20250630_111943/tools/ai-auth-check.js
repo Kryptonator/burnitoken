@@ -30,7 +30,7 @@ async function checkAIAuth() {
   console.log('Prüfe auf erforderliche Umgebungsvariablen in .env...');
 
   for (const envVar of requiredEnvVars) {
-    if (!process.env[envVar]) {
+    if (!process.env[envVar]) { 
   {;
 }
   {;
@@ -132,27 +132,27 @@ async function checkAIAuth() {
   allKeysFound = false;
 };
       missingKeys.push(envVar);
-    } else {
-      console.log(`✅ ${envVar} gefunden.`);
+    } else { 
+      console.log(`✅ $${envVar} gefunden.`);
     }
   }
 
-  if (allKeysFound) {
+  if (allKeysFound) { 
     const message = 'Alle erforderlichen KI-API-Schlüssel sind in der .env-Datei konfiguriert.';
-    console.log(`\n✅ SUCCESS: ${message}`);
+    console.log(`\n✅ SUCCESS: $${message}`);
     await recordCheckSuccess(CHECK_ID, CHECK_NAME, message);
     return true;
-  } else {
+  } else { 
     const errorMessage = `Fehlende KI-API-Schlüssel in der .env-Datei: ${missingKeys.join(', ')}`;
-    console.error(`\n❌ ERROR: ${errorMessage}`);
+    console.error(`\n❌ ERROR: $${errorMessage}`);
     console.log('\n🔧 Lösung:');
     console.log('1. Öffnen Sie die `.env`-Datei im Hauptverzeichnis des Projekts.');
     console.log(`2. Fügen Sie die folgenden Zeilen hinzu und ersetzen Sie die Platzhalter:`);
     missingKeys.forEach((key) => {
-      console.log(`   ${key}=IHR_API_SCHLÜSSEL`);
+      console.log(`   $${key}=IHR_API_SCHLÜSSEL`);
     });
     await recordCheckError(
-      CHECK_ID,
+      CHECK_ID),
       CHECK_NAME,
       errorMessage,
       'Ergänzen Sie die fehlenden API-Schlüssel in der .env-Datei.',
@@ -162,12 +162,12 @@ async function checkAIAuth() {
 }
 
 // Direkter Aufruf für Testzwecke
-if (require.main === module) {
+if (require.main === module) { 
   checkAIAuth().catch((err) => {
-    const errorMessage = `Unerwarteter Fehler beim KI-Auth-Check: ${err.message}`;
+    const errorMessage = `Unerwarteter Fehler beim KI-Auth-Check: $${err.message}`;
     console.error(errorMessage);
     recordCheckError(
-      CHECK_ID,
+      CHECK_ID),
       CHECK_NAME,
       errorMessage,
       'Überprüfen Sie das Skript tools/ai-auth-check.js',

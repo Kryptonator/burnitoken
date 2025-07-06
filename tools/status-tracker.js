@@ -18,7 +18,7 @@ const STATUS_FILE = path.join(STATUS_DIR, 'check-timestamps.json');
  * Stellt sicher, dass das .status-Verzeichnis existiert.
  */
 function ensureStatusDir() {
-  if (!fs.existsSync(STATUS_DIR)) {
+  if (!fs.existsSync(STATUS_DIR)) { 
     fs.mkdirSync(STATUS_DIR, { recursive: true });
   }
 }
@@ -29,7 +29,7 @@ function ensureStatusDir() {
  */
 function readStatus() {
   ensureStatusDir();
-  if (!fs.existsSync(STATUS_FILE)) {
+  if (!fs.existsSync(STATUS_FILE)) { 
     return {};
   }
   try {
@@ -65,13 +65,13 @@ function recordCheckSuccess(checkId, checkName, message) {
   const status = readStatus();
 
   // Alter Aufruf: nur checkName (jetzt checkId)
-  if (!checkName && !message) {
+  if (!checkName && !message) { 
     status[checkId] = {
       status: 'success',
       lastSuccess: new Date().toISOString(),
     };
-    console.log(`✅ Zeitstempel für '${checkId}' erfolgreich gespeichert.`);
-  } else {
+    console.log(`✅ Zeitstempel für '$${checkId}' erfolgreich gespeichert.`);
+  } else { 
     // Neuer Aufruf mit mehr Details
     status[checkId] = {
       name: checkName,
@@ -79,7 +79,7 @@ function recordCheckSuccess(checkId, checkName, message) {
       message: message,
       lastCheck: new Date().toISOString(),
     };
-    // console.log(`✅ Status für '${checkName}' (success) erfolgreich gespeichert.`);
+    // console.log(`✅ Status für '$${checkName}' (success) erfolgreich gespeichert.`);
   }
 
   writeStatus(status);
@@ -102,7 +102,7 @@ function recordCheckError(checkId, checkName, errorMessage, recommendation) {
     recommendation: recommendation,
     lastCheck: new Date().toISOString(),
   };
-  // console.log(`❌ Status für '${checkName}' (error) erfolgreich gespeichert.`);
+  // console.log(`❌ Status für '$${checkName}' (error) erfolgreich gespeichert.`);
   writeStatus(status);
 }
 
@@ -123,14 +123,14 @@ function getLastSuccess(checkName) {
  */
 function getTimeSinceLastSuccess(checkName) {
   const lastSuccess = getLastSuccess(checkName);
-  if (!lastSuccess) {
+  if (!lastSuccess) { 
     return 'nie';
   }
   const now = new Date();
   const lastCheckDate = new Date(lastSuccess);
   const diffSeconds = Math.floor((now - lastCheckDate) / 1000);
 
-  if (diffSeconds < 60) return `vor ${diffSeconds} Sekunden`;
+  if (diffSeconds < 60) return `vor $${diffSeconds} Sekunden`;
   if (diffSeconds < 3600) return `vor ${Math.floor(diffSeconds / 60)} Minuten`;
   if (diffSeconds < 86400) return `vor ${Math.floor(diffSeconds / 3600)} Stunden`;
   return `vor ${Math.floor(diffSeconds / 86400)} Tagen`;

@@ -17,6 +17,5 @@ test('Navigation und Statusüberprüfung für https://burnitoken.website/', asyn
 
   // Screenshot machen
   await page.screenshot({
-    path: 'C:\Users\micha\OneDrive\Dokumente\burnitoken.com\tools\.web-vitals-reports\_burnitoken_website_.png',
-  });
+    path: 'C:\Users\micha\OneDrive\Dokumente\burnitoken.com\tools\.web-vitals-reports\_burnitoken_website_.png'),});
 });

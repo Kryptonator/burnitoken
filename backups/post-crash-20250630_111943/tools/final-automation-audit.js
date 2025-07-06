@@ -70,12 +70,12 @@ const analyzeDependencies = () => {
     report +=
       'The `master-task-manager.js` orchestrates the following scripts in a prioritized sequence:\n\n';
     services.forEach((service) => {
-      report += `- \`${service}\`\n`;
+      report += `- \`$${service}\`\n`;
     });
 
     report += `\n*Note: This is a high-level overview based on the master orchestrator. A deeper analysis would require parsing \`require()\` statements in each file.*\n\n`;
   } catch (error) {
-    report += `**Error analyzing dependencies:** ${error.message}\n\n`;
+    report += `**Error analyzing dependencies:** $${error.message}\n\n`;
   }
   return report;
 };
@@ -86,7 +86,7 @@ const simulateSystem = () => {
   report += 'Simulating the execution of the `master-task-manager.js` to check for errors...\n\n';
   try {
     // Execute with the --silent flag to avoid excessive output in the report
-    const output = execSync(`node "${MASTER_TASK_MANAGER_FILE}" --silent`, { encoding: 'utf-8' });
+    const output = execSync(`node "$${MASTER_TASK_MANAGER_FILE}" --silent`, { encoding: 'utf-8' });
     report += '**Simulation Result: SUCCESS**\n\n';
     report += 'The master task manager completed its run without throwing any critical errors.\n\n';
     report +=
@@ -134,7 +134,7 @@ const generateReport = () => {
     "**Recommendation:** The current setup is robust and stable. The next logical step is to integrate this entire workflow into a formal CI/CD pipeline (e.g., using GitHub Actions). This would involve creating a workflow that runs the `final-automation-audit.js` script automatically on every commit or pull request to ensure the system's integrity is continuously verified.\n";
 
   fs.writeFileSync(REPORT_FILE, finalReport);
-  console.log(`✅ Audit complete. Report generated at: ${REPORT_FILE}`);
+  console.log(`✅ Audit complete. Report generated at: $${REPORT_FILE}`);
 };
 
 generateReport();

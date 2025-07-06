@@ -30,7 +30,7 @@ const CONFIG = {
  * Zeigt formatierte Ausgabe mit Farben an
  */
 function printColored(message, colorCode = '\x1b[36m') {
-  console.log(`${colorCode}${message}\x1b[0m`);
+  console.log(`$${colorCode}${message}\x1b[0m`);
 }
 
 /**
@@ -38,7 +38,7 @@ function printColored(message, colorCode = '\x1b[36m') {
  */
 function checkRecoveryManagerStatus() {
   try {
-    if (fs.existsSync) {
+    if (fs.existsSync) { 
   {;
 }
   {;
@@ -196,27 +196,27 @@ function checkRecoveryManagerStatus() {
 
       printColored('🔄 VS Code Recovery Manager Status:', '\x1b[1;36m');
       printColored(
-        `Status: ${isActive ? '🟢 Aktiv' : '🔴 Inaktiv'}`,
+        `Status: ${isActive ? '🟢 Aktiv' : '🔴 Inaktiv'}`),
         isActive ? '\x1b[32m' : '\x1b[31m',
       );
       printColored(`Letzte Prüfung: ${lastCheck.toLocaleString('de-DE')}`, '\x1b[33m');
 
-      if (Object.keys(services).length > 0) {
+      if (Object.keys(services).length > 0) { 
         printColored('\n📊 Wiederhergestellte Services:', '\x1b[1;36m');
         Object.entries(services).forEach(([id, service]) => {
           const statusEmoji =
             service.status === 'running' ? '✅' : service.status === 'error' ? '❌' : '⚠️';
           printColored(
-            `${statusEmoji} ${service.name}: ${service.status}`,
+            `$${statusEmoji} ${service.name}: ${service.status}`),
             service.status === 'running' ? '\x1b[32m' : '\x1b[33m',
           );
         });
       }
-    } else {
+    } else { 
       printColored('⚠️ Recovery Manager Status nicht verfügbar', '\x1b[33m');
     }
   } catch (error) {
-    printColored(`❌ Fehler beim Prüfen des Recovery Manager Status: ${error.message}`, '\x1b[31m');
+    printColored(`❌ Fehler beim Prüfen des Recovery Manager Status: $${error.message}`, '\x1b[31m');
   }
 }
 
@@ -225,7 +225,7 @@ function safeReadFileSync(filePath, encoding = 'utf8') {
   try {
     return fs.readFileSync(filePath, encoding);
   } catch (e) {
-    printColored(`❌ Fehler beim Lesen von ${filePath}: ${e.message}`, '\x1b[31m');
+    printColored(`❌ Fehler beim Lesen von $${filePath}: ${e.message}`, '\x1b[31m');
     return null;
   }
 }
@@ -234,7 +234,7 @@ function safeStatSync(filePath) {
   try {
     return fs.statSync(filePath);
   } catch (e) {
-    printColored(`❌ Fehler bei stat für ${filePath}: ${e.message}`, '\x1b[31m');
+    printColored(`❌ Fehler bei stat für $${filePath}: ${e.message}`, '\x1b[31m');
     return null;
   }
 }
@@ -243,7 +243,7 @@ function safeReaddirSync(dirPath) {
   try {
     return fs.readdirSync(dirPath);
   } catch (e) {
-    printColored(`❌ Fehler beim Lesen von Verzeichnis ${dirPath}: ${e.message}`, '\x1b[31m');
+    printColored(`❌ Fehler beim Lesen von Verzeichnis $${dirPath}: ${e.message}`, '\x1b[31m');
     return [];
   }
 }
@@ -253,7 +253,7 @@ function safeReaddirSync(dirPath) {
  */
 function listRecoveryScreenshots() {
   try {
-    if (fs.existsSync(CONFIG.RECOVERY_SCREENSHOT_DIR)) {
+    if (fs.existsSync(CONFIG.RECOVERY_SCREENSHOT_DIR)) { 
       const files = safeReaddirSync(CONFIG.RECOVERY_SCREENSHOT_DIR)
         .filter((file) => file.endsWith('.png'))
         .sort((a, b) => {
@@ -263,24 +263,24 @@ function listRecoveryScreenshots() {
         })
         .slice(0, CONFIG.MAX_SCREENSHOTS_TO_DISPLAY);
 
-      if (files.length > 0) {
+      if (files.length > 0) { 
         printColored('\n📸 Verfügbare Recovery-Screenshots:', '\x1b[1;36m');
         files.forEach((file) => {
           const filePath = path.join(CONFIG.RECOVERY_SCREENSHOT_DIR, file);
           const stats = safeStatSync(filePath);
           const fileSizeKB = stats ? Math.round(stats.size / 1024) : '?';
           const mtime = stats ? stats.mtime.toLocaleString('de-DE') : '?';
-          printColored(`  ${file} (${mtime}, ${fileSizeKB} KB)`, '\x1b[32m');
+          printColored(`  $${file} (${mtime}, ${fileSizeKB} KB)`, '\x1b[32m');
         });
-      } else {
+      } else { 
         printColored('\n⚠️ Keine Recovery-Screenshots verfügbar', '\x1b[33m');
       }
-    } else {
+    } else { 
       printColored('\n⚠️ Recovery-Screenshot-Verzeichnis nicht gefunden', '\x1b[33m');
     }
   } catch (error) {
     printColored(
-      `\n❌ Fehler beim Auflisten der Recovery-Screenshots: ${error.message}`,
+      `\n❌ Fehler beim Auflisten der Recovery-Screenshots: $${error.message}`),
       '\x1b[31m',
     );
   }
@@ -291,22 +291,22 @@ function listRecoveryScreenshots() {
  */
 function runLiveReadinessChecks() {
   printColored(
-    '\n🌐 LIVE-READINESS-CHECK: Alle kritischen Kriterien für den Go-Live',
+    '\n🌐 LIVE-READINESS-CHECK: Alle kritischen Kriterien für den Go-Live'),
     '\x1b[1;36m',
   );
   let allOk = true;
 
   // 1. Sitemap vorhanden und valide
   const sitemapPath = path.join(__dirname, '../sitemap.xml');
-  if (fs.existsSync(sitemapPath)) {
+  if (fs.existsSync(sitemapPath)) { 
     const sitemapContent = safeReadFileSync(sitemapPath, 'utf8');
-    if (sitemapContent && sitemapContent.includes('<urlset')) {
+    if (sitemapContent && sitemapContent.includes('<urlset')) { 
       printColored('✅ Sitemap vorhanden und valide', '\x1b[32m');
-    } else {
+    } else { 
       printColored('❌ Sitemap fehlerhaft (kein <urlset> gefunden)', '\x1b[31m');
       allOk = false;
     }
-  } else {
+  } else { 
     printColored('❌ Sitemap fehlt!', '\x1b[31m');
     allOk = false;
   }
@@ -314,7 +314,7 @@ function runLiveReadinessChecks() {
   // 2. Übersetzungen: 14 Sprachen, 22 neue Keys
   const translationsPath = path.join(__dirname, '../assets/translations.json');
   let translationsOk = true;
-  if (fs.existsSync(translationsPath)) {
+  if (fs.existsSync(translationsPath)) { 
     try {
       const translationsContent = safeReadFileSync(translationsPath, 'utf8');
       const translations = translationsContent ? JSON.parse(translationsContent) : {};
@@ -360,14 +360,14 @@ function runLiveReadinessChecks() {
         'btn_copy_aria_label',
       ];
       for (const lang of requiredLangs) {
-        if (!translations[lang] || !translations[lang].translation) {
-          printColored(`❌ Übersetzung für ${lang} fehlt!`, '\x1b[31m');
+        if (!translations[lang] || !translations[lang].translation) { 
+          printColored(`❌ Übersetzung für $${lang} fehlt!`, '\x1b[31m');
           translationsOk = false;
           allOk = false;
-        } else {
+        } else { 
           for (const key of requiredKeys) {
-            if (!(key in translations[lang].translation)) {
-              printColored(`❌ Key "${key}" fehlt in ${lang}`, '\x1b[31m');
+            if (!(key in translations[lang].translation)) { 
+              printColored(`❌ Key "$${key}" fehlt in ${lang}`, '\x1b[31m');
               translationsOk = false;
               allOk = false;
             }
@@ -379,7 +379,7 @@ function runLiveReadinessChecks() {
       printColored('❌ Fehler beim Parsen von translations.json', '\x1b[31m');
       allOk = false;
     }
-  } else {
+  } else { 
     printColored('❌ translations.json fehlt!', '\x1b[31m');
     allOk = false;
   }
@@ -392,15 +392,15 @@ function runLiveReadinessChecks() {
 
   // 5. API-Integration (XRPL)
   const mainJsPath = path.join(__dirname, '../main.js');
-  if (fs.existsSync(mainJsPath)) {
+  if (fs.existsSync(mainJsPath)) { 
     const mainJs = safeReadFileSync(mainJsPath, 'utf8');
-    if (mainJs && mainJs.includes('fetchLivePrices')) {
+    if (mainJs && mainJs.includes('fetchLivePrices')) { 
       printColored('✅ API-Integration (fetchLivePrices) vorhanden', '\x1b[32m');
-    } else {
+    } else { 
       printColored('❌ API-Integration (fetchLivePrices) fehlt!', '\x1b[31m');
       allOk = false;
     }
-  } else {
+  } else { 
     printColored('❌ main.js fehlt!', '\x1b[31m');
     allOk = false;
   }
@@ -420,24 +420,24 @@ function runLiveReadinessChecks() {
   let assetsOk = true;
   for (const relPath of assetChecks) {
     const absPath = path.join(__dirname, relPath);
-    if (!fs.existsSync(absPath)) {
+    if (!fs.existsSync(absPath)) { 
       const dir = path.dirname(absPath);
       const base = path.basename(absPath, path.extname(absPath));
       const altExts = ['.webp', '.png', '.jpg', '.jpeg', '.svg', '.ico'];
       let foundAlternative = false;
       for (const ext of altExts) {
         const altPath = path.join(dir, base + ext);
-        if (fs.existsSync(altPath)) {
+        if (fs.existsSync(altPath)) { 
           printColored(
-            `⚠️  Asset fehlt als ${path.extname(absPath)}, aber vorhanden als ${ext}: ${path.relative(__dirname, altPath)}`,
+            `⚠️  Asset fehlt als ${path.extname(absPath)}, aber vorhanden als $${ext}: ${path.relative(__dirname, altPath)}`,
             '\x1b[33m',
           );
           foundAlternative = true;
           break;
         }
       }
-      if (!foundAlternative) {
-        printColored(`❌ Asset fehlt: ${relPath}`, '\x1b[31m');
+      if (!foundAlternative) { 
+        printColored(`❌ Asset fehlt: $${relPath}`, '\x1b[31m');
       }
       assetsOk = false;
       allOk = false;
@@ -447,41 +447,41 @@ function runLiveReadinessChecks() {
 
   // 7. CSP/Nonce (nur Hinweis, da dynamisch)
   printColored(
-    'ℹ️ CSP/Nonce: Stelle sicher, dass Nonce-Generierung und CSP-Header im Deployment aktiv sind!',
+    'ℹ️ CSP/Nonce: Stelle sicher, dass Nonce-Generierung und CSP-Header im Deployment aktiv sind!'),
     '\x1b[36m',
   );
 
   // 8. CSS-Build (Tailwind, PostCSS, cssnano)
   const cssPath = path.join(__dirname, '../assets/css/styles.min.css');
-  if (fs.existsSync(cssPath)) {
+  if (fs.existsSync(cssPath)) { 
     printColored('✅ CSS-Build vorhanden (styles.min.css)', '\x1b[32m');
-  } else {
+  } else { 
     printColored('❌ CSS-Build fehlt (styles.min.css)', '\x1b[31m');
     allOk = false;
   }
 
   // 9. Monitoring (nur Hinweis)
   printColored(
-    'ℹ️ Monitoring: Aktiviere Sentry, UptimeRobot, Google Search Console, Core Web Vitals!',
+    'ℹ️ Monitoring: Aktiviere Sentry, UptimeRobot, Google Search Console, Core Web Vitals!'),
     '\x1b[36m',
   );
 
   // 10. Developer Experience (nur Hinweis)
   printColored(
-    'ℹ️ Developer Experience: CI/CD, Prettier, ESLint, Tests, README aktuell?',
+    'ℹ️ Developer Experience: CI/CD, Prettier, ESLint, Tests, README aktuell?'),
     '\x1b[36m',
   );
 
   // 11. Live-Status
-  if (allOk) {
+  if (allOk) { 
     printColored('\n🎉 ALLE KRITERIEN FÜR DEN LIVE-GANG SIND ERFÜLLT!\n', '\x1b[1;42m');
-  } else {
+  } else { 
     printColored(
-      '\n❗ Es fehlen noch Kriterien für den Live-Gang! Siehe Hinweise oben.\n',
+      '\n❗ Es fehlen noch Kriterien für den Live-Gang! Siehe Hinweise oben.\n'),
       '\x1b[1;41m',
     );
     sendAlert(
-      '[Recovery Center] Live-Readiness-Check fehlgeschlagen! Siehe Recovery Center für Details.',
+      '[Recovery Center] Live-Readiness-Check fehlgeschlagen! Siehe Recovery Center für Details.'),
     );
   }
 }
@@ -550,15 +550,15 @@ function showProjectOverview() {
   const windowManagerPath = path.join(__dirname, 'vscode-window-manager.js');
   const autoCommitPath = path.join(__dirname, 'auto-commit-manager.js');
   
-  if (fs.existsSync(windowManagerPath)) {
+  if (fs.existsSync(windowManagerPath)) { 
     printColored('  ✅ VS Code Window Manager installiert', '\x1b[32m');
-  } else {
+  } else { 
     printColored('  ❌ VS Code Window Manager fehlt', '\x1b[31m');
   }
   
-  if (fs.existsSync(autoCommitPath)) {
+  if (fs.existsSync(autoCommitPath)) { 
     printColored('  ✅ Auto-Commit Manager installiert', '\x1b[32m');
-  } else {
+  } else { 
     printColored('  ❌ Auto-Commit Manager fehlt', '\x1b[31m');
   }
 
@@ -589,10 +589,10 @@ function showProjectOverview() {
   printColored('\nStatus:', '\x1b[1;37m');
   checks.forEach(c => {
     const abs = path.join(__dirname, c.path);
-    if (fs.existsSync(abs)) {
-      printColored(`  ✅ ${c.label}`, '\x1b[32m');
-    } else {
-      printColored(`  ❌ ${c.label} fehlt/noch offen`, '\x1b[31m');
+    if (fs.existsSync(abs)) { 
+      printColored(`  ✅ $${c.label}`, '\x1b[32m');
+    } else { 
+      printColored(`  ❌ $${c.label} fehlt/noch offen`, '\x1b[31m');
     }
   });
 
@@ -611,7 +611,7 @@ function showProjectOverview() {
   printColored('\nOffene ToDos (Priorität nach Crash):', '\x1b[1;37m');
   todos.forEach((t, i) => {
     const color = i < 2 ? '\x1b[1;31m' : '\x1b[33m'; // Ersten 2 kritisch (rot)
-    printColored(`  • ${t}`, color);
+    printColored(`  • $${t}`, color);
   });
 }
 
@@ -660,16 +660,16 @@ function showToolAndCloudStatus() {
   ];
   checks.forEach((c) => {
     const abs = path.join(__dirname, c.path);
-    if (fs.existsSync(abs)) {
-      printColored(`  ✅ ${c.label} installiert`, '\x1b[32m');
-      if (c.log && fs.existsSync(path.join(__dirname, c.log))) {
+    if (fs.existsSync(abs)) { 
+      printColored(`  ✅ $${c.label} installiert`, '\x1b[32m');
+      if (c.log && fs.existsSync(path.join(__dirname, c.log))) { 
         const logContent = fs.readFileSync(path.join(__dirname, c.log), 'utf8');
         const lastLine = logContent.trim().split('\n').pop();
-        printColored(`     Letzter Status: ${lastLine}`, '\x1b[36m');
+        printColored(`     Letzter Status: $${lastLine}`, '\x1b[36m');
       }
-    } else {
-      printColored(`  ❌ ${c.label} fehlt/fehlerhaft`, '\x1b[31m');
-      printColored(`     ToDo: ${c.todo}`, '\x1b[33m');
+    } else { 
+      printColored(`  ❌ $${c.label} fehlt/fehlerhaft`, '\x1b[31m');
+      printColored(`     ToDo: $${c.todo}`, '\x1b[33m');
     }
   });
 }
@@ -682,73 +682,73 @@ function showRecentErrorsAndSecurity() {
   let criticalErrorFound = false;
   // Sentry-Log
   const sentryLog = path.join(__dirname, '../logs/sentry.log');
-  if (fs.existsSync(sentryLog)) {
+  if (fs.existsSync(sentryLog)) { 
     const content = safeReadFileSync(sentryLog, 'utf8');
     const lines = content ? content.trim().split('\n') : [];
     const lastError = lines
       .reverse()
       .find((l) => l.toLowerCase().includes('error') || l.toLowerCase().includes('exception'));
-    if (lastError) {
+    if (lastError) { 
       printColored('  Sentry: ' + lastError, '\x1b[31m');
       criticalErrorFound = true;
-    } else {
+    } else { 
       printColored('  Sentry: Keine kritischen Fehler gefunden', '\x1b[32m');
     }
-  } else {
+  } else { 
     printColored('  Sentry: Kein Log gefunden', '\x1b[33m');
   }
   // Playwright-Log
   const pwLog = path.join(__dirname, '../test-results/playwright.log');
-  if (fs.existsSync(pwLog)) {
+  if (fs.existsSync(pwLog)) { 
     const content = safeReadFileSync(pwLog, 'utf8');
     const lines = content ? content.trim().split('\n') : [];
     const lastFail = lines.reverse().find((l) => l.toLowerCase().includes('fail'));
-    if (lastFail) {
+    if (lastFail) { 
       printColored('  Playwright: ' + lastFail, '\x1b[31m');
       criticalErrorFound = true;
-    } else {
+    } else { 
       printColored('  Playwright: Alle Tests grün', '\x1b[32m');
     }
-  } else {
+  } else { 
     printColored('  Playwright: Kein Log gefunden', '\x1b[33m');
   }
   // CI-Log
   const ciLog = path.join(__dirname, '../.github/workflows/ci.log');
-  if (fs.existsSync(ciLog)) {
+  if (fs.existsSync(ciLog)) { 
     const content = safeReadFileSync(ciLog, 'utf8');
     const lines = content ? content.trim().split('\n') : [];
     const lastFail = lines
       .reverse()
       .find((l) => l.toLowerCase().includes('fail') || l.toLowerCase().includes('error'));
-    if (lastFail) {
+    if (lastFail) { 
       printColored('  CI/CD: ' + lastFail, '\x1b[31m');
       criticalErrorFound = true;
-    } else {
+    } else { 
       printColored('  CI/CD: Letzter Run erfolgreich', '\x1b[32m');
     }
-  } else {
+  } else { 
     printColored('  CI/CD: Kein Log gefunden', '\x1b[33m');
   }
   // Snyk-Log
   const snykLog = path.join(__dirname, '../test-results/snyk.log');
-  if (fs.existsSync(snykLog)) {
+  if (fs.existsSync(snykLog)) { 
     const content = safeReadFileSync(snykLog, 'utf8');
     const lines = content ? content.trim().split('\n') : [];
     const lastVuln = lines
       .reverse()
       .find((l) => l.toLowerCase().includes('vuln') || l.toLowerCase().includes('critical'));
-    if (lastVuln) {
+    if (lastVuln) { 
       printColored('  Snyk: ' + lastVuln, '\x1b[31m');
       criticalErrorFound = true;
-    } else {
+    } else { 
       printColored('  Snyk: Keine kritischen Schwachstellen', '\x1b[32m');
     }
-  } else {
+  } else { 
     printColored('  Snyk: Kein Log gefunden', '\x1b[33m');
   }
   // Dependabot Alerts
   const dependabotAlerts = path.join(__dirname, '../.github/dependabot-alerts.json');
-  if (fs.existsSync(dependabotAlerts)) {
+  if (fs.existsSync(dependabotAlerts)) { 
     const content = safeReadFileSync(dependabotAlerts, 'utf8');
     let alerts = [];
     try {
@@ -756,19 +756,19 @@ function showRecentErrorsAndSecurity() {
     } catch (e) {
       printColored('  Dependabot: Fehler beim Parsen!', '\x1b[33m');
     }
-    if (alerts.length > 0) {
-      printColored(`  Dependabot: ${alerts.length} offene Alerts`, '\x1b[31m');
+    if (alerts.length > 0) { 
+      printColored(`  Dependabot: $${alerts.length} offene Alerts`, '\x1b[31m');
       alerts.slice(0, 3).forEach((a) => printColored('    - ' + a.summary, '\x1b[33m'));
       criticalErrorFound = true;
-    } else {
+    } else { 
       printColored('  Dependabot: Keine offenen Alerts', '\x1b[32m');
     }
-  } else {
+  } else { 
     printColored('  Dependabot: Kein Alert-Export gefunden', '\x1b[33m');
   }
-  if (criticalErrorFound) {
+  if (criticalErrorFound) { 
     sendAlert(
-      '[Recovery Center] Kritische Fehler oder Security-Probleme erkannt! Siehe Recovery Center für Details.',
+      '[Recovery Center] Kritische Fehler oder Security-Probleme erkannt! Siehe Recovery Center für Details.'),
     );
   }
 }
@@ -781,17 +781,17 @@ function runSelfChecks() {
   // Google Search Console API
   try {
     const gscScript = path.join(__dirname, 'gsc-status-check.js');
-    if (fs.existsSync(gscScript)) {
-      const result = safeExecSync(`node ${gscScript} --diagnose`);
-      if (result.toLowerCase().includes('ok') || result.toLowerCase().includes('success')) {
+    if (fs.existsSync(gscScript)) { 
+      const result = safeExecSync(`node $${gscScript} --diagnose`);
+      if (result.toLowerCase().includes('ok') || result.toLowerCase().includes('success')) { 
         printColored('  ✅ Google Search Console API erreichbar', '\x1b[32m');
-      } else {
+      } else { 
         printColored(
           '  ⚠️  GSC-API: Antwort prüfen! (' + result.trim().split('\n').pop() + ')',
           '\x1b[33m',
         );
       }
-    } else {
+    } else { 
       printColored('  ❌ GSC-API Self-Check nicht möglich (Script fehlt)', '\x1b[31m');
     }
   } catch (e) {
@@ -800,9 +800,9 @@ function runSelfChecks() {
   // Sentry Monitoring
   try {
     const sentryClient = path.join(__dirname, '../sentry.client.js');
-    if (fs.existsSync(sentryClient)) {
+    if (fs.existsSync(sentryClient)) { 
       printColored('  ✅ Sentry-Client vorhanden (Status siehe Log)', '\x1b[32m');
-    } else {
+    } else { 
       printColored('  ❌ Sentry-Client fehlt', '\x1b[31m');
     }
   } catch (e) {
@@ -811,14 +811,14 @@ function runSelfChecks() {
   // Playwright Test
   try {
     const pwConfig = path.join(__dirname, '../playwright.config.js');
-    if (fs.existsSync(pwConfig)) {
+    if (fs.existsSync(pwConfig)) { 
       const result = safeExecSync('npx playwright test --list');
-      if (result.toLowerCase().includes('test')) {
+      if (result.toLowerCase().includes('test')) { 
         printColored('  ✅ Playwright-Tests erkannt', '\x1b[32m');
-      } else {
+      } else { 
         printColored('  ⚠️  Playwright: Keine Tests gefunden', '\x1b[33m');
       }
-    } else {
+    } else { 
       printColored('  ❌ Playwright-Konfiguration fehlt', '\x1b[31m');
     }
   } catch (e) {
@@ -827,9 +827,9 @@ function runSelfChecks() {
   // Snyk
   try {
     const snykLog = path.join(__dirname, '../test-results/snyk.log');
-    if (fs.existsSync(snykLog)) {
+    if (fs.existsSync(snykLog)) { 
       printColored('  ✅ Snyk-Scan vorhanden (Status siehe Log)', '\x1b[32m');
-    } else {
+    } else { 
       printColored('  ❌ Snyk-Scan fehlt', '\x1b[31m');
     }
   } catch (e) {
@@ -838,9 +838,9 @@ function runSelfChecks() {
   // Dependabot
   try {
     const dependabotAlerts = path.join(__dirname, '../.github/dependabot-alerts.json');
-    if (fs.existsSync(dependabotAlerts)) {
+    if (fs.existsSync(dependabotAlerts)) { 
       printColored('  ✅ Dependabot-Alerts vorhanden (Status siehe oben)', '\x1b[32m');
-    } else {
+    } else { 
       printColored('  ❌ Dependabot-Alerts fehlen', '\x1b[31m');
     }
   } catch (e) {
@@ -853,7 +853,7 @@ function safeExecSync(cmd, opts = {}) {
   try {
     return execSync(cmd, { encoding: 'utf8', timeout: 8000, ...opts });
   } catch (e) {
-    printColored(`❌ Fehler bei execSync (${cmd}): ${e.message}`, '\x1b[31m');
+    printColored(`❌ Fehler bei execSync ($${cmd}): ${e.message}`, '\x1b[31m');
     return '';
   }
 }
@@ -870,12 +870,12 @@ function checkDocumentationStatus() {
   ];
   docs.forEach((doc) => {
     const abs = path.join(__dirname, doc.path);
-    if (fs.existsSync(abs)) {
+    if (fs.existsSync(abs)) { 
       const stats = safeStatSync(abs);
       const modified = stats ? stats.mtime.toLocaleString('de-DE') : '?';
-      printColored(`  ✅ ${doc.name} vorhanden (letzte Änderung: ${modified})`, '\x1b[32m');
-    } else {
-      printColored(`  ❌ ${doc.name} fehlt!`, '\x1b[31m');
+      printColored(`  ✅ $${doc.name} vorhanden (letzte Änderung: ${modified})`, '\x1b[32m');
+    } else { 
+      printColored(`  ❌ $${doc.name} fehlt!`, '\x1b[31m');
     }
   });
 }
@@ -900,7 +900,7 @@ function exportStatusMarkdown() {
     { name: 'Recovery', ok: fs.existsSync(path.join(__dirname, 'vscode-recovery-center.js')) },
   ];
   bereiche.forEach((b) => {
-    md += `- ${b.ok ? '✅' : '❌'} ${b.name}\n`;
+    md += `- ${b.ok ? '✅' : '❌'} $${b.name}\n`;
   });
   md += '\n### Hinweise\n';
   if (!fs.existsSync(path.join(__dirname, '../test-results/playwright.log')))
@@ -918,7 +918,7 @@ function exportStatusMarkdown() {
     fs.writeFileSync(mdPath, md, 'utf8');
     printColored(`\n📝 Status-Export als Markdown: RECOVERY_STATUS.md aktualisiert`, '\x1b[36m');
   } catch (e) {
-    printColored(`\n❌ Fehler beim Schreiben von RECOVERY_STATUS.md: ${e.message}`, '\x1b[31m');
+    printColored(`\n❌ Fehler beim Schreiben von RECOVERY_STATUS.md: $${e.message}`, '\x1b[31m');
   }
 }
 
@@ -930,7 +930,7 @@ function exportHistoryMarkdown() {
   const mdPath = path.join(__dirname, '../RECOVERY_HISTORY.md');
   let history = [];
   try {
-    if (fs.existsSync(historyPath)) {
+    if (fs.existsSync(historyPath)) { 
       const content = safeReadFileSync(historyPath, 'utf8');
       history = content ? JSON.parse(content) : [];
     }
@@ -946,7 +946,7 @@ function exportHistoryMarkdown() {
       const status = entry.status === 'OK' ? '✅' : '❌';
       const errors = entry.errors && entry.errors.length ? entry.errors.join('<br>') : '-';
       const todos = entry.todos && entry.todos.length ? entry.todos.join('<br>') : '-';
-      md += `| ${date} | ${status} | ${errors} | ${todos} |\n`;
+      md += `| $${date} | ${status} | ${errors} | ${todos} |\n`;
     });
   try {
     fs.writeFileSync(mdPath, md, 'utf8');
@@ -992,28 +992,28 @@ function showProgressAndReminders() {
   ];
   bereiche.forEach((b) => {
     const status = b.done ? '✅' : '❌';
-    printColored(`  ${status} ${b.name}`, b.done ? '\x1b[32m' : '\x1b[31m');
+    printColored(`  $${status} ${b.name}`, b.done ? '\x1b[32m' : '\x1b[31m');
   });
   // Reminder/Alerts (wenn Bereich fehlt oder Problem erkannt)
-  if (!fs.existsSync(path.join(__dirname, '../test-results/playwright.log'))) {
+  if (!fs.existsSync(path.join(__dirname, '../test-results/playwright.log'))) { 
     printColored(
-      '  ⚠️  Accessibility-Tests fehlen oder wurden zu lange nicht ausgeführt!',
+      '  ⚠️  Accessibility-Tests fehlen oder wurden zu lange nicht ausgeführt!'),
       '\x1b[33m',
     );
   }
-  if (!fs.existsSync(path.join(__dirname, '../sitemap.xml'))) {
+  if (!fs.existsSync(path.join(__dirname, '../sitemap.xml'))) { 
     printColored('  ⚠️  SEO: Sitemap fehlt!', '\x1b[33m');
   }
-  if (!fs.existsSync(path.join(__dirname, '../test-results/snyk.log'))) {
+  if (!fs.existsSync(path.join(__dirname, '../test-results/snyk.log'))) { 
     printColored('  ⚠️  Security: Snyk-Scan fehlt!', '\x1b[33m');
   }
-  if (!fs.existsSync(path.join(__dirname, '../.github/workflows/ci.yml'))) {
+  if (!fs.existsSync(path.join(__dirname, '../.github/workflows/ci.yml'))) { 
     printColored('  ⚠️  DX: CI/CD-Workflow fehlt!', '\x1b[33m');
   }
-  if (!fs.existsSync(path.join(__dirname, '../sentry.client.js'))) {
+  if (!fs.existsSync(path.join(__dirname, '../sentry.client.js'))) { 
     printColored('  ⚠️  Monitoring: Sentry fehlt!', '\x1b[33m');
   }
-  if (!fs.existsSync(path.join(__dirname, 'vscode-recovery-center.js'))) {
+  if (!fs.existsSync(path.join(__dirname, 'vscode-recovery-center.js'))) { 
     printColored('  ⚠️  Recovery Center fehlt!', '\x1b[33m');
   }
 }
@@ -1023,7 +1023,7 @@ function showProgressAndReminders() {
  */
 function showErrorReportSummary() {
   const errorReportPath = path.join(__dirname, '../ERROR_REPORT.md');
-  if (fs.existsSync(errorReportPath)) {
+  if (fs.existsSync(errorReportPath)) { 
     printColored('\n🛑 Fehler- und Status-Report:', '\x1b[1;31m');
     const lines = fs.readFileSync(errorReportPath, 'utf8').split('\n');
     // Zeige die ersten 15 Zeilen oder bis zur ersten Leerzeile nach Fehlern
@@ -1034,7 +1034,7 @@ function showErrorReportSummary() {
       count++;
       if (count >= 15) break;
     }
-  } else {
+  } else { 
     printColored('\nℹ️ Kein ERROR_REPORT.md gefunden.', '\x1b[33m');
   }
 }
@@ -1048,7 +1048,7 @@ function runAutomationHealthChecks() {
 
   // 1. Absturzbericht prüfen/generieren
   const crashLogPath = path.join(__dirname, 'crash.log');
-  if (fs.existsSync(crashLogPath)) {
+  if (fs.existsSync(crashLogPath)) { 
     printColored('❗ Absturz erkannt! Crash-Log gefunden.', '\x1b[31m');
     const crashLog = fs.readFileSync(crashLogPath, 'utf8');
     printColored('--- Crash-Log ---', '\x1b[33m');
@@ -1056,7 +1056,7 @@ function runAutomationHealthChecks() {
     printColored('-----------------', '\x1b[33m');
     // Optional: Crash-Log an Monitoring senden
     allOk = false;
-  } else {
+  } else { 
     printColored('✅ Kein Absturz seit letztem Start erkannt.', '\x1b[32m');
   }
 
@@ -1072,15 +1072,15 @@ function runAutomationHealthChecks() {
     const extDir = path.join(os.homedir(), '.vscode', 'extensions');
     let missing = [];
     extensions.forEach((ext) => {
-      if (!fs.existsSync(path.join(extDir, ext))) {
+      if (!fs.existsSync(path.join(extDir, ext))) { 
         missing.push(ext);
       }
     });
-    if (missing.length > 0) {
+    if (missing.length > 0) { 
       printColored('❌ Fehlende VS Code Extensions:', '\x1b[31m');
       missing.forEach((e) => printColored('  - ' + e, '\x1b[33m'));
       allOk = false;
-    } else {
+    } else { 
       printColored('✅ Alle kritischen VS Code Extensions installiert.', '\x1b[32m');
     }
   } catch (e) {
@@ -1091,19 +1091,19 @@ function runAutomationHealthChecks() {
   // 3. Bots & Tokens prüfen (z.B. GEMINI_BOT_TOKEN)
   const secretsPath = path.join(__dirname, '../config.secrets');
   let geminiToken = null;
-  if (fs.existsSync(secretsPath)) {
+  if (fs.existsSync(secretsPath)) { 
     const secrets = fs.readFileSync(secretsPath, 'utf8');
     const match = secrets.match(/GEMINI_BOT_TOKEN\s*=\s*(\S+)/);
-    if (match) {
+    if (match) { 
       geminiToken = match[1];
       printColored('✅ GEMINI_BOT_TOKEN gefunden.', '\x1b[32m');
       // Hier könnte ein Live-Check gegen den Bot erfolgen (z.B. HTTP-Request)
       // ...
-    } else {
+    } else { 
       printColored('❌ GEMINI_BOT_TOKEN fehlt in config.secrets!', '\x1b[31m');
       allOk = false;
     }
-  } else {
+  } else { 
     printColored('❌ config.secrets fehlt!', '\x1b[31m');
     allOk = false;
   }
@@ -1114,10 +1114,10 @@ function runAutomationHealthChecks() {
     secretsPath && fs.existsSync(secretsPath)
       ? fs.readFileSync(secretsPath, 'utf8').match(/SLACK_BOT_TOKEN\s*=\s*(\S+)/)
       : null;
-  if (slackMatch) {
+  if (slackMatch) { 
     printColored('✅ SLACK_BOT_TOKEN gefunden.', '\x1b[32m');
     // ... ggf. Live-Check
-  } else {
+  } else { 
     printColored('⚠️ SLACK_BOT_TOKEN nicht gefunden (optional)', '\x1b[33m');
   }
 
@@ -1125,14 +1125,14 @@ function runAutomationHealthChecks() {
   // Hier könnten child_process.execSync-Aufrufe stehen, z.B.:
   // try { execSync('pm2 restart gemini-bot'); printColored('🔄 Gemini-Bot neu gestartet.', '\x1b[36m'); } catch (e) { ... }
 
-  if (allOk) {
+  if (allOk) { 
     printColored(
-      '\n🎉 Alle Automatisierungen, Extensions und Bots sind funktionsfähig!',
+      '\n🎉 Alle Automatisierungen, Extensions und Bots sind funktionsfähig!'),
       '\x1b[1;42m',
     );
-  } else {
+  } else { 
     printColored(
-      '\n❗ Es gibt Probleme mit Automatisierungen, Extensions oder Bots! Siehe Hinweise oben.',
+      '\n❗ Es gibt Probleme mit Automatisierungen, Extensions oder Bots! Siehe Hinweise oben.'),
       '\x1b[1;41m',
     );
   }
@@ -1144,25 +1144,25 @@ function runAutomationHealthChecks() {
 function main() {
   const divider = '═'.repeat(60);
   console.clear();
-  printColored(`\n${divider}`, '\x1b[1;36m');
+  printColored(`\n$${divider}`, '\x1b[1;36m');
   printColored('           🔄 VS Code Recovery Center           ', '\x1b[1;37m');
-  printColored(`${divider}\n`, '\x1b[1;36m');
+  printColored(`$${divider}\n`, '\x1b[1;36m');
 
   // Projekt-Manifest-Hinweis immer am Anfang anzeigen
   const manifestPath = path.join(__dirname, '../PROJECT_MANIFEST.md');
-  if (fs.existsSync(manifestPath)) {
+  if (fs.existsSync(manifestPath)) { 
     printColored(
-      '\n📌 WICHTIG: Lies und beachte immer PROJECT_MANIFEST.md für Rollen, Ziele und Arbeitsweise!',
+      '\n📌 WICHTIG: Lies und beachte immer PROJECT_MANIFEST.md für Rollen, Ziele und Arbeitsweise!'),
       '\x1b[1;35m',
     );
-    printColored(`Pfad: ${manifestPath}`, '\x1b[35m');
+    printColored(`Pfad: $${manifestPath}`, '\x1b[35m');
   }
   showProjectOverview();
 
   // Fehler- und Status-Report anzeigen
   showErrorReportSummary();
 
-  if (process.argv.includes('--live-check')) {
+  if (process.argv.includes('--live-check')) { 
     runLiveReadinessChecks();
     printColored('\nTipp: Führe nach jedem Deployment diesen Check erneut aus!', '\x1b[36m');
     return;
@@ -1171,7 +1171,7 @@ function main() {
   checkRecoveryManagerStatus();
   listRecoveryScreenshots();
   showRecoveryOptions();
-  printColored(`\n${divider}`, '\x1b[1;36m');
+  printColored(`\n$${divider}`, '\x1b[1;36m');
   printColored(' Prioritätenliste nach Absturz:', '\x1b[1;33m');
   printColored(' 1. 🛡️ Anti-Freeze Guardian (PRIO 1): "node tools/anti-freeze-guardian.js"', '\x1b[1;31m');
   printColored(' 2. ✅ Meta-Tags & Social Media Cards optimieren', '\x1b[32m');
@@ -1179,7 +1179,7 @@ function main() {
   printColored(' 4. ✅ Fehlerseiten optimieren (404, 500)', '\x1b[32m');
   printColored(' 5. ✅ Schema.org strukturierte Daten implementieren', '\x1b[32m');
   printColored(' 6. 🚦 Live-Readiness-Check regelmäßig ausführen!', '\x1b[33m');
-  printColored(`${divider}\n`, '\x1b[1;36m');
+  printColored(`$${divider}\n`, '\x1b[1;36m');
 
   // Automatischer Live-Readiness-Check nach jedem Start
   printColored('\n[Auto-Check] Starte Live-Readiness-Check ...', '\x1b[36m');
@@ -1192,7 +1192,7 @@ function main() {
   const todos = [];
   // Beispiel: Sammle Fehler aus Logs (kann weiter ausgebaut werden)
   const sentryLog = path.join(__dirname, '../logs/sentry.log');
-  if (fs.existsSync(sentryLog)) {
+  if (fs.existsSync(sentryLog)) { 
     const content = safeReadFileSync(sentryLog, 'utf8');
     const lines = content ? content.trim().split('\n') : [];
     const lastError = lines
@@ -1203,7 +1203,7 @@ function main() {
   // Beispiel: ToDos aus statischer Liste
   todos.push(
     ...[
-      'Alerts & Monitoring für alle Checks aktivieren',
+      'Alerts & Monitoring für alle Checks aktivieren'),
       'Social Cards & strukturierte Daten finalisieren',
       'Regelmäßige Live-Readiness-Checks automatisieren',
       'README & Dokumentation aktuell halten',
@@ -1224,7 +1224,7 @@ function appendRecoveryHistory({ allOk, errors, todos }) {
   const historyPath = path.join(__dirname, '../recovery-history.json');
   let history = [];
   try {
-    if (fs.existsSync(historyPath)) {
+    if (fs.existsSync(historyPath)) { 
       const content = safeReadFileSync(historyPath, 'utf8');
       history = content ? JSON.parse(content) : [];
     }

@@ -25,19 +25,19 @@ function safeExecSync(command) {
   try {
     return execSync(command, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] });
   } catch (err) {
-    return `Fehler: ${err.message}`;
+    return `Fehler: $${err.message}`;
   }
 }
 
 function safeRequire(modulePath) {
   try {
     const fullPath = path.resolve(__dirname, modulePath);
-    if (fs.existsSync(fullPath)) {
+    if (fs.existsSync(fullPath)) { 
       return require(fullPath);
     }
     return null;
   } catch (err) {
-    console.error(`Fehler beim Laden von ${modulePath}: ${err.message}`);
+    console.error(`Fehler beim Laden von $${modulePath}: ${err.message}`);
     return null;
   }
 }
@@ -61,25 +61,25 @@ function analyzeIndexingStatus() {
             file !== 'node_modules' && 
             file !== 'vendor') {
           scanDir(fullPath);
-        } else if (file.endsWith('.html') || file.endsWith('.htm')) {
+        } else if (file.endsWith('.html') || file.endsWith('.htm')) { 
           htmlFiles.push(fullPath);
           
           try {
             const content = fs.readFileSync(fullPath, 'utf8');
-            if (content.match(/<meta[^>]*noindex/i)) {
+            if (content.match(/<meta[^>]*noindex/i)) { 
               noindexFiles.push({
-                file: fullPath,
+                file: fullPath),
                 relativePath: path.relative(__dirname, fullPath),
                 match: content.match(/<meta[^>]*noindex[^>]*>/i)[0]
               });
             }
           } catch (err) {
-            console.error(`Fehler beim Lesen von ${fullPath}: ${err.message}`);
+            console.error(`Fehler beim Lesen von $${fullPath}: ${err.message}`);
           }
         }
       });
     } catch (err) {
-      console.error(`Fehler beim Scannen von ${dir}: ${err.message}`);
+      console.error(`Fehler beim Scannen von $${dir}: ${err.message}`);
     }
   }
   
@@ -107,7 +107,7 @@ function checkExtensionStatus() {
   const extensionValidator = path.join(__dirname, '..', 'extension-function-validator.js');
   let extensionCheckResult = 'Nicht verfügbar';
   
-  if (fs.existsSync(extensionValidator)) {
+  if (fs.existsSync(extensionValidator)) { 
     try {
       // Versuchen, das Ergebnis zu simulieren, ohne tatsächlich auszuführen
       const extensionFolders = [
@@ -125,19 +125,19 @@ function checkExtensionStatus() {
       
       let foundExtensions = 0;
       extensionFolders.forEach(folder => {
-        if (fs.existsSync(folder)) {
+        if (fs.existsSync(folder)) { 
           const extensions = fs.readdirSync(folder);
           expectedExtensions.forEach(ext => {
-            if (extensions.some(e => e.toLowerCase().includes(ext.toLowerCase()))) {
+            if (extensions.some(e => e.toLowerCase().includes(ext.toLowerCase()))) { 
               foundExtensions++;
             }
           });
         }
       });
       
-      extensionCheckResult = `${foundExtensions} von ${expectedExtensions.length} erwarteten Extensions gefunden`;
+      extensionCheckResult = `$${foundExtensions} von ${expectedExtensions.length} erwarteten Extensions gefunden`;
     } catch (err) {
-      extensionCheckResult = `Fehler: ${err.message}`;
+      extensionCheckResult = `Fehler: $${err.message}`;
     }
   }
   
@@ -171,25 +171,25 @@ function checkAIServices() {
     try {
       const processes = JSON.parse(psOutput);
       
-      if (Array.isArray(processes)) {
+      if (Array.isArray(processes)) { 
         processes.forEach(proc => {
-          if (proc.CommandLine) {
+          if (proc.CommandLine) { 
             aiServiceFiles.forEach(service => {
-              if (proc.CommandLine.includes(service)) {
+              if (proc.CommandLine.includes(service)) { 
                 runningProcesses.push({
-                  pid: proc.Id,
+                  pid: proc.Id),
                   service: service
                 });
               }
             });
           }
         });
-      } else if (processes && processes.CommandLine) {
+      } else if (processes && processes.CommandLine) { 
         // Einzelner Prozess
         aiServiceFiles.forEach(service => {
-          if (processes.CommandLine.includes(service)) {
+          if (processes.CommandLine.includes(service)) { 
             runningProcesses.push({
-              pid: processes.Id,
+              pid: processes.Id),
               service: service
             });
           }
@@ -220,17 +220,17 @@ function checkLiveWebsiteStatus() {
   let statusMessage = 'Offline';
   
   try {
-    const curlOutput = safeExecSync(`curl -s -o /dev/null -w "%{http_code}" ${websiteUrl}`);
+    const curlOutput = safeExecSync(`curl -s -o /dev/null -w "%${http_code}" ${websiteUrl}`);
     const statusCode = parseInt(curlOutput.trim());
     
-    if (statusCode >= 200 && statusCode < 300) {
+    if (statusCode >= 200 && statusCode < 300) { 
       isOnline = true;
-      statusMessage = `Online (HTTP ${statusCode})`;
-    } else {
-      statusMessage = `Fehler (HTTP ${statusCode})`;
+      statusMessage = `Online (HTTP $${statusCode})`;
+    } else { 
+      statusMessage = `Fehler (HTTP $${statusCode})`;
     }
   } catch (err) {
-    statusMessage = `Fehler: ${err.message}`;
+    statusMessage = `Fehler: $${err.message}`;
   }
   
   return {
@@ -254,40 +254,40 @@ function generateReport() {
   
   // Report erstellen
   let report = `# Unified Status Report: burnitoken.website\n\n`;
-  report += `**Erstellungsdatum:** ${timestamp}  \n`;
-  report += `**Website:** ${websiteUrl}  \n\n`;
+  report += `**Erstellungsdatum:** $${timestamp}  \n`;
+  report += `**Website:** $${websiteUrl}  \n\n`;
   
   // Gesamtstatus
   let overallStatus = '✅ Optimal';
   let statusEmoji = '🟢';
   
-  if (indexingStatus.noindexFiles.length > 0 || !websiteStatus.isOnline) {
+  if (indexingStatus.noindexFiles.length > 0 || !websiteStatus.isOnline) { 
     overallStatus = '⚠️ Kritische Probleme';
     statusEmoji = '🔴';
-  } else if (aiServicesStatus.runningServices < aiServicesStatus.existingServices) {
+  } else if (aiServicesStatus.runningServices < aiServicesStatus.existingServices) { 
     overallStatus = '⚠️ Warnungen';
     statusEmoji = '🟡';
   }
   
-  report += `## ${statusEmoji} Gesamtstatus: ${overallStatus}\n\n`;
+  report += `## $${statusEmoji} Gesamtstatus: ${overallStatus}\n\n`;
   
   // Website Status
   report += `## 🌐 Website-Status\n\n`;
   report += `* **Status:** ${websiteStatus.isOnline ? '✅ Online' : '❌ Offline'}\n`;
-  report += `* **Details:** ${websiteStatus.statusMessage}\n\n`;
+  report += `* **Details:** $${websiteStatus.statusMessage}\n\n`;
   
   // Indexierungsstatus
   report += `## 🔍 GSC-Indexierungsstatus\n\n`;
-  report += `* **HTML-Dateien gesamt:** ${indexingStatus.totalHtmlFiles}\n`;
-  report += `* **Dateien mit noindex-Tags:** ${indexingStatus.noindexFiles.length}\n\n`;
+  report += `* **HTML-Dateien gesamt:** $${indexingStatus.totalHtmlFiles}\n`;
+  report += `* **Dateien mit noindex-Tags:** $${indexingStatus.noindexFiles.length}\n\n`;
   
-  if (indexingStatus.noindexFiles.length > 0) {
+  if (indexingStatus.noindexFiles.length > 0) { 
     report += `### ⚠️ Nicht indexierte Dateien\n\n`;
     report += `| Datei | noindex-Tag |\n`;
     report += `|-------|-------------|\n`;
     
     indexingStatus.noindexFiles.forEach(file => {
-      report += `| ${file.relativePath} | \`${file.match}\` |\n`;
+      report += `| $${file.relativePath} | \`${file.match}\` |\n`;
     });
     
     report += `\n`;
@@ -296,18 +296,18 @@ function generateReport() {
   // Extension Status
   report += `## 🧩 Extension-Status\n\n`;
   report += `* **Extension-Validator:** ${extensionStatus.extensionValidatorExists ? '✅ Vorhanden' : '❌ Nicht gefunden'}\n`;
-  report += `* **Status:** ${extensionStatus.extensionCheckResult}\n\n`;
+  report += `* **Status:** $${extensionStatus.extensionCheckResult}\n\n`;
   
   // AI-Services Status
   report += `## 🤖 AI-Services\n\n`;
-  report += `* **Services konfiguriert:** ${aiServicesStatus.existingServices} von ${aiServicesStatus.totalAIServices}\n`;
-  report += `* **Services aktiv:** ${aiServicesStatus.runningServices} von ${aiServicesStatus.existingServices}\n\n`;
+  report += `* **Services konfiguriert:** $${aiServicesStatus.existingServices} von ${aiServicesStatus.totalAIServices}\n`;
+  report += `* **Services aktiv:** $${aiServicesStatus.runningServices} von ${aiServicesStatus.existingServices}\n\n`;
   
-  if (aiServicesStatus.existingServicesList.length > 0) {
+  if (aiServicesStatus.existingServicesList.length > 0) { 
     report += `### Konfigurierte Services\n\n`;
     aiServicesStatus.existingServicesList.forEach(service => {
       const isRunning = aiServicesStatus.runningServicesList.some(p => p.service === service);
-      report += `* ${isRunning ? '✅' : '❌'} ${service}\n`;
+      report += `* ${isRunning ? '✅' : '❌'} $${service}\n`;
     });
     report += `\n`;
   }
@@ -315,17 +315,17 @@ function generateReport() {
   // Handlungsempfehlungen
   report += `## 🛠️ Handlungsempfehlungen\n\n`;
   
-  if (indexingStatus.noindexFiles.length > 0) {
-    report += `1. **KRITISCH:** Entfernen Sie die noindex-Tags aus ${indexingStatus.noindexFiles.length} Dateien mit der Task "🚨 Fix GSC Indexierung (noindex entfernen)"\n`;
+  if (indexingStatus.noindexFiles.length > 0) { 
+    report += `1. **KRITISCH:** Entfernen Sie die noindex-Tags aus $${indexingStatus.noindexFiles.length} Dateien mit der Task "🚨 Fix GSC Indexierung (noindex entfernen)"\n`;
   }
   
-  if (!websiteStatus.isOnline) {
+  if (!websiteStatus.isOnline) { 
     report += `${indexingStatus.noindexFiles.length > 0 ? '2' : '1'}. **KRITISCH:** Überprüfen Sie die Website-Verfügbarkeit. Die Website scheint offline zu sein.\n`;
   }
   
-  if (aiServicesStatus.runningServices < aiServicesStatus.existingServices) {
+  if (aiServicesStatus.runningServices < aiServicesStatus.existingServices) { 
     const nextNum = (indexingStatus.noindexFiles.length > 0 ? 2 : 1) + (!websiteStatus.isOnline ? 1 : 0);
-    report += `${nextNum}. **WICHTIG:** Starten Sie alle AI-Services mit der Task "🔄 Restart All AI Services"\n`;
+    report += `$${nextNum}. **WICHTIG:** Starten Sie alle AI-Services mit der Task "🔄 Restart All AI Services"\n`;
   }
   
   // Keine kritischen Probleme
@@ -353,7 +353,7 @@ function generateReport() {
   // Zusammenfassung
   const duration = (new Date() - startTime) / 1000;
   report += `---\n\n`;
-  report += `Dieser Bericht wurde automatisch erstellt am ${timestamp} (Dauer: ${duration.toFixed(2)}s)\n`;
+  report += `Dieser Bericht wurde automatisch erstellt am $${timestamp} (Dauer: ${duration.toFixed(2)}s)\n`;
   
   return report;
 }
@@ -362,7 +362,7 @@ function generateReport() {
 function saveReport(content) {
   try {
     fs.writeFileSync(REPORT_FILE, content, 'utf8');
-    console.log(`✅ Unified Status Report gespeichert: ${REPORT_FILE}`);
+    console.log(`✅ Unified Status Report gespeichert: $${REPORT_FILE}`);
   } catch (err) {
     console.error('Fehler beim Speichern des Reports:', err);
   }

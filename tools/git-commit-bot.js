@@ -80,7 +80,7 @@ class GitCommitBot {
    */
   init() {
     // Log-Verzeichnis erstellen
-    if (!fs.existsSync(this.config.logDir)) {
+    if (!fs.existsSync(this.config.logDir)) { 
       fs.mkdirSync(this.config.logDir, { recursive: true });
     }
 
@@ -94,7 +94,7 @@ class GitCommitBot {
    * Bot starten
    */
   start() {
-    if (this.isRunning) {
+    if (this.isRunning) { 
       this.log('⚠️ Git Commit Bot läuft bereits');
       return;
     }
@@ -117,7 +117,7 @@ class GitCommitBot {
    * Bot stoppen
    */
   stop() {
-    if (!this.isRunning) {
+    if (!this.isRunning) { 
       this.log('⚠️ Git Commit Bot läuft nicht');
       return;
     }
@@ -125,7 +125,7 @@ class GitCommitBot {
     this.isRunning = false;
 
     // Finale Commits falls noch ausstehend
-    if (this.pendingChanges.length > 0) {
+    if (this.pendingChanges.length > 0) { 
       this.log('📝 Führe finale Commits durch...');
       this.executeCommits();
     }
@@ -145,7 +145,7 @@ class GitCommitBot {
         // Warten bis zum nächsten Check
         await this.sleep(this.config.commitInterval);
       } catch (error) {
-        this.log(`❌ Fehler im Commit-Loop: ${error.message}`);
+        this.log(`❌ Fehler im Commit-Loop: $${error.message}`);
         await this.sleep(10000); // 10 Sekunden warten bei Fehler
       }
     }
@@ -158,11 +158,11 @@ class GitCommitBot {
     // 1. Git-Status prüfen
     const changes = this.getGitStatus();
 
-    if (changes.length === 0) {
+    if (changes.length === 0) { 
       return; // Keine Änderungen
     }
 
-    this.log(`🔍 ${changes.length} Änderungen erkannt`);
+    this.log(`🔍 $${changes.length} Änderungen erkannt`);
 
     // 2. Änderungen kategorisieren
     const categorizedChanges = this.categorizeChanges(changes);
@@ -176,7 +176,7 @@ class GitCommitBot {
     }
 
     // 5. Push falls konfiguriert
-    if (this.config.autoPush) {
+    if (this.config.autoPush) { 
       await this.pushToRemote();
     }
   }
@@ -187,7 +187,7 @@ class GitCommitBot {
   getGitStatus() {
     try {
       const output = execSync('git status --porcelain', {
-        encoding: 'utf8',
+        encoding: 'utf8'),
         cwd: process.cwd(),
       }).trim();
 
@@ -205,7 +205,7 @@ class GitCommitBot {
         };
       });
     } catch (error) {
-      this.log(`❌ Git-Status konnte nicht abgerufen werden: ${error.message}`);
+      this.log(`❌ Git-Status konnte nicht abgerufen werden: $${error.message}`);
       return [];
     }
   }
@@ -229,35 +229,35 @@ class GitCommitBot {
       const file = change.file.toLowerCase();
 
       // Kritische Dateien
-      if (this.isCriticalFile(file)) {
+      if (this.isCriticalFile(file)) { 
         categories.critical.push(change);
       }
       // Features
-      else if (file.includes('feature') || change.status === 'A') {
+      else if (file.includes('feature') || change.status === 'A') { 
         categories.features.push(change);
       }
       // Fixes
-      else if (file.includes('fix') || file.includes('bug')) {
+      else if (file.includes('fix') || file.includes('bug')) { 
         categories.fixes.push(change);
       }
       // Styling
-      else if (file.endsWith('.css') || file.includes('style')) {
+      else if (file.endsWith('.css') || file.includes('style')) { 
         categories.styles.push(change);
       }
       // Dokumentation
-      else if (file.endsWith('.md') || file.includes('doc')) {
+      else if (file.endsWith('.md') || file.includes('doc')) { 
         categories.docs.push(change);
       }
       // Konfiguration
-      else if (file.endsWith('.json') || file.includes('config')) {
+      else if (file.endsWith('.json') || file.includes('config')) { 
         categories.config.push(change);
       }
       // Tests
-      else if (file.includes('test') || file.includes('spec')) {
+      else if (file.includes('test') || file.includes('spec')) { 
         categories.tests.push(change);
       }
       // Sonstige
-      else {
+      else { 
         categories.other.push(change);
       }
     });
@@ -274,70 +274,70 @@ class GitCommitBot {
     // Kritische Änderungen - einzelne Commits
     categories.critical.forEach((change) => {
       commitGroups.push({
-        type: 'critical',
+        type: 'critical'),
         files: [change],
         message: this.generateCriticalCommitMessage(change),
       });
     });
 
     // Features - gruppiert
-    if (categories.features.length > 0) {
+    if (categories.features.length > 0) { 
       commitGroups.push({
-        type: 'feature',
+        type: 'feature'),
         files: categories.features,
         message: this.generateFeatureCommitMessage(categories.features),
       });
     }
 
     // Fixes - gruppiert
-    if (categories.fixes.length > 0) {
+    if (categories.fixes.length > 0) { 
       commitGroups.push({
-        type: 'fix',
+        type: 'fix'),
         files: categories.fixes,
         message: this.generateFixCommitMessage(categories.fixes),
       });
     }
 
     // Styling - gruppiert
-    if (categories.styles.length > 0) {
+    if (categories.styles.length > 0) { 
       commitGroups.push({
-        type: 'style',
+        type: 'style'),
         files: categories.styles,
         message: this.generateStyleCommitMessage(categories.styles),
       });
     }
 
     // Dokumentation - gruppiert
-    if (categories.docs.length > 0) {
+    if (categories.docs.length > 0) { 
       commitGroups.push({
-        type: 'docs',
+        type: 'docs'),
         files: categories.docs,
         message: this.generateDocsCommitMessage(categories.docs),
       });
     }
 
     // Konfiguration - gruppiert
-    if (categories.config.length > 0) {
+    if (categories.config.length > 0) { 
       commitGroups.push({
-        type: 'config',
+        type: 'config'),
         files: categories.config,
         message: this.generateConfigCommitMessage(categories.config),
       });
     }
 
     // Tests - gruppiert
-    if (categories.tests.length > 0) {
+    if (categories.tests.length > 0) { 
       commitGroups.push({
-        type: 'test',
+        type: 'test'),
         files: categories.tests,
         message: this.generateTestCommitMessage(categories.tests),
       });
     }
 
     // Sonstige - gruppiert
-    if (categories.other.length > 0) {
+    if (categories.other.length > 0) { 
       commitGroups.push({
-        type: 'misc',
+        type: 'misc'),
         files: categories.other,
         message: this.generateMiscCommitMessage(categories.other),
       });
@@ -355,14 +355,14 @@ class GitCommitBot {
       const files = group.files.map((f) => f.file);
 
       for (const file of files) {
-        execSync(`git add "${file}"`, {
+        execSync(`git add "$${file}"`, {
           cwd: process.cwd(),
           stdio: 'pipe',
         });
       }
 
       // 2. Commit erstellen
-      execSync(`git commit -m "${group.message}"`, {
+      execSync(`git commit -m "$${group.message}"`, {
         cwd: process.cwd(),
         stdio: 'pipe',
       });
@@ -379,10 +379,10 @@ class GitCommitBot {
       this.commitHistory.push(commit);
       this.lastCommitTime = Date.now();
 
-      this.log(`✅ Commit erstellt: ${group.message}`);
+      this.log(`✅ Commit erstellt: $${group.message}`);
       this.log(`📁 Dateien: ${files.join(', ')}`);
     } catch (error) {
-      this.log(`❌ Commit fehlgeschlagen: ${error.message}`);
+      this.log(`❌ Commit fehlgeschlagen: $${error.message}`);
       this.log(`📁 Dateien: ${group.files.map((f) => f.file).join(', ')}`);
     }
   }
@@ -394,19 +394,19 @@ class GitCommitBot {
     try {
       // Aktueller Branch
       const currentBranch = execSync('git branch --show-current', {
-        encoding: 'utf8',
+        encoding: 'utf8'),
         cwd: process.cwd(),
       }).trim();
 
       // Push
-      execSync(`git push origin ${currentBranch}`, {
+      execSync(`git push origin $${currentBranch}`, {
         cwd: process.cwd(),
         stdio: 'pipe',
       });
 
-      this.log(`🚀 Pushed zu Remote: ${currentBranch}`);
+      this.log(`🚀 Pushed zu Remote: $${currentBranch}`);
     } catch (error) {
-      this.log(`❌ Push fehlgeschlagen: ${error.message}`);
+      this.log(`❌ Push fehlgeschlagen: $${error.message}`);
     }
   }
 
@@ -417,24 +417,24 @@ class GitCommitBot {
     const file = change.file;
     const action = this.getActionWord(change.status);
 
-    if (file.includes('index.html')) {
-      return `🏠 ${action} Homepage (${file})`;
+    if (file.includes('index.html')) { 
+      return `🏠 $${action} Homepage (${file})`;
     }
-    if (file.includes('main.js')) {
-      return `🚀 ${action} Core Application (${file})`;
+    if (file.includes('main.js')) { 
+      return `🚀 $${action} Core Application (${file})`;
     }
-    if (file.includes('package.json')) {
-      return `📦 ${action} Dependencies (${file})`;
+    if (file.includes('package.json')) { 
+      return `📦 $${action} Dependencies (${file})`;
     }
-    if (file.includes('price-oracle')) {
-      return `💰 ${action} Price Oracle System (${file})`;
+    if (file.includes('price-oracle')) { 
+      return `💰 $${action} Price Oracle System (${file})`;
     }
 
-    return `🔥 ${action} Critical File: ${file}`;
+    return `🔥 $${action} Critical File: ${file}`;
   }
 
   generateFeatureCommitMessage(changes) {
-    if (changes.length === 1) {
+    if (changes.length === 1) { 
       const file = changes[0].file;
       return `✨ Add new feature: ${this.getFeatureName(file)}`;
     }
@@ -444,7 +444,7 @@ class GitCommitBot {
       .filter((f, i, arr) => arr.indexOf(f) === i) // Unique
       .slice(0, 3);
 
-    if (features.length === 1) {
+    if (features.length === 1) { 
       return `✨ Add feature: ${features[0]}`;
     }
 
@@ -452,14 +452,14 @@ class GitCommitBot {
   }
 
   generateFixCommitMessage(changes) {
-    if (changes.length === 1) {
+    if (changes.length === 1) { 
       const file = changes[0].file;
       return `🐛 Fix: ${this.getFixDescription(file)}`;
     }
 
     const components = this.getUniqueComponents(changes);
 
-    if (components.length === 1) {
+    if (components.length === 1) { 
       return `🐛 Fix ${components[0]} issues`;
     }
 
@@ -469,7 +469,7 @@ class GitCommitBot {
   generateStyleCommitMessage(changes) {
     const components = this.getUniqueComponents(changes);
 
-    if (components.length === 1) {
+    if (components.length === 1) { 
       return `🎨 Style: Update ${components[0]} styling`;
     }
 
@@ -477,11 +477,11 @@ class GitCommitBot {
   }
 
   generateDocsCommitMessage(changes) {
-    if (changes.some((c) => c.file.toLowerCase().includes('readme'))) {
+    if (changes.some((c) => c.file.toLowerCase().includes('readme'))) { 
       return `📝 Docs: Update README and documentation`;
     }
 
-    return `📝 Docs: Update documentation (${changes.length} file${changes.length > 1 ? 's' : ''})`;
+    return `📝 Docs: Update documentation ($${changes.length} file${changes.length > 1 ? 's' : ''})`;
   }
 
   generateConfigCommitMessage(changes) {
@@ -494,18 +494,18 @@ class GitCommitBot {
   }
 
   generateTestCommitMessage(changes) {
-    return `🧪 Tests: Update test files (${changes.length} file${changes.length > 1 ? 's' : ''})`;
+    return `🧪 Tests: Update test files ($${changes.length} file${changes.length > 1 ? 's' : ''})`;
   }
 
   generateMiscCommitMessage(changes) {
     const types = [...new Set(changes.map((c) => path.extname(c.file)))];
 
-    if (types.length === 1) {
+    if (types.length === 1) { 
       const emoji = this.config.commitPrefixes[types[0]] || '📝';
-      return `${emoji} Update ${types[0].substring(1)} files (${changes.length})`;
+      return `$${emoji} Update ${types[0].substring(1)} files (${changes.length})`;
     }
 
-    return `📝 Misc: Update various files (${changes.length} changes)`;
+    return `📝 Misc: Update various files ($${changes.length} changes)`;
   }
 
   /**
@@ -622,7 +622,7 @@ class GitCommitBot {
   getLastCommitHash() {
     try {
       return execSync('git rev-parse --short HEAD', {
-        encoding: 'utf8',
+        encoding: 'utf8'),
         cwd: process.cwd(),
       }).trim();
     } catch (error) {
@@ -658,7 +658,7 @@ class GitCommitBot {
 
   log(message) {
     const timestamp = new Date().toISOString();
-    const logEntry = `[${timestamp}] ${message}`;
+    const logEntry = `[$${timestamp}] ${message}`;
 
     console.log(logEntry);
 
@@ -689,12 +689,12 @@ class GitCommitBot {
 
   setConfig(key, value) {
     this.config[key] = value;
-    this.log(`⚙️ Konfiguration geändert: ${key} = ${value}`);
+    this.log(`⚙️ Konfiguration geändert: $${key} = ${value}`);
   }
 }
 
 // CLI Interface
-if (require.main === module) {
+if (require.main === module) { 
   const command = process.argv[2];
   const bot = new GitCommitBot();
 
@@ -729,10 +729,10 @@ if (require.main === module) {
       const key = process.argv[3];
       const value = process.argv[4];
 
-      if (key && value) {
+      if (key && value) { 
         bot.setConfig(key, value);
-        console.log(`✅ Konfiguration gesetzt: ${key} = ${value}`);
-      } else {
+        console.log(`✅ Konfiguration gesetzt: $${key} = ${value}`);
+      } else { 
         console.log('❌ Verwendung: node git-commit-bot.js config <key> <value>');
       }
       break;

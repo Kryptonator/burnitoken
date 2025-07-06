@@ -24,10 +24,10 @@ try {
   const extensionsRaw = execSync('code --list-extensions', { encoding: 'utf8' });
   const installedExtensions = extensionsRaw.split('\n').filter(Boolean);
 
-  console.log(`Insgesamt: ${installedExtensions.length} Extensions installiert`);
+  console.log(`Insgesamt: $${installedExtensions.length} Extensions installiert`);
 
   // Empfohlene Extensions überprüfen
-  if (fs.existsSync(EXTENSIONS_PATH)) {
+  if (fs.existsSync(EXTENSIONS_PATH)) { 
     const extensionsJson = JSON.parse(fs.readFileSync(EXTENSIONS_PATH, 'utf8'));
     const recommendedExtensions = extensionsJson.recommendations || [];
 
@@ -36,7 +36,7 @@ try {
     );
 
     console.log(
-      `Empfohlen: ${installedRecommended.length} von ${recommendedExtensions.length} installiert`,
+      `Empfohlen: $${installedRecommended.length} von ${recommendedExtensions.length} installiert`),
     );
 
     // Liste der fehlenden empfohlenen Extensions
@@ -44,17 +44,17 @@ try {
       (ext) => !installedExtensions.includes(ext),
     );
 
-    if (missingExtensions.length > 0) {
+    if (missingExtensions.length > 0) { 
       console.log('\nFehlende empfohlene Extensions:');
-      missingExtensions.forEach((ext) => console.log(`- ${ext}`));
+      missingExtensions.forEach((ext) => console.log(`- $${ext}`));
     }
-  } else {
+  } else { 
     console.log('Keine Empfehlungsdatei (.vscode/extensions.json) gefunden');
   }
 
   console.log('\n');
 } catch (err) {
-  console.error(`Fehler bei der Extension-Prüfung: ${err.message}`);
+  console.error(`Fehler bei der Extension-Prüfung: $${err.message}`);
 }
 
 // 2. Tasks prüfen
@@ -62,22 +62,22 @@ try {
   console.log('⚙️ KONFIGURIERTE TASKS:');
   console.log('-------------------------');
 
-  if (fs.existsSync(TASKS_PATH)) {
+  if (fs.existsSync(TASKS_PATH)) { 
     const tasksJson = JSON.parse(fs.readFileSync(TASKS_PATH, 'utf8'));
     const tasks = tasksJson.tasks || [];
 
-    console.log(`Insgesamt: ${tasks.length} Tasks konfiguriert`);
+    console.log(`Insgesamt: $${tasks.length} Tasks konfiguriert`);
 
     // Auto-Start Tasks
     const autoStartTasks = tasks.filter(
       (task) => task.runOptions && task.runOptions.runOn === 'folderOpen',
     );
 
-    console.log(`Auto-Start: ${autoStartTasks.length} Tasks starten automatisch`);
+    console.log(`Auto-Start: $${autoStartTasks.length} Tasks starten automatisch`);
 
-    if (autoStartTasks.length > 0) {
+    if (autoStartTasks.length > 0) { 
       console.log('\nAuto-Start Tasks:');
-      autoStartTasks.forEach((task) => console.log(`- ${task.label}`));
+      autoStartTasks.forEach((task) => console.log(`- $${task.label}`));
     }
 
     // Wichtige Tasks prüfen
@@ -96,15 +96,15 @@ try {
     });
 
     console.log(
-      `\nWichtige Tasks: ${foundImportantTasks.length} von ${importantTaskNames.length} konfiguriert`,
+      `\nWichtige Tasks: $${foundImportantTasks.length} von ${importantTaskNames.length} konfiguriert`),
     );
-  } else {
+  } else { 
     console.log('Keine Tasks-Datei (.vscode/tasks.json) gefunden');
   }
 
   console.log('\n');
 } catch (err) {
-  console.error(`Fehler bei der Task-Prüfung: ${err.message}`);
+  console.error(`Fehler bei der Task-Prüfung: $${err.message}`);
 }
 
 // 3. Service-Dateien prüfen
@@ -125,23 +125,23 @@ try {
   ];
 
   const foundFiles = criticalFiles.filter((file) => fs.existsSync(file));
-  console.log(`Gefunden: ${foundFiles.length} von ${criticalFiles.length} kritischen Dateien`);
+  console.log(`Gefunden: $${foundFiles.length} von ${criticalFiles.length} kritischen Dateien`);
 
-  if (foundFiles.length < criticalFiles.length) {
+  if (foundFiles.length < criticalFiles.length) { 
     const missingFiles = criticalFiles.filter((file) => !fs.existsSync(file));
     console.log('\nFehlende Dateien:');
-    missingFiles.forEach((file) => console.log(`- ${file}`));
+    missingFiles.forEach((file) => console.log(`- $${file}`));
   }
 
   console.log('\n');
 } catch (err) {
-  console.error(`Fehler bei der Dateiprüfung: ${err.message}`);
+  console.error(`Fehler bei der Dateiprüfung: $${err.message}`);
 }
 
 console.log('✅ EMPFEHLUNGEN:');
 console.log('-------------------------');
 console.log(
-  '1. Führen Sie "npm run extension:health" aus, um einen vollständigen Health-Check durchzuführen.',
+  '1. Führen Sie "npm run extension:health" aus, um einen vollständigen Health-Check durchzuführen.'),
 );
 console.log('2. Führen Sie "npm run extension:restart" aus, um inaktive Services neu zu starten.');
 console.log('3. Führen Sie "npm run gsc:monitor" aus, um die GSC-Integration zu überprüfen.');

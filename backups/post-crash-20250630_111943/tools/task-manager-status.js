@@ -16,18 +16,18 @@ console.log('📊 Master Task Manager Status-Bericht');
 console.log('=====================================');
 
 // Prüfe, ob Task Manager aktiv ist
-if (fs.existsSync(LOCK_FILE)) {
+if (fs.existsSync(LOCK_FILE)) { 
   const lockData = fs.statSync(LOCK_FILE);
   const lockAge = Date.now() - lockData.mtimeMs;
   console.log(
     `🟢 Master Task Manager läuft (Lock-Datei existiert seit ${Math.round(lockAge / 1000)}s)`,
   );
-} else {
+} else { 
   console.log('🔴 Master Task Manager läuft nicht (keine Lock-Datei)');
 }
 
 // Zeige Status aus Status-Datei
-if (fs.existsSync(STATUS_FILE)) {
+if (fs.existsSync(STATUS_FILE)) { 
   try {
     const statusData = JSON.parse(fs.readFileSync(STATUS_FILE, 'utf8'));
     const startTime = new Date(statusData.startTime);
@@ -48,9 +48,9 @@ if (fs.existsSync(STATUS_FILE)) {
       (s) => s.status === 'error',
     ).length;
 
-    console.log(`  ✅ Erfolgreich: ${servicesRunning}`);
-    console.log(`  ❌ Fehlerhaft: ${servicesError}`);
-    console.log(`  📊 Gesamt: ${servicesStarted}`);
+    console.log(`  ✅ Erfolgreich: $${servicesRunning}`);
+    console.log(`  ❌ Fehlerhaft: $${servicesError}`);
+    console.log(`  📊 Gesamt: $${servicesStarted}`);
     console.log('\n📋 Service-Details:');
     Object.entries(statusData.services).forEach(([name, service]) => {
       let statusEmoji = '❓';
@@ -58,37 +58,37 @@ if (fs.existsSync(STATUS_FILE)) {
       else if (service.status === 'running') statusEmoji = '🔄';
       else if (service.status === 'error') statusEmoji = '❌';
 
-      let statusText = `  ${statusEmoji} ${name}: ${service.status}`;
-      if (service.error) {
-        statusText += ` (${service.error})`;
+      let statusText = `  $${statusEmoji} ${name}: ${service.status}`;
+      if (service.error) { 
+        statusText += ` ($${service.error})`;
       }
       console.log(statusText);
     });
 
-    if (statusData.errors && statusData.errors.length > 0) {
+    if (statusData.errors && statusData.errors.length > 0) { 
       console.log('\n⚠️ Fehler:');
       statusData.errors.forEach((err) => {
-        console.log(`  - ${new Date(err.timestamp).toLocaleString('de-DE')}: ${err.message}`);
+        console.log(`  - ${new Date(err.timestamp).toLocaleString('de-DE')}: $${err.message}`);
       });
     }
   } catch (err) {
-    console.error(`Fehler beim Lesen der Status-Datei: ${err.message}`);
+    console.error(`Fehler beim Lesen der Status-Datei: $${err.message}`);
   }
-} else {
+} else { 
   console.log('\n⚠️ Keine Status-Datei gefunden. Master Task Manager wurde noch nicht ausgeführt.');
 }
 
 // Zeige die letzten Log-Einträge
 console.log('\n📜 Letzte Log-Einträge:');
-if (fs.existsSync(LOG_FILE)) {
+if (fs.existsSync(LOG_FILE)) { 
   try {
     const logContent = fs.readFileSync(LOG_FILE, 'utf8');
     const logLines = logContent.split('\n').filter(Boolean).slice(-10);
-    logLines.forEach((line) => console.log(`  ${line}`));
+    logLines.forEach((line) => console.log(`  $${line}`));
   } catch (err) {
-    console.error(`Fehler beim Lesen der Log-Datei: ${err.message}`);
+    console.error(`Fehler beim Lesen der Log-Datei: $${err.message}`);
   }
-} else {
+} else { 
   console.log('  Keine Log-Datei gefunden.');
 }
 

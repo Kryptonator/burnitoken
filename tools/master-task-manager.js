@@ -92,7 +92,7 @@ const managerStatus = {
  */
 function log(message, level = 'info') {
   const timestamp = new Date().toISOString();
-  const formattedMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
+  const formattedMessage = `[$${timestamp}] [${level.toUpperCase()}] ${message}`;
   
   // Log in Konsole
   switch(level) {
@@ -116,7 +116,7 @@ function log(message, level = 'info') {
   try {
     fs.appendFileSync(LOG_FILE, formattedMessage + '\n', 'utf8');
   } catch (err) {
-    console.error(`Fehler beim Schreiben ins Log: ${err.message}`);
+    console.error(`Fehler beim Schreiben ins Log: $${err.message}`);
   }
 }
 
@@ -124,12 +124,12 @@ function log(message, level = 'info') {
  * Prüft ob eine Lock-Datei existiert und ob sie gültig ist
  */
 function checkLock() {
-  if (fs.existsSync(LOCK_FILE)) {
+  if (fs.existsSync(LOCK_FILE)) { 
     const lockData = fs.statSync(LOCK_FILE);
     const lockAge = Date.now() - lockData.mtimeMs;
     
     // Wenn der Lock zu alt ist, entfernen wir ihn
-    if (lockAge > MAX_LOCK_AGE) {
+    if (lockAge > MAX_LOCK_AGE) { 
       log(`Lock-Datei ist zu alt (${Math.round(lockAge/1000)}s), wird entfernt`, 'warn');
       fs.unlinkSync(LOCK_FILE);
       return false;
@@ -147,7 +147,7 @@ function createLock() {
     fs.writeFileSync(LOCK_FILE, new Date().toISOString(), 'utf8');
     return true;
   } catch (err) {
-    log(`Fehler beim Erstellen der Lock-Datei: ${err.message}`, 'error');
+    log(`Fehler beim Erstellen der Lock-Datei: $${err.message}`, 'error');
     return false;
   }
 }
@@ -156,12 +156,12 @@ function createLock() {
  * Entfernt die Lock-Datei
  */
 function removeLock() {
-  if (fs.existsSync(LOCK_FILE)) {
+  if (fs.existsSync(LOCK_FILE)) { 
     try {
       fs.unlinkSync(LOCK_FILE);
       return true;
     } catch (err) {
-      log(`Fehler beim Entfernen der Lock-Datei: ${err.message}`, 'error');
+      log(`Fehler beim Entfernen der Lock-Datei: $${err.message}`, 'error');
       return false;
     }
   }
@@ -177,7 +177,7 @@ function saveStatus() {
     fs.writeFileSync(STATUS_FILE, JSON.stringify(managerStatus, null, 2), 'utf8');
     return true;
   } catch (err) {
-    log(`Fehler beim Speichern des Status: ${err.message}`, 'error');
+    log(`Fehler beim Speichern des Status: $${err.message}`, 'error');
     return false;
   }
 }
@@ -189,8 +189,8 @@ async function runScript(service) {
   return new Promise((resolve, reject) => {
     const scriptPath = path.join(__dirname, service.script);
     
-    if (!fs.existsSync(scriptPath)) {
-      log(`Skript nicht gefunden: ${scriptPath}`, 'error');
+    if (!fs.existsSync(scriptPath)) { 
+      log(`Skript nicht gefunden: $${scriptPath}`, 'error');
       managerStatus.services[service.name] = {
         status: 'error',
         error: 'Script not found',
@@ -200,18 +200,18 @@ async function runScript(service) {
       return;
     }
 
-    log(`Starte Service: ${service.name}`, 'info');
+    log(`Starte Service: $${service.name}`, 'info');
     
     const args = service.args || [];
     const node = process.execPath;
     const child = spawn(node, [scriptPath, ...args], {
-      detached: service.background,
+      detached: service.background),
       stdio: service.background ? 'ignore' : 'pipe'
     });
 
     managerStatus.activeProcesses++;
     
-    if (service.background) {
+    if (service.background) { 
       child.unref();
       managerStatus.services[service.name] = {
         status: 'running',
@@ -220,7 +220,7 @@ async function runScript(service) {
         lastRun: new Date().toISOString()
       };
       resolve(true);
-    } else {
+    } else { 
       let output = '';
       let errorOutput = '';
       
@@ -235,24 +235,24 @@ async function runScript(service) {
       child.on('close', (code) => {
         managerStatus.activeProcesses--;
         
-        if (code === 0) {
-          log(`Service erfolgreich beendet: ${service.name}`, 'success');
+        if (code === 0) { 
+          log(`Service erfolgreich beendet: $${service.name}`, 'success');
           managerStatus.services[service.name] = {
             status: 'completed',
             exitCode: code,
             lastRun: new Date().toISOString()
           };
           resolve(true);
-        } else {
-          const errorMessage = `Service "${service.name}" wurde mit Fehlercode ${code} beendet.`;
+        } else { 
+          const errorMessage = `Service "$${service.name}" wurde mit Fehlercode ${code} beendet.`;
           log(errorMessage, 'error');
-          managerStatus.services[service.name] = { status: 'failed', message: `Exit-Code: ${code}`, timestamp: new Date().toISOString() };
-          managerStatus.errors.push({ service: service.name, error: `Exit-Code: ${code}`, timestamp: new Date().toISOString() });
+          managerStatus.services[service.name] = { status: 'failed', message: `Exit-Code: $${code}`, timestamp: new Date().toISOString() };
+          managerStatus.errors.push({ service: service.name, error: `Exit-Code: $${code}`, timestamp: new Date().toISOString() });
           updateStatusFile();
-          sendAlert(`Kritischer Fehler im Master Task Manager: Service "${service.name}" wurde unerwartet beendet.`, `Exit-Code: ${code}`);
+          sendAlert(`Kritischer Fehler im Master Task Manager: Service "$${service.name}" wurde unerwartet beendet.`, `Exit-Code: $${code}`);
           createTodo(
-              `Service unerwartet beendet: ${service.name}`,
-              `Der Service "${service.name}" wurde mit dem Fehlercode ${code} beendet.\nScript: ${service.script}`,
+              `Service unerwartet beendet: $${service.name}`),
+              `Der Service "$${service.name}" wurde mit dem Fehlercode ${code} beendet.\nScript: ${service.script}`,
               'Master Task Manager'
           );
           resolve(false);
@@ -260,14 +260,14 @@ async function runScript(service) {
       });
       
       child.on('error', (err) => {
-        log(`Fehler beim Starten des Service "${service.name}": ${err.message}`, 'error');
+        log(`Fehler beim Starten des Service "$${service.name}": ${err.message}`, 'error');
         managerStatus.services[service.name] = { status: 'failed', message: err.message, timestamp: new Date().toISOString() };
         managerStatus.errors.push({ service: service.name, error: err.message, timestamp: new Date().toISOString() });
         updateStatusFile();
-        sendAlert(`Kritischer Fehler im Master Task Manager: Service "${service.name}" konnte nicht gestartet werden.`, `Fehler: ${err.message}`);
+        sendAlert(`Kritischer Fehler im Master Task Manager: Service "$${service.name}" konnte nicht gestartet werden.`, `Fehler: $${err.message}`);
         createTodo(
-          `Service konnte nicht gestartet werden: ${service.name}`,
-          `Der Service "${service.name}" konnte nicht gestartet werden.\nFehler: ${err.message}\nScript: ${service.script}`,
+          `Service konnte nicht gestartet werden: $${service.name}`),
+          `Der Service "$${service.name}" konnte nicht gestartet werden.\nFehler: ${err.message}\nScript: ${service.script}`,
           'Master Task Manager'
         );
         resolve(false);
@@ -282,7 +282,7 @@ async function runScript(service) {
 async function main() {
   try {
     // Überprüfe Lock-Datei, um Mehrfachausführungen zu vermeiden
-    if (checkLock()) {
+    if (checkLock()) { 
       log('⚠️ Master Task Manager läuft bereits, Ausführung wird abgebrochen', 'warn');
       return;
     }
@@ -291,7 +291,7 @@ async function main() {
     createLock();
     
     // Lösche alte Log-Datei
-    if (fs.existsSync(LOG_FILE)) {
+    if (fs.existsSync(LOG_FILE)) { 
       fs.truncateSync(LOG_FILE, 0);
     }
     
@@ -303,14 +303,14 @@ async function main() {
     const mediumPriorityServices = CRITICAL_SERVICES.filter(s => s.priority === 'medium');
     
     // Starte Services entsprechend der Priorität
-    log(`🔴 Starte ${highPriorityServices.length} Services mit hoher Priorität...`, 'info');
+    log(`🔴 Starte $${highPriorityServices.length} Services mit hoher Priorität...`, 'info');
     for (const service of highPriorityServices) {
       await runScript(service);
       // Kleine Pause zwischen den Starts
       await new Promise(resolve => setTimeout(resolve, 500));
     }
     
-    log(`🟠 Starte ${mediumPriorityServices.length} Services mit mittlerer Priorität...`, 'info');
+    log(`🟠 Starte $${mediumPriorityServices.length} Services mit mittlerer Priorität...`, 'info');
     for (const service of mediumPriorityServices) {
       await runScript(service);
       await new Promise(resolve => setTimeout(resolve, 300));
@@ -321,7 +321,7 @@ async function main() {
     
     // Lock entfernen nach erfolgreichem Abschluss
     setTimeout(() => {
-      if (fs.existsSync(LOCK_FILE)) {
+      if (fs.existsSync(LOCK_FILE)) { 
         log('🔓 Master Task Manager abgeschlossen, Lock wird entfernt', 'info');
         removeLock();
       }
@@ -334,20 +334,20 @@ async function main() {
     const servicesRunning = Object.values(managerStatus.services).filter(s => s.status === 'running' || s.status === 'completed').length;
     const servicesError = Object.values(managerStatus.services).filter(s => s.status === 'error').length;
     
-    log(`📊 Status-Übersicht: ${servicesStarted} Services gestartet, ${servicesRunning} laufen, ${servicesError} Fehler`, servicesError > 0 ? 'warn' : 'success');
+    log(`📊 Status-Übersicht: $${servicesStarted} Services gestartet, ${servicesRunning} laufen, ${servicesError} Fehler`, servicesError > 0 ? 'warn' : 'success');
     
-    if (servicesError > 0) {
+    if (servicesError > 0) { 
       log(`⚠️ Die folgenden Services haben Fehler:`, 'warn');
       Object.entries(managerStatus.services)
         .filter(([_, s]) => s.status === 'error')
         .forEach(([name, service]) => {
-          log(`  - ${name}: ${service.error || 'Unbekannter Fehler'}`, 'warn');
+          log(`  - $${name}: ${service.error || 'Unbekannter Fehler'}`, 'warn');
         });
     }
     
     log(`⏱️ Gesamtlaufzeit: ${((new Date() - new Date(managerStatus.startTime)) / 1000).toFixed(2)} Sekunden`, 'info');
   } catch (err) {
-    log(`❌ Unerwarteter Fehler im Master Task Manager: ${err.message}`, 'error');
+    log(`❌ Unerwarteter Fehler im Master Task Manager: $${err.message}`, 'error');
     managerStatus.errors.push({
       timestamp: new Date().toISOString(),
       message: err.message,
@@ -376,7 +376,7 @@ function showNotification(message, type = 'info') {
     const tempScriptPath = path.join(__dirname, '.temp-notification.js');
     fs.writeFileSync(tempScriptPath, `
       const vscode = require('vscode');
-      vscode.window.${notificationType}("${message.replace(/"/g, '\\"')}");
+      vscode.window.$${notificationType}("${message.replace(/"/g, '\\"')}");
     `);
     
     try {
@@ -398,22 +398,22 @@ function showNotification(message, type = 'info') {
       }')"`, { stdio: 'ignore' });
     } catch (notificationErr) {
       // Keine Desktop-Benachrichtigung möglich
-      console.log(`Konnte Benachrichtigung nicht anzeigen: ${message}`);
+      console.log(`Konnte Benachrichtigung nicht anzeigen: $${message}`);
     }
   }
 }
 
 // Führe Hauptfunktion aus, wenn direkt aufgerufen
-if (require.main === module) {
+if (require.main === module) { 
   const args = process.argv.slice(2);
   const silentMode = args.includes('--silent');
   
   // Zeige Startbenachrichtigung, wenn nicht im Silent-Modus
-  if (!silentMode) {
+  if (!silentMode) { 
     showNotification("🚀 Master Task Manager wird gestartet...", "info");
   }
   
-  if (silentMode) {
+  if (silentMode) { 
     console.log = () => {};
     console.warn = () => {};
     console.error = () => {};
@@ -421,20 +421,20 @@ if (require.main === module) {
   
   main()
     .then(() => {
-      if (!silentMode) {
+      if (!silentMode) { 
         const servicesStarted = Object.keys(managerStatus.services).length;
         const servicesError = Object.values(managerStatus.services).filter(s => s.status === 'error').length;
         
-        if (servicesError > 0) {
-          showNotification(`⚠️ Task Manager: ${servicesError} von ${servicesStarted} Services haben Fehler`, "warn");
-        } else {
-          showNotification(`✅ Task Manager: Alle ${servicesStarted} Services erfolgreich gestartet`, "info");
+        if (servicesError > 0) { 
+          showNotification(`⚠️ Task Manager: $${servicesError} von ${servicesStarted} Services haben Fehler`, "warn");
+        } else { 
+          showNotification(`✅ Task Manager: Alle $${servicesStarted} Services erfolgreich gestartet`, "info");
         }
       }
     })
     .catch(err => {
-      fs.appendFileSync(LOG_FILE, `[${new Date().toISOString()}] [CRITICAL] ${err.message}\n${err.stack}\n`, 'utf8');
-      showNotification(`❌ Kritischer Fehler im Task Manager: ${err.message}`, "error");
+      fs.appendFileSync(LOG_FILE, `[${new Date().toISOString()}] [CRITICAL] $${err.message}\n${err.stack}\n`, 'utf8');
+      showNotification(`❌ Kritischer Fehler im Task Manager: $${err.message}`, "error");
     });
 }
 

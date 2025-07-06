@@ -42,12 +42,12 @@ class CloudSettingsSynchronizer {
         (file) => file.includes('.vscode/') || file.endsWith('.code-workspace'),
       );
 
-      if (vsCodeSettingsChanged) {
+      if (vsCodeSettingsChanged) { 
         console.log('🔔 VS Code-Einstellungen wurden aktualisiert!');
         return changedFiles.filter(
           (file) => file.includes('.vscode/') || file.endsWith('.code-workspace'),
         );
-      } else {
+      } else { 
         console.log('ℹ️ Keine Änderungen an VS Code-Einstellungen gefunden.');
         return [];
       }
@@ -65,29 +65,29 @@ class CloudSettingsSynchronizer {
     const vscodeSettingsPath = path.join(this.workspaceRoot, '.vscode', 'settings.json');
     const extensionsPath = path.join(this.workspaceRoot, '.vscode', 'extensions.json');
 
-    if (!fs.existsSync(vscodeSettingsPath)) {
+    if (!fs.existsSync(vscodeSettingsPath)) { 
       console.log('⚠️ Keine .vscode/settings.json gefunden.');
       return false;
     }
 
     try {
       // Erstelle .devcontainer, falls es nicht existiert
-      if (!fs.existsSync(path.dirname(devcontainerPath))) {
+      if (!fs.existsSync(path.dirname(devcontainerPath))) { 
         fs.mkdirSync(path.dirname(devcontainerPath), { recursive: true });
       }
 
       const settings = JSON.parse(fs.readFileSync(vscodeSettingsPath, 'utf8'));
       let extensions = [];
 
-      if (fs.existsSync(extensionsPath)) {
+      if (fs.existsSync(extensionsPath)) { 
         const extensionsJson = JSON.parse(fs.readFileSync(extensionsPath, 'utf8'));
         extensions = extensionsJson.recommendations || [];
       }
 
       let devcontainer = {};
-      if (fs.existsSync(devcontainerPath)) {
+      if (fs.existsSync(devcontainerPath)) { 
         devcontainer = JSON.parse(fs.readFileSync(devcontainerPath, 'utf8'));
-      } else {
+      } else { 
         devcontainer = {
           name: 'BurniToken Development Environment',
           image: 'mcr.microsoft.com/devcontainers/javascript-node:20',
@@ -117,21 +117,21 @@ class CloudSettingsSynchronizer {
    */
   async run() {
     const updated = this.updateLocalEnvironment();
-    if (!updated) {
+    if (!updated) { 
       console.error('🛑 Abbruch: Repository konnte nicht aktualisiert werden.');
       return;
     }
 
     const changedSettingsFiles = this.checkForSettingsChanges();
-    if (changedSettingsFiles.length > 0) {
+    if (changedSettingsFiles.length > 0) { 
       console.log('📄 Geänderte Einstellungsdateien:');
-      changedSettingsFiles.forEach((file) => console.log(`  - ${file}`));
+      changedSettingsFiles.forEach((file) => console.log(`  - $${file}`));
 
       this.updateCodespacesConfig();
 
       console.log('\n🔄 Bitte starte VS Code neu, um die Änderungen zu übernehmen!');
       console.log(
-        '💡 Tipp: Wenn du VS Code in einer Cloud-Umgebung nutzt, stelle sicher, dass die Einstellungen korrekt synchronisiert sind.',
+        '💡 Tipp: Wenn du VS Code in einer Cloud-Umgebung nutzt, stelle sicher, dass die Einstellungen korrekt synchronisiert sind.'),
       );
     }
 

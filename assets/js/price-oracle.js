@@ -110,7 +110,7 @@ class BurniPriceOracle {
     this.updateUI();
 
     console.log('🔮 BurniToken Price Oracle initialized', {
-      apis: this.config.apis.length,
+      apis: this.config.apis.length),
       elements: Object.keys(this.elements).length,
       refreshInterval: this.config.refreshInterval,
     });
@@ -131,9 +131,9 @@ class BurniPriceOracle {
 
     // Try cache first
     const cached = this.getFromCache('price');
-    if (cached && this.isCacheValid(cached)) {
+    if (cached && this.isCacheValid(cached)) { 
       this.setState({
-        ...cached.data,
+        ...cached.data),
         status: 'cached',
         lastUpdate: cached.timestamp,
       });
@@ -144,9 +144,9 @@ class BurniPriceOracle {
     for (const [index, api] of this.config.apis.entries()) {
       try {
         const data = await this.fetchFromAPI(api);
-        if (data && (data.usd > 0 || data.price > 0)) {
+        if (data && (data.usd > 0 || data.price > 0)) { 
           this.setState({
-            usd: data.usd || data.price,
+            usd: data.usd || data.price),
             eur: data.eur,
             btc: data.btc,
             change: data.change,
@@ -161,7 +161,7 @@ class BurniPriceOracle {
 
           // Cache successful result
           this.setCache('price', {
-            usd: data.usd || data.price,
+            usd: data.usd || data.price),
             eur: data.eur,
             btc: data.btc,
             change: data.change,
@@ -174,8 +174,8 @@ class BurniPriceOracle {
           return;
         }
       } catch (error) {
-        console.warn(`📊 Price Oracle: ${api.name} failed`, error.message);
-        if (index === this.config.apis.length - 1) {
+        console.warn(`📊 Price Oracle: $${api.name} failed`, error.message);
+        if (index === this.config.apis.length - 1) { 
           // All APIs failed
           this.handleError(new Error('All price APIs failed'));
         }
@@ -189,7 +189,7 @@ class BurniPriceOracle {
 
     try {
       const response = await fetch(api.url, {
-        signal: controller.signal,
+        signal: controller.signal),
         headers: {
           Accept: 'application/json',
         },
@@ -197,8 +197,8 @@ class BurniPriceOracle {
 
       clearTimeout(timeoutId);
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      if (!response.ok) { 
+        throw new Error(`HTTP $${response.status}: ${response.statusText}`);
       }
 
       const data = await response.json();
@@ -211,13 +211,13 @@ class BurniPriceOracle {
 
   handleError(error) {
     this.setState({
-      status: 'error',
+      status: 'error'),
       error: error.message,
       retryCount: this.state.retryCount + 1,
     });
 
     // Auto-retry with exponential backoff
-    if (this.state.retryCount < this.config.maxRetries) {
+    if (this.state.retryCount < this.config.maxRetries) { 
       const delay = this.config.retryDelay * Math.pow(2, this.state.retryCount);
       setTimeout(() => this.fetchPrice(), delay);
     }
@@ -235,41 +235,41 @@ class BurniPriceOracle {
 
     // Update USD price elements
     document.querySelectorAll('[data-price-usd], [data-price-value]').forEach((el) => {
-      if (usd !== null && usd > 0) {
+      if (usd !== null && usd > 0) { 
         el.textContent = this.formatPrice(usd, 'USD');
         el.setAttribute('data-price', usd);
-      } else {
+      } else { 
         el.textContent = '$--';
       }
     });
 
     // Update EUR price elements
     document.querySelectorAll('[data-price-eur]').forEach((el) => {
-      if (eur !== null && eur > 0) {
+      if (eur !== null && eur > 0) { 
         el.textContent = this.formatPrice(eur, 'EUR');
         el.setAttribute('data-price', eur);
-      } else {
+      } else { 
         el.textContent = '€--';
       }
     });
 
     // Update BTC price elements
     document.querySelectorAll('[data-price-btc]').forEach((el) => {
-      if (btc !== null && btc > 0) {
+      if (btc !== null && btc > 0) { 
         el.textContent = this.formatPrice(btc, 'BTC');
         el.setAttribute('data-price', btc);
-      } else {
+      } else { 
         el.textContent = '₿--';
       }
     });
 
     // Update 24h change elements
     document.querySelectorAll('[data-price-change]').forEach((el) => {
-      if (change !== null) {
+      if (change !== null) { 
         const isPositive = change >= 0;
         el.textContent = `${isPositive ? '+' : ''}${change.toFixed(2)}%`;
         el.className = `${el.className.replace(/text-(red|green)-\d+/, '')} ${isPositive ? 'text-green-500' : 'text-red-500'}`;
-      } else {
+      } else { 
         el.textContent = '--%';
       }
     });
@@ -282,20 +282,20 @@ class BurniPriceOracle {
 
     // Update burned tokens elements
     document.querySelectorAll('[data-tokens-burned]').forEach((el) => {
-      if (burned !== null && burned > 0) {
+      if (burned !== null && burned > 0) { 
         el.textContent = this.formatTokenAmount(burned);
         el.setAttribute('data-burned', burned);
-      } else {
+      } else { 
         el.textContent = '--';
       }
     });
 
     // Update locked tokens elements
     document.querySelectorAll('[data-tokens-locked]').forEach((el) => {
-      if (locked !== null && locked > 0) {
+      if (locked !== null && locked > 0) { 
         el.textContent = this.formatTokenAmount(locked);
         el.setAttribute('data-locked', locked);
-      } else {
+      } else { 
         el.textContent = '--';
       }
     });
@@ -366,7 +366,7 @@ class BurniPriceOracle {
     element.innerHTML = `
             <div class="price-success" role="region" aria-live="polite">
                 <span class="price-value" aria-label="Aktueller ${priceType.toUpperCase()}-Preis">
-                    ${formattedPrice}
+                    $${formattedPrice}
                 </span>
                 <span class="price-change ${changeClass}" 
                       aria-label="24-Stunden-Änderung: ${Math.abs(change).toFixed(2)} Prozent ${change >= 0 ? 'Gewinn' : 'Verlust'}">
@@ -379,8 +379,8 @@ class BurniPriceOracle {
         `;
     element.setAttribute('data-state', 'success');
     element.setAttribute(
-      'aria-label',
-      `${priceType.toUpperCase()}-Preis: ${formattedPrice}, 24h-Änderung: ${change.toFixed(2)}%`,
+      'aria-label'),
+      `${priceType.toUpperCase()}-Preis: $${formattedPrice}, 24h-Änderung: ${change.toFixed(2)}%`,
     );
   }
 
@@ -398,7 +398,7 @@ class BurniPriceOracle {
                 </button>
                 ${
                   error
-                    ? `<div class="error-details" title="${error.message}">
+                    ? `<div class="error-details" title="$${error.message}">
                     Fehler: ${this.simplifyErrorMessage(error.message)}
                 </div>`
                     : ''
@@ -416,7 +416,7 @@ class BurniPriceOracle {
     element.innerHTML = `
             <div class="price-stale" role="region" aria-live="polite">
                 <span class="price-value stale" aria-label="Veralteter ${priceType.toUpperCase()}-Preis">
-                    ${formattedPrice}
+                    $${formattedPrice}
                 </span>
                 <span class="stale-indicator" title="Daten sind ${ageMinutes} Minuten alt">
                     ⏰ ${ageMinutes}min alt
@@ -442,7 +442,7 @@ class BurniPriceOracle {
     const config = statusConfig[state] || statusConfig.error;
 
     element.innerHTML = `
-            <span class="status-indicator ${config.class}" aria-label="Status: ${config.text}">
+            <span class="status-indicator $${config.class}" aria-label="Status: ${config.text}">
                 ${config.icon} ${config.text}
             </span>
         `;
@@ -452,11 +452,11 @@ class BurniPriceOracle {
    * Advanced Error Recovery with Exponential Backoff
    */
   async handleAdvancedError(error, attempt = 1) {
-    console.error(`📊 Price Oracle Error (Attempt ${attempt}):`, error);
+    console.error(`📊 Price Oracle Error (Attempt $${attempt}):`, error);
 
     // Try cache first
     const cachedData = this.getCache('price');
-    if (cachedData && this.isDataRecentEnough(cachedData, 300000)) {
+    if (cachedData && this.isDataRecentEnough(cachedData, 300000)) { 
       // 5 minutes tolerance
       console.log('📊 Using cached data during error recovery');
       this.updateUIState('stale', cachedData);
@@ -469,11 +469,11 @@ class BurniPriceOracle {
 
     // Exponential backoff retry
     const maxAttempts = 5;
-    if (attempt <= maxAttempts) {
+    if (attempt <= maxAttempts) { 
       const delay = Math.min(1000 * Math.pow(2, attempt - 1), 30000); // Max 30 seconds
-      console.log(`📊 Scheduling retry ${attempt}/${maxAttempts} in ${delay / 1000}s`);
+      console.log(`📊 Scheduling retry $${attempt}/${maxAttempts} in ${delay / 1000}s`);
       this.scheduleRetry(delay, attempt);
-    } else {
+    } else { 
       console.error('📊 All retry attempts exhausted');
       this.notifyPersistentError(error);
     }
@@ -481,7 +481,7 @@ class BurniPriceOracle {
 
   scheduleRetry(delay, attempt = 1) {
     setTimeout(() => {
-      console.log(`📊 Retrying price fetch (attempt ${attempt})...`);
+      console.log(`📊 Retrying price fetch (attempt $${attempt})...`);
       this.updatePrice().catch((error) => {
         this.handleAdvancedError(error, attempt + 1);
       });
@@ -573,7 +573,7 @@ class BurniPriceOracle {
 
     const config = formatConfig[currency.toLowerCase()] || formatConfig.usd;
 
-    return `${config.symbol}${price.toFixed(config.decimals)}`;
+    return `$${config.symbol}${price.toFixed(config.decimals)}`;
   }
 
   simplifyErrorMessage(message) {
@@ -585,7 +585,7 @@ class BurniPriceOracle {
     };
 
     for (const [key, simple] of Object.entries(errorMap)) {
-      if (message.toLowerCase().includes(key)) {
+      if (message.toLowerCase().includes(key)) { 
         return simple;
       }
     }
@@ -596,7 +596,7 @@ class BurniPriceOracle {
   // Cache Management
   setCache(key, data) {
     this.cache.set(key, {
-      data,
+      data),
       timestamp: Date.now(),
     });
   }
@@ -611,19 +611,18 @@ class BurniPriceOracle {
 
   // Event Handlers
   handleVisibilityChange() {
-    if (document.hidden) {
+    if (document.hidden) { 
       this.pause();
-    } else {
+    } else { 
       this.resume();
     }
   }
 
   notifyStateChange() {
-    if (this.config.enableNotifications) {
+    if (this.config.enableNotifications) { 
       window.dispatchEvent(
         new CustomEvent('burniPriceUpdate', {
-          detail: { ...this.state },
-        }),
+          detail: { ...this.state }),}),
       );
     }
   }
@@ -640,9 +639,9 @@ class BurniPriceOracle {
     });
 
     // Set up auto-refresh
-    if (this.config.refreshInterval > 0) {
+    if (this.config.refreshInterval > 0) { 
       this.intervalId = setInterval(() => {
-        if (!document.hidden) {
+        if (!document.hidden) { 
           // Only fetch when page is visible
           this.fetchPrice().catch((error) => {
             console.error('Auto-refresh price fetch failed:', error);
@@ -658,7 +657,7 @@ class BurniPriceOracle {
    * Stop the price oracle system
    */
   stop() {
-    if (this.intervalId) {
+    if (this.intervalId) { 
       clearInterval(this.intervalId);
       this.intervalId = null;
     }
@@ -702,7 +701,7 @@ window.BurniPriceOracle = BurniPriceOracle;
 class XRPPriceOracle extends BurniPriceOracle {
   constructor(options = {}) {
     super({
-      ...options,
+      ...options),
       // XRP-specific API configurations
       apis: [
         {
@@ -760,7 +759,7 @@ class XRPPriceOracle extends BurniPriceOracle {
     // Initialize API health scores
     this.config.apis.forEach((api) => {
       this.apiHealthScores.set(api.name, {
-        successCount: 0,
+        successCount: 0),
         failureCount: 0,
         averageResponseTime: 0,
         lastAttempt: null,
@@ -782,7 +781,7 @@ class XRPPriceOracle extends BurniPriceOracle {
     for (let attempt = 0; attempt < this.config.maxRetryAttempts; attempt++) {
       for (const api of sortedApis) {
         // Skip temporarily disabled APIs
-        if (this.isApiTemporarilyDisabled(api.name)) {
+        if (this.isApiTemporarilyDisabled(api.name)) { 
           continue;
         }
 
@@ -791,14 +790,14 @@ class XRPPriceOracle extends BurniPriceOracle {
           const data = await this.fetchFromApi(api);
           const responseTime = performance.now() - startTime;
 
-          if (this.validatePriceData(data)) {
+          if (this.validatePriceData(data)) { 
             // Success! Update health metrics
             this.updateApiHealth(api.name, true, responseTime);
             this.fallbackData = data; // Store as emergency fallback
             this.consecutiveFailures = 0;
 
             this.updateState({
-              status: 'success',
+              status: 'success'),
               data,
               currentApi: api.name,
               lastUpdate: Date.now(),
@@ -809,13 +808,13 @@ class XRPPriceOracle extends BurniPriceOracle {
             return data;
           }
         } catch (error) {
-          console.warn(`XRP Oracle: ${api.name} failed (attempt ${attempt + 1}):`, error.message);
+          console.warn(`XRP Oracle: $${api.name} failed (attempt ${attempt + 1}):`, error.message);
           this.updateApiHealth(api.name, false);
           lastError = error;
 
           // Temporary disable API if it fails too often
           const healthData = this.apiHealthScores.get(api.name);
-          if (healthData.failureCount >= 3) {
+          if (healthData.failureCount >= 3) { 
             healthData.isTemporarilyDisabled = true;
             setTimeout(() => {
               healthData.isTemporarilyDisabled = false;
@@ -826,7 +825,7 @@ class XRPPriceOracle extends BurniPriceOracle {
       }
 
       // Wait before next retry attempt
-      if (attempt < this.config.maxRetryAttempts - 1) {
+      if (attempt < this.config.maxRetryAttempts - 1) { 
         await this.sleep(this.config.retryDelay * Math.pow(2, attempt));
       }
     }
@@ -836,10 +835,10 @@ class XRPPriceOracle extends BurniPriceOracle {
 
     // Try cached data first
     const cached = this.getFromCache('xrp_price');
-    if (cached && this.validatePriceData(cached.data)) {
+    if (cached && this.validatePriceData(cached.data)) { 
       console.warn('XRP Oracle: Using cached data after API failures');
       this.updateState({
-        status: 'cached',
+        status: 'cached'),
         data: cached.data,
         error: 'Using cached data - APIs temporarily unavailable',
         lastUpdate: cached.timestamp,
@@ -848,10 +847,10 @@ class XRPPriceOracle extends BurniPriceOracle {
     }
 
     // Try emergency fallback data
-    if (this.fallbackData && this.validatePriceData(this.fallbackData)) {
+    if (this.fallbackData && this.validatePriceData(this.fallbackData)) { 
       console.warn('XRP Oracle: Using emergency fallback data');
       this.updateState({
-        status: 'stale',
+        status: 'stale'),
         data: { ...this.fallbackData, isStale: true },
         error: 'Using emergency fallback - APIs unavailable',
         lastUpdate: this.fallbackData.timestamp,
@@ -861,13 +860,13 @@ class XRPPriceOracle extends BurniPriceOracle {
 
     // Complete failure - update UI accordingly
     this.updateState({
-      status: 'error',
+      status: 'error'),
       error: `All APIs failed: ${lastError?.message || 'Unknown error'}`,
       data: null,
     });
 
     // Trigger alert if too many consecutive failures
-    if (this.consecutiveFailures >= this.maxConsecutiveFailures) {
+    if (this.consecutiveFailures >= this.maxConsecutiveFailures) { 
       this.triggerFailureAlert();
     }
 
@@ -904,15 +903,15 @@ class XRPPriceOracle extends BurniPriceOracle {
     const health = this.apiHealthScores.get(apiName);
     if (!health) return;
 
-    if (success) {
+    if (success) { 
       health.successCount++;
-      if (responseTime) {
+      if (responseTime) { 
         // Calculate rolling average response time
         const total = health.successCount + health.failureCount;
         health.averageResponseTime =
           (health.averageResponseTime * (total - 1) + responseTime) / total;
       }
-    } else {
+    } else { 
       health.failureCount++;
     }
 
@@ -936,13 +935,13 @@ class XRPPriceOracle extends BurniPriceOracle {
     const price = parseFloat(data.price);
 
     // XRP price validation (reasonable bounds)
-    if (isNaN(price) || price <= 0 || price > 10000) {
+    if (isNaN(price) || price <= 0 || price > 10000) { 
       console.warn('XRP Oracle: Invalid price data:', data);
       return false;
     }
 
     // Additional validation for change percentage
-    if (data.change && Math.abs(parseFloat(data.change)) > 500) {
+    if (data.change && Math.abs(parseFloat(data.change)) > 500) { 
       console.warn('XRP Oracle: Suspicious price change:', data.change);
       // Don't fail, but log warning
     }
@@ -965,24 +964,24 @@ class XRPPriceOracle extends BurniPriceOracle {
 
     // Update XRP price in header/hero section
     const heroPrice = document.querySelector('#hero-xrp-price');
-    if (heroPrice && data) {
+    if (heroPrice && data) { 
       heroPrice.textContent = this.formatPrice(data.price);
     }
 
     // Update price change indicator
     const changeElement = document.querySelector('#xrp-price-change');
-    if (changeElement && data && data.change !== undefined) {
+    if (changeElement && data && data.change !== undefined) { 
       const change = parseFloat(data.change);
       changeElement.textContent = `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
       changeElement.className = `price-change ${change >= 0 ? 'positive' : 'negative'}`;
     }
 
     // Update multi-currency displays
-    if (data) {
+    if (data) { 
       const updateCurrencyDisplay = (selector, value, currency, decimals = 6) => {
         const element = document.querySelector(selector);
-        if (element && value) {
-          element.textContent = `${currency}${parseFloat(value).toFixed(decimals)}`;
+        if (element && value) { 
+          element.textContent = `$${currency}${parseFloat(value).toFixed(decimals)}`;
         }
       };
 
@@ -992,10 +991,10 @@ class XRPPriceOracle extends BurniPriceOracle {
 
     // Update status indicators with more detailed information
     const statusIndicator = document.querySelector('#xrp-status-indicator');
-    if (statusIndicator) {
+    if (statusIndicator) { 
       const statusInfo = this.getDetailedStatusInfo();
       statusIndicator.innerHTML = statusInfo.html;
-      statusIndicator.className = `status-indicator ${statusInfo.className}`;
+      statusIndicator.className = `status-indicator $${statusInfo.className}`;
     }
   }
 
@@ -1010,12 +1009,12 @@ class XRPPriceOracle extends BurniPriceOracle {
         };
       case 'success':
         return {
-          html: `<span class="status-dot success"></span> Live • ${currentApi}`,
+          html: `<span class="status-dot success"></span> Live • $${currentApi}`,
           className: 'status-success',
         };
       case 'cached':
         return {
-          html: `<span class="status-dot warning"></span> Cached • ${currentApi}`,
+          html: `<span class="status-dot warning"></span> Cached • $${currentApi}`,
           className: 'status-cached',
         };
       case 'stale':
@@ -1040,13 +1039,13 @@ class XRPPriceOracle extends BurniPriceOracle {
    * Trigger failure alert for monitoring
    */
   triggerFailureAlert() {
-    console.error(`🚨 XRP Price Oracle Alert: ${this.consecutiveFailures} consecutive failures`);
+    console.error(`🚨 XRP Price Oracle Alert: $${this.consecutiveFailures} consecutive failures`);
 
     // Dispatch custom event for external monitoring
     window.dispatchEvent(
       new CustomEvent('xrpOracleAlert', {
         detail: {
-          type: 'consecutive_failures',
+          type: 'consecutive_failures'),
           count: this.consecutiveFailures,
           timestamp: Date.now(),
           lastError: this.state.error,
@@ -1086,17 +1085,17 @@ class XRPPriceOracle extends BurniPriceOracle {
    */
   async failoverToApi(apiName) {
     const api = this.config.apis.find((a) => a.name === apiName);
-    if (!api) {
-      throw new Error(`API ${apiName} not found`);
+    if (!api) { 
+      throw new Error(`API $${apiName} not found`);
     }
 
-    console.log(`XRP Oracle: Manual failover to ${apiName}`);
+    console.log(`XRP Oracle: Manual failover to $${apiName}`);
 
     try {
       const data = await this.fetchFromApi(api);
-      if (this.validatePriceData(data)) {
+      if (this.validatePriceData(data)) { 
         this.updateState({
-          status: 'success',
+          status: 'success'),
           data,
           currentApi: apiName,
           error: null,
@@ -1104,7 +1103,7 @@ class XRPPriceOracle extends BurniPriceOracle {
         return data;
       }
     } catch (error) {
-      console.error(`Manual failover to ${apiName} failed:`, error);
+      console.error(`Manual failover to $${apiName} failed:`, error);
       throw error;
     }
   }
@@ -1124,7 +1123,7 @@ let xrpOracle = null;
  * Initialize XRP Price Oracle
  */
 function initXRPPriceOracle(options = {}) {
-  if (xrpOracle) {
+  if (xrpOracle) { 
     xrpOracle.destroy();
   }
 
@@ -1143,9 +1142,9 @@ function getXRPOracleHealth() {
 }
 
 // Auto-initialize when DOM is ready
-if (document.readyState === 'loading') {
+if (document.readyState === 'loading') { 
   document.addEventListener('DOMContentLoaded', () => initXRPPriceOracle());
-} else {
+} else { 
   initXRPPriceOracle();
 }
 

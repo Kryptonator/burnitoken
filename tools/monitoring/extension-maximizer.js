@@ -155,11 +155,11 @@ console.log('📊 EXTENSION ACTIVATION PLAN:');
 Object.entries(extensionUtilization).forEach(([category, extensions]) => {
   console.log(`\n🎯 ${category.toUpperCase()}:`);
   Object.entries(extensions).forEach(([id, config]) => {
-    console.log(`  📦 ${config.name}`);
-    console.log(`     🎯 ${config.purpose}`);
-    console.log(`     🔧 Action: ${config.activation}`);
+    console.log(`  📦 $${config.name}`);
+    console.log(`     🎯 $${config.purpose}`);
+    console.log(`     🔧 Action: $${config.activation}`);
     config.tasks.forEach((task) => {
-      console.log(`     ✅ ${task}`);
+      console.log(`     ✅ $${task}`);
     });
   });
 });
@@ -190,7 +190,7 @@ const activationCommands = [
 
 console.log('\n🚀 IMMEDIATE ACTIVATION COMMANDS:');
 activationCommands.forEach((cmd) => {
-  console.log(`• ${cmd.extension}: ${cmd.command}`);
+  console.log(`• $${cmd.extension}: ${cmd.command}`);
 });
 
 console.log('\n🎯 NEXT STEPS:');

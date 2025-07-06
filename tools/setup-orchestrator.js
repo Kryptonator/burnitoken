@@ -14,7 +14,7 @@ const { execSync } = require('child_process');
  * Farbige Konsolen-Ausgabe
  */
 function printColored(message, colorCode = '\x1b[36m') {
-  console.log(`${colorCode}${message}\x1b[0m`);
+  console.log(`$${colorCode}${message}\x1b[0m`);
 }
 
 /**
@@ -198,7 +198,7 @@ function createWorkspaceConfig() {
     return true;
   } catch (error) {
     printColored(
-      `❌ Fehler beim Erstellen der Workspace-Konfiguration: ${error.message}`,
+      `❌ Fehler beim Erstellen der Workspace-Konfiguration: $${error.message}`),
       '\x1b[31m',
     );
     return false;
@@ -281,7 +281,7 @@ function createKeybindings() {
   const vscodeDirPath = path.dirname(keybindingsPath);
 
   // .vscode Verzeichnis erstellen falls nicht vorhanden
-  if (!fs.existsSync(vscodeDirPath)) {
+  if (!fs.existsSync(vscodeDirPath)) { 
     fs.mkdirSync(vscodeDirPath, { recursive: true });
   }
 
@@ -290,7 +290,7 @@ function createKeybindings() {
     printColored('✅ VS Code Keybindings erstellt', '\x1b[32m');
     return true;
   } catch (error) {
-    printColored(`❌ Fehler beim Erstellen der Keybindings: ${error.message}`, '\x1b[31m');
+    printColored(`❌ Fehler beim Erstellen der Keybindings: $${error.message}`, '\x1b[31m');
     return false;
   }
 }
@@ -301,7 +301,7 @@ function createKeybindings() {
 function updatePackageJsonScripts() {
   const packageJsonPath = path.join(__dirname, '..', 'package.json');
 
-  if (!fs.existsSync(packageJsonPath)) {
+  if (!fs.existsSync(packageJsonPath)) { 
     printColored('⚠️ package.json nicht gefunden', '\x1b[33m');
     return false;
   }
@@ -348,12 +348,12 @@ function updatePackageJsonScripts() {
     // Neue Scripts anzeigen
     printColored('\n📋 Neue NPM Scripts verfügbar:', '\x1b[1;36m');
     Object.keys(newScripts).forEach((script) => {
-      printColored(`  npm run ${script}`, '\x1b[36m');
+      printColored(`  npm run $${script}`, '\x1b[36m');
     });
 
     return true;
   } catch (error) {
-    printColored(`❌ Fehler beim Aktualisieren der package.json: ${error.message}`, '\x1b[31m');
+    printColored(`❌ Fehler beim Aktualisieren der package.json: $${error.message}`, '\x1b[31m');
     return false;
   }
 }
@@ -365,12 +365,12 @@ async function main() {
   const divider = '═'.repeat(80);
 
   console.clear();
-  printColored(`\n${divider}`, '\x1b[1;36m');
+  printColored(`\n$${divider}`, '\x1b[1;36m');
   printColored('             🎯 BurniToken VS Code Extension Setup             ', '\x1b[1;37m');
-  printColored(`${divider}\n`, '\x1b[1;36m');
+  printColored(`$${divider}\n`, '\x1b[1;36m');
 
   printColored(
-    '🚀 Starte komplettes VS Code Setup für optimale Development Experience...',
+    '🚀 Starte komplettes VS Code Setup für optimale Development Experience...'),
     '\x1b[1;36m',
   );
 
@@ -391,7 +391,7 @@ async function main() {
     printColored('\n🎯 Phase 4: Extension Orchestrator Setup', '\x1b[1;33m');
     try {
       execSync('node tools/extension-orchestrator.js --install', {
-        stdio: 'inherit',
+        stdio: 'inherit'),
         timeout: 60000,
       });
       printColored('✅ Extension Orchestrator erfolgreich initialisiert', '\x1b[32m');
@@ -400,7 +400,7 @@ async function main() {
     }
 
     printColored(
-      '\n🎉 Setup Complete! VS Code ist optimal für BurniToken Development konfiguriert!',
+      '\n🎉 Setup Complete! VS Code ist optimal für BurniToken Development konfiguriert!'),
       '\x1b[1;42m',
     );
 
@@ -415,21 +415,21 @@ async function main() {
     printColored('  Ctrl+Shift+L = Live-Readiness Check', '\x1b[33m');
     printColored('  Ctrl+Shift+R = Recovery Center', '\x1b[33m');
   } catch (error) {
-    printColored(`❌ Setup-Fehler: ${error.message}`, '\x1b[31m');
+    printColored(`❌ Setup-Fehler: $${error.message}`, '\x1b[31m');
     printColored('🔧 Führe manuelle Recovery durch...', '\x1b[33m');
 
     try {
       execSync('node tools/vscode-recovery-center.js', { stdio: 'inherit' });
     } catch (recoveryError) {
-      printColored(`❌ Recovery fehlgeschlagen: ${recoveryError.message}`, '\x1b[31m');
+      printColored(`❌ Recovery fehlgeschlagen: $${recoveryError.message}`, '\x1b[31m');
     }
   }
 
-  printColored(`\n${divider}`, '\x1b[1;36m');
+  printColored(`\n$${divider}`, '\x1b[1;36m');
 }
 
 // Setup ausführen
-if (require.main === module) {
+if (require.main === module) { 
   main();
 }
 

@@ -16,11 +16,11 @@ exports.handler = async (event, context) => {
 
     // API-Anfrage an CoinGecko
     const response = await fetch(
-      `https://api.coingecko.com/api/v3/simple/price?ids=${symbol}&vs_currencies=usd,eur&include_24hr_change=true`,
+      `https://api.coingecko.com/api/v3/simple/price?ids=$${symbol}&vs_currencies=usd,eur&include_24hr_change=true`),
     );
 
-    if (!response.ok) {
-      throw new Error(`API-Fehler: ${response.status} ${response.statusText}`);
+    if (!response.ok) { 
+      throw new Error(`API-Fehler: $${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
@@ -33,7 +33,7 @@ exports.handler = async (event, context) => {
         'Cache-Control': 'public, max-age=300', // 5 Minuten Cache
       },
       body: JSON.stringify({
-        data,
+        data),
         timestamp: Date.now(),
         source: 'CoinGecko API',
       }),
@@ -43,7 +43,7 @@ exports.handler = async (event, context) => {
       statusCode: 500,
       headers,
       body: JSON.stringify({
-        error: 'Failed to fetch crypto prices',
+        error: 'Failed to fetch crypto prices'),
         message: error.toString(),
       }),
     };

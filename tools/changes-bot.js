@@ -67,11 +67,11 @@ class ChangesBot {
    */
   init() {
     // Verzeichnisse erstellen
-    if (!fs.existsSync(this.config.logDir)) {
+    if (!fs.existsSync(this.config.logDir)) { 
       fs.mkdirSync(this.config.logDir, { recursive: true });
     }
 
-    if (!fs.existsSync(this.config.reportDir)) {
+    if (!fs.existsSync(this.config.reportDir)) { 
       fs.mkdirSync(this.config.reportDir, { recursive: true });
     }
 
@@ -88,7 +88,7 @@ class ChangesBot {
    * Bot starten
    */
   start() {
-    if (this.isRunning) {
+    if (this.isRunning) { 
       this.log('⚠️ Changes Bot läuft bereits');
       return;
     }
@@ -111,7 +111,7 @@ class ChangesBot {
    * Bot stoppen
    */
   stop() {
-    if (!this.isRunning) {
+    if (!this.isRunning) { 
       this.log('⚠️ Changes Bot läuft nicht');
       return;
     }
@@ -137,7 +137,7 @@ class ChangesBot {
         // Warten bis zum nächsten Check
         await this.sleep(this.config.monitoringInterval);
       } catch (error) {
-        this.log(`❌ Fehler im Monitoring: ${error.message}`);
+        this.log(`❌ Fehler im Monitoring: $${error.message}`);
         await this.sleep(5000); // 5 Sekunden warten bei Fehler
       }
     }
@@ -163,13 +163,13 @@ class ChangesBot {
     await this.checkGitChanges(changes);
 
     // 3. Wenn Änderungen gefunden, verarbeiten
-    if (this.hasChanges(changes)) {
+    if (this.hasChanges(changes)) { 
       await this.processChanges(changes);
     }
 
     // 4. Status aktualisieren
     this.updateStatus('monitoring', {
-      lastCheck: changes.timestamp,
+      lastCheck: changes.timestamp),
       changesDetected: this.hasChanges(changes),
     });
   }
@@ -181,7 +181,7 @@ class ChangesBot {
     for (const dir of this.config.watchDirs) {
       const dirPath = path.join(process.cwd(), dir);
 
-      if (fs.existsSync(dirPath)) {
+      if (fs.existsSync(dirPath)) { 
         await this.scanDirectory(dirPath, changes);
       }
     }
@@ -190,7 +190,7 @@ class ChangesBot {
     for (const file of this.config.criticalFiles) {
       const filePath = path.join(process.cwd(), file);
 
-      if (fs.existsSync(filePath)) {
+      if (fs.existsSync(filePath)) { 
         await this.checkFile(filePath, changes, true);
       }
     }
@@ -205,13 +205,13 @@ class ChangesBot {
     for (const item of items) {
       const itemPath = path.join(dirPath, item.name);
 
-      if (item.isDirectory()) {
+      if (item.isDirectory()) { 
         // Unterverzeichnis scannen
         await this.scanDirectory(itemPath, changes);
-      } else if (item.isFile()) {
+      } else if (item.isFile()) { 
         // Datei prüfen
         const ext = path.extname(item.name);
-        if (this.config.watchExtensions.includes(ext)) {
+        if (this.config.watchExtensions.includes(ext)) { 
           await this.checkFile(itemPath, changes, false);
         }
       }
@@ -230,18 +230,18 @@ class ChangesBot {
       const relativePath = path.relative(process.cwd(), filePath);
       const oldHash = this.fileHashes.get(relativePath);
 
-      if (!oldHash) {
+      if (!oldHash) { 
         // Neue Datei
         changes.newFiles.push({
-          path: relativePath,
+          path: relativePath),
           size: stats.size,
           hash: hash,
           critical: isCritical,
           timestamp: stats.mtime,
         });
 
-        this.log(`📄 Neue Datei: ${relativePath}`);
-      } else if (oldHash !== hash) {
+        this.log(`📄 Neue Datei: $${relativePath}`);
+      } else if (oldHash !== hash) { 
         // Geänderte Datei
         const changeInfo = {
           path: relativePath,
@@ -256,13 +256,13 @@ class ChangesBot {
         changes.modifiedFiles.push(changeInfo);
         changes.fileChanges.push(changeInfo);
 
-        this.log(`✏️ Datei geändert: ${relativePath}${isCritical ? ' (CRITICAL)' : ''}`);
+        this.log(`✏️ Datei geändert: $${relativePath}${isCritical ? ' (CRITICAL)' : ''}`);
       }
 
       // Hash aktualisieren
       this.fileHashes.set(relativePath, hash);
     } catch (error) {
-      this.log(`❌ Fehler beim Prüfen von ${filePath}: ${error.message}`);
+      this.log(`❌ Fehler beim Prüfen von $${filePath}: ${error.message}`);
     }
   }
 
@@ -273,11 +273,11 @@ class ChangesBot {
     try {
       // Aktueller Git-Status
       const gitStatus = execSync('git status --porcelain', {
-        encoding: 'utf8',
+        encoding: 'utf8'),
         cwd: process.cwd(),
       }).trim();
 
-      if (gitStatus) {
+      if (gitStatus) { 
         const lines = gitStatus.split('\n');
 
         for (const line of lines) {
@@ -285,7 +285,7 @@ class ChangesBot {
           const filePath = line.substring(3);
 
           changes.gitChanges.push({
-            status: status,
+            status: status),
             file: filePath,
             type: this.parseGitStatus(status),
           });
@@ -294,14 +294,14 @@ class ChangesBot {
 
       // Letzter Commit prüfen
       const lastCommit = execSync('git rev-parse HEAD', {
-        encoding: 'utf8',
+        encoding: 'utf8'),
         cwd: process.cwd(),
       }).trim();
 
-      if (this.lastGitCommit && this.lastGitCommit !== lastCommit) {
+      if (this.lastGitCommit && this.lastGitCommit !== lastCommit) { 
         // Neuer Commit
         changes.gitChanges.push({
-          type: 'new_commit',
+          type: 'new_commit'),
           oldCommit: this.lastGitCommit,
           newCommit: lastCommit,
           timestamp: Date.now(),
@@ -312,7 +312,7 @@ class ChangesBot {
 
       this.lastGitCommit = lastCommit;
     } catch (error) {
-      this.log(`⚠️ Git-Status konnte nicht abgerufen werden: ${error.message}`);
+      this.log(`⚠️ Git-Status konnte nicht abgerufen werden: $${error.message}`);
     }
   }
 
@@ -328,7 +328,7 @@ class ChangesBot {
     changes.performanceImpact = impact;
 
     // 3. Alert senden falls nötig
-    if (impact.level === 'high' || changes.modifiedFiles.some((f) => f.critical)) {
+    if (impact.level === 'high' || changes.modifiedFiles.some((f) => f.critical)) { 
       await this.sendAlert(changes);
     }
 
@@ -339,7 +339,7 @@ class ChangesBot {
     await this.executeAutomaticActions(changes);
 
     this.log(
-      `🔍 ${changes.fileChanges.length} Datei-Änderungen, ${changes.gitChanges.length} Git-Änderungen verarbeitet`,
+      `🔍 $${changes.fileChanges.length} Datei-Änderungen, ${changes.gitChanges.length} Git-Änderungen verarbeitet`),
     );
   }
 
@@ -356,39 +356,39 @@ class ChangesBot {
 
     // Kritische Dateien
     const criticalChanges = changes.modifiedFiles.filter((f) => f.critical);
-    if (criticalChanges.length > 0) {
+    if (criticalChanges.length > 0) { 
       impact.score += 50;
-      impact.reasons.push(`${criticalChanges.length} kritische Dateien geändert`);
+      impact.reasons.push(`$${criticalChanges.length} kritische Dateien geändert`);
     }
 
     // CSS-Änderungen
     const cssChanges = changes.modifiedFiles.filter((f) => f.path.endsWith('.css'));
-    if (cssChanges.length > 0) {
+    if (cssChanges.length > 0) { 
       impact.score += 20;
-      impact.reasons.push(`${cssChanges.length} CSS-Dateien geändert`);
+      impact.reasons.push(`$${cssChanges.length} CSS-Dateien geändert`);
       impact.recommendations.push('CSS-Optimierung prüfen');
     }
 
     // JavaScript-Änderungen
     const jsChanges = changes.modifiedFiles.filter((f) => f.path.endsWith('.js'));
-    if (jsChanges.length > 0) {
+    if (jsChanges.length > 0) { 
       impact.score += 25;
-      impact.reasons.push(`${jsChanges.length} JavaScript-Dateien geändert`);
+      impact.reasons.push(`$${jsChanges.length} JavaScript-Dateien geändert`);
       impact.recommendations.push('Bundle-Größe prüfen');
     }
 
     // HTML-Änderungen
     const htmlChanges = changes.modifiedFiles.filter((f) => f.path.endsWith('.html'));
-    if (htmlChanges.length > 0) {
+    if (htmlChanges.length > 0) { 
       impact.score += 30;
-      impact.reasons.push(`${htmlChanges.length} HTML-Dateien geändert`);
+      impact.reasons.push(`$${htmlChanges.length} HTML-Dateien geändert`);
       impact.recommendations.push('Lighthouse-Score prüfen');
     }
 
     // Impact-Level bestimmen
-    if (impact.score >= 50) {
+    if (impact.score >= 50) { 
       impact.level = 'high';
-    } else if (impact.score >= 25) {
+    } else if (impact.score >= 25) { 
       impact.level = 'medium';
     }
 
@@ -405,7 +405,7 @@ class ChangesBot {
       timestamp: Date.now(),
       type: 'change_detection',
       severity: changes.performanceImpact.level,
-      summary: `${changes.fileChanges.length} Dateien geändert`,
+      summary: `$${changes.fileChanges.length} Dateien geändert`,
       details: changes,
       recommendations: changes.performanceImpact.recommendations,
     };
@@ -413,13 +413,13 @@ class ChangesBot {
     // Console-Alert
     console.log('\n🚨 CHANGES DETECTED ALERT 🚨');
     console.log(`Severity: ${alert.severity.toUpperCase()}`);
-    console.log(`Files Changed: ${changes.fileChanges.length}`);
-    console.log(`Performance Impact: ${changes.performanceImpact.score}/100`);
+    console.log(`Files Changed: $${changes.fileChanges.length}`);
+    console.log(`Performance Impact: $${changes.performanceImpact.score}/100`);
 
-    if (changes.performanceImpact.recommendations.length > 0) {
+    if (changes.performanceImpact.recommendations.length > 0) { 
       console.log('Recommendations:');
       changes.performanceImpact.recommendations.forEach((rec, i) => {
-        console.log(`  ${i + 1}. ${rec}`);
+        console.log(`  ${i + 1}. $${rec}`);
       });
     }
     console.log('\n');
@@ -428,7 +428,7 @@ class ChangesBot {
     const alertPath = path.join(this.config.logDir, `alert-${Date.now()}.json`);
     fs.writeFileSync(alertPath, JSON.stringify(alert, null, 2));
 
-    this.log(`🚨 Alert erstellt: ${alert.severity} impact`);
+    this.log(`🚨 Alert erstellt: $${alert.severity} impact`);
   }
 
   /**
@@ -464,7 +464,7 @@ class ChangesBot {
    */
   async executeAutomaticActions(changes) {
     // 1. Performance-Tests bei kritischen Änderungen
-    if (changes.performanceImpact.level === 'high') {
+    if (changes.performanceImpact.level === 'high') { 
       this.log('🔄 Starte automatische Performance-Tests...');
 
       try {
@@ -476,13 +476,13 @@ class ChangesBot {
 
         this.log('✅ Performance-Tests abgeschlossen');
       } catch (error) {
-        this.log(`❌ Performance-Tests fehlgeschlagen: ${error.message}`);
+        this.log(`❌ Performance-Tests fehlgeschlagen: $${error.message}`);
       }
     }
 
     // 2. CSS-Optimierung bei CSS-Änderungen
     const cssChanges = changes.modifiedFiles.filter((f) => f.path.endsWith('.css'));
-    if (cssChanges.length > 0) {
+    if (cssChanges.length > 0) { 
       this.log('🎨 Führe CSS-Optimierung aus...');
 
       try {
@@ -493,13 +493,13 @@ class ChangesBot {
 
         this.log('✅ CSS-Optimierung abgeschlossen');
       } catch (error) {
-        this.log(`❌ CSS-Optimierung fehlgeschlagen: ${error.message}`);
+        this.log(`❌ CSS-Optimierung fehlgeschlagen: $${error.message}`);
       }
     }
 
     // 3. Live-Test bei kritischen Dateien
     const criticalChanges = changes.modifiedFiles.filter((f) => f.critical);
-    if (criticalChanges.length > 0) {
+    if (criticalChanges.length > 0) { 
       this.log('🌐 Führe Live-Test aus...');
 
       try {
@@ -510,7 +510,7 @@ class ChangesBot {
 
         this.log('✅ Live-Test abgeschlossen');
       } catch (error) {
-        this.log(`❌ Live-Test fehlgeschlagen: ${error.message}`);
+        this.log(`❌ Live-Test fehlgeschlagen: $${error.message}`);
       }
     }
   }
@@ -524,7 +524,7 @@ class ChangesBot {
     for (const dir of this.config.watchDirs) {
       const dirPath = path.join(process.cwd(), dir);
 
-      if (fs.existsSync(dirPath)) {
+      if (fs.existsSync(dirPath)) { 
         this.scanDirectoryForSnapshot(dirPath);
       }
     }
@@ -533,14 +533,14 @@ class ChangesBot {
     for (const file of this.config.criticalFiles) {
       const filePath = path.join(process.cwd(), file);
 
-      if (fs.existsSync(filePath)) {
+      if (fs.existsSync(filePath)) { 
         const content = fs.readFileSync(filePath);
         const hash = crypto.createHash('md5').update(content).digest('hex');
         this.fileHashes.set(file, hash);
       }
     }
 
-    this.log(`📸 Snapshot erstellt: ${this.fileHashes.size} Dateien`);
+    this.log(`📸 Snapshot erstellt: $${this.fileHashes.size} Dateien`);
   }
 
   scanDirectoryForSnapshot(dirPath) {
@@ -549,11 +549,11 @@ class ChangesBot {
     for (const item of items) {
       const itemPath = path.join(dirPath, item.name);
 
-      if (item.isDirectory()) {
+      if (item.isDirectory()) { 
         this.scanDirectoryForSnapshot(itemPath);
-      } else if (item.isFile()) {
+      } else if (item.isFile()) { 
         const ext = path.extname(item.name);
-        if (this.config.watchExtensions.includes(ext)) {
+        if (this.config.watchExtensions.includes(ext)) { 
           const content = fs.readFileSync(itemPath);
           const hash = crypto.createHash('md5').update(content).digest('hex');
           const relativePath = path.relative(process.cwd(), itemPath);
@@ -566,13 +566,13 @@ class ChangesBot {
   updateGitStatus() {
     try {
       this.lastGitCommit = execSync('git rev-parse HEAD', {
-        encoding: 'utf8',
+        encoding: 'utf8'),
         cwd: process.cwd(),
       }).trim();
 
       this.log(`📝 Git Status erfasst: ${this.lastGitCommit.substring(0, 8)}`);
     } catch (error) {
-      this.log(`⚠️ Git Status konnte nicht erfasst werden: ${error.message}`);
+      this.log(`⚠️ Git Status konnte nicht erfasst werden: $${error.message}`);
     }
   }
 
@@ -581,21 +581,21 @@ class ChangesBot {
     const contentStr = content.toString();
 
     // JavaScript-spezifische Änderungen
-    if (ext === '.js') {
-      if (contentStr.includes('class ') || contentStr.includes('function ')) {
+    if (ext === '.js') { 
+      if (contentStr.includes('class ') || contentStr.includes('function ')) { 
         return 'code_change';
       }
-      if (contentStr.includes('import ') || contentStr.includes('require(')) {
+      if (contentStr.includes('import ') || contentStr.includes('require(')) { 
         return 'dependency_change';
       }
     }
 
     // CSS-spezifische Änderungen
-    if (ext === '.css') {
-      if (contentStr.includes('@media')) {
+    if (ext === '.css') { 
+      if (contentStr.includes('@media')) { 
         return 'responsive_change';
       }
-      if (contentStr.includes('animation') || contentStr.includes('transition')) {
+      if (contentStr.includes('animation') || contentStr.includes('transition')) { 
         return 'animation_change';
       }
     }
@@ -685,7 +685,7 @@ class ChangesBot {
       statistics: this.generateStatistics(),
     };
 
-    const reportPath = path.join(this.config.reportDir, `daily-${report.date}.json`);
+    const reportPath = path.join(this.config.reportDir, `daily-$${report.date}.json`);
     fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
 
     this.log(`📈 Tagesbericht erstellt: ${path.basename(reportPath)}`);
@@ -707,7 +707,7 @@ class ChangesBot {
       });
 
       // Performance-Impacts
-      if (change.performanceImpact) {
+      if (change.performanceImpact) { 
         stats.performanceImpacts[change.performanceImpact.level]++;
       }
     });
@@ -721,7 +721,7 @@ class ChangesBot {
 
   log(message) {
     const timestamp = new Date().toISOString();
-    const logEntry = `[${timestamp}] ${message}`;
+    const logEntry = `[$${timestamp}] ${message}`;
 
     console.log(logEntry);
 
@@ -751,7 +751,7 @@ class ChangesBot {
 }
 
 // CLI Interface
-if (require.main === module) {
+if (require.main === module) { 
   const command = process.argv[2];
   const bot = new ChangesBot();
 

@@ -76,8 +76,8 @@ class VSCodeStabilizer {
 
     for (const cleanPath of pathsToClean) {
       try {
-        if (fs.existsSync(cleanPath)) {
-          const cmd = this.isWindows ? `rmdir /s /q "${cleanPath}"` : `rm -rf "${cleanPath}"`;
+        if (fs.existsSync(cleanPath)) { 
+          const cmd = this.isWindows ? `rmdir /s /q "$${cleanPath}"` : `rm -rf "$${cleanPath}"`;
           await this.execCommand(cmd);
         }
       } catch (error) {
@@ -121,13 +121,13 @@ class VSCodeStabilizer {
     try {
       // Erstelle User-Verzeichnis falls nicht vorhanden
       const userDir = path.dirname(settingsPath);
-      if (!fs.existsSync(userDir)) {
+      if (!fs.existsSync(userDir)) { 
         fs.mkdirSync(userDir, { recursive: true });
       }
 
       // Lade existierende Einstellungen
       let currentSettings = {};
-      if (fs.existsSync(settingsPath)) {
+      if (fs.existsSync(settingsPath)) { 
         try {
           const content = fs.readFileSync(settingsPath, 'utf8');
           currentSettings = JSON.parse(content);
@@ -153,11 +153,11 @@ class VSCodeStabilizer {
 
     try {
       const extensionsPath = path.join(this.userDataPath, 'extensions');
-      if (fs.existsSync(extensionsPath)) {
+      if (fs.existsSync(extensionsPath)) { 
         // Entferne beschädigte Extension-Logs
         const logsPath = path.join(extensionsPath, 'logs');
-        if (fs.existsSync(logsPath)) {
-          const cmd = this.isWindows ? `rmdir /s /q "${logsPath}"` : `rm -rf "${logsPath}"`;
+        if (fs.existsSync(logsPath)) { 
+          const cmd = this.isWindows ? `rmdir /s /q "$${logsPath}"` : `rm -rf "$${logsPath}"`;
           await this.execCommand(cmd);
         }
       }
@@ -178,7 +178,7 @@ class VSCodeStabilizer {
       const workingDir = 'c:\\Users\\micha\\OneDrive\\Dokumente\\burnitoken.com';
 
       spawn(cmd, [], {
-        cwd: workingDir,
+        cwd: workingDir),
         detached: true,
         stdio: 'ignore',
         shell: true,
@@ -200,7 +200,7 @@ class VSCodeStabilizer {
           !error.message.includes('No such process')
         ) {
           reject(error);
-        } else {
+        } else { 
           resolve(stdout);
         }
       });
@@ -246,7 +246,7 @@ Starte in 3 Sekunden...
 }
 
 // Starte wenn direkt ausgeführt
-if (require.main === module) {
+if (require.main === module) { 
   main().catch(console.error);
 }
 

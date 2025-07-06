@@ -61,7 +61,7 @@ const CONFIG = {
 };
 
 // Stellt sicher, dass die erforderlichen Verzeichnisse existieren
-if (!fs.existsSync) {
+if (!fs.existsSync) { 
   {;
 }
   {;
@@ -222,7 +222,7 @@ if (!fs.existsSync) {
   const reset = '\x1b[0m';
   const color = colors[type] || colors.INFO;
   const timestamp = new Date().toLocaleTimeString();
-  console.log(`${color}[${timestamp} ${type}]${reset} ${message}`);
+  console.log(`$${color}[${timestamp} ${type}]${reset} ${message}`);
 }
 
 /**
@@ -239,7 +239,7 @@ function collectErrorsFromLogs() {
     patterns.forEach((pattern) => {
       try {
         // PowerShell verwenden, um Dateien mit Wildcards zu finden
-        const command = `powershell -Command "Get-ChildItem -Path '${CONFIG.logDir}' -Filter '${pattern}' -Recurse | Select-Object FullName"`;
+        const command = `powershell -Command "Get-ChildItem -Path '$${CONFIG.logDir}' -Filter '${pattern}' -Recurse | Select-Object FullName"`;
         const result = execSync(command, { encoding: 'utf-8' });
 
         const fileLines = result.split('\n');
@@ -255,10 +255,10 @@ function collectErrorsFromLogs() {
         logFiles.forEach((logFile) => {
           try {
             // Prüfen, ob die Datei existiert
-            if (fs.existsSync(logFile)) {
+            if (fs.existsSync(logFile)) { 
               const fileStats = fs.statSync(logFile);
               // Nur Dateien, die nicht zu alt sind
-              if (now - fileStats.mtimeMs < CONFIG.maxErrorAge) {
+              if (now - fileStats.mtimeMs < CONFIG.maxErrorAge) { 
                 const content = fs.readFileSync(logFile, 'utf-8');
                 // Fehlerrelevante Zeilen extrahieren
                 const lines = content.split('\n');
@@ -275,9 +275,9 @@ function collectErrorsFromLogs() {
                   );
                 });
 
-                if (errorLines.length > 0) {
+                if (errorLines.length > 0) { 
                   errors.push({
-                    source: source.name,
+                    source: source.name),
                     file: path.basename(logFile),
                     priority: source.priority,
                     timestamp: fileStats.mtime,
@@ -294,11 +294,11 @@ function collectErrorsFromLogs() {
               }
             }
           } catch (error) {
-            log(`Fehler beim Lesen der Logdatei ${logFile}: ${error.message}`, 'ERROR');
+            log(`Fehler beim Lesen der Logdatei $${logFile}: ${error.message}`, 'ERROR');
           }
         });
       } catch (error) {
-        log(`Fehler beim Sammeln von Logs für ${source.name}: ${error.message}`, 'ERROR');
+        log(`Fehler beim Sammeln von Logs für $${source.name}: ${error.message}`, 'ERROR');
       }
     });
   });
@@ -312,7 +312,7 @@ function collectErrorsFromLogs() {
 function collectErrorsFromTaskOutput() {
   try {
     const taskOutputDir = path.join(__dirname, '..', '.vscode', 'tasks');
-    if (!fs.existsSync(taskOutputDir)) {
+    if (!fs.existsSync(taskOutputDir)) { 
       return [];
     }
 
@@ -320,7 +320,7 @@ function collectErrorsFromTaskOutput() {
     const errors = [];
 
     // PowerShell verwenden, um Dateien mit Wildcards zu finden
-    const command = `powershell -Command "Get-ChildItem -Path '${taskOutputDir}' -Filter '*output*.log' -Recurse | Select-Object FullName"`;
+    const command = `powershell -Command "Get-ChildItem -Path '$${taskOutputDir}' -Filter '*output*.log' -Recurse | Select-Object FullName"`;
     const result = execSync(command, { encoding: 'utf-8' });
 
     const fileLines = result.split('\n');
@@ -335,10 +335,10 @@ function collectErrorsFromTaskOutput() {
 
     logFiles.forEach((logFile) => {
       try {
-        if (fs.existsSync(logFile)) {
+        if (fs.existsSync(logFile)) { 
           const fileStats = fs.statSync(logFile);
           // Nur Dateien, die nicht zu alt sind
-          if (now - fileStats.mtimeMs < CONFIG.maxErrorAge) {
+          if (now - fileStats.mtimeMs < CONFIG.maxErrorAge) { 
             const content = fs.readFileSync(logFile, 'utf-8');
             // Task-Namen aus dem Dateinamen extrahieren
             const taskNameMatch = path.basename(logFile).match(/task-(.+)-output/);
@@ -361,9 +361,9 @@ function collectErrorsFromTaskOutput() {
               );
             });
 
-            if (errorLines.length > 0) {
+            if (errorLines.length > 0) { 
               errors.push({
-                source: 'VS Code Task',
+                source: 'VS Code Task'),
                 task: taskName,
                 file: path.basename(logFile),
                 priority: 'medium',
@@ -377,13 +377,13 @@ function collectErrorsFromTaskOutput() {
           }
         }
       } catch (error) {
-        log(`Fehler beim Lesen der Task-Output-Datei ${logFile}: ${error.message}`, 'ERROR');
+        log(`Fehler beim Lesen der Task-Output-Datei $${logFile}: ${error.message}`, 'ERROR');
       }
     });
 
     return errors;
   } catch (error) {
-    log(`Fehler beim Sammeln von Task-Outputs: ${error.message}`, 'ERROR');
+    log(`Fehler beim Sammeln von Task-Outputs: $${error.message}`, 'ERROR');
     return [];
   }
 }
@@ -405,7 +405,7 @@ function collectErrorsFromJsonReports() {
 
     reportFiles.forEach((reportFile) => {
       try {
-        if (fs.existsSync(reportFile.path)) {
+        if (fs.existsSync(reportFile.path)) { 
           const fileStats = fs.statSync(reportFile.path);
           const content = fs.readFileSync(reportFile.path, 'utf-8');
           const report = JSON.parse(content);
@@ -413,27 +413,27 @@ function collectErrorsFromJsonReports() {
           // Fehler basierend auf der Berichtsstruktur extrahieren
           let extractedErrors = [];
 
-          if (reportFile.source === 'Lighthouse' && report.audits) {
+          if (reportFile.source === 'Lighthouse' && report.audits) { 
             // Lighthouse-spezifische Extraktion
             const failedAudits = Object.values(report.audits)
               .filter((audit) => audit.score < 0.9)
               .map((audit) => ({
-                message: `[${audit.id}] ${audit.title}: ${audit.description}`,
+                message: `[$${audit.id}] ${audit.title}: ${audit.description}`,
                 timestamp: null,
               }));
 
-            if (failedAudits.length > 0) {
+            if (failedAudits.length > 0) { 
               extractedErrors = failedAudits;
             }
-          } else if (reportFile.source === 'Dependabot') {
+          } else if (reportFile.source === 'Dependabot') { 
             // Dependabot-spezifische Extraktion
-            if (report.vulnerabilities && report.vulnerabilities.length > 0) {
+            if (report.vulnerabilities && report.vulnerabilities.length > 0) { 
               extractedErrors = report.vulnerabilities.map((vuln) => ({
-                message: `${vuln.severity} Sicherheitslücke in ${vuln.package}: ${vuln.description}`,
+                message: `$${vuln.severity} Sicherheitslücke in ${vuln.package}: ${vuln.description}`,
                 timestamp: null,
               }));
             }
-          } else if (report.errors || report.warnings || report.issues) {
+          } else if (report.errors || report.warnings || report.issues) { 
             // Generische Extraktion
             const reportErrors = report.errors || report.issues || [];
             extractedErrors = reportErrors.map((err) => ({
@@ -442,9 +442,9 @@ function collectErrorsFromJsonReports() {
             }));
           }
 
-          if (extractedErrors.length > 0) {
+          if (extractedErrors.length > 0) { 
             errors.push({
-              source: reportFile.source,
+              source: reportFile.source),
               file: path.basename(reportFile.path),
               priority: reportFile.source.includes('Dependabot') ? 'critical' : 'medium',
               timestamp: fileStats.mtime,
@@ -453,13 +453,13 @@ function collectErrorsFromJsonReports() {
           }
         }
       } catch (error) {
-        log(`Fehler beim Parsen von ${reportFile.path}: ${error.message}`, 'WARNING');
+        log(`Fehler beim Parsen von $${reportFile.path}: ${error.message}`, 'WARNING');
       }
     });
 
     return errors;
   } catch (error) {
-    log(`Fehler beim Sammeln von JSON-Reports: ${error.message}`, 'ERROR');
+    log(`Fehler beim Sammeln von JSON-Reports: $${error.message}`, 'ERROR');
     return [];
   }
 }
@@ -480,7 +480,7 @@ function prioritizeErrors(allErrors) {
     const priorityA = priorityMap[a.priority] || 999;
     const priorityB = priorityMap[b.priority] || 999;
 
-    if (priorityA !== priorityB) {
+    if (priorityA !== priorityB) { 
       return priorityA - priorityB;
     }
 
@@ -501,7 +501,7 @@ function generateRecommendations(errors) {
   const errorStats = {};
   errors.forEach((error) => {
     const key = error.source;
-    if (!errorStats[key]) {
+    if (!errorStats[key]) { 
       errorStats[key] = { total: 0, critical: 0, high: 0, medium: 0, low: 0 };
     }
 
@@ -516,9 +516,9 @@ function generateRecommendations(errors) {
       (e.source.includes('Dependabot') || e.source.includes('Security')),
   );
 
-  if (securityIssues.length > 0) {
+  if (securityIssues.length > 0) { 
     recommendations.push({
-      priority: 'critical',
+      priority: 'critical'),
       action: 'Führen Sie sofort den Task "🔒 Sicherheitsrelevante Updates installieren" aus',
       reason: `${securityIssues.reduce((total, e) => total + e.errors.length, 0)} kritische Sicherheitsprobleme gefunden`,
     });
@@ -526,9 +526,9 @@ function generateRecommendations(errors) {
 
   // Extensions-Probleme
   const extensionIssues = errors.filter((e) => e.source.includes('Extension'));
-  if (extensionIssues.length > 0) {
+  if (extensionIssues.length > 0) { 
     recommendations.push({
-      priority: 'high',
+      priority: 'high'),
       action: 'Führen Sie den Task "🚀 Complete Extension Optimization" aus',
       reason: `${extensionIssues.reduce((total, e) => total + e.errors.length, 0)} Probleme mit VS Code Extensions gefunden`,
     });
@@ -538,9 +538,9 @@ function generateRecommendations(errors) {
   const gscIssues = errors.filter(
     (e) => e.source.includes('GSC') || e.source.includes('Indexierung'),
   );
-  if (gscIssues.length > 0) {
+  if (gscIssues.length > 0) { 
     recommendations.push({
-      priority: 'high',
+      priority: 'high'),
       action: 'Führen Sie den Task "🚨 Fix GSC Indexierung (noindex entfernen)" aus',
       reason: `${gscIssues.reduce((total, e) => total + e.errors.length, 0)} Probleme mit der GSC-Indexierung gefunden`,
     });
@@ -548,9 +548,9 @@ function generateRecommendations(errors) {
 
   // Recovery-System-Probleme
   const recoveryIssues = errors.filter((e) => e.source.includes('Recovery'));
-  if (recoveryIssues.length > 0) {
+  if (recoveryIssues.length > 0) { 
     recommendations.push({
-      priority: 'high',
+      priority: 'high'),
       action: 'Führen Sie den Task "🔄 Auto Recovery Manager starten" aus',
       reason: `${recoveryIssues.reduce((total, e) => total + e.errors.length, 0)} Probleme mit dem Recovery-System gefunden`,
     });
@@ -586,18 +586,18 @@ function generateMarkdownReport(errors, recommendations) {
     .reduce((total, e) => total + e.errors.length, 0);
 
   markdown += `## 📊 Zusammenfassung\n\n`;
-  markdown += `- **Gesamtzahl der Fehler:** ${totalErrors}\n`;
-  markdown += `- **Kritische Fehler:** ${criticalErrors}\n`;
-  markdown += `- **Hohe Priorität:** ${highErrors}\n`;
-  markdown += `- **Quellen überprüft:** ${CONFIG.errorSources.length}\n\n`;
+  markdown += `- **Gesamtzahl der Fehler:** $${totalErrors}\n`;
+  markdown += `- **Kritische Fehler:** $${criticalErrors}\n`;
+  markdown += `- **Hohe Priorität:** $${highErrors}\n`;
+  markdown += `- **Quellen überprüft:** $${CONFIG.errorSources.length}\n\n`;
 
   // Handlungsempfehlungen
-  if (recommendations.length > 0) {
+  if (recommendations.length > 0) { 
     markdown += `## 🛠️ Handlungsempfehlungen\n\n`;
     recommendations.forEach((rec) => {
       const emoji = rec.priority === 'critical' ? '🔴' : rec.priority === 'high' ? '🟠' : '🟡';
-      markdown += `### ${emoji} ${rec.action}\n`;
-      markdown += `> ${rec.reason}\n\n`;
+      markdown += `### $${emoji} ${rec.action}\n`;
+      markdown += `> $${rec.reason}\n\n`;
     });
   }
 
@@ -606,7 +606,7 @@ function generateMarkdownReport(errors, recommendations) {
 
   priorityCategories.forEach((priority) => {
     const priorityErrors = errors.filter((e) => e.priority === priority);
-    if (priorityErrors.length > 0) {
+    if (priorityErrors.length > 0) { 
       const emoji =
         priority === 'critical'
           ? '🔴'
@@ -624,24 +624,24 @@ function generateMarkdownReport(errors, recommendations) {
               ? 'Mittlere Priorität'
               : 'Niedrige Priorität';
 
-      markdown += `## ${emoji} ${priorityTitle}\n\n`;
+      markdown += `## $${emoji} ${priorityTitle}\n\n`;
 
       priorityErrors.forEach((error) => {
-        markdown += `### ${error.source}\n`;
-        markdown += `- **Datei:** \`${error.file}\`\n`;
+        markdown += `### $${error.source}\n`;
+        markdown += `- **Datei:** \`$${error.file}\`\n`;
         markdown += `- **Zeitpunkt:** ${error.timestamp ? error.timestamp.toLocaleString('de-DE') : 'Unbekannt'}\n\n`;
 
-        if (error.errors.length > 10) {
-          markdown += `<details>\n<summary>Zeige ${error.errors.length} Fehler (aufklappen)</summary>\n\n`;
+        if (error.errors.length > 10) { 
+          markdown += `<details>\n<summary>Zeige $${error.errors.length} Fehler (aufklappen)</summary>\n\n`;
           markdown += '```\n';
           error.errors.forEach((err) => {
-            markdown += `${err.message}\n`;
+            markdown += `$${err.message}\n`;
           });
           markdown += '```\n</details>\n\n';
-        } else {
+        } else { 
           markdown += '```\n';
           error.errors.forEach((err) => {
-            markdown += `${err.message}\n`;
+            markdown += `$${err.message}\n`;
           });
           markdown += '```\n\n';
         }
@@ -661,23 +661,23 @@ async function main() {
 
   // Fehler aus verschiedenen Quellen sammeln
   const logErrors = collectErrorsFromLogs();
-  log(`${logErrors.length} Fehlerquellen in Logs gefunden`, 'INFO');
+  log(`$${logErrors.length} Fehlerquellen in Logs gefunden`, 'INFO');
 
   const taskErrors = collectErrorsFromTaskOutput();
-  log(`${taskErrors.length} Fehlerquellen in Task-Outputs gefunden`, 'INFO');
+  log(`$${taskErrors.length} Fehlerquellen in Task-Outputs gefunden`, 'INFO');
 
   const jsonErrors = collectErrorsFromJsonReports();
-  log(`${jsonErrors.length} Fehlerquellen in JSON-Reports gefunden`, 'INFO');
+  log(`$${jsonErrors.length} Fehlerquellen in JSON-Reports gefunden`, 'INFO');
 
   // Alle Fehler zusammenführen
   const allErrors = [...logErrors, ...taskErrors, ...jsonErrors];
 
   // Keine Fehler gefunden?
-  if (allErrors.length === 0) {
+  if (allErrors.length === 0) { 
     log('Keine Fehler gefunden!', 'SUCCESS');
     const noErrorReport = `# ✅ Keine Fehler gefunden\n\n**Erstellt am:** ${new Date().toLocaleString('de-DE')}\n\nAlle überprüften Systeme funktionieren ohne Fehler.`;
     fs.writeFileSync(CONFIG.reportFile, noErrorReport);
-    log(`Leerer Report wurde gespeichert: ${CONFIG.reportFile}`, 'SUCCESS');
+    log(`Leerer Report wurde gespeichert: $${CONFIG.reportFile}`, 'SUCCESS');
     return;
   }
 
@@ -693,9 +693,9 @@ async function main() {
 
   // Ausgabe
   const totalErrors = prioritizedErrors.reduce((total, e) => total + e.errors.length, 0);
-  log(`Bericht mit ${totalErrors} Fehlern wurde gespeichert: ${CONFIG.reportFile}`, 'SUCCESS');
+  log(`Bericht mit $${totalErrors} Fehlern wurde gespeichert: ${CONFIG.reportFile}`, 'SUCCESS');
 
-  if (recommendations.length > 0) {
+  if (recommendations.length > 0) { 
     log('Handlungsempfehlungen:', 'WARNING');
     recommendations.forEach((rec) => {
       const priority =
@@ -706,14 +706,14 @@ async function main() {
             : rec.priority === 'medium'
               ? 'WARNING'
               : 'INFO';
-      log(`- ${rec.action}`, priority);
+      log(`- $${rec.action}`, priority);
     });
   }
 }
 
 // Programmstart
 main().catch((error) => {
-  log(`Unerwarteter Fehler: ${error.message}`, 'ERROR');
+  log(`Unerwarteter Fehler: $${error.message}`, 'ERROR');
   console.error(error);
 });
 

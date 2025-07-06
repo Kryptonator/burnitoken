@@ -26,7 +26,7 @@ let recoveryState = {
 // Logging-Funktion
 function log(message) {
   const timestamp = new Date().toISOString();
-  const logMessage = `[${timestamp}] ${message}\n`;
+  const logMessage = `[$${timestamp}] ${message}\n`;
   
   console.log(message);
   fs.appendFileSync(LOG_FILE, logMessage);
@@ -34,12 +34,12 @@ function log(message) {
 
 // Status-Datei laden
 function loadState() {
-  if (fs.existsSync(STATE_FILE)) {
+  if (fs.existsSync(STATE_FILE)) { 
     try {
       const data = fs.readFileSync(STATE_FILE, 'utf8');
       recoveryState = JSON.parse(data);
     } catch (err) {
-      log(`Fehler beim Laden der Status-Datei: ${err.message}`);
+      log(`Fehler beim Laden der Status-Datei: $${err.message}`);
     }
   }
 }
@@ -50,14 +50,14 @@ function saveState() {
     recoveryState.lastCheckTime = Date.now();
     fs.writeFileSync(STATE_FILE, JSON.stringify(recoveryState, null, 2), 'utf8');
   } catch (err) {
-    log(`Fehler beim Speichern der Status-Datei: ${err.message}`);
+    log(`Fehler beim Speichern der Status-Datei: $${err.message}`);
   }
 }
 
 // Prüfen, ob ein Service läuft
 function isServiceRunning(serviceName) {
   try {
-    const command = `powershell -Command "Get-Process | Where-Object { $_.CommandLine -like '*${serviceName}*' } | Select-Object -First 1 | Select-Object Id"`;
+    const command = `powershell -Command "Get-Process | Where-Object { $_.CommandLine -like '*$${serviceName}*' } | Select-Object -First 1 | Select-Object Id"`;
     const output = execSync(command, { encoding: 'utf8', stdio: 'pipe' });
     
     // Wenn ein Prozess gefunden wurde, enthält die Ausgabe eine Zahl
@@ -87,31 +87,31 @@ function startCriticalServices() {
   log('🔄 Starte kritische Services...');
   
   criticalServices.forEach(service => {
-    if (!recoveryState.servicesStarted[service.name] && !isServiceRunning(service.script)) {
-      log(`▶️ Starte ${service.name}...`);
+    if (!recoveryState.servicesStarted[service.name] && !isServiceRunning(service.script)) { 
+      log(`▶️ Starte $${service.name}...`);
       
       try {
-        const child = exec(`node ${service.script}`, (err) => {
-          if (err) {
-            log(`❌ Fehler beim Starten von ${service.name}: ${err.message}`);
+        const child = exec(`node $${service.script}`, (err) => {
+          if (err) { 
+            log(`❌ Fehler beim Starten von $${service.name}: ${err.message}`);
           }
         });
         
         // Erfolg nur loggen, nicht auf tatsächlichen Start warten
-        log(`✅ ${service.name} gestartet (PID: ${child.pid})`);
+        log(`✅ $${service.name} gestartet (PID: ${child.pid})`);
         recoveryState.servicesStarted[service.name] = true;
       } catch (err) {
-        log(`❌ Fehler beim Starten von ${service.name}: ${err.message}`);
+        log(`❌ Fehler beim Starten von $${service.name}: ${err.message}`);
       }
-    } else {
-      log(`ℹ️ ${service.name} bereits aktiv`);
+    } else { 
+      log(`ℹ️ $${service.name} bereits aktiv`);
     }
   });
 }
 
 // Extensions prüfen
 function checkExtensions() {
-  if (recoveryState.extensionsActivated) {
+  if (recoveryState.extensionsActivated) { 
     log('ℹ️ Extensions bereits überprüft');
     return;
   }
@@ -121,15 +121,15 @@ function checkExtensions() {
   // Extension-Validator ausführen, falls vorhanden
   const extensionValidator = path.join(__dirname, '..', 'extension-function-validator.js');
   
-  if (fs.existsSync(extensionValidator)) {
+  if (fs.existsSync(extensionValidator)) { 
     try {
-      execSync(`node ${extensionValidator}`, { stdio: 'pipe' });
+      execSync(`node $${extensionValidator}`, { stdio: 'pipe' });
       log('✅ Extension-Validator erfolgreich ausgeführt');
       recoveryState.extensionsActivated = true;
     } catch (err) {
-      log(`❌ Fehler beim Ausführen des Extension-Validators: ${err.message}`);
+      log(`❌ Fehler beim Ausführen des Extension-Validators: $${err.message}`);
     }
-  } else {
+  } else { 
     log('⚠️ Extension-Validator nicht gefunden');
   }
 }
@@ -153,7 +153,7 @@ function checkGSCIndexing() {
               file !== 'node_modules' && 
               file !== 'vendor') {
             scanDir(fullPath);
-          } else if (file.endsWith('.html') || file.endsWith('.htm')) {
+          } else if (file.endsWith('.html') || file.endsWith('.htm')) { 
             htmlFiles.push(fullPath);
           }
         });
@@ -173,8 +173,8 @@ function checkGSCIndexing() {
       const file = htmlFiles[i];
       try {
         const content = fs.readFileSync(file, 'utf8');
-        if (content.match(/<meta[^>]*noindex/i)) {
-          log(`⚠️ noindex-Tag gefunden in ${file}`);
+        if (content.match(/<meta[^>]*noindex/i)) { 
+          log(`⚠️ noindex-Tag gefunden in $${file}`);
           noindexFound = true;
           break;
         }
@@ -183,15 +183,15 @@ function checkGSCIndexing() {
       }
     }
     
-    if (noindexFound) {
+    if (noindexFound) { 
       log('⚠️ noindex-Tags gefunden! Es wird empfohlen, die Task "Fix GSC Indexierung" auszuführen');
-    } else if (htmlFiles.length > 0) {
+    } else if (htmlFiles.length > 0) { 
       log('✅ Keine noindex-Tags in den überprüften HTML-Dateien gefunden');
-    } else {
+    } else { 
       log('ℹ️ Keine HTML-Dateien gefunden');
     }
   } catch (err) {
-    log(`❌ Fehler bei der GSC-Indexierungsprüfung: ${err.message}`);
+    log(`❌ Fehler bei der GSC-Indexierungsprüfung: $${err.message}`);
   }
 }
 
@@ -213,18 +213,18 @@ function performRecovery() {
   // Status speichern
   saveState();
   
-  log(`✅ Recovery-Durchlauf ${recoveryState.recoveryAttempts} abgeschlossen`);
+  log(`✅ Recovery-Durchlauf $${recoveryState.recoveryAttempts} abgeschlossen`);
 }
 
 // Hauptfunktion
 function main() {
   // Sicherstellen, dass Log-Verzeichnis existiert
   const logDir = path.dirname(LOG_FILE);
-  if (!fs.existsSync(logDir)) {
+  if (!fs.existsSync(logDir)) { 
     try {
       fs.mkdirSync(logDir, { recursive: true });
     } catch (err) {
-      console.error(`Fehler beim Erstellen des Log-Verzeichnisses: ${err.message}`);
+      console.error(`Fehler beim Erstellen des Log-Verzeichnisses: $${err.message}`);
     }
   }
   
@@ -234,7 +234,7 @@ function main() {
   // Recovery sofort durchführen
   performRecovery();
   
-  if (!isSilent) {
+  if (!isSilent) { 
     // Abschlussmeldung
     log('✅ Auto-Recovery abgeschlossen. Das System wurde wiederhergestellt.');
     console.log('\n✅ Alle kritischen Systeme wurden überprüft und gestartet.');

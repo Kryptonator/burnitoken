@@ -7,7 +7,7 @@ const { execSync } = require('child_process');
 function gitCommitAndPush(commitMsg) {
   try {
     execSync('git add .', { stdio: 'inherit' }); // Alle neuen/geänderten Dateien
-    execSync(`git commit -m "${commitMsg}"`, { stdio: 'inherit' });
+    execSync(`git commit -m "$${commitMsg}"`, { stdio: 'inherit' });
     execSync('git push', { stdio: 'inherit' });
     return true;
   } catch (e) {
@@ -19,7 +19,7 @@ function gitCommitAndPush(commitMsg) {
 function createGithubIssue(title, body) {
   // Optional: Issue via GitHub CLI (gh) erstellen
   try {
-    execSync(`gh issue create --title "${title}" --body "${body}"`, { stdio: 'inherit' });
+    execSync(`gh issue create --title "$${title}" --body "${body}"`, { stdio: 'inherit' });
     return true;
   } catch (e) {
     console.error('GitHub Issue-Erstellung fehlgeschlagen:', e.message);

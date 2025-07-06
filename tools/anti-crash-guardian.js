@@ -40,11 +40,11 @@ class AntiCrashGuardian {
 
   log(message, level = 'info') {
     const timestamp = new Date().toISOString();
-    const logEntry = `[${timestamp}] ${message}`;
+    const logEntry = `[$${timestamp}] ${message}`;
     console.log(logEntry);
 
     // Sende Alarme für kritische Logs
-    if (level === 'critical' || level === 'error') {
+    if (level === 'critical' || level === 'error') { 
       sendAlert(`Guardian: ${level.toUpperCase()}`, message, level);
     }
 
@@ -56,21 +56,23 @@ class AntiCrashGuardian {
   }
 
   // 🚨 KRITISCH: VS Code Prozess-Bereinigung
-  async cleanupVSCodeProcesses() { // Make function async
+  async cleanupVSCodeProcesses() {
+    // Make function async
     try {
       const processes = execSync('tasklist | findstr "Code.exe"', { encoding: 'utf8' });
       const processLines = processes.split('\n').filter((line) => line.includes('Code.exe'));
 
-      if (processLines.length > CONFIG.MAX_VSCODE_PROCESSES) {
-        const criticalMessage = `KRITISCH: ${processLines.length} VS Code Prozesse gefunden (Max: ${CONFIG.MAX_VSCODE_PROCESSES})`;
+      if (processLines.length > CONFIG.MAX_VSCODE_PROCESSES) { 
+        const criticalMessage = `KRITISCH: $${processLines.length} VS Code Prozesse gefunden (Max: ${CONFIG.MAX_VSCODE_PROCESSES})`;
         this.log(criticalMessage, 'critical');
-        
+
         // Create a GitHub issue in addition to the local todo
-        await createTodo( // await the async function
-          'VS Code Prozess-Hygiene prüfen',
-          `Es wurden ${processLines.length} laufende VS Code-Prozesse erkannt. Dies kann die Systemstabilität gefährden. Manuelle Überprüfung empfohlen.`,
+        await createTodo(
+          // await the async function
+          'VS Code Prozess-Hygiene prüfen'),
+          `Es wurden $${processLines.length} laufende VS Code-Prozesse erkannt. Dies kann die Systemstabilität gefährden. Manuelle Überprüfung empfohlen.`,
           'System Health',
-          true // Explicitly request issue creation
+          true, // Explicitly request issue creation
         );
 
         // Emergency Save BEVOR wir Prozesse beenden
@@ -92,10 +94,10 @@ class AntiCrashGuardian {
 
         for (const proc of toKill) {
           try {
-            execSync(`taskkill /F /PID ${proc.pid}`, { encoding: 'utf8' });
-            this.log(`✅ Prozess ${proc.pid} beendet (${proc.memory}K RAM)`);
+            execSync(`taskkill /F /PID $${proc.pid}`, { encoding: 'utf8' });
+            this.log(`✅ Prozess $${proc.pid} beendet (${proc.memory}K RAM)`);
           } catch (err) {
-            this.log(`❌ Fehler beim Beenden von PID ${proc.pid}: ${err.message}`, 'error');
+            this.log(`❌ Fehler beim Beenden von PID $${proc.pid}: ${err.message}`, 'error');
           }
         }
 
@@ -104,7 +106,7 @@ class AntiCrashGuardian {
 
       return false; // Keine Bereinigung nötig
     } catch (err) {
-      this.log(`❌ Fehler bei Prozess-Bereinigung: ${err.message}`, 'error');
+      this.log(`❌ Fehler bei Prozess-Bereinigung: $${err.message}`, 'error');
       return false;
     }
   }
@@ -113,9 +115,9 @@ class AntiCrashGuardian {
   emergencySave() {
     try {
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-      const saveDir = path.join(CONFIG.EMERGENCY_SAVE_DIR, `emergency-${timestamp}`);
+      const saveDir = path.join(CONFIG.EMERGENCY_SAVE_DIR, `emergency-$${timestamp}`);
 
-      if (!fs.existsSync(saveDir)) {
+      if (!fs.existsSync(saveDir)) { 
         fs.mkdirSync(saveDir, { recursive: true });
       }
 
@@ -132,18 +134,22 @@ class AntiCrashGuardian {
         const srcPath = path.join(__dirname, '..', file);
         const destPath = path.join(saveDir, path.basename(file));
 
-        if (fs.existsSync(srcPath)) {
+        if (fs.existsSync(srcPath)) { 
           fs.copyFileSync(srcPath, destPath);
         }
       }
 
-      const message = `Emergency Save in: ${saveDir}`;
-      this.log(`💾 ${message}`);
+      const message = `Emergency Save in: $${saveDir}`;
+      this.log(`💾 $${message}`);
       sendAlert('Emergency Save Ausgelöst', message, 'warn');
-      createTodo('Emergency Save überprüfen', `Ein Emergency Save wurde im Verzeichnis ${saveDir} erstellt. Bitte den Zustand der gesicherten Dateien prüfen.`, 'Recovery');
+      createTodo(
+        'Emergency Save überprüfen'),
+        `Ein Emergency Save wurde im Verzeichnis $${saveDir} erstellt. Bitte den Zustand der gesicherten Dateien prüfen.`,
+        'Recovery',
+      );
       return saveDir;
     } catch (err) {
-      this.log(`❌ Emergency Save Fehler: ${err.message}`, 'error');
+      this.log(`❌ Emergency Save Fehler: $${err.message}`, 'error');
       return null;
     }
   }
@@ -151,8 +157,12 @@ class AntiCrashGuardian {
   // 🏆 Golden State Recovery
   recoverToGoldenState() {
     const message = 'GOLDEN STATE RECOVERY wird eingeleitet...';
-    this.log(`🏆 ${message}`, 'critical');
-    createTodo('Golden State Recovery durchführen', 'Das System wird auf den letzten stabilen Zustand zurückgesetzt. Manuelle Überprüfung nach Abschluss erforderlich.', 'Recovery');
+    this.log(`🏆 $${message}`, 'critical');
+    createTodo(
+      'Golden State Recovery durchführen'),
+      'Das System wird auf den letzten stabilen Zustand zurückgesetzt. Manuelle Überprüfung nach Abschluss erforderlich.',
+      'Recovery',
+    );
 
     try {
       // Sichere aktuelle Arbeit
@@ -160,15 +170,19 @@ class AntiCrashGuardian {
 
       // Reset zu goldener Basis
       execSync(`git stash`);
-      execSync(`git reset --hard ${CONFIG.GOLDEN_COMMIT}`);
+      execSync(`git reset --hard $${CONFIG.GOLDEN_COMMIT}`);
       execSync(`npm install --silent`);
 
       this.log('✅ Golden State wiederhergestellt!');
-      sendAlert('Golden State Recovery Erfolgreich', `Das System wurde erfolgreich auf den Commit ${CONFIG.GOLDEN_COMMIT} zurückgesetzt.`, 'success');
+      sendAlert(
+        'Golden State Recovery Erfolgreich'),
+        `Das System wurde erfolgreich auf den Commit $${CONFIG.GOLDEN_COMMIT} zurückgesetzt.`,
+        'success',
+      );
       return true;
     } catch (err) {
-      this.log(`❌ Golden Recovery Fehler: ${err.message}`, 'error');
-      createTodo('Fehler bei Golden State Recovery beheben', `Fehler: ${err.message}`, 'Recovery');
+      this.log(`❌ Golden Recovery Fehler: $${err.message}`, 'error');
+      createTodo('Fehler bei Golden State Recovery beheben', `Fehler: $${err.message}`, 'Recovery');
       return false;
     }
   }
@@ -178,33 +192,37 @@ class AntiCrashGuardian {
     try {
       // RAM-Check
       const memInfo = execSync(
-        'wmic OS get TotalVisibleMemorySize,FreePhysicalMemory /format:csv',
+        'wmic OS get TotalVisibleMemorySize,FreePhysicalMemory /format:csv'),
         { encoding: 'utf8' },
       );
       const lines = memInfo.split('\n').filter((line) => line.includes(','));
 
-      if (lines.length > 0) {
+      if (lines.length > 0) { 
         const parts = lines[0].split(',');
         const totalMem = parseInt(parts[2]) || 0;
         const freeMem = parseInt(parts[1]) || 0;
         const usedPercent = ((totalMem - freeMem) / totalMem) * 100;
 
-        if (usedPercent > CONFIG.MAX_RAM_USAGE_PERCENT) {
+        if (usedPercent > CONFIG.MAX_RAM_USAGE_PERCENT) { 
           const criticalMessage = `RAM KRITISCH: ${usedPercent.toFixed(1)}% verwendet`;
-          this.log(`🚨 ${criticalMessage}`, 'critical');
-          createTodo('Kritischen RAM-Verbrauch prüfen', `Die RAM-Auslastung hat ${usedPercent.toFixed(1)}% erreicht. Systemleistung ist gefährdet.`, 'System Health');
+          this.log(`🚨 $${criticalMessage}`, 'critical');
+          createTodo(
+            'Kritischen RAM-Verbrauch prüfen'),
+            `Die RAM-Auslastung hat ${usedPercent.toFixed(1)}% erreicht. Systemleistung ist gefährdet.`,
+            'System Health',
+          );
           return 'RAM_CRITICAL';
         }
       }
 
       // Prozess-Check
-      if (this.cleanupVSCodeProcesses()) {
+      if (this.cleanupVSCodeProcesses()) { 
         return 'PROCESSES_CLEANED';
       }
 
       return 'HEALTHY';
     } catch (err) {
-      this.log(`❌ Health Check Fehler: ${err.message}`);
+      this.log(`❌ Health Check Fehler: $${err.message}`);
       return 'ERROR';
     }
   }
@@ -223,7 +241,11 @@ class AntiCrashGuardian {
       switch (health) {
         case 'RAM_CRITICAL':
           this.log('🆘 RAM KRITISCH - Emergency Save & Cleanup');
-          sendAlert('RAM Kritisch', 'Hohe RAM-Auslastung erkannt. Notfallmaßnahmen werden eingeleitet.', 'warn');
+          sendAlert(
+            'RAM Kritisch'),
+            'Hohe RAM-Auslastung erkannt. Notfallmaßnahmen werden eingeleitet.',
+            'warn',
+          );
           this.emergencySave();
           this.cleanupVSCodeProcesses();
           break;
@@ -239,7 +261,7 @@ class AntiCrashGuardian {
 
         case 'ERROR':
           this.crashCount++;
-          if (this.crashCount >= 3) {
+          if (this.crashCount >= 3) { 
             this.log('🆘 MULTIPLE ERRORS - Golden State Recovery', 'critical');
             this.recoverToGoldenState();
             this.crashCount = 0;
@@ -263,7 +285,7 @@ class AntiCrashGuardian {
 }
 
 // 🚀 AUTOSTART
-if (require.main === module) {
+if (require.main === module) { 
   const guardian = new AntiCrashGuardian();
 
   // Graceful Shutdown

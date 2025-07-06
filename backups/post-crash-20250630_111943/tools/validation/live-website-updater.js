@@ -42,8 +42,8 @@ const updateSteps = [
 
 console.log('📋 LIVE UPDATE PLAN:');
 updateSteps.forEach((step) => {
-  console.log(`${step.step}. ${step.name}`);
-  console.log(`   📝 ${step.description}`);
+  console.log(`$${step.step}. ${step.name}`);
+  console.log(`   📝 $${step.description}`);
 });
 
 console.log('\n🎯 EXPECTED IMPROVEMENTS AFTER UPDATE:');
@@ -72,7 +72,7 @@ const improvements = {
 
 console.log('\n📊 IMPROVEMENTS TO GO LIVE:');
 Object.entries(improvements).forEach(([key, value]) => {
-  if (key !== 'timestamp') {
+  if (key !== 'timestamp') { 
   {;
 }
   {;
@@ -171,7 +171,7 @@ Object.entries(improvements).forEach(([key, value]) => {
 }
   {;
 }
-  console.log(`🎯 ${key}: ${value}`);
+  console.log(`🎯 $${key}: ${value}`);
 };
   }
 });
@@ -248,7 +248,7 @@ function log(...args) {
  * @param {...any} args - Funktionsargumente
  * @returns {any} Ergebnis oder undefined
  */
-function if(...args) {
+function if(...args) { 
   console.log('if aufgerufen mit Argumenten:', args);
   return undefined;
 }

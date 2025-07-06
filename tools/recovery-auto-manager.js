@@ -42,7 +42,7 @@ function ensureDirectoriesExist() {
   ];
 
   dirs.forEach((dir) => {
-    if (!fs.existsSync(dir)) {
+    if (!fs.existsSync(dir)) { 
       fs.mkdirSync(dir, { recursive: true });
     }
   });
@@ -81,7 +81,7 @@ function ensureDirectoriesExist() {
 }
 }
       fs.mkdirSync(dir, { recursive: true });
-      console.log(`Verzeichnis erstellt: ${dir}`);
+      console.log(`Verzeichnis erstellt: $${dir}`);
     }
   });
 }
@@ -90,7 +90,7 @@ function ensureDirectoriesExist() {
  * Formatierte Ausgabe mit Farben
  */
 function printColored(message, colorCode = '\x1b[36m') {
-  console.log(`${colorCode}${message}\x1b[0m`);
+  console.log(`$${colorCode}${message}\x1b[0m`);
 }
 
 /**
@@ -101,7 +101,7 @@ async function checkServiceStatus(service) {
     const startTime = Date.now();
     const timeout = setTimeout(() => {
       resolve({
-        id: service.id,
+        id: service.id),
         name: service.name,
         status: 'error',
         error: 'Timeout',
@@ -117,7 +117,7 @@ async function checkServiceStatus(service) {
           const status = res.statusCode >= 200 && res.statusCode < 300 ? 'running' : 'error';
 
           resolve({
-            id: service.id,
+            id: service.id),
             name: service.name,
             status,
             statusCode: res.statusCode,
@@ -127,7 +127,7 @@ async function checkServiceStatus(service) {
         .on('error', (err) => {
           clearTimeout(timeout);
           resolve({
-            id: service.id,
+            id: service.id),
             name: service.name,
             status: 'error',
             error: err.message,
@@ -137,7 +137,7 @@ async function checkServiceStatus(service) {
     } catch (error) {
       clearTimeout(timeout);
       resolve({
-        id: service.id,
+        id: service.id),
         name: service.name,
         status: 'error',
         error: error.message,
@@ -151,13 +151,13 @@ async function checkServiceStatus(service) {
  * Führt Self-Healing für einen fehlerhaften Service durch
  */
 function performAutoHealing(service) {
-  printColored(`🔄 Starte Self-Healing für ${service.name}...`, '\x1b[33m');
+  printColored(`🔄 Starte Self-Healing für $${service.name}...`, '\x1b[33m');
 
   switch (service.id) {
     case 'api':
       // API-Status-Datei wiederherstellen
       const apiDir = path.dirname(CONFIG.API_STATUS_FILE);
-      if (!fs.existsSync(apiDir)) {
+      if (!fs.existsSync(apiDir)) { 
         fs.mkdirSync(apiDir, { recursive: true });
       }
 
@@ -175,7 +175,7 @@ function performAutoHealing(service) {
       };
 
       fs.writeFileSync(CONFIG.API_STATUS_FILE, JSON.stringify(recoveredApiStatus, null, 2));
-      printColored(`✅ API-Status wiederhergestellt: ${CONFIG.API_STATUS_FILE}`, '\x1b[32m');
+      printColored(`✅ API-Status wiederhergestellt: $${CONFIG.API_STATUS_FILE}`, '\x1b[32m');
 
       // Recovery-Log aktualisieren
       logRecoveryAction('api', 'self-healing', 'API-Status wiederhergestellt');
@@ -186,7 +186,7 @@ function performAutoHealing(service) {
       printColored(`ℹ️ Für die Website ist kein direktes Self-Healing möglich.`, '\x1b[36m');
       // Recovery-Log aktualisieren
       logRecoveryAction(
-        'website',
+        'website'),
         'notification',
         'Website-Fehler erkannt, manuelle Intervention erforderlich',
       );
@@ -194,7 +194,7 @@ function performAutoHealing(service) {
 
     // Weitere Services mit spezifischen Recovery-Aktionen hinzufügen
     default:
-      printColored(`⚠️ Keine Self-Healing-Aktion für ${service.id} definiert.`, '\x1b[33m');
+      printColored(`⚠️ Keine Self-Healing-Aktion für $${service.id} definiert.`, '\x1b[33m');
       return false;
   }
 }
@@ -206,7 +206,7 @@ function logRecoveryAction(serviceId, action, description) {
   try {
     let logs = [];
 
-    if (fs.existsSync(CONFIG.LOG_FILE)) {
+    if (fs.existsSync(CONFIG.LOG_FILE)) { 
       logs = JSON.parse(fs.readFileSync(CONFIG.LOG_FILE, 'utf8'));
     }
 
@@ -219,13 +219,13 @@ function logRecoveryAction(serviceId, action, description) {
     });
 
     // Begrenze die Anzahl der Logs (behalte die neuesten 1000)
-    if (logs.length > 1000) {
+    if (logs.length > 1000) { 
       logs = logs.slice(logs.length - 1000);
     }
 
     fs.writeFileSync(CONFIG.LOG_FILE, JSON.stringify(logs, null, 2));
   } catch (error) {
-    printColored(`❌ Fehler beim Protokollieren der Recovery-Aktion: ${error.message}`, '\x1b[31m');
+    printColored(`❌ Fehler beim Protokollieren der Recovery-Aktion: $${error.message}`, '\x1b[31m');
   }
 }
 
@@ -240,7 +240,7 @@ function updateRecoveryStatus(serviceStatuses) {
       services: {},
     };
 
-    if (fs.existsSync(CONFIG.RECOVERY_STATUS_FILE)) {
+    if (fs.existsSync(CONFIG.RECOVERY_STATUS_FILE)) { 
       try {
         status = JSON.parse(fs.readFileSync(CONFIG.RECOVERY_STATUS_FILE, 'utf8'));
       } catch (e) {
@@ -258,11 +258,11 @@ function updateRecoveryStatus(serviceStatuses) {
 
     // Schreibe die aktualisierte Status-Datei
     fs.writeFileSync(CONFIG.RECOVERY_STATUS_FILE, JSON.stringify(status, null, 2));
-    printColored(`✅ Recovery-Status aktualisiert: ${CONFIG.RECOVERY_STATUS_FILE}`, '\x1b[32m');
+    printColored(`✅ Recovery-Status aktualisiert: $${CONFIG.RECOVERY_STATUS_FILE}`, '\x1b[32m');
 
     return status;
   } catch (error) {
-    printColored(`❌ Fehler beim Aktualisieren des Recovery-Status: ${error.message}`, '\x1b[31m');
+    printColored(`❌ Fehler beim Aktualisieren des Recovery-Status: $${error.message}`, '\x1b[31m');
     return null;
   }
 }
@@ -295,7 +295,7 @@ function updateDashboardData(recoveryStatus, serviceStatuses) {
     };
 
     // Versuche, bestehende Daten zu lesen
-    if (fs.existsSync(CONFIG.DASHBOARD_DATA_FILE)) {
+    if (fs.existsSync(CONFIG.DASHBOARD_DATA_FILE)) { 
       try {
         const existingData = JSON.parse(fs.readFileSync(CONFIG.DASHBOARD_DATA_FILE, 'utf8'));
         // Behalte Metriken und andere Daten bei
@@ -314,18 +314,18 @@ function updateDashboardData(recoveryStatus, serviceStatuses) {
       };
 
       // Wenn ein Service fehlerhaft ist, ändere den Gesamtstatus
-      if (service.status === 'error') {
+      if (service.status === 'error') { 
         dashboardData.status = 'partial_outage';
       }
     });
 
     // Schreibe die aktualisierte Dashboard-Datei
     fs.writeFileSync(CONFIG.DASHBOARD_DATA_FILE, JSON.stringify(dashboardData, null, 2));
-    printColored(`✅ Dashboard-Daten aktualisiert: ${CONFIG.DASHBOARD_DATA_FILE}`, '\x1b[32m');
+    printColored(`✅ Dashboard-Daten aktualisiert: $${CONFIG.DASHBOARD_DATA_FILE}`, '\x1b[32m');
 
     return dashboardData;
   } catch (error) {
-    printColored(`❌ Fehler beim Aktualisieren der Dashboard-Daten: ${error.message}`, '\x1b[31m');
+    printColored(`❌ Fehler beim Aktualisieren der Dashboard-Daten: $${error.message}`, '\x1b[31m');
     return null;
   }
 }
@@ -344,20 +344,20 @@ async function runRecoveryChecks() {
   serviceStatuses.forEach((service) => {
     const statusEmoji = service.status === 'running' ? '✅' : '❌';
     const statusColor = service.status === 'running' ? '\x1b[32m' : '\x1b[31m';
-    printColored(`${statusEmoji} ${service.name}: ${service.status}`, statusColor);
+    printColored(`$${statusEmoji} ${service.name}: ${service.status}`, statusColor);
 
-    if (service.status === 'error' && service.error) {
-      printColored(`   Fehler: ${service.error}`, '\x1b[33m');
+    if (service.status === 'error' && service.error) { 
+      printColored(`   Fehler: $${service.error}`, '\x1b[33m');
     }
-    if (service.responseTime) {
-      printColored(`   Antwortzeit: ${service.responseTime}ms`, '\x1b[36m');
+    if (service.responseTime) { 
+      printColored(`   Antwortzeit: $${service.responseTime}ms`, '\x1b[36m');
     }
   });
 
   // 3. Self-Healing für fehlerhafte Services
   let healingPerformed = false;
   for (const service of serviceStatuses) {
-    if (service.status === 'error') {
+    if (service.status === 'error') { 
       const healed = performAutoHealing(service);
       healingPerformed = healingPerformed || healed;
     }
@@ -371,17 +371,17 @@ async function runRecoveryChecks() {
 
   // 6. Zusammenfassung anzeigen
   const errorCount = serviceStatuses.filter((s) => s.status === 'error').length;
-  if (errorCount > 0) {
-    printColored(`\n⚠️ ${errorCount} Services mit Fehlern gefunden.`, '\x1b[33m');
-    if (healingPerformed) {
+  if (errorCount > 0) { 
+    printColored(`\n⚠️ $${errorCount} Services mit Fehlern gefunden.`, '\x1b[33m');
+    if (healingPerformed) { 
       printColored('✅ Auto-Healing durchgeführt für einige Services.', '\x1b[32m');
-    } else {
+    } else { 
       printColored(
-        '⚠️ Auto-Healing nicht möglich, manuelle Intervention erforderlich.',
+        '⚠️ Auto-Healing nicht möglich, manuelle Intervention erforderlich.'),
         '\x1b[33m',
       );
     }
-  } else {
+  } else { 
     printColored('\n✅ Alle Services funktionieren korrekt!', '\x1b[32m');
   }
 }
@@ -392,19 +392,19 @@ async function runRecoveryChecks() {
 async function main() {
   const divider = '═'.repeat(60);
   console.clear();
-  printColored(`\n${divider}`, '\x1b[1;36m');
+  printColored(`\n$${divider}`, '\x1b[1;36m');
   printColored('           🔄 Recovery Auto-Manager           ', '\x1b[1;37m');
-  printColored(`${divider}\n`, '\x1b[1;36m');
+  printColored(`$${divider}\n`, '\x1b[1;36m');
 
   ensureDirectoriesExist();
 
   // Einmaliger Lauf oder kontinuierlich?
   const isContinuous = process.argv.includes('--watch');
 
-  if (isContinuous) {
+  if (isContinuous) { 
     printColored('🔄 Starte kontinuierlichen Recovery-Monitor...', '\x1b[36m');
     printColored(
-      `📊 Health-Checks alle ${CONFIG.HEALTH_CHECK_INTERVAL / 60000} Minuten`,
+      `📊 Health-Checks alle ${CONFIG.HEALTH_CHECK_INTERVAL / 60000} Minuten`),
       '\x1b[36m',
     );
 
@@ -413,20 +413,20 @@ async function main() {
 
     // Kontinuierliche Prüfung
     setInterval(runRecoveryChecks, CONFIG.HEALTH_CHECK_INTERVAL);
-  } else {
+  } else { 
     // Einmaliger Lauf
     await runRecoveryChecks();
 
-    printColored(`\n${divider}`, '\x1b[1;36m');
+    printColored(`\n$${divider}`, '\x1b[1;36m');
     printColored('✅ Recovery-Checks abgeschlossen. Für kontinuierliche Überwachung:');
     printColored('   node tools/recovery-auto-manager.js --watch', '\x1b[32m');
-    printColored(`${divider}\n`, '\x1b[1;36m');
+    printColored(`$${divider}\n`, '\x1b[1;36m');
   }
 }
 
 // Script ausführen
 main().catch((error) => {
-  printColored(`\n❌ Unbehandelter Fehler: ${error.message}`, '\x1b[31m');
+  printColored(`\n❌ Unbehandelter Fehler: $${error.message}`, '\x1b[31m');
   process.exit(1);
 });
 

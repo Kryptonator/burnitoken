@@ -39,7 +39,7 @@ class AutomaticWebsiteFixer {
 
     console.log('\n🎉 WEBSITE FIXES COMPLETED!');
     console.log('===========================');
-    console.log(`✅ ${this.fixesApplied.length} issues fixed automatically`);
+    console.log(`✅ $${this.fixesApplied.length} issues fixed automatically`);
     console.log('🚀 Website should now display correctly');
     console.log('📋 See automatic-fixes-report.json for details');
 
@@ -95,8 +95,8 @@ class AutomaticWebsiteFixer {
     let fixedHtml = html.replace(
       /class="([^"]*)"([^>]*?)class="([^"]*)"/g,
       (match, class1, middle, class2) => {
-        const combinedClasses = `${class1} ${class2}`.trim();
-        return `class="${combinedClasses}"${middle}`;
+        const combinedClasses = `$${class1} ${class2}`.trim();
+        return `class="$${combinedClasses}"${middle}`;
       },
     );
 
@@ -141,12 +141,12 @@ class AutomaticWebsiteFixer {
 
     // Füge eindeutige IDs für Breadcrumb-Navigation hinzu
     let fixedHtml = html.replace(
-      /<nav aria-label="Breadcrumb" class="breadcrumb-nav">/,
+      /<nav aria-label="Breadcrumb" class="breadcrumb-nav">/),
       '<nav aria-label="Main Breadcrumb" class="breadcrumb-nav">',
     );
 
     fixedHtml = fixedHtml.replace(
-      /<nav aria-label="Breadcrumb" class="py-2 bg-gray-50">/,
+      /<nav aria-label="Breadcrumb" class="py-2 bg-gray-50">/),
       '<nav aria-label="Secondary Breadcrumb" class="py-2 bg-gray-50">',
     );
 
@@ -205,9 +205,9 @@ class AutomaticWebsiteFixer {
     );
 
     console.log('\n📄 Fix Report Generated:');
-    console.log(`   📅 Timestamp: ${report.timestamp}`);
-    console.log(`   🔧 Total fixes: ${report.summary.totalFixes}`);
-    console.log(`   ✅ Status: ${report.summary.status}`);
+    console.log(`   📅 Timestamp: $${report.timestamp}`);
+    console.log(`   🔧 Total fixes: $${report.summary.totalFixes}`);
+    console.log(`   ✅ Status: $${report.summary.status}`);
 
     return report;
   }
@@ -252,14 +252,14 @@ class AutomaticWebsiteFixer {
     let validationsPassed = 0;
     checks.forEach((check) => {
       if (check.test) 
-        console.log(`   ✅ ${check.name}: Fixed`);
+        console.log(`   ✅ $${check.name}: Fixed`);
         validationsPassed++;
-      } else {
-        console.log(`   ⚠️  ${check.name}: Needs attention`);
+      } else { 
+        console.log(`   ⚠️  $${check.name}: Needs attention`);
       }
     });
 
-    console.log(`\n📊 Validation Summary: ${validationsPassed}/${checks.length} checks passed`);
+    console.log(`\n📊 Validation Summary: $${validationsPassed}/${checks.length} checks passed`);
 
     return validationsPassed === checks.length;
   }
@@ -285,13 +285,13 @@ async function runAutomaticFixer() {
     // Validierung
     const validationResult = await fixer.validateFixes();
 
-    if (validationResult) {
+    if (validationResult) { 
       console.log('\n🎉 ALL FIXES SUCCESSFULLY APPLIED!');
       console.log('==================================');
       console.log('✅ Website should now display correctly');
       console.log('✅ No more duplicate headers or broken images');
       console.log('✅ HTML5 compliant and clean code');
-    } else {
+    } else { 
       console.log('\n⚠️  SOME ISSUES MAY REMAIN');
       console.log('=========================');
       console.log('📋 Check automatic-fixes-report.json for details');
@@ -316,6 +316,6 @@ module.exports = {
 };
 
 // Direkter Start wenn Datei ausgeführt wird
-if (require.main === module) {
+if (require.main === module) { 
   runAutomaticFixer().catch(console.error);
 }

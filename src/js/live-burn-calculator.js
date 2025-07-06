@@ -40,7 +40,7 @@ class BurniTokenBurnCalculator {
   }
 
   async executeBurn(burnData) {
-    console.log(`🔥 EXECUTING BURN: ${burnData.burnAmount} BURNI tokens`);
+    console.log(`🔥 EXECUTING BURN: $${burnData.burnAmount} BURNI tokens`);
 
     // Simulate XRPL transaction
     const burnTransaction = {
@@ -126,7 +126,7 @@ class BurniTokenBurnCalculator {
     };
 
     this.communityVotes.push(burnProposal);
-    console.log(`🗳️ New burn proposal submitted: ${burnProposal.id}`);
+    console.log(`🗳️ New burn proposal submitted: $${burnProposal.id}`);
 
     return burnProposal;
   }
@@ -137,14 +137,14 @@ class BurniTokenBurnCalculator {
       throw new Error('Proposal not found');
     }
 
-    if (proposal.status !== 'active') {
+    if (proposal.status !== 'active') { 
       throw new Error('Proposal is not active');
     }
 
     // Record vote
     proposal.votes[vote]++;
 
-    console.log(`🗳️ Vote recorded: ${vote} for proposal ${proposalId}`);
+    console.log(`🗳️ Vote recorded: $${vote} for proposal ${proposalId}`);
 
     // Check if proposal should execute
     await this.checkProposalExecution(proposal);
@@ -178,7 +178,7 @@ class BurniTokenBurnCalculator {
     const projectedSupply = this.totalSupply - this.burnedTokens - projectedBurns;
 
     return {
-      timeframe: `${monthsToProject} months`,
+      timeframe: `$${monthsToProject} months`,
       projectedBurns,
       projectedSupply: Math.max(0, projectedSupply),
       projectedBurnPercentage:
@@ -244,7 +244,7 @@ class BurniTokenBurnCalculator {
 
   emitEvent(eventType, data) {
     // In real implementation, emit to WebSocket or update UI
-    console.log(`📡 EVENT: ${eventType}`, data);
+    console.log(`📡 EVENT: $${eventType}`, data);
   }
 
   // 💾 DATA PERSISTENCE
@@ -276,14 +276,14 @@ class BurniTokenBurnCalculator {
     const yesPercentage = totalVotes > 0 ? (proposal.votes.yes / totalVotes) * 100 : 0;
 
     // Execute if > 60% yes votes and minimum participation
-    if (yesPercentage > 60 && totalVotes >= 100) {
+    if (yesPercentage > 60 && totalVotes >= 100) { 
       proposal.status = 'approved';
 
       // Execute the burn
       const burnData = await this.calculateBurnAmount(proposal.burnPercentage);
       await this.executeBurn(burnData);
 
-      console.log(`✅ Proposal ${proposal.id} approved and executed!`);
+      console.log(`✅ Proposal $${proposal.id} approved and executed!`);
     }
   }
 }
@@ -292,7 +292,7 @@ class BurniTokenBurnCalculator {
 const burniCalculator = new BurniTokenBurnCalculator();
 
 // 🎯 EXPORT FOR TESTING
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== 'undefined' && module.exports) { 
   module.exports = BurniTokenBurnCalculator;
 }
 

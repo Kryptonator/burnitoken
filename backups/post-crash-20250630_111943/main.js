@@ -2,7 +2,7 @@
 console.log('Main.js loading...');
 
 // Global fallback functions - defined first before any other scripts
-if (typeof window.checkFontAwesome !== 'function') {
+if (typeof window.checkFontAwesome !== 'function') { 
   {;
 }
   {;
@@ -106,7 +106,7 @@ if (typeof window.checkFontAwesome !== 'function') {
     console.log('FontAwesome check: Fallback function active');
     // Überprüfe, ob FontAwesome korrekt geladen wurde
     const faElements = document.querySelectorAll('[class*="fa-"]');
-    if (faElements.length > 0) {
+    if (faElements.length > 0) { 
       console.log('FontAwesome Icons gefunden:', faElements.length);
     }
   };
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Initialize optimized features immediately
   try {
-    if (typeof initializeOptimizedFeatures === 'function') {
+    if (typeof initializeOptimizedFeatures === 'function') { 
       await initializeOptimizedFeatures();
       console.log('Optimized features initialized successfully');
     }
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.__pw_playwright;
     document.documentElement.getAttribute('data-pw-test') !== null;
 
-  if (isTest) {
+  if (isTest) { 
     document.body.setAttribute('data-test-mode', 'true');
     document.body.setAttribute('data-playwright', 'true');
     console.log('Test mode detected and body attributes set');
@@ -145,13 +145,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Hide page loader immediately (cross-browser, including Webkit)
   const pageLoader = document.getElementById('pageLoader');
-  if (pageLoader) {
+  if (pageLoader) { 
     // Für E2E-Tests sofort entfernen - erweiterte Erkennung
-    if (isTest) {
+    if (isTest) { 
       pageLoader.remove();
       console.log('Page Loader für E2E-Tests entfernt');
       // Don't return early - continue with initialization for E2E tests
-    } else {
+    } else { 
       // Forciere Verstecken mit mehreren Methoden für Browser-Kompatibilität
       pageLoader.style.display = 'none';
       pageLoader.style.visibility = 'hidden';
@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       // Webkit/Safari-spezifische Behandlung - entferne aus DOM
       setTimeout(() => {
-        if (pageLoader && pageLoader.parentNode) {
+        if (pageLoader && pageLoader.parentNode) { 
           pageLoader.parentNode.removeChild(pageLoader);
           console.log('Page Loader für Webkit-Kompatibilität entfernt');
         }
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   console.log('Setting up mobile menu...');
   const mobileMenuButton = document.getElementById('mobile-menu-button');
   const mobileMenu = document.getElementById('mobile-menu');
-  if (mobileMenuButton && mobileMenu) {
+  if (mobileMenuButton && mobileMenu) { 
     mobileMenuButton.addEventListener('click', () => {
       const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
       mobileMenuButton.setAttribute('aria-expanded', String(!isExpanded));
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function loadChartJs() {
     return new Promise((resolve, reject) => {
       // Prüfen, ob Chart.js bereits geladen ist
-      if (typeof Chart !== 'undefined') {
+      if (typeof Chart !== 'undefined') { 
         chartJsLoaded = true;
         resolve();
         return;
@@ -231,19 +231,19 @@ document.addEventListener('DOMContentLoaded', async () => {
   const navLinks = document.querySelectorAll('header nav a.nav-link, #mobile-menu a');
   navLinks.forEach((link) => {
     link.addEventListener('click', (e) => {
-      if (link.hash) {
+      if (link.hash) { 
         e.preventDefault();
         const targetElement = document.querySelector(link.hash);
-        if (targetElement) {
+        if (targetElement) { 
           const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
           window.scrollTo({ top: elementPosition - headerOffset, behavior: 'smooth' });
           navLinks.forEach((nav) => nav.classList.remove('active'));
           document
             .querySelectorAll(
-              `header nav a[href="${link.hash}"], #mobile-menu a[href="${link.hash}"]`,
+              `header nav a[href="$${link.hash}"], #mobile-menu a[href="${link.hash}"]`),
             )
             .forEach((activeLink) => activeLink.classList.add('active'));
-          if (mobileMenu?.classList.contains('active')) {
+          if (mobileMenu?.classList.contains('active')) { 
             mobileMenu.classList.remove('active');
             mobileMenu.classList.add('hidden');
             if (mobileMenuButton) mobileMenuButton.setAttribute('aria-expanded', 'false');
@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       link.classList.remove('active');
       if (link.getAttribute('href')?.includes(current)) link.classList.add('active');
     });
-    if (sections.length > 0 && window.pageYOffset < sections[0].offsetTop - headerOffset - 10) {
+    if (sections.length > 0 && window.pageYOffset < sections[0].offsetTop - headerOffset - 10) { 
       navLinks.forEach((link) => link.classList.remove('active'));
       document
         .querySelectorAll(`header nav a[href="#hero"], #mobile-menu a[href="#hero"]`)
@@ -305,14 +305,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       coins = coins * (1 - 0.03) * (1 - 0.02); // Burn 3%, lock 2%
       schedule.push({
         date: date.toLocaleDateString(locales[locale] || 'en-US', {
-          day: '2-digit',
+          day: '2-digit'),
           month: '2-digit',
           year: 'numeric',
         }),
         day: date.toLocaleDateString(locales[locale] || 'en-US', { weekday: 'long' }),
         process: i,
         coins: new Intl.NumberFormat(locales[locale] || 'en-US', {
-          minimumFractionDigits: 2,
+          minimumFractionDigits: 2),
           maximumFractionDigits: 2,
         }).format(coins),
       });
@@ -328,11 +328,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const currentTranslations = translations[lang] || translations.en;
 
     let displaySchedule = [];
-    if (schedule.length <= 7) {
+    if (schedule.length <= 7) { 
       displaySchedule = schedule;
-    } else {
+    } else { 
       displaySchedule = schedule.slice(0, 4);
-      if (schedule.length > 6) {
+      if (schedule.length > 6) { 
         displaySchedule.push({ date: '...', day: '...', process: '...', coins: '...' });
       }
       displaySchedule = displaySchedule.concat(schedule.slice(-3));
@@ -388,7 +388,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Setze alle Elemente in den Ladezustand
     Object.values(priceElements).forEach(({ element }) => {
-      if (element) {
+      if (element) { 
         element.dataset.status = 'loading';
         element.textContent = '...';
       }
@@ -403,11 +403,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       const price = await PriceOracle.fetchPrice(tokenIds, 'usd');
 
-      if (price !== null) {
+      if (price !== null) { 
         element.dataset.status = 'success';
         element.textContent = formatter(price);
         element.title = `Live-Preis (aktualisiert: ${new Date().toLocaleTimeString()})`;
-      } else {
+      } else { 
         element.dataset.status = 'error';
         element.textContent = 'N/A';
         element.title = 'Preisdaten derzeit nicht verfügbar.';
@@ -421,14 +421,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     // würden die Daten hier an die Charts weitergegeben.
     
     const lastUpdatedTimestampElement = document.getElementById('lastUpdatedTimestamp');
-    if (lastUpdatedTimestampElement) {
+    if (lastUpdatedTimestampElement) { 
         lastUpdatedTimestampElement.textContent = new Date().toLocaleString(currentLocale);
     }
     
-    if (priceErrorMessageElement) {
-        if (allPricesFetched) {
+    if (priceErrorMessageElement) { 
+        if (allPricesFetched) { 
             priceErrorMessageElement.classList.add('hidden');
-        } else {
+        } else { 
             const errorMsgKey = translations[currentLang]?.price_error_message || translations.en.price_error_message;
             priceErrorMessageElement.textContent = errorMsgKey;
             priceErrorMessageElement.classList.remove('hidden');
@@ -493,7 +493,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       navigator.userAgent.includes('HeadlessChrome');
       window.location.search.includes('test');
 
-    if (isTestEnvironment) {
+    if (isTestEnvironment) { 
       console.log('Test environment detected - using fallback prices');
       return fallbackPrices;
     }
@@ -502,13 +502,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       let xrpUsdPrice = fallbackPrices.xrp.priceUSD;
       try {
         const xrpPriceResponse = await fetch(
-          'https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd',
+          'https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd'),
         );
-        if (xrpPriceResponse.ok) {
+        if (xrpPriceResponse.ok) { 
           const xrpPriceData = await xrpPriceResponse.json();
           xrpUsdPrice = xrpPriceData.ripple?.usd || fallbackPrices.xrp.priceUSD;
-        } else {
-          console.warn(`CoinGecko API request for XRP price failed: ${xrpPriceResponse.status}`);
+        } else { 
+          console.warn(`CoinGecko API request for XRP price failed: $${xrpPriceResponse.status}`);
         }
       } catch (e) {
         console.warn('Could not fetch XRP price from CoinGecko, using fallback.', e);
@@ -547,7 +547,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         xpm: { priceUSD: fallbackPrices.xpm.priceXRP * fallbackPrices.xrp.priceUSD },
       };
 
-      if (priceErrorMessageElement && translations[currentLang]) {
+      if (priceErrorMessageElement && translations[currentLang]) { 
         const errorMsgKey =
           translations[currentLang].price_error_message || translations.en.price_error_message;
         priceErrorMessageElement.textContent = errorMsgKey;
@@ -563,7 +563,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (burniPriceElement)
       burniPriceElement.textContent = new Intl.NumberFormat(currentLocale, {
-        style: 'currency',
+        style: 'currency'),
         currency: 'USD',
         minimumFractionDigits: 6,
         maximumFractionDigits: 8,
@@ -572,17 +572,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       circulatingSupplyElement.textContent = `${new Intl.NumberFormat(currentLocale, { maximumFractionDigits: 1 }).format(prices.burni.circulatingSupply / 1000)}K`;
     if (holdersElement)
       holdersElement.textContent = new Intl.NumberFormat(currentLocale).format(
-        prices.burni.holders,
+        prices.burni.holders),
       );
     if (trustlinesElement)
       trustlinesElement.textContent = new Intl.NumberFormat(currentLocale).format(
-        prices.burni.trustlines,
+        prices.burni.trustlines),
       );
 
     const xrpPriceElement = document.getElementById('xrpPriceValue');
     if (xrpPriceElement)
       xrpPriceElement.textContent = new Intl.NumberFormat(currentLocale, {
-        style: 'currency',
+        style: 'currency'),
         currency: 'USD',
         minimumFractionDigits: 4,
       }).format(prices.xrp.priceUSD);
@@ -590,7 +590,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const xpmPriceElement = document.getElementById('xpmPriceValue');
     if (xpmPriceElement)
       xpmPriceElement.textContent = new Intl.NumberFormat(currentLocale, {
-        style: 'currency',
+        style: 'currency'),
         currency: 'USD',
         minimumFractionDigits: 10,
         maximumFractionDigits: 12,
@@ -613,7 +613,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         translations[currentLang].kpi_circulating_supply || translations.en.kpi_circulating_supply;
       const maxSupplyLabelKey =
         translations[currentLang].kpi_max_supply || translations.en.kpi_max_supply;
-      supplyChartInstance.data.labels[0] = `${supplyLabelKey} (${new Intl.NumberFormat(currentLocale, { maximumFractionDigits: 1 }).format(prices.burni.circulatingSupply / 1000)}K)`;
+      supplyChartInstance.data.labels[0] = `$${supplyLabelKey} (${new Intl.NumberFormat(currentLocale, { maximumFractionDigits: 1 }).format(prices.burni.circulatingSupply / 1000)}K)`;
       supplyChartInstance.data.labels[1] = maxSupplyLabelKey;
       supplyChartInstance.update();
     }
@@ -629,7 +629,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function initializeChartsAsync() {
     await waitForChartJs();
 
-    if (!chartJsLoaded) {
+    if (!chartJsLoaded) { 
       console.warn('Chart.js nicht verfügbar - Charts werden übersprungen');
       return;
     }
@@ -643,9 +643,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   function initializeSupplyChart() {
     try {
       const supplyCtx = document.getElementById('supplyChart')?.getContext('2d');
-      if (supplyCtx) {
+      if (supplyCtx) { 
         supplyChartInstance = new Chart(supplyCtx, {
-          type: 'doughnut',
+          type: 'doughnut'),
           data: {
             labels: ['Circulating Supply', 'Max Supply'],
             datasets: [
@@ -689,9 +689,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   function initializeAthAtlChart() {
     try {
       const athAtlCtx = document.getElementById('athAtlChart')?.getContext('2d');
-      if (athAtlCtx) {
+      if (athAtlCtx) { 
         athAtlChartInstance = new Chart(athAtlCtx, {
-          type: 'bar',
+          type: 'bar'),
           data: {
             labels: ['All-Time Low (ATL) May 17, 2025', 'All-Time High (ATH) May 19, 2025'],
             datasets: [
@@ -742,7 +742,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   function initializeScheduleChart() {
     try {
       const scheduleCtx = document.getElementById('scheduleChart')?.getContext('2d');
-      if (scheduleCtx) {
+      if (scheduleCtx) { 
         const scheduleData = generateSchedule('2025-06-01', 500000, 260, currentLang, translations);
         const chartLabels = scheduleData
           .map((row) => row.date)
@@ -756,7 +756,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           .concat(scheduleData.map((row) => parseFloat(row.coins)).slice(-3));
 
         scheduleChartInstance = new Chart(scheduleCtx, {
-          type: 'line',
+          type: 'line'),
           data: {
             labels: chartLabels,
             datasets: [
@@ -855,7 +855,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       currentInterval = interval;
 
       // Chart.js Verfügbarkeit prüfen
-      if (typeof Chart === 'undefined') {
+      if (typeof Chart === 'undefined') { 
         console.warn('Chart.js not available, deferring chart update...');
         return;
       }
@@ -874,7 +874,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             : ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7'];
 
       priceChartInstance = new Chart(chartContext, {
-        type: 'line',
+        type: 'line'),
         data: {
           labels: labels,
           datasets: [
@@ -981,7 +981,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const weekBtn = document.getElementById('interval-week');
     const monthBtn = document.getElementById('interval-month');
 
-    if (dayBtn && weekBtn && monthBtn) {
+    if (dayBtn && weekBtn && monthBtn) { 
       dayBtn.addEventListener('click', () => {
         updatePriceChart('day');
         setActiveIntervalButton('day');
@@ -1003,12 +1003,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function setActiveIntervalButton(activeInterval) {
     ['day', 'week', 'month'].forEach((interval) => {
-      const btn = document.getElementById(`interval-${interval}`);
-      if (btn) {
-        if (interval === activeInterval) {
+      const btn = document.getElementById(`interval-$${interval}`);
+      if (btn) { 
+        if (interval === activeInterval) { 
           btn.classList.add('bg-orange-600', 'text-white');
           btn.classList.remove('bg-teal-500');
-        } else {
+        } else { 
           btn.classList.remove('bg-orange-600', 'text-white');
           btn.classList.add('bg-teal-500');
         }
@@ -1022,7 +1022,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const xrpEl = document.getElementById('xrpPrice');
     const xpmEl = document.getElementById('xpmPrice');
 
-    if (burniEl && xrpEl && xpmEl) {
+    if (burniEl && xrpEl && xpmEl) { 
       // Realistische Schwankungen um Basiswerte
       const burniBase = 0.0011;
       const xrpBase = 0.5;
@@ -1033,7 +1033,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       xpmEl.textContent = `$${(xpmBase + (Math.random() - 0.5) * 0.002).toFixed(3)}`;
 
       // Aktualisiere auch Chart-Daten leicht (simuliert Live-Updates)
-      if (priceChartInstance && Math.random() > 0.7) {
+      if (priceChartInstance && Math.random() > 0.7) { 
         // 30% Chance für Chart-Update
         const lastIndex = mockData.burni[currentInterval].length - 1;
         mockData.burni[currentInterval][lastIndex] = parseFloat(
@@ -1061,15 +1061,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Priority 1: URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     const langParam = urlParams.get('lang');
-    if (langParam && translations[langParam]) {
-      console.log(`Language set from URL parameter: ${langParam}`);
+    if (langParam && translations[langParam]) { 
+      console.log(`Language set from URL parameter: $${langParam}`);
       return langParam;
     }
 
     // Priority 2: Saved preference in localStorage
     const savedLang = localStorage.getItem('burni-language');
-    if (savedLang && translations[savedLang]) {
-      console.log(`Language loaded from localStorage: ${savedLang}`);
+    if (savedLang && translations[savedLang]) { 
+      console.log(`Language loaded from localStorage: $${savedLang}`);
       return savedLang;
     }
 
@@ -1084,18 +1084,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     for (const lang of browserLanguages) {
       const langCode = lang.split('-')[0].toLowerCase();
-      if (translations[langCode]) {
-        console.log(`Auto-detected browser language: ${langCode} (from: ${lang})`);
+      if (translations[langCode]) { 
+        console.log(`Auto-detected browser language: $${langCode} (from: ${lang})`);
         return langCode;
       }
     }
 
     // Priority 4: Geolocation-based language hints (common patterns)
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    if (timeZone) {
+    if (timeZone) { 
       const germanTimeZones = ['Europe/Berlin', 'Europe/Vienna', 'Europe/Zurich'];
-      if (germanTimeZones.includes(timeZone)) {
-        console.log(`Language inferred from timezone: de (${timeZone})`);
+      if (germanTimeZones.includes(timeZone)) { 
+        console.log(`Language inferred from timezone: de ($${timeZone})`);
         return 'de';
       }
     }
@@ -1108,7 +1108,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function applyTranslations(lang) {
     const loadedTranslations = await loadTranslations();
     const translation = loadedTranslations[lang] || loadedTranslations.en;
-    console.log(`Applying translations for language: ${lang}`);
+    console.log(`Applying translations for language: $${lang}`);
     console.log(`Translation object:`, translation);
 
     // Add loading indicator
@@ -1117,14 +1117,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Update all elements with data-i18n attribute
     const i18nElements = document.querySelectorAll('[data-i18n]');
-    console.log(`Found ${i18nElements.length} elements with data-i18n attribute`);
+    console.log(`Found $${i18nElements.length} elements with data-i18n attribute`);
 
     i18nElements.forEach((element) => {
       const key = element.getAttribute('data-i18n');
       console.log(
-        `Processing element with key: ${key}, current text: "${element.textContent}", new text: "${translation[key]}"`,
+        `Processing element with key: $${key}, current text: "${element.textContent}", new text: "${translation[key]}"`),
       );
-      if (translation[key]) {
+      if (translation[key]) { 
         // Für Tests und Playwright - sofortige Aktualisierung
         const isTest =
           window.navigator.userAgent.includes('Playwright');
@@ -1132,32 +1132,32 @@ document.addEventListener('DOMContentLoaded', async () => {
           window.__playwright;
           document.body.getAttribute('data-test-mode') === 'true';
 
-        if (isTest) {
+        if (isTest) { 
           element.textContent = translation[key];
           console.log(
-            `Updated element with key ${key} to: "${element.textContent}" (immediate for tests)`,
+            `Updated element with key $${key} to: "${element.textContent}" (immediate for tests)`,
           );
           // Trigger update events for tests
           element.dispatchEvent(new Event('i18n-updated', { bubbles: true }));
-        } else {
+        } else { 
           // CSS-Klassen für Animation verwenden statt inline styles
           element.classList.add('i18n-fade');
           setTimeout(() => {
             element.textContent = translation[key];
             element.classList.remove('i18n-fade');
-            console.log(`Updated element with key ${key} to: "${element.textContent}"`);
+            console.log(`Updated element with key $${key} to: "${element.textContent}"`);
             element.dispatchEvent(new Event('i18n-updated', { bubbles: true }));
           }, 100);
         }
-      } else {
-        console.warn(`No translation found for key: ${key}`);
+      } else { 
+        console.warn(`No translation found for key: $${key}`);
       }
     });
 
     // Update all elements with data-i18n-alt attribute (for alt text)
     document.querySelectorAll('[data-i18n-alt]').forEach((element) => {
       const key = element.getAttribute('data-i18n-alt');
-      if (translation[key]) {
+      if (translation[key]) { 
         element.setAttribute('alt', translation[key]);
       }
     });
@@ -1165,19 +1165,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Update all elements with data-i18n-aria-label attribute
     document.querySelectorAll('[data-i18n-aria-label]').forEach((element) => {
       const key = element.getAttribute('data-i18n-aria-label');
-      if (translation[key]) {
+      if (translation[key]) { 
         element.setAttribute('aria-label', translation[key]);
       }
     });
 
     // Update page title
-    if (translation.page_title) {
+    if (translation.page_title) { 
       document.title = translation.page_title;
     }
 
     // Update language selector value
     const langSelect = document.getElementById('lang-select');
-    if (langSelect) {
+    if (langSelect) { 
       langSelect.value = lang;
     }
 
@@ -1192,13 +1192,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.body.classList.remove(loadingClass);
     }, 300);
 
-    console.log(`Language updated to: ${lang} (saved to localStorage)`);
+    console.log(`Language updated to: $${lang} (saved to localStorage)`);
   }
 
   // Change language and update URL
   async function changeLanguage(lang) {
-    if (!translations[lang]) {
-      console.warn(`Translation for language '${lang}' not found`);
+    if (!translations[lang]) { 
+      console.warn(`Translation for language '$${lang}' not found`);
       return;
     }
 
@@ -1211,7 +1211,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await applyTranslations(lang);
 
     // Regenerate dynamic content (schedules, charts) with new language
-    if (typeof renderScheduleTable === 'function') {
+    if (typeof renderScheduleTable === 'function') { 
       const schedule = generateSchedule(
         new Date('2025-06-01'),
         500000,
@@ -1226,7 +1226,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateChartsForLanguage(lang);
 
     // Update live data with new locale formatting
-    if (typeof updateLiveDataPrices === 'function') {
+    if (typeof updateLiveDataPrices === 'function') { 
       updateLiveDataPrices();
     }
   }
@@ -1235,18 +1235,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   function initializeLanguageSystem() {
     console.log('initializeLanguageSystem called');
     const initialLang = getInitialLanguage();
-    console.log(`Initial language determined: ${initialLang}`);
+    console.log(`Initial language determined: $${initialLang}`);
 
     // Set up language selector event listener
     const langSelect = document.getElementById('lang-select');
     console.log('Language selector element:', langSelect);
 
-    if (langSelect) {
+    if (langSelect) { 
       console.log('Setting up language selector event listeners');
       // Add change event listener
       langSelect.addEventListener('change', (e) => {
         const newLang = e.target.value;
-        console.log(`Language change requested: ${newLang}`);
+        console.log(`Language change requested: $${newLang}`);
         changeLanguage(newLang);
 
         // Announce to screen readers
@@ -1255,7 +1255,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       // Add keyboard support for better accessibility
       langSelect.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
+        if (e.key === 'Enter' || e.key === ' ') { 
           e.preventDefault();
           langSelect.click();
         }
@@ -1275,18 +1275,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Apply initial language
-    console.log(`Applying initial language: ${initialLang}`);
+    console.log(`Applying initial language: $${initialLang}`);
     applyTranslations(initialLang);
 
     // Add keyboard shortcut for language switching (Alt + L)
     document.addEventListener('keydown', (e) => {
-      if (e.altKey && e.key === 'l') {
+      if (e.altKey && e.key === 'l') { 
         e.preventDefault();
         toggleLanguage();
       }
     });
 
-    console.log(`i18n system initialized with language: ${initialLang}`);
+    console.log(`i18n system initialized with language: $${initialLang}`);
     console.log('Keyboard shortcut: Alt + L to toggle language');
     console.log('Language selector element:', document.getElementById('lang-select'));
   }
@@ -1299,7 +1299,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const nextIndex = (currentIndex + 1) % availableLanguages.length;
     const nextLang = availableLanguages[nextIndex];
 
-    console.log(`Toggling language from ${currentLang} to ${nextLang}`);
+    console.log(`Toggling language from $${currentLang} to ${nextLang}`);
     changeLanguage(nextLang);
     announceLanguageChange(nextLang);
   }
@@ -1317,7 +1317,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Remove announcement after screen reader has processed it
     setTimeout(() => {
-      if (announcement.parentNode) {
+      if (announcement.parentNode) { 
         announcement.parentNode.removeChild(announcement);
       }
     }, 1000);
@@ -1343,7 +1343,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const script = document.createElement('script');
       script.src = src;
       script.onload = () => resolve();
-      script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+      script.onerror = () => reject(new Error(`Failed to load script: $${src}`));
       document.head.appendChild(script);
     });
   };
@@ -1351,7 +1351,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     for (const src of xrplScripts) {
       try {
         await loadScript(src);
-        console.log(`Script loaded: ${src}`);
+        console.log(`Script loaded: $${src}`);
       } catch (error) {
         console.error(error);
       }
@@ -1364,7 +1364,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
       const metrics = await fetchBurniMetrics();
       document.getElementById('circulatingSupplyValue').textContent = new Intl.NumberFormat(
-        locales[currentLang] || 'en-US',
+        locales[currentLang] || 'en-US'),
       ).format(metrics.circulatingSupply);
       document.getElementById('kpi_holders_value').textContent = metrics.holders;
       document.getElementById('kpi_trustlines_value').textContent = metrics.trustlines;
@@ -1390,7 +1390,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       // Fetch general XRPL data
       const xrplResponse = await fetch('https://livenet.xrpl.org/api/v1/server_info');
-      if (!xrplResponse.ok) throw new Error(`XRPL API error: ${xrplResponse.status}`);
+      if (!xrplResponse.ok) throw new Error(`XRPL API error: $${xrplResponse.status}`);
 
       const xrplData = await xrplResponse.json();
       console.log('XRPL server info:', xrplData);
@@ -1399,9 +1399,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       let xrpPrice = 0.5; // Fallback
       try {
         const priceResponse = await fetch(
-          'https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd',
+          'https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd'),
         );
-        if (priceResponse.ok) {
+        if (priceResponse.ok) { 
           const priceData = await priceResponse.json();
           xrpPrice = priceData.ripple?.usd || 0.5;
         }
@@ -1413,9 +1413,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       let burniData = { balance: 'N/A', holders: 'N/A', trustlines: 'N/A' };
       try {
         const burniResponse = await fetch(
-          'https://livenet.xrpl.org/api/v1/account/rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2/currencies',
+          'https://livenet.xrpl.org/api/v1/account/rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2/currencies'),
         );
-        if (burniResponse.ok) {
+        if (burniResponse.ok) { 
           const burniInfo = await burniResponse.json();
           console.log('Burni token info:', burniInfo);
           // Process burni data if available
@@ -1450,7 +1450,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const xrpEl = document.getElementById('xrpPrice');
     const xpmEl = document.getElementById('xpmPrice');
 
-    if (burniEl && xrpEl && xpmEl) {
+    if (burniEl && xrpEl && xpmEl) { 
       try {
         const liveData = await fetchXRPLiveData();
 
@@ -1468,7 +1468,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (xpmPriceValue) xpmPriceValue.textContent = `$${liveData.xpmPrice.toFixed(3)}`;
 
         // Update chart data if chart exists
-        if (priceChartInstance && Math.random() > 0.7) {
+        if (priceChartInstance && Math.random() > 0.7) { 
           const lastIndex = mockData.burni[currentInterval].length - 1;
           mockData.burni[currentInterval][lastIndex] = liveData.burniPrice;
           mockData.xrp[currentInterval][lastIndex] = liveData.xrpPrice;
@@ -1496,7 +1496,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const translation = translations[lang] || translations.en;
 
     // Update schedule chart if it exists
-    if (scheduleChartInstance) {
+    if (scheduleChartInstance) { 
       scheduleChartInstance.options.scales.y.title.text =
         translation.remaining_coins || 'Number of Coins';
       scheduleChartInstance.options.scales.x.title.text = translation.date || 'Date';
@@ -1504,17 +1504,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Update supply chart if it exists
-    if (supplyChartInstance) {
+    if (supplyChartInstance) { 
       supplyChartInstance.update();
     }
 
     // Update ATH/ATL chart if it exists
-    if (athAtlChartInstance) {
+    if (athAtlChartInstance) { 
       athAtlChartInstance.update();
     }
 
     // Update price chart if it exists (live data chart)
-    if (typeof priceChartInstance !== 'undefined' && priceChartInstance) {
+    if (typeof priceChartInstance !== 'undefined' && priceChartInstance) { 
       priceChartInstance.update();
     }
   }
@@ -1529,9 +1529,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Test immediate translation on page load
   setTimeout(() => {
     const heroTitle = document.querySelector('[data-i18n="hero_title"]');
-    if (heroTitle) {
+    if (heroTitle) { 
       console.log('Hero title element found:', heroTitle.textContent);
-    } else {
+    } else { 
       console.log('Hero title element NOT found');
     }
   }, 1000);
@@ -1559,7 +1559,7 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log('Initializing enhanced features...');
 
   // Track page load with analytics
-  if (window.BurniAnalytics) {
+  if (window.BurniAnalytics) { 
     window.BurniAnalytics.trackPageView('homepage');
     window.BurniAnalytics.trackFeatureUsage('website', 'page_loaded');
   }
@@ -1572,25 +1572,25 @@ document.addEventListener('DOMContentLoaded', () => {
     updateChartsForTheme(event.detail.theme);
 
     // Track theme change
-    if (window.BurniAnalytics) {
-      window.BurniAnalytics.trackFeatureUsage('theme', `changed_to_${event.detail.theme}`);
+    if (window.BurniAnalytics) { 
+      window.BurniAnalytics.trackFeatureUsage('theme', `changed_to_$${event.detail.theme}`);
     }
   });
 
   // Setup performance monitoring alerts
-  if (window.PerformanceMonitor) {
+  if (window.PerformanceMonitor) { 
     // Listen for performance issues
     document.addEventListener('performanceIssue', (event) => {
       console.warn('Performance issue detected:', event.detail);
 
-      if (window.BurniAnalytics) {
+      if (window.BurniAnalytics) { 
         window.BurniAnalytics.trackCustomEvent('performance_issue', event.detail);
       }
     });
   }
 
   // Setup accessibility announcements
-  if (window.AccessibilityManager) {
+  if (window.AccessibilityManager) { 
     // Announce important page updates
     setTimeout(() => {
       window.AccessibilityManager.announceToScreenReader('Burni Token website loaded successfully');
@@ -1601,9 +1601,9 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('error', (event) => {
     console.error('Global error caught:', event.error);
 
-    if (window.BurniAnalytics) {
+    if (window.BurniAnalytics) { 
       window.BurniAnalytics.trackError(event.error, {
-        filename: event.filename,
+        filename: event.filename),
         lineno: event.lineno,
         colno: event.colno,
         type: 'javascript_error',
@@ -1615,7 +1615,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('unhandledrejection', (event) => {
     console.error('Unhandled promise rejection:', event.reason);
 
-    if (window.BurniAnalytics) {
+    if (window.BurniAnalytics) { 
       window.BurniAnalytics.trackError(new Error(event.reason), {
         type: 'unhandled_promise_rejection',
         reason: event.reason,
@@ -1626,14 +1626,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Setup connection status monitoring
   window.addEventListener('online', () => {
     console.log('Connection restored');
-    if (window.BurniAnalytics) {
+    if (window.BurniAnalytics) { 
       window.BurniAnalytics.trackCustomEvent('connection_status', { status: 'online' });
     }
   });
 
   window.addEventListener('offline', () => {
     console.log('Connection lost');
-    if (window.BurniAnalytics) {
+    if (window.BurniAnalytics) { 
       window.BurniAnalytics.trackCustomEvent('connection_status', { status: 'offline' });
     }
   });
@@ -1659,7 +1659,7 @@ function updateChartsForTheme(theme) {
   const colors = isDark ? darkColors : lightColors;
 
   // Update existing charts if they exist
-  if (window.supplyChartInstance) {
+  if (window.supplyChartInstance) { 
     window.supplyChartInstance.options.plugins.legend.labels.color = colors.text;
     window.supplyChartInstance.options.scales.x.ticks.color = colors.text;
     window.supplyChartInstance.options.scales.y.ticks.color = colors.text;
@@ -1668,7 +1668,7 @@ function updateChartsForTheme(theme) {
     window.supplyChartInstance.update();
   }
 
-  if (window.athAtlChartInstance) {
+  if (window.athAtlChartInstance) { 
     window.athAtlChartInstance.options.plugins.legend.labels.color = colors.text;
     window.athAtlChartInstance.options.scales.x.ticks.color = colors.text;
     window.athAtlChartInstance.options.scales.y.ticks.color = colors.text;
@@ -1677,7 +1677,7 @@ function updateChartsForTheme(theme) {
     window.athAtlChartInstance.update();
   }
 
-  if (window.scheduleChartInstance) {
+  if (window.scheduleChartInstance) { 
     window.scheduleChartInstance.options.plugins.legend.labels.color = colors.text;
     window.scheduleChartInstance.options.scales.x.ticks.color = colors.text;
     window.scheduleChartInstance.options.scales.y.ticks.color = colors.text;
@@ -1713,7 +1713,7 @@ function checkFeatureSupport() {
 
   console.log('Feature support:', features);
 
-  if (window.BurniAnalytics) {
+  if (window.BurniAnalytics) { 
     window.BurniAnalytics.trackCustomEvent('feature_support', features);
   }
 
@@ -1726,16 +1726,16 @@ checkFeatureSupport();
 // Enhanced keyboard shortcuts
 document.addEventListener('keydown', (event) => {
   // Ctrl/Cmd + K: Focus search (if search is added later)
-  if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+  if ((event.ctrlKey || event.metaKey) && event.key === 'k') { 
     event.preventDefault();
     const searchInput = document.querySelector('input[type="search"]');
-    if (searchInput) {
+    if (searchInput) { 
       searchInput.focus();
     }
   }
 
   // Ctrl/Cmd + /: Show keyboard shortcuts help
-  if ((event.ctrlKey || event.metaKey) && event.key === '/') {
+  if ((event.ctrlKey || event.metaKey) && event.key === '/') { 
     event.preventDefault();
     showKeyboardShortcutsHelp();
   }
@@ -1761,7 +1761,7 @@ function showKeyboardShortcutsHelp() {
           .map(
             (shortcut) => `
           <div class="flex justify-between items-center">
-            <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm font-mono">${shortcut.key}</kbd>
+            <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm font-mono">$${shortcut.key}</kbd>
             <span class="text-sm text-gray-600 dark:text-gray-300">${shortcut.description}</span>
           </div>
         `,
@@ -1784,13 +1784,13 @@ function showKeyboardShortcutsHelp() {
 
   // Close on escape or click outside
   modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
+    if (e.target === modal) { 
       document.body.removeChild(modal);
     }
   });
 
   document.addEventListener('keydown', function escapeHandler(e) {
-    if (e.key === 'Escape') {
+    if (e.key === 'Escape') { 
       document.body.removeChild(modal);
       document.removeEventListener('keydown', escapeHandler);
     }
@@ -1825,17 +1825,17 @@ function showInstallPrompt() {
   `;
 
   installButton.addEventListener('click', () => {
-    if (deferredPrompt) {
+    if (deferredPrompt) { 
       deferredPrompt.prompt();
       deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
+        if (choiceResult.outcome === 'accepted') { 
           console.log('User accepted the install prompt');
-          if (window.BurniAnalytics) {
+          if (window.BurniAnalytics) { 
             window.BurniAnalytics.trackConversion('pwa_install', 'accepted');
           }
-        } else {
+        } else { 
           console.log('User dismissed the install prompt');
-          if (window.BurniAnalytics) {
+          if (window.BurniAnalytics) { 
             window.BurniAnalytics.trackConversion('pwa_install', 'dismissed');
           }
         }
@@ -1849,14 +1849,14 @@ function showInstallPrompt() {
 
   // Auto-hide after 10 seconds
   setTimeout(() => {
-    if (installButton.parentNode) {
+    if (installButton.parentNode) { 
       document.body.removeChild(installButton);
     }
   }, 10000);
 }
 
 // Service Worker registration with enhanced error handling - RE-ENABLED WITH OPTIMIZATIONS
-if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator) { 
   window.addEventListener('load', () => {
     navigator.serviceWorker
       .register('/sw.js')
@@ -1866,13 +1866,13 @@ if ('serviceWorker' in navigator) {
         // Listen for service worker updates
         registration.addEventListener('updatefound', () => {
           const newWorker = registration.installing;
-          if (newWorker) {
+          if (newWorker) { 
             newWorker.addEventListener('statechange', () => {
-              if (newWorker.state === 'installed') {
-                if (navigator.serviceWorker.controller) {
+              if (newWorker.state === 'installed') { 
+                if (navigator.serviceWorker.controller) { 
                   // New version available
                   showUpdateAvailableNotification();
-                } else {
+                } else { 
                   // First time installation
                   console.log('Content cached for offline use');
                 }
@@ -1881,14 +1881,14 @@ if ('serviceWorker' in navigator) {
           }
         });
 
-        if (window.BurniAnalytics) {
+        if (window.BurniAnalytics) { 
           window.BurniAnalytics.trackFeatureUsage('service_worker', 'registered');
         }
       })
       .catch((error) => {
         console.log('ServiceWorker registration failed:', error);
 
-        if (window.BurniAnalytics) {
+        if (window.BurniAnalytics) { 
           window.BurniAnalytics.trackError(error, { type: 'service_worker_registration' });
         }
       });
@@ -1944,7 +1944,7 @@ class PriceUpdateManager {
       } catch (error) {
         console.warn('Price update failed:', error);
         this.retryCount++;
-        if (this.retryCount >= this.maxRetries) {
+        if (this.retryCount >= this.maxRetries) { 
           console.error('Max retries reached for price updates');
           this.fallbackToStaticPrices();
         }
@@ -1967,7 +1967,7 @@ class PriceUpdateManager {
         const oldPrice = this.lastPrices[currency];
         const newPrice = newPrices[currency];
 
-        if (oldPrice && oldPrice.priceUSD !== newPrice.priceUSD) {
+        if (oldPrice && oldPrice.priceUSD !== newPrice.priceUSD) { 
           this.animatePriceChange(currency, oldPrice.priceUSD, newPrice.priceUSD);
         }
       });
@@ -2004,9 +2004,9 @@ class PriceUpdateManager {
     try {
       // Try to fetch XRP price
       const xrpResponse = await fetch(
-        'https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd',
+        'https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd'),
       );
-      if (xrpResponse.ok) {
+      if (xrpResponse.ok) { 
         const xrpData = await xrpResponse.json();
         fallbackPrices.xrp.priceUSD = xrpData.ripple?.usd || fallbackPrices.xrp.priceUSD;
       }
@@ -2018,17 +2018,17 @@ class PriceUpdateManager {
   }
 
   animatePriceChange(currency, oldPrice, newPrice) {
-    const elements = document.querySelectorAll(`[data-price="${currency}"]`);
+    const elements = document.querySelectorAll(`[data-price="$${currency}"]`);
 
     elements.forEach((element) => {
       // Add price update animation class
       element.classList.add('price-update');
 
       // Add color indication for price direction
-      if (newPrice > oldPrice) {
+      if (newPrice > oldPrice) { 
         element.classList.add('text-green-500');
         element.classList.remove('text-red-500');
-      } else if (newPrice < oldPrice) {
+      } else if (newPrice < oldPrice) { 
         element.classList.add('text-red-500');
         element.classList.remove('text-green-500');
       }
@@ -2079,10 +2079,10 @@ class PriceUpdateManager {
         currentStep++;
         const newValue = Math.round(currentValue + increment * currentStep);
 
-        if (currentStep >= steps) {
+        if (currentStep >= steps) { 
           element.textContent = this.formatNumber(targetValue);
           clearInterval(timer);
-        } else {
+        } else { 
           element.textContent = this.formatNumber(newValue);
         }
       }, stepDuration);
@@ -2090,9 +2090,9 @@ class PriceUpdateManager {
   }
 
   formatNumber(num) {
-    if (num >= 1000000) {
+    if (num >= 1000000) { 
       return (num / 1000000).toFixed(1) + 'M';
-    } else if (num >= 1000) {
+    } else if (num >= 1000) { 
       return (num / 1000).toFixed(1) + 'K';
     }
     return num.toLocaleString();
@@ -2108,7 +2108,7 @@ class PriceUpdateManager {
   }
 
   stopUpdates() {
-    if (this.updateInterval) {
+    if (this.updateInterval) { 
       clearInterval(this.updateInterval);
       this.updateInterval = null;
     }
@@ -2124,11 +2124,11 @@ class ImageOptimizer {
   }
 
   setupIntersectionObserver() {
-    if ('IntersectionObserver' in window) {
+    if ('IntersectionObserver' in window) { 
       this.observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
-            if (entry.isIntersecting) {
+            if (entry.isIntersecting) { 
               this.loadImage(entry.target);
               this.observer.unobserve(entry.target);
             }
@@ -2150,9 +2150,9 @@ class ImageOptimizer {
       this.lazyImages.add(img);
       img.classList.add('lazy-image', 'opacity-0');
 
-      if (this.observer) {
+      if (this.observer) { 
         this.observer.observe(img);
-      } else {
+      } else { 
         // Fallback for browsers without IntersectionObserver
         this.loadImage(img);
       }
@@ -2163,7 +2163,7 @@ class ImageOptimizer {
     try {
       const src = img.dataset.src;
 
-      if (this.imageCache.has(src)) {
+      if (this.imageCache.has(src)) { 
         this.applyImage(img, src);
         return;
       }
@@ -2176,7 +2176,7 @@ class ImageOptimizer {
       };
 
       imageLoader.onerror = () => {
-        console.warn(`Failed to load image: ${src}`);
+        console.warn(`Failed to load image: $${src}`);
         img.classList.add('opacity-50');
       };
 
@@ -2231,13 +2231,13 @@ class AnimationManager {
     });
 
     // Disable animations for reduced motion preference
-    if (this.reducedMotion) {
+    if (this.reducedMotion) { 
       document.body.classList.add('reduce-motion');
     }
   }
 
   startAnimationFrame() {
-    if (!this.rafId) {
+    if (!this.rafId) { 
       this.rafId = requestAnimationFrame(() => this.animationLoop());
     }
   }
@@ -2246,7 +2246,7 @@ class AnimationManager {
     // Optimize animations based on performance
     const fps = this.calculateFPS();
 
-    if (fps < 30) {
+    if (fps < 30) { 
       this.reduceAnimationComplexity();
     }
 
@@ -2301,7 +2301,7 @@ initializeOptimizedFeatures();
 // Enhanced Error Monitoring and Reporting
 window.onerror = function (message, source, lineno, colno, error) {
   console.error('Global Error:', {
-    message,
+    message),
     source,
     line: lineno,
     column: colno,
@@ -2326,7 +2326,7 @@ window.addEventListener('load', function () {
   setTimeout(function () {
     const perfData = performance.getEntriesByType('navigation')[0];
     console.log('Performance Metrics:', {
-      loadTime: perfData.loadEventEnd - perfData.loadEventStart,
+      loadTime: perfData.loadEventEnd - perfData.loadEventStart),
       domContentLoaded: perfData.domContentLoadedEventEnd - perfData.domContentLoadedEventStart,
       firstPaint: performance
         .getEntriesByType('paint')
@@ -2344,11 +2344,11 @@ class AdvancedImageLoader {
   }
 
   init() {
-    if ('IntersectionObserver' in window) {
+    if ('IntersectionObserver' in window) { 
       this.imageObserver = new IntersectionObserver(
         (entries, observer) => {
           entries.forEach((entry) => {
-            if (entry.isIntersecting) {
+            if (entry.isIntersecting) { 
               const img = entry.target;
               this.loadImage(img);
               observer.unobserve(img);
@@ -2367,7 +2367,7 @@ class AdvancedImageLoader {
 
   loadImage(img) {
     const src = img.getAttribute('data-src') || img.src;
-    if (src) {
+    if (src) { 
       img.src = src;
       img.classList.add('loaded');
     }
@@ -3748,7 +3748,7 @@ function log(...args) {
  * @param {...any} args - Funktionsargumente
  * @returns {any} Ergebnis oder undefined
  */
-function if(...args) {
+function if(...args) { 
   console.log('if aufgerufen mit Argumenten:', args);
   return undefined;
 }

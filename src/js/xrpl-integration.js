@@ -48,7 +48,7 @@ class BurniTokenXRPLIntegration {
       this.connected = true;
       this.ledgerVersion = Math.floor(Math.random() * 1000000) + 75000000;
 
-      console.log(`✅ Connected to XRPL Ledger ${this.ledgerVersion}`);
+      console.log(`✅ Connected to XRPL Ledger $${this.ledgerVersion}`);
 
       // Start heartbeat
       this.startHeartbeat();
@@ -72,10 +72,10 @@ class BurniTokenXRPLIntegration {
 
   startHeartbeat() {
     this.heartbeatInterval = setInterval(async () => {
-      if (this.connected) {
+      if (this.connected) { 
         await this.updateLedgerInfo();
         this.emit('heartbeat', {
-          ledger: this.ledgerVersion,
+          ledger: this.ledgerVersion),
           timestamp: new Date().toISOString(),
         });
       }
@@ -96,7 +96,7 @@ class BurniTokenXRPLIntegration {
   }
 
   async getLedgerInfo() {
-    if (!this.connected) {
+    if (!this.connected) { 
       throw new Error('Not connected to XRPL');
     }
 
@@ -105,9 +105,9 @@ class BurniTokenXRPLIntegration {
 
   // 🪙 TOKEN OPERATIONS
   async getBurniTokenBalance(accountAddress) {
-    console.log(`🔍 Getting BURNI balance for ${accountAddress}`);
+    console.log(`🔍 Getting BURNI balance for $${accountAddress}`);
 
-    if (!this.connected) {
+    if (!this.connected) { 
       throw new Error('Not connected to XRPL');
     }
 
@@ -144,9 +144,9 @@ class BurniTokenXRPLIntegration {
 
   // 🔥 BURN OPERATIONS
   async prepareBurnTransaction(burnAmount, sourceAccount) {
-    console.log(`🔥 Preparing burn transaction: ${burnAmount} BURNI`);
+    console.log(`🔥 Preparing burn transaction: $${burnAmount} BURNI`);
 
-    if (!this.connected) {
+    if (!this.connected) { 
       throw new Error('Not connected to XRPL');
     }
 
@@ -166,7 +166,7 @@ class BurniTokenXRPLIntegration {
         {
           Memo: {
             MemoType: this.stringToHex('BurnTransaction'),
-            MemoData: this.stringToHex(`Burning ${burnAmount} BURNI tokens`),
+            MemoData: this.stringToHex(`Burning $${burnAmount} BURNI tokens`),
             MemoFormat: this.stringToHex('text/plain'),
           },
         },
@@ -179,7 +179,7 @@ class BurniTokenXRPLIntegration {
   async submitBurnTransaction(signedTransaction) {
     console.log('📡 Submitting burn transaction to XRPL...');
 
-    if (!this.connected) {
+    if (!this.connected) { 
       throw new Error('Not connected to XRPL');
     }
 
@@ -198,11 +198,11 @@ class BurniTokenXRPLIntegration {
     // Simulate network delay
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    console.log(`✅ Burn transaction successful: ${txResult.hash}`);
+    console.log(`✅ Burn transaction successful: $${txResult.hash}`);
 
     // Emit burn event
     this.emit('burnExecuted', {
-      txHash: txResult.hash,
+      txHash: txResult.hash),
       amount: signedTransaction.Amount.value,
       ledger: txResult.ledger_index,
       timestamp: txResult.timestamp,
@@ -213,7 +213,7 @@ class BurniTokenXRPLIntegration {
 
   // 📈 ANALYTICS & MONITORING
   async getBurnHistory(days = 30) {
-    console.log(`📊 Fetching burn history for last ${days} days...`);
+    console.log(`📊 Fetching burn history for last $${days} days...`);
 
     // Simulate burn history
     const burns = [];
@@ -223,7 +223,7 @@ class BurniTokenXRPLIntegration {
       const date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
 
       // Random burn events (not every day)
-      if (Math.random() > 0.7) {
+      if (Math.random() > 0.7) { 
         burns.push({
           date: date.toISOString(),
           amount: Math.floor(Math.random() * 50000) + 10000,
@@ -235,7 +235,7 @@ class BurniTokenXRPLIntegration {
     }
 
     return {
-      period: `${days} days`,
+      period: `$${days} days`,
       total_burns: burns.length,
       total_burned: burns.reduce((sum, burn) => sum + burn.amount, 0),
       burns: burns.sort((a, b) => new Date(b.date) - new Date(a.date)),
@@ -271,16 +271,16 @@ class BurniTokenXRPLIntegration {
   }
 
   async monitorAccount(accountAddress) {
-    console.log(`👀 Monitoring account: ${accountAddress}`);
+    console.log(`👀 Monitoring account: $${accountAddress}`);
 
     // In real implementation, subscribe to account transactions
     // This simulates the monitoring process
 
     setInterval(async () => {
-      if (this.connected) {
+      if (this.connected) { 
         const balance = await this.getBurniTokenBalance(accountAddress);
         this.emit('accountUpdate', {
-          account: accountAddress,
+          account: accountAddress),
           balance: balance,
           timestamp: new Date().toISOString(),
         });
@@ -373,19 +373,19 @@ class BurniTokenXRPLIntegration {
 
   // 📡 EVENT SYSTEM
   on(event, callback) {
-    if (!this.eventListeners.has(event)) {
+    if (!this.eventListeners.has(event)) { 
       this.eventListeners.set(event, []);
     }
     this.eventListeners.get(event).push(callback);
   }
 
   emit(event, data) {
-    if (this.eventListeners.has(event)) {
+    if (this.eventListeners.has(event)) { 
       this.eventListeners.get(event).forEach((callback) => {
         try {
           callback(data);
         } catch (error) {
-          console.error(`Error in event listener for ${event}:`, error);
+          console.error(`Error in event listener for $${event}:`, error);
         }
       });
     }
@@ -448,7 +448,7 @@ xrplIntegration.on('heartbeat', (data) => {
 });
 
 // 🎯 EXPORT FOR USAGE
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== 'undefined' && module.exports) { 
   module.exports = BurniTokenXRPLIntegration;
 }
 

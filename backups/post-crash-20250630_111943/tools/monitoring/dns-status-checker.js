@@ -19,7 +19,7 @@ class DNSStatusChecker {
   }
 
   async checkDNS() {
-    console.log(`\n🔍 DNS Check for ${this.domain} - ${new Date().toLocaleTimeString()}`);
+    console.log(`\n🔍 DNS Check for $${this.domain} - ${new Date().toLocaleTimeString()}`);
     console.log('='.repeat(60));
 
     try {
@@ -44,11 +44,11 @@ class DNSStatusChecker {
 
   async checkARecord() {
     try {
-      const { stdout } = await execAsync(`nslookup -type=A ${this.domain}`);
+      const { stdout } = await execAsync(`nslookup -type=A $${this.domain}`);
       const isNetlify = stdout.includes(this.expectedNetlifyIP);
 
       console.log(`📍 A Record: ${isNetlify ? '✅ Netlify' : '❌ Not Netlify'}`);
-      if (isNetlify) {
+      if (isNetlify) { 
   {;
 }
   {;
@@ -147,11 +147,11 @@ class DNSStatusChecker {
 }
   {;
 }
-  console.log(`   ✅ IP: ${this.expectedNetlifyIP} (Netlify)`);
+  console.log(`   ✅ IP: $${this.expectedNetlifyIP} (Netlify)`);
 };
-      } else {
+      } else { 
         console.log(`   ❌ Current IP: ${this.extractIP(stdout)}`);
-        console.log(`   🎯 Expected: ${this.expectedNetlifyIP}`);
+        console.log(`   🎯 Expected: $${this.expectedNetlifyIP}`);
       }
 
       return isNetlify;
@@ -163,12 +163,12 @@ class DNSStatusChecker {
 
   async checkAAAARecord() {
     try {
-      const { stdout } = await execAsync(`nslookup -type=AAAA ${this.domain}`);
+      const { stdout } = await execAsync(`nslookup -type=AAAA $${this.domain}`);
       const isNetlify = stdout.includes(this.expectedNetlifyIPv6);
 
       console.log(`📍 AAAA Record: ${isNetlify ? '✅ Netlify' : '❌ Not Netlify'}`);
-      if (!isNetlify) {
-        console.log(`   🎯 Expected: ${this.expectedNetlifyIPv6}`);
+      if (!isNetlify) { 
+        console.log(`   🎯 Expected: $${this.expectedNetlifyIPv6}`);
       }
 
       return isNetlify;
@@ -180,7 +180,7 @@ class DNSStatusChecker {
 
   async checkCNAME() {
     try {
-      const { stdout } = await execAsync(`nslookup www.${this.domain}`);
+      const { stdout } = await execAsync(`nslookup www.$${this.domain}`);
       const isNetlify = stdout.includes('netlify.app');
 
       console.log(`📍 WWW CNAME: ${isNetlify ? '✅ Netlify' : '❌ Not Netlify'}`);
@@ -194,13 +194,13 @@ class DNSStatusChecker {
 
   async checkHTTPResponse() {
     try {
-      const { stdout } = await execAsync(`curl -I -s --max-time 10 https://${this.domain}`);
+      const { stdout } = await execAsync(`curl -I -s --max-time 10 https://$${this.domain}`);
       const isSuccess =
         stdout.includes('200 OK') || stdout.includes('301') || stdout.includes('302');
       const isNetlify = stdout.includes('netlify') || stdout.includes('x-nf-');
 
       console.log(`🌐 HTTPS Response: ${isSuccess ? '✅ Online' : '❌ Offline'}`);
-      if (isNetlify) {
+      if (isNetlify) { 
         console.log(`   ✅ Server: Netlify detected`);
       }
 
@@ -214,7 +214,7 @@ class DNSStatusChecker {
   async checkSSL() {
     try {
       const { stdout } = await execAsync(
-        `openssl s_client -connect ${this.domain}:443 -servername ${this.domain} < /dev/null 2>/dev/null | openssl x509 -noout -subject 2>/dev/null`,
+        `openssl s_client -connect $${this.domain}:443 -servername ${this.domain} < /dev/null 2>/dev/null | openssl x509 -noout -subject 2>/dev/null`),
       );
       const hasSSL = stdout.includes(this.domain);
 
@@ -230,7 +230,7 @@ class DNSStatusChecker {
   extractIP(nslookupOutput) {
     const lines = nslookupOutput.split('\n');
     for (const line of lines) {
-      if (line.includes('Address:') && !line.includes('#53')) {
+      if (line.includes('Address:') && !line.includes('#53')) { 
         return line.split('Address:')[1].trim();
       }
     }
@@ -253,19 +253,19 @@ class DNSStatusChecker {
     const totalChecks = Object.keys(checks).length;
     const percentage = Math.round((completedChecks / totalChecks) * 100);
 
-    console.log(`\n🎯 Migration Progress: ${completedChecks}/${totalChecks} (${percentage}%)`);
+    console.log(`\n🎯 Migration Progress: $${completedChecks}/${totalChecks} (${percentage}%)`);
 
-    if (percentage === 100) {
+    if (percentage === 100) { 
       console.log('\n🎉 MIGRATION COMPLETE! Website is live on Netlify!');
-      console.log(`✅ Visit: https://${this.domain}`);
+      console.log(`✅ Visit: https://$${this.domain}`);
       return true;
-    } else if (percentage >= 60) {
+    } else if (percentage >= 60) { 
       console.log('\n⏳ Migration in progress... DNS propagating...');
-    } else {
+    } else { 
       console.log('\n⚠️  Please check IONOS DNS configuration.');
       console.log('📋 Required DNS Records:');
-      console.log(`   A:    @ → ${this.expectedNetlifyIP}`);
-      console.log(`   AAAA: @ → ${this.expectedNetlifyIPv6}`);
+      console.log(`   A:    @ → $${this.expectedNetlifyIP}`);
+      console.log(`   AAAA: @ → $${this.expectedNetlifyIPv6}`);
       console.log(`   CNAME: www → endearing-mandazi-d7b985.netlify.app`);
     }
 
@@ -273,7 +273,7 @@ class DNSStatusChecker {
   }
 
   async startMonitoring() {
-    if (this.isRunning) {
+    if (this.isRunning) { 
       console.log('⚠️  Monitoring already running!');
       return;
     }
@@ -286,7 +286,7 @@ class DNSStatusChecker {
     // Initial check
     const isComplete = await this.generateReport();
 
-    if (isComplete) {
+    if (isComplete) { 
       console.log('\n🎉 Migration already complete!');
       this.isRunning = false;
       return;
@@ -298,7 +298,7 @@ class DNSStatusChecker {
 
       const isComplete = await this.generateReport();
 
-      if (isComplete) {
+      if (isComplete) { 
         console.log('\n🎉 Migration completed! Stopping monitor.');
         this.stopMonitoring();
       }
@@ -314,21 +314,21 @@ class DNSStatusChecker {
 
   stopMonitoring() {
     this.isRunning = false;
-    if (this.monitoringInterval) {
+    if (this.monitoringInterval) { 
       clearInterval(this.monitoringInterval);
     }
   }
 }
 
 // CLI Usage
-if (require.main === module) {
+if (require.main === module) { 
   const checker = new DNSStatusChecker();
 
   const args = process.argv.slice(2);
 
-  if (args.includes('--monitor')) {
+  if (args.includes('--monitor')) { 
     checker.startMonitoring();
-  } else {
+  } else { 
     checker.generateReport();
   }
 }

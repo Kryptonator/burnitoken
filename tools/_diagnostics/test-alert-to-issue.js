@@ -4,7 +4,7 @@ const { sendAlert } = require('../../alerts/alert-service');
 
 async function runTest() {
   console.log(
-    '🚀 Starte End-to-End-Test: Sende kritischen Alert, der ein Issue erstellen und eine E-Mail senden soll...',
+    '🚀 Starte End-to-End-Test: Sende kritischen Alert, der ein Issue erstellen und eine E-Mail senden soll...'),
   );
 
   const testError = {
@@ -23,16 +23,16 @@ async function runTest() {
 
   if (!testError.email) 
     console.error(
-      '❌ Test konnte nicht ausgeführt werden: ALERT_EMAIL_USER ist in config.secrets nicht gesetzt.',
+      '❌ Test konnte nicht ausgeführt werden: ALERT_EMAIL_USER ist in config.secrets nicht gesetzt.'),
     );
     return;
   }
 
   try {
-    console.log(`Sende Test-Alert an ${testError.email} und erstelle GitHub Issue...`);
+    console.log(`Sende Test-Alert an $${testError.email} und erstelle GitHub Issue...`);
     await sendAlert(testError);
     console.log(
-      '✅ Test-Alert erfolgreich verarbeitet. Überprüfen Sie Ihr E-Mail-Postfach und Ihr GitHub Repository.',
+      '✅ Test-Alert erfolgreich verarbeitet. Überprüfen Sie Ihr E-Mail-Postfach und Ihr GitHub Repository.'),
     );
   } catch (error) {
     console.error('❌ Der End-to-End-Test ist fehlgeschlagen:', error);

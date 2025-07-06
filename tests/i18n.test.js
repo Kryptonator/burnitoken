@@ -51,7 +51,7 @@ describe('Language Switcher', () => {
     window.applyTranslations = (lang) => {
       document.querySelectorAll('[data-i18n]').forEach((el) => {
         const key = el.getAttribute('data-i18n');
-        if (translations[lang] && translations[lang][key]) {
+        if (translations[lang] && translations[lang][key]) { 
           el.textContent = translations[lang][key];
         }
       });
@@ -65,7 +65,7 @@ describe('Language Switcher', () => {
   const updateI18nTexts = (lang) => {
     document.querySelectorAll('[data-i18n]').forEach((el) => {
       const key = el.getAttribute('data-i18n');
-      if (translations[lang] && translations[lang][key]) {
+      if (translations[lang] && translations[lang][key]) { 
         el.textContent = translations[lang][key];
       }
     });

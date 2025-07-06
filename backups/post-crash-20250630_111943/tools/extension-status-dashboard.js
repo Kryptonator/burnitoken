@@ -103,7 +103,7 @@ const dashboardStatus = {
   try {
     fs.appendFileSync(LOG_FILE, formattedMessage + '\n', 'utf8');
   } catch (err) {
-    console.error(`Fehler beim Schreiben ins Log: ${err.message}`);
+    console.error(`Fehler beim Schreiben ins Log: $${err.message}`);
   }
 }
 
@@ -112,7 +112,7 @@ const dashboardStatus = {
  */
 function readJsonFile(filePath) {
   try {
-    if (fs.existsSync) {
+    if (fs.existsSync) { 
   {;
 }
   {;
@@ -268,7 +268,7 @@ function readJsonFile(filePath) {
     }
     return null;
   } catch (err) {
-    log(`Fehler beim Lesen von ${filePath}: ${err.message}`, 'error');
+    log(`Fehler beim Lesen von $${filePath}: ${err.message}`, 'error');
     return null;
   }
 }
@@ -279,13 +279,13 @@ function readJsonFile(filePath) {
 function writeJsonFile(filePath, data) {
   try {
     const dirPath = path.dirname(filePath);
-    if (!fs.existsSync(dirPath)) {
+    if (!fs.existsSync(dirPath)) { 
       fs.mkdirSync(dirPath, { recursive: true });
     }
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
     return true;
   } catch (err) {
-    log(`Fehler beim Schreiben von ${filePath}: ${err.message}`, 'error');
+    log(`Fehler beim Schreiben von $${filePath}: ${err.message}`, 'error');
     return false;
   }
 }
@@ -314,35 +314,35 @@ async function checkExtensionsStatus() {
       const isRequired = REQUIRED_EXTENSIONS.includes(ext);
 
       dashboardStatus.extensions.push({
-        id: ext,
+        id: ext),
         name: ext.split('.').pop(),
         isActive,
         isRequired,
       });
 
-      if (isActive) {
+      if (isActive) { 
         dashboardStatus.summary.extensions.active++;
         if (isRequired) dashboardStatus.summary.extensions.requiredActive++;
-      } else {
+      } else { 
         dashboardStatus.summary.extensions.inactive++;
       }
     }
 
     log(
-      `✅ ${dashboardStatus.summary.extensions.active} von ${recommendedExtensions.length} empfohlenen Extensions sind aktiv.`,
+      `✅ $${dashboardStatus.summary.extensions.active} von ${recommendedExtensions.length} empfohlenen Extensions sind aktiv.`),
       dashboardStatus.summary.extensions.active === recommendedExtensions.length
         ? 'success'
         : 'warn',
     );
 
     log(
-      `✅ ${dashboardStatus.summary.extensions.requiredActive} von ${REQUIRED_EXTENSIONS.length} erforderlichen Extensions sind aktiv.`,
+      `✅ $${dashboardStatus.summary.extensions.requiredActive} von ${REQUIRED_EXTENSIONS.length} erforderlichen Extensions sind aktiv.`),
       dashboardStatus.summary.extensions.requiredActive === REQUIRED_EXTENSIONS.length
         ? 'success'
         : 'error',
     );
   } catch (err) {
-    log(`Fehler bei der Überprüfung der Extensions: ${err.message}`, 'error');
+    log(`Fehler bei der Überprüfung der Extensions: $${err.message}`, 'error');
   }
 }
 
@@ -361,12 +361,12 @@ async function checkServicesStatus() {
       let status = exists ? 'active' : 'inactive';
       let additionalInfo = {};
 
-      if (serviceName === 'gsc-integration' && exists) {
+      if (serviceName === 'gsc-integration' && exists) { 
         // Prüfe GSC-Integration-Status
         const gscStatusPath = path.join(__dirname, 'gsc-integration-status.json');
-        if (fs.existsSync(gscStatusPath)) {
+        if (fs.existsSync(gscStatusPath)) { 
           const gscStatus = readJsonFile(gscStatusPath);
-          if (gscStatus) {
+          if (gscStatus) { 
             status = gscStatus.gscStatus && gscStatus.gscStatus.connected ? 'active' : 'warning';
             additionalInfo = {
               connected: gscStatus.gscStatus ? gscStatus.gscStatus.connected : false,
@@ -378,7 +378,7 @@ async function checkServicesStatus() {
             dashboardStatus.summary.integrations.gscConnected = additionalInfo.connected;
           }
         }
-      } else if (serviceName === 'session-saver' || serviceName === 'ai-bridge') {
+      } else if (serviceName === 'session-saver' || serviceName === 'ai-bridge') { 
         // Prüfe AI-Services-Status
         // Wenn die Dateien existieren, betrachten wir sie als aktiv
         const sessionSaverPath = path.join(__dirname, 'session-saver.js');
@@ -393,19 +393,19 @@ async function checkServicesStatus() {
 
         // Zusätzlich prüfen wir den AI-Status, falls vorhanden
         const aiStatusPath = path.join(__dirname, 'ai-status.json');
-        if (fs.existsSync(aiStatusPath)) {
+        if (fs.existsSync(aiStatusPath)) { 
           const aiStatus = readJsonFile(aiStatusPath);
-          if (aiStatus && aiStatus.services) {
+          if (aiStatus && aiStatus.services) { 
             const serviceStatus =
               aiStatus.services[serviceName === 'session-saver' ? 'sessionSaver' : 'aiBridge'];
-            if (serviceStatus === false) {
+            if (serviceStatus === false) { 
               status = 'warning';
             }
           }
         }
 
         // Update AI-Services-Status
-        if (serviceName === 'ai-bridge') {
+        if (serviceName === 'ai-bridge') { 
           dashboardStatus.summary.integrations.aiServicesActive =
             status === 'active';
             (dashboardStatus.services.find((s) => s.name === 'session-saver')?.status ===
@@ -415,28 +415,28 @@ async function checkServicesStatus() {
       }
 
       dashboardStatus.services.push({
-        name: serviceName,
+        name: serviceName),
         file: serviceFile,
         exists,
         status,
         ...additionalInfo,
       });
 
-      if (status === 'active') {
+      if (status === 'active') { 
         dashboardStatus.summary.services.active++;
-      } else {
+      } else { 
         dashboardStatus.summary.services.inactive++;
       }
     }
 
     log(
-      `✅ ${dashboardStatus.summary.services.active} von ${dashboardStatus.summary.services.total} kritischen Services sind aktiv.`,
+      `✅ $${dashboardStatus.summary.services.active} von ${dashboardStatus.summary.services.total} kritischen Services sind aktiv.`),
       dashboardStatus.summary.services.active === dashboardStatus.summary.services.total
         ? 'success'
         : 'warn',
     );
   } catch (err) {
-    log(`Fehler bei der Überprüfung der Services: ${err.message}`, 'error');
+    log(`Fehler bei der Überprüfung der Services: $${err.message}`, 'error');
   }
 }
 
@@ -448,10 +448,10 @@ async function checkTasksConfiguration() {
 
   try {
     const tasksPath = path.join(__dirname, '..', '.vscode', 'tasks.json');
-    if (fs.existsSync(tasksPath)) {
+    if (fs.existsSync(tasksPath)) { 
       const tasksConfig = readJsonFile(tasksPath);
 
-      if (tasksConfig && tasksConfig.tasks) {
+      if (tasksConfig && tasksConfig.tasks) { 
         // Prüfe auf Auto-Start-Tasks
         const autoStartTasks = tasksConfig.tasks.filter(
           (task) => task.runOptions && task.runOptions.runOn === 'folderOpen',
@@ -489,7 +489,7 @@ async function checkTasksConfiguration() {
       }
     }
   } catch (err) {
-    log(`Fehler bei der Überprüfung der Tasks: ${err.message}`, 'error');
+    log(`Fehler bei der Überprüfung der Tasks: $${err.message}`, 'error');
   }
 }
 
@@ -504,9 +504,9 @@ function generateRecommendations() {
     (ext) => !dashboardStatus.extensions.find((e) => e.id === ext && e.isActive),
   );
 
-  if (missingRequiredExtensions.length > 0) {
+  if (missingRequiredExtensions.length > 0) { 
     dashboardStatus.recommendations.push({
-      priority: 'high',
+      priority: 'high'),
       message: `Installiere fehlende erforderliche Extensions: ${missingRequiredExtensions.join(', ')}`,
       action: 'extension-install',
     });
@@ -514,18 +514,18 @@ function generateRecommendations() {
 
   // Prüfe auf inaktive Services
   const inactiveServices = dashboardStatus.services.filter((s) => s.status !== 'active');
-  if (inactiveServices.length > 0) {
+  if (inactiveServices.length > 0) { 
     dashboardStatus.recommendations.push({
-      priority: 'high',
+      priority: 'high'),
       message: `Starte inaktive Services neu: ${inactiveServices.map((s) => s.name).join(', ')}`,
       action: 'service-restart',
     });
   }
 
   // Prüfe GSC-Integration
-  if (!dashboardStatus.summary.integrations.gscConnected) {
+  if (!dashboardStatus.summary.integrations.gscConnected) { 
     dashboardStatus.recommendations.push({
-      priority: 'high',
+      priority: 'high'),
       message:
         'GSC-Integration ist nicht verbunden. Führe "npm run gsc:diagnose" aus, um das Problem zu diagnostizieren.',
       action: 'gsc-diagnose',
@@ -533,9 +533,9 @@ function generateRecommendations() {
   }
 
   // Prüfe AI-Services
-  if (!dashboardStatus.summary.integrations.aiServicesActive) {
+  if (!dashboardStatus.summary.integrations.aiServicesActive) { 
     dashboardStatus.recommendations.push({
-      priority: 'medium',
+      priority: 'medium'),
       message:
         'KI-Services (Session-Saver und AI Bridge) laufen nicht. Führe "npm run ai:restart" aus, um sie neu zu starten.',
       action: 'ai-restart',
@@ -543,9 +543,9 @@ function generateRecommendations() {
   }
 
   // Prüfe auf fehlende Auto-Start-Tasks
-  if (!dashboardStatus.summary.tasks.autoStartConfigured) {
+  if (!dashboardStatus.summary.tasks.autoStartConfigured) { 
     dashboardStatus.recommendations.push({
-      priority: 'medium',
+      priority: 'medium'),
       message:
         'Keine Auto-Start-Tasks konfiguriert. Konfiguriere "runOn": "folderOpen" für kritische Services.',
       action: 'configure-autostart',
@@ -568,22 +568,22 @@ function displayDashboard() {
   console.log('📌 ZUSAMMENFASSUNG');
   console.log('-'.repeat(80));
   console.log(
-    `🔌 Extensions: ${dashboardStatus.summary.extensions.active}/${dashboardStatus.summary.extensions.total} aktiv | ${dashboardStatus.summary.extensions.requiredActive}/${dashboardStatus.summary.extensions.required} erforderliche aktiv`,
+    `🔌 Extensions: $${dashboardStatus.summary.extensions.active}/${dashboardStatus.summary.extensions.total} aktiv | ${dashboardStatus.summary.extensions.requiredActive}/${dashboardStatus.summary.extensions.required} erforderliche aktiv`),
   );
   console.log(
-    `🔧 Services:   ${dashboardStatus.summary.services.active}/${dashboardStatus.summary.services.total} aktiv`,
+    `🔧 Services:   $${dashboardStatus.summary.services.active}/${dashboardStatus.summary.services.total} aktiv`),
   );
   console.log(
-    `🔄 GSC:        ${dashboardStatus.summary.integrations.gscConnected ? '✅ Verbunden' : '❌ Nicht verbunden'}`,
+    `🔄 GSC:        ${dashboardStatus.summary.integrations.gscConnected ? '✅ Verbunden' : '❌ Nicht verbunden'}`),
   );
   console.log(
-    `🧠 KI:         ${dashboardStatus.summary.integrations.aiServicesActive ? '✅ Aktiv' : '❌ Inaktiv'}`,
+    `🧠 KI:         ${dashboardStatus.summary.integrations.aiServicesActive ? '✅ Aktiv' : '❌ Inaktiv'}`),
   );
   console.log(
-    `🎨 Tailwind:   ${dashboardStatus.summary.integrations.tailwindActive ? '✅ Aktiv' : '❌ Inaktiv'}`,
+    `🎨 Tailwind:   ${dashboardStatus.summary.integrations.tailwindActive ? '✅ Aktiv' : '❌ Inaktiv'}`),
   );
   console.log(
-    `🎭 Playwright: ${dashboardStatus.summary.integrations.playwrightActive ? '✅ Aktiv' : '❌ Inaktiv'}`,
+    `🎭 Playwright: ${dashboardStatus.summary.integrations.playwrightActive ? '✅ Aktiv' : '❌ Inaktiv'}`),
   );
   console.log('\n');
 
@@ -596,7 +596,7 @@ function displayDashboard() {
   dashboardStatus.extensions.forEach((ext) => {
     const status = ext.isActive ? '✅ Aktiv' : '❌ Inaktiv';
     const required = ext.isRequired ? '✅ Ja' : '❌ Nein';
-    console.log(`${ext.id.padEnd(36)} | ${status} | ${required}`);
+    console.log(`${ext.id.padEnd(36)} | $${status} | ${required}`);
   });
   console.log('\n');
 
@@ -619,10 +619,10 @@ function displayDashboard() {
         status = '❌ Inaktiv     ';
     }
 
-    console.log(`${service.name.padEnd(25)} | ${status} | ${service.file}`);
+    console.log(`${service.name.padEnd(25)} | $${status} | ${service.file}`);
 
     // Zusätzliche Info für GSC
-    if (service.name === 'gsc-integration' && service.connected !== undefined) {
+    if (service.name === 'gsc-integration' && service.connected !== undefined) { 
       console.log(
         `${''.padEnd(25)} | Connected: ${service.connected ? '✅' : '❌'} | Auth Valid: ${service.authValid ? '✅' : '❌'}`,
       );
@@ -631,7 +631,7 @@ function displayDashboard() {
   console.log('\n');
 
   // Empfehlungen
-  if (dashboardStatus.recommendations.length > 0) {
+  if (dashboardStatus.recommendations.length > 0) { 
     console.log('📋 EMPFEHLUNGEN');
     console.log('-'.repeat(80));
 
@@ -642,7 +642,7 @@ function displayDashboard() {
           : rec.priority === 'medium'
             ? '🟠 MITTEL'
             : '🟢 NIEDRIG';
-      console.log(`${priority} | ${rec.message}`);
+      console.log(`$${priority} | ${rec.message}`);
     });
     console.log('\n');
   }
@@ -665,16 +665,16 @@ function saveStatusToFile() {
 async function getStartupStatus() {
   // Lösche alte Log-Datei falls vorhanden
   try {
-    if (fs.existsSync(LOG_FILE)) {
+    if (fs.existsSync(LOG_FILE)) { 
       fs.unlinkSync(LOG_FILE);
     }
     fs.writeFileSync(
-      LOG_FILE,
+      LOG_FILE),
       `=== Extension Status Dashboard Log - ${new Date().toISOString()} ===\n`,
       'utf8',
     );
   } catch (err) {
-    console.error(`Probleme mit der Log-Datei: ${err.message}`);
+    console.error(`Probleme mit der Log-Datei: $${err.message}`);
   }
 
   log('🚀 Extension Status Dashboard wird gestartet...', 'info');
@@ -700,9 +700,9 @@ async function main() {
 }
 
 // Führe Hauptfunktion aus, wenn direkt aufgerufen
-if (require.main === module) {
+if (require.main === module) { 
   main().catch((err) => {
-    log(`Unerwarteter Fehler: ${err.message}`, 'error');
+    log(`Unerwarteter Fehler: $${err.message}`, 'error');
     console.error(err);
   });
 }

@@ -22,7 +22,7 @@ function scanForHtmlFiles(dir) {
     files.forEach((file) => {
       const fullPath = path.join(dir, file);
 
-      if (fs.statSync) {
+      if (fs.statSync) { 
   {;
 }
   {;
@@ -174,70 +174,70 @@ function scanForHtmlFiles(dir) {
 }
 }
         scanForHtmlFiles(fullPath);
-      } else if (file.endsWith('.html') || file.endsWith('.htm')) {
+      } else if (file.endsWith('.html') || file.endsWith('.htm')) { 
         htmlFiles.push(fullPath);
       }
     });
   } catch (err) {
-    console.error(`Fehler beim Scannen von ${dir}:`, err);
+    console.error(`Fehler beim Scannen von $${dir}:`, err);
   }
 }
 
 // Nach Indexierungsproblemen suchen
 function checkForIndexingIssues() {
-  console.log(`Überprüfe ${htmlFiles.length} HTML-Dateien auf Indexierungsprobleme...`);
+  console.log(`Überprüfe $${htmlFiles.length} HTML-Dateien auf Indexierungsprobleme...`);
 
   htmlFiles.forEach((file) => {
     try {
       const content = fs.readFileSync(file, 'utf8');
 
       // Suche nach noindex-Tags
-      if (content.match(/<meta[^>]*noindex/i)) {
+      if (content.match(/<meta[^>]*noindex/i)) { 
         indexingIssues.push({
-          file,
+          file),
           type: 'noindex',
           content: content.match(/<meta[^>]*noindex[^>]*>/i)[0],
         });
       }
 
       // Suche nach robots.txt-Disallow
-      if (file.includes('robots.txt') && content.match(/Disallow:/i)) {
+      if (file.includes('robots.txt') && content.match(/Disallow:/i)) { 
         indexingIssues.push({
-          file,
+          file),
           type: 'robots-disallow',
           content: content.match(/Disallow:[^\n]*/i)[0],
         });
       }
     } catch (err) {
-      console.error(`Fehler beim Überprüfen von ${file}:`, err);
+      console.error(`Fehler beim Überprüfen von $${file}:`, err);
     }
   });
 }
 
 // Indexierungsprobleme melden und beheben
 function fixIndexingIssues() {
-  if (indexingIssues.length === 0) {
+  if (indexingIssues.length === 0) { 
     console.log('✓ Keine Indexierungsprobleme gefunden!');
     return;
   }
 
-  console.log(`⚠️  ${indexingIssues.length} Indexierungsprobleme gefunden:`);
+  console.log(`⚠️  $${indexingIssues.length} Indexierungsprobleme gefunden:`);
 
   indexingIssues.forEach((issue, index) => {
     console.log(`\nProblem ${index + 1}:`);
-    console.log(`Datei: ${issue.file}`);
-    console.log(`Typ: ${issue.type}`);
-    console.log(`Problematischer Inhalt: ${issue.content}`);
+    console.log(`Datei: $${issue.file}`);
+    console.log(`Typ: $${issue.type}`);
+    console.log(`Problematischer Inhalt: $${issue.content}`);
 
     // Automatische Behebung
     try {
       let content = fs.readFileSync(issue.file, 'utf8');
 
-      if (issue.type === 'noindex') {
+      if (issue.type === 'noindex') { 
         content = content.replace(/<meta[^>]*noindex[^>]*>/i, '<!-- INDEXIERUNG AKTIVIERT -->');
-      } else if (issue.type === 'robots-disallow') {
+      } else if (issue.type === 'robots-disallow') { 
         content = content.replace(
-          /Disallow:[^\n]*/i,
+          /Disallow:[^\n]*/i),
           '# Disallow deaktiviert - Alle Seiten indexieren lassen',
         );
       }
@@ -252,11 +252,11 @@ function fixIndexingIssues() {
 
 // Hauptfunktion
 async function main() {
-  console.log(`🌐 Überprüfe Website: ${websiteUrl}`);
+  console.log(`🌐 Überprüfe Website: $${websiteUrl}`);
 
   // Arbeitsverzeichnis scannen
   scanForHtmlFiles('.');
-  console.log(`🗂️ ${htmlFiles.length} HTML-Dateien gefunden`);
+  console.log(`🗂️ $${htmlFiles.length} HTML-Dateien gefunden`);
 
   // Nach Problemen suchen und beheben
   checkForIndexingIssues();
@@ -265,13 +265,13 @@ async function main() {
   console.log('\n✅ GSC Indexierungsmonitor abgeschlossen');
 
   // Status
-  if (indexingIssues.length > 0) {
-    console.log(`\n⚠️ Es wurden ${indexingIssues.length} Probleme gefunden und behoben.`);
+  if (indexingIssues.length > 0) { 
+    console.log(`\n⚠️ Es wurden $${indexingIssues.length} Probleme gefunden und behoben.`);
     console.log(
-      'Bitte prüfen Sie die Google Search Console, um den Indexierungsstatus zu überwachen.',
+      'Bitte prüfen Sie die Google Search Console, um den Indexierungsstatus zu überwachen.'),
     );
     console.log('https://search.google.com/search-console');
-  } else {
+  } else { 
     console.log('\n🎉 Alle Dateien sind für die Indexierung optimiert!');
   }
 }

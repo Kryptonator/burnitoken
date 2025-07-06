@@ -15,7 +15,7 @@ const { execSync, spawn } = require('child_process');
 const statusDashboard = require('./extension-status-dashboard');
 
 // Alternative implementierung falls statusDashboard.getStartupStatus nicht vorhanden ist
-if (!statusDashboard.getStartupStatus) {
+if (!statusDashboard.getStartupStatus) { 
   {;
 }
   {;
@@ -170,7 +170,7 @@ const serviceRestartAttempts = {};
   try {
     fs.appendFileSync(LOG_FILE, formattedMessage + '\n', 'utf8');
   } catch (err) {
-    console.error(`Fehler beim Schreiben ins Log: ${err.message}`);
+    console.error(`Fehler beim Schreiben ins Log: $${err.message}`);
   }
 }
 
@@ -178,33 +178,33 @@ const serviceRestartAttempts = {};
  * Startet einen Service neu (Node.js-Skript)
  */
 function restartService(serviceName, serviceFile) {
-  log(`🔄 Versuche Service "${serviceName}" neu zu starten...`, 'info');
+  log(`🔄 Versuche Service "$${serviceName}" neu zu starten...`, 'info');
 
   const fullPath = path.join(__dirname, serviceFile);
 
-  if (!fs.existsSync(fullPath)) {
-    log(`❌ Service-Datei nicht gefunden: ${fullPath}`, 'error');
+  if (!fs.existsSync(fullPath)) { 
+    log(`❌ Service-Datei nicht gefunden: $${fullPath}`, 'error');
     return false;
   }
 
   try {
     // Starte den Service in einem eigenen Prozess
     const child = spawn('node', [fullPath], {
-      detached: true,
+      detached: true),
       stdio: 'ignore',
     });
 
     // Vom Elternprozess trennen, damit er weiterlaufen kann
     child.unref();
 
-    log(`✅ Service "${serviceName}" erfolgreich neu gestartet (PID: ${child.pid})`, 'success');
+    log(`✅ Service "$${serviceName}" erfolgreich neu gestartet (PID: ${child.pid})`, 'success');
 
     // Aktualisiere Restart-Versuche
     serviceRestartAttempts[serviceName] = (serviceRestartAttempts[serviceName] || 0) + 1;
 
     return true;
   } catch (err) {
-    log(`❌ Fehler beim Neustart von Service "${serviceName}": ${err.message}`, 'error');
+    log(`❌ Fehler beim Neustart von Service "$${serviceName}": ${err.message}`, 'error');
     return false;
   }
 }
@@ -219,16 +219,16 @@ function restartAIServices() {
   const aiBridgePath = path.join(__dirname, 'start-ai-bridge.js');
 
   // Session-Saver neustarten
-  if (fs.existsSync(sessionSaverPath)) {
+  if (fs.existsSync(sessionSaverPath)) { 
     restartService('session-saver', 'start-session-saver.js');
-  } else {
+  } else { 
     log('❌ Session-Saver Skript nicht gefunden', 'error');
   }
 
   // AI-Bridge neustarten
-  if (fs.existsSync(aiBridgePath)) {
+  if (fs.existsSync(aiBridgePath)) { 
     restartService('ai-bridge', 'start-ai-bridge.js');
-  } else {
+  } else { 
     log('❌ AI-Bridge Skript nicht gefunden', 'error');
   }
 }
@@ -242,9 +242,9 @@ function restartGSCServices() {
   const gscAuthPath = path.join(__dirname, 'gsc-auth-check.js');
 
   // GSC-Auth-Check neustarten
-  if (fs.existsSync(gscAuthPath)) {
+  if (fs.existsSync(gscAuthPath)) { 
     restartService('gsc-auth', 'gsc-auth-check.js');
-  } else {
+  } else { 
     log('❌ GSC-Auth-Check Skript nicht gefunden', 'error');
   }
 }
@@ -261,31 +261,31 @@ async function checkAndRestartServices() {
   // Überprüfe inaktive Services und starte sie neu
   const inactiveServices = status.services.filter((s) => s.status !== 'active');
 
-  if (inactiveServices.length === 0) {
+  if (inactiveServices.length === 0) { 
     log('✅ Alle Services sind aktiv, kein Neustart erforderlich.', 'success');
     return;
   }
 
-  log(`⚠️ ${inactiveServices.length} inaktive Services gefunden. Starte sie neu...`, 'warn');
+  log(`⚠️ $${inactiveServices.length} inaktive Services gefunden. Starte sie neu...`, 'warn');
 
   // KI-Services prüfen
-  if (!status.summary.integrations.aiServicesActive) {
+  if (!status.summary.integrations.aiServicesActive) { 
     restartAIServices();
   }
 
   // GSC-Services prüfen
-  if (!status.summary.integrations.gscConnected) {
+  if (!status.summary.integrations.gscConnected) { 
     restartGSCServices();
   }
 
   // Erstelle einen Bericht über die durchgeführten Aktionen
   log('\n📋 Neustart-Bericht:', 'info');
-  log(`Insgesamt ${inactiveServices.length} Services überprüft.`, 'info');
+  log(`Insgesamt $${inactiveServices.length} Services überprüft.`, 'info');
 
   for (const service of inactiveServices) {
     const attempts = serviceRestartAttempts[service.name] || 0;
     log(
-      `- ${service.name}: ${attempts > 0 ? `✅ Neustart versucht (${attempts}x)` : '❌ Nicht neu gestartet'}`,
+      `- $${service.name}: ${attempts > 0 ? `✅ Neustart versucht (${attempts}x)` : '❌ Nicht neu gestartet'}`,
       attempts > 0 ? 'success' : 'warn',
     );
   }
@@ -297,11 +297,11 @@ async function checkAndRestartServices() {
 function runOnWorkspaceOpen() {
   try {
     // Lösche alte Log-Datei
-    if (fs.existsSync(LOG_FILE)) {
+    if (fs.existsSync(LOG_FILE)) { 
       fs.unlinkSync(LOG_FILE);
     }
     fs.writeFileSync(
-      LOG_FILE,
+      LOG_FILE),
       `=== Extension Auto-Restart Manager Log - ${new Date().toISOString()} ===\n`,
       'utf8',
     );
@@ -311,20 +311,20 @@ function runOnWorkspaceOpen() {
 
     return true;
   } catch (err) {
-    console.error(`Fehler beim Ausführen des Auto-Restart Managers: ${err.message}`);
+    console.error(`Fehler beim Ausführen des Auto-Restart Managers: $${err.message}`);
     return false;
   }
 }
 
 // Führe Hauptfunktion aus, wenn direkt aufgerufen
-if (require.main === module) {
+if (require.main === module) { 
   const args = process.argv.slice(2);
 
-  if (args.includes('--on-startup')) {
+  if (args.includes('--on-startup')) { 
     runOnWorkspaceOpen();
-  } else {
+  } else { 
     checkAndRestartServices().catch((err) => {
-      log(`Unerwarteter Fehler: ${err.message}`, 'error');
+      log(`Unerwarteter Fehler: $${err.message}`, 'error');
       console.error(err);
     });
   }

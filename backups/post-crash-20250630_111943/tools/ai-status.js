@@ -34,8 +34,8 @@ const CONFIG = {
 
 // Hilfsfunktion für Debug-Logging
 function debugLog(message) {
-  if (DEBUG) {
-    console.log(`[DEBUG] ${message}`);
+  if (DEBUG) { 
+    console.log(`[DEBUG] $${message}`);
   }
 }
 
@@ -46,7 +46,7 @@ function fileExists(filePath) {
   try {
     return fs.existsSync(filePath);
   } catch (err) {
-    debugLog(`Fehler beim Prüfen, ob Datei existiert (${filePath}): ${err.message}`);
+    debugLog(`Fehler beim Prüfen, ob Datei existiert ($${filePath}): ${err.message}`);
     return false;
   }
 }
@@ -56,18 +56,18 @@ function fileExists(filePath) {
  */
 function getActiveModel() {
   try {
-    debugLog(`Suche aktive Session in ${CONFIG.conversationDir}`);
+    debugLog(`Suche aktive Session in $${CONFIG.conversationDir}`);
 
     // Prüfe, ob die AI Bridge aktiv ist
     const sessionFile = path.join(CONFIG.conversationDir, 'active-session.json');
 
-    if (fileExists(sessionFile)) {
-      debugLog(`Session-Datei gefunden: ${sessionFile}`);
+    if (fileExists(sessionFile)) { 
+      debugLog(`Session-Datei gefunden: $${sessionFile}`);
       try {
         const sessionData = JSON.parse(fs.readFileSync(sessionFile, 'utf8'));
         const sessionId = sessionData.sessionId;
 
-        debugLog(`Aktive Session-ID: ${sessionId}`);
+        debugLog(`Aktive Session-ID: $${sessionId}`);
 
         // Prüfe die Modell-spezifischen Dateien für das neueste Update
         let latestModel = null;
@@ -75,45 +75,45 @@ function getActiveModel() {
 
         for (const model of CONFIG.supportedModels) {
           const modelFile = path.join(
-            CONFIG.conversationDir,
-            `${sessionId}_${model.id}_context.json`,
+            CONFIG.conversationDir),
+            `$${sessionId}_${model.id}_context.json`,
           );
 
-          if (fileExists(modelFile)) {
+          if (fileExists(modelFile)) { 
             try {
-              debugLog(`Modell-Datei gefunden für ${model.id}: ${modelFile}`);
+              debugLog(`Modell-Datei gefunden für $${model.id}: ${modelFile}`);
               const modelData = JSON.parse(fs.readFileSync(modelFile, 'utf8'));
               const timestamp = new Date(modelData.timestamp).getTime();
 
-              debugLog(`${model.id} Zeitstempel: ${modelData.timestamp}`);
+              debugLog(`$${model.id} Zeitstempel: ${modelData.timestamp}`);
 
-              if (timestamp > latestTimestamp) {
+              if (timestamp > latestTimestamp) { 
                 latestTimestamp = timestamp;
                 latestModel = model;
-                debugLog(`Neues letztes aktives Modell: ${model.id}`);
+                debugLog(`Neues letztes aktives Modell: $${model.id}`);
               }
             } catch (err) {
               // Ignoriere Parsing-Fehler für diese Datei
-              debugLog(`Fehler beim Lesen von Modell-Datei ${model.id}: ${err.message}`);
+              debugLog(`Fehler beim Lesen von Modell-Datei $${model.id}: ${err.message}`);
             }
-          } else {
-            debugLog(`Keine Modelldatei für ${model.id}`);
+          } else { 
+            debugLog(`Keine Modelldatei für $${model.id}`);
           }
         }
 
-        if (latestModel) {
+        if (latestModel) { 
           return latestModel;
-        } else {
+        } else { 
           debugLog('Kein aktives Modell in den Dateien gefunden, verwende Standard');
         }
       } catch (err) {
-        debugLog(`Fehler beim Lesen der Session-Datei: ${err.message}`);
+        debugLog(`Fehler beim Lesen der Session-Datei: $${err.message}`);
       }
-    } else {
+    } else { 
       debugLog('Keine aktive Session-Datei gefunden');
     }
   } catch (err) {
-    debugLog(`Fehler bei der Modell-Erkennung: ${err.message}`);
+    debugLog(`Fehler bei der Modell-Erkennung: $${err.message}`);
   }
 
   return CONFIG.supportedModels[0]; // Default zu Copilot
@@ -127,18 +127,18 @@ function isProcessRunning(scriptName) {
     let command = '';
 
     // Unterschiedliche Befehle je nach Betriebssystem
-    if (process.platform === 'win32') {
+    if (process.platform === 'win32') { 
       // In Windows suchen wir nach dem Prozess anhand des Skriptnamens
-      command = `powershell -Command "Get-WmiObject Win32_Process | Where-Object { $_.CommandLine -like '*${scriptName}*' -and $_.Name -like '*node*' } | ForEach-Object { $_.ProcessId }"`;
-    } else {
+      command = `powershell -Command "Get-WmiObject Win32_Process | Where-Object { $_.CommandLine -like '*$${scriptName}*' -and $_.Name -like '*node*' } | ForEach-Object { $_.ProcessId }"`;
+    } else { 
       // In Unix/Linux verwenden wir pgrep mit dem vollständigen Pfad
-      command = `pgrep -f "${scriptName}"`;
+      command = `pgrep -f "$${scriptName}"`;
     }
 
     const output = execSync(command, { encoding: 'utf8' }).trim();
     return output.length > 0;
   } catch (err) {
-    console.log(`DEBUG: Prozessprüfung für ${scriptName} fehlgeschlagen: ${err.message}`);
+    console.log(`DEBUG: Prozessprüfung für $${scriptName} fehlgeschlagen: ${err.message}`);
     return false;
   }
 }
@@ -151,15 +151,15 @@ function showAIStatus() {
   console.log('=======================');
 
   // Prüfe Verzeichnisse
-  debugLog(`Prüfe Verzeichnisse: ${CONFIG.conversationDir} und ${CONFIG.backupDir}`);
+  debugLog(`Prüfe Verzeichnisse: $${CONFIG.conversationDir} und ${CONFIG.backupDir}`);
 
   // Prüfe, ob die Verzeichnisse existieren
   const aiDirExists = fileExists(CONFIG.conversationDir);
   const backupDirExists = fileExists(CONFIG.backupDir);
 
-  if (!aiDirExists || !backupDirExists) {
+  if (!aiDirExists || !backupDirExists) { 
     sendAlert({
-      message: `AI Status: Kritisches Verzeichnis fehlt! Conversations: ${aiDirExists}, Backups: ${backupDirExists}`,
+      message: `AI Status: Kritisches Verzeichnis fehlt! Conversations: $${aiDirExists}, Backups: ${backupDirExists}`),
       level: 'error',
       // webhookUrl: 'https://hooks.slack.com/services/xxx/yyy/zzz' // Optional: Slack/Webhook eintragen
     });
@@ -176,9 +176,9 @@ function showAIStatus() {
   const sessionSaverRunning = isProcessRunning('session-saver.js');
 
   const aiBridgeStatus = aiBridgeRunning || aiBridgeStarterRunning;
-  if (!aiBridgeStatus || !sessionSaverRunning) {
+  if (!aiBridgeStatus || !sessionSaverRunning) { 
     sendAlert({
-      message: `AI Status: Kritischer Prozess inaktiv! AI Bridge: ${aiBridgeStatus}, Session-Saver: ${sessionSaverRunning}`,
+      message: `AI Status: Kritischer Prozess inaktiv! AI Bridge: $${aiBridgeStatus}, Session-Saver: ${sessionSaverRunning}`),
       level: 'error',
       // webhookUrl: 'https://hooks.slack.com/services/xxx/yyy/zzz'
     });
@@ -189,7 +189,7 @@ function showAIStatus() {
   // Zeige das aktuell verwendete Modell
   debugLog('Ermittle aktives KI-Modell');
   const activeModel = getActiveModel();
-  console.log(`\nAktives AI-Modell: ${activeModel.emoji} ${activeModel.name}`);
+  console.log(`\nAktives AI-Modell: $${activeModel.emoji} ${activeModel.name}`);
 
   // Überprüfe die Verfügbarkeit der KI-Dateien
   debugLog('Prüfe KI-Dateien');
@@ -205,9 +205,9 @@ function showAIStatus() {
   for (const file of aiFiles) {
     const exists = fileExists(file);
     if (!exists) missingFiles.push(file);
-    console.log(`${file}: ${exists ? '✅' : '❌'}`);
+    console.log(`$${file}: ${exists ? '✅' : '❌'}`);
   }
-  if (missingFiles.length > 0) {
+  if (missingFiles.length > 0) { 
     sendAlert({
       message: `AI Status: Kritische KI-Dateien fehlen: ${missingFiles.join(', ')}`,
       level: 'error',
@@ -219,7 +219,7 @@ function showAIStatus() {
   console.log('\nVerfügbare Modelle:');
   for (const model of CONFIG.supportedModels) {
     const isActive = model.id === activeModel.id;
-    console.log(`${model.emoji} ${model.name}${isActive ? ' (Aktiv)' : ''}`);
+    console.log(`$${model.emoji} ${model.name}${isActive ? ' (Aktiv)' : ''}`);
   }
 
   console.log('\n💡 TIP: Um das Modell zu wechseln, führe aus:');
@@ -227,13 +227,13 @@ function showAIStatus() {
   console.log('Unterstützte Modelle: copilot, chatgpt, claude, gemini, llama');
 
   // Debug-Hinweis
-  if (!DEBUG) {
+  if (!DEBUG) { 
     console.log('\nℹ️ Für detailliertere Informationen: node tools/ai-status.js --debug');
   }
 }
 
 // Verarbeite Befehlszeilenargumente
-if (process.argv.includes('--help') || process.argv.includes('-h')) {
+if (process.argv.includes('--help') || process.argv.includes('-h')) { 
   console.log('AI Status Checker - Zeigt den Status der KI-Integration an');
   console.log('\nOptionen:');
   console.log('  --debug    Zeigt detaillierte Debug-Informationen an');
@@ -245,8 +245,8 @@ if (process.argv.includes('--help') || process.argv.includes('-h')) {
 try {
   showAIStatus();
 } catch (error) {
-  console.error(`❌ Unerwarteter Fehler: ${error.message}`);
-  if (DEBUG) {
+  console.error(`❌ Unerwarteter Fehler: $${error.message}`);
+  if (DEBUG) { 
     console.error(error.stack);
   }
   process.exit(1);

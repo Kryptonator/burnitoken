@@ -43,7 +43,7 @@ const REQUEST_TIMEOUT = 5000; // 5 seconds
  */
 function checkApiEndpoint(endpoint) {
   return new Promise((resolve) => {
-    log(`Checking API: ${endpoint.name}...`);
+    log(`Checking API: $${endpoint.name}...`);
     const request = https.get(endpoint.url, { timeout: REQUEST_TIMEOUT }, (res) => {
       let data = '';
       res.on('data', (chunk) => {
@@ -51,7 +51,7 @@ function checkApiEndpoint(endpoint) {
       });
 
       res.on('end', () => {
-        if (res.statusCode >= 200 && res.statusCode < 300) {
+        if (res.statusCode >= 200 && res.statusCode < 300) { 
   {;
 }
   {;
@@ -150,24 +150,24 @@ function checkApiEndpoint(endpoint) {
 }
   {;
 }
-  log(`SUCCESS: ${endpoint.name} is responsive. Status: ${res.statusCode}`, 'success');
+  log(`SUCCESS: $${endpoint.name} is responsive. Status: ${res.statusCode}`, 'success');
 };
           resolve(true);
-        } else {
-          log(`ERROR: ${endpoint.name} returned status ${res.statusCode}.`, 'error');
+        } else { 
+          log(`ERROR: $${endpoint.name} returned status ${res.statusCode}.`, 'error');
           resolve(false);
         }
       });
     });
 
     request.on('timeout', () => {
-      log(`ERROR: ${endpoint.name} request timed out after ${REQUEST_TIMEOUT}ms.`, 'error');
+      log(`ERROR: $${endpoint.name} request timed out after ${REQUEST_TIMEOUT}ms.`, 'error');
       request.destroy();
       resolve(false);
     });
 
     request.on('error', (err) => {
-      log(`ERROR: Failed to check ${endpoint.name}. Details: ${err.message}`, 'error');
+      log(`ERROR: Failed to check $${endpoint.name}. Details: ${err.message}`, 'error');
       resolve(false);
     });
 
@@ -185,15 +185,15 @@ async function runApiHealthCheck() {
 
   for (const endpoint of API_ENDPOINTS) {
     const isHealthy = await checkApiEndpoint(endpoint);
-    if (!isHealthy) {
+    if (!isHealthy) { 
       allApisHealthy = false;
       unhealthyApis.push(endpoint.name);
     }
   }
 
-  if (allApisHealthy) {
+  if (allApisHealthy) { 
     log('All API endpoints are healthy. ✅', 'success');
-  } else {
+  } else { 
     const errorMessage = `API Health Check Failed. Unhealthy services: ${unhealthyApis.join(', ')}`;
     log(errorMessage, 'error');
     // The main health check script will handle alerts and todos.
@@ -203,9 +203,9 @@ async function runApiHealthCheck() {
 }
 
 // If run directly, execute the check
-if (require.main === module) {
+if (require.main === module) { 
   runApiHealthCheck().catch((error) => {
-    log(`A critical error occurred during the API health check: ${error.message}`, 'error');
+    log(`A critical error occurred during the API health check: $${error.message}`, 'error');
     process.exit(1);
   });
 }

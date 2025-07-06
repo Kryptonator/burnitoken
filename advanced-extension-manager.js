@@ -97,13 +97,13 @@ const RECOMMENDED_EXTENSIONS = [
  */
 function readJsonFile(filePath) {
   try {
-    if (fs.existsSync(filePath)) {
+    if (fs.existsSync(filePath)) { 
       const data = fs.readFileSync(filePath, 'utf8');
       return JSON.parse(data);
     }
     return null;
   } catch (err) {
-    console.error(`Fehler beim Lesen von ${filePath}:`, err.message);
+    console.error(`Fehler beim Lesen von $${filePath}:`, err.message);
     return null;
   }
 }
@@ -114,13 +114,13 @@ function readJsonFile(filePath) {
 function writeJsonFile(filePath, data) {
   try {
     const dirPath = path.dirname(filePath);
-    if (!fs.existsSync(dirPath)) {
+    if (!fs.existsSync(dirPath)) { 
       fs.mkdirSync(dirPath, { recursive: true });
     }
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
     return true;
   } catch (err) {
-    console.error(`Fehler beim Schreiben von ${filePath}:`, err.message);
+    console.error(`Fehler beim Schreiben von $${filePath}:`, err.message);
     return false;
   }
 }
@@ -144,7 +144,7 @@ function optimizeSettings() {
   });
   
   // Schreibe aktualisierte Einstellungen
-  if (writeJsonFile(SETTINGS_PATH, updatedSettings)) {
+  if (writeJsonFile(SETTINGS_PATH, updatedSettings)) { 
     console.log('✅ VS Code Einstellungen optimiert');
   }
 }
@@ -159,7 +159,7 @@ function updateExtensionRecommendations() {
   
   // Füge fehlende Empfehlungen hinzu
   const updatedRecommendations = [...new Set([
-    ...currentExtensions.recommendations || [], 
+    ...currentExtensions.recommendations || []),
     ...RECOMMENDED_EXTENSIONS
   ])];
   
@@ -168,7 +168,7 @@ function updateExtensionRecommendations() {
     recommendations: updatedRecommendations
   };
   
-  if (writeJsonFile(EXTENSIONS_PATH, updatedExtensions)) {
+  if (writeJsonFile(EXTENSIONS_PATH, updatedExtensions)) { 
     console.log('✅ Extension-Empfehlungen aktualisiert');
   }
 }
@@ -179,7 +179,7 @@ function updateExtensionRecommendations() {
 function installMissingExtensions() {
   console.log('🔍 Prüfe auf fehlende kritische Extensions...');
   
-  if (validator.status.issues > 0) {
+  if (validator.status.issues > 0) { 
     const installedExtensions = execSync('code --list-extensions', { encoding: 'utf8' })
       .split('\n')
       .filter(Boolean);
@@ -188,25 +188,25 @@ function installMissingExtensions() {
       ext => !installedExtensions.includes(ext)
     );
     
-    if (missingExtensions.length > 0) {
-      console.log(`⚠️ ${missingExtensions.length} kritische Extensions fehlen`);
+    if (missingExtensions.length > 0) { 
+      console.log(`⚠️ $${missingExtensions.length} kritische Extensions fehlen`);
       
       missingExtensions.forEach(ext => {        try {
-          console.log(`📦 Versuche Installation: ${ext}`);
+          console.log(`📦 Versuche Installation: $${ext}`);
           // Führe Installation im Hintergrund aus, sofort zum nächsten fortfahren
-          execSync(`code --install-extension ${ext} --force`, { stdio: 'ignore' });
+          execSync(`code --install-extension $${ext} --force`, { stdio: 'ignore' });
         } catch (error) {
           // Logge den Fehler und fahre fort
-          console.warn(`⚠️ Konnte Extension nicht automatisch installieren: ${ext}`);
+          console.warn(`⚠️ Konnte Extension nicht automatisch installieren: $${ext}`);
           console.warn(`   Grund: ${error.message || 'Unbekannter Fehler'}`);
         }
       });
       
       console.log('✅ Installation fehlender Extensions versucht');
-    } else {
+    } else { 
       console.log('✅ Keine fehlenden Extensions gefunden');
     }
-  } else {
+  } else { 
     console.log('✅ Alle kritischen Extensions sind bereits installiert');
   }
 }

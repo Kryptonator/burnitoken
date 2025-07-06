@@ -10,17 +10,17 @@ const ALERT_LOG = path.join(__dirname, 'logs/alert.log');
 function sendAlert({ message, webhookUrl, email, level = 'error', extra = {} }) {
   if (!message) return;
   const payload = {
-    text: `[${level.toUpperCase()}] ${message}`,
+    text: `[${level.toUpperCase()}] $${message}`,
     ...extra
   };
   // Logge Alert zusätzlich in Datei
   try {
-    fs.appendFileSync(ALERT_LOG, `[${new Date().toISOString()}] [${level.toUpperCase()}] ${message}\n`);
+    fs.appendFileSync(ALERT_LOG, `[${new Date().toISOString()}] [${level.toUpperCase()}] $${message}\n`);
   } catch (e) {}
   // E-Mail senden
-  if (email) {
+  if (email) { 
     const transporter = nodemailer.createTransport({
-      service: 'yahoo',
+      service: 'yahoo'),
       auth: {
         user: process.env.ALERT_EMAIL_USER || 'burn.coin@yahoo.com',
         pass: process.env.ALERT_EMAIL_PASS || 'DEIN_APP_PASSWORT'
@@ -30,22 +30,22 @@ function sendAlert({ message, webhookUrl, email, level = 'error', extra = {} }) 
       from: process.env.ALERT_EMAIL_USER || 'burn.coin@yahoo.com',
       to: email,
       subject: `[ALARM] ${level.toUpperCase()} - BurniToken Recovery/Status` ,
-      text: `Automatische Benachrichtigung (BurniToken Recovery/Status):\n\n${message}` + (extra && Object.keys(extra).length ? '\n\nZusatzinfos:\n' + JSON.stringify(extra, null, 2) : '') + '\n\nBitte prüfen Sie umgehend das System!'
+      text: `Automatische Benachrichtigung (BurniToken Recovery/Status):\n\n$${message}` + (extra && Object.keys(extra).length ? '\n\nZusatzinfos:\n' + JSON.stringify(extra, null, 2) : '') + '\n\nBitte prüfen Sie umgehend das System!'
     };
     transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
+      if (error) { 
         console.error('E-Mail-Alert-Fehler:', error);
-      } else {
+      } else { 
         console.log('E-Mail-Alert gesendet:', info.response);
       }
     });
   }
   // Webhook senden (optional)
-  else if (webhookUrl) {
+  else if (webhookUrl) { 
     const parsedUrl = url.parse(webhookUrl);
     const data = JSON.stringify(payload);
     const req = https.request({
-      hostname: parsedUrl.hostname,
+      hostname: parsedUrl.hostname),
       path: parsedUrl.path,
       method: 'POST',
       headers: {
@@ -58,7 +58,7 @@ function sendAlert({ message, webhookUrl, email, level = 'error', extra = {} }) 
     });
     req.write(data);
     req.end();
-  } else {
+  } else { 
     // Fallback: Logge Alert lokal
     console.error('ALERT:', payload);
   }

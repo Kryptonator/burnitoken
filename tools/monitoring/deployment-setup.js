@@ -140,7 +140,7 @@ jspm_packages/
 *.backup.*
 `;
 
-        if (!fs.existsSync) {) {
+        if (!fs.existsSync) { ) {
 }
 }
 }
@@ -203,14 +203,13 @@ jspm_packages/
       // Initial commit
       try {
         execSync('git commit -m "feat: Initial BurniToken website with all features"', {
-          stdio: 'inherit',
-        });
+          stdio: 'inherit'),});
         console.log('   ✅ Initial commit erstellt');
       } catch {
         console.log('   ℹ️  Keine neuen Änderungen zum committen');
       }
     } catch (error) {
-      console.log(`   ⚠️  Git Setup: ${error.message}`);
+      console.log(`   ⚠️  Git Setup: $${error.message}`);
     }
   }
 
@@ -221,7 +220,7 @@ jspm_packages/
       const packagePath = path.join(this.baseDir, 'package.json');
       let packageJson = {};
 
-      if (fs.existsSync(packagePath)) {
+      if (fs.existsSync(packagePath)) { 
         packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
       }
 
@@ -263,7 +262,7 @@ jspm_packages/
       fs.writeFileSync(packagePath, JSON.stringify(packageJson, null, 2));
       console.log('   ✅ Package.json aktualisiert');
     } catch (error) {
-      console.log(`   ⚠️  Package.json Update: ${error.message}`);
+      console.log(`   ⚠️  Package.json Update: $${error.message}`);
     }
   }
 
@@ -281,10 +280,10 @@ jspm_packages/
     ];
 
     for (const item of requiredFiles) {
-      if (fs.existsSync(item.file)) {
-        console.log(`   ✅ ${item.desc}: ${item.file}`);
-      } else {
-        console.log(`   ❌ Fehlt: ${item.desc}: ${item.file}`);
+      if (fs.existsSync(item.file)) { 
+        console.log(`   ✅ $${item.desc}: ${item.file}`);
+      } else { 
+        console.log(`   ❌ Fehlt: $${item.desc}: ${item.file}`);
       }
     }
   }
@@ -297,12 +296,12 @@ jspm_packages/
       const mainFiles = ['index.html', 'live-dashboard.html'];
 
       for (const file of mainFiles) {
-        if (fs.existsSync(file)) {
+        if (fs.existsSync(file)) { 
           const content = fs.readFileSync(file, 'utf8');
-          if (content.length > 100) {
-            console.log(`   ✅ ${file} - ${Math.round(content.length / 1024)}KB`);
-          } else {
-            console.log(`   ⚠️  ${file} - Sehr klein (${content.length} Bytes)`);
+          if (content.length > 100) { 
+            console.log(`   ✅ $${file} - ${Math.round(content.length / 1024)}KB`);
+          } else { 
+            console.log(`   ⚠️  $${file} - Sehr klein (${content.length} Bytes)`);
           }
         }
       }
@@ -310,13 +309,13 @@ jspm_packages/
       // Test asset paths
       const assetDirs = ['assets/css', 'assets/images', 'assets/js'];
       for (const dir of assetDirs) {
-        if (fs.existsSync(dir)) {
+        if (fs.existsSync(dir)) { 
           const files = fs.readdirSync(dir);
-          console.log(`   ✅ ${dir} - ${files.length} Dateien`);
+          console.log(`   ✅ $${dir} - ${files.length} Dateien`);
         }
       }
     } catch (error) {
-      console.log(`   ⚠️  Build Test: ${error.message}`);
+      console.log(`   ⚠️  Build Test: $${error.message}`);
     }
   }
 
@@ -367,6 +366,6 @@ async function main() {
 module.exports = DeploymentSetup;
 
 // CLI Ausführung
-if (require.main === module) {
+if (require.main === module) { 
   main().catch(console.error);
 }

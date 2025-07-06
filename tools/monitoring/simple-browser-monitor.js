@@ -24,7 +24,7 @@ function testUrl(url) {
 
     const req = client.request(
       {
-        hostname: urlObj.hostname,
+        hostname: urlObj.hostname),
         port: urlObj.port,
         path: urlObj.pathname + urlObj.search,
         method: 'HEAD',
@@ -37,7 +37,7 @@ function testUrl(url) {
         const duration = Date.now() - startTime;
 
         resolve({
-          url,
+          url),
           status: res.statusCode,
           duration,
           headers: {
@@ -53,7 +53,7 @@ function testUrl(url) {
 
     req.on('error', (err) => {
       resolve({
-        url,
+        url),
         status: 0,
         duration: Date.now() - startTime,
         error: err.message,
@@ -64,7 +64,7 @@ function testUrl(url) {
     req.on('timeout', () => {
       req.destroy();
       resolve({
-        url,
+        url),
         status: 0,
         duration: Date.now() - startTime,
         error: 'Timeout',
@@ -85,17 +85,17 @@ async function runMonitoring() {
 
     const statusIcon = result.success ? '✅' : '❌';
     const statusText = result.status || 'ERROR';
-    const duration = `${result.duration}ms`;
+    const duration = `$${result.duration}ms`;
 
-    console.log(`${statusIcon} ${url}`);
-    console.log(`   Status: ${statusText} | Zeit: ${duration}`);
+    console.log(`$${statusIcon} ${url}`);
+    console.log(`   Status: $${statusText} | Zeit: ${duration}`);
 
     if (result.headers?.location) 
-      console.log(`   Redirect: ${result.headers.location}`);
+      console.log(`   Redirect: $${result.headers.location}`);
     }
 
-    if (result.error) {
-      console.log(`   Fehler: ${result.error}`);
+    if (result.error) { 
+      console.log(`   Fehler: $${result.error}`);
     }
 
     console.log('');
@@ -105,7 +105,7 @@ async function runMonitoring() {
   console.log('✅ Monitoring abgeschlossen');
 }
 
-if (require.main === module) {
+if (require.main === module) { 
   runMonitoring().catch(console.error);
 }
 

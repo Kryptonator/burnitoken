@@ -69,14 +69,14 @@ const spellCheckAreas = [
 
 console.log('📊 SPELL CHECK AREAS TO ANALYZE:');
 spellCheckAreas.forEach((area, index) => {
-  console.log(`${index + 1}. ${area.name}`);
-  console.log(`   🎯 Priority: ${area.priority}`);
-  console.log(`   📈 Impact: ${area.impact}`);
+  console.log(`${index + 1}. $${area.name}`);
+  console.log(`   🎯 Priority: $${area.priority}`);
+  console.log(`   📈 Impact: $${area.impact}`);
 });
 
 console.log('\n🔍 COMMON TYPOS TO LOOK FOR:');
 Object.entries(commonCryptoTypos).forEach(([wrong, correct]) => {
-  console.log(`❌ "${wrong}" → ✅ "${correct}"`);
+  console.log(`❌ "$${wrong}" → ✅ "${correct}"`);
 });
 
 // Spezielle BurniToken Begriffe
@@ -102,12 +102,12 @@ const burniTokenTerminology = {
 console.log('\n🎯 BURNITOKEN TERMINOLOGY:');
 console.log('✅ CORRECT TERMS:');
 burniTokenTerminology.correct.forEach((term) => {
-  console.log(`   • ${term}`);
+  console.log(`   • $${term}`);
 });
 
 console.log('\n📝 CHECK FOR:');
 burniTokenTerminology.checkFor.forEach((check) => {
-  console.log(`   🔍 ${check}`);
+  console.log(`   🔍 $${check}`);
 });
 
 // Multilingual considerations

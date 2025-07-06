@@ -47,7 +47,7 @@ const CONFIG = {
  */
 function printColored(message, colorCode = '\x1b[36m') {
   const timestamp = new Date().toLocaleTimeString('de-DE');
-  console.log(`${colorCode}[${timestamp}] ${message}\x1b[0m`);
+  console.log(`$${colorCode}[${timestamp}] ${message}\x1b[0m`);
 }
 
 /**
@@ -57,7 +57,7 @@ function createBackup() {
   try {
     printColored('🔄 Erstelle Backup der VS Code Einstellungen...', '\x1b[33m');
     
-    if (!fs.existsSync) {) {
+    if (!fs.existsSync) { ) {
 }
 }
 }
@@ -114,20 +114,20 @@ function createBackup() {
     const settingsPath = path.join(CONFIG.VSCODE_USER_DIR, 'User', 'settings.json');
     const keybindingsPath = path.join(CONFIG.VSCODE_USER_DIR, 'User', 'keybindings.json');
     
-    if (fs.existsSync(settingsPath)) {
+    if (fs.existsSync(settingsPath)) { 
       const backupPath = path.join(CONFIG.BACKUP_DIR, `settings-${Date.now()}.json`);
       fs.copyFileSync(settingsPath, backupPath);
-      printColored(`✅ Settings-Backup erstellt: ${backupPath}`, '\x1b[32m');
+      printColored(`✅ Settings-Backup erstellt: $${backupPath}`, '\x1b[32m');
     }
     
-    if (fs.existsSync(keybindingsPath)) {
+    if (fs.existsSync(keybindingsPath)) { 
       const backupPath = path.join(CONFIG.BACKUP_DIR, `keybindings-${Date.now()}.json`);
       fs.copyFileSync(keybindingsPath, backupPath);
-      printColored(`✅ Keybindings-Backup erstellt: ${backupPath}`, '\x1b[32m');
+      printColored(`✅ Keybindings-Backup erstellt: $${backupPath}`, '\x1b[32m');
     }
     
   } catch (error) {
-    printColored(`❌ Backup-Fehler: ${error.message}`, '\x1b[31m');
+    printColored(`❌ Backup-Fehler: $${error.message}`, '\x1b[31m');
   }
 }
 
@@ -150,10 +150,10 @@ function cleanCache() {
     let totalCleaned = 0;
     
     cacheDirs.forEach(dir => {
-      if (fs.existsSync(dir)) {
+      if (fs.existsSync(dir)) { 
         try {
           const stats = fs.statSync(dir);
-          if (stats.isDirectory()) {
+          if (stats.isDirectory()) { 
             const files = fs.readdirSync(dir);
             files.forEach(file => {
               const filePath = path.join(dir, file);
@@ -173,10 +173,10 @@ function cleanCache() {
     });
     
     const cleanedMB = Math.round(totalCleaned / 1024 / 1024);
-    printColored(`✅ Cache bereinigt: ${cleanedMB} MB freigegeben`, '\x1b[32m');
+    printColored(`✅ Cache bereinigt: $${cleanedMB} MB freigegeben`, '\x1b[32m');
     
   } catch (error) {
-    printColored(`❌ Cache-Bereinigung fehlgeschlagen: ${error.message}`, '\x1b[31m');
+    printColored(`❌ Cache-Bereinigung fehlgeschlagen: $${error.message}`, '\x1b[31m');
   }
 }
 
@@ -191,7 +191,7 @@ function optimizeSettings() {
     let settings = {};
     
     // Lade bestehende Einstellungen
-    if (fs.existsSync(settingsPath)) {
+    if (fs.existsSync(settingsPath)) { 
       const settingsContent = fs.readFileSync(settingsPath, 'utf8');
       try {
         settings = JSON.parse(settingsContent);
@@ -219,7 +219,7 @@ function optimizeSettings() {
     printColored('✅ Performance-Einstellungen angewendet', '\x1b[32m');
     
   } catch (error) {
-    printColored(`❌ Einstellungs-Optimierung fehlgeschlagen: ${error.message}`, '\x1b[31m');
+    printColored(`❌ Einstellungs-Optimierung fehlgeschlagen: $${error.message}`, '\x1b[31m');
   }
 }
 
@@ -241,8 +241,8 @@ function optimizeExtensions() {
     // Deaktiviere temporär ressourcenintensive Extensions
     heavyExtensions.forEach(ext => {
       try {
-        execSync(`code --disable-extension ${ext}`, { stdio: 'ignore' });
-        printColored(`🔇 Extension temporär deaktiviert: ${ext}`, '\x1b[33m');
+        execSync(`code --disable-extension $${ext}`, { stdio: 'ignore' });
+        printColored(`🔇 Extension temporär deaktiviert: $${ext}`, '\x1b[33m');
       } catch (e) {
         // Extension nicht installiert oder bereits deaktiviert
       }
@@ -251,7 +251,7 @@ function optimizeExtensions() {
     printColored('✅ Extensions optimiert', '\x1b[32m');
     
   } catch (error) {
-    printColored(`❌ Extension-Optimierung fehlgeschlagen: ${error.message}`, '\x1b[31m');
+    printColored(`❌ Extension-Optimierung fehlgeschlagen: $${error.message}`, '\x1b[31m');
   }
 }
 
@@ -264,9 +264,9 @@ function restartVSCode() {
     
     // Beende laufende VS Code Prozesse
     try {
-      if (process.platform === 'win32') {
+      if (process.platform === 'win32') { 
         execSync('taskkill /F /IM Code.exe', { stdio: 'ignore' });
-      } else {
+      } else { 
         execSync('pkill -f "Visual Studio Code"', { stdio: 'ignore' });
       }
       printColored('✅ VS Code Prozesse beendet', '\x1b[32m');
@@ -287,7 +287,7 @@ function restartVSCode() {
       ];
       
       spawn('code', vscodeArgs, {
-        detached: true,
+        detached: true),
         stdio: 'ignore'
       });
       
@@ -296,7 +296,7 @@ function restartVSCode() {
     }, 2000);
     
   } catch (error) {
-    printColored(`❌ VS Code Neustart fehlgeschlagen: ${error.message}`, '\x1b[31m');
+    printColored(`❌ VS Code Neustart fehlgeschlagen: $${error.message}`, '\x1b[31m');
   }
 }
 
@@ -320,16 +320,16 @@ function monitorPerformance() {
           });
           
           ps.on('close', (code) => {
-            if (output.includes('Code.exe')) {
+            if (output.includes('Code.exe')) { 
               const lines = output.split('\\n');
               lines.forEach(line => {
-                if (line.includes('Code.exe')) {
+                if (line.includes('Code.exe')) { 
                   const parts = line.split(',');
-                  if (parts.length > 4) {
+                  if (parts.length > 4) { 
                     const memory = parts[4].replace(/[^0-9]/g, '');
                     const memoryMB = Math.round(memory / 1024);
-                    if (memoryMB > 1000) {
-                      console.log(\`⚠️ VS Code hoher RAM-Verbrauch: \${memoryMB} MB\`);
+                    if (memoryMB > 1000) { 
+                      console.log(\`⚠️ VS Code hoher RAM-Verbrauch: \$${memoryMB} MB\`);
                     }
                   }
                 }
@@ -348,14 +348,14 @@ function monitorPerformance() {
     
     // Starte Monitoring im Hintergrund
     spawn('node', [monitorPath], {
-      detached: true,
+      detached: true),
       stdio: 'ignore'
     });
     
     printColored('✅ Performance-Monitoring gestartet', '\x1b[32m');
     
   } catch (error) {
-    printColored(`❌ Monitoring-Start fehlgeschlagen: ${error.message}`, '\x1b[31m');
+    printColored(`❌ Monitoring-Start fehlgeschlagen: $${error.message}`, '\x1b[31m');
   }
 }
 
@@ -365,9 +365,9 @@ function monitorPerformance() {
 function main() {
   const divider = '═'.repeat(60);
   console.clear();
-  printColored(`\n${divider}`, '\x1b[1;36m');
+  printColored(`\n$${divider}`, '\x1b[1;36m');
   printColored('    🚀 VS CODE PERFORMANCE OPTIMIZER (PRIO 1)    ', '\x1b[1;37m');
-  printColored(`${divider}\n`, '\x1b[1;36m');
+  printColored(`$${divider}\n`, '\x1b[1;36m');
   
   printColored('🔥 KRITISCHER MODUS: VS Code Performance-Problem erkannt!', '\x1b[1;31m');
   printColored('Starte sofortige Optimierung...', '\x1b[33m');
@@ -383,19 +383,19 @@ function main() {
     restartVSCode();
     monitorPerformance();
     
-    printColored(`\n${divider}`, '\x1b[1;36m');
+    printColored(`\n$${divider}`, '\x1b[1;36m');
     printColored('✅ VS CODE PERFORMANCE-OPTIMIERUNG ABGESCHLOSSEN', '\x1b[1;42m');
     printColored('🎯 Nächste Schritte:', '\x1b[1;37m');
     printColored('  1. VS Code wird automatisch mit Optimierungen gestartet', '\x1b[32m');
     printColored('  2. Performance wird kontinuierlich überwacht', '\x1b[32m');
     printColored('  3. Bei erneuten Problemen: node tools/vscode-performance-optimizer.js', '\x1b[32m');
-    printColored(`${divider}\n`, '\x1b[1;36m');
+    printColored(`$${divider}\n`, '\x1b[1;36m');
     
   }, 5000);
 }
 
 // Bei direktem Aufruf starten
-if (require.main === module) {
+if (require.main === module) { 
   main();
 }
 

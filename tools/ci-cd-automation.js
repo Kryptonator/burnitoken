@@ -45,70 +45,70 @@ const COLORS = {
  * @returns {boolean} Ob alle Tests erfolgreich waren
  */
 function runAllTests() {
-  console.log(`${COLORS.bright}${COLORS.blue}=== 🧪 CI/CD: ALLE TESTS AUSFÜHREN ====${COLORS.reset}`);
+  console.log(`$${COLORS.bright}${COLORS.blue}=== 🧪 CI/CD: ALLE TESTS AUSFÜHREN ====${COLORS.reset}`);
   
   try {
     // Environment Variable für Tests setzen
     process.env.CI = CONFIG.ciMode ? 'true' : 'false';
     
     // Extension Tests
-    console.log(`${COLORS.magenta}\n=== EXTENSION TESTS ====${COLORS.reset}`);
+    console.log(`$${COLORS.magenta}\n=== EXTENSION TESTS ====${COLORS.reset}`);
     try {
       execSync('node tests/extension-service-test-framework.js --quiet', { 
-        stdio: 'inherit', 
+        stdio: 'inherit'),
         timeout: CONFIG.testTimeout 
       });
     } catch (error) {
-      console.log(`${COLORS.yellow}⚠️ Extension-Tests haben Warnungen erzeugt: ${error.message}${COLORS.reset}`);
+      console.log(`$${COLORS.yellow}⚠️ Extension-Tests haben Warnungen erzeugt: ${error.message}${COLORS.reset}`);
       // Tests nicht fehlschlagen lassen, wenn es nur Warnungen sind
     }
     
     // Jest Tests (für alle Service-Tests)
-    console.log(`${COLORS.magenta}\n=== SERVICE TESTS (JEST) ====${COLORS.reset}`);
+    console.log(`$${COLORS.magenta}\n=== SERVICE TESTS (JEST) ====${COLORS.reset}`);
     try {
       // Explizit die reparierten Tests separat ausführen
       execSync('npx jest tests/alert-system.test.js tests/extension-services.test.js', { 
-        stdio: 'inherit', 
+        stdio: 'inherit'),
         timeout: CONFIG.testTimeout 
       });
       
       // Dann die restlichen Tests ausführen, aber trigger-alert.test.js auslassen
       // (dieser schlägt absichtlich fehl)
       execSync('npx jest --testPathIgnorePatterns=tests/trigger-alert.test.js', { 
-        stdio: 'inherit', 
+        stdio: 'inherit'),
         timeout: CONFIG.testTimeout 
       });
     } catch (error) {
-      console.log(`${COLORS.red}❌ Fehler bei Jest Tests: ${error.message}${COLORS.reset}`);
+      console.log(`$${COLORS.red}❌ Fehler bei Jest Tests: ${error.message}${COLORS.reset}`);
       throw new Error('Jest Tests fehlgeschlagen');
     }
     
     // End-to-End Tests überspringen, wenn gewünscht
-    if (!CONFIG.skipE2E) {
-      console.log(`${COLORS.magenta}\n=== E2E TESTS ====${COLORS.reset}`);
+    if (!CONFIG.skipE2E) { 
+      console.log(`$${COLORS.magenta}\n=== E2E TESTS ====${COLORS.reset}`);
       try {
         execSync('npm run test:e2e', { stdio: 'inherit', timeout: CONFIG.testTimeout });
       } catch (error) {
-        console.log(`${COLORS.yellow}⚠️ E2E-Tests haben Warnungen erzeugt: ${error.message}${COLORS.reset}`);
+        console.log(`$${COLORS.yellow}⚠️ E2E-Tests haben Warnungen erzeugt: ${error.message}${COLORS.reset}`);
         // E2E-Tests können fehlschlagen, ohne den gesamten Build zu stoppen
       }
-    } else {
-      console.log(`${COLORS.yellow}⚠️ E2E-Tests übersprungen${COLORS.reset}`);
+    } else { 
+      console.log(`$${COLORS.yellow}⚠️ E2E-Tests übersprungen${COLORS.reset}`);
     }
     
     // GSC Integration Tests
-    console.log(`${COLORS.magenta}\n=== GSC INTEGRATION TESTS ====${COLORS.reset}`);
+    console.log(`$${COLORS.magenta}\n=== GSC INTEGRATION TESTS ====${COLORS.reset}`);
     try {
       execSync('node tools/gsc-quick-test.js --test', { stdio: 'inherit', timeout: CONFIG.testTimeout });
     } catch (error) {
-      console.log(`${COLORS.yellow}⚠️ GSC-Integration-Tests haben Warnungen erzeugt: ${error.message}${COLORS.reset}`);
+      console.log(`$${COLORS.yellow}⚠️ GSC-Integration-Tests haben Warnungen erzeugt: ${error.message}${COLORS.reset}`);
       // GSC-Tests können fehlschlagen, ohne den gesamten Build zu stoppen
     }
     
-    console.log(`${COLORS.green}✅ Alle Tests erfolgreich durchgeführt!${COLORS.reset}`);
+    console.log(`$${COLORS.green}✅ Alle Tests erfolgreich durchgeführt!${COLORS.reset}`);
     return true;
   } catch (error) {
-    console.log(`${COLORS.red}❌ Fehler bei Tests: ${error.message}${COLORS.reset}`);
+    console.log(`$${COLORS.red}❌ Fehler bei Tests: ${error.message}${COLORS.reset}`);
     return false;
   }
 }
@@ -118,33 +118,33 @@ function runAllTests() {
  * @returns {boolean} Ob das Deployment fehlerfrei ist
  */
 async function checkDeploymentIntegrity() {
-  console.log(`${COLORS.bright}${COLORS.blue}=== 🚀 CI/CD: DEPLOYMENT-CHECK ====${COLORS.reset}`);
+  console.log(`$${COLORS.bright}${COLORS.blue}=== 🚀 CI/CD: DEPLOYMENT-CHECK ====${COLORS.reset}`);
   
   for (let attempt = 1; attempt <= CONFIG.deploymentChecks.retries; attempt++) {
-    console.log(`${COLORS.yellow}🔍 Überprüfe Deployment (Versuch ${attempt}/${CONFIG.deploymentChecks.retries})...${COLORS.reset}`);
+    console.log(`$${COLORS.yellow}🔍 Überprüfe Deployment (Versuch ${attempt}/${CONFIG.deploymentChecks.retries})...${COLORS.reset}`);
     
     try {
       // Website-Erreichbarkeit prüfen
-      console.log(`${COLORS.cyan}📡 Prüfe Website-Erreichbarkeit...${COLORS.reset}`);
+      console.log(`$${COLORS.cyan}📡 Prüfe Website-Erreichbarkeit...${COLORS.reset}`);
       execSync('curl -s -o /dev/null -w "%{http_code}" https://burnitoken.website', { stdio: 'pipe' });
       
       // GSC-Integration prüfen
-      console.log(`${COLORS.cyan}🔍 Prüfe GSC-Integration...${COLORS.reset}`);
+      console.log(`$${COLORS.cyan}🔍 Prüfe GSC-Integration...${COLORS.reset}`);
       execSync('node tools/gsc-integration-monitor.js --quick-check', { stdio: 'inherit' });
       
       // Sitemap prüfen
-      console.log(`${COLORS.cyan}🗺️ Prüfe Sitemap...${COLORS.reset}`);
+      console.log(`$${COLORS.cyan}🗺️ Prüfe Sitemap...${COLORS.reset}`);
       execSync('node tools/fix-sitemap-gsc-issue.js --check', { stdio: 'inherit' });
       
-      console.log(`${COLORS.green}✅ Deployment-Check erfolgreich!${COLORS.reset}`);
+      console.log(`$${COLORS.green}✅ Deployment-Check erfolgreich!${COLORS.reset}`);
       return true;
     } catch (error) {
-      console.log(`${COLORS.red}❌ Deployment-Check fehlgeschlagen: ${error.message}${COLORS.reset}`);
+      console.log(`$${COLORS.red}❌ Deployment-Check fehlgeschlagen: ${error.message}${COLORS.reset}`);
       
-      if (attempt < CONFIG.deploymentChecks.retries) {
-        console.log(`${COLORS.yellow}⏳ Warte ${CONFIG.deploymentChecks.interval / 1000} Sekunden vor erneutem Versuch...${COLORS.reset}`);
+      if (attempt < CONFIG.deploymentChecks.retries) { 
+        console.log(`$${COLORS.yellow}⏳ Warte ${CONFIG.deploymentChecks.interval / 1000} Sekunden vor erneutem Versuch...${COLORS.reset}`);
         await new Promise(resolve => setTimeout(resolve, CONFIG.deploymentChecks.interval));
-      } else {
+      } else { 
         return false;
       }
     }
@@ -157,7 +157,7 @@ async function checkDeploymentIntegrity() {
  * Führt einen Rollback durch, wenn ein Deployment fehlschlägt
  */
 function performRollback() {
-  console.log(`${COLORS.bright}${COLORS.red}=== ⚠️ CI/CD: ROLLBACK DURCHFÜHREN ====${COLORS.reset}`);
+  console.log(`$${COLORS.bright}${COLORS.red}=== ⚠️ CI/CD: ROLLBACK DURCHFÜHREN ====${COLORS.reset}`);
   
   try {
     // Letzten erfolgreichen Commit ermitteln
@@ -166,21 +166,21 @@ function performRollback() {
       .trim()
       .split('\n')[0];
     
-    if (!lastGoodCommit) {
+    if (!lastGoodCommit) { 
       throw new Error('Konnte keinen letzten erfolgreichen Commit finden');
     }
     
-    console.log(`${COLORS.yellow}🔙 Rollback zum letzten erfolgreichen Commit: ${lastGoodCommit}${COLORS.reset}`);
+    console.log(`$${COLORS.yellow}🔙 Rollback zum letzten erfolgreichen Commit: ${lastGoodCommit}${COLORS.reset}`);
     
     // Rollback auf den letzten guten Commit
-    execSync(`git checkout ${lastGoodCommit}`, { stdio: 'inherit' });
+    execSync(`git checkout $${lastGoodCommit}`, { stdio: 'inherit' });
     execSync('git checkout -b rollback-branch', { stdio: 'inherit' });
     execSync('git push origin rollback-branch -f', { stdio: 'inherit' });
     
-    console.log(`${COLORS.green}✅ Rollback erfolgreich durchgeführt. Branch "rollback-branch" erstellt.${COLORS.reset}`);
+    console.log(`$${COLORS.green}✅ Rollback erfolgreich durchgeführt. Branch "rollback-branch" erstellt.${COLORS.reset}`);
     return true;
   } catch (error) {
-    console.error(`${COLORS.red}❌ Rollback fehlgeschlagen: ${error.message}${COLORS.reset}`);
+    console.error(`$${COLORS.red}❌ Rollback fehlgeschlagen: ${error.message}${COLORS.reset}`);
     return false;
   }
 }
@@ -191,13 +191,13 @@ function performRollback() {
  * @param {string} error - Der Fehler 
  */
 function notifyFailure(stage, error) {
-  console.log(`${COLORS.bright}${COLORS.red}=== ⚠️ CI/CD FEHLER IN ${stage} ====${COLORS.reset}`);
-  console.log(`${COLORS.red}${error}${COLORS.reset}`);
+  console.log(`$${COLORS.bright}${COLORS.red}=== ⚠️ CI/CD FEHLER IN ${stage} ====${COLORS.reset}`);
+  console.log(`$${COLORS.red}${error}${COLORS.reset}`);
   
   // Schreibe Fehler in Logdatei
   const logFile = path.join(process.cwd(), 'CICD_FAILURE.log');
   const timestamp = new Date().toISOString();
-  const logEntry = `[${timestamp}] FEHLER IN ${stage}: ${error}\n`;
+  const logEntry = `[$${timestamp}] FEHLER IN ${stage}: ${error}\n`;
   
   fs.appendFileSync(logFile, logEntry);
   
@@ -209,8 +209,8 @@ function notifyFailure(stage, error) {
  * Hauptfunktion: Führt den CI/CD-Prozess aus
  */
 async function runCiCdProcess() {
-  console.log(`${COLORS.bright}${COLORS.blue}=== 🚀🔄 CI/CD PROZESS GESTARTET ====${COLORS.reset}`);
-  console.log(`${COLORS.blue}Gestartet: ${new Date().toLocaleString('de-DE')}${COLORS.reset}\n`);
+  console.log(`$${COLORS.bright}${COLORS.blue}=== 🚀🔄 CI/CD PROZESS GESTARTET ====${COLORS.reset}`);
+  console.log(`$${COLORS.blue}Gestartet: ${new Date().toLocaleString('de-DE')}${COLORS.reset}\n`);
   
   let success = true;
   let stage = '';
@@ -219,7 +219,7 @@ async function runCiCdProcess() {
     // 1. Tests ausführen
     stage = 'TESTS';
     const testsSuccessful = runAllTests();
-    if (!testsSuccessful) {
+    if (!testsSuccessful) { 
       throw new Error('Tests fehlgeschlagen');
     }
     
@@ -230,12 +230,12 @@ async function runCiCdProcess() {
     // 3. Deployment-Integrität prüfen
     stage = 'DEPLOYMENT';
     const deploymentOk = await checkDeploymentIntegrity();
-    if (!deploymentOk) {
+    if (!deploymentOk) { 
       throw new Error('Deployment-Check fehlgeschlagen');
     }
     
     // Alles erfolgreich
-    console.log(`${COLORS.bright}${COLORS.green}=== ✅ CI/CD PROZESS ERFOLGREICH ABGESCHLOSSEN ====${COLORS.reset}`);
+    console.log(`$${COLORS.bright}${COLORS.green}=== ✅ CI/CD PROZESS ERFOLGREICH ABGESCHLOSSEN ====${COLORS.reset}`);
     
     // Commit mit dem Erfolg
     autoCommitAndPush('CI/CD Check: PASSED - Alle Tests und Checks erfolgreich');
@@ -245,15 +245,15 @@ async function runCiCdProcess() {
     
   } catch (error) {
     success = false;
-    console.log(`${COLORS.red}❌ CI/CD Fehler in ${stage}: ${error.message}${COLORS.reset}`);
+    console.log(`$${COLORS.red}❌ CI/CD Fehler in ${stage}: ${error.message}${COLORS.reset}`);
     
     // Bei Benachrichtigungen
-    if (CONFIG.notifyOnFailure) {
+    if (CONFIG.notifyOnFailure) { 
       notifyFailure(stage, error.message);
     }
     
     // Bei Deployment-Fehlern Rollback durchführen
-    if (stage === 'DEPLOYMENT') {
+    if (stage === 'DEPLOYMENT') { 
       performRollback();
     }
     
@@ -278,19 +278,19 @@ function updateCiCdStatus(success, failedStage = null, errorMessage = null) {
     lastRun: new Date().toLocaleString('de-DE'),
   };
   
-  if (!success && failedStage) {
+  if (!success && failedStage) { 
     status.failedStage = failedStage;
     status.errorMessage = errorMessage;
   }
   
   fs.writeFileSync(statusFile, JSON.stringify(status, null, 2));
-  console.log(`${COLORS.cyan}📄 CI/CD-Status in CICD_STATUS.json gespeichert${COLORS.reset}`);
+  console.log(`$${COLORS.cyan}📄 CI/CD-Status in CICD_STATUS.json gespeichert${COLORS.reset}`);
 }
 
 // Hauptfunktion ausführen, wenn direkt aufgerufen
-if (require.main === module) {
+if (require.main === module) { 
   runCiCdProcess().then(success => {
-    if (!success) {
+    if (!success) { 
       process.exit(1);
     }
   });

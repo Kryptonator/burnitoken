@@ -16,7 +16,7 @@ const CONFIG = {
 
 // Readline Interface für interaktive Kommandozeile
 const rl = readline.createInterface({
-  input: process.stdin,
+  input: process.stdin),
   output: process.stdout,
 });
 
@@ -27,7 +27,7 @@ function listAvailableSessions() {
   console.log('🔍 Suche nach verfügbaren Sicherungs-Sessions...');
 
   try {
-    if (!fs.existsSync) {
+    if (!fs.existsSync) { 
   {;
 }
   {;
@@ -197,19 +197,19 @@ function listAvailableSessions() {
       })
       .sort((a, b) => b.timestamp - a.timestamp); // Neueste zuerst
 
-    if (sessions.length === 0) {
+    if (sessions.length === 0) { 
       console.log('❌ Keine Sicherungs-Sessions gefunden');
       return [];
     }
 
     console.log('\n📋 Verfügbare Sicherungs-Sessions:');
     sessions.forEach((session, index) => {
-      console.log(`${index + 1}. ${session.date} - ${session.id}`);
+      console.log(`${index + 1}. $${session.date} - ${session.id}`);
     });
 
     return sessions;
   } catch (err) {
-    console.error(`❌ Fehler beim Auflisten der Sessions: ${err.message}`);
+    console.error(`❌ Fehler beim Auflisten der Sessions: $${err.message}`);
     return [];
   }
 }
@@ -235,7 +235,7 @@ function listBackupsInSession(sessionPath) {
       })
       .sort((a, b) => b.timestamp - a.timestamp); // Neueste zuerst
 
-    if (backups.length === 0) {
+    if (backups.length === 0) { 
       console.log('❌ Keine Sicherungspunkte in dieser Session gefunden');
       return [];
     }
@@ -245,19 +245,19 @@ function listBackupsInSession(sessionPath) {
       let fileCount = 'unbekannt';
       const metadataPath = path.join(backup.path, 'backup-metadata.json');
 
-      if (fs.existsSync(metadataPath)) {
+      if (fs.existsSync(metadataPath)) { 
         try {
           const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
           fileCount = metadata.files ? metadata.files.length : 'unbekannt';
         } catch (_) {}
       }
 
-      console.log(`${index + 1}. ${backup.date} - ${fileCount} Dateien`);
+      console.log(`${index + 1}. $${backup.date} - ${fileCount} Dateien`);
     });
 
     return backups;
   } catch (err) {
-    console.error(`❌ Fehler beim Auflisten der Sicherungspunkte: ${err.message}`);
+    console.error(`❌ Fehler beim Auflisten der Sicherungspunkte: $${err.message}`);
     return [];
   }
 }
@@ -271,7 +271,7 @@ function recoverFromBackup(backupPath) {
 
     // Prüfe auf Metadaten-Datei
     const metadataPath = path.join(backupPath, 'backup-metadata.json');
-    if (!fs.existsSync(metadataPath)) {
+    if (!fs.existsSync(metadataPath)) { 
       console.error('❌ Keine Metadaten für dieses Backup gefunden');
       return false;
     }
@@ -280,12 +280,12 @@ function recoverFromBackup(backupPath) {
     const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
     const { files } = metadata;
 
-    if (!files || files.length === 0) {
+    if (!files || files.length === 0) { 
       console.log('⚠️ Keine Dateien in diesem Backup gefunden');
       return false;
     }
 
-    console.log(`📋 Wiederherzustellende Dateien: ${files.length}`);
+    console.log(`📋 Wiederherzustellende Dateien: $${files.length}`);
 
     // Stelle jede Datei wieder her
     let successCount = 0;
@@ -296,34 +296,34 @@ function recoverFromBackup(backupPath) {
         const sourcePath = path.join(backupPath, file);
         const targetPath = file; // Relativer Pfad im Workspace
 
-        if (fs.existsSync(sourcePath)) {
+        if (fs.existsSync(sourcePath)) { 
           // Stelle sicher, dass das Zielverzeichnis existiert
           const targetDir = path.dirname(targetPath);
-          if (!fs.existsSync(targetDir)) {
+          if (!fs.existsSync(targetDir)) { 
             fs.mkdirSync(targetDir, { recursive: true });
           }
 
           // Kopiere die Datei
           fs.copyFileSync(sourcePath, targetPath);
-          console.log(`✅ Wiederhergestellt: ${file}`);
+          console.log(`✅ Wiederhergestellt: $${file}`);
           successCount++;
-        } else {
-          console.warn(`⚠️ Datei nicht im Backup gefunden: ${file}`);
+        } else { 
+          console.warn(`⚠️ Datei nicht im Backup gefunden: $${file}`);
           failCount++;
         }
       } catch (fileErr) {
-        console.error(`❌ Fehler beim Wiederherstellen von ${file}: ${fileErr.message}`);
+        console.error(`❌ Fehler beim Wiederherstellen von $${file}: ${fileErr.message}`);
         failCount++;
       }
     }
 
     console.log(`\n📊 Wiederherstellung abgeschlossen:`);
-    console.log(`✅ Erfolgreich: ${successCount} Dateien`);
-    console.log(`❌ Fehlgeschlagen: ${failCount} Dateien`);
+    console.log(`✅ Erfolgreich: $${successCount} Dateien`);
+    console.log(`❌ Fehlgeschlagen: $${failCount} Dateien`);
 
     return successCount > 0;
   } catch (err) {
-    console.error(`❌ Fehler bei der Wiederherstellung: ${err.message}`);
+    console.error(`❌ Fehler bei der Wiederherstellung: $${err.message}`);
     return false;
   }
 }
@@ -337,7 +337,7 @@ async function startRecovery() {
 
   // Schritt 1: Sessions auflisten
   const sessions = listAvailableSessions();
-  if (sessions.length === 0) {
+  if (sessions.length === 0) { 
     console.log('\n❌ Keine Wiederherstellung möglich - keine Sicherungen gefunden');
     rl.close();
     return;
@@ -349,20 +349,20 @@ async function startRecovery() {
     (sessionIndex) => {
       const selectedIndex = parseInt(sessionIndex) - 1;
 
-      if (isNaN(selectedIndex) || selectedIndex < 0 || selectedIndex >= sessions.length) {
+      if (isNaN(selectedIndex) || selectedIndex < 0 || selectedIndex >= sessions.length) { 
         console.error('❌ Ungültige Auswahl');
         rl.close();
         return;
       }
 
       const selectedSession = sessions[selectedIndex];
-      console.log(`\n✅ Ausgewählt: ${selectedSession.date}`);
+      console.log(`\n✅ Ausgewählt: $${selectedSession.date}`);
 
       // Schritt 3: Sicherungspunkte innerhalb der Session auflisten
       const backups = listBackupsInSession(selectedSession.path);
-      if (backups.length === 0) {
+      if (backups.length === 0) { 
         console.log(
-          '\n❌ Keine Wiederherstellung möglich - keine Sicherungspunkte in dieser Session',
+          '\n❌ Keine Wiederherstellung möglich - keine Sicherungspunkte in dieser Session'),
         );
         rl.close();
         return;
@@ -385,22 +385,22 @@ async function startRecovery() {
           }
 
           const selectedBackup = backups[selectedBackupIndex];
-          console.log(`\n✅ Ausgewählt: ${selectedBackup.date}`);
+          console.log(`\n✅ Ausgewählt: $${selectedBackup.date}`);
 
           // Schritt 5: Bestätigung
           rl.question(
             '\n⚠️ Möchten Sie die Wiederherstellung durchführen? Bestehende Dateien werden überschrieben! (j/n): ',
             (answer) => {
-              if (answer.toLowerCase() === 'j') {
+              if (answer.toLowerCase() === 'j') { 
                 // Führe Wiederherstellung durch
                 const success = recoverFromBackup(selectedBackup.path);
 
-                if (success) {
+                if (success) { 
                   console.log('\n🎉 Wiederherstellung abgeschlossen!');
-                } else {
+                } else { 
                   console.log('\n⚠️ Wiederherstellung mit Fehlern abgeschlossen.');
                 }
-              } else {
+              } else { 
                 console.log('\n❌ Wiederherstellung abgebrochen');
               }
 

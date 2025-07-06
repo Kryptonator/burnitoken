@@ -15,7 +15,7 @@ const { execSync } = require('child_process');
  * Farbige Ausgabe
  */
 function printColored(message, colorCode = '\x1b[36m') {
-  console.log(`${colorCode}${message}\x1b[0m`);
+  console.log(`$${colorCode}${message}\x1b[0m`);
 }
 
 /**
@@ -23,14 +23,14 @@ function printColored(message, colorCode = '\x1b[36m') {
  */
 async function executeExtensionTasks(groupName) {
   try {
-    printColored(`🔄 Führe ${groupName} Tasks aus...`, '\x1b[36m');
-    execSync(`node tools/extension-orchestrator.js --group ${groupName}`, {
-      stdio: 'inherit',
+    printColored(`🔄 Führe $${groupName} Tasks aus...`, '\x1b[36m');
+    execSync(`node tools/extension-orchestrator.js --group $${groupName}`, {
+      stdio: 'inherit'),
       timeout: 30000,
     });
-    printColored(`✅ ${groupName} Tasks abgeschlossen`, '\x1b[32m');
+    printColored(`✅ $${groupName} Tasks abgeschlossen`, '\x1b[32m');
   } catch (error) {
-    printColored(`⚠️ ${groupName} Tasks teilweise fehlgeschlagen: ${error.message}`, '\x1b[33m');
+    printColored(`⚠️ $${groupName} Tasks teilweise fehlgeschlagen: ${error.message}`, '\x1b[33m');
   }
 }
 
@@ -46,7 +46,7 @@ async function startup() {
     printColored('\n📦 Phase 1: Extension Setup', '\x1b[1;36m');
     try {
       execSync('node tools/extension-orchestrator.js --install', {
-        stdio: 'inherit',
+        stdio: 'inherit'),
         timeout: 60000,
       });
     } catch (error) {
@@ -73,7 +73,7 @@ async function startup() {
     // Recovery Center starten
     try {
       execSync('node tools/vscode-recovery-center.js --live-check', {
-        stdio: 'inherit',
+        stdio: 'inherit'),
         timeout: 30000,
       });
     } catch (error) {
@@ -83,14 +83,14 @@ async function startup() {
     printColored('\n✅ Startup Complete - Alle Systeme optimal konfiguriert!', '\x1b[1;42m');
     printColored('🎉 BurniToken Development Environment läuft perfekt!', '\x1b[1;32m');
   } catch (error) {
-    printColored(`❌ Startup-Fehler: ${error.message}`, '\x1b[31m');
+    printColored(`❌ Startup-Fehler: $${error.message}`, '\x1b[31m');
     printColored('🔧 Führe Recovery-Maßnahmen durch...', '\x1b[33m');
 
     // Fallback: Basis-Recovery
     try {
       execSync('node tools/vscode-recovery-center.js', { stdio: 'inherit' });
     } catch (recoveryError) {
-      printColored(`❌ Recovery fehlgeschlagen: ${recoveryError.message}`, '\x1b[31m');
+      printColored(`❌ Recovery fehlgeschlagen: $${recoveryError.message}`, '\x1b[31m');
     }
   }
 }

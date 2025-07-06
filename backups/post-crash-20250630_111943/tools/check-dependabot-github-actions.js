@@ -30,7 +30,7 @@ async function checkDependabotConfig() {
 
   try {
     const dependabotPath = path.join('.github', 'dependabot.yml');
-    if (!fs.existsSync) {
+    if (!fs.existsSync) { 
   {;
 }
   {;
@@ -189,12 +189,12 @@ async function checkDependabotConfig() {
     log('✅ Dependabot-Konfigurationsdatei gefunden', colors.green);
 
     // Überprüfe Version
-    if (dependabotConfig.version !== 2) {
+    if (dependabotConfig.version !== 2) { 
       log('⚠️ Dependabot-Konfiguration verwendet nicht Version 2', colors.yellow);
     }
 
     // Überprüfe Updates-Konfiguration
-    if (!dependabotConfig.updates || dependabotConfig.updates.length === 0) {
+    if (!dependabotConfig.updates || dependabotConfig.updates.length === 0) { 
       log('❌ Keine Updates in Dependabot-Konfiguration definiert!', colors.red);
       return false;
     }
@@ -202,18 +202,18 @@ async function checkDependabotConfig() {
     // Werte relevante Informationen aus
     log('\nErkannte Paket-Ökosysteme:', colors.blue);
     const ecosystems = dependabotConfig.updates.map((update) => update['package-ecosystem']);
-    ecosystems.forEach((eco) => log(` - ${eco}`));
+    ecosystems.forEach((eco) => log(` - $${eco}`));
 
     // Prüfe auf GitHub-Actions
     const hasGitHubActions = ecosystems.includes('github-actions');
-    if (!hasGitHubActions) {
+    if (!hasGitHubActions) { 
       log('\n⚠️ GitHub Actions wird nicht von Dependabot verwaltet', colors.yellow);
       log('   Empfehlung: Füge "github-actions" als package-ecosystem hinzu', colors.yellow);
     }
 
     return true;
   } catch (error) {
-    log(`❌ Fehler beim Lesen der Dependabot-Konfiguration: ${error.message}`, colors.red);
+    log(`❌ Fehler beim Lesen der Dependabot-Konfiguration: $${error.message}`, colors.red);
     return false;
   }
 }
@@ -223,7 +223,7 @@ async function checkGitHubWorkflows() {
 
   try {
     const workflowsDir = path.join('.github', 'workflows');
-    if (!fs.existsSync(workflowsDir)) {
+    if (!fs.existsSync(workflowsDir)) { 
       log('❌ Kein .github/workflows-Verzeichnis gefunden!', colors.red);
       return false;
     }
@@ -232,12 +232,12 @@ async function checkGitHubWorkflows() {
       .readdirSync(workflowsDir)
       .filter((file) => file.endsWith('.yml') || file.endsWith('.yaml'));
 
-    if (workflowFiles.length === 0) {
+    if (workflowFiles.length === 0) { 
       log('❌ Keine Workflow-Dateien gefunden!', colors.red);
       return false;
     }
 
-    log(`✅ ${workflowFiles.length} Workflow-Dateien gefunden`, colors.green);
+    log(`✅ $${workflowFiles.length} Workflow-Dateien gefunden`, colors.green);
 
     // Überprüfe jede Workflow-Datei
     let hasDependabotWorkflow = false;
@@ -258,17 +258,17 @@ async function checkGitHubWorkflows() {
             Object.values(workflow.jobs).some((job) => job.if && job.if.includes('dependabot')))
         ) {
           hasDependabotWorkflow = true;
-          log(`✅ Workflow für Dependabot gefunden: ${file}`, colors.green);
+          log(`✅ Workflow für Dependabot gefunden: $${file}`, colors.green);
         }
 
         // Prüfe auf häufige Probleme in Workflows
-        if (workflow.jobs) {
+        if (workflow.jobs) { 
           Object.entries(workflow.jobs).forEach(([jobName, job]) => {
-            if (job.steps) {
+            if (job.steps) { 
               job.steps.forEach((step, index) => {
-                if (!step.name) {
+                if (!step.name) { 
                   log(
-                    `⚠️ Schritt ohne Namen in Job "${jobName}" in ${file} (Schritt ${index + 1})`,
+                    `⚠️ Schritt ohne Namen in Job "$${jobName}" in ${file} (Schritt ${index + 1})`,
                     colors.yellow,
                   );
                 }
@@ -277,24 +277,24 @@ async function checkGitHubWorkflows() {
           });
         }
       } catch (error) {
-        log(`❌ Syntax-Fehler in ${file}: ${error.message}`, colors.red);
+        log(`❌ Syntax-Fehler in $${file}: ${error.message}`, colors.red);
         syntaxErrors++;
       }
     }
 
-    if (!hasDependabotWorkflow) {
+    if (!hasDependabotWorkflow) { 
       log('⚠️ Kein spezifischer Workflow für Dependabot gefunden', colors.yellow);
       log('   Empfehlung: Erstelle einen Workflow für Dependabot-PRs', colors.yellow);
     }
 
-    if (syntaxErrors > 0) {
-      log(`❌ ${syntaxErrors} Workflow-Dateien mit Syntax-Fehlern gefunden`, colors.red);
+    if (syntaxErrors > 0) { 
+      log(`❌ $${syntaxErrors} Workflow-Dateien mit Syntax-Fehlern gefunden`, colors.red);
       return false;
     }
 
     return true;
   } catch (error) {
-    log(`❌ Fehler beim Überprüfen der GitHub Workflows: ${error.message}`, colors.red);
+    log(`❌ Fehler beim Überprüfen der GitHub Workflows: $${error.message}`, colors.red);
     return false;
   }
 }
@@ -307,11 +307,11 @@ async function checkGitHubPermissions() {
   log('Um die GitHub-Repository-Berechtigungen zu überprüfen:', colors.blue);
   log('1. Gehe zu Repository-Einstellungen > Actions > General', colors.yellow);
   log(
-    '2. Unter "Workflow permissions" sollte "Read and write permissions" aktiviert sein',
+    '2. Unter "Workflow permissions" sollte "Read and write permissions" aktiviert sein'),
     colors.yellow,
   );
   log(
-    '3. "Allow GitHub Actions to create and approve pull requests" sollte aktiviert sein',
+    '3. "Allow GitHub Actions to create and approve pull requests" sollte aktiviert sein'),
     colors.yellow,
   );
   log('4. Speichere die Änderungen, falls nötig', colors.yellow);
@@ -329,27 +329,27 @@ async function main() {
 
   log('\n📋 Zusammenfassung:', colors.cyan);
   log(
-    `Dependabot-Konfiguration: ${dependabotOk ? '✅ OK' : '❌ Probleme gefunden'}`,
+    `Dependabot-Konfiguration: ${dependabotOk ? '✅ OK' : '❌ Probleme gefunden'}`),
     dependabotOk ? colors.green : colors.red,
   );
   log(
-    `GitHub Workflows: ${workflowsOk ? '✅ OK' : '❌ Probleme gefunden'}`,
+    `GitHub Workflows: ${workflowsOk ? '✅ OK' : '❌ Probleme gefunden'}`),
     workflowsOk ? colors.green : colors.red,
   );
 
-  if (!dependabotOk || !workflowsOk) {
+  if (!dependabotOk || !workflowsOk) { 
     log(
-      '\n⚠️ Es wurden Probleme gefunden. Behebe diese, um GitHub Actions und Dependabot zu optimieren.',
+      '\n⚠️ Es wurden Probleme gefunden. Behebe diese, um GitHub Actions und Dependabot zu optimieren.'),
       colors.yellow,
     );
     createFixScript();
-  } else {
+  } else { 
     log('\n✅ Alles sieht gut aus! Die Konfiguration sollte korrekt funktionieren.', colors.green);
     createFixScript();
   }
 
   log(
-    '\n💡 Tipp: Überprüfe die Repository-Einstellungen auf GitHub, um sicherzustellen, dass die Workflow-Berechtigungen korrekt sind.',
+    '\n💡 Tipp: Überprüfe die Repository-Einstellungen auf GitHub, um sicherzustellen, dass die Workflow-Berechtigungen korrekt sind.'),
     colors.blue,
   );
 }
@@ -386,7 +386,7 @@ try {
   console.log("\\n✅ Fix-Skript erfolgreich ausgeführt!");
   console.log("💡 Überprüfe die Repository-Einstellungen auf GitHub für Workflow-Berechtigungen");
 } catch (error) {
-  console.error(\`❌ Fehler: \${error.message}\`);
+  console.error(\`❌ Fehler: \$${error.message}\`);
   process.exit(1);
 }
 `;
@@ -397,7 +397,7 @@ try {
 
 // Führe das Skript aus
 main().catch((error) => {
-  log(`❌ Fehler: ${error.message}`, colors.red);
+  log(`❌ Fehler: $${error.message}`, colors.red);
   process.exit(1);
 });
 

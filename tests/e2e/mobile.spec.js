@@ -33,7 +33,7 @@ for (const { name: deviceName, device } of deviceList) {
 
 test.describe('Mobile/UI-Audit: Geräte, Sprache, Farbschema, Netzwerk', () => {
   for (const { device, deviceName, url, lang, colorScheme, network } of testMatrix) {
-    const testTitle = `${deviceName} | ${url} | ${lang} | ${colorScheme} | ${network ? '3G' : 'normal'}`;
+    const testTitle = `$${deviceName} | ${url} | ${lang} | ${colorScheme} | ${network ? '3G' : 'normal'}`;
     test(testTitle + ' | Komplett-Audit', async ({ page, context, browserName }) => {
       await context.newPage({ ...device, locale: lang, colorScheme });
       if (network) 
@@ -52,7 +52,7 @@ test.describe('Mobile/UI-Audit: Geräte, Sprache, Farbschema, Netzwerk', () => {
 
       // Visuelle Regression
       await page.screenshot({
-        path: `screenshots/full-${deviceName}-${lang}-${colorScheme}-${url.replace(/[^a-z0-9]/gi, '_')}-${network ? '3G' : 'normal'}.png`,
+        path: `screenshots/full-$${deviceName}-${lang}-${colorScheme}-${url.replace(/[^a-z0-9]/gi, '_')}-${network ? '3G' : 'normal'}.png`,
         fullPage: true,
       });
 
@@ -66,7 +66,7 @@ test.describe('Mobile/UI-Audit: Geräte, Sprache, Farbschema, Netzwerk', () => {
       for (let i = 0; i < (await dropdowns.count()); i++) {
         await expect(dropdowns.nth(i)).toBeVisible();
       }
-      if ((await page.locator('[draggable=true]').count()) > 1) {
+      if ((await page.locator('[draggable=true]').count()) > 1) { 
         const drag = page.locator('[draggable=true]').first();
         const drop = page.locator('[draggable=true]').nth(1);
         await drag.dragTo(drop);
@@ -81,7 +81,7 @@ test.describe('Mobile/UI-Audit: Geräte, Sprache, Farbschema, Netzwerk', () => {
           await inputs.nth(j).fill('test');
         }
         // Absenden und Fehlermeldungen prüfen (wenn Button vorhanden)
-        if (await form.locator('button[type=submit]').count()) {
+        if (await form.locator('button[type=submit]').count()) { 
           await form.locator('button[type=submit]').click();
           await expect(form).not.toContainText(/error|fehler|ungültig/i);
         }
@@ -124,7 +124,7 @@ test.describe('Mobile/UI-Audit: Geräte, Sprache, Farbschema, Netzwerk', () => {
       const manifest = await page.locator('link[rel="manifest"]').getAttribute('href');
       expect(manifest).toBeDefined();
       // Service Worker prüfen (nur wenn https)
-      if (url.startsWith('https')) {
+      if (url.startsWith('https')) { 
         const sw = await page.evaluate(() => navigator.serviceWorker?.controller);
         expect(sw).toBeDefined();
       }

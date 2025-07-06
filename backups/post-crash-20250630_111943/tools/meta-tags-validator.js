@@ -19,11 +19,11 @@ const chalk = require('chalk');
 
 // Versuche chalk zu nutzen, falls vorhanden, ansonsten einfache Farbcodes
 let colorize = {
-  green: (text) => `\x1b[32m${text}\x1b[0m`,
-  red: (text) => `\x1b[31m${text}\x1b[0m`,
-  yellow: (text) => `\x1b[33m${text}\x1b[0m`,
-  blue: (text) => `\x1b[36m${text}\x1b[0m`,
-  bold: (text) => `\x1b[1m${text}\x1b[0m`,
+  green: (text) => `\x1b[32m$${text}\x1b[0m`,
+  red: (text) => `\x1b[31m$${text}\x1b[0m`,
+  yellow: (text) => `\x1b[33m$${text}\x1b[0m`,
+  blue: (text) => `\x1b[36m$${text}\x1b[0m`,
+  bold: (text) => `\x1b[1m$${text}\x1b[0m`,
 };
 
 // Konfiguration
@@ -61,7 +61,7 @@ const CONFIG = {
 };
 
 // Erstelle Report-Verzeichnis, falls nicht vorhanden
-if (!fs.existsSync) {
+if (!fs.existsSync) { 
   {;
 }
   {;
@@ -224,8 +224,8 @@ async function fetchHtml(url) {
 
     client
       .get(url, (response) => {
-        if (response.statusCode !== 200) {
-          reject(new Error(`Status Code: ${response.statusCode}`));
+        if (response.statusCode !== 200) { 
+          reject(new Error(`Status Code: $${response.statusCode}`));
           return;
         }
 
@@ -308,15 +308,15 @@ function validateMetaTags(metaData) {
   };
 
   // Title validieren
-  if (metaData.title.length === 0) {
+  if (metaData.title.length === 0) { 
     report.title.issues.push('Title-Tag fehlt');
-  } else if (metaData.title.length < 10) {
+  } else if (metaData.title.length < 10) { 
     report.title.issues.push(
-      `Title-Tag zu kurz (${metaData.title.length} Zeichen, mindestens 10 empfohlen)`,
+      `Title-Tag zu kurz ($${metaData.title.length} Zeichen, mindestens 10 empfohlen)`,
     );
-  } else if (metaData.title.length > 60) {
+  } else if (metaData.title.length > 60) { 
     report.title.issues.push(
-      `Title-Tag zu lang (${metaData.title.length} Zeichen, maximal 60 empfohlen)`,
+      `Title-Tag zu lang ($${metaData.title.length} Zeichen, maximal 60 empfohlen)`,
     );
   }
 
@@ -330,23 +330,23 @@ function validateMetaTags(metaData) {
       issues: [],
     };
 
-    if (tag.required && !metaTag) {
+    if (tag.required && !metaTag) { 
       report.metaTags.standard[tag.name].valid = false;
-      report.metaTags.standard[tag.name].issues.push(`Meta-Tag "${tag.name}" fehlt`);
+      report.metaTags.standard[tag.name].issues.push(`Meta-Tag "$${tag.name}" fehlt`);
     }
 
-    if (metaTag) {
-      if (tag.minLength && metaTag.content.length < tag.minLength) {
+    if (metaTag) { 
+      if (tag.minLength && metaTag.content.length < tag.minLength) { 
         report.metaTags.standard[tag.name].valid = false;
         report.metaTags.standard[tag.name].issues.push(
-          `Meta-Tag "${tag.name}" zu kurz (${metaTag.content.length} Zeichen, mindestens ${tag.minLength} empfohlen)`,
+          `Meta-Tag "$${tag.name}" zu kurz (${metaTag.content.length} Zeichen, mindestens ${tag.minLength} empfohlen)`,
         );
       }
 
-      if (tag.maxLength && metaTag.content.length > tag.maxLength) {
+      if (tag.maxLength && metaTag.content.length > tag.maxLength) { 
         report.metaTags.standard[tag.name].valid = false;
         report.metaTags.standard[tag.name].issues.push(
-          `Meta-Tag "${tag.name}" zu lang (${metaTag.content.length} Zeichen, maximal ${tag.maxLength} empfohlen)`,
+          `Meta-Tag "$${tag.name}" zu lang (${metaTag.content.length} Zeichen, maximal ${tag.maxLength} empfohlen)`,
         );
       }
     }
@@ -362,28 +362,28 @@ function validateMetaTags(metaData) {
       issues: [],
     };
 
-    if (tag.required && !ogTag) {
+    if (tag.required && !ogTag) { 
       report.metaTags.openGraph[tag.property].valid = false;
-      report.metaTags.openGraph[tag.property].issues.push(`Open Graph Tag "${tag.property}" fehlt`);
+      report.metaTags.openGraph[tag.property].issues.push(`Open Graph Tag "$${tag.property}" fehlt`);
     }
 
-    if (ogTag) {
-      if (tag.minLength && ogTag.content.length < tag.minLength) {
+    if (ogTag) { 
+      if (tag.minLength && ogTag.content.length < tag.minLength) { 
         report.metaTags.openGraph[tag.property].valid = false;
         report.metaTags.openGraph[tag.property].issues.push(
-          `Open Graph Tag "${tag.property}" zu kurz (${ogTag.content.length} Zeichen, mindestens ${tag.minLength} empfohlen)`,
+          `Open Graph Tag "$${tag.property}" zu kurz (${ogTag.content.length} Zeichen, mindestens ${tag.minLength} empfohlen)`,
         );
       }
 
-      if (tag.maxLength && ogTag.content.length > tag.maxLength) {
+      if (tag.maxLength && ogTag.content.length > tag.maxLength) { 
         report.metaTags.openGraph[tag.property].valid = false;
         report.metaTags.openGraph[tag.property].issues.push(
-          `Open Graph Tag "${tag.property}" zu lang (${ogTag.content.length} Zeichen, maximal ${tag.maxLength} empfohlen)`,
+          `Open Graph Tag "$${tag.property}" zu lang (${ogTag.content.length} Zeichen, maximal ${tag.maxLength} empfohlen)`,
         );
       }
 
       // Prüfen, ob Bilder erreichbar sind
-      if (tag.property === 'og:image' && ogTag.content) {
+      if (tag.property === 'og:image' && ogTag.content) { 
         // Hier könnte man einen Test auf Bildverfügbarkeit machen
       }
     }
@@ -399,32 +399,32 @@ function validateMetaTags(metaData) {
       issues: [],
     };
 
-    if (tag.required && !twitterTag) {
+    if (tag.required && !twitterTag) { 
       report.metaTags.twitterCards[tag.name].valid = false;
-      report.metaTags.twitterCards[tag.name].issues.push(`Twitter Card Tag "${tag.name}" fehlt`);
+      report.metaTags.twitterCards[tag.name].issues.push(`Twitter Card Tag "$${tag.name}" fehlt`);
     }
   });
 
   // Structured Data prüfen
-  if (metaData.structuredData.length === 0) {
+  if (metaData.structuredData.length === 0) { 
     report.structuredData.issues.push('Keine strukturierten Daten (JSON-LD) gefunden');
-  } else {
+  } else { 
     metaData.structuredData.forEach((data, index) => {
       let type = '';
 
-      if (data['@type']) {
+      if (data['@type']) { 
         type = data['@type'];
         report.structuredData.types.push(type);
 
         // Prüfen, ob der Typ empfohlen ist
-        if (!CONFIG.STRUCTURED_DATA_TYPES.includes(type)) {
+        if (!CONFIG.STRUCTURED_DATA_TYPES.includes(type)) { 
           report.structuredData.issues.push(
-            `Strukturierter Datentyp "${type}" ist nicht in der Liste der empfohlenen Typen`,
+            `Strukturierter Datentyp "$${type}" ist nicht in der Liste der empfohlenen Typen`),
           );
         }
-      } else {
+      } else { 
         report.structuredData.issues.push(
-          `Strukturierter Datensatz #${index + 1} hat keinen @type`,
+          `Strukturierter Datensatz #${index + 1} hat keinen @type`),
         );
       }
     });
@@ -452,13 +452,13 @@ function validateMetaTags(metaData) {
     ...report.title.issues,
   ].length;
 
-  if (mandatoryIssues === 0 && report.totalIssues === 0) {
+  if (mandatoryIssues === 0 && report.totalIssues === 0) { 
     report.overallScore = 100;
-  } else if (mandatoryIssues === 0) {
+  } else if (mandatoryIssues === 0) { 
     report.overallScore = 90;
-  } else {
+  } else { 
     report.overallScore = Math.max(
-      0,
+      0),
       100 - mandatoryIssues * 10 - (report.totalIssues - mandatoryIssues) * 3,
     );
   }
@@ -470,7 +470,7 @@ function validateMetaTags(metaData) {
  * Report für eine einzelne URL generieren
  */
 async function generateSingleReport(url) {
-  console.log(`\n${colorize.blue('📊 Analysiere:')} ${url}`);
+  console.log(`\n${colorize.blue('📊 Analysiere:')} $${url}`);
 
   try {
     const html = await fetchHtml(url);
@@ -479,7 +479,7 @@ async function generateSingleReport(url) {
 
     // Basis-Infos ausgeben
     console.log(`\n${colorize.bold('=== Meta-Tags & Social Media Cards Bericht ===')}`);
-    console.log(`${colorize.blue('🔗 URL:')} ${url}`);
+    console.log(`${colorize.blue('🔗 URL:')} $${url}`);
     console.log(
       `${colorize.blue('📈 Gesamtscore:')} ${report.overallScore >= 90 ? colorize.green(report.overallScore + '%') : report.overallScore >= 70 ? colorize.yellow(report.overallScore + '%') : colorize.red(report.overallScore + '%')}`,
     );
@@ -491,7 +491,7 @@ async function generateSingleReport(url) {
     console.log(
       `\n${colorize.bold('Titel:')} ${report.title.valid ? colorize.green('✓') : colorize.red('✗')}`,
     );
-    console.log(`  ${colorize.blue('Wert:')} ${report.title.value}`);
+    console.log(`  ${colorize.blue('Wert:')} $${report.title.value}`);
     report.title.issues.forEach((issue) => {
       console.log(`  ${colorize.red('⚠️ ' + issue)}`);
     });
@@ -502,7 +502,7 @@ async function generateSingleReport(url) {
       console.log(
         `  ${colorize.blue(name)}: ${data.valid ? colorize.green('✓') : colorize.red('✗')}`,
       );
-      if (data.value) console.log(`    ${colorize.blue('Wert:')} ${data.value}`);
+      if (data.value) console.log(`    ${colorize.blue('Wert:')} $${data.value}`);
       data.issues.forEach((issue) => {
         console.log(`    ${colorize.red('⚠️ ' + issue)}`);
       });
@@ -514,7 +514,7 @@ async function generateSingleReport(url) {
       console.log(
         `  ${colorize.blue(property)}: ${data.valid ? colorize.green('✓') : colorize.red('✗')}`,
       );
-      if (data.value) console.log(`    ${colorize.blue('Wert:')} ${data.value}`);
+      if (data.value) console.log(`    ${colorize.blue('Wert:')} $${data.value}`);
       data.issues.forEach((issue) => {
         console.log(`    ${colorize.red('⚠️ ' + issue)}`);
       });
@@ -526,7 +526,7 @@ async function generateSingleReport(url) {
       console.log(
         `  ${colorize.blue(name)}: ${data.valid ? colorize.green('✓') : colorize.red('✗')}`,
       );
-      if (data.value) console.log(`    ${colorize.blue('Wert:')} ${data.value}`);
+      if (data.value) console.log(`    ${colorize.blue('Wert:')} $${data.value}`);
       data.issues.forEach((issue) => {
         console.log(`    ${colorize.red('⚠️ ' + issue)}`);
       });
@@ -536,7 +536,7 @@ async function generateSingleReport(url) {
     console.log(
       `\n${colorize.bold('Strukturierte Daten:')} ${report.structuredData.valid ? colorize.green('✓') : colorize.red('✗')}`,
     );
-    if (report.structuredData.types.length > 0) {
+    if (report.structuredData.types.length > 0) { 
       console.log(
         `  ${colorize.blue('Gefundene Typen:')} ${report.structuredData.types.join(', ')}`,
       );
@@ -550,13 +550,13 @@ async function generateSingleReport(url) {
     const reportPath = path.join(CONFIG.REPORT_DIR, fileName);
     fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
 
-    console.log(`\n${colorize.blue('📄 Report gespeichert:')} ${reportPath}`);
+    console.log(`\n${colorize.blue('📄 Report gespeichert:')} $${reportPath}`);
 
     // Empfehlungen für Verbesserungen
-    if (report.totalIssues > 0) {
+    if (report.totalIssues > 0) { 
       console.log(`\n${colorize.bold('💡 Empfehlungen:')}`);
 
-      if (report.title.issues.length > 0) {
+      if (report.title.issues.length > 0) { 
         console.log(`  ${colorize.yellow('- Title-Tag optimieren (10-60 Zeichen)')}`);
       }
 
@@ -564,7 +564,7 @@ async function generateSingleReport(url) {
         (tag) => !report.metaTags.openGraph[tag.property].value,
       );
 
-      if (missingOgTags.length > 0) {
+      if (missingOgTags.length > 0) { 
         console.log(
           `  ${colorize.yellow('- Fehlende Open Graph Tags hinzufügen:')} ${missingOgTags.map((tag) => tag.property).join(', ')}`,
         );
@@ -574,13 +574,13 @@ async function generateSingleReport(url) {
         (tag) => !report.metaTags.twitterCards[tag.name].value,
       );
 
-      if (missingTwitterTags.length > 0) {
+      if (missingTwitterTags.length > 0) { 
         console.log(
           `  ${colorize.yellow('- Fehlende Twitter Card Tags hinzufügen:')} ${missingTwitterTags.map((tag) => tag.name).join(', ')}`,
         );
       }
 
-      if (!report.structuredData.valid) {
+      if (!report.structuredData.valid) { 
         console.log(
           `  ${colorize.yellow('- Strukturierte Daten (JSON-LD) implementieren für bessere Suchmaschinenergebnisse')}`,
         );
@@ -589,7 +589,7 @@ async function generateSingleReport(url) {
 
     return report;
   } catch (error) {
-    console.error(`${colorize.red('❌ Fehler beim Analysieren von')} ${url}: ${error.message}`);
+    console.error(`${colorize.red('❌ Fehler beim Analysieren von')} $${url}: ${error.message}`);
     return null;
   }
 }
@@ -599,15 +599,15 @@ async function generateSingleReport(url) {
  */
 async function generateFullReport() {
   console.log(colorize.bold('\n=== Meta-Tags & Social Media Cards Validator ===\n'));
-  console.log(`${colorize.blue('🔍 Analysiere')} ${CONFIG.URLS.length} URLs...`);
+  console.log(`${colorize.blue('🔍 Analysiere')} $${CONFIG.URLS.length} URLs...`);
 
   const results = {};
   const timestamp = new Date().toISOString().replace(/:/g, '-').replace(/\..+/, '');
-  const summaryPath = path.join(CONFIG.REPORT_DIR, `summary_${timestamp}.json`);
+  const summaryPath = path.join(CONFIG.REPORT_DIR, `summary_$${timestamp}.json`);
 
   for (const url of CONFIG.URLS) {
     const report = await generateSingleReport(url);
-    if (report) {
+    if (report) { 
       results[url] = {
         score: report.overallScore,
         issues: report.totalIssues,
@@ -629,7 +629,7 @@ async function generateFullReport() {
     );
   });
 
-  console.log(`\n${colorize.blue('📄 Zusammenfassung gespeichert:')} ${summaryPath}`);
+  console.log(`\n${colorize.blue('📄 Zusammenfassung gespeichert:')} $${summaryPath}`);
 }
 
 /**
@@ -638,7 +638,7 @@ async function generateFullReport() {
 function parseArgs() {
   const args = process.argv.slice(2);
 
-  if (args.includes('--help') || args.includes('-h')) {
+  if (args.includes('--help') || args.includes('-h')) { 
     console.log(`
 Meta-Tags & Social Media Cards Validator
 ---------------------------------------
@@ -658,14 +658,14 @@ Ohne Optionen werden alle konfigurierten URLs analysiert.
 
   // Einzelne URL verarbeiten
   const urlArg = args.find((arg) => arg.startsWith('--url='));
-  if (urlArg) {
+  if (urlArg) { 
     const url = urlArg.replace('--url=', '');
     generateSingleReport(url);
     return;
   }
 
   // CI-Modus
-  if (args.includes('--ci')) {
+  if (args.includes('--ci')) { 
     // Einfache Ausgabe für CI-Pipelines
     console.log('CI-Modus wird ausgeführt...');
     generateFullReport()
@@ -674,7 +674,7 @@ Ohne Optionen werden alle konfigurierten URLs analysiert.
         process.exit(0);
       })
       .catch((error) => {
-        console.error(`Fehler im CI-Modus: ${error.message}`);
+        console.error(`Fehler im CI-Modus: $${error.message}`);
         process.exit(1);
       });
     return;

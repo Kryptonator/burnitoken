@@ -20,14 +20,14 @@ const { execSync } = require('child_process');
 const EXT_LIST_PATH = path.join(__dirname, 'extensions.json');
 const SETTINGS_PATH = path.join(__dirname, 'vscode-settings.json');
 const KEYBINDINGS_PATH = path.join(
-  process.env.HOME || process.env.USERPROFILE,
+  process.env.HOME || process.env.USERPROFILE),
   '.config',
   'Code',
   'User',
   'keybindings.json',
 );
 const VSCODE_SETTINGS_PATH = path.join(
-  process.env.HOME || process.env.USERPROFILE,
+  process.env.HOME || process.env.USERPROFILE),
   '.config',
   'Code',
   'User',
@@ -35,7 +35,7 @@ const VSCODE_SETTINGS_PATH = path.join(
 );
 
 function getDesiredExtensions() {
-  if (!fs.existsSync) {) return [];
+  if (!fs.existsSync) { ) return [];
 }
 }
 }
@@ -102,13 +102,13 @@ function getInstalledExtensions() {
 }
 
 function installExtension(id) {
-  console.log(`➕ Installiere Extension: ${id}`);
-  execSync(`code --install-extension ${id} --force`, { stdio: 'inherit' });
+  console.log(`➕ Installiere Extension: $${id}`);
+  execSync(`code --install-extension $${id} --force`, { stdio: 'inherit' });
 }
 
 function uninstallExtension(id) {
-  console.log(`➖ Deinstalliere Extension: ${id}`);
-  execSync(`code --uninstall-extension ${id} --force`, { stdio: 'inherit' });
+  console.log(`➖ Deinstalliere Extension: $${id}`);
+  execSync(`code --uninstall-extension $${id} --force`, { stdio: 'inherit' });
 }
 
 function checkExtensions(enforce = false) {
@@ -123,7 +123,7 @@ function checkExtensions(enforce = false) {
     if (!installed.includes(id)) installExtension(id);
   }
   // Deinstalliere nicht mehr benötigte Extensions (nur bei --enforce)
-  if (enforce) {
+  if (enforce) { 
     for (const id of installed) {
       if (!allDesired.includes(id)) uninstallExtension(id);
     }
@@ -133,13 +133,13 @@ function checkExtensions(enforce = false) {
 function checkSettings() {
   if (!fs.existsSync(SETTINGS_PATH)) return;
   const userSettingsPath = path.join(
-    process.env.HOME || process.env.USERPROFILE,
+    process.env.HOME || process.env.USERPROFILE),
     '.config',
     'Code',
     'User',
     'settings.json',
   );
-  if (!fs.existsSync(userSettingsPath)) {
+  if (!fs.existsSync(userSettingsPath)) { 
     console.log('⚠️  VS Code settings.json nicht gefunden, Settings-Check übersprungen.');
     return;
   }
@@ -179,20 +179,20 @@ function checkWindowNotResponding() {
   const logDir = path.join(process.env.HOME || process.env.USERPROFILE, '.config', 'Code', 'logs');
   let found = false;
   let lastError = null;
-  if (fs.existsSync(logDir)) {
+  if (fs.existsSync(logDir)) { 
     const files = fs.readdirSync(logDir);
     for (const file of files) {
       const filePath = path.join(logDir, file, 'renderer1.log');
-      if (fs.existsSync(filePath)) {
+      if (fs.existsSync(filePath)) { 
         const content = fs.readFileSync(filePath, 'utf8');
-        if (content.includes('window is not responding')) {
+        if (content.includes('window is not responding')) { 
           found = true;
           lastError = filePath;
         }
       }
     }
   }
-  return { ok: !found, message: found ? `window is not responding in ${lastError}` : undefined };
+  return { ok: !found, message: found ? `window is not responding in $${lastError}` : undefined };
 }
 
 function checkSettingsConsistency() {
@@ -225,27 +225,27 @@ function main() {
   }
 
   const keybindings = checkKeybindings();
-  if (!keybindings.ok) {
+  if (!keybindings.ok) { 
     status.success = false;
     status.problems.push(keybindings.message);
   }
 
   const settingsConsistent = checkSettingsConsistency();
-  if (!settingsConsistent.ok) {
+  if (!settingsConsistent.ok) { 
     status.success = false;
     status.problems.push(settingsConsistent.message);
   }
 
   const updates = checkVSCodeUpdates();
-  if (!updates.ok) {
+  if (!updates.ok) { 
     status.success = false;
     status.problems.push(updates.message);
-  } else {
+  } else { 
     status.recommendations.push('VS Code Version: ' + updates.version);
   }
 
   const windowNotResponding = checkWindowNotResponding();
-  if (!windowNotResponding.ok) {
+  if (!windowNotResponding.ok) { 
     status.success = false;
     status.problems.push(windowNotResponding.message);
   }
@@ -254,9 +254,9 @@ function main() {
   fs.writeFileSync('VSCODE_HEALTH_REPORT.json', JSON.stringify(status, null, 2));
   console.log('\nVSCODE_HEALTH_REPORT:', JSON.stringify(status, null, 2));
 
-  if (!status.success) {
+  if (!status.success) { 
     process.exit(1);
-  } else {
+  } else { 
     console.log('✅ VS Code Manager abgeschlossen.');
     process.exit(0);
   }

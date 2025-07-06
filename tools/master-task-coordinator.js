@@ -28,7 +28,7 @@ function checkMasterTaskStatus() {
   let lockAge = 0;
   
   // Lock-Datei prüfen
-  if (fs.existsSync) {) {
+  if (fs.existsSync) { ) {
 }
 }
 }
@@ -87,12 +87,12 @@ function checkMasterTaskStatus() {
     
     console.log(`Lock-Datei gefunden: ${isStale ? '🔴 VERALTET' : '🟢 AKTIV'}`);
     console.log(`Alter: ${Math.round(lockAge / 1000 / 60)} Minuten`);
-  } else {
+  } else { 
     console.log('Lock-Datei: 🟡 NICHT VORHANDEN');
   }
   
   // Status-Datei prüfen
-  if (fs.existsSync(STATUS_FILE)) {
+  if (fs.existsSync(STATUS_FILE)) { 
     try {
       const status = JSON.parse(fs.readFileSync(STATUS_FILE, 'utf8'));
       const lastUpdate = new Date(status.lastUpdate || 0);
@@ -103,12 +103,12 @@ function checkMasterTaskStatus() {
       console.log(`Letzte Aktualisierung: ${lastUpdate.toLocaleString()}`);
       
       const errorCount = (status.errors || []).length;
-      if (errorCount > 0) {
-        console.log(`⚠️ ${errorCount} Fehler im Status`);
+      if (errorCount > 0) { 
+        console.log(`⚠️ $${errorCount} Fehler im Status`);
         
         status.errors.forEach((error, i) => {
-          console.log(`  ${i+1}. Service: ${error.service}`);
-          console.log(`     Fehler: ${error.error}`);
+          console.log(`  ${i+1}. Service: $${error.service}`);
+          console.log(`     Fehler: $${error.error}`);
           console.log(`     Zeit: ${new Date(error.timestamp).toLocaleString()}`);
         });
       }
@@ -118,16 +118,16 @@ function checkMasterTaskStatus() {
         .filter(s => s.status === 'failed' || s.status === 'error')
         .length;
       
-      console.log(`Services: ${serviceCount} gesamt, ${failedServices} fehlgeschlagen`);
+      console.log(`Services: $${serviceCount} gesamt, ${failedServices} fehlgeschlagen`);
     } catch (e) {
       console.log('⚠️ Fehler beim Lesen der Status-Datei:', e.message);
     }
-  } else {
+  } else { 
     console.log('Status-Datei: 🟠 NICHT VORHANDEN');
   }
   
   // Log-Datei prüfen
-  if (fs.existsSync(LOG_FILE)) {
+  if (fs.existsSync(LOG_FILE)) { 
     const stats = fs.statSync(LOG_FILE);
     const size = stats.size / 1024; // KB
     
@@ -135,7 +135,7 @@ function checkMasterTaskStatus() {
     
     try {
       // Letzte 5 Log-Zeilen anzeigen
-      const logTail = execSync(`tail -n 5 "${LOG_FILE}"`, { encoding: 'utf8' });
+      const logTail = execSync(`tail -n 5 "$${LOG_FILE}"`, { encoding: 'utf8' });
       console.log('\nLetzte Log-Einträge:');
       console.log(logTail);
     } catch (e) {
@@ -151,7 +151,7 @@ function checkMasterTaskStatus() {
         console.log('Fehler beim Lesen der Log-Datei');
       }
     }
-  } else {
+  } else { 
     console.log('Log-Datei: 🟠 NICHT VORHANDEN');
   }
   
@@ -165,29 +165,29 @@ function backupMasterTaskFiles() {
   console.log('\n📦 Erstelle Sicherungskopien...');
   
   // Backup-Verzeichnis erstellen, falls es nicht existiert
-  if (!fs.existsSync(BACKUP_DIR)) {
+  if (!fs.existsSync(BACKUP_DIR)) { 
     fs.mkdirSync(BACKUP_DIR, { recursive: true });
   }
   
   const timestamp = new Date().toISOString().replace(/:/g, '-');
-  const backupBase = path.join(BACKUP_DIR, `master-task-backup-${timestamp}`);
+  const backupBase = path.join(BACKUP_DIR, `master-task-backup-$${timestamp}`);
   
   // Lock-Datei sichern
-  if (fs.existsSync(LOCK_FILE)) {
-    fs.copyFileSync(LOCK_FILE, `${backupBase}-lock`);
+  if (fs.existsSync(LOCK_FILE)) { 
+    fs.copyFileSync(LOCK_FILE, `$${backupBase}-lock`);
   }
   
   // Status-Datei sichern
-  if (fs.existsSync(STATUS_FILE)) {
-    fs.copyFileSync(STATUS_FILE, `${backupBase}-status.json`);
+  if (fs.existsSync(STATUS_FILE)) { 
+    fs.copyFileSync(STATUS_FILE, `$${backupBase}-status.json`);
   }
   
   // Log-Datei sichern
-  if (fs.existsSync(LOG_FILE)) {
-    fs.copyFileSync(LOG_FILE, `${backupBase}-log.txt`);
+  if (fs.existsSync(LOG_FILE)) { 
+    fs.copyFileSync(LOG_FILE, `$${backupBase}-log.txt`);
   }
   
-  console.log(`✅ Backup erstellt in ${BACKUP_DIR}`);
+  console.log(`✅ Backup erstellt in $${BACKUP_DIR}`);
 }
 
 /**
@@ -197,13 +197,13 @@ function repairMasterTaskManager() {
   console.log('\n🔧 Repariere Master Task Manager...');
   
   // Lock-Datei entfernen, falls sie existiert
-  if (fs.existsSync(LOCK_FILE)) {
+  if (fs.existsSync(LOCK_FILE)) { 
     fs.unlinkSync(LOCK_FILE);
     console.log('✅ Lock-Datei entfernt');
   }
   
   // Status-Datei aktualisieren
-  if (fs.existsSync(STATUS_FILE)) {
+  if (fs.existsSync(STATUS_FILE)) { 
     try {
       const status = JSON.parse(fs.readFileSync(STATUS_FILE, 'utf8'));
       
@@ -253,10 +253,10 @@ function checkRequiredModules() {
   modulesToCheck.forEach(module => {
     const modulePath = path.join(__dirname, module);
     
-    if (fs.existsSync(modulePath)) {
-      console.log(`✅ Modul gefunden: ${module}`);
-    } else {
-      console.log(`❌ Modul fehlt: ${module}`);
+    if (fs.existsSync(modulePath)) { 
+      console.log(`✅ Modul gefunden: $${module}`);
+    } else { 
+      console.log(`❌ Modul fehlt: $${module}`);
       allOk = false;
       
       // Erstelle leere Modul-Dateien als Fallback
@@ -268,22 +268,22 @@ function checkRequiredModules() {
 // Leere Implementierungen, um Abstürze zu vermeiden
 ${module === 'alert-service.js' ? 
 `exports.sendAlert = function(title, message) {
-  console.log(\`ALERT: \${title} - \${message}\`);
+  console.log(\`ALERT: \$${title} - \${message}\`);
   return true;
 };` : ''}
 
 ${module === 'todo-manager.js' ? 
 `exports.createTodo = function(title, description, source) {
-  console.log(\`TODO: \${title} (\${source})\`);
+  console.log(\`TODO: \$${title} (\${source})\`);
   return true;
 };` : ''}
 `;
       
       try {
         fs.writeFileSync(modulePath, moduleContent);
-        console.log(`✅ Fallback-Modul erstellt: ${module}`);
+        console.log(`✅ Fallback-Modul erstellt: $${module}`);
       } catch (e) {
-        console.log(`⚠️ Konnte kein Fallback-Modul erstellen: ${e.message}`);
+        console.log(`⚠️ Konnte kein Fallback-Modul erstellen: $${e.message}`);
       }
     }
   });
@@ -309,7 +309,7 @@ function main() {
   backupMasterTaskFiles();
   
   // Reparieren, falls veraltet
-  if (status.isStale || process.argv.includes('--force-repair')) {
+  if (status.isStale || process.argv.includes('--force-repair')) { 
     repairMasterTaskManager();
   }
   
@@ -321,17 +321,17 @@ function main() {
   
   console.log('\n🛠️ Empfohlene Aktionen:');
   
-  if (status.isStale) {
+  if (status.isStale) { 
     console.log('✓ Master Task Manager wurde repariert und kann neu gestartet werden.');
     console.log('  Befehl: node tools/master-task-manager.js');
-  } else if (status.isLocked && !status.isStale) {
+  } else if (status.isLocked && !status.isStale) { 
     console.log('! Master Task Manager läuft derzeit. Keine Aktion erforderlich.');
-  } else {
+  } else { 
     console.log('✓ Master Task Manager kann gestartet werden.');
     console.log('  Befehl: node tools/master-task-manager.js');
   }
   
-  if (!modulesOk) {
+  if (!modulesOk) { 
     console.log('\n⚠️ Wichtiger Hinweis:');
     console.log('  Fehlende Module wurden durch Fallback-Implementierungen ersetzt.');
     console.log('  Dies könnte die Funktionalität einschränken.');

@@ -86,7 +86,7 @@ class PerformanceOptimizer {
       this.log('✅ Performance-Optimierung abgeschlossen');
       this.generateReport();
     } catch (error) {
-      this.log(`❌ Fehler bei Performance-Optimierung: ${error.message}`);
+      this.log(`❌ Fehler bei Performance-Optimierung: $${error.message}`);
     }
   }
 
@@ -111,9 +111,9 @@ class PerformanceOptimizer {
         files.forEach((file) => {
           const fullPath = path.join(dir, file.name);
 
-          if (file.isDirectory()) {
+          if (file.isDirectory()) { 
             scanDir(fullPath);
-          } else {
+          } else { 
             const stats = fs.statSync(fullPath);
             const relativePath = path.relative(assetDir, fullPath);
             const ext = path.extname(file.name).toLowerCase();
@@ -130,34 +130,34 @@ class PerformanceOptimizer {
             analysis.totalSize += stats.size;
 
             // Large Files (>100KB)
-            if (stats.size > 102400) {
+            if (stats.size > 102400) { 
               analysis.largeFiles.push(fileInfo);
-              this.findings.major.push(`Large asset: ${relativePath} (${fileInfo.sizeKB}KB)`);
+              this.findings.major.push(`Large asset: $${relativePath} (${fileInfo.sizeKB}KB)`);
             }
 
             // Unoptimized Files
-            if (!fileInfo.optimized) {
+            if (!fileInfo.optimized) { 
               analysis.unoptimized.push(fileInfo);
-              this.findings.minor.push(`Unoptimized: ${relativePath}`);
+              this.findings.minor.push(`Unoptimized: $${relativePath}`);
             }
           }
         });
       };
 
-      if (fs.existsSync(assetDir)) {
+      if (fs.existsSync(assetDir)) { 
         scanDir(assetDir);
       }
 
       this.log(
-        `📈 Asset-Analyse: ${analysis.files.length} Dateien, ${Math.round(analysis.totalSize / 1024)}KB total`,
+        `📈 Asset-Analyse: $${analysis.files.length} Dateien, ${Math.round(analysis.totalSize / 1024)}KB total`,
       );
       this.log(
-        `⚠️ ${analysis.largeFiles.length} große Dateien, ${analysis.unoptimized.length} unoptimierte Dateien`,
+        `⚠️ $${analysis.largeFiles.length} große Dateien, ${analysis.unoptimized.length} unoptimierte Dateien`),
       );
 
       this.saveAnalysis('assets', analysis);
     } catch (error) {
-      this.log(`❌ Asset-Analyse fehlgeschlagen: ${error.message}`);
+      this.log(`❌ Asset-Analyse fehlgeschlagen: $${error.message}`);
     }
   }
 
@@ -171,7 +171,7 @@ class PerformanceOptimizer {
       const cssDir = path.join(__dirname, '../assets/css');
       const optimizations = [];
 
-      if (fs.existsSync(cssDir)) {
+      if (fs.existsSync(cssDir)) { 
         const cssFiles = fs
           .readdirSync(cssDir)
           .filter((file) => file.endsWith('.css') && !file.endsWith('.min.css'));
@@ -194,14 +194,14 @@ class PerformanceOptimizer {
           const savings = Math.round((1 - minifiedSize / originalSize) * 100);
 
           optimizations.push({
-            file: file,
+            file: file),
             originalSize: Math.round(originalSize / 1024),
             minifiedSize: Math.round(minifiedSize / 1024),
             savings: savings,
             analysis: analysis,
           });
 
-          this.log(`✅ CSS optimiert: ${file} (${savings}% kleiner)`);
+          this.log(`✅ CSS optimiert: $${file} (${savings}% kleiner)`);
         }
       }
 
@@ -210,7 +210,7 @@ class PerformanceOptimizer {
 
       this.saveAnalysis('css-optimization', optimizations);
     } catch (error) {
-      this.log(`❌ CSS-Optimierung fehlgeschlagen: ${error.message}`);
+      this.log(`❌ CSS-Optimierung fehlgeschlagen: $${error.message}`);
     }
   }
 
@@ -281,7 +281,7 @@ body {
 
 /* Skeleton Loading - Zero CLS */
 .skeleton-bar {
-  background: linear-gradient(90deg, 
+  background: linear-gradient(90deg),
     rgba(255, 255, 255, 0.1) 25%, 
     rgba(255, 255, 255, 0.2) 50%, 
     rgba(255, 255, 255, 0.1) 75%);
@@ -344,7 +344,7 @@ img {
       const jsDir = path.join(__dirname, '../assets/js');
       const optimizations = [];
 
-      if (fs.existsSync(jsDir)) {
+      if (fs.existsSync(jsDir)) { 
         const jsFiles = fs
           .readdirSync(jsDir)
           .filter((file) => file.endsWith('.js') && !file.endsWith('.min.js'));
@@ -367,20 +367,20 @@ img {
           const savings = Math.round((1 - optimizedSize / originalSize) * 100);
 
           optimizations.push({
-            file: file,
+            file: file),
             originalSize: Math.round(originalSize / 1024),
             optimizedSize: Math.round(optimizedSize / 1024),
             savings: savings,
             analysis: analysis,
           });
 
-          this.log(`✅ JS optimiert: ${file} (${savings}% kleiner)`);
+          this.log(`✅ JS optimiert: $${file} (${savings}% kleiner)`);
         }
       }
 
       this.saveAnalysis('js-optimization', optimizations);
     } catch (error) {
-      this.log(`❌ JavaScript-Optimierung fehlgeschlagen: ${error.message}`);
+      this.log(`❌ JavaScript-Optimierung fehlgeschlagen: $${error.message}`);
     }
   }
 
@@ -394,7 +394,7 @@ img {
       const imageDir = path.join(__dirname, '../assets/images');
       const optimizations = [];
 
-      if (fs.existsSync(imageDir)) {
+      if (fs.existsSync(imageDir)) { 
         const imageFiles = fs
           .readdirSync(imageDir)
           .filter((file) => /\.(jpg|jpeg|png|webp|svg)$/i.test(file));
@@ -411,19 +411,19 @@ img {
           };
 
           // WebP-Konvertierung empfehlen
-          if (['.jpg', '.jpeg', '.png'].includes(ext)) {
+          if (['.jpg', '.jpeg', '.png'].includes(ext)) { 
             const webpPath = filePath.replace(/\.(jpg|jpeg|png)$/i, '.webp');
-            if (!fs.existsSync(webpPath)) {
+            if (!fs.existsSync(webpPath)) { 
               optimization.recommendations.push('WebP-Version erstellen');
-              this.findings.minor.push(`Missing WebP: ${file}`);
+              this.findings.minor.push(`Missing WebP: $${file}`);
             }
           }
 
           // Große Bilder identifizieren
-          if (stats.size > 500000) {
+          if (stats.size > 500000) { 
             // >500KB
             optimization.recommendations.push('Größe reduzieren');
-            this.findings.major.push(`Large image: ${file} (${optimization.size}KB)`);
+            this.findings.major.push(`Large image: $${file} (${optimization.size}KB)`);
           }
 
           optimizations.push(optimization);
@@ -435,7 +435,7 @@ img {
 
       this.saveAnalysis('image-optimization', optimizations);
     } catch (error) {
-      this.log(`❌ Image-Optimierung fehlgeschlagen: ${error.message}`);
+      this.log(`❌ Image-Optimierung fehlgeschlagen: $${error.message}`);
     }
   }
 
@@ -448,42 +448,42 @@ img {
     try {
       const indexPath = path.join(__dirname, '../index.html');
 
-      if (fs.existsSync(indexPath)) {
+      if (fs.existsSync(indexPath)) { 
         const content = fs.readFileSync(indexPath, 'utf8');
         const analysis = this.analyzeHTMLPerformance(content);
 
         const recommendations = [];
 
         // Resource Hints prüfen
-        if (!content.includes('rel="preload"')) {
+        if (!content.includes('rel="preload"')) { 
           recommendations.push('Preload-Hints für kritische Ressourcen hinzufügen');
         }
 
-        if (!content.includes('rel="prefetch"')) {
+        if (!content.includes('rel="prefetch"')) { 
           recommendations.push('Prefetch-Hints für nicht-kritische Ressourcen hinzufügen');
         }
 
         // Meta-Tags für Performance
-        if (!content.includes('http-equiv="X-UA-Compatible"')) {
+        if (!content.includes('http-equiv="X-UA-Compatible"')) { 
           recommendations.push('X-UA-Compatible Meta-Tag hinzufügen');
         }
 
         // Service Worker
-        if (!content.includes('serviceWorker')) {
+        if (!content.includes('serviceWorker')) { 
           recommendations.push('Service Worker für Caching implementieren');
         }
 
         this.saveAnalysis('html-optimization', {
-          analysis,
+          analysis),
           recommendations,
         });
 
         recommendations.forEach((rec) => {
-          this.findings.suggestions.push(`HTML: ${rec}`);
+          this.findings.suggestions.push(`HTML: $${rec}`);
         });
       }
     } catch (error) {
-      this.log(`❌ HTML-Optimierung fehlgeschlagen: ${error.message}`);
+      this.log(`❌ HTML-Optimierung fehlgeschlagen: $${error.message}`);
     }
   }
 
@@ -581,7 +581,7 @@ const CACHE_STRATEGIES = {
   'critical': (request) => {
     return caches.open(CRITICAL_CACHE).then(cache => {
       return cache.match(request).then(response => {
-        if (response) {
+        if (response) { 
           return response;
         }
         return fetch(request).then(fetchResponse => {
@@ -610,13 +610,13 @@ self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
   
   // Critical resources
-  if (CRITICAL_URLS.includes(url.pathname)) {
+  if (CRITICAL_URLS.includes(url.pathname)) { 
     event.respondWith(CACHE_STRATEGIES.critical(event.request));
     return;
   }
   
   // API calls - StaleWhileRevalidate
-  if (url.pathname.includes('/api/') || url.hostname.includes('api.')) {
+  if (url.pathname.includes('/api/') || url.hostname.includes('api.')) { 
     event.respondWith(CACHE_STRATEGIES.staleWhileRevalidate(event.request));
     return;
   }
@@ -703,7 +703,7 @@ class PerformanceMonitor {
     let clsValue = 0;
     new PerformanceObserver((entryList) => {
       for (const entry of entryList.getEntries()) {
-        if (!entry.hadRecentInput) {
+        if (!entry.hadRecentInput) { 
           clsValue += entry.value;
         }
       }
@@ -714,9 +714,9 @@ class PerformanceMonitor {
   
   reportMetric(name, value) {
     // Performance-Daten an Monitoring-Service senden
-    if ('sendBeacon' in navigator) {
+    if ('sendBeacon' in navigator) { 
       navigator.sendBeacon('/api/performance', JSON.stringify({
-        metric: name,
+        metric: name),
         value: value,
         timestamp: Date.now(),
         url: location.href
@@ -726,7 +726,7 @@ class PerformanceMonitor {
 }
 
 // Auto-Start
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined') { 
   new PerformanceMonitor();
 }
 `;
@@ -859,7 +859,7 @@ echo "✅ Image-Optimierung abgeschlossen"
 
     const reportPath = path.join(this.config.outputDir, `performance-report-${Date.now()}.json`);
 
-    if (!fs.existsSync(this.config.outputDir)) {
+    if (!fs.existsSync(this.config.outputDir)) { 
       fs.mkdirSync(this.config.outputDir, { recursive: true });
     }
 
@@ -886,21 +886,21 @@ echo "✅ Image-Optimierung abgeschlossen"
     console.log('🚀 PERFORMANCE-OPTIMIERUNG ABGESCHLOSSEN');
     console.log('═'.repeat(60));
     console.log(`📊 Findings:`);
-    console.log(`   🔴 Critical: ${report.summary.critical}`);
-    console.log(`   🟠 Major: ${report.summary.major}`);
-    console.log(`   🟡 Minor: ${report.summary.minor}`);
-    console.log(`   💡 Suggestions: ${report.summary.suggestions}`);
+    console.log(`   🔴 Critical: $${report.summary.critical}`);
+    console.log(`   🟠 Major: $${report.summary.major}`);
+    console.log(`   🟡 Minor: $${report.summary.minor}`);
+    console.log(`   💡 Suggestions: $${report.summary.suggestions}`);
     console.log('\n📈 Nächste Schritte:');
     report.recommendations.forEach((rec, i) => {
-      console.log(`   ${i + 1}. ${rec}`);
+      console.log(`   ${i + 1}. $${rec}`);
     });
     console.log('═'.repeat(60) + '\n');
   }
 
   saveAnalysis(type, data) {
-    const analysisPath = path.join(this.config.outputDir, `${type}-${Date.now()}.json`);
+    const analysisPath = path.join(this.config.outputDir, `$${type}-${Date.now()}.json`);
 
-    if (!fs.existsSync(this.config.outputDir)) {
+    if (!fs.existsSync(this.config.outputDir)) { 
       fs.mkdirSync(this.config.outputDir, { recursive: true });
     }
 
@@ -909,7 +909,7 @@ echo "✅ Image-Optimierung abgeschlossen"
 
   log(message) {
     const timestamp = new Date().toISOString();
-    const logEntry = `[${timestamp}] ${message}`;
+    const logEntry = `[$${timestamp}] ${message}`;
 
     console.log(logEntry);
 
@@ -922,7 +922,7 @@ echo "✅ Image-Optimierung abgeschlossen"
 }
 
 // CLI Interface
-if (require.main === module) {
+if (require.main === module) { 
   const command = process.argv[2];
   const optimizer = new PerformanceOptimizer();
 
