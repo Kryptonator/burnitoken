@@ -1,0 +1,7 @@
+[
+  { "id": "dbaeumer.vscode-eslint", "name": "ESLint", "required": true },
+  { "id": "esbenp.prettier-vscode", "name": "Prettier", "required": true },
+  { "id": "ms-vscode.vscode-typescript-next", "name": "TypeScript Next", "required": false },
+  { "id": "streetsidesoftware.code-spell-checker", "name": "Code Spell Checker", "required": true },
+  { "id": "github.vscode-pull-request-github", "name": "GitHub Pull Requests", "required": false }
+]

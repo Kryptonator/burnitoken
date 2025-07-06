@@ -1,0 +1,86 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Extension Health Check",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/extension-management/extension-function-validator.js"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Extension Management Full Run",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/extension-management/master-extension-orchestrator.js"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Extension Configuration Update",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/extension-management/advanced-extension-manager.js"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "⚡ Quick Asset Check",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "scripts/quick-asset-check.ps1"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "🧹 Repository Cleanup Report",
+      "type": "shell",
+      "command": "cat",
+      "args": [
+        "docs/REPOSITORY_CLEANUP_SUMMARY.md"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    }
+  ]
+}

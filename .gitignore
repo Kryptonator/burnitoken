@@ -1,0 +1,123 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Logs
+logs/
+*.log
+*.log.*
+log-aggregator.log
+master-task-manager.log
+git-status-log.txt
+*.json.log
+
+# Backups & Emergency
+.backups/
+.emergency-backup-syntax/
+.emergency-saves/
+.recovery-data/
+.recovery-dashboard/
+.vscode-backup/
+*.bak
+*.tmp
+*.swp
+
+# Reports & Status
+.reports/
+.status/
+.web-vitals-reports/
+.meta-reports/
+changes-reports/
+performance-reports/
+tools/changes-reports/
+tools/performance-reports/
+tools/bot-status.json
+tools/master-task-status.json
+tools/master-status.json
+tools/powerfix-monitoring-status.json
+tools/auto-recovery-status.json
+tools/dependency-security-status.json
+tools/deployment-status.json
+tools/gsc-integration-status.json
+tools/system-status.json
+tools/website-status.json
+*.html
+!index.html
+!404.html
+!500.html
+!status-dashboard.html
+!live-dashboard.html
+!live-monitor.html
+!monitoring-dashboard.html
+!bot-dashboard.html
+!lightweight-dashboard.html
+!extension-validator.html
+!simple-browser-test.html
+!google-analytics-integration.html
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Build output
+dist/
+build/
+out/
+coverage/
+.next/
+.nuxt/
+.svelte-kit/
+
+# PID files
+*.pid
+tools/bot-pids/
+
+# ToDo files
+.todos/
+
+# Worker System
+.worker-system/
+
+# Other
+.devcontainer/
+
+# Ignore all json files by default
+*.json
+# But DO include these specific json files
+!package.json
+!package-lock.json
+!tsconfig.json
+!jsconfig.json
+!lighthouserc.json
+!lighthouserc-*.js
+!jest.config.js
+!playwright.config.js
+!tailwind.config.js
+!postcss.config.js
+!prettierrc
+!manifest.json
+!cspell.json
+!extensions.json
+!launch.json
+!settings.json
+!tasks.json
+!jfrog-config.json
+!security-policy.yaml
+!optimization-knowledge-base.json
+!resource-hints.json
+!performance-budget.json
+!assets/translations.json
+!commit_message.txt
+!status-report-template.html
+!tools/gsc-service-account.example.json
+!tools/vscode-keybindings.json
+!tools/vscode-settings.json

@@ -1,0 +1,21 @@
+/* =============================================
+   Price Oracle & Widget States
+   ============================================= */
+.price--loading {
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.price--error {
+  color: #ef4444; /* red-500 */
+  font-style: italic;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

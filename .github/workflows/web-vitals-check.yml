@@ -1,0 +1,120 @@
+name: Web Vitals & Meta Tags Check
+
+on:
+  schedule:
+    # Runs every Wednesday at 8:00 AM UTC
+    - cron: '0 8 * * 3'
+  workflow_dispatch:
+    # Allows manual triggering
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  web-vitals-check:
+    name: 📊 Core Web Vitals Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 📥 Install dependencies
+        run: npm ci
+      
+      - name: 🔍 Run Web Vitals Check
+        id: web-vitals
+        run: node --max-old-space-size=4096 ./node_modules/.bin/web-vitals || npm run web-vitals:ci
+        continue-on-error: true
+      
+      - name: 📤 Upload Web Vitals Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-vitals-report
+          path: tools/.web-vitals-reports
+          
+      - name: Fehler- und Status-Report generieren
+        id: error_report
+        run: |
+          node --max-old-space-size=4096 tools/error-collector.js
+      - name: ERROR_REPORT.md als Artefakt hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: error-report
+          path: ERROR_REPORT.md
+      - name: Kritische Fehler prüfen und Alert senden
+        if: failure() || steps.error_report.outcome == 'failure'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port: ${{ secrets.SMTP_PORT }}
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: 'Kritischer Fehler im Web Vitals/Meta-Check!'
+          to: ${{ secrets.ALERT_EMAIL }}
+          from: 'performance-monitor@burnitoken.com'
+          body: |
+            Es wurden kritische Fehler im Web Vitals/Meta-Check gefunden. Bitte prüfe den ERROR_REPORT.md im Anhang.
+          attachments: ERROR_REPORT.md
+      - name: Status-Webhook bei Erfolg
+        if: success()
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{"status":"success","workflow":"web-vitals-check"}' ${{ secrets.STATUS_WEBHOOK_URL }}
+      - name: Status-Webhook bei Fehler
+        if: failure()
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{"status":"failure","workflow":"web-vitals-check"}' ${{ secrets.STATUS_WEBHOOK_URL }}
+      - name: 📄 Status-Übersicht generieren
+        run: node tools/update-status-md.js
+      - name: 📤 STATUS.md als Artefakt hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: status-md
+          path: STATUS.md
+      - name: 📤 STATUS.md ins Repository pushen
+        if: success()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin
+          git checkout ${{ github.ref_name }}
+          git add STATUS.md
+          git commit -m "ci: update STATUS.md [skip ci]" || echo "No changes to commit"
+          git push origin HEAD:${{ github.ref_name }}
+          
+  meta-tags-check:
+    name: 🏷️ Meta Tags Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 📥 Install dependencies
+        run: npm ci
+      
+      - name: 🔍 Install additional dependencies
+        run: npm install jsdom
+      
+      - name: 🔍 Run Meta Tags Check
+        id: meta-tags
+        run: node --max-old-space-size=4096 ./node_modules/.bin/meta-tags || npm run meta-tags:ci
+        continue-on-error: true
+      
+      - name: 📤 Upload Meta Tags Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: meta-tags-report
+          path: tools/.meta-reports

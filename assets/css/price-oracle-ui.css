@@ -1,0 +1,427 @@
+/**
+ * BurniToken Price Oracle UI Styles
+ * Robuste, accessibility-freundliche Styles für alle Price-Widget-States
+ * 
+ * Autor: Technischer Visionär  
+ * Erstellt: 2025-07-01
+ */
+
+/* =============================================================================
+   Price Widget Base Styles
+   ============================================================================= */
+
+[data-price-display] {
+  min-height: 60px; /* Verhindert Layout Shift */
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* =============================================================================
+   Loading State - Elegant Skeleton Loader
+   ============================================================================= */
+
+.price-loading {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skeleton-price {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.skeleton-bar {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.1) 25%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.1) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+.skeleton-main {
+  width: 80px;
+  height: 24px;
+}
+
+.skeleton-change {
+  width: 50px;
+  height: 18px;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* =============================================================================
+   Success State - Clean Price Display
+   ============================================================================= */
+
+.price-success {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.price-value {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.price-change {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.price-change.positive {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.price-change.negative {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.price-source {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* =============================================================================
+   Error State - Clear Error Communication
+   ============================================================================= */
+
+.price-error {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.error-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.error-icon {
+  font-size: 1.125rem;
+}
+
+.error-text {
+  color: #ef4444;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.retry-button,
+.refresh-button {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+.retry-button:hover,
+.refresh-button:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+}
+
+.retry-button:active,
+.refresh-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+.error-details {
+  font-size: 0.6875rem;
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 200px;
+  word-break: break-word;
+}
+
+/* =============================================================================
+   Stale State - Subtle Indication of Old Data
+   ============================================================================= */
+
+.price-stale {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.price-value.stale {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.stale-indicator {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.15);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+/* =============================================================================
+   Persistent Error State - For Critical Failures
+   ============================================================================= */
+
+.price-persistent-error {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+  padding: 16px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+}
+
+.error-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.support-link {
+  color: #3b82f6;
+  text-decoration: none;
+  font-size: 0.75rem;
+  padding: 6px 12px;
+  border: 1px solid #3b82f6;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.support-link:hover {
+  background: rgba(59, 130, 246, 0.1);
+  text-decoration: none;
+}
+
+/* =============================================================================
+   Status Indicators
+   ============================================================================= */
+
+[data-price-status] {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.status-indicator {
+  display: inherit;
+  align-items: inherit;
+  gap: 4px;
+}
+
+.status-loading {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.status-success {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.status-error {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.status-stale {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+/* =============================================================================
+   Accessibility & Screen Reader Support
+   ============================================================================= */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =============================================================================
+   Responsive Design
+   ============================================================================= */
+
+@media (max-width: 640px) {
+  [data-price-display] {
+    padding: 8px;
+    min-height: 50px;
+  }
+
+  .price-value {
+    font-size: 1.125rem;
+  }
+
+  .price-success,
+  .price-stale {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .error-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .retry-button,
+  .refresh-button,
+  .support-link {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* =============================================================================
+   Dark/Light Mode Adaptations
+   ============================================================================= */
+
+@media (prefers-color-scheme: light) {
+  [data-price-display] {
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .price-value {
+    color: #1f2937;
+  }
+
+  .price-value.stale {
+    color: rgba(31, 41, 55, 0.7);
+  }
+
+  .skeleton-bar {
+    background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.1) 25%,
+      rgba(0, 0, 0, 0.2) 50%,
+      rgba(0, 0, 0, 0.1) 75%
+    );
+  }
+
+  .price-source {
+    color: rgba(31, 41, 55, 0.6);
+    background: rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .error-details {
+    color: rgba(31, 41, 55, 0.5);
+  }
+}
+
+/* =============================================================================
+   High Contrast Mode Support
+   ============================================================================= */
+
+@media (prefers-contrast: high) {
+  [data-price-display] {
+    border-width: 2px;
+  }
+
+  .price-change,
+  .status-indicator,
+  .stale-indicator {
+    border-width: 2px;
+    font-weight: 700;
+  }
+
+  .retry-button,
+  .refresh-button {
+    border: 2px solid #1d4ed8;
+  }
+}
+
+/* =============================================================================
+   Reduced Motion Support
+   ============================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-bar {
+    animation: none;
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

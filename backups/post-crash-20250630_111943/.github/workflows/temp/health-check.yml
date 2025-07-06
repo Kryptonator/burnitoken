@@ -1,0 +1,56 @@
+name: Health Check
+
+on:
+  schedule:
+    - cron: '0 5 * * *' # täglich um 5 Uhr UTC
+  workflow_dispatch:
+
+jobs:
+  health-check:
+    name: 🌡️ Health Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: 📥 Install dependencies
+        run: npm ci || true
+      - name: 🌡️ Run Health Check
+        run: node tools/health-check.js
+      - name: 📤 Upload Health Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: health-report
+          path: HEALTH_REPORT.md
+      - name: Slack-Alert bei Fehler
+        if: failure()
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{
+              "text": ":rotating_light: *Health-Check-Fehler bei BurniToken!*\nWorkflow: health-check\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }' ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Discord-Alert bei Fehler
+        if: failure()
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{
+              "content": ":rotating_light: **Health-Check-Fehler bei BurniToken!**\\nWorkflow: health-check\\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }' ${{ secrets.DISCORD_WEBHOOK_URL }}
+      - name: Status-Webhook bei Erfolg
+        if: success()
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{"status":"success","workflow":"health-check"}' ${{ secrets.STATUS_WEBHOOK_URL }}
+      - name: Status-Webhook bei Fehler
+        if: failure()
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{"status":"failure","workflow":"health-check"}' ${{ secrets.STATUS_WEBHOOK_URL }}
+      - name: GitHub Issue bei kritischem Fehler
+        if: failure()
+        uses: peter-evans/create-issue-from-file@v4
+        with:
+          title: "🚨 Health-Check-Fehler: ${{ github.workflow }} @ ${{ github.sha }}"
+          content-filepath: HEALTH_REPORT.md
+          labels: bug, automated, health-check

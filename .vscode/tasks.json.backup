@@ -1,0 +1,1131 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "🔒 Auto Snyk Security Scan",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "Write-Host '🔒 Starting automatic security scan...' -ForegroundColor Blue; if (Test-Path 'tools/enhanced-security-manager.js') { node tools/enhanced-security-manager.js --silent > $null }; Write-Host '✅ Security scan complete!' -ForegroundColor Green"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 Automatic Extension Check",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "Write-Host '🔍 Performing automatic extension check...' -ForegroundColor Blue; if (Test-Path 'extension-function-validator.js') { node extension-function-validator.js > $null }; Write-Host '✅ Extensions ready!' -ForegroundColor Green"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 Automatic Extension Recovery",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/extension-auto-restart.js",
+        "--on-startup"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔧 Extension Health Check",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "extension-function-validator.js"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Extension Management Full Run",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "master-extension-orchestrator.js"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Extension Configuration Update",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "advanced-extension-manager.js"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🚀 Complete Extension Optimization",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '🔍 Starting Full Extension Optimization...' -ForegroundColor Cyan; node extension-function-validator.js && node advanced-extension-manager.js && node master-extension-orchestrator.js && Write-Host '✅ Extension Optimization Complete!' -ForegroundColor Green"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "new",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🎨 Tailwind: IntelliSense Active",
+      "type": "shell",
+      "command": "echo",
+      "args": [
+        "Tailwind CSS IntelliSense activated - start typing class names for autocomplete"
+      ],
+      "group": "build"
+    },
+    {
+      "label": "♿ Accessibility: WCAG Check",
+      "type": "shell",
+      "command": "echo",
+      "args": [
+        "Web Accessibility extension active - check for WCAG compliance indicators"
+      ],
+      "group": "test"
+    },
+    {
+      "label": "🔄 Start Session-Saver",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/session-saver.js"
+      ],
+      "presentation": {
+        "reveal": "never",
+        "echo": false,
+        "focus": false,
+        "panel": "dedicated",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "🧠 Start AI Conversation Bridge",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/start-ai-bridge.js"
+      ],
+      "presentation": {
+        "reveal": "never",
+        "echo": false,
+        "focus": false,
+        "panel": "dedicated",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "🔍 Show AI Status",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/ai-status.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 Restart All AI Services",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/ai-services-manager.js",
+        "restart"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 GSC Auth Check",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/gsc-auth-check.js"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 GSC Integration Monitor",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/gsc-integration-monitor.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "📊 Extension Status Dashboard",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/extension-status-dashboard.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "🔍 Unified Status Check",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/unified-status-manager.js"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 Auto Start Unified Manager",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/unified-status-manager.js",
+        "--silent"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🚨 GSC Indexierungsprüfung",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/gsc-startup-check.js"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared"
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🚨 Fix GSC Indexierung (noindex entfernen)",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '🔍 Suche nach noindex-Tags...' -ForegroundColor Yellow; Get-ChildItem -Path . -Recurse -Include *.html,*.htm | Select-String -Pattern '<meta.*noindex' | ForEach-Object { Write-Host ('⚠️ In ' + $_.Path + ': ' + $_.Line) -ForegroundColor Red }; Write-Host '🛠️ Starte Reparatur...' -ForegroundColor Cyan; Get-ChildItem -Path . -Recurse -Include *.html,*.htm | ForEach-Object { $content = Get-Content $_.FullName -Raw; if ($content -match '<meta.*noindex') { $updated = $content -replace '<meta.*noindex.*?>', '<!-- INDEXIERUNG AKTIVIERT -->'; Set-Content -Path $_.FullName -Value $updated -Encoding UTF8; Write-Host ('✅ Korrigiert: ' + $_.FullName) -ForegroundColor Green } }; Write-Host '✓ Indexierungs-Fix abgeschlossen!' -ForegroundColor Green"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "new",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔧 Extension Health Check (Worker)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "extension-function-validator.js"
+      ],
+      "group": "test",
+      "isBackground": true,
+      "presentation": {
+        "echo": false,
+        "reveal": "never",
+        "focus": false,
+        "panel": "dedicated",
+        "close": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔍 GSC Indexierungsmonitor (Worker)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/gsc-indexing-monitor.js"
+      ],
+      "isBackground": true,
+      "presentation": {
+        "echo": false,
+        "reveal": "never",
+        "focus": false,
+        "panel": "dedicated",
+        "close": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🚨 GSC Indexierungsprüfung (Worker)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/gsc-startup-check.js"
+      ],
+      "isBackground": true,
+      "presentation": {
+        "echo": false,
+        "reveal": "never",
+        "focus": false,
+        "panel": "dedicated",
+        "close": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔍 GSC Indexierungs-Watcher starten",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/gsc-indexing-watch.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "📊 GSC Indexierungsbericht erstellen",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/gsc-indexing-report.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "📊 Unified Status Report erstellen",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/unified-status-report.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 Auto-Recovery nach Absturz",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/auto-recovery.js"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "🌐 GSC Integration starten",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/gsc-integration.js",
+        "--watch"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "📦 Dependabot Status Check",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/dependabot-status-monitor.js"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 Auto Dependabot Monitor",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/dependabot-status-monitor.js",
+        "--silent",
+        "--background"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "📸 Start Auto Screenshot Recovery (5s)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/auto-screenshot-manager.js"
+      ],
+      "presentation": {
+        "reveal": "never",
+        "close": true,
+        "echo": false,
+        "focus": false,
+        "panel": "dedicated"
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "📸 Take Recovery Screenshot Now",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '📸 Erstelle Recovery-Screenshot...' -ForegroundColor Cyan; node tools/auto-screenshot-manager.js --now; Write-Host '✅ Recovery-Screenshot erstellt!' -ForegroundColor Green"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔍 View Recovery Screenshots",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '🔍 Verfügbare Recovery-Screenshots:' -ForegroundColor Cyan; Get-ChildItem -Path '.recovery-screenshots' -Filter 'vscode_recovery_*.png' | Sort-Object -Property LastWriteTime -Descending | Format-Table Name,@{Name='Time';Expression={$_.LastWriteTime}},@{Name='Size (KB)';Expression={[int]($_.Length / 1KB)}} -AutoSize; Write-Host '💡 Um einen Screenshot zu öffnen, doppelklicken Sie darauf im Explorer.' -ForegroundColor Green"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔒 Sicherheitsrelevante Updates installieren",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/dependency-security-updater.js"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "new",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔍 Analyse der Abhängigkeiten (ohne Update)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/dependency-security-updater.js",
+        "--test"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 VS Code Recovery Center",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '🔍 VS Code Recovery Center wird gestartet...' -ForegroundColor Cyan; Write-Host ''; Write-Host '📸 Recovery-Screenshots:' -ForegroundColor Yellow; Get-ChildItem -Path '.recovery-screenshots' -Filter 'vscode_recovery_*.png' -ErrorAction SilentlyContinue | Sort-Object -Property LastWriteTime -Descending | Select-Object -First 5 | Format-Table Name,@{Name='Zeit';Expression={$_.LastWriteTime.ToString('dd.MM HH:mm')}},@{Name='KB';Expression={[int]($_.Length / 1KB)}} -AutoSize; Write-Host ''; Write-Host '📦 Abhängigkeits-Backups:' -ForegroundColor Yellow; Get-ChildItem -Path '.dependency-backups' -Directory -ErrorAction SilentlyContinue | Sort-Object -Property LastWriteTime -Descending | Select-Object -First 5 | Format-Table Name,@{Name='Zeitpunkt';Expression={$_.LastWriteTime.ToString('dd.MM HH:mm')}} -AutoSize; Write-Host ''; Write-Host '🛠️ Wiederherstellungs-Optionen:' -ForegroundColor Green; Write-Host ' - Task \"📸 Take Recovery Screenshot Now\" für sofortigen Screenshot' -ForegroundColor Cyan; Write-Host ' - Task \"🔒 Sicherheitsrelevante Updates installieren\" für Abhängigkeits-Updates' -ForegroundColor Cyan; Write-Host ' - Task \"🔄 Auto Dependabot Monitor\" für automatisches Monitoring' -ForegroundColor Cyan; Write-Host ''; Write-Host '💡 Tipp: Nutzen Sie den VS Code Explorer, um Screenshots direkt zu öffnen!' -ForegroundColor Magenta;"
+      ],
+      "group": {
+        "kind": "none",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🚨 Automatischer Recovery-Modus",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '🚨 Automatischer Recovery-Modus gestartet...' -ForegroundColor Red; Write-Host 'Screenshots werden alle 2 Minuten erstellt!' -ForegroundColor Yellow; node tools/auto-screenshot-manager.js --interval=2"
+      ],
+      "group": "none",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 Auto Recovery Manager starten",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/auto-recovery-manager.js",
+        "--silent"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "📸 Ultra High-Frequency Screenshots (1s)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/auto-screenshot-manager.js",
+        "--high-freq"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "📸 Standard-Frequency Screenshots (5s)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/auto-screenshot-manager.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "📸 Low-Frequency Screenshots (30s)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/auto-screenshot-manager.js",
+        "--low-freq"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "🗑️ Alte Screenshots aufräumen",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '🔍 Screenshots werden aufgeräumt...' -ForegroundColor Yellow; $count = (Get-ChildItem -Path '.recovery-screenshots' -Filter 'vscode_recovery_*.png' -ErrorAction SilentlyContinue).Count; node tools/auto-screenshot-manager.js --now; Write-Host \"✅ Screenshot-Aufräumen abgeschlossen! Vorher: $count Screenshots\" -ForegroundColor Green"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🚨 Fehler-Report erstellen",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/error-collector.js"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 Auto Fehler-Monitoring",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '🔄 Starte automatisches Fehler-Monitoring...' -ForegroundColor Blue; node tools/error-collector.js > $null; Write-Host '✅ Fehler-Report wurde erstellt: ERROR_REPORT.md' -ForegroundColor Green"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🛠️ GitHub Actions Fehler beheben",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '🔧 GitHub Actions Workflow wird repariert...' -ForegroundColor Yellow; npm install js-yaml --no-save; node tools/fix-github-actions.js; Write-Host '✅ Korrektur abgeschlossen!' -ForegroundColor Green"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔍 Dependabot & GitHub Actions prüfen",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '🔍 Überprüfe Dependabot und GitHub Actions...' -ForegroundColor Cyan; npm install js-yaml --no-save; node tools/check-dependabot-github-actions.js; Write-Host '✅ Überprüfung abgeschlossen!' -ForegroundColor Green"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔒 Snyk Security Scan",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/enhanced-security-manager.js",
+        "--report"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔒 Snyk Continuous Monitor",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/enhanced-security-manager.js",
+        "--monitor"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔍 Check Snyk Token",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "Write-Host '🔍 Checking Snyk authentication status...' -ForegroundColor Blue; npx snyk auth; Write-Host '✅ Check complete!' -ForegroundColor Green"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔍 Snyk Code Security Scan",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "Write-Host '🔍 Running Snyk Code scan...' -ForegroundColor Blue; npx snyk code test || true; Write-Host '✅ Code scan complete!' -ForegroundColor Green"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🛡️ Comprehensive Security Scan",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/enhanced-security-manager.js",
+        "--full",
+        "--report"
+      ],
+      "group": {
+        "kind": "test",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "📚 Snyk Resource Library öffnen",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "Start-Process 'https://snyk.io/de/resource-library/'"
+      ],
+      "group": "none",
+      "presentation": {
+        "reveal": "never",
+        "close": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔒 Snyk Security Monitor (Worker)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/enhanced-security-manager.js",
+        "--monitor",
+        "--silent"
+      ],
+      "isBackground": true,
+      "presentation": {
+        "echo": false,
+        "reveal": "never",
+        "focus": false,
+        "panel": "dedicated",
+        "close": true
+      },
+      "problemMatcher": [],
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
+      "label": "🚨 Snyk Security Alert",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "Write-Host '🚨 Führe Snyk Sicherheitsanalyse durch...' -ForegroundColor Red; node tools/enhanced-security-manager.js --report --silent > ./.security-reports/latest-scan.log; if ($?) { $vulnerabilities = Select-String -Path ./.security-reports/latest-scan.log -Pattern 'vulnerabilities' | Measure-Object | ForEach-Object { $_.Count }; if ($vulnerabilities -gt 0) { Write-Host \"⚠️ $vulnerabilities Sicherheitslücken gefunden!\" -ForegroundColor Yellow; node tools/error-collector.js --source=snyk; Write-Host '📝 Fehler-Report wurde aktualisiert' -ForegroundColor Cyan } else { Write-Host '✅ Keine kritischen Sicherheitslücken gefunden!' -ForegroundColor Green } } else { Write-Host '❌ Sicherheitsanalyse fehlgeschlagen!' -ForegroundColor Red }"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "📢 Security Advisory Check",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "Write-Host '🔍 Prüfe auf Security Advisories...' -ForegroundColor Blue; Write-Host ''; Write-Host '📋 NPM AUDIT:' -ForegroundColor Yellow; npm audit --audit-level=moderate --json | ConvertFrom-Json | ForEach-Object { $_.metadata } | Format-Table vulnerabilities,dependencies -AutoSize; Write-Host ''; Write-Host '📋 SNYK ADVISORIES:' -ForegroundColor Yellow; npx snyk test --severity-threshold=medium --json | ConvertFrom-Json | ForEach-Object { Write-Host (\"🛑 \" + $_.vulnerabilities.count + \" Vulnerabilities in \" + $_.packageManager + \" packages\") -ForegroundColor $(if ($_.vulnerabilities.count -gt 0) {'Red'} else {'Green'}) }; Write-Host ''; Write-Host '✅ Advisory Check abgeschlossen!' -ForegroundColor Green"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🚨 Security Emergency Recovery",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "Write-Host '🚨 SECURITY EMERGENCY RECOVERY' -ForegroundColor Red; Write-Host '==========================================' -ForegroundColor Red; Write-Host 'Sicherung und Wiederherstellung wird gestartet...' -ForegroundColor Yellow; Write-Host ''; $timestamp = Get-Date -Format 'yyyy-MM-dd_HH-mm-ss'; mkdir -Force ./.security-emergency/$timestamp; Write-Host '1️⃣ Sicherung der package.json und package-lock.json' -ForegroundColor Cyan; Copy-Item -Path ./package.json -Destination ./.security-emergency/$timestamp/package.json; Copy-Item -Path ./package-lock.json -Destination ./.security-emergency/$timestamp/package-lock.json -ErrorAction SilentlyContinue; Write-Host '2️⃣ Letzte sichere Abhängigkeiten suchen...' -ForegroundColor Cyan; $latestBackup = Get-ChildItem -Path ./.dependency-backups -Directory | Sort-Object -Property LastWriteTime -Descending | Select-Object -First 1; if ($latestBackup) { Write-Host ('3️⃣ Wiederherstellung von: ' + $latestBackup.Name) -ForegroundColor Green; Copy-Item -Path $latestBackup.FullName/package.json -Destination ./package.json -Force; if (Test-Path $latestBackup.FullName/package-lock.json) { Copy-Item -Path $latestBackup.FullName/package-lock.json -Destination ./package-lock.json -Force }; Write-Host '4️⃣ Abhängigkeiten neu installieren...' -ForegroundColor Cyan; npm ci --quiet; Write-Host '✅ Wiederherstellung abgeschlossen!' -ForegroundColor Green } else { Write-Host '❌ Kein Backup gefunden! Manuelle Wiederherstellung erforderlich.' -ForegroundColor Red }"
+      ],
+      "group": "none",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🕒 Daily Security Scan",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "Write-Host '🕒 Scheduled Security Scan gestartet...' -ForegroundColor Blue; $timestamp = Get-Date -Format 'yyyy-MM-dd'; $reportFile = \"./.security-reports/daily-scan-$timestamp.md\"; New-Item -ItemType File -Path $reportFile -Force | Out-Null; Add-Content -Path $reportFile -Value \"# 🔒 Daily Security Scan: $timestamp`n`n\"; Add-Content -Path $reportFile -Value \"## NPM Audit`n\"; npm audit --json | ConvertFrom-Json | ForEach-Object { $auditSummary = $_.metadata | Format-Table -Property vulnerabilities,dependencies -AutoSize | Out-String; Add-Content -Path $reportFile -Value \"$auditSummary`n\" }; Add-Content -Path $reportFile -Value \"## Snyk Test`n\"; npx snyk test --json | ConvertFrom-Json | ForEach-Object { Add-Content -Path $reportFile -Value \"* Snyk gefunden: $($_.vulnerabilities.length) Schwachstellen`n\"; $_.vulnerabilities | ForEach-Object { Add-Content -Path $reportFile -Value \"  * $($_.severity): $($_.packageName) - $($_.title)`n\" } }; Write-Host '✅ Daily Security Scan abgeschlossen!' -ForegroundColor Green; Write-Host \"Report gespeichert: $reportFile\" -ForegroundColor Cyan"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔍 Snyk Dashboard öffnen",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "Start-Process 'https://app.snyk.io/'"
+      ],
+      "group": "none",
+      "presentation": {
+        "reveal": "never",
+        "close": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "📦 Snyk Auto-Backup erstellen",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/snyk-auto-backup.js"
+      ],
+      "group": "none",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "📋 Snyk Backups anzeigen",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/snyk-auto-backup.js",
+        "--list"
+      ],
+      "group": "none",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 Letztes Snyk Backup wiederherstellen",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/snyk-auto-backup.js",
+        "--restore"
+      ],
+      "group": "none",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "⏰ Start Snyk Auto-Scheduler",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/snyk-auto-scheduler.js",
+        "--daemon"
+      ],
+      "group": "none",
+      "isBackground": true,
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 Snyk Auto-Scheduler: Täglicher Scan",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/snyk-auto-scheduler.js",
+        "--daily"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    }
+  ]
+}
+

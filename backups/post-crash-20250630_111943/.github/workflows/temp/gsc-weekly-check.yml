@@ -1,0 +1,58 @@
+name: Weekly GSC Status Check
+
+on:
+  schedule:
+    # Runs every Monday at 8:00 AM UTC
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+    # Allows manual triggering
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  gsc-status-check:
+    name: 🔍 Google Search Console Status Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 📥 Install dependencies
+        run: npm ci
+      
+      # Erstelle die Service Account Datei aus dem GitHub Secret
+      - name: 📝 Create GSC service account file
+        run: echo '${{ secrets.GSC_SERVICE_ACCOUNT }}' > ./tools/gsc-service-account.json
+        
+      # Führe den GSC Status Check aus
+      - name: 🔍 Run GSC status check
+        id: gsc-check
+        run: node ./tools/gsc-status-check.js
+        continue-on-error: true
+      
+      # Führe eine erweiterte Diagnose aus, wenn der Check fehlschlägt
+      - name: 🩺 Run GSC diagnosis if check failed
+        if: steps.gsc-check.outcome == 'failure'
+        run: node ./tools/gsc-status-check.js --diagnose
+      
+      # Lösche die Service Account Datei vor dem Ende des Workflows
+      - name: 🗑️ Remove service account file
+        if: always()
+        run: rm -f ./tools/gsc-service-account.json
+        
+      # Führe einen Webhook-Aufruf durch, wenn Fehler auftreten
+      - name: 📢 Send notification on failure
+        if: steps.gsc-check.outcome == 'failure'
+        uses: distributhor/workflow-webhook@v3
+        env:
+          webhook_url: ${{ secrets.NOTIFICATION_WEBHOOK_URL }}
+          webhook_secret: ${{ secrets.NOTIFICATION_WEBHOOK_SECRET }}
+          data: '{"type":"gsc-status-check", "status":"failure", "repository":"${{ github.repository }}", "workflow":"${{ github.workflow }}", "run_id":"${{ github.run_id }}"}'

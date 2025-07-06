@@ -1,0 +1,678 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "� Dependency Security Manager",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/dependency-security-manager.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "�🚀 Master Task Manager (Auto-Start)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/master-task-manager.js",
+        "--silent"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🤖 Unified Monitoring (Auto-Start)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/unified-monitoring-service.js",
+        "--silent"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🚀 Master Task Manager (Manuell)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/master-task-manager.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "📊 Task Manager Status anzeigen",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/task-manager-status.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "📊 Extension Status Dashboard",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/extension-status-dashboard.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔧 Extension Health Check",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "extension-function-validator.js"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 GSC Integration Monitor",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/gsc-integration-monitor.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "🔍 Unified Status Check",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/unified-status-manager.js"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 VS Code Recovery Center",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '🔍 VS Code Recovery Center wird gestartet...' -ForegroundColor Cyan; Write-Host ''; Write-Host '📸 Recovery-Screenshots:' -ForegroundColor Yellow; Get-ChildItem -Path '.recovery-screenshots' -Filter 'vscode_recovery_*.png' -ErrorAction SilentlyContinue | Sort-Object -Property LastWriteTime -Descending | Select-Object -First 5 | Format-Table Name,@{Name='Zeit';Expression={$_.LastWriteTime.ToString('dd.MM HH:mm')}},@{Name='KB';Expression={[int]($_.Length / 1KB)}} -AutoSize; Write-Host ''; Write-Host '🛠️ Wiederherstellungs-Optionen:' -ForegroundColor Green; Write-Host ' - Task \"📸 Take Recovery Screenshot Now\" für sofortigen Screenshot' -ForegroundColor Cyan; Write-Host ''; Write-Host '💡 Tipp: Nutzen Sie den VS Code Explorer, um Screenshots direkt zu öffnen!' -ForegroundColor Magenta;"
+      ],
+      "group": {
+        "kind": "none",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "📸 Take Recovery Screenshot Now",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '📸 Erstelle Recovery-Screenshot...' -ForegroundColor Cyan; node tools/auto-screenshot-manager.js --now; Write-Host '✅ Recovery-Screenshot erstellt!' -ForegroundColor Green"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🚀 Complete Extension Optimization",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "Write-Host '🔍 Starting Full Extension Optimization...' -ForegroundColor Cyan; node extension-function-validator.js && node advanced-extension-manager.js && node master-extension-orchestrator.js && Write-Host '✅ Extension Optimization Complete!' -ForegroundColor Green"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "new",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🌐 Website Health Check",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/website-health-check.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "🚢 Deployment Status Check",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/deployment-checker.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "🚀 Unified Monitoring Service",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/unified-monitoring-service.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "📊 Master Status Dashboard",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/master-status-dashboard.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "📊 Status Dashboard generieren",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/generate-status-dashboard.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 Start Continuous Monitoring",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/unified-monitoring-service.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "👀 [Überwachung] Dependabot PRs prüfen",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/dependabot-monitor.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "🔧 Start Auto-Recovery System",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/auto-recovery-system.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "⚡ Force Website Recovery",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/auto-recovery-system.js",
+        "--force"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "🛠️ Fix PowerShell Problems",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/safe-task-starter.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "📊 Status-Report generieren",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/generate-status-report.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "💻 Start PowerShell-Safe Monitoring",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/powerfix-monitoring.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "🌍 Test I18N",
+      "type": "shell",
+      "command": "npx",
+      "args": [
+        "playwright",
+        "test",
+        "tests/i18n.test.js"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      }
+    },
+    {
+      "label": "♿ Accessibility Check",
+      "type": "shell",
+      "command": "npx",
+      "args": [
+        "playwright",
+        "test",
+        "tests/accessibility.test.js"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      }
+    },
+    {
+      "label": "🔗 Test API",
+      "type": "shell",
+      "command": "npx",
+      "args": [
+        "playwright",
+        "test",
+        "tests/api.spec.js"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      }
+    },
+    {
+      "label": "⚡ Performance Test",
+      "type": "shell",
+      "command": "npx",
+      "args": [
+        "playwright",
+        "test",
+        "tests/performance.test.js"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      }
+    },
+    {
+      "label": "🌐 Browser Compatibility Test",
+      "type": "shell",
+      "command": "npx",
+      "args": [
+        "playwright",
+        "test",
+        "tests/browser-compatibility.test.js"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "clear": true
+      }
+    },
+    {
+      "label": "🔄 GSC Auth Check",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/gsc-auth-check.js"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "🔒 Snyk Security Scan",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/enhanced-security-manager.js",
+        "--report"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "💾 Session-Saver: Sitzung speichern",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/session-saver.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "group": "build"
+    },
+    {
+      "label": "🤖 AI Conversation Bridge starten",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/ai-conversation-bridge.js"
+      ],
+      "isBackground": true,
+      "presentation": {
+        "echo": true,
+        "reveal": "silent"
+      },
+      "group": "build"
+    },
+    {
+      "label": "🔑 GSC Auth Check (Auto-Start)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/gsc-auth-check.js"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "🤖 KI Auth Check (Auto-Start)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/ai-auth-check.js"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "🤖 AI Conversation Bridge (Auto-Start)",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/ai-conversation-bridge.js"
+      ],
+      "isBackground": true,
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "group": "build"
+    },
+    {
+      "label": "🧠 AI-Status anzeigen",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/ai-status-reporter.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared"
+      },
+      "group": "test"
+    },
+    {
+      "label": "🔄 Alle KI-Dienste neustarten",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "tools/restart-ai-services.js"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared"
+      },
+      "group": "build"
+    }
+  ]
+}

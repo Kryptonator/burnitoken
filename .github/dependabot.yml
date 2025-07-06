@@ -1,0 +1,145 @@
+version: 2
+updates:
+  # npm Pakete aktualisieren (optimiert für das burnitoken-Projekt)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Berlin"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "Kryptonator"
+    assignees:
+      - "Kryptonator"
+    commit-message:
+      prefix: "📦"
+      prefix-development: "🔧"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "javascript"
+      - "security-review" 
+    versioning-strategy: "auto"
+    groups:
+      # Entwicklungs-Tools gemeinsam aktualisieren
+      dev-tools:
+        patterns:
+          - "*-loader"
+          - "eslint*"
+          - "*-plugin"
+          - "test-*"
+          - "prettier*"
+          - "webpack*"
+          - "babel*"
+          - "jest*"
+          - "postcss*"
+        update-types:
+          - "minor"
+          - "patch"
+      # Tailwind Abhängigkeiten zusammen aktualisieren
+      tailwind-ecosystem:
+        patterns:
+          - "tailwindcss"
+          - "autoprefixer"
+          - "cssnano"
+          - "postcss*"
+        update-types:
+          - "minor"
+          - "patch"
+      # Test-Framework gemeinsam aktualisieren
+      test-ecosystem:
+        patterns:
+          - "jest*"
+          - "@playwright*"
+          - "selenium*"
+        update-types:
+          - "minor"
+          - "patch"
+      # Übrige kleinere Dependencies für schnelles Update
+      minor-dependencies:
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "*-loader"
+          - "eslint*"
+          - "*-plugin"
+          - "test-*"
+          - "prettier*"
+          - "webpack*"
+          - "tailwindcss"
+          - "jest*"
+          - "@playwright*"
+        update-types:
+          - "patch"
+    # Automatisches Mergen für Sicherheits-Updates und kleinere Patches
+    automerge: true
+    ignore-workflow-files: false
+    automergeable-types: 
+      - "security:patch"
+      - "version-update:semver-patch"
+    # Priorisiere sicherheitsrelevante Pakete
+    security-updates-only: false
+    rebase-strategy: "auto"
+
+  # GitHub Actions aktualisieren (optimiert für CI/CD-Pipeline)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Berlin"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "Kryptonator"
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "ci-cd"
+    commit-message:
+      prefix: "👷"
+      include: "scope"
+    automerge: true
+    automergeable-types: 
+      - "security:patch"
+      - "version-update:semver-patch"
+
+  # Docker-Container aktualisieren (falls verwendet)
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "wednesday" 
+      time: "10:00"
+      timezone: "Europe/Berlin"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+      - "docker"
+    commit-message:
+      prefix: "🐳"
+      include: "scope"
+      
+# Globale Einstellungen für alle Ecosystems
+registries:
+  npm-github:
+    type: npm-registry
+    url: https://npm.pkg.github.com
+    token: ${{secrets.GITHUB_TOKEN}}
+    
+  npm-npmjs:
+    type: npm-registry
+    url: https://registry.npmjs.org
+    
+# Spezielle Erlaubte Lizenzen (Compliance-Filter)
+allowed-licenses:
+  - MIT
+  - Apache-2.0
+  - BSD-2-Clause
+  - BSD-3-Clause
+  - ISC
+  - 0BSD
+  - CC0-1.0
+  - Unlicense

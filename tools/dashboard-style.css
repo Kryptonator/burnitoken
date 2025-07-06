@@ -1,0 +1,125 @@
+/* tools/dashboard-style.css */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f7f9;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.dashboard-header {
+  background-color: #4a5568; /* Tailwind's gray-700 */
+  color: white;
+  padding: 25px 30px;
+  text-align: center;
+  border-bottom: 5px solid #2d3748; /* Tailwind's gray-800 */
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  font-size: 2.5em;
+  font-weight: 700;
+}
+
+.summary {
+  margin-top: 15px;
+  font-size: 1.1em;
+}
+
+main {
+  padding: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.check-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0; /* Tailwind's gray-200 */
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.check-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.check-title {
+  font-size: 1.4em;
+  font-weight: 700;
+  margin: 0;
+}
+
+.status-icon {
+  font-size: 1.5em;
+}
+
+.status-label {
+  font-size: 0.9em;
+  font-weight: bold;
+  padding: 5px 12px;
+  border-radius: 15px;
+  color: white;
+}
+
+.status-label.success {
+  background-color: #28a745; /* Green */
+}
+
+.status-label.error {
+  background-color: #dc3545; /* Red */
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.card-body p {
+  margin: 0 0 15px 0;
+  line-height: 1.6;
+}
+
+.details-box {
+  background-color: #f8f9fa; /* Lighter gray */
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  padding: 15px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9em;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.dashboard-footer {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  text-align: center;
+  padding: 15px;
+  font-size: 0.9em;
+  border-top: 1px solid #e2e8f0;
+}

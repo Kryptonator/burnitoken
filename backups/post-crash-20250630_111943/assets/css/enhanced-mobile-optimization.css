@@ -1,0 +1,460 @@
+/* Enhanced Mobile and Touch Optimizations */
+/* Supports all mobile browsers, tablets, and touch devices */
+
+/* Touch target optimization - minimum 44px targets */
+.touch-optimized,
+button,
+[role='button'],
+a,
+input,
+select,
+textarea,
+.nav-link,
+.pixar-button {
+  min-height: 44px !important;
+  min-width: 44px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 12px 16px !important;
+  position: relative !important;
+}
+
+/* Enhanced touch feedback */
+.touch-optimized:active,
+button:active,
+[role='button']:active,
+.pixar-button:active {
+  transform: scale(0.98) !important;
+  opacity: 0.8 !important;
+  transition:
+    transform 0.1s ease,
+    opacity 0.1s ease !important;
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-appearance: none) {
+  /* Fix iOS safari viewport issues */
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Fix iOS safari button styling */
+  button,
+  input[type='button'],
+  input[type='submit'],
+  .pixar-button {
+    -webkit-appearance: none;
+    border-radius: 8px;
+    background-clip: padding-box;
+  }
+
+  /* Fix iOS safari focus outline */
+  button:focus,
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: 2px solid #f97316;
+    outline-offset: 2px;
+  }
+}
+
+/* Android Chrome specific fixes */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  /* Fix Android Chrome select styling */
+  select {
+    background-image:
+      linear-gradient(45deg, transparent 50%, #f97316 50%),
+      linear-gradient(135deg, #f97316 50%, transparent 50%);
+    background-position:
+      calc(100% - 20px) calc(1em + 2px),
+      calc(100% - 15px) calc(1em + 2px);
+    background-size:
+      5px 5px,
+      5px 5px;
+    background-repeat: no-repeat;
+  }
+}
+
+/* Samsung Internet browser fixes */
+@media screen and (min-device-width: 320px) and (max-device-width: 812px) {
+  /* Fix Samsung Internet font rendering */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Fix Samsung Internet button hover states */
+  .pixar-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(249, 115, 22, 0.3);
+  }
+}
+
+/* Enhanced mobile navigation */
+@media (max-width: 768px) {
+  /* Mobile menu optimization */
+  #mobile-menu {
+    position: fixed;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 999;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #mobile-menu.show {
+    transform: translateY(-100%);
+  }
+
+  /* Mobile menu links */
+  #mobile-menu a {
+    display: block;
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(249, 115, 22, 0.1);
+    font-size: 18px;
+    font-weight: 500;
+    color: #f97316;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  #mobile-menu a:hover,
+  #mobile-menu a:focus {
+    background: rgba(249, 115, 22, 0.1);
+    padding-left: 32px;
+  }
+
+  /* Mobile hero section */
+  .hero-gradient {
+    min-height: 100vh;
+    padding: 24px 16px;
+  }
+
+  /* Mobile KPI cards */
+  .kpi-card {
+    padding: 16px 12px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .kpi-card:active {
+    transform: scale(0.98);
+  }
+
+  /* Mobile section cards */
+  .section-card {
+    margin-bottom: 24px;
+    border-radius: 16px;
+    padding: 24px 20px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Tablet-specific optimizations */
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* Tablet navigation */
+  .nav-link {
+    padding: 12px 16px;
+    margin: 0 4px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  /* Tablet grid adjustments */
+  .grid-cols-1.sm\\:grid-cols-2.lg\\:grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  /* Tablet hero adjustments */
+  .burni-mascot {
+    width: 12rem;
+    height: 12rem;
+  }
+}
+
+/* High-DPI display optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Crisp borders and shadows for retina displays */
+  .section-card,
+  .kpi-card,
+  .pixar-button {
+    border: 0.5px solid rgba(249, 115, 22, 0.2);
+  }
+
+  /* Enhanced text rendering */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Landscape mobile optimization */
+@media screen and (orientation: landscape) and (max-height: 500px) {
+  /* Compact header for landscape mobile */
+  header {
+    padding: 8px 0;
+  }
+
+  /* Reduce hero height in landscape */
+  .hero-gradient {
+    min-height: 90vh;
+    padding: 16px;
+  }
+
+  /* Compact navigation */
+  .nav-link {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+}
+
+/* Dark mode preference support */
+@media (prefers-color-scheme: dark) {
+  /* Dark mode mobile optimizations */
+  #mobile-menu {
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(20px);
+  }
+
+  #mobile-menu a {
+    color: #fb923c;
+    border-bottom-color: rgba(251, 146, 60, 0.2);
+  }
+
+  .section-card {
+    background: rgba(0, 0, 0, 0.8);
+    color: #f3f4f6;
+    border: 1px solid rgba(251, 146, 60, 0.3);
+  }
+
+  .kpi-card {
+    background: rgba(0, 0, 0, 0.85);
+    color: #f3f4f6;
+    border: 1px solid rgba(251, 146, 60, 0.2);
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  /* Disable animations for accessibility */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Maintain focus indicators */
+  .pixar-button:focus,
+  button:focus,
+  a:focus {
+    outline: 3px solid #f97316;
+    outline-offset: 2px;
+  }
+}
+
+/* Print optimizations */
+@media print {
+  /* Hide interactive elements */
+  button,
+  .pixar-button,
+  #mobile-menu-button,
+  #language-switcher,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Optimize layout for printing */
+  .section-card,
+  .kpi-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+
+  /* Ensure text is readable */
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #000;
+    background: #fff;
+  }
+}
+
+/* Accessibility enhancements */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.sr-only:focus {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 8px 16px !important;
+  margin: 0 !important;
+  overflow: visible !important;
+  clip: auto !important;
+  white-space: normal !important;
+  background: #f97316 !important;
+  color: #fff !important;
+  border-radius: 4px !important;
+  text-decoration: none !important;
+}
+
+/* Focus management */
+.focus-visible {
+  outline: 3px solid #f97316 !important;
+  outline-offset: 2px !important;
+}
+
+/* Enhanced loading states */
+.loading-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Performance optimization classes */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 200px;
+}
+
+/* Internet Explorer specific fixes */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  /* IE11 flexbox fixes */
+  .flex {
+    display: -ms-flexbox;
+    display: flex;
+  }
+
+  .items-center {
+    -ms-flex-align: center;
+    align-items: center;
+  }
+
+  .justify-between {
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+  }
+
+  /* IE11 grid fallback */
+  .grid {
+    display: -ms-grid;
+    display: grid;
+  }
+
+  .grid-cols-2 {
+    -ms-grid-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .grid-cols-4 {
+    -ms-grid-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
+/* Legacy browser notifications */
+.legacy-browser-notice {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #92400e;
+  padding: 12px 16px;
+  text-align: center;
+  font-weight: 500;
+  z-index: 9999;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+}
+
+.legacy-browser-notice.show {
+  transform: translateY(0);
+}
+
+.legacy-browser-notice button {
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 4px;
+  padding: 4px 12px;
+  margin-left: 12px;
+  color: #92400e;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Performance monitoring styles */
+.performance-indicator {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-family: monospace;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.performance-indicator.show {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .performance-indicator {
+    bottom: 10px;
+    right: 10px;
+    font-size: 10px;
+    padding: 6px 10px;
+  }
+}

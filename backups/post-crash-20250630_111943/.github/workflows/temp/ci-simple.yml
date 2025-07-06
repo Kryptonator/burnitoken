@@ -1,0 +1,115 @@
+name: CI - Test and Validate
+
+on:
+  pull_request:
+    branches: [ main, master ]
+  push:
+    branches: [ develop, feature/* ]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: ✅ Validate Static Website
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: ✅ Validate HTML structure
+        run: |
+          echo "🔍 Validating HTML files..."
+          if [[ -f "index.html" ]]; then
+            echo "✅ index.html found"
+            # Basic HTML validation
+            if grep -q "<!DOCTYPE html>" index.html; then
+              echo "✅ DOCTYPE declaration found"
+            else
+              echo "⚠️ Missing DOCTYPE declaration"
+            fi
+            
+            if grep -q "<title>" index.html; then
+              echo "✅ Title tag found"
+            else
+              echo "⚠️ Missing title tag"
+            fi
+            
+            if grep -q "lang=" index.html; then
+              echo "✅ Language attribute found"
+            else
+              echo "⚠️ Missing language attribute"
+            fi
+          else
+            echo "❌ index.html missing"
+            exit 1
+          fi
+          
+      - name: ✅ Validate CSS/JS assets
+        run: |
+          echo "🔍 Checking CSS and JavaScript files..."
+          css_count=$(find assets/ -name "*.css" 2>/dev/null | wc -l)
+          js_count=$(find assets/ -name "*.js" 2>/dev/null | wc -l)
+          
+          echo "📊 Found $css_count CSS files"
+          echo "📊 Found $js_count JavaScript files"
+          
+          if [[ $css_count -gt 0 ]]; then
+            echo "✅ CSS assets found"
+            find assets/ -name "*.css" | head -5
+          else
+            echo "⚠️ No CSS files found"
+          fi
+          
+          if [[ $js_count -gt 0 ]]; then
+            echo "✅ JavaScript assets found"
+            find assets/ -name "*.js" | head -5
+          else
+            echo "⚠️ No JavaScript files found"
+          fi
+          
+      - name: ✅ Check images and icons
+        run: |
+          echo "🔍 Checking image assets..."
+          img_count=$(find assets/ -name "*.webp" -o -name "*.png" -o -name "*.jpg" -o -name "*.ico" 2>/dev/null | wc -l)
+          
+          echo "📊 Found $img_count image files"
+          
+          if [[ $img_count -gt 0 ]]; then
+            echo "✅ Image assets found"
+            find assets/ \( -name "*.webp" -o -name "*.png" -o -name "*.jpg" -o -name "*.ico" \) | head -10
+          else
+            echo "⚠️ No image files found"
+          fi
+          
+      - name: ✅ Validate manifest.json
+        run: |
+          if [[ -f "manifest.json" ]]; then
+            echo "✅ manifest.json found"
+            # Basic JSON validation
+            if python3 -m json.tool manifest.json > /dev/null 2>&1; then
+              echo "✅ manifest.json is valid JSON"
+            else
+              echo "❌ manifest.json is invalid JSON"
+              exit 1
+            fi
+          else
+            echo "⚠️ manifest.json not found (PWA functionality may be limited)"
+          fi
+          
+      - name: 📊 Generate validation report
+        run: |
+          echo "# 🧪 CI Validation Report" > CI_VALIDATION_REPORT.md
+          echo "- Date: $(date)" >> CI_VALIDATION_REPORT.md
+          echo "- Branch: ${{ github.ref_name }}" >> CI_VALIDATION_REPORT.md
+          echo "- Commit: ${{ github.sha }}" >> CI_VALIDATION_REPORT.md
+          echo "- Status: ✅ Static website validation completed" >> CI_VALIDATION_REPORT.md
+          echo "" >> CI_VALIDATION_REPORT.md
+          echo "## File Structure:" >> CI_VALIDATION_REPORT.md
+          echo '```' >> CI_VALIDATION_REPORT.md
+          ls -la | grep -E '\.(html|json|css|js|webp|png|ico)$' >> CI_VALIDATION_REPORT.md || echo "No matching files in root"
+          echo '```' >> CI_VALIDATION_REPORT.md
+          echo "" >> CI_VALIDATION_REPORT.md
+          echo "## Assets:" >> CI_VALIDATION_REPORT.md
+          echo '```' >> CI_VALIDATION_REPORT.md
+          find assets/ -type f 2>/dev/null | head -20 >> CI_VALIDATION_REPORT.md || echo "No assets found"
+          echo '```' >> CI_VALIDATION_REPORT.md
