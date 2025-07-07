@@ -1,0 +1,87 @@
+{
+  "en": {
+    "translation": {
+      "nav_home": "Home",
+      "nav_about": "About Burni",
+      "nav_tokenomics": "Tokenomics",
+      "nav_use_cases": "Use Cases",
+      "nav_token_schedule": "Token Schedule",
+      "nav_trade": "Trade Tokens",
+      "nav_calculator": "Calculator",
+      "nav_community": "Community",
+      "nav_xrpl_resources": "XRPL Explorer",
+      "menu_button": "Menu",
+      "hero_title": "Burni Token - Creating Value Through Scarcity",
+      "hero_subtitle": "Join the revolutionary deflationary cryptocurrency that burns tokens to increase value. Built on XRPL with community-driven innovation.",
+      "lang_select_label": "Select language"
+    }
+  },
+  "de": {
+    "translation": {
+      "nav_home": "Startseite",
+      "nav_about": "Über Burni",
+      "nav_tokenomics": "Tokenomics",
+      "nav_use_cases": "Anwendungsfälle",
+      "nav_token_schedule": "Token Zeitplan",
+      "nav_trade": "Token handeln",
+      "nav_calculator": "Rechner",
+      "nav_community": "Community",
+      "nav_xrpl_resources": "XRPL Explorer",
+      "menu_button": "Menü",
+      "hero_title": "Burni Token - Wert durch Knappheit schaffen",
+      "hero_subtitle": "Schließe dich der revolutionären deflationären Kryptowährung an, die Token verbrennt, um den Wert zu steigern. Entwickelt auf XRPL mit Community-Innovation.",
+      "lang_select_label": "Sprache wählen"
+    }
+  },
+  "es": {
+    "translation": {
+      "nav_home": "Inicio",
+      "nav_about": "Sobre Burni",
+      "nav_tokenomics": "Tokenómica",
+      "nav_use_cases": "Casos de uso",
+      "nav_token_schedule": "Calendario de tokens",
+      "nav_trade": "Comerciar tokens",
+      "nav_calculator": "Calculadora",
+      "nav_community": "Comunidad",
+      "nav_xrpl_resources": "XRPL Explorer",
+      "menu_button": "Menú",
+      "hero_title": "Burni Token - Creando valor a través de la escasez",
+      "hero_subtitle": "Únete a la criptomoneda deflacionaria revolucionaria que quema tokens para aumentar el valor. Construido en XRPL con innovación impulsada por la comunidad.",
+      "lang_select_label": "Seleccionar idioma"
+    }
+  },
+  "fr": {
+    "translation": {
+      "nav_home": "Accueil",
+      "nav_about": "À propos de Burni",
+      "nav_tokenomics": "Tokenomics",
+      "nav_use_cases": "Cas d'utilisation",
+      "nav_token_schedule": "Calendrier des tokens",
+      "nav_trade": "Échanger des tokens",
+      "nav_calculator": "Calculatrice",
+      "nav_community": "Communauté",
+      "nav_xrpl_resources": "XRPL Explorer",
+      "menu_button": "Menu",
+      "hero_title": "Burni Token - Créer de la valeur par la rareté",
+      "hero_subtitle": "Rejoignez la cryptomonnaie déflationniste révolutionnaire qui brûle des tokens pour augmenter la valeur. Construit sur XRPL avec l'innovation communautaire.",
+      "lang_select_label": "Choisir la langue"
+    }
+  },
+  "ar": {
+    "translation": {
+      "nav_home": "الرئيسية",
+      "nav_about": "حول بورني",
+      "nav_tokenomics": "الرموز الاقتصادية",
+      "nav_use_cases": "حالات الاستخدام",
+      "nav_token_schedule": "جدول الرموز",
+      "nav_trade": "تداول الرموز",
+      "nav_calculator": "حاسبة",
+      "nav_community": "المجتمع",
+      "nav_xrpl_resources": "XRPL Explorer",
+      "menu_button": "القائمة",
+      "hero_title": "Burni Token - خلق القيمة من خلال النقص",
+      "hero_subtitle": "انضم إلى العملة المشفرة الانكماشية الثورية التي تحرق الرموز لزيادة القيمة. مبني على XRPL مع ابتكار يقوده المجتمع.",
+      "lang_select_label": "اختر اللغة"
+    }
+  }
+}

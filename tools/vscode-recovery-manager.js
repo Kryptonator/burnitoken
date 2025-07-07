@@ -94,7 +94,7 @@ const recoveryStatus = {
 // Initialisierung der Services im Status-Objekt
 CRITICAL_SERVICES.forEach(service => {
   recoveryStatus.services[service.id] = {
-    id: service.id),
+    id: service.id,
     name: service.name,
     status: 'unknown',
     lastRestart: null,
@@ -108,29 +108,29 @@ CRITICAL_SERVICES.forEach(service => {
  */
 function log(message, level = 'info') {
   const timestamp = new Date().toISOString();
-  const formattedMessage = `[$${timestamp}] [${level.toUpperCase()}] ${message}`;
+  const formattedMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
   
   // Output zu Konsole
   switch(level) {
     case 'error':
-      console.error(`❌ $${message}`);
+      console.error(`❌ ${message}`);
       break;
     case 'warn':
-      console.warn(`⚠️ $${message}`);
+      console.warn(`⚠️ ${message}`);
       break;
     case 'success':
-      console.log(`✅ $${message}`);
+      console.log(`✅ ${message}`);
       break;
     case 'info':
     default:
-      console.log(`ℹ️ $${message}`);
+      console.log(`ℹ️ ${message}`);
   }
   
   // Log in Datei
   try {
     fs.appendFileSync(CONFIG.LOG_FILE, formattedMessage + '\n');
   } catch (err) {
-    console.error(`Fehler beim Schreiben ins Log: $${err.message}`);
+    console.error(`Fehler beim Schreiben ins Log: ${err.message}`);
   }
 }
 
@@ -142,7 +142,7 @@ function saveStatus() {
     recoveryStatus.lastCheck = new Date().toISOString();
     fs.writeFileSync(CONFIG.STATUS_FILE, JSON.stringify(recoveryStatus, null, 2));
   } catch (err) {
-    log(`Fehler beim Speichern des Status: $${err.message}`, 'error');
+    log(`Fehler beim Speichern des Status: ${err.message}`, 'error');
   }
 }
 
@@ -151,7 +151,7 @@ function saveStatus() {
  */
 function loadStatus() {
   try {
-    if (fs.existsSync(CONFIG.STATUS_FILE)) { 
+    if (fs.existsSync(CONFIG.STATUS_FILE)) {
       const savedStatus = JSON.parse(fs.readFileSync(CONFIG.STATUS_FILE, 'utf8'));
       
       // Merge mit aktuellem Status, aber behalte Struktur bei
@@ -162,9 +162,9 @@ function loadStatus() {
       recoveryStatus.recoveryHistory = savedStatus.recoveryHistory || [];
       
       // Services mergen
-      if (savedStatus.services) { 
+      if (savedStatus.services) {
         Object.keys(savedStatus.services).forEach(serviceId => {
-          if (recoveryStatus.services[serviceId]) { 
+          if (recoveryStatus.services[serviceId]) {
             recoveryStatus.services[serviceId] = {
               ...recoveryStatus.services[serviceId],
               ...savedStatus.services[serviceId]
@@ -176,7 +176,7 @@ function loadStatus() {
       log('Status geladen', 'info');
     }
   } catch (err) {
-    log(`Fehler beim Laden des Status: $${err.message}`, 'error');
+    log(`Fehler beim Laden des Status: ${err.message}`, 'error');
   }
 }
 
@@ -189,43 +189,43 @@ function detectVSCodeProcess() {
     let command = '';
     
     // Je nach Betriebssystem unterschiedliche Befehle
-    if (process.platform === 'win32') { 
+    if (process.platform === 'win32') {
       command = 'powershell -Command "Get-Process Code | Select-Object -Property Id | ConvertTo-Json"';
-    } else if (process.platform === 'darwin') { 
+    } else if (process.platform === 'darwin') {
       command = 'pgrep -x "Code"';
-    } else { 
+    } else {
       command = 'pgrep -x "code"';
     }
     
     // Befehl ausführen und PID extrahieren
     const output = execSync(command, { encoding: 'utf8' });
     
-    if (process.platform === 'win32') { 
+    if (process.platform === 'win32') {
       try {
         // Windows PowerShell gibt JSON zurück
         const processes = JSON.parse(output);
         
         // Wir nehmen die erste gefundene PID
-        if (Array.isArray(processes)) { 
+        if (Array.isArray(processes)) {
           pid = processes[0].Id;
-        } else { 
+        } else {
           pid = processes.Id;
         }
       } catch (err) {
-        log(`Fehler beim Parsen der VS Code PID: $${err.message}`, 'error');
+        log(`Fehler beim Parsen der VS Code PID: ${err.message}`, 'error');
       }
-    } else { 
+    } else {
       // Unix-basierte Systeme geben einfach die PID zurück
       pid = parseInt(output.trim().split('\n')[0], 10);
     }
     
     // PID speichern
-    if (pid && !isNaN(pid)) { 
-      log(`VS Code Prozess erkannt: PID $${pid}`, 'info');
+    if (pid && !isNaN(pid)) {
+      log(`VS Code Prozess erkannt: PID ${pid}`, 'info');
       
       // Wenn wir eine andere PID als zuvor haben, wurde VS Code neu gestartet
-      if (recoveryStatus.vscodePid && recoveryStatus.vscodePid !== pid) { 
-        log(`VS Code Neustart erkannt! Alter PID: $${recoveryStatus.vscodePid}, neuer PID: ${pid}`, 'warn');
+      if (recoveryStatus.vscodePid && recoveryStatus.vscodePid !== pid) {
+        log(`VS Code Neustart erkannt! Alter PID: ${recoveryStatus.vscodePid}, neuer PID: ${pid}`, 'warn');
         recoveryStatus.vscodeRestarts++;
         recoveryStatus.lastRecovery = new Date().toISOString();
         
@@ -238,7 +238,7 @@ function detectVSCodeProcess() {
       
       // PID auch in separater Datei speichern für andere Tools
       fs.writeFileSync(CONFIG.VSCODE_PID_FILE, JSON.stringify({
-        pid: pid),
+        pid: pid,
         timestamp: new Date().toISOString(),
         platform: process.platform
       }, null, 2));
@@ -248,7 +248,7 @@ function detectVSCodeProcess() {
     
     return null;
   } catch (err) {
-    log(`Fehler beim Erkennen des VS Code Prozesses: $${err.message}`, 'error');
+    log(`Fehler beim Erkennen des VS Code Prozesses: ${err.message}`, 'error');
     return null;
   }
 }
@@ -266,7 +266,7 @@ async function checkServiceStatus(service) {
     return true;
   } catch (err) {
     // Fehler beim Ausführen des Status-Checks
-    log(`Status-Check für $${service.name} fehlgeschlagen: ${err.message}`, 'warn');
+    log(`Status-Check für ${service.name} fehlgeschlagen: ${err.message}`, 'warn');
     recoveryStatus.services[service.id].status = 'stopped';
     return false;
   }
@@ -276,11 +276,11 @@ async function checkServiceStatus(service) {
  * Startet einen einzelnen Service neu
  */
 async function restartService(service) {
-  log(`Starte Service neu: $${service.name}`, 'info');
+  log(`Starte Service neu: ${service.name}`, 'info');
   try {
     // Process starten
     const child = spawn(service.restartCommand, {
-      shell: true),
+      shell: true,
       detached: true,
       stdio: 'ignore'
     });
@@ -288,17 +288,17 @@ async function restartService(service) {
     recoveryStatus.services[service.id].lastRestart = new Date().toISOString();
     recoveryStatus.services[service.id].restartCount++;
     recoveryStatus.services[service.id].status = 'restarting';
-    log(`Service $${service.name} neu gestartet`, 'success');
+    log(`Service ${service.name} neu gestartet`, 'success');
     setTimeout(() => {
       checkServiceStatus(service)
         .then(isRunning => {
-          if (isRunning) { 
-            log(`Service $${service.name} läuft nach Neustart`, 'success');
-          } else { 
-            log(`Service $${service.name} läuft nach Neustart nicht`, 'warn');
+          if (isRunning) {
+            log(`Service ${service.name} läuft nach Neustart`, 'success');
+          } else {
+            log(`Service ${service.name} läuft nach Neustart nicht`, 'warn');
             // Alert bei Fehlschlag
             sendAlert({
-              message: `[Recovery Manager] Service $${service.name} konnte nach Recovery nicht gestartet werden!`),
+              message: `[Recovery Manager] Service ${service.name} konnte nach Recovery nicht gestartet werden!`,
               level: 'error',
               // webhookUrl: 'https://hooks.slack.com/services/xxx/yyy/zzz'
             });
@@ -308,11 +308,11 @@ async function restartService(service) {
     }, 5000);
     return true;
   } catch (err) {
-    log(`Fehler beim Neustart von $${service.name}: ${err.message}`, 'error');
+    log(`Fehler beim Neustart von ${service.name}: ${err.message}`, 'error');
     recoveryStatus.services[service.id].status = 'error';
     // Alert bei schwerem Fehler
     sendAlert({
-      message: `[Recovery Manager] Schwerer Fehler beim Neustart von $${service.name}: ${err.message}`),
+      message: `[Recovery Manager] Schwerer Fehler beim Neustart von ${service.name}: ${err.message}`,
       level: 'error',
       // webhookUrl: 'https://hooks.slack.com/services/xxx/yyy/zzz'
     });
@@ -343,12 +343,12 @@ async function recoverServices() {
   
   // Services der Reihe nach wiederherstellen
   for (const service of sortedServices) {
-    log(`Prüfe Service $${service.name}...`, 'info');
+    log(`Prüfe Service ${service.name}...`, 'info');
     
     // Status prüfen
     const isRunning = await checkServiceStatus(service);
     
-    if (!isRunning) { 
+    if (!isRunning) {
       // Service neustarten
       const success = await restartService(service);
       
@@ -358,8 +358,8 @@ async function recoverServices() {
         status: success ? 'restarted' : 'failed',
         timestamp: new Date().toISOString()
       };
-    } else { 
-      log(`Service $${service.name} läuft bereits, kein Neustart nötig`, 'info');
+    } else {
+      log(`Service ${service.name} läuft bereits, kein Neustart nötig`, 'info');
       
       // Recovery-Eintrag aktualisieren
       recoveryEntry.services[service.id] = {
@@ -374,7 +374,7 @@ async function recoverServices() {
   recoveryStatus.recoveryHistory.unshift(recoveryEntry);
   
   // Recovery-Historie auf maximale Länge begrenzen
-  if (recoveryStatus.recoveryHistory.length > CONFIG.RECOVERY_HISTORY_MAX) { 
+  if (recoveryStatus.recoveryHistory.length > CONFIG.RECOVERY_HISTORY_MAX) {
     recoveryStatus.recoveryHistory = recoveryStatus.recoveryHistory.slice(0, CONFIG.RECOVERY_HISTORY_MAX);
   }
   
@@ -401,28 +401,28 @@ async function checkAllServices() {
 // Fortschrittsanzeige und Zeit seit letztem erfolgreichen Check
 function showServiceProgress() {
   try {
-    if (fs.existsSync(CONFIG.STATUS_FILE)) { 
+    if (fs.existsSync(CONFIG.STATUS_FILE)) {
       const statusData = JSON.parse(fs.readFileSync(CONFIG.STATUS_FILE, 'utf8'));
       const now = new Date();
       let running = 0;
       let total = 0;
-      if (statusData.services) { 
+      if (statusData.services) {
         console.log('\n📈 Service-Fortschritt & Zeit seit letztem erfolgreichen Check:');
         Object.entries(statusData.services).forEach(([id, service]) => {
           total++;
           const lastCheck = service.lastCheck ? new Date(service.lastCheck) : null;
           let ago = '-';
-          if (lastCheck) { 
+          if (lastCheck) {
             const diffMin = Math.round((now - lastCheck) / 60000);
-            ago = diffMin < 60 ? `$${diffMin} min` : `${Math.round(diffMin/60)} h`;
+            ago = diffMin < 60 ? `${diffMin} min` : `${Math.round(diffMin/60)} h`;
           }
           const status = service.status === 'running' ? '✅' : (service.status === 'error' ? '❌' : '⚠️');
           if (service.status === 'running') running++;
-          console.log(`  $${status} ${service.name.padEnd(28)} | Letzter erfolgreicher Check: ${service.lastCheck || '-'} | Vor: ${ago}`);
+          console.log(`  ${status} ${service.name.padEnd(28)} | Letzter erfolgreicher Check: ${service.lastCheck || '-'} | Vor: ${ago}`);
         });
         // Prozentanzeige
         const percent = total > 0 ? Math.round((running/total)*100) : 0;
-        console.log(`\n$${running}/${total} Services laufen (${percent}%)`);
+        console.log(`\n${running}/${total} Services laufen (${percent}%)`);
       }
     }
   } catch (e) {
@@ -441,19 +441,19 @@ async function main() {
   const isSilent = process.argv.includes('--silent');
   
   // Nur Status-Check durchführen, wenn Parameter vorhanden
-  if (process.argv.includes('--check')) { 
+  if (process.argv.includes('--check')) {
     await checkAllServices();
     console.log(JSON.stringify(recoveryStatus, null, 2));
     return;
   }
   
   // Nur Recovery durchführen, wenn Parameter vorhanden
-  if (process.argv.includes('--recover')) { 
+  if (process.argv.includes('--recover')) {
     await recoverServices();
     return;
   }
   
-  if (!isSilent) { 
+  if (!isSilent) {
     log('VS Code Recovery Manager gestartet', 'info');
   }
   
@@ -466,7 +466,7 @@ async function main() {
   // Status aller Services prüfen
   await checkAllServices();
   
-  if (!isSilent) { 
+  if (!isSilent) {
     log('Erster Check abgeschlossen. Starte periodischen Check...', 'info');
   }
   
@@ -479,6 +479,6 @@ async function main() {
 
 // Start
 main().catch(err => {
-  log(`Unerwarteter Fehler: $${err.message}`, 'error');
+  log(`Unerwarteter Fehler: ${err.message}`, 'error');
   process.exit(1);
 });

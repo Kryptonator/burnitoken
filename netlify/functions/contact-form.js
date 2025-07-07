@@ -9,7 +9,7 @@ exports.handler = async (event, context) => {
   };
 
   // OPTIONS-Anfrage für CORS-Preflight
-  if (event.httpMethod === 'OPTIONS') { 
+  if (event.httpMethod === 'OPTIONS') {
     return {
       statusCode: 200,
       headers,
@@ -18,7 +18,7 @@ exports.handler = async (event, context) => {
   }
 
   // Nur POST-Anfragen zulassen
-  if (event.httpMethod !== 'POST') { 
+  if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
       headers,
@@ -32,7 +32,7 @@ exports.handler = async (event, context) => {
     const { name, email, message } = data;
 
     // Einfache Validierung
-    if (!name || !email || !message) { 
+    if (!name || !email || !message) {
       return {
         statusCode: 400,
         headers,
@@ -49,7 +49,7 @@ exports.handler = async (event, context) => {
       statusCode: 200,
       headers,
       body: JSON.stringify({
-        success: true),
+        success: true,
         message: 'Ihre Nachricht wurde erfolgreich gesendet!',
       }),
     };
@@ -58,7 +58,7 @@ exports.handler = async (event, context) => {
       statusCode: 500,
       headers,
       body: JSON.stringify({
-        error: 'Server error'),
+        error: 'Server error',
         message: error.toString(),
       }),
     };

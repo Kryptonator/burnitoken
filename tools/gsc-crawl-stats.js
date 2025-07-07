@@ -21,11 +21,11 @@ async function getCrawlStats() {
   console.log('====================================================');
 
   try {
-    console.log(`🌐 Site: $${SITE_URL}`);
+    console.log(`🌐 Site: ${SITE_URL}`);
 
     // Auth-Client erstellen
     const auth = new google.auth.GoogleAuth({
-      keyFile: SERVICE_ACCOUNT_FILE),
+      keyFile: SERVICE_ACCOUNT_FILE,
       scopes: ['https://www.googleapis.com/auth/webmasters.readonly'],
     });
 
@@ -39,7 +39,7 @@ async function getCrawlStats() {
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
     
     const performanceResponse = await searchconsole.searchanalytics.query({
-      siteUrl: SITE_URL),
+      siteUrl: SITE_URL,
       requestBody: {
         startDate: oneWeekAgo.toISOString().split('T')[0],
         endDate: new Date().toISOString().split('T')[0],
@@ -51,7 +51,7 @@ async function getCrawlStats() {
     console.log('\n📈 WEBSITE-PERFORMANCE DER LETZTEN WOCHE:');
     console.log('------------------------------');
     
-    if (!performanceResponse.data?.rows || performanceResponse.data.rows.length === 0) { 
+    if (!performanceResponse.data?.rows || performanceResponse.data.rows.length === 0) {
       console.log('❓ Keine Performance-Daten für die letzte Woche verfügbar.');
       return;
     }
@@ -79,7 +79,7 @@ async function getCrawlStats() {
     console.log('\n✅ Analyse der Crawling-Statistiken abgeschlossen.');
 
     // Im Test-Modus gibt es eine klare Bestätigung zurück
-    if (TEST_MODE) { 
+    if (TEST_MODE) {
       console.log('\n🧪 TEST-MODUS: Tool funktioniert korrekt!');
     }
 
@@ -91,7 +91,7 @@ async function getCrawlStats() {
 }
 
 // Hauptfunktion ausführen
-if (require.main === module) { 
+if (require.main === module) {
   getCrawlStats().catch(error => {
     console.error('Unbehandelte Ausnahme:', error);
     process.exit(1);

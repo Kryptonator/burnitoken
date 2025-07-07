@@ -77,15 +77,15 @@ const colors = {
 
 // Hilfsfunktion für Debug-Logging
 function debugLog(message) {
-  if (DEBUG) { 
-    console.log(`$${colors.blue}[DEBUG]${colors.reset} ${message}`);
+  if (DEBUG) {
+    console.log(`${colors.blue}[DEBUG]${colors.reset} ${message}`);
   }
 }
 
 // Hilfsfunktion für erweiterte Logging
 function verboseLog(message) {
-  if (VERBOSE || DEBUG) { 
-    console.log(`$${colors.magenta}[INFO]${colors.reset} ${message}`);
+  if (VERBOSE || DEBUG) {
+    console.log(`${colors.magenta}[INFO]${colors.reset} ${message}`);
   }
 }
 
@@ -96,7 +96,7 @@ function fileExists(filePath) {
   try {
     return fs.existsSync(filePath);
   } catch (err) {
-    debugLog(`Fehler beim Prüfen, ob Datei existiert ($${filePath}): ${err.message}`);
+    debugLog(`Fehler beim Prüfen, ob Datei existiert (${filePath}): ${err.message}`);
     return false;
   }
 }
@@ -111,7 +111,7 @@ function getFileAge(filePath) {
     const now = Date.now();
     return Math.floor((now - fileTime) / (1000 * 60)); // Minuten
   } catch (err) {
-    debugLog(`Fehler beim Prüfen des Dateialters ($${filePath}): ${err.message}`);
+    debugLog(`Fehler beim Prüfen des Dateialters (${filePath}): ${err.message}`);
     return -1;
   }
 }
@@ -121,20 +121,20 @@ function getFileAge(filePath) {
  */
 function getActiveModel() {
   try {
-    debugLog(`Suche aktive Session in $${CONFIG.conversationDir}`);
+    debugLog(`Suche aktive Session in ${CONFIG.conversationDir}`);
     
     // Prüfe, ob die AI Bridge aktiv ist
     const sessionFile = path.join(CONFIG.conversationDir, 'active-session.json');
     
-    if (fileExists(sessionFile)) { 
-      debugLog(`Session-Datei gefunden: $${sessionFile}`);
+    if (fileExists(sessionFile)) {
+      debugLog(`Session-Datei gefunden: ${sessionFile}`);
       verboseLog(`Session-Datei Alter: ${getFileAge(sessionFile)} Minuten`);
       
       try {
         const sessionData = JSON.parse(fs.readFileSync(sessionFile, 'utf8'));
         const sessionId = sessionData.sessionId;
         
-        debugLog(`Aktive Session-ID: $${sessionId}`);
+        debugLog(`Aktive Session-ID: ${sessionId}`);
         
         // Prüfe die Modell-spezifischen Dateien für das neueste Update
         let latestModel = null;
@@ -142,45 +142,45 @@ function getActiveModel() {
         
         for (const model of CONFIG.supportedModels) {
           const modelFile = path.join(
-            CONFIG.conversationDir),
-            `$${sessionId}_${model.id}_context.json`
+            CONFIG.conversationDir, 
+            `${sessionId}_${model.id}_context.json`
           );
           
-          if (fileExists(modelFile)) { 
+          if (fileExists(modelFile)) {
             try {
-              debugLog(`Modell-Datei gefunden für $${model.id}: ${modelFile}`);
+              debugLog(`Modell-Datei gefunden für ${model.id}: ${modelFile}`);
               const modelData = JSON.parse(fs.readFileSync(modelFile, 'utf8'));
               const timestamp = new Date(modelData.timestamp).getTime();
               
-              debugLog(`$${model.id} Zeitstempel: ${modelData.timestamp}`);
+              debugLog(`${model.id} Zeitstempel: ${modelData.timestamp}`);
               
-              if (timestamp > latestTimestamp) { 
+              if (timestamp > latestTimestamp) {
                 latestTimestamp = timestamp;
                 latestModel = model;
-                debugLog(`Neues letztes aktives Modell: $${model.id}`);
+                debugLog(`Neues letztes aktives Modell: ${model.id}`);
               }
             } catch (err) {
               // Ignoriere Parsing-Fehler für diese Datei
-              debugLog(`Fehler beim Lesen von Modell-Datei $${model.id}: ${err.message}`);
+              debugLog(`Fehler beim Lesen von Modell-Datei ${model.id}: ${err.message}`);
             }
-          } else { 
-            debugLog(`Keine Modelldatei für $${model.id}`);
+          } else {
+            debugLog(`Keine Modelldatei für ${model.id}`);
           }
         }
         
-        if (latestModel) { 
+        if (latestModel) {
           return latestModel;
-        } else { 
+        } else {
           debugLog('Kein aktives Modell in den Dateien gefunden, verwende Standard');
         }
       } catch (err) {
-        debugLog(`Fehler beim Lesen der Session-Datei: $${err.message}`);
+        debugLog(`Fehler beim Lesen der Session-Datei: ${err.message}`);
       }
-    } else { 
+    } else {
       debugLog('Keine aktive Session-Datei gefunden');
     }
   } catch (err) {
-    debugLog(`Fehler bei der Modell-Erkennung: $${err.message}`);
+    debugLog(`Fehler bei der Modell-Erkennung: ${err.message}`);
   }
   
   return CONFIG.supportedModels[0]; // Default zu Copilot
@@ -206,9 +206,9 @@ function updateServiceStatus(services) {
     }
     
     fs.writeFileSync(CONFIG.processStatusFile, JSON.stringify(statusData, null, 2), 'utf8');
-    debugLog(`Status in $${CONFIG.processStatusFile} aktualisiert`);
+    debugLog(`Status in ${CONFIG.processStatusFile} aktualisiert`);
   } catch (err) {
-    debugLog(`Fehler beim Speichern des Service-Status: $${err.message}`);
+    debugLog(`Fehler beim Speichern des Service-Status: ${err.message}`);
   }
 }
 
@@ -217,8 +217,8 @@ function updateServiceStatus(services) {
  */
 function getTaskPids() {
   try {
-    if (!fileExists(CONFIG.vscodeTasksPath)) { 
-      debugLog(`VS Code Tasks-Verzeichnis existiert nicht: $${CONFIG.vscodeTasksPath}`);
+    if (!fileExists(CONFIG.vscodeTasksPath)) {
+      debugLog(`VS Code Tasks-Verzeichnis existiert nicht: ${CONFIG.vscodeTasksPath}`);
       return {};
     }
     
@@ -226,25 +226,25 @@ function getTaskPids() {
     const files = fs.readdirSync(CONFIG.vscodeTasksPath);
     
     for (const file of files) {
-      if (file.endsWith('.pid')) { 
+      if (file.endsWith('.pid')) {
         try {
           const serviceName = file.replace('.pid', '');
           const pidContent = fs.readFileSync(path.join(CONFIG.vscodeTasksPath, file), 'utf8').trim();
           
-          if (pidContent && /^\d+$/.test(pidContent)) { 
+          if (pidContent && /^\d+$/.test(pidContent)) {
             const pid = parseInt(pidContent, 10);
             taskPids[serviceName] = pid;
-            debugLog(`PID für $${serviceName} gefunden: ${pid}`);
+            debugLog(`PID für ${serviceName} gefunden: ${pid}`);
           }
         } catch (err) {
-          debugLog(`Fehler beim Lesen der PID-Datei $${file}: ${err.message}`);
+          debugLog(`Fehler beim Lesen der PID-Datei ${file}: ${err.message}`);
         }
       }
     }
     
     return taskPids;
   } catch (err) {
-    debugLog(`Fehler beim Lesen des VS Code Tasks-Verzeichnisses: $${err.message}`);
+    debugLog(`Fehler beim Lesen des VS Code Tasks-Verzeichnisses: ${err.message}`);
     return {};
   }
 }
@@ -261,25 +261,25 @@ function getRunningServices() {
     let command = '';
     let output = '';
     
-    if (process.platform === 'win32') { 
+    if (process.platform === 'win32') {
       // Windows-Prozessliste mit mehr Details
       command = `powershell -Command "Get-Process -IncludeUserName | Where-Object { $_.Name -eq 'node' } | ForEach-Object { $_.Id.ToString() + ',' + $_.CommandLine + ',' + $_.StartTime + ',' + $_.UserName }"`;
       try {
         output = execSync(command, { encoding: 'utf8', timeout: 5000 }).trim();
       } catch (err) {
-        debugLog(`Fehler bei Windows-Prozessabfrage: $${err.message}`);
+        debugLog(`Fehler bei Windows-Prozessabfrage: ${err.message}`);
         // Alternative Methode für ältere Windows-Versionen
         command = `tasklist /v /fo csv /nh`;
         output = execSync(command, { encoding: 'utf8', timeout: 5000 }).trim();
       }
-    } else { 
+    } else {
       // Unix-Prozessliste
       command = `ps -eo pid,lstart,cmd | grep node`;
       output = execSync(command, { encoding: 'utf8', timeout: 5000 }).trim();
     }
     
-    verboseLog(`Prozessliste erhalten, Länge: $${output.length} Zeichen`);
-    debugLog(`Prozessliste: $${output}`);
+    verboseLog(`Prozessliste erhalten, Länge: ${output.length} Zeichen`);
+    debugLog(`Prozessliste: ${output}`);
     
     // Verarbeite jeden Service
     for (const service of services) {
@@ -288,22 +288,22 @@ function getRunningServices() {
       
       // Prüfe die Prozessliste für den Dienst
       for (const scriptName of service.scriptNames) {
-        if (output.includes(scriptName)) { 
+        if (output.includes(scriptName)) {
           service.running = true;
           
           // Versuche, die PID zu extrahieren
-          const match = new RegExp(`(\\d+).*$${scriptName}`).exec(output);
-          if (match && match[1]) { 
+          const match = new RegExp(`(\\d+).*${scriptName}`).exec(output);
+          if (match && match[1]) {
             service.pid = parseInt(match[1], 10);
           }
           
-          verboseLog(`Service $${service.name} läuft (PID: ${service.pid || 'unbekannt'})`);
+          verboseLog(`Service ${service.name} läuft (PID: ${service.pid || 'unbekannt'})`);
           break;
         }
       }
     }
   } catch (err) {
-    debugLog(`Fehler bei der Prozessabfrage: $${err.message}`);
+    debugLog(`Fehler bei der Prozessabfrage: ${err.message}`);
   }
   
   // 2. Überprüfe anhand der VS Code Task-PIDs als Backup-Methode
@@ -312,14 +312,14 @@ function getRunningServices() {
   
   // Ergänze nicht erkannte Services mit Task-PIDs
   for (const service of services) {
-    if (!service.running) { 
+    if (!service.running) {
       for (const scriptName of service.scriptNames) {
         const baseName = path.basename(scriptName, '.js');
         
-        if (taskPids[baseName]) { 
+        if (taskPids[baseName]) {
           service.running = true;
           service.pid = taskPids[baseName];
-          verboseLog(`Service $${service.name} über Task-PID erkannt: ${service.pid}`);
+          verboseLog(`Service ${service.name} über Task-PID erkannt: ${service.pid}`);
           break;
         }
       }
@@ -328,46 +328,46 @@ function getRunningServices() {
   
   // 3. Überprüfe anhand des Status-Files als Fallback
   try {
-    if (fileExists(CONFIG.processStatusFile)) { 
+    if (fileExists(CONFIG.processStatusFile)) {
       const statusData = JSON.parse(fs.readFileSync(CONFIG.processStatusFile, 'utf8'));
       const statusAge = getFileAge(CONFIG.processStatusFile);
       
       // Verwende Status-Daten, wenn sie nicht älter als 5 Minuten sind
-      if (statusAge >= 0 && statusAge < 5) { 
-        verboseLog(`Status-Datei ist $${statusAge} Minuten alt, verwende als Fallback`);
+      if (statusAge >= 0 && statusAge < 5) {
+        verboseLog(`Status-Datei ist ${statusAge} Minuten alt, verwende als Fallback`);
         
         for (const service of services) {
-          if (!service.running && statusData.services[service.id] && statusData.services[service.id].running) { 
+          if (!service.running && statusData.services[service.id] && statusData.services[service.id].running) {
             // Überprüfe zusätzlich, ob der gespeicherte PID noch existiert
             const storedPid = statusData.services[service.id].pid;
             
-            if (storedPid) { 
+            if (storedPid) {
               try {
-                if (process.platform === 'win32') { 
-                  execSync(`powershell -Command "Get-Process -Id $${storedPid} -ErrorAction SilentlyContinue"`, { stdio: 'ignore' });
-                } else { 
-                  execSync(`ps -p $${storedPid}`, { stdio: 'ignore' });
+                if (process.platform === 'win32') {
+                  execSync(`powershell -Command "Get-Process -Id ${storedPid} -ErrorAction SilentlyContinue"`, { stdio: 'ignore' });
+                } else {
+                  execSync(`ps -p ${storedPid}`, { stdio: 'ignore' });
                 }
                 
                 // Prozess existiert noch
                 service.running = true;
                 service.pid = storedPid;
-                verboseLog(`Service $${service.name} über gespeicherte PID erkannt: ${service.pid}`);
+                verboseLog(`Service ${service.name} über gespeicherte PID erkannt: ${service.pid}`);
               } catch (err) {
                 // Prozess mit dieser PID existiert nicht mehr
-                debugLog(`Gespeicherter Prozess $${storedPid} für ${service.name} existiert nicht mehr`);
+                debugLog(`Gespeicherter Prozess ${storedPid} für ${service.name} existiert nicht mehr`);
               }
             }
           }
         }
-      } else { 
-        debugLog(`Status-Datei ist zu alt ($${statusAge} Minuten) oder nicht lesbar`);
+      } else {
+        debugLog(`Status-Datei ist zu alt (${statusAge} Minuten) oder nicht lesbar`);
       }
-    } else { 
-      debugLog(`Keine Status-Datei gefunden: $${CONFIG.processStatusFile}`);
+    } else {
+      debugLog(`Keine Status-Datei gefunden: ${CONFIG.processStatusFile}`);
     }
   } catch (err) {
-    debugLog(`Fehler beim Lesen der Status-Datei: $${err.message}`);
+    debugLog(`Fehler beim Lesen der Status-Datei: ${err.message}`);
   }
   
   // Speichere den aktuellen Status
@@ -379,12 +379,12 @@ function getRunningServices() {
  * Zeigt den AI-Status
  */
 function showAIStatus() {
-  console.log(`$${colors.cyan}🧠 AI Integration Status${colors.reset}`);
-  console.log(`$${colors.cyan}=======================${colors.reset}`);
+  console.log(`${colors.cyan}🧠 AI Integration Status${colors.reset}`);
+  console.log(`${colors.cyan}=======================${colors.reset}`);
   console.log(`📅 ${new Date().toLocaleString('de-DE')}`);
   
   // Prüfe Verzeichnisse
-  debugLog(`Prüfe Verzeichnisse: $${CONFIG.conversationDir} und ${CONFIG.backupDir}`);
+  debugLog(`Prüfe Verzeichnisse: ${CONFIG.conversationDir} und ${CONFIG.backupDir}`);
   
   // Prüfe, ob die Verzeichnisse existieren
   const aiDirExists = fileExists(CONFIG.conversationDir);
@@ -400,16 +400,16 @@ function showAIStatus() {
   console.log(`\nServices:`);
   for (const service of services) {
     const status = service.running 
-      ? `$${colors.green}✅ Aktiv${colors.reset}${service.pid ? ` (PID: ${service.pid})` : ''}` 
-      : `$${colors.red}❌ Inaktiv${colors.reset}`;
+      ? `${colors.green}✅ Aktiv${colors.reset}${service.pid ? ` (PID: ${service.pid})` : ''}` 
+      : `${colors.red}❌ Inaktiv${colors.reset}`;
       
-    console.log(`$${service.name}: ${status}`);
+    console.log(`${service.name}: ${status}`);
   }
   
   // Zeige das aktuell verwendete Modell
   debugLog('Ermittle aktives KI-Modell');
   const activeModel = getActiveModel();
-  console.log(`\nAktives AI-Modell: $${activeModel.emoji} ${activeModel.name}`);
+  console.log(`\nAktives AI-Modell: ${activeModel.emoji} ${activeModel.name}`);
   
   // Überprüfe die Verfügbarkeit der KI-Dateien
   debugLog('Prüfe KI-Dateien');
@@ -423,14 +423,14 @@ function showAIStatus() {
   
   console.log('\nKI-Dateien:');
   for (const file of aiFiles) {
-    console.log(`$${file}: ${fileExists(file) ? colors.green + '✅' + colors.reset : colors.red + '❌' + colors.reset}`);
+    console.log(`${file}: ${fileExists(file) ? colors.green + '✅' + colors.reset : colors.red + '❌' + colors.reset}`);
   }
   
   // Anzeige der verfügbaren Modelle
   console.log('\nVerfügbare Modelle:');
   for (const model of CONFIG.supportedModels) {
     const isActive = model.id === activeModel.id;
-    console.log(`$${model.emoji} ${model.name}${isActive ? colors.cyan + ' (Aktiv)' + colors.reset : ''}`);
+    console.log(`${model.emoji} ${model.name}${isActive ? colors.cyan + ' (Aktiv)' + colors.reset : ''}`);
   }
   
   console.log('\n💡 TIP: Um das Modell zu wechseln, führe aus:');
@@ -442,13 +442,13 @@ function showAIStatus() {
   console.log('node tools/ai-services-manager.js restart');
   
   // Debug-Hinweis
-  if (!DEBUG && !VERBOSE) { 
-    console.log(`\nℹ️ Für detailliertere Informationen: $${colors.yellow}node tools/ai-status-improved.js --debug${colors.reset} oder ${colors.yellow}--verbose${colors.reset}`);
+  if (!DEBUG && !VERBOSE) {
+    console.log(`\nℹ️ Für detailliertere Informationen: ${colors.yellow}node tools/ai-status-improved.js --debug${colors.reset} oder ${colors.yellow}--verbose${colors.reset}`);
   }
 }
 
 // Verarbeite Befehlszeilenargumente
-if (process.argv.includes('--help') || process.argv.includes('-h')) { 
+if (process.argv.includes('--help') || process.argv.includes('-h')) {
   console.log('AI Status Checker - Zeigt den Status der KI-Integration an');
   console.log('\nOptionen:');
   console.log('  --debug    Zeigt detaillierte Debug-Informationen an');
@@ -461,8 +461,8 @@ if (process.argv.includes('--help') || process.argv.includes('-h')) {
 try {
   showAIStatus();
 } catch (error) {
-  console.error(`$${colors.red}❌ Unerwarteter Fehler: ${error.message}${colors.reset}`);
-  if (DEBUG) { 
+  console.error(`${colors.red}❌ Unerwarteter Fehler: ${error.message}${colors.reset}`);
+  if (DEBUG) {
     console.error(error.stack);
   }
   process.exit(1);

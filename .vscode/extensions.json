@@ -1,0 +1,23 @@
+{
+  "recommendations": [
+    "github.copilot",
+    "github.copilot-chat",
+    "eamodio.gitlens",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "bradlc.vscode-tailwindcss",
+    "ritwickdey.liveserver",
+    "ms-playwright.playwright",
+    "streetsidesoftware.code-spell-checker",
+    "formulahendry.auto-close-tag",
+    "formulahendry.auto-rename-tag",
+    "ms-vscode.powershell"
+  ],
+  "unwantedRecommendations": [
+    "ms-vscode.vscode-typescript",
+    "hookyqr.beautify",
+    "orta.vscode-jest",
+    "solidity.solidity",
+    "juanblanco.solidity"
+  ]
+}

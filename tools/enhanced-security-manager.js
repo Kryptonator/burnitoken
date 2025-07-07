@@ -45,37 +45,37 @@ function log(message, color = colors.reset) {
 
 // Verzeichnisse initialisieren
 function initializeDirs() {
-  if (!fs.existsSync(config.reportDir)) { 
+  if (!fs.existsSync(config.reportDir)) {
     fs.mkdirSync(config.reportDir, { recursive: true });
-    log(`✅ Sicherheits-Report-Verzeichnis erstellt: $${config.reportDir}`, colors.green);
+    log(`✅ Sicherheits-Report-Verzeichnis erstellt: ${config.reportDir}`, colors.green);
   }
   
-  if (!fs.existsSync(config.backupDir)) { 
+  if (!fs.existsSync(config.backupDir)) {
     fs.mkdirSync(config.backupDir, { recursive: true });
-    log(`✅ Backup-Verzeichnis erstellt: $${config.backupDir}`, colors.green);
+    log(`✅ Backup-Verzeichnis erstellt: ${config.backupDir}`, colors.green);
   }
 }
 
 // Aktuelle Abhängigkeiten sichern
 function backupDependencies() {
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-  const backupDir = path.join(config.backupDir, `backup-$${timestamp}`);
+  const backupDir = path.join(config.backupDir, `backup-${timestamp}`);
   
   try {
     fs.mkdirSync(backupDir, { recursive: true });
     
-    if (fs.existsSync('./package.json')) { 
+    if (fs.existsSync('./package.json')) {
       fs.copyFileSync('./package.json', path.join(backupDir, 'package.json'));
     }
     
-    if (fs.existsSync('./package-lock.json')) { 
+    if (fs.existsSync('./package-lock.json')) {
       fs.copyFileSync('./package-lock.json', path.join(backupDir, 'package-lock.json'));
     }
     
-    log(`✅ Abhängigkeiten gesichert: $${backupDir}`, colors.green);
+    log(`✅ Abhängigkeiten gesichert: ${backupDir}`, colors.green);
     return backupDir;
   } catch (error) {
-    log(`❌ Fehler beim Sichern der Abhängigkeiten: $${error.message}`, colors.red);
+    log(`❌ Fehler beim Sichern der Abhängigkeiten: ${error.message}`, colors.red);
     return null;
   }
 }
@@ -84,7 +84,7 @@ function backupDependencies() {
 async function runSnykTests(options = {}) {
   const { generateReport = true, testOnly = true, silent = false } = options;
   
-  if (!silent) { 
+  if (!silent) {
     log('\n🔒 Führe Snyk-Sicherheitsanalyse durch...', colors.cyan);
   }
   
@@ -92,42 +92,42 @@ async function runSnykTests(options = {}) {
     const reportFile = path.join(config.reportDir, `snyk-report-${Date.now()}.json`);
     
     // Snyk Auth überprüfen
-    if (!process.env.SNYK_TOKEN) { 
-        if (!silent) { 
+    if (!process.env.SNYK_TOKEN) {
+        if (!silent) {
             log('⚠️ Snyk-Token nicht gefunden. Bitte fügen Sie SNYK_TOKEN zu Ihrer .env-Datei hinzu.', colors.yellow);
             log('Ein Token erhalten Sie hier: https://app.snyk.io/account', colors.yellow);
         }
         // Brechen Sie hier nicht ab, Snyk versucht möglicherweise eine andere Methode
-    } else { 
-        if (!silent) { 
+    } else {
+        if (!silent) {
             log('✅ Snyk-Token gefunden. Authentifizierung wird verwendet.', colors.green);
         }
     }
     
     // Snyk-Test ausführen
-    let command = `npx snyk test --severity-threshold=$${config.severityThreshold} --json-file-output=${reportFile}`;
-    if (testOnly) { 
+    let command = `npx snyk test --severity-threshold=${config.severityThreshold} --json-file-output=${reportFile}`;
+    if (testOnly) {
       command += ' --fail-on=all';
     }
     
     execSync(command, { stdio: silent ? 'ignore' : 'inherit' });
     
-    if (!silent) { 
+    if (!silent) {
       log('✅ Snyk-Test erfolgreich abgeschlossen', colors.green);
     }
     
     // Erfolgreichen Scan aufzeichnen
     await recordCheckSuccess('snyk-security-scan');
     
-    if (generateReport) { 
-      log(`📄 Report gespeichert: $${reportFile}`, colors.blue);
+    if (generateReport) {
+      log(`📄 Report gespeichert: ${reportFile}`, colors.blue);
     }
     
     return { success: true, reportFile };
     
   } catch (error) {
-    if (!silent) { 
-      log(`❌ Snyk-Test fehlgeschlagen: $${error.message}`, colors.red);
+    if (!silent) {
+      log(`❌ Snyk-Test fehlgeschlagen: ${error.message}`, colors.red);
     }
     
     // Alert senden bei Fehler
@@ -139,7 +139,7 @@ async function runSnykTests(options = {}) {
 
 // Automatische Behebung von Sicherheitsproblemen
 async function fixSecurityIssues() {
-  if (!config.autoFix) { 
+  if (!config.autoFix) {
     log('\n⚠️ Automatisches Beheben ist deaktiviert. Aktiviere es in der Konfiguration, wenn gewünscht.', colors.yellow);
     return false;
   }
@@ -150,7 +150,7 @@ async function fixSecurityIssues() {
     // Backup erstellen, bevor Änderungen vorgenommen werden
     const backupDir = backupDependencies();
     
-    if (!backupDir) { 
+    if (!backupDir) {
       log('❌ Konnte kein Backup erstellen, breche Reparatur ab', colors.red);
       return false;
     }
@@ -161,7 +161,7 @@ async function fixSecurityIssues() {
     log('✅ Sicherheitsassistent abgeschlossen', colors.green);
     return true;
   } catch (error) {
-    log(`❌ Fehler bei der Behebung von Sicherheitsproblemen: $${error.message}`, colors.red);
+    log(`❌ Fehler bei der Behebung von Sicherheitsproblemen: ${error.message}`, colors.red);
     return false;
   }
 }
@@ -176,7 +176,7 @@ function generateSecurityReport() {
       .sort()
       .reverse();
     
-    if (reportFiles.length === 0) { 
+    if (reportFiles.length === 0) {
       log('❌ Keine Snyk-Report-Dateien gefunden', colors.red);
       return false;
     }
@@ -198,8 +198,8 @@ function generateSecurityReport() {
     const vulnerabilities = reportData.vulnerabilities || [];
     const uniqueVulnerabilities = [...new Set(vulnerabilities.map(v => v.id))];
     
-    markdown += `- **Gesamtzahl der gefundenen Schwachstellen:** $${vulnerabilities.length}\n`;
-    markdown += `- **Einzigartige Schwachstellen:** $${uniqueVulnerabilities.length}\n\n`;
+    markdown += `- **Gesamtzahl der gefundenen Schwachstellen:** ${vulnerabilities.length}\n`;
+    markdown += `- **Einzigartige Schwachstellen:** ${uniqueVulnerabilities.length}\n\n`;
     
     // Nach Schweregrad gruppieren
     const severityCounts = {
@@ -211,7 +211,7 @@ function generateSecurityReport() {
     
     markdown += `### Schweregrade
 
-- 🔴 **Kritisch:** $${severityCounts.critical}
+- 🔴 **Kritisch:** ${severityCounts.critical}
 - 🟠 **Hoch:** ${severityCounts.high}
 - 🟡 **Mittel:** ${severityCounts.medium}
 - 🟢 **Niedrig:** ${severityCounts.low}
@@ -219,7 +219,7 @@ function generateSecurityReport() {
 `;
 
     // Detaillierte Auflistung der Schwachstellen, nach Schweregrad sortiert
-    if (vulnerabilities.length > 0) { 
+    if (vulnerabilities.length > 0) {
       markdown += `## 🔍 Detaillierte Schwachstellen\n\n`;
       
       const severityOrder = ['critical', 'high', 'medium', 'low'];
@@ -236,19 +236,19 @@ function generateSecurityReport() {
           low: '🟢',
         }[severity];
         
-        markdown += `### $${severityEmoji} ${severity.toUpperCase()} Schwachstellen\n\n`;
+        markdown += `### ${severityEmoji} ${severity.toUpperCase()} Schwachstellen\n\n`;
         
         severityVulns.forEach((vuln, index) => {
           markdown += `#### ${index + 1}. ${vuln.title || 'Unbenannte Schwachstelle'}\n\n`;
-          markdown += `- **Paket:** $${vuln.packageName}@${vuln.version}\n`;
-          markdown += `- **Schwachstelle ID:** $${vuln.id}\n`;
+          markdown += `- **Paket:** ${vuln.packageName}@${vuln.version}\n`;
+          markdown += `- **Schwachstelle ID:** ${vuln.id}\n`;
           markdown += `- **Einführung:** ${vuln.from?.join(' > ') || 'Unbekannt'}\n`;
           
-          if (vuln.description) { 
-            markdown += `- **Beschreibung:** $${vuln.description}\n`;
+          if (vuln.description) {
+            markdown += `- **Beschreibung:** ${vuln.description}\n`;
           }
           
-          if (vuln.fixedIn && vuln.fixedIn.length > 0) { 
+          if (vuln.fixedIn && vuln.fixedIn.length > 0) {
             markdown += `- **Behoben in Version:** ${vuln.fixedIn.join(', ')}\n`;
           }
           
@@ -276,7 +276,7 @@ function generateSecurityReport() {
     const markdownFile = path.join(config.reportDir, 'SECURITY_REPORT.md');
     fs.writeFileSync(markdownFile, markdown);
     
-    log(`✅ Sicherheitsbericht erstellt: $${markdownFile}`, colors.green);
+    log(`✅ Sicherheitsbericht erstellt: ${markdownFile}`, colors.green);
     
     // Erstelle eine Kopie im Hauptverzeichnis für einfachen Zugriff
     fs.copyFileSync(markdownFile, './SECURITY_REPORT.md');
@@ -284,7 +284,7 @@ function generateSecurityReport() {
     
     return true;
   } catch (error) {
-    log(`❌ Fehler beim Erstellen des Sicherheitsberichts: $${error.message}`, colors.red);
+    log(`❌ Fehler beim Erstellen des Sicherheitsberichts: ${error.message}`, colors.red);
     return false;
   }
 }
@@ -298,7 +298,7 @@ function runSnykWizard() {
     log('✅ Snyk-Wizard abgeschlossen', colors.green);
     return true;
   } catch (error) {
-    log(`❌ Fehler beim Ausführen des Snyk-Wizards: $${error.message}`, colors.red);
+    log(`❌ Fehler beim Ausführen des Snyk-Wizards: ${error.message}`, colors.red);
     return false;
   }
 }
@@ -309,7 +309,7 @@ function integrateWithRecoverySystem() {
   
   try {
     // Prüfen, ob das Recovery-System existiert
-    if (!fs.existsSync('./tools/auto-recovery-manager.js')) { 
+    if (!fs.existsSync('./tools/auto-recovery-manager.js')) {
       log('⚠️ Recovery-System nicht gefunden, überspringe Integration', colors.yellow);
       return false;
     }
@@ -323,7 +323,7 @@ function integrateWithRecoverySystem() {
     };
     
     // Speichern des Zustands für das Recovery-System
-    if (!fs.existsSync('./.recovery-data')) { 
+    if (!fs.existsSync('./.recovery-data')) {
       fs.mkdirSync('./.recovery-data', { recursive: true });
     }
     
@@ -332,7 +332,7 @@ function integrateWithRecoverySystem() {
     
     return true;
   } catch (error) {
-    log(`❌ Fehler bei der Integration mit dem Recovery-System: $${error.message}`, colors.red);
+    log(`❌ Fehler bei der Integration mit dem Recovery-System: ${error.message}`, colors.red);
     return false;
   }
 }
@@ -352,7 +352,7 @@ async function main() {
     full: args.includes('--full') || args.includes('-a')
   };
   
-  if (!options.silent) { 
+  if (!options.silent) {
     log('🔒 Snyk Security Management Tool', colors.magenta);
     log('===============================', colors.magenta);
   }
@@ -361,49 +361,49 @@ async function main() {
   initializeDirs();
   
   // Backup erstellen
-  if (!options.silent) { 
+  if (!options.silent) {
     backupDependencies();
   }
   
   // Aktionen basierend auf Argumenten ausführen
-  if (options.test || options.full || (!options.fix && !options.monitor && !options.wizard && !options.vscode)) { 
+  if (options.test || options.full || (!options.fix && !options.monitor && !options.wizard && !options.vscode)) {
     await runSnykTests({ 
-      generateReport: options.report || options.full),
+      generateReport: options.report || options.full, 
       silent: options.silent 
     });
   }
   
-  if (options.fix) { 
+  if (options.fix) {
     await fixSecurityIssues();
   }
   
-  if (options.monitor || options.full) { 
+  if (options.monitor || options.full) {
     // Im Monitor-Modus führen wir Snyk monitor aus zur kontinuierlichen Überwachung
     await runSnykTests({ 
-      generateReport: options.report),
+      generateReport: options.report, 
       testOnly: false,
       silent: options.silent 
     });
   }
   
-  if (options.wizard) { 
+  if (options.wizard) {
     await runSnykWizard();
   }
   
-  if (options.report) { 
+  if (options.report) {
     generateSecurityReport();
   }
   
   // Integration mit dem Recovery-System
   integrateWithRecoverySystem();
   
-  if (!options.silent) { 
+  if (!options.silent) {
     log('\n✅ Snyk-Sicherheitsanalyse abgeschlossen!', colors.green);
   }
 }
 
 // Ausführen des Skripts
 main().catch(error => {
-  log(`❌ Unerwarteter Fehler: $${error.message}`, colors.red);
+  log(`❌ Unerwarteter Fehler: ${error.message}`, colors.red);
   process.exit(1);
 });

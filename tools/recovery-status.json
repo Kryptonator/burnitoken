@@ -1,0 +1,59 @@
+{
+  "isActive": true,
+  "lastCheck": "2025-06-29T17:44:10.745Z",
+  "services": {
+    "gsc": {
+      "name": "Google Search Console Monitor",
+      "status": "running",
+      "lastCheck": "2025-06-23T16:25:00Z"
+    },
+    "netlify": {
+      "name": "Netlify Deployment",
+      "status": "running",
+      "lastCheck": "2025-06-23T10:14:30Z"
+    },
+    "monitoring": {
+      "name": "Website Monitoring",
+      "status": "running",
+      "lastCheck": "2025-06-23T10:14:00Z"
+    },
+    "webVitals": {
+      "name": "Core Web Vitals Monitor",
+      "status": "running",
+      "lastCheck": "2025-06-23T16:28:00Z"
+    },
+    "metaTags": {
+      "name": "Meta-Tags Validator",
+      "status": "running",
+      "lastCheck": "2025-06-23T16:29:00Z"
+    },
+    "website": {
+      "id": "website",
+      "name": "Website",
+      "status": "running",
+      "statusCode": 200,
+      "responseTime": 194
+    },
+    "api": {
+      "id": "api",
+      "name": "API",
+      "status": "running",
+      "statusCode": 200,
+      "responseTime": 260
+    },
+    "xrpl": {
+      "id": "xrpl",
+      "name": "XRPL Connection",
+      "status": "running",
+      "statusCode": 200,
+      "responseTime": 190
+    },
+    "coingecko": {
+      "id": "coingecko",
+      "name": "CoinGecko API",
+      "status": "running",
+      "statusCode": 200,
+      "responseTime": 308
+    }
+  }
+}

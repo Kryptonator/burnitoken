@@ -1,0 +1,48 @@
+{
+  "timestamp": "2025-07-07T04:34:15.247Z",
+  "summary": {
+    "status": "deployed",
+    "criticalFilesFound": 6,
+    "criticalFilesMissing": [],
+    "elementsFound": 5,
+    "elementsMissing": []
+  },
+  "details": {
+    "websiteActive": true,
+    "statusCode": 200,
+    "contentChecked": true,
+    "filesChecked": {
+      "index.html": {
+        "exists": true,
+        "statusCode": 200,
+        "contentType": "text/html; charset=UTF-8"
+      },
+      "styles.css": {
+        "exists": true,
+        "statusCode": 200,
+        "contentType": "text/html; charset=UTF-8"
+      },
+      "main.js": {
+        "exists": true,
+        "statusCode": 200,
+        "contentType": "application/javascript; charset=UTF-8"
+      },
+      "manifest.json": {
+        "exists": true,
+        "statusCode": 200,
+        "contentType": "application/json"
+      },
+      "favicon.ico": {
+        "exists": true,
+        "statusCode": 200,
+        "contentType": "text/html; charset=UTF-8"
+      },
+      "robots.txt": {
+        "exists": true,
+        "statusCode": 200,
+        "contentType": "text/plain; charset=UTF-8"
+      }
+    },
+    "responseTime": 248
+  }
+}

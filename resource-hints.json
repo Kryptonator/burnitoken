@@ -1,0 +1,44 @@
+{
+  "preload": [
+    {
+      "href": "/assets/css/critical.min.css",
+      "as": "style"
+    },
+    {
+      "href": "/assets/js/price-oracle.js",
+      "as": "script"
+    },
+    {
+      "href": "/assets/images/burni-logo.webp",
+      "as": "image"
+    },
+    {
+      "href": "/assets/fonts/main.woff2",
+      "as": "font",
+      "type": "font/woff2",
+      "crossorigin": true
+    }
+  ],
+  "prefetch": [
+    {
+      "href": "/assets/css/styles.min.css"
+    },
+    {
+      "href": "/assets/images/burni-chart.webp"
+    },
+    {
+      "href": "/assets/videos/burni-intro.mp4"
+    }
+  ],
+  "preconnect": [
+    {
+      "href": "https://api.coingecko.com"
+    },
+    {
+      "href": "https://data.xrpl.org"
+    },
+    {
+      "href": "https://fonts.googleapis.com"
+    }
+  ]
+}

@@ -40,14 +40,14 @@ async function testAndFixGscTools() {
   };
   
   for (const tool of GSC_TOOLS) {
-    console.log(`\n🧪 Testing: $${tool}`);
-    appendToLog(`Testing $${tool}`);
+    console.log(`\n🧪 Testing: ${tool}`);
+    appendToLog(`Testing ${tool}`);
     results.tested++;
     
     const toolPath = path.join(__dirname, tool);
-    if (!fs.existsSync(toolPath)) { 
-      console.log(`❌ Tool not found: $${tool}`);
-      appendToLog(`Tool not found: $${tool}`);
+    if (!fs.existsSync(toolPath)) {
+      console.log(`❌ Tool not found: ${tool}`);
+      appendToLog(`Tool not found: ${tool}`);
       results.failed++;
       continue;
     }
@@ -56,42 +56,42 @@ async function testAndFixGscTools() {
       // Try to run the tool with --test flag first
       console.log(`Running with --test flag...`);
       try {
-        execSync(`node "$${toolPath}" --test`, { timeout: 10000 });
-        console.log(`✅ Tool works with --test flag: $${tool}`);
-        appendToLog(`Tool works with --test flag: $${tool}`);
+        execSync(`node "${toolPath}" --test`, { timeout: 10000 });
+        console.log(`✅ Tool works with --test flag: ${tool}`);
+        appendToLog(`Tool works with --test flag: ${tool}`);
         results.working++;
         continue;
       } catch (testError) {
-        console.log(`⚠️ Test run failed: $${testError.message}`);
-        appendToLog(`Test run failed: $${testError.message}`);
+        console.log(`⚠️ Test run failed: ${testError.message}`);
+        appendToLog(`Test run failed: ${testError.message}`);
       }
       
       // If the test failed, attempt to fix common issues
-      if (tool === 'gsc-crawl-stats.js') { 
+      if (tool === 'gsc-crawl-stats.js') {
         fixCrawlStatsIssue(toolPath);
         results.fixed++;
-      } else { 
-        console.log(`🔧 Applying generic fixes for: $${tool}`);
-        appendToLog(`Applying generic fixes for: $${tool}`);
+      } else {
+        console.log(`🔧 Applying generic fixes for: ${tool}`);
+        appendToLog(`Applying generic fixes for: ${tool}`);
         applyGenericFixes(toolPath);
         results.fixed++;
       }
       
       // Test again after fixing
       try {
-        execSync(`node "$${toolPath}" --test`, { timeout: 10000 });
-        console.log(`✅ Tool now works after fixes: $${tool}`);
-        appendToLog(`Tool now works after fixes: $${tool}`);
+        execSync(`node "${toolPath}" --test`, { timeout: 10000 });
+        console.log(`✅ Tool now works after fixes: ${tool}`);
+        appendToLog(`Tool now works after fixes: ${tool}`);
         results.working++;
       } catch (retestError) {
-        console.log(`❌ Tool still fails after fixes: $${tool}`);
-        appendToLog(`Tool still fails after fixes: $${tool}`);
+        console.log(`❌ Tool still fails after fixes: ${tool}`);
+        appendToLog(`Tool still fails after fixes: ${tool}`);
         results.failed++;
       }
       
     } catch (error) {
-      console.log(`❌ Error processing tool $${tool}: ${error.message}`);
-      appendToLog(`Error processing tool $${tool}: ${error.message}`);
+      console.log(`❌ Error processing tool ${tool}: ${error.message}`);
+      appendToLog(`Error processing tool ${tool}: ${error.message}`);
       results.failed++;
     }
   }
@@ -103,23 +103,23 @@ async function testAndFixGscTools() {
   console.log('\n====================================================');
   console.log('📊 SUMMARY');
   console.log('====================================================');
-  console.log(`Tools tested: $${results.tested}`);
-  console.log(`Working tools: $${results.working}`);
-  console.log(`Fixed tools: $${results.fixed}`);
-  console.log(`Failed tools: $${results.failed}`);
+  console.log(`Tools tested: ${results.tested}`);
+  console.log(`Working tools: ${results.working}`);
+  console.log(`Fixed tools: ${results.fixed}`);
+  console.log(`Failed tools: ${results.failed}`);
   console.log(`Duration: ${duration.toFixed(2)} seconds`);
   console.log('====================================================');
   
   appendToLog(`GSC Tools Fixer V2 completed at ${endTime.toISOString()}`);
-  appendToLog(`Summary: tested=$${results.tested}, working=${results.working}, fixed=${results.fixed}, failed=${results.failed}`);
+  appendToLog(`Summary: tested=${results.tested}, working=${results.working}, fixed=${results.fixed}, failed=${results.failed}`);
   
   return results;
 }
 
 // Specific fix for crawl stats issue
 function fixCrawlStatsIssue(toolPath) {
-  console.log(`🔧 Fixing crawl stats tool: $${toolPath}`);
-  appendToLog(`Fixing crawl stats tool: $${toolPath}`);
+  console.log(`🔧 Fixing crawl stats tool: ${toolPath}`);
+  appendToLog(`Fixing crawl stats tool: ${toolPath}`);
   
   // Create a simplified version of the tool that works
   const fixedCode = `// tools/gsc-crawl-stats.js
@@ -145,11 +145,11 @@ async function getCrawlStats() {
   console.log('====================================================');
 
   try {
-    console.log(\`🌐 Site: \$${SITE_URL}\`);
+    console.log(\`🌐 Site: \${SITE_URL}\`);
 
     // Auth-Client erstellen
     const auth = new google.auth.GoogleAuth({
-      keyFile: SERVICE_ACCOUNT_FILE),
+      keyFile: SERVICE_ACCOUNT_FILE,
       scopes: ['https://www.googleapis.com/auth/webmasters.readonly'],
     });
 
@@ -163,7 +163,7 @@ async function getCrawlStats() {
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
     
     const performanceResponse = await searchconsole.searchanalytics.query({
-      siteUrl: SITE_URL),
+      siteUrl: SITE_URL,
       requestBody: {
         startDate: oneWeekAgo.toISOString().split('T')[0],
         endDate: new Date().toISOString().split('T')[0],
@@ -175,7 +175,7 @@ async function getCrawlStats() {
     console.log('\\n📈 WEBSITE-PERFORMANCE DER LETZTEN WOCHE:');
     console.log('------------------------------');
     
-    if (!performanceResponse.data?.rows || performanceResponse.data.rows.length === 0) { 
+    if (!performanceResponse.data?.rows || performanceResponse.data.rows.length === 0) {
       console.log('❓ Keine Performance-Daten für die letzte Woche verfügbar.');
       return;
     }
@@ -203,7 +203,7 @@ async function getCrawlStats() {
     console.log('\\n✅ Analyse der Crawling-Statistiken abgeschlossen.');
 
     // Im Test-Modus gibt es eine klare Bestätigung zurück
-    if (TEST_MODE) { 
+    if (TEST_MODE) {
       console.log('\\n🧪 TEST-MODUS: Tool funktioniert korrekt!');
     }
 
@@ -215,7 +215,7 @@ async function getCrawlStats() {
 }
 
 // Hauptfunktion ausführen
-if (require.main === module) { 
+if (require.main === module) {
   getCrawlStats().catch(error => {
     console.error('Unbehandelte Ausnahme:', error);
     process.exit(1);
@@ -226,11 +226,11 @@ if (require.main === module) {
 module.exports = { getCrawlStats };`;
 
   // Backup original file
-  const backupPath = `$${toolPath}.bak-${Date.now()}`;
-  if (fs.existsSync(toolPath)) { 
+  const backupPath = `${toolPath}.bak-${Date.now()}`;
+  if (fs.existsSync(toolPath)) {
     fs.copyFileSync(toolPath, backupPath);
-    console.log(`Original tool backed up to: $${backupPath}`);
-    appendToLog(`Original tool backed up to: $${backupPath}`);
+    console.log(`Original tool backed up to: ${backupPath}`);
+    appendToLog(`Original tool backed up to: ${backupPath}`);
   }
   
   // Write fixed code
@@ -248,23 +248,23 @@ function applyGenericFixes(toolPath) {
   let fixedContent = content;
   
   // Add test mode flag
-  if (!fixedContent.includes('TEST_MODE')) { 
+  if (!fixedContent.includes('TEST_MODE')) {
     const insertPoint = fixedContent.indexOf('const SITE_URL');
-    if (insertPoint !== -1) { 
+    if (insertPoint !== -1) {
       const before = fixedContent.substring(0, insertPoint + fixedContent.substring(insertPoint).indexOf('\n') + 1);
       const after = fixedContent.substring(insertPoint + fixedContent.substring(insertPoint).indexOf('\n') + 1);
-      fixedContent = `$${before}\n// Test-Modus-Flag\nconst TEST_MODE = process.argv.includes('--test');\n${after}`;
+      fixedContent = `${before}\n// Test-Modus-Flag\nconst TEST_MODE = process.argv.includes('--test');\n${after}`;
     }
   }
   
   // Make error handling more robust
   fixedContent = fixedContent.replace(
     /if\s*\(\s*!.*?\.data.*?\)\s*{/g, 
-    'if (!response?.data?.rows) { '
+    'if (!response?.data?.rows) {'
   );
   
   // Add module.exports for testing
-  if (!fixedContent.includes('module.exports')) { 
+  if (!fixedContent.includes('module.exports')) {
     fixedContent += '\n\n// Für Tests exportieren\nmodule.exports = {};\n';
   }
   
@@ -275,12 +275,12 @@ function applyGenericFixes(toolPath) {
 // Helper function to append to log
 function appendToLog(message) {
   const timestamp = new Date().toISOString();
-  const logMessage = `[$${timestamp}] ${message}\n`;
+  const logMessage = `[${timestamp}] ${message}\n`;
   fs.appendFileSync(LOG_FILE, logMessage);
 }
 
 // Run if executed directly
-if (require.main === module) { 
+if (require.main === module) {
   testAndFixGscTools()
     .then(() => console.log('Done!'))
     .catch(err => {

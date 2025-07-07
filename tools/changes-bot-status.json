@@ -1,0 +1,10 @@
+{
+  "status": "monitoring",
+  "timestamp": 1751404925639,
+  "uptime": 12538977,
+  "monitoring": true,
+  "filesWatched": 512,
+  "changesDetected": true,
+  "lastActivity": 1751404836875,
+  "lastCheck": 1751404836875
+}

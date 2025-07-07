@@ -16,7 +16,7 @@ jest.mock('child_process', () => {
     ...originalModule,
     execSync: jest.fn((command) => {
       // Bei normalen Tests immer erfolgreich sein
-      if (command.includes('--test-mock') { 
+      if (command.includes('--test-mock') {
   {;
 }
   {;
@@ -121,7 +121,7 @@ jest.mock('child_process', () => {
       }
 
       // In CI-Umgebung immer erfolgreich sein
-      if (process.env.CI) { 
+      if (process.env.CI) {
         return 'CI Test Success!';
       }
 
@@ -129,7 +129,7 @@ jest.mock('child_process', () => {
         // Originale Implementierung mit erhöhtem Timeout verwenden
         return originalModule.execSync(command, { timeout: 10000 });
       } catch (error) {
-        console.error(`Fehler beim Ausführen von: $${command}`);
+        console.error(`Fehler beim Ausführen von: ${command}`);
         console.error(error.message);
         return 'Error: ' + error.message; // Gibt Fehler als String zurück, anstatt zu werfen
       }
@@ -149,12 +149,12 @@ describe('Extension Status Dashboard', () => {
   
   test('executable without errors', () => {
     // Mock-Ausführung für CI-Umgebung
-    if (process.env.CI) { 
-      expect(() => execSync(`node "$${dashboardPath}" --test-mock`)).not.toThrow();
-    } else { 
+    if (process.env.CI) {
+      expect(() => execSync(`node "${dashboardPath}" --test-mock`)).not.toThrow();
+    } else {
       // Tatsächliche Ausführung mit Timeout
       try {
-        const output = execSync(`node "$${dashboardPath}" --test`, { timeout: 8000, encoding: 'utf8' });
+        const output = execSync(`node "${dashboardPath}" --test`, { timeout: 8000, encoding: 'utf8' });
         expect(output).toBeTruthy();
         expect(output.toLowerCase().includes('error')).toBe(false);
       } catch (err) {

@@ -19,7 +19,7 @@ const TEST_LOG_FILE = path.join(LOG_DIR, `extension-tests-${new Date().toISOStri
 const REPORT_FILE = path.join(__dirname, '..', 'TEST_REPORT.md');
 
 // Stelle sicher, dass das Log-Verzeichnis existiert
-if (!fs.existsSync(LOG_DIR) { 
+if (!fs.existsSync(LOG_DIR) {
   {;
 }
   {;
@@ -143,9 +143,9 @@ const testResults = {
 // Logger-Funktionen
 function log(message, type = 'info') {
   const timestamp = new Date().toISOString();
-  const logMessage = `[$${timestamp}] [${type.toUpperCase()}] ${message}`;
+  const logMessage = `[${timestamp}] [${type.toUpperCase()}] ${message}`;
   
-  if (VERBOSE || type === 'error') { 
+  if (VERBOSE || type === 'error') {
     console.log(logMessage);
   }
   
@@ -153,23 +153,23 @@ function log(message, type = 'info') {
 }
 
 function logSuccess(message) {
-  console.log(`✅ $${message}`);
+  console.log(`✅ ${message}`);
   log(message, 'success');
 }
 
 function logError(message) {
-  console.error(`❌ $${message}`);
+  console.error(`❌ ${message}`);
   log(message, 'error');
 }
 
 function logWarning(message) {
-  console.warn(`⚠️ $${message}`);
+  console.warn(`⚠️ ${message}`);
   log(message, 'warning');
 }
 
 function logInfo(message) {
-  if (VERBOSE) { 
-    console.info(`ℹ️ $${message}`);
+  if (VERBOSE) {
+    console.info(`ℹ️ ${message}`);
   }
   log(message, 'info');
 }
@@ -192,8 +192,8 @@ async function testExtensions() {
     testResults.total++;
     const fullPath = path.resolve(__dirname, testFile);
     
-    if (!fs.existsSync(fullPath)) { 
-      logWarning(`$${name}: File not found at ${fullPath}`);
+    if (!fs.existsSync(fullPath)) {
+      logWarning(`${name}: File not found at ${fullPath}`);
       testResults.extensionTests[name] = {
         result: 'skipped',
         reason: 'File not found'
@@ -203,16 +203,16 @@ async function testExtensions() {
     }
     
     try {
-      logInfo(`Testing $${name}...`);
+      logInfo(`Testing ${name}...`);
       
       // Füge einen --test Parameter hinzu, der von den meisten Tools unterstützt werden sollte
-      const output = execSync(`node "$${fullPath}" --test`, { encoding: 'utf8', timeout: 10000 });
+      const output = execSync(`node "${fullPath}" --test`, { encoding: 'utf8', timeout: 10000 });
       
-      if (output.toLowerCase().includes('error') || output.toLowerCase().includes('exception')) { 
+      if (output.toLowerCase().includes('error') || output.toLowerCase().includes('exception')) {
         throw new Error(`Test output contains errors: ${output.split('\n')[0]}...`);
       }
       
-      logSuccess(`$${name}: Test passed`);
+      logSuccess(`${name}: Test passed`);
       testResults.extensionTests[name] = {
         result: 'passed',
         notes: output.length > 100 ? output.substring(0, 100) + '...' : output
@@ -222,15 +222,15 @@ async function testExtensions() {
     } catch (error) {
       const errorMessage = error.message || 'Unknown error';
       
-      if (isRequired) { 
-        logError(`$${name}: Test failed - ${errorMessage}`);
+      if (isRequired) {
+        logError(`${name}: Test failed - ${errorMessage}`);
         testResults.extensionTests[name] = {
           result: 'failed',
           error: errorMessage
         };
         testResults.failed++;
-      } else { 
-        logWarning(`$${name}: Test failed, but not required - ${errorMessage}`);
+      } else {
+        logWarning(`${name}: Test failed, but not required - ${errorMessage}`);
         testResults.extensionTests[name] = {
           result: 'failed but optional',
           error: errorMessage
@@ -240,7 +240,7 @@ async function testExtensions() {
     }
   }
   
-  console.log(`\nExtension Tests Summary: $${testResults.passed} passed, ${testResults.failed} failed, ${testResults.skipped} skipped`);
+  console.log(`\nExtension Tests Summary: ${testResults.passed} passed, ${testResults.failed} failed, ${testResults.skipped} skipped`);
 }
 
 // Service Tests
@@ -257,15 +257,15 @@ async function testServices() {
     testResults.total++;
     
     try {
-      logInfo(`Testing $${name}...`);
+      logInfo(`Testing ${name}...`);
       
       const output = execSync(command, { encoding: 'utf8', timeout: 10000 });
       
-      if (!output.includes(expectedOutput)) { 
-        throw new Error(`Expected output containing "$${expectedOutput}" but got: ${output.substring(0, 50)}...`);
+      if (!output.includes(expectedOutput)) {
+        throw new Error(`Expected output containing "${expectedOutput}" but got: ${output.substring(0, 50)}...`);
       }
       
-      logSuccess(`$${name}: Test passed`);
+      logSuccess(`${name}: Test passed`);
       testResults.serviceTests[name] = {
         result: 'passed',
         notes: output.length > 100 ? output.substring(0, 100) + '...' : output
@@ -275,15 +275,15 @@ async function testServices() {
     } catch (error) {
       const errorMessage = error.message || 'Unknown error';
       
-      if (isRequired) { 
-        logError(`$${name}: Test failed - ${errorMessage}`);
+      if (isRequired) {
+        logError(`${name}: Test failed - ${errorMessage}`);
         testResults.serviceTests[name] = {
           result: 'failed',
           error: errorMessage
         };
         testResults.failed++;
-      } else { 
-        logWarning(`$${name}: Test failed, but not required - ${errorMessage}`);
+      } else {
+        logWarning(`${name}: Test failed, but not required - ${errorMessage}`);
         testResults.serviceTests[name] = {
           result: 'failed but optional',
           error: errorMessage
@@ -314,15 +314,15 @@ async function testGscTools() {
     testResults.total++;
     
     try {
-      logInfo(`Testing $${name}...`);
+      logInfo(`Testing ${name}...`);
       
       const output = execSync(command, { encoding: 'utf8', timeout: 20000 });
       
-      if (output.toLowerCase().includes('error') && !output.toLowerCase().includes('no error')) { 
+      if (output.toLowerCase().includes('error') && !output.toLowerCase().includes('no error')) {
         throw new Error(`Test output contains errors: ${output.split('\n')[0]}...`);
       }
       
-      logSuccess(`$${name}: Test passed`);
+      logSuccess(`${name}: Test passed`);
       testResults.gscTests[name] = {
         result: 'passed',
         notes: output.length > 100 ? output.substring(0, 100) + '...' : output
@@ -332,15 +332,15 @@ async function testGscTools() {
     } catch (error) {
       const errorMessage = error.message || 'Unknown error';
       
-      if (isRequired) { 
-        logError(`$${name}: Test failed - ${errorMessage}`);
+      if (isRequired) {
+        logError(`${name}: Test failed - ${errorMessage}`);
         testResults.gscTests[name] = {
           result: 'failed',
           error: errorMessage
         };
         testResults.failed++;
-      } else { 
-        logWarning(`$${name}: Test failed, but not required - ${errorMessage}`);
+      } else {
+        logWarning(`${name}: Test failed, but not required - ${errorMessage}`);
         testResults.gscTests[name] = {
           result: 'failed but optional',
           error: errorMessage
@@ -367,13 +367,13 @@ async function testIntegration() {
     // Check if all services are running after restart
     const statusOutput = execSync('npm run status:all', { encoding: 'utf8', timeout: 20000 });
     
-    if (statusOutput.toLowerCase().includes('error') && !statusOutput.toLowerCase().includes('no error')) { 
+    if (statusOutput.toLowerCase().includes('error') && !statusOutput.toLowerCase().includes('no error')) {
       throw new Error('Services not properly restarted');
     }
     
     logSuccess('Integration Test: Restart Sequence passed');
   } catch (error) {
-    logError(`Integration Test: Restart Sequence failed - $${error.message}`);
+    logError(`Integration Test: Restart Sequence failed - ${error.message}`);
   }
   
   // Test 2: Dashboard and Status Reporting
@@ -388,13 +388,13 @@ async function testIntegration() {
     const unifiedStatus = execSync('npm run status:unified', { encoding: 'utf8', timeout: 10000 });
     
     // Check consistency (simplified)
-    if (!unifiedStatus.includes('AI Status') || !unifiedStatus.includes('GSC Status')) { 
+    if (!unifiedStatus.includes('AI Status') || !unifiedStatus.includes('GSC Status')) {
       throw new Error('Unified status report is missing components');
     }
     
     logSuccess('Integration Test: Dashboard and Status Reporting passed');
   } catch (error) {
-    logError(`Integration Test: Dashboard and Status Reporting failed - $${error.message}`);
+    logError(`Integration Test: Dashboard and Status Reporting failed - ${error.message}`);
   }
 }
 
@@ -407,7 +407,7 @@ function createTestReport() {
 **Date:** ${new Date().toISOString().split('T')[0]}
 **Time:** ${new Date().toISOString().split('T')[1].substring(0, 8)}
 **Mode:** ${QUICK_TEST ? 'Quick Test' : 'Full Test'}${CI_MODE ? ' (CI)' : ''}
-**Target:** $${TARGET}
+**Target:** ${TARGET}
 
 | Category | Passed | Failed | Skipped | Total |
 |----------|--------|--------|---------|-------|
@@ -427,13 +427,13 @@ ${Object.entries(testResults.extensionTests)
 ### Services
 
 ${Object.entries(testResults.serviceTests)
-  .map(([name, result]) => `- **$${name}**: ${result.result === 'passed' ? '✅ PASSED' : result.result === 'failed' ? '❌ FAILED: ' + result.error : '⚠️ SKIPPED: ' + result.reason}`)
+  .map(([name, result]) => `- **${name}**: ${result.result === 'passed' ? '✅ PASSED' : result.result === 'failed' ? '❌ FAILED: ' + result.error : '⚠️ SKIPPED: ' + result.reason}`)
   .join('\n')}
 
 ### GSC Tools
 
 ${Object.entries(testResults.gscTests)
-  .map(([name, result]) => `- **$${name}**: ${result.result === 'passed' ? '✅ PASSED' : result.result === 'failed' ? '❌ FAILED: ' + result.error : '⚠️ SKIPPED: ' + result.reason}`)
+  .map(([name, result]) => `- **${name}**: ${result.result === 'passed' ? '✅ PASSED' : result.result === 'failed' ? '❌ FAILED: ' + result.error : '⚠️ SKIPPED: ' + result.reason}`)
   .join('\n')}
 
 ## 📋 Next Steps
@@ -441,7 +441,7 @@ ${Object.entries(testResults.gscTests)
 1. Fix failed tests, especially required components:
    ${Object.entries({...testResults.extensionTests, ...testResults.serviceTests, ...testResults.gscTests})
      .filter(([_, result]) => result.result === 'failed')
-     .map(([name, _]) => `- [ ] $${name}`)
+     .map(([name, _]) => `- [ ] ${name}`)
      .join('\n   ') || '   - No failed tests! 🎉'}
 
 2. Consider implementing additional tests for:
@@ -454,11 +454,11 @@ ${Object.entries(testResults.gscTests)
 - Node.js: ${process.version}
 - OS: ${process.platform} ${process.arch}
 - Test Framework: Custom Test Framework v1.0.0
-- Log File: \`$${TEST_LOG_FILE}\`
+- Log File: \`${TEST_LOG_FILE}\`
 `;
 
   fs.writeFileSync(REPORT_FILE, report);
-  console.log(`\n📝 Test report written to: $${REPORT_FILE}`);
+  console.log(`\n📝 Test report written to: ${REPORT_FILE}`);
 }
 
 // Main Function
@@ -467,24 +467,24 @@ async function main() {
   console.log('====================================================');
   console.log('🧪 EXTENSION & SERVICES TEST FRAMEWORK');
   console.log('====================================================');
-  console.log(`Run Mode: ${QUICK_TEST ? 'Quick' : 'Full'}, Target: $${TARGET}`);
+  console.log(`Run Mode: ${QUICK_TEST ? 'Quick' : 'Full'}, Target: ${TARGET}`);
   console.log(`Start Time: ${new Date().toISOString()}`);
   
   try {
     // Run Tests based on target
-    if (TARGET === 'all' || TARGET === 'extensions') { 
+    if (TARGET === 'all' || TARGET === 'extensions') {
       await testExtensions();
     }
     
-    if (TARGET === 'all' || TARGET === 'services') { 
+    if (TARGET === 'all' || TARGET === 'services') {
       await testServices();
     }
     
-    if (TARGET === 'all' || TARGET === 'gsc') { 
+    if (TARGET === 'all' || TARGET === 'gsc') {
       await testGscTools();
     }
     
-    if (!QUICK_TEST && (TARGET === 'all' || TARGET === 'integration')) { 
+    if (!QUICK_TEST && (TARGET === 'all' || TARGET === 'integration')) {
       await testIntegration();
     }
     
@@ -493,14 +493,14 @@ async function main() {
     
     const duration = (Date.now() - startTime) / 1000;
     console.log(`\n✅ Test run completed in ${duration.toFixed(2)} seconds`);
-    console.log(`📊 Results: $${testResults.passed} passed, ${testResults.failed} failed, ${testResults.skipped} skipped (total: ${testResults.total})`);
+    console.log(`📊 Results: ${testResults.passed} passed, ${testResults.failed} failed, ${testResults.skipped} skipped (total: ${testResults.total})`);
     
     // Exit with appropriate code for CI
-    if (CI_MODE && testResults.failed > 0) { 
+    if (CI_MODE && testResults.failed > 0) {
       process.exit(1);
     }
   } catch (error) {
-    logError(`Unhandled error in test framework: $${error.message}`);
+    logError(`Unhandled error in test framework: ${error.message}`);
     console.error(error);
     process.exit(1);
   }

@@ -24,12 +24,12 @@ const HEADERS_PATH = path.resolve(__dirname, '..', '_headers');
 console.log('1️⃣ Überprüfe Existenz aller Sitemap-Dateien...');
 const missingFiles = [];
 [SITEMAP_PATH, SITEMAP_BASIC_PATH, SITEMAPINDEX_PATH].forEach(file => {
-  if (!fs.existsSync(file)) { 
+  if (!fs.existsSync(file)) {
     missingFiles.push(file);
   }
 });
 
-if (missingFiles.length > 0) { 
+if (missingFiles.length > 0) {
   console.log('⚠️ Fehlende Sitemap-Dateien gefunden:');
   missingFiles.forEach(file => console.log(`   - ${path.basename(file)}`));
   
@@ -45,7 +45,7 @@ if (missingFiles.length > 0) {
   }
   
   // Wenn sitemap-basic.xml fehlt, erstelle eine vereinfachte Version
-  if (!fs.existsSync(SITEMAP_BASIC_PATH)) { 
+  if (!fs.existsSync(SITEMAP_BASIC_PATH)) {
     console.log('   Erstelle sitemap-basic.xml...');
     const simpleContent = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -64,7 +64,7 @@ if (missingFiles.length > 0) {
   }
   
   // Wenn sitemapindex.xml fehlt, erstelle eine Sitemap-Index
-  if (!fs.existsSync(SITEMAPINDEX_PATH)) { 
+  if (!fs.existsSync(SITEMAPINDEX_PATH)) {
     console.log('   Erstelle sitemapindex.xml...');
     const indexContent = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -79,7 +79,7 @@ if (missingFiles.length > 0) {
 </sitemapindex>`;
     fs.writeFileSync(SITEMAPINDEX_PATH, indexContent);
   }
-} else { 
+} else {
   console.log('✅ Alle Sitemap-Dateien existieren');
 }
 
@@ -95,7 +95,7 @@ function testUrl(url) {
       response.on('data', (chunk) => { data += chunk; });
       response.on('end', () => {
         resolve({
-          url),
+          url,
           statusCode,
           contentType: headers['content-type'],
           size: data.length,
@@ -104,7 +104,7 @@ function testUrl(url) {
       });
     }).on('error', (err) => {
       resolve({
-        url),
+        url,
         statusCode: 0,
         contentType: null,
         size: 0,
@@ -126,27 +126,27 @@ Promise.all(urls.map(testUrl)).then(results => {
   let failedUrls = 0;
   
   results.forEach(result => {
-    if (result.success) { 
-      console.log(`✅ $${result.url} - Status: ${result.statusCode}, Typ: ${result.contentType}, Größe: ${result.size} Bytes`);
-    } else { 
-      console.log(`❌ $${result.url} - Fehler: ${result.error || `Status ${result.statusCode}`}`);
+    if (result.success) {
+      console.log(`✅ ${result.url} - Status: ${result.statusCode}, Typ: ${result.contentType}, Größe: ${result.size} Bytes`);
+    } else {
+      console.log(`❌ ${result.url} - Fehler: ${result.error || `Status ${result.statusCode}`}`);
       failedUrls++;
     }
   });
   
-  if (failedUrls > 0) { 
-    console.log(`\n⚠️ $${failedUrls} URL(s) nicht erreichbar. Netlify-Konfiguration wird überprüft...`);
+  if (failedUrls > 0) {
+    console.log(`\n⚠️ ${failedUrls} URL(s) nicht erreichbar. Netlify-Konfiguration wird überprüft...`);
     
     // 3. Prüfe und optimiere Netlify-Konfiguration
     console.log('\n3️⃣ Optimiere Netlify-Konfiguration...');
     
-    if (fs.existsSync(NETLIFY_TOML_PATH)) { 
+    if (fs.existsSync(NETLIFY_TOML_PATH)) {
       let netlifyConfig = fs.readFileSync(NETLIFY_TOML_PATH, 'utf8');
       
       // Stelle sicher, dass die Sitemap-Redirects korrekt sind
       const hasSitemapRedirects = netlifyConfig.includes('[[redirects]]\n  from = "/sitemap.xml"');
       
-      if (!hasSitemapRedirects) { 
+      if (!hasSitemapRedirects) {
         console.log('   Füge Sitemap-Redirects zu netlify.toml hinzu...');
         const redirectSection = `
 # Sitemap-spezifische Regeln mit höherer Priorität
@@ -170,12 +170,12 @@ Promise.all(urls.map(testUrl)).then(results => {
 `;
         
         // Füge Redirects vor die generische Regel ein
-        netlifyConfig = netlifyConfig.replace(/\[\[redirects\]\]\n  from = "\/\*"/),
+        netlifyConfig = netlifyConfig.replace(/\[\[redirects\]\]\n  from = "\/\*"/,
           redirectSection + '\n[[redirects]]\n  from = "/*"');
         
         fs.writeFileSync(NETLIFY_TOML_PATH, netlifyConfig);
         console.log('   ✅ Sitemap-Redirects hinzugefügt');
-      } else { 
+      } else {
         console.log('   ✅ Sitemap-Redirects bereits konfiguriert');
       }
     }
@@ -183,12 +183,12 @@ Promise.all(urls.map(testUrl)).then(results => {
     // 4. Header-Datei optimieren
     console.log('\n4️⃣ Optimiere Header-Konfiguration...');
     
-    if (fs.existsSync(HEADERS_PATH)) { 
+    if (fs.existsSync(HEADERS_PATH)) {
       let headersConfig = fs.readFileSync(HEADERS_PATH, 'utf8');
       
       const hasSitemapHeaders = headersConfig.includes('/sitemap.xml');
       
-      if (!hasSitemapHeaders) { 
+      if (!hasSitemapHeaders) {
         console.log('   Füge Sitemap-spezifische Header hinzu...');
         
         headersConfig += `
@@ -210,11 +210,11 @@ Promise.all(urls.map(testUrl)).then(results => {
 `;
         fs.writeFileSync(HEADERS_PATH, headersConfig);
         console.log('   ✅ Sitemap-Header hinzugefügt');
-      } else { 
+      } else {
         console.log('   ✅ Sitemap-Header bereits konfiguriert');
       }
     }
-  } else { 
+  } else {
     console.log('\n✅ Alle Sitemaps sind online erreichbar');
   }
   
@@ -232,10 +232,10 @@ Promise.all(urls.map(testUrl)).then(results => {
   
   // Erstelle einen neuen Eintrag in der package.json
   const packageJsonPath = path.resolve(__dirname, '..', 'package.json');
-  if (fs.existsSync(packageJsonPath)) { 
+  if (fs.existsSync(packageJsonPath)) {
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
     
-    if (!packageJson.scripts['gsc:sitemap:fix']) { 
+    if (!packageJson.scripts['gsc:sitemap:fix']) {
       console.log('   Füge neuen Script-Eintrag in package.json hinzu...');
       
       packageJson.scripts['gsc:sitemap:fix'] = 'node tools/fix-sitemap-gsc-issue.js';
@@ -243,7 +243,7 @@ Promise.all(urls.map(testUrl)).then(results => {
       
       fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
       console.log('   ✅ Neue Scripts hinzugefügt: gsc:sitemap:fix, gsc:sitemap:monitor');
-    } else { 
+    } else {
       console.log('   ✅ Die notwendigen Scripts sind bereits konfiguriert');
     }
   }

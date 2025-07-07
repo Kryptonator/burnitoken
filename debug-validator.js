@@ -16,10 +16,10 @@ try {
   
   console.log('Teste Dateizugriff...');
   const settingsPath = path.join('.vscode', 'settings.json');
-  console.log(`Settings Pfad: $${settingsPath}`);
+  console.log(`Settings Pfad: ${settingsPath}`);
   
   const settingsExist = fs.existsSync(settingsPath);
-  console.log(`settings.json existiert: $${settingsExist}`);
+  console.log(`settings.json existiert: ${settingsExist}`);
   
   console.log('Versuche VS Code Extensions zu listen...');
   try {

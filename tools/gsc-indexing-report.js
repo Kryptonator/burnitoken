@@ -18,8 +18,8 @@ function generateReportContent() {
     const timestamp = startTime.toISOString().replace('T', ' ').substring(0, 19);
     
     let report = `# Google Search Console - Indexierungsbericht\n\n`;
-    report += `**Website:** $${websiteUrl}  \n`;
-    report += `**Erstellungsdatum:** $${timestamp}  \n\n`;
+    report += `**Website:** ${websiteUrl}  \n`;
+    report += `**Erstellungsdatum:** ${timestamp}  \n\n`;
     
     // HTML-Dateien scannen
     const htmlFiles = [];
@@ -39,41 +39,41 @@ function generateReportContent() {
                     file !== 'node_modules' && 
                     file !== 'vendor') {
                     scanDir(fullPath, currentRelPath);
-                } else { 
+                } else {
                     totalFiles++;
                     const ext = path.extname(file).toLowerCase();
                     
-                    if (ext === '.html' || ext === '.htm') { 
+                    if (ext === '.html' || ext === '.htm') {
                         htmlFiles.push({
-                            path: fullPath),
+                            path: fullPath,
                             relativePath: currentRelPath
                         });
                         
                         // Prüfen auf noindex-Tags
                         try {
                             const content = fs.readFileSync(fullPath, 'utf8');
-                            if (content.match(/<meta[^>]*noindex/i)) { 
+                            if (content.match(/<meta[^>]*noindex/i)) {
                                 noindexFiles.push({
-                                    path: fullPath),
+                                    path: fullPath,
                                     relativePath: currentRelPath,
                                     match: content.match(/<meta[^>]*noindex[^>]*>/i)[0]
                                 });
                             }
                         } catch (err) {
-                            console.error(`Fehler beim Lesen von $${fullPath}:`, err);
+                            console.error(`Fehler beim Lesen von ${fullPath}:`, err);
                         }
                     }
                 }
             });
         } catch (err) {
-            console.error(`Fehler beim Scannen von $${dir}:`, err);
+            console.error(`Fehler beim Scannen von ${dir}:`, err);
         }
     }
     
     // Suche nach robots.txt
     let robotsTxtContent = null;
     const robotsTxtPath = path.join(__dirname, '..', 'robots.txt');
-    if (fs.existsSync(robotsTxtPath)) { 
+    if (fs.existsSync(robotsTxtPath)) {
         try {
             robotsTxtContent = fs.readFileSync(robotsTxtPath, 'utf8');
         } catch (err) {
@@ -86,22 +86,22 @@ function generateReportContent() {
     
     // Zusammenfassung
     report += `## Zusammenfassung\n\n`;
-    report += `- **Gescannte Dateien:** $${totalFiles}\n`;
-    report += `- **HTML-Dateien:** $${htmlFiles.length}\n`;
-    report += `- **Dateien mit noindex-Tags:** $${noindexFiles.length}\n\n`;
+    report += `- **Gescannte Dateien:** ${totalFiles}\n`;
+    report += `- **HTML-Dateien:** ${htmlFiles.length}\n`;
+    report += `- **Dateien mit noindex-Tags:** ${noindexFiles.length}\n\n`;
     
     // Indexierungsstatus
     report += `## Indexierungsstatus\n\n`;
-    if (noindexFiles.length === 0) { 
+    if (noindexFiles.length === 0) {
         report += `✅ **OPTIMIERT:** Alle HTML-Dateien können von Suchmaschinen indexiert werden.\n\n`;
-    } else { 
-        report += `⚠️ **ACHTUNG:** Es wurden $${noindexFiles.length} HTML-Dateien mit noindex-Tags gefunden.\n\n`;
+    } else {
+        report += `⚠️ **ACHTUNG:** Es wurden ${noindexFiles.length} HTML-Dateien mit noindex-Tags gefunden.\n\n`;
         report += `### Dateien mit Indexierungsproblemen\n\n`;
         report += `| Datei | noindex-Tag |\n`;
         report += `|-------|-------------|\n`;
         
         noindexFiles.forEach(file => {
-            report += `| $${file.relativePath} | \`${file.match}\` |\n`;
+            report += `| ${file.relativePath} | \`${file.match}\` |\n`;
         });
         
         report += `\n`;
@@ -109,15 +109,15 @@ function generateReportContent() {
     
     // robots.txt Status
     report += `## robots.txt Status\n\n`;
-    if (robotsTxtContent === null) { 
+    if (robotsTxtContent === null) {
         report += `ℹ️ Keine robots.txt gefunden.\n\n`;
-    } else { 
+    } else {
         const hasDisallow = robotsTxtContent.match(/Disallow:/i);
         
-        if (hasDisallow) { 
+        if (hasDisallow) {
             report += `⚠️ Die robots.txt enthält Disallow-Regeln, die die Indexierung einschränken könnten:\n\n`;
             report += "```\n" + robotsTxtContent + "\n```\n\n";
-        } else { 
+        } else {
             report += `✅ Die robots.txt erlaubt die vollständige Indexierung.\n\n`;
             report += "```\n" + robotsTxtContent + "\n```\n\n";
         }
@@ -140,13 +140,13 @@ function generateReportContent() {
             const description = descriptionMatch ? descriptionMatch[1].substr(0, 30) + '...' : '-';
             const keywords = keywordsMatch ? keywordsMatch[1].substr(0, 30) + '...' : '-';
             
-            report += `| $${file.relativePath} | ${description} | ${keywords} |\n`;
+            report += `| ${file.relativePath} | ${description} | ${keywords} |\n`;
         } catch (err) {
-            report += `| $${file.relativePath} | Fehler beim Lesen | - |\n`;
+            report += `| ${file.relativePath} | Fehler beim Lesen | - |\n`;
         }
     }
     
-    if (htmlFiles.length > maxFilesToShow) { 
+    if (htmlFiles.length > maxFilesToShow) {
         report += `| ... und ${htmlFiles.length - maxFilesToShow} weitere Dateien | | |\n`;
     }
     
@@ -154,16 +154,16 @@ function generateReportContent() {
     
     // Handlungsempfehlungen
     report += `## Handlungsempfehlungen\n\n`;
-    if (noindexFiles.length > 0) { 
+    if (noindexFiles.length > 0) {
         report += `1. **DRINGEND:** Entfernen Sie die noindex-Tags aus den oben aufgelisteten Dateien.\n`;
         report += `2. Führen Sie die Task "🚨 Fix GSC Indexierung (noindex entfernen)" aus, um dies automatisch zu beheben.\n`;
         report += `3. Prüfen Sie nach der Behebung die Google Search Console, um die Indexierung zu überwachen.\n`;
-    } else { 
+    } else {
         report += `1. Überwachen Sie weiterhin den Indexierungsstatus in der Google Search Console.\n`;
         report += `2. Starten Sie den GSC Indexierungs-Watcher mit der Task "🔍 GSC Indexierungs-Watcher starten", um automatisch benachrichtigt zu werden, falls noindex-Tags hinzugefügt werden.\n`;
     }
     
-    if (robotsTxtContent && robotsTxtContent.match(/Disallow:/i)) { 
+    if (robotsTxtContent && robotsTxtContent.match(/Disallow:/i)) {
         report += `3. Überprüfen Sie die Disallow-Regeln in der robots.txt und stellen Sie sicher, dass wichtige Seiten nicht blockiert werden.\n`;
     }
     
@@ -178,7 +178,7 @@ function generateReportContent() {
     const endTime = new Date();
     const duration = (endTime - startTime) / 1000;
     report += `---\n\n`;
-    report += `Bericht erstellt am $${timestamp} (Dauer: ${duration.toFixed(2)}s)\n`;
+    report += `Bericht erstellt am ${timestamp} (Dauer: ${duration.toFixed(2)}s)\n`;
     
     return report;
 }
@@ -192,7 +192,7 @@ function createReport() {
     
     const endTime = new Date();
     const duration = (endTime - startTime) / 1000;
-    console.log(`✅ Bericht gespeichert: $${REPORT_FILE} (${duration.toFixed(2)}s)`);
+    console.log(`✅ Bericht gespeichert: ${REPORT_FILE} (${duration.toFixed(2)}s)`);
 }
 
 // Report erstellen

@@ -2,12 +2,12 @@
 console.log('Main.js loading...');
 
 // Global fallback functions - defined first before any other scripts
-if (typeof window.checkFontAwesome !== 'function') { 
+if (typeof window.checkFontAwesome !== 'function') {
   window.checkFontAwesome = function () {
     console.log('FontAwesome check: Fallback function active');
     // Überprüfe, ob FontAwesome korrekt geladen wurde
     const faElements = document.querySelectorAll('[class*="fa-"]');
-    if (faElements.length > 0) { 
+    if (faElements.length > 0) {
       console.log('FontAwesome Icons gefunden:', faElements.length);
     }
   };
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Initialize optimized features immediately
   try {
-    if (typeof initializeOptimizedFeatures === 'function') { 
+    if (typeof initializeOptimizedFeatures === 'function') {
       await initializeOptimizedFeatures();
       console.log('Optimized features initialized successfully');
     }
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.__pw_playwright ||
     document.documentElement.getAttribute('data-pw-test') !== null;
 
-  if (isTest) { 
+  if (isTest) {
     document.body.setAttribute('data-test-mode', 'true');
     document.body.setAttribute('data-playwright', 'true');
     console.log('Test mode detected and body attributes set');
@@ -46,13 +46,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Hide page loader immediately (cross-browser, including Webkit)
   const pageLoader = document.getElementById('pageLoader');
-  if (pageLoader) { 
+  if (pageLoader) {
     // Für E2E-Tests sofort entfernen - erweiterte Erkennung
-    if (isTest) { 
+    if (isTest) {
       pageLoader.remove();
       console.log('Page Loader für E2E-Tests entfernt');
       // Don't return early - continue with initialization for E2E tests
-    } else { 
+    } else {
       // Forciere Verstecken mit mehreren Methoden für Browser-Kompatibilität
       pageLoader.style.display = 'none';
       pageLoader.style.visibility = 'hidden';
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       // Webkit/Safari-spezifische Behandlung - entferne aus DOM
       setTimeout(() => {
-        if (pageLoader && pageLoader.parentNode) { 
+        if (pageLoader && pageLoader.parentNode) {
           pageLoader.parentNode.removeChild(pageLoader);
           console.log('Page Loader für Webkit-Kompatibilität entfernt');
         }
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Lauscht auf das globale Sprachwechsel-Event von navigation-language.js
   document.addEventListener('languageSwitched', async (e) => {
-    console.log(`Main.js hat Sprachwechsel zu $${e.detail.lang} erkannt.`);
+    console.log(`Main.js hat Sprachwechsel zu ${e.detail.lang} erkannt.`);
     i18nState.lang = e.detail.lang;
     
     // Greift auf die global gecachten Übersetzungen zu
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   console.log('Setting up mobile menu...');
   const mobileMenuButton = document.getElementById('mobile-menu-button');
   const mobileMenu = document.getElementById('mobile-menu');
-  if (mobileMenuButton && mobileMenu) { 
+  if (mobileMenuButton && mobileMenu) {
     mobileMenuButton.addEventListener('click', () => {
       const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
       mobileMenuButton.setAttribute('aria-expanded', String(!isExpanded));
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function loadChartJs() {
     return new Promise((resolve, reject) => {
       // Prüfen, ob Chart.js bereits geladen ist
-      if (typeof Chart !== 'undefined') { 
+      if (typeof Chart !== 'undefined') {
         chartJsLoaded = true;
         resolve();
         return;
@@ -167,19 +167,19 @@ document.addEventListener('DOMContentLoaded', async () => {
   const navLinks = document.querySelectorAll('header nav a.nav-link, #mobile-menu a');
   navLinks.forEach((link) => {
     link.addEventListener('click', (e) => {
-      if (link.hash) { 
+      if (link.hash) {
         e.preventDefault();
         const targetElement = document.querySelector(link.hash);
-        if (targetElement) { 
+        if (targetElement) {
           const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
           window.scrollTo({ top: elementPosition - headerOffset, behavior: 'smooth' });
           navLinks.forEach((nav) => nav.classList.remove('active'));
           document
             .querySelectorAll(
-              `header nav a[href="$${link.hash}"], #mobile-menu a[href="${link.hash}"]`),
+              `header nav a[href="${link.hash}"], #mobile-menu a[href="${link.hash}"]`,
             )
             .forEach((activeLink) => activeLink.classList.add('active'));
-          if (mobileMenu?.classList.contains('active')) { 
+          if (mobileMenu?.classList.contains('active')) {
             mobileMenu.classList.remove('active');
             mobileMenu.classList.add('hidden');
             if (mobileMenuButton) mobileMenuButton.setAttribute('aria-expanded', 'false');
@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       link.classList.remove('active');
       if (link.getAttribute('href')?.includes(current)) link.classList.add('active');
     });
-    if (sections.length > 0 && window.pageYOffset < sections[0].offsetTop - headerOffset - 10) { 
+    if (sections.length > 0 && window.pageYOffset < sections[0].offsetTop - headerOffset - 10) {
       navLinks.forEach((link) => link.classList.remove('active'));
       document
         .querySelectorAll(`header nav a[href="#hero"], #mobile-menu a[href="#hero"]`)
@@ -224,14 +224,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       coins = coins * (1 - 0.03) * (1 - 0.02); // Burn 3%, lock 2%
       schedule.push({
         date: date.toLocaleDateString(locale, {
-          day: '2-digit'),
+          day: '2-digit',
           month: '2-digit',
           year: 'numeric',
         }),
         day: date.toLocaleDateString(locale, { weekday: 'long' }),
         process: i,
         coins: new Intl.NumberFormat(locale, {
-          minimumFractionDigits: 2),
+          minimumFractionDigits: 2,
           maximumFractionDigits: 2,
         }).format(coins),
       });
@@ -247,11 +247,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const currentTranslations = i18nState.translations; // NEU: aus i18nState
 
     let displaySchedule = [];
-    if (schedule.length <= 7) { 
+    if (schedule.length <= 7) {
       displaySchedule = schedule;
-    } else { 
+    } else {
       displaySchedule = schedule.slice(0, 4);
-      if (schedule.length > 6) { 
+      if (schedule.length > 6) {
         displaySchedule.push({ date: '...', day: '...', process: '...', coins: '...' });
       }
       displaySchedule = displaySchedule.concat(schedule.slice(-3));
@@ -307,7 +307,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Setze alle Elemente in den Ladezustand
     Object.values(priceElements).forEach(({ element }) => {
-      if (element) { 
+      if (element) {
         element.dataset.status = 'loading';
         element.textContent = '...';
       }
@@ -322,11 +322,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       const price = await PriceOracle.fetchPrice(tokenIds, 'usd');
 
-      if (price !== null) { 
+      if (price !== null) {
         element.dataset.status = 'success';
         element.textContent = formatter(price);
         element.title = `Live-Preis (aktualisiert: ${new Date().toLocaleTimeString()})`;
-      } else { 
+      } else {
         element.dataset.status = 'error';
         element.textContent = 'N/A';
         element.title = 'Preisdaten derzeit nicht verfügbar.';
@@ -340,14 +340,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     // würden die Daten hier an die Charts weitergegeben.
     
     const lastUpdatedTimestampElement = document.getElementById('lastUpdatedTimestamp');
-    if (lastUpdatedTimestampElement) { 
+    if (lastUpdatedTimestampElement) {
         lastUpdatedTimestampElement.textContent = new Date().toLocaleString(currentLocale);
     }
     
-    if (priceErrorMessageElement) { 
-        if (allPricesFetched) { 
+    if (priceErrorMessageElement) {
+        if (allPricesFetched) {
             priceErrorMessageElement.classList.add('hidden');
-        } else { 
+        } else {
             const errorMsgKey = i18nState.translations.price_error_message || 'Price data currently unavailable.'; // NEU: aus i18nState
             priceErrorMessageElement.textContent = errorMsgKey;
             priceErrorMessageElement.classList.remove('hidden');
@@ -425,7 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log('Initializing enhanced features...');
 
   // Track page load with analytics
-  if (window.BurniAnalytics) { 
+  if (window.BurniAnalytics) {
     window.BurniAnalytics.trackPageView('homepage');
     window.BurniAnalytics.trackFeatureUsage('website', 'page_loaded');
   }
@@ -438,25 +438,25 @@ document.addEventListener('DOMContentLoaded', () => {
     updateChartsForTheme(event.detail.theme);
 
     // Track theme change
-    if (window.BurniAnalytics) { 
-      window.BurniAnalytics.trackFeatureUsage('theme', `changed_to_$${event.detail.theme}`);
+    if (window.BurniAnalytics) {
+      window.BurniAnalytics.trackFeatureUsage('theme', `changed_to_${event.detail.theme}`);
     }
   });
 
   // Setup performance monitoring alerts
-  if (window.PerformanceMonitor) { 
+  if (window.PerformanceMonitor) {
     // Listen for performance issues
     document.addEventListener('performanceIssue', (event) => {
       console.warn('Performance issue detected:', event.detail);
 
-      if (window.BurniAnalytics) { 
+      if (window.BurniAnalytics) {
         window.BurniAnalytics.trackCustomEvent('performance_issue', event.detail);
       }
     });
   }
 
   // Setup accessibility announcements
-  if (window.AccessibilityManager) { 
+  if (window.AccessibilityManager) {
     // Announce important page updates
     setTimeout(() => {
       window.AccessibilityManager.announceToScreenReader('Burni Token website loaded successfully');
@@ -467,9 +467,9 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('error', (event) => {
     console.error('Global error caught:', event.error);
 
-    if (window.BurniAnalytics) { 
+    if (window.BurniAnalytics) {
       window.BurniAnalytics.trackError(event.error, {
-        filename: event.filename),
+        filename: event.filename,
         lineno: event.lineno,
         colno: event.colno,
         type: 'javascript_error',
@@ -481,7 +481,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('unhandledrejection', (event) => {
     console.error('Unhandled promise rejection:', event.reason);
 
-    if (window.BurniAnalytics) { 
+    if (window.BurniAnalytics) {
       window.BurniAnalytics.trackError(new Error(event.reason), {
         type: 'unhandled_promise_rejection',
         reason: event.reason,
@@ -492,14 +492,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Setup connection status monitoring
   window.addEventListener('online', () => {
     console.log('Connection restored');
-    if (window.BurniAnalytics) { 
+    if (window.BurniAnalytics) {
       window.BurniAnalytics.trackCustomEvent('connection_status', { status: 'online' });
     }
   });
 
   window.addEventListener('offline', () => {
     console.log('Connection lost');
-    if (window.BurniAnalytics) { 
+    if (window.BurniAnalytics) {
       window.BurniAnalytics.trackCustomEvent('connection_status', { status: 'offline' });
     }
   });
@@ -525,7 +525,7 @@ function updateChartsForTheme(theme) {
   const colors = isDark ? darkColors : lightColors;
 
   // Update existing charts if they exist
-  if (window.supplyChartInstance) { 
+  if (window.supplyChartInstance) {
     window.supplyChartInstance.options.plugins.legend.labels.color = colors.text;
     window.supplyChartInstance.options.scales.x.ticks.color = colors.text;
     window.supplyChartInstance.options.scales.y.ticks.color = colors.text;
@@ -534,7 +534,7 @@ function updateChartsForTheme(theme) {
     window.supplyChartInstance.update();
   }
 
-  if (window.athAtlChartInstance) { 
+  if (window.athAtlChartInstance) {
     window.athAtlChartInstance.options.plugins.legend.labels.color = colors.text;
     window.athAtlChartInstance.options.scales.x.ticks.color = colors.text;
     window.athAtlChartInstance.options.scales.y.ticks.color = colors.text;
@@ -543,7 +543,7 @@ function updateChartsForTheme(theme) {
     window.athAtlChartInstance.update();
   }
 
-  if (window.scheduleChartInstance) { 
+  if (window.scheduleChartInstance) {
     window.scheduleChartInstance.options.plugins.legend.labels.color = colors.text;
     window.scheduleChartInstance.options.scales.x.ticks.color = colors.text;
     window.scheduleChartInstance.options.scales.y.ticks.color = colors.text;
@@ -579,7 +579,7 @@ function checkFeatureSupport() {
 
   console.log('Feature support:', features);
 
-  if (window.BurniAnalytics) { 
+  if (window.BurniAnalytics) {
     window.BurniAnalytics.trackCustomEvent('feature_support', features);
   }
 
@@ -592,16 +592,16 @@ checkFeatureSupport();
 // Enhanced keyboard shortcuts
 document.addEventListener('keydown', (event) => {
   // Ctrl/Cmd + K: Focus search (if search is added later)
-  if ((event.ctrlKey || event.metaKey) && event.key === 'k') { 
+  if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
     event.preventDefault();
     const searchInput = document.querySelector('input[type="search"]');
-    if (searchInput) { 
+    if (searchInput) {
       searchInput.focus();
     }
   }
 
   // Ctrl/Cmd + /: Show keyboard shortcuts help
-  if ((event.ctrlKey || event.metaKey) && event.key === '/') { 
+  if ((event.ctrlKey || event.metaKey) && event.key === '/') {
     event.preventDefault();
     showKeyboardShortcutsHelp();
   }
@@ -627,7 +627,7 @@ function showKeyboardShortcutsHelp() {
           .map(
             (shortcut) => `
           <div class="flex justify-between items-center">
-            <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm font-mono">$${shortcut.key}</kbd>
+            <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm font-mono">${shortcut.key}</kbd>
             <span class="text-sm text-gray-600 dark:text-gray-300">${shortcut.description}</span>
           </div>
         `,
@@ -650,13 +650,13 @@ function showKeyboardShortcutsHelp() {
 
   // Close on escape or click outside
   modal.addEventListener('click', (e) => {
-    if (e.target === modal) { 
+    if (e.target === modal) {
       document.body.removeChild(modal);
     }
   });
 
   document.addEventListener('keydown', function escapeHandler(e) {
-    if (e.key === 'Escape') { 
+    if (e.key === 'Escape') {
       document.body.removeChild(modal);
       document.removeEventListener('keydown', escapeHandler);
     }
@@ -691,17 +691,17 @@ function showInstallPrompt() {
   `;
 
   installButton.addEventListener('click', () => {
-    if (deferredPrompt) { 
+    if (deferredPrompt) {
       deferredPrompt.prompt();
       deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') { 
+        if (choiceResult.outcome === 'accepted') {
           console.log('User accepted the install prompt');
-          if (window.BurniAnalytics) { 
+          if (window.BurniAnalytics) {
             window.BurniAnalytics.trackConversion('pwa_install', 'accepted');
           }
-        } else { 
+        } else {
           console.log('User dismissed the install prompt');
-          if (window.BurniAnalytics) { 
+          if (window.BurniAnalytics) {
             window.BurniAnalytics.trackConversion('pwa_install', 'dismissed');
           }
         }
@@ -715,14 +715,14 @@ function showInstallPrompt() {
 
   // Auto-hide after 10 seconds
   setTimeout(() => {
-    if (installButton.parentNode) { 
+    if (installButton.parentNode) {
       document.body.removeChild(installButton);
     }
   }, 10000);
 }
 
 // Service Worker registration with enhanced error handling - RE-ENABLED WITH OPTIMIZATIONS
-if ('serviceWorker' in navigator) { 
+if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
       .register('/sw.js')
@@ -732,13 +732,13 @@ if ('serviceWorker' in navigator) {
         // Listen for service worker updates
         registration.addEventListener('updatefound', () => {
           const newWorker = registration.installing;
-          if (newWorker) { 
+          if (newWorker) {
             newWorker.addEventListener('statechange', () => {
-              if (newWorker.state === 'installed') { 
-                if (navigator.serviceWorker.controller) { 
+              if (newWorker.state === 'installed') {
+                if (navigator.serviceWorker.controller) {
                   // New version available
                   showUpdateAvailableNotification();
-                } else { 
+                } else {
                   // First time installation
                   console.log('Content cached for offline use');
                 }
@@ -747,14 +747,14 @@ if ('serviceWorker' in navigator) {
           }
         });
 
-        if (window.BurniAnalytics) { 
+        if (window.BurniAnalytics) {
           window.BurniAnalytics.trackFeatureUsage('service_worker', 'registered');
         }
       })
       .catch((error) => {
         console.log('ServiceWorker registration failed:', error);
 
-        if (window.BurniAnalytics) { 
+        if (window.BurniAnalytics) {
           window.BurniAnalytics.trackError(error, { type: 'service_worker_registration' });
         }
       });
@@ -810,7 +810,7 @@ class PriceUpdateManager {
       } catch (error) {
         console.warn('Price update failed:', error);
         this.retryCount++;
-        if (this.retryCount >= this.maxRetries) { 
+        if (this.retryCount >= this.maxRetries) {
           console.error('Max retries reached for price updates');
           this.fallbackToStaticPrices();
         }
@@ -833,7 +833,7 @@ class PriceUpdateManager {
         const oldPrice = this.lastPrices[currency];
         const newPrice = newPrices[currency];
 
-        if (oldPrice && oldPrice.priceUSD !== newPrice.priceUSD) { 
+        if (oldPrice && oldPrice.priceUSD !== newPrice.priceUSD) {
           this.animatePriceChange(currency, oldPrice.priceUSD, newPrice.priceUSD);
         }
       });
@@ -870,9 +870,9 @@ class PriceUpdateManager {
     try {
       // Try to fetch XRP price
       const xrpResponse = await fetch(
-        'https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd'),
+        'https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd',
       );
-      if (xrpResponse.ok) { 
+      if (xrpResponse.ok) {
         const xrpData = await xrpResponse.json();
         fallbackPrices.xrp.priceUSD = xrpData.ripple?.usd || fallbackPrices.xrp.priceUSD;
       }
@@ -884,17 +884,17 @@ class PriceUpdateManager {
   }
 
   animatePriceChange(currency, oldPrice, newPrice) {
-    const elements = document.querySelectorAll(`[data-price="$${currency}"]`);
+    const elements = document.querySelectorAll(`[data-price="${currency}"]`);
 
     elements.forEach((element) => {
       // Add price update animation class
       element.classList.add('price-update');
 
       // Add color indication for price direction
-      if (newPrice > oldPrice) { 
+      if (newPrice > oldPrice) {
         element.classList.add('text-green-500');
         element.classList.remove('text-red-500');
-      } else if (newPrice < oldPrice) { 
+      } else if (newPrice < oldPrice) {
         element.classList.add('text-red-500');
         element.classList.remove('text-green-500');
       }
@@ -945,10 +945,10 @@ class PriceUpdateManager {
         currentStep++;
         const newValue = Math.round(currentValue + increment * currentStep);
 
-        if (currentStep >= steps) { 
+        if (currentStep >= steps) {
           element.textContent = this.formatNumber(targetValue);
           clearInterval(timer);
-        } else { 
+        } else {
           element.textContent = this.formatNumber(newValue);
         }
       }, stepDuration);
@@ -956,9 +956,9 @@ class PriceUpdateManager {
   }
 
   formatNumber(num) {
-    if (num >= 1000000) { 
+    if (num >= 1000000) {
       return (num / 1000000).toFixed(1) + 'M';
-    } else if (num >= 1000) { 
+    } else if (num >= 1000) {
       return (num / 1000).toFixed(1) + 'K';
     }
     return num.toLocaleString();
@@ -974,7 +974,7 @@ class PriceUpdateManager {
   }
 
   stopUpdates() {
-    if (this.updateInterval) { 
+    if (this.updateInterval) {
       clearInterval(this.updateInterval);
       this.updateInterval = null;
     }
@@ -990,11 +990,11 @@ class ImageOptimizer {
   }
 
   setupIntersectionObserver() {
-    if ('IntersectionObserver' in window) { 
+    if ('IntersectionObserver' in window) {
       this.observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
-            if (entry.isIntersecting) { 
+            if (entry.isIntersecting) {
               this.loadImage(entry.target);
               this.observer.unobserve(entry.target);
             }
@@ -1016,9 +1016,9 @@ class ImageOptimizer {
       this.lazyImages.add(img);
       img.classList.add('lazy-image', 'opacity-0');
 
-      if (this.observer) { 
+      if (this.observer) {
         this.observer.observe(img);
-      } else { 
+      } else {
         // Fallback for browsers without IntersectionObserver
         this.loadImage(img);
       }
@@ -1029,7 +1029,7 @@ class ImageOptimizer {
     try {
       const src = img.dataset.src;
 
-      if (this.imageCache.has(src)) { 
+      if (this.imageCache.has(src)) {
         this.applyImage(img, src);
         return;
       }
@@ -1042,7 +1042,7 @@ class ImageOptimizer {
       };
 
       imageLoader.onerror = () => {
-        console.warn(`Failed to load image: $${src}`);
+        console.warn(`Failed to load image: ${src}`);
         img.classList.add('opacity-50');
       };
 
@@ -1097,13 +1097,13 @@ class AnimationManager {
     });
 
     // Disable animations for reduced motion preference
-    if (this.reducedMotion) { 
+    if (this.reducedMotion) {
       document.body.classList.add('reduce-motion');
     }
   }
 
   startAnimationFrame() {
-    if (!this.rafId) { 
+    if (!this.rafId) {
       this.rafId = requestAnimationFrame(() => this.animationLoop());
     }
   }
@@ -1112,7 +1112,7 @@ class AnimationManager {
     // Optimize animations based on performance
     const fps = this.calculateFPS();
 
-    if (fps < 30) { 
+    if (fps < 30) {
       this.reduceAnimationComplexity();
     }
 
@@ -1167,7 +1167,7 @@ initializeOptimizedFeatures();
 // Enhanced Error Monitoring and Reporting
 window.onerror = function (message, source, lineno, colno, error) {
   console.error('Global Error:', {
-    message),
+    message,
     source,
     line: lineno,
     column: colno,
@@ -1192,7 +1192,7 @@ window.addEventListener('load', function () {
   setTimeout(function () {
     const perfData = performance.getEntriesByType('navigation')[0];
     console.log('Performance Metrics:', {
-      loadTime: perfData.loadEventEnd - perfData.loadEventStart),
+      loadTime: perfData.loadEventEnd - perfData.loadEventStart,
       domContentLoaded: perfData.domContentLoadedEventEnd - perfData.domContentLoadedEventStart,
       firstPaint: performance
         .getEntriesByType('paint')
@@ -1210,11 +1210,11 @@ class AdvancedImageLoader {
   }
 
   init() {
-    if ('IntersectionObserver' in window) { 
+    if ('IntersectionObserver' in window) {
       this.imageObserver = new IntersectionObserver(
         (entries, observer) => {
           entries.forEach((entry) => {
-            if (entry.isIntersecting) { 
+            if (entry.isIntersecting) {
               const img = entry.target;
               this.loadImage(img);
               observer.unobserve(img);
@@ -1233,7 +1233,7 @@ class AdvancedImageLoader {
 
   loadImage(img) {
     const src = img.getAttribute('data-src') || img.src;
-    if (src) { 
+    if (src) {
       img.src = src;
       img.classList.add('loaded');
     }

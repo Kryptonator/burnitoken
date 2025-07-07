@@ -1,0 +1,136 @@
+{
+  "title": {
+    "value": "BurniToken - XRPL Deflation Token | Crypto Investment",
+    "valid": true,
+    "issues": []
+  },
+  "metaTags": {
+    "standard": {
+      "title": {
+        "value": "",
+        "valid": false,
+        "issues": [
+          "Meta-Tag \"title\" fehlt"
+        ]
+      },
+      "description": {
+        "value": "BurniToken - Die erste deflationäre XRPL-basierte Kryptowährung mit automatischem Token-Burning-Mechanismus. Investieren Sie in die Zukunft der Blockchain-Technologie mit über 2 Milliarden verbrannten Tokens!",
+        "valid": false,
+        "issues": [
+          "Meta-Tag \"description\" zu lang (208 Zeichen, maximal 160 empfohlen)"
+        ]
+      },
+      "keywords": {
+        "value": "BurniToken, XRPL, Token Burning, Kryptowährung, Blockchain, Deflationär, Investment, Crypto, XRP Ledger",
+        "valid": true,
+        "issues": []
+      },
+      "robots": {
+        "value": "index, follow",
+        "valid": true,
+        "issues": []
+      }
+    },
+    "openGraph": {
+      "og:title": {
+        "value": "",
+        "valid": false,
+        "issues": [
+          "Open Graph Tag \"og:title\" fehlt"
+        ]
+      },
+      "og:description": {
+        "value": "",
+        "valid": false,
+        "issues": [
+          "Open Graph Tag \"og:description\" fehlt"
+        ]
+      },
+      "og:image": {
+        "value": "",
+        "valid": false,
+        "issues": [
+          "Open Graph Tag \"og:image\" fehlt"
+        ]
+      },
+      "og:url": {
+        "value": "",
+        "valid": false,
+        "issues": [
+          "Open Graph Tag \"og:url\" fehlt"
+        ]
+      },
+      "og:type": {
+        "value": "",
+        "valid": false,
+        "issues": [
+          "Open Graph Tag \"og:type\" fehlt"
+        ]
+      },
+      "og:site_name": {
+        "value": "",
+        "valid": true,
+        "issues": []
+      }
+    },
+    "twitterCards": {
+      "twitter:card": {
+        "value": "",
+        "valid": false,
+        "issues": [
+          "Twitter Card Tag \"twitter:card\" fehlt"
+        ]
+      },
+      "twitter:title": {
+        "value": "",
+        "valid": false,
+        "issues": [
+          "Twitter Card Tag \"twitter:title\" fehlt"
+        ]
+      },
+      "twitter:description": {
+        "value": "",
+        "valid": false,
+        "issues": [
+          "Twitter Card Tag \"twitter:description\" fehlt"
+        ]
+      },
+      "twitter:image": {
+        "value": "",
+        "valid": false,
+        "issues": [
+          "Twitter Card Tag \"twitter:image\" fehlt"
+        ]
+      },
+      "twitter:site": {
+        "value": "",
+        "valid": true,
+        "issues": []
+      },
+      "twitter:creator": {
+        "value": "",
+        "valid": true,
+        "issues": []
+      }
+    },
+    "issues": []
+  },
+  "canonical": {
+    "value": "https://burnitoken.website/",
+    "valid": true,
+    "issues": []
+  },
+  "structuredData": {
+    "types": [
+      "Product",
+      "FAQPage",
+      "WebSite"
+    ],
+    "valid": true,
+    "issues": [
+      "Strukturierter Datentyp \"FAQPage\" ist nicht in der Liste der empfohlenen Typen"
+    ]
+  },
+  "overallScore": 0,
+  "totalIssues": 12
+}

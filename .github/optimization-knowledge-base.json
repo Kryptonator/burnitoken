@@ -1,0 +1,33 @@
+{
+  "metaTagPatterns": {
+    "description": {
+      "de": "Die deflationäre Kryptowährung auf dem XRP Ledger mit automatischem Token-Burning. Investieren Sie in eine nachhaltige Zukunft.",
+      "en": "The deflationary cryptocurrency on the XRP Ledger with automatic token burning. Invest in a sustainable future.",
+      "maxLength": 160
+    },
+    "title": {
+      "de": "BurniToken - XRPL Deflation Token | Crypto Investment",
+      "en": "BurniToken - XRPL Deflation Token | Crypto Investment",
+      "maxLength": 70
+    }
+  },
+  "commonIssues": {
+    "a11y-missing-alt": {
+      "severity": "high",
+      "pattern": "<img[^>]*>",
+      "fix": "<img alt=\"{{description}}\" $&"
+    },
+    "seo-meta-description": {
+      "severity": "high",
+      "pattern": "<head>",
+      "fix": "<head>\n    <meta name=\"description\" content=\"{{description}}\" />"
+    },
+    "performance-lcp": {
+      "severity": "high",
+      "pattern": "</title>",
+      "fix": "</title>\n    <link rel=\"preload\" href=\"{{asset}}\" as=\"{{type}}\" type=\"{{mimeType}}\" />"
+    }
+  },
+  "successfulFixes": [],
+  "failedFixes": []
+}

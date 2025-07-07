@@ -13,7 +13,7 @@ const SETTINGS_PATH = path.join('.vscode', 'settings.json');
 
 // Stelle sicher, dass alte Log-Datei gelöscht wird
 try {
-    if (fs.existsSync(LOG_FILE)) { 
+    if (fs.existsSync(LOG_FILE)) {
         fs.unlinkSync(LOG_FILE);
     }
 } catch (err) {
@@ -39,62 +39,62 @@ function checkTailwindCSS() {
 
     // Prüfe package.json
     try {
-        if (fs.existsSync('package.json')) { 
+        if (fs.existsSync('package.json')) {
             const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
             
-            if (packageJson.devDependencies && packageJson.devDependencies.tailwindcss) { 
+            if (packageJson.devDependencies && packageJson.devDependencies.tailwindcss) {
                 const tailwindVersion = packageJson.devDependencies.tailwindcss;
-                log(`TailwindCSS Version: $${tailwindVersion}`);
+                log(`TailwindCSS Version: ${tailwindVersion}`);
                 
                 // Version prüfen
-                if (tailwindVersion === '^4.1.10') { 
+                if (tailwindVersion === '^4.1.10') {
                     log('✅ TailwindCSS ist auf der gewünschten Version 4.1.10');
-                } else { 
-                    log(`⚠️ TailwindCSS sollte auf Version 4.1.10 aktualisiert werden (aktuell: $${tailwindVersion})`);
+                } else {
+                    log(`⚠️ TailwindCSS sollte auf Version 4.1.10 aktualisiert werden (aktuell: ${tailwindVersion})`);
                 }
-            } else { 
+            } else {
                 log('❌ TailwindCSS ist nicht in package.json definiert');
             }
-        } else { 
+        } else {
             log('❌ package.json nicht gefunden');
         }
     } catch (err) {
-        log(`❌ Fehler beim Prüfen der package.json: $${err.message}`);
+        log(`❌ Fehler beim Prüfen der package.json: ${err.message}`);
     }
 
     // Prüfe settings.json
     try {
-        if (fs.existsSync(SETTINGS_PATH)) { 
+        if (fs.existsSync(SETTINGS_PATH)) {
             const settings = JSON.parse(fs.readFileSync(SETTINGS_PATH, 'utf8'));
             
-            if (settings['tailwindCSS.includeLanguages']) { 
+            if (settings['tailwindCSS.includeLanguages']) {
                 log('✅ tailwindCSS.includeLanguages ist konfiguriert');
                 log(JSON.stringify(settings['tailwindCSS.includeLanguages'], null, 2));
-            } else { 
+            } else {
                 log('⚠️ tailwindCSS.includeLanguages fehlt in settings.json');
             }
             
-            if (settings['tailwindCSS.experimental.classRegex']) { 
+            if (settings['tailwindCSS.experimental.classRegex']) {
                 log('✅ tailwindCSS.experimental.classRegex ist konfiguriert');
-            } else { 
+            } else {
                 log('⚠️ tailwindCSS.experimental.classRegex fehlt in settings.json');
             }
-        } else { 
+        } else {
             log('❌ settings.json nicht gefunden');
         }
     } catch (err) {
-        log(`❌ Fehler beim Prüfen der settings.json: $${err.message}`);
+        log(`❌ Fehler beim Prüfen der settings.json: ${err.message}`);
     }
 
     // Prüfe tailwind.config.js
     try {
-        if (fs.existsSync('tailwind.config.js')) { 
+        if (fs.existsSync('tailwind.config.js')) {
             log('✅ tailwind.config.js gefunden');
-        } else { 
+        } else {
             log('⚠️ tailwind.config.js nicht gefunden');
         }
     } catch (err) {
-        log(`❌ Fehler beim Prüfen von tailwind.config.js: $${err.message}`);
+        log(`❌ Fehler beim Prüfen von tailwind.config.js: ${err.message}`);
     }
 }
 
@@ -111,7 +111,7 @@ function main() {
     
     log('');
     log('===== Prüfung abgeschlossen =====');
-    log(`Ergebnisse wurden in $${LOG_FILE} gespeichert.`);
+    log(`Ergebnisse wurden in ${LOG_FILE} gespeichert.`);
 }
 
 // Führe Hauptfunktion aus

@@ -1,0 +1,180 @@
+<!-- Google Analytics 4 & Search Console Integration -->
+<!-- Diesen Code in den <head> Bereich der index.html einfügen -->
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag('js', new Date());
+
+  // Google Analytics 4 Configuration
+  gtag('config', 'G-XXXXXXXXXX', {
+    send_page_view: true,
+    cookie_flags: 'SameSite=None;Secure',
+    custom_map: {
+      custom_parameter_1: 'burni_interaction',
+    },
+  });
+
+  // Enhanced Ecommerce für Token Tracking
+  gtag('config', 'G-XXXXXXXXXX', {
+    send_page_view: false, // Prevent duplicate page views
+  });
+
+  // Custom Events für BurniToken Features
+  function trackBurnCalculation(tokenAmount, burnRate, result) {
+    gtag('event', 'burn_calculation', {
+      event_category: 'engagement',
+      event_label: 'burn_calculator',
+      value: tokenAmount,
+      custom_parameters: {
+        burn_rate: burnRate,
+        calculated_result: result,
+      },
+    });
+  }
+
+  function trackDashboardView() {
+    gtag('event', 'dashboard_view', {
+      event_category: 'engagement',
+      event_label: 'live_dashboard',
+      page_title: 'Live Dashboard',
+    });
+  }
+
+  function trackXRPLInteraction(action) {
+    gtag('event', 'xrpl_interaction', {
+      event_category: 'blockchain',
+      event_label: action,
+      page_title: 'XRPL Integration',
+    });
+  }
+
+  // Page Load Performance Tracking
+  window.addEventListener('load', function () {
+    const loadTime =
+      window.performance.timing.loadEventEnd - window.performance.timing.navigationStart;
+    gtag('event', 'page_load_time', {
+      event_category: 'performance',
+      value: Math.round(loadTime),
+    });
+  });
+
+  // Scroll Tracking
+  let scrolled = false;
+  window.addEventListener('scroll', function () {
+    if (!scrolled && window.scrollY > window.innerHeight * 0.8) {
+      scrolled = true;
+      gtag('event', 'scroll_depth_80', {
+        event_category: 'engagement',
+        event_label: 'deep_scroll',
+      });
+    }
+  });
+</script>
+
+<!-- Google Search Console Verification -->
+<meta name="google-site-verification" content="YOUR_VERIFICATION_CODE_HERE" />
+
+<!-- Enhanced SEO & Social Media Meta Tags -->
+<meta property="og:site_name" content="BurniToken" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="BurniToken - XRPL Deflation Token | Crypto Investment" />
+<meta
+  property="og:description"
+  content="BurniToken - Die erste deflationäre XRPL-basierte Kryptowährung mit automatischem Token-Burning-Mechanismus."
+/>
+<meta property="og:image" content="https://burnitoken.website/assets/images/burni-social.webp" />
+<meta property="og:url" content="https://burnitoken.website/" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@burnitoken" />
+<meta name="twitter:creator" content="@burnitoken" />
+<meta name="twitter:title" content="BurniToken - XRPL Deflation Token" />
+<meta
+  name="twitter:description"
+  content="Die revolutionäre deflationäre XRPL-Kryptowährung mit über 2 Milliarden verbrannten Tokens."
+/>
+<meta name="twitter:image" content="https://burnitoken.website/assets/images/burni-social.webp" />
+
+<!-- Schema.org Structured Data für SEO -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "BurniToken",
+    "url": "https://burnitoken.website",
+    "logo": "https://burnitoken.website/assets/images/burni-logo.webp",
+    "description": "BurniToken - Die erste deflationäre XRPL-basierte Kryptowährung mit automatischem Token-Burning-Mechanismus.",
+    "sameAs": [
+      "https://twitter.com/burnitoken",
+      "https://github.com/burnitoken",
+      "https://t.me/burnitoken"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer service",
+      "email": "info@burnitoken.com"
+    }
+  }
+</script>
+
+<!-- Performance & Core Web Vitals Tracking -->
+<script>
+  // Core Web Vitals Measurement
+  function measureCoreWebVitals() {
+    // Largest Contentful Paint (LCP)
+    new PerformanceObserver((entryList) => {
+      const entries = entryList.getEntries();
+      const lastEntry = entries[entries.length - 1];
+      gtag('event', 'LCP', {
+        event_category: 'Web Vitals',
+        value: Math.round(lastEntry.startTime),
+        custom_parameters: {
+          metric_name: 'largest_contentful_paint',
+        },
+      });
+    }).observe({ entryTypes: ['largest-contentful-paint'] });
+
+    // First Input Delay (FID)
+    new PerformanceObserver((entryList) => {
+      const firstEntry = entryList.getEntries()[0];
+      gtag('event', 'FID', {
+        event_category: 'Web Vitals',
+        value: Math.round(firstEntry.processingStart - firstEntry.startTime),
+        custom_parameters: {
+          metric_name: 'first_input_delay',
+        },
+      });
+    }).observe({ entryTypes: ['first-input'] });
+
+    // Cumulative Layout Shift (CLS)
+    let clsValue = 0;
+    let clsEntries = [];
+    new PerformanceObserver((entryList) => {
+      for (const entry of entryList.getEntries()) {
+        if (!entry.hadRecentInput) {
+          clsEntries.push(entry);
+          clsValue += entry.value;
+        }
+      }
+      gtag('event', 'CLS', {
+        event_category: 'Web Vitals',
+        value: Math.round(clsValue * 1000),
+        custom_parameters: {
+          metric_name: 'cumulative_layout_shift',
+        },
+      });
+    }).observe({ entryTypes: ['layout-shift'] });
+  }
+
+  // Start measurements when page loads
+  if (document.readyState === 'complete') {
+    measureCoreWebVitals();
+  } else {
+    window.addEventListener('load', measureCoreWebVitals);
+  }
+</script>

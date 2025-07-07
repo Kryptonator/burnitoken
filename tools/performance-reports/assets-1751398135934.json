@@ -1,0 +1,1444 @@
+{
+  "totalSize": 12295936,
+  "files": [
+    {
+      "path": "accessibility-enhanced.js",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "ai-analytics.js",
+      "size": 36,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "analytics-dashboard.js",
+      "size": 488,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "browserconfig.xml",
+      "size": 245,
+      "sizeKB": 0,
+      "type": "other",
+      "optimized": false
+    },
+    {
+      "path": "burni-calculator.js",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "burni-dark-mode.js",
+      "size": 16871,
+      "sizeKB": 16,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "burni-logo.png",
+      "size": 414264,
+      "sizeKB": 405,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "burni-realtime-dashboard.js",
+      "size": 48,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "burni-social.jpg",
+      "size": 185281,
+      "sizeKB": 181,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "burni-trading-strategist.js",
+      "size": 48,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "community-features.js",
+      "size": 472,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "css\\browser-compatibility.css",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\browser-compatibility.min.css",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "stylesheet",
+      "optimized": true
+    },
+    {
+      "path": "css\\burni-calculator.css",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\burni-calculator.min.css",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "stylesheet",
+      "optimized": true
+    },
+    {
+      "path": "css\\critical.css",
+      "size": 18478,
+      "sizeKB": 18,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\critical.min.css",
+      "size": 1559,
+      "sizeKB": 2,
+      "type": "stylesheet",
+      "optimized": true
+    },
+    {
+      "path": "css\\dark-mode-variables.css",
+      "size": 4881,
+      "sizeKB": 5,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\dark-mode-variables.min.css",
+      "size": 3662,
+      "sizeKB": 4,
+      "type": "stylesheet",
+      "optimized": true
+    },
+    {
+      "path": "css\\enhanced-contrast.css",
+      "size": 7593,
+      "sizeKB": 7,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\enhanced-contrast.min.css",
+      "size": 5722,
+      "sizeKB": 6,
+      "type": "stylesheet",
+      "optimized": true
+    },
+    {
+      "path": "css\\enhanced-mobile-optimization.css",
+      "size": 9806,
+      "sizeKB": 10,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\enhanced-mobile-optimization.min.css",
+      "size": 6734,
+      "sizeKB": 7,
+      "type": "stylesheet",
+      "optimized": true
+    },
+    {
+      "path": "css\\enhanced-touch-targets.css",
+      "size": 1225,
+      "sizeKB": 1,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\enhanced-touch-targets.min.css",
+      "size": 735,
+      "sizeKB": 1,
+      "type": "stylesheet",
+      "optimized": true
+    },
+    {
+      "path": "css\\forms-enhanced.css",
+      "size": 4985,
+      "sizeKB": 5,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\forms-enhanced.min.css",
+      "size": 3931,
+      "sizeKB": 4,
+      "type": "stylesheet",
+      "optimized": true
+    },
+    {
+      "path": "css\\performance-optimization.css",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\performance-optimization.min.css",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "stylesheet",
+      "optimized": true
+    },
+    {
+      "path": "css\\price-oracle-status.css",
+      "size": 5089,
+      "sizeKB": 5,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\price-oracle-status.min.css",
+      "size": 3749,
+      "sizeKB": 4,
+      "type": "stylesheet",
+      "optimized": true
+    },
+    {
+      "path": "css\\price-oracle-ui.css",
+      "size": 9615,
+      "sizeKB": 9,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\price-oracle-ui.min.css",
+      "size": 5551,
+      "sizeKB": 5,
+      "type": "stylesheet",
+      "optimized": true
+    },
+    {
+      "path": "css\\price-oracle.css",
+      "size": 1908,
+      "sizeKB": 2,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\price-oracle.min.css",
+      "size": 1528,
+      "sizeKB": 1,
+      "type": "stylesheet",
+      "optimized": true
+    },
+    {
+      "path": "css\\price-widget.css",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\price-widget.min.css",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "stylesheet",
+      "optimized": true
+    },
+    {
+      "path": "css\\proportion-optimization.css",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\proportion-optimization.min.css",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "stylesheet",
+      "optimized": true
+    },
+    {
+      "path": "css\\responsive-enhancements.css",
+      "size": 13511,
+      "sizeKB": 13,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\responsive-enhancements.min.css",
+      "size": 8679,
+      "sizeKB": 8,
+      "type": "stylesheet",
+      "optimized": true
+    },
+    {
+      "path": "css\\responsive-optimized.css",
+      "size": 1670,
+      "sizeKB": 2,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\responsive-optimized.min.css",
+      "size": 1111,
+      "sizeKB": 1,
+      "type": "stylesheet",
+      "optimized": true
+    },
+    {
+      "path": "css\\schedule-table.css",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\schedule-table.min.css",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "stylesheet",
+      "optimized": true
+    },
+    {
+      "path": "css\\styles-compat.css",
+      "size": 16601,
+      "sizeKB": 16,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\styles-compat.min.css",
+      "size": 12309,
+      "sizeKB": 12,
+      "type": "stylesheet",
+      "optimized": true
+    },
+    {
+      "path": "css\\styles.min.css",
+      "size": 18427,
+      "sizeKB": 18,
+      "type": "stylesheet",
+      "optimized": true
+    },
+    {
+      "path": "css\\touch-targets.css",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\touch-targets.min.css",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "stylesheet",
+      "optimized": true
+    },
+    {
+      "path": "enhanced-functionality.js",
+      "size": 16754,
+      "sizeKB": 16,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "enhanced-functionality.v2.js",
+      "size": 5775,
+      "sizeKB": 6,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "enhanced-polyfills.js",
+      "size": 11157,
+      "sizeKB": 11,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "event-handlers.js",
+      "size": 2233,
+      "sizeKB": 2,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "fonts\\Inter-Regular.woff2",
+      "size": 58,
+      "sizeKB": 0,
+      "type": "font",
+      "optimized": true
+    },
+    {
+      "path": "form-handler.js",
+      "size": 22864,
+      "sizeKB": 22,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "i18n-enhanced.js",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "images\\apple-touch-icon.png",
+      "size": 414264,
+      "sizeKB": 405,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "images\\burn-coin-schwarzes-loch.jpg",
+      "size": 614868,
+      "sizeKB": 600,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "images\\burni-07.27.2027.jpg",
+      "size": 342391,
+      "sizeKB": 334,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "images\\burni-chart.webp",
+      "size": 241021,
+      "sizeKB": 235,
+      "type": "image",
+      "optimized": true
+    },
+    {
+      "path": "images\\burni-lagerfeuer.jpg",
+      "size": 469663,
+      "sizeKB": 459,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "images\\burni-logo.webp",
+      "size": 414264,
+      "sizeKB": 405,
+      "type": "image",
+      "optimized": true
+    },
+    {
+      "path": "images\\burni-social.webp",
+      "size": 185281,
+      "sizeKB": 181,
+      "type": "image",
+      "optimized": true
+    },
+    {
+      "path": "images\\burni-verbrannt.jpg",
+      "size": 322450,
+      "sizeKB": 315,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "images\\burni-verbrennt-lagerfeuer.webp",
+      "size": 1907364,
+      "sizeKB": 1863,
+      "type": "image",
+      "optimized": true
+    },
+    {
+      "path": "images\\burni-versperrt-coins-im-tresor.webp",
+      "size": 398928,
+      "sizeKB": 390,
+      "type": "image",
+      "optimized": true
+    },
+    {
+      "path": "images\\burniimage.webp",
+      "size": 185281,
+      "sizeKB": 181,
+      "type": "image",
+      "optimized": true
+    },
+    {
+      "path": "images\\exchange.webp",
+      "size": 379,
+      "sizeKB": 0,
+      "type": "image",
+      "optimized": true
+    },
+    {
+      "path": "images\\favicon.ico",
+      "size": 414264,
+      "sizeKB": 405,
+      "type": "other",
+      "optimized": false
+    },
+    {
+      "path": "images\\gamepad.svg",
+      "size": 392,
+      "sizeKB": 0,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "images\\gamepad.webp",
+      "size": 301,
+      "sizeKB": 0,
+      "type": "image",
+      "optimized": true
+    },
+    {
+      "path": "images\\palette.webp",
+      "size": 474,
+      "sizeKB": 0,
+      "type": "image",
+      "optimized": true
+    },
+    {
+      "path": "images\\use-case-rewards.webp",
+      "size": 342391,
+      "sizeKB": 334,
+      "type": "image",
+      "optimized": true
+    },
+    {
+      "path": "images\\vote.webp",
+      "size": 547,
+      "sizeKB": 1,
+      "type": "image",
+      "optimized": true
+    },
+    {
+      "path": "js\\advanced-lazy-loader.js",
+      "size": 11046,
+      "sizeKB": 11,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\advanced-lazy-loader.optimized.js",
+      "size": 7622,
+      "sizeKB": 7,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\monitoring-services.js",
+      "size": 34986,
+      "sizeKB": 34,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\monitoring-services.optimized.js",
+      "size": 19172,
+      "sizeKB": 19,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\performance-monitor.js",
+      "size": 1548,
+      "sizeKB": 2,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\price-oracle-dashboard.js",
+      "size": 36731,
+      "sizeKB": 36,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\price-oracle-dashboard.optimized.js",
+      "size": 19231,
+      "sizeKB": 19,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\price-oracle-recovery.js",
+      "size": 34269,
+      "sizeKB": 33,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\price-oracle-recovery.optimized.js",
+      "size": 18481,
+      "sizeKB": 18,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\price-oracle.js",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\price-oracle.optimized.js",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\security-hardening.js",
+      "size": 35819,
+      "sizeKB": 35,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\security-hardening.optimized.js",
+      "size": 19475,
+      "sizeKB": 19,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\seo-automation.js",
+      "size": 44765,
+      "sizeKB": 44,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\seo-automation.optimized.js",
+      "size": 16030,
+      "sizeKB": 16,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\system-dashboard.js",
+      "size": 47482,
+      "sizeKB": 46,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\system-dashboard.optimized.js",
+      "size": 25158,
+      "sizeKB": 25,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "main-es5.js",
+      "size": 20585,
+      "sizeKB": 20,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "navigation-language.js",
+      "size": 8605,
+      "sizeKB": 8,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "performance-advanced.js",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "performance-optimizer.js",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "performance.js",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "price-tracker.js",
+      "size": 576,
+      "sizeKB": 1,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "scripts-broken.min.js",
+      "size": 7155,
+      "sizeKB": 7,
+      "type": "script",
+      "optimized": true
+    },
+    {
+      "path": "scripts-clean.min.js",
+      "size": 4778,
+      "sizeKB": 5,
+      "type": "script",
+      "optimized": true
+    },
+    {
+      "path": "scripts-fixed.min.js",
+      "size": 5571,
+      "sizeKB": 5,
+      "type": "script",
+      "optimized": true
+    },
+    {
+      "path": "scripts.min.js",
+      "size": 4778,
+      "sizeKB": 5,
+      "type": "script",
+      "optimized": true
+    },
+    {
+      "path": "security-monitor.js",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "security.js",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "test-dark-mode.js",
+      "size": 10350,
+      "sizeKB": 10,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "translations.json",
+      "size": 27579,
+      "sizeKB": 27,
+      "type": "other",
+      "optimized": false
+    },
+    {
+      "path": "ultra-performance.js",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "vendor\\chart.min.js",
+      "size": 114,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": true
+    },
+    {
+      "path": "videos\\1burni-favicon-im-pixar-comic-sti.mp4",
+      "size": 4732834,
+      "sizeKB": 4622,
+      "type": "video",
+      "optimized": false
+    },
+    {
+      "path": "videos\\captions-de.vtt",
+      "size": 183,
+      "sizeKB": 0,
+      "type": "other",
+      "optimized": false
+    },
+    {
+      "path": "videos\\captions-en.vtt",
+      "size": 177,
+      "sizeKB": 0,
+      "type": "other",
+      "optimized": false
+    },
+    {
+      "path": "videos\\descriptions.vtt",
+      "size": 161,
+      "sizeKB": 0,
+      "type": "other",
+      "optimized": false
+    },
+    {
+      "path": "xrpl-data.js",
+      "size": 499,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    }
+  ],
+  "largeFiles": [
+    {
+      "path": "burni-logo.png",
+      "size": 414264,
+      "sizeKB": 405,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "burni-social.jpg",
+      "size": 185281,
+      "sizeKB": 181,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "images\\apple-touch-icon.png",
+      "size": 414264,
+      "sizeKB": 405,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "images\\burn-coin-schwarzes-loch.jpg",
+      "size": 614868,
+      "sizeKB": 600,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "images\\burni-07.27.2027.jpg",
+      "size": 342391,
+      "sizeKB": 334,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "images\\burni-chart.webp",
+      "size": 241021,
+      "sizeKB": 235,
+      "type": "image",
+      "optimized": true
+    },
+    {
+      "path": "images\\burni-lagerfeuer.jpg",
+      "size": 469663,
+      "sizeKB": 459,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "images\\burni-logo.webp",
+      "size": 414264,
+      "sizeKB": 405,
+      "type": "image",
+      "optimized": true
+    },
+    {
+      "path": "images\\burni-social.webp",
+      "size": 185281,
+      "sizeKB": 181,
+      "type": "image",
+      "optimized": true
+    },
+    {
+      "path": "images\\burni-verbrannt.jpg",
+      "size": 322450,
+      "sizeKB": 315,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "images\\burni-verbrennt-lagerfeuer.webp",
+      "size": 1907364,
+      "sizeKB": 1863,
+      "type": "image",
+      "optimized": true
+    },
+    {
+      "path": "images\\burni-versperrt-coins-im-tresor.webp",
+      "size": 398928,
+      "sizeKB": 390,
+      "type": "image",
+      "optimized": true
+    },
+    {
+      "path": "images\\burniimage.webp",
+      "size": 185281,
+      "sizeKB": 181,
+      "type": "image",
+      "optimized": true
+    },
+    {
+      "path": "images\\favicon.ico",
+      "size": 414264,
+      "sizeKB": 405,
+      "type": "other",
+      "optimized": false
+    },
+    {
+      "path": "images\\use-case-rewards.webp",
+      "size": 342391,
+      "sizeKB": 334,
+      "type": "image",
+      "optimized": true
+    },
+    {
+      "path": "videos\\1burni-favicon-im-pixar-comic-sti.mp4",
+      "size": 4732834,
+      "sizeKB": 4622,
+      "type": "video",
+      "optimized": false
+    }
+  ],
+  "unoptimized": [
+    {
+      "path": "accessibility-enhanced.js",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "ai-analytics.js",
+      "size": 36,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "analytics-dashboard.js",
+      "size": 488,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "browserconfig.xml",
+      "size": 245,
+      "sizeKB": 0,
+      "type": "other",
+      "optimized": false
+    },
+    {
+      "path": "burni-calculator.js",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "burni-dark-mode.js",
+      "size": 16871,
+      "sizeKB": 16,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "burni-logo.png",
+      "size": 414264,
+      "sizeKB": 405,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "burni-realtime-dashboard.js",
+      "size": 48,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "burni-social.jpg",
+      "size": 185281,
+      "sizeKB": 181,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "burni-trading-strategist.js",
+      "size": 48,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "community-features.js",
+      "size": 472,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "css\\browser-compatibility.css",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\burni-calculator.css",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\critical.css",
+      "size": 18478,
+      "sizeKB": 18,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\dark-mode-variables.css",
+      "size": 4881,
+      "sizeKB": 5,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\enhanced-contrast.css",
+      "size": 7593,
+      "sizeKB": 7,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\enhanced-mobile-optimization.css",
+      "size": 9806,
+      "sizeKB": 10,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\enhanced-touch-targets.css",
+      "size": 1225,
+      "sizeKB": 1,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\forms-enhanced.css",
+      "size": 4985,
+      "sizeKB": 5,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\performance-optimization.css",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\price-oracle-status.css",
+      "size": 5089,
+      "sizeKB": 5,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\price-oracle-ui.css",
+      "size": 9615,
+      "sizeKB": 9,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\price-oracle.css",
+      "size": 1908,
+      "sizeKB": 2,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\price-widget.css",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\proportion-optimization.css",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\responsive-enhancements.css",
+      "size": 13511,
+      "sizeKB": 13,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\responsive-optimized.css",
+      "size": 1670,
+      "sizeKB": 2,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\schedule-table.css",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\styles-compat.css",
+      "size": 16601,
+      "sizeKB": 16,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "css\\touch-targets.css",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "stylesheet",
+      "optimized": false
+    },
+    {
+      "path": "enhanced-functionality.js",
+      "size": 16754,
+      "sizeKB": 16,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "enhanced-functionality.v2.js",
+      "size": 5775,
+      "sizeKB": 6,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "enhanced-polyfills.js",
+      "size": 11157,
+      "sizeKB": 11,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "event-handlers.js",
+      "size": 2233,
+      "sizeKB": 2,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "form-handler.js",
+      "size": 22864,
+      "sizeKB": 22,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "i18n-enhanced.js",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "images\\apple-touch-icon.png",
+      "size": 414264,
+      "sizeKB": 405,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "images\\burn-coin-schwarzes-loch.jpg",
+      "size": 614868,
+      "sizeKB": 600,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "images\\burni-07.27.2027.jpg",
+      "size": 342391,
+      "sizeKB": 334,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "images\\burni-lagerfeuer.jpg",
+      "size": 469663,
+      "sizeKB": 459,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "images\\burni-verbrannt.jpg",
+      "size": 322450,
+      "sizeKB": 315,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "images\\favicon.ico",
+      "size": 414264,
+      "sizeKB": 405,
+      "type": "other",
+      "optimized": false
+    },
+    {
+      "path": "images\\gamepad.svg",
+      "size": 392,
+      "sizeKB": 0,
+      "type": "image",
+      "optimized": false
+    },
+    {
+      "path": "js\\advanced-lazy-loader.js",
+      "size": 11046,
+      "sizeKB": 11,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\advanced-lazy-loader.optimized.js",
+      "size": 7622,
+      "sizeKB": 7,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\monitoring-services.js",
+      "size": 34986,
+      "sizeKB": 34,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\monitoring-services.optimized.js",
+      "size": 19172,
+      "sizeKB": 19,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\performance-monitor.js",
+      "size": 1548,
+      "sizeKB": 2,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\price-oracle-dashboard.js",
+      "size": 36731,
+      "sizeKB": 36,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\price-oracle-dashboard.optimized.js",
+      "size": 19231,
+      "sizeKB": 19,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\price-oracle-recovery.js",
+      "size": 34269,
+      "sizeKB": 33,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\price-oracle-recovery.optimized.js",
+      "size": 18481,
+      "sizeKB": 18,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\price-oracle.js",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\price-oracle.optimized.js",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\security-hardening.js",
+      "size": 35819,
+      "sizeKB": 35,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\security-hardening.optimized.js",
+      "size": 19475,
+      "sizeKB": 19,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\seo-automation.js",
+      "size": 44765,
+      "sizeKB": 44,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\seo-automation.optimized.js",
+      "size": 16030,
+      "sizeKB": 16,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\system-dashboard.js",
+      "size": 47482,
+      "sizeKB": 46,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "js\\system-dashboard.optimized.js",
+      "size": 25158,
+      "sizeKB": 25,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "main-es5.js",
+      "size": 20585,
+      "sizeKB": 20,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "navigation-language.js",
+      "size": 8605,
+      "sizeKB": 8,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "performance-advanced.js",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "performance-optimizer.js",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "performance.js",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "price-tracker.js",
+      "size": 576,
+      "sizeKB": 1,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "security-monitor.js",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "security.js",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "test-dark-mode.js",
+      "size": 10350,
+      "sizeKB": 10,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "translations.json",
+      "size": 27579,
+      "sizeKB": 27,
+      "type": "other",
+      "optimized": false
+    },
+    {
+      "path": "ultra-performance.js",
+      "size": 0,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    },
+    {
+      "path": "videos\\1burni-favicon-im-pixar-comic-sti.mp4",
+      "size": 4732834,
+      "sizeKB": 4622,
+      "type": "video",
+      "optimized": false
+    },
+    {
+      "path": "videos\\captions-de.vtt",
+      "size": 183,
+      "sizeKB": 0,
+      "type": "other",
+      "optimized": false
+    },
+    {
+      "path": "videos\\captions-en.vtt",
+      "size": 177,
+      "sizeKB": 0,
+      "type": "other",
+      "optimized": false
+    },
+    {
+      "path": "videos\\descriptions.vtt",
+      "size": 161,
+      "sizeKB": 0,
+      "type": "other",
+      "optimized": false
+    },
+    {
+      "path": "xrpl-data.js",
+      "size": 499,
+      "sizeKB": 0,
+      "type": "script",
+      "optimized": false
+    }
+  ]
+}

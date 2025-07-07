@@ -17,13 +17,13 @@ function log(message) {
   try {
     fs.appendFileSync(LOG_FILE, message + '\n', 'utf8');
   } catch (err) {
-    console.error(`Fehler beim Schreiben ins Log: $${err.message}`);
+    console.error(`Fehler beim Schreiben ins Log: ${err.message}`);
   }
 }
 
 // Lösche alte Log-Datei falls vorhanden und erstelle Verzeichnis wenn nötig
 try {
-  if (fs.existsSync(LOG_FILE)) { 
+  if (fs.existsSync(LOG_FILE)) {
     fs.unlinkSync(LOG_FILE);
   }
   
@@ -31,7 +31,7 @@ try {
   fs.writeFileSync(LOG_FILE, '=== Extension Validator Log ===\n', 'utf8');
   
 } catch (err) {
-  console.error(`Probleme mit der Log-Datei: $${err.message}`);
+  console.error(`Probleme mit der Log-Datei: ${err.message}`);
 }
 
 log('🚀 Extension Function Validator wird gestartet...');
@@ -91,7 +91,7 @@ function fileExists(filePath) {
   try {
     return fs.existsSync(filePath);
   } catch (err) {
-    console.error(`Fehler beim Prüfen, ob Datei existiert ($${filePath}):`, err.message);
+    console.error(`Fehler beim Prüfen, ob Datei existiert (${filePath}):`, err.message);
     return false;
   }
 }
@@ -104,7 +104,7 @@ function readJsonFile(filePath) {
     const data = fs.readFileSync(filePath, 'utf8');
     return JSON.parse(data);
   } catch (err) {
-    console.error(`Fehler beim Lesen von $${filePath}:`, err.message);
+    console.error(`Fehler beim Lesen von ${filePath}:`, err.message);
     return null;
   }
 }
@@ -117,13 +117,13 @@ function checkExtensionStatus() {
   
   try {
     // Prüfe, ob settings.json existiert
-    if (!fileExists(SETTINGS_PATH)) { 
+    if (!fileExists(SETTINGS_PATH)) {
       console.warn('⚠️ Keine settings.json gefunden, erstelle Standard-Konfiguration');
       createDefaultSettings();
     }
 
     // Prüfe, ob extensions.json existiert
-    if (!fileExists(EXTENSIONS_PATH)) { 
+    if (!fileExists(EXTENSIONS_PATH)) {
       console.warn('⚠️ Keine extensions.json gefunden, erstelle Standard-Konfiguration');
       createDefaultExtensionsRecommendations();
     }
@@ -134,14 +134,14 @@ function checkExtensionStatus() {
         .split('\n')
         .filter(Boolean);
       
-      console.log(`✅ Gefunden: $${installedExtensions.length} installierte Extensions`);
+      console.log(`✅ Gefunden: ${installedExtensions.length} installierte Extensions`);
       
       for (const ext of CRITICAL_EXTENSIONS) {
-        if (installedExtensions.includes(ext)) { 
+        if (installedExtensions.includes(ext)) {
           extensionStatus.healthy.push(ext);
-        } else { 
+        } else {
           extensionStatus.issues.push(ext);
-          console.warn(`⚠️ Kritische Extension nicht installiert: $${ext}`);
+          console.warn(`⚠️ Kritische Extension nicht installiert: ${ext}`);
         }
       }
       
@@ -166,29 +166,29 @@ checkGSCIntegration();
 
     // Ausgabe des Ergebnisses
     console.log('\n📊 Extension Health Check Ergebnis:');
-    console.log(`✅ Gesunde Extensions: $${extensionStatus.healthy.length}`);
-    console.log(`⚠️ Extensions mit Problemen: $${extensionStatus.issues.length}`);
-    console.log(`💡 Empfehlungen: $${extensionStatus.recommendations.length}`);
+    console.log(`✅ Gesunde Extensions: ${extensionStatus.healthy.length}`);
+    console.log(`⚠️ Extensions mit Problemen: ${extensionStatus.issues.length}`);
+    console.log(`💡 Empfehlungen: ${extensionStatus.recommendations.length}`);
     
-    if (extensionStatus.issues.length === 0) { 
+    if (extensionStatus.issues.length === 0) {
       console.log('🎉 Alle kritischen Extensions sind korrekt installiert und konfiguriert!');
       recordCheckSuccess('extension-health-check'); // Zeitstempel für erfolgreichen Check speichern
-    } else { 
+    } else {
       console.log('\n⚠️ Es wurden Probleme gefunden die behoben werden sollten:');
       extensionStatus.issues.forEach(issue => {
-        console.log(`  - Fehlende kritische Extension: $${issue}`);
+        console.log(`  - Fehlende kritische Extension: ${issue}`);
       });
       
       console.log('\nFühren Sie folgende Befehle aus, um fehlende Extensions zu installieren:');
       extensionStatus.issues.forEach(issue => {
-        console.log(`  code --install-extension $${issue}`);
+        console.log(`  code --install-extension ${issue}`);
       });
     }
     
-    if (extensionStatus.recommendations.length > 0) { 
+    if (extensionStatus.recommendations.length > 0) {
       console.log('\n💡 Empfehlungen zur Optimierung:');
       extensionStatus.recommendations.forEach(recommendation => {
-        console.log(`  - $${recommendation}`);
+        console.log(`  - ${recommendation}`);
       });
     }
     
@@ -219,7 +219,7 @@ function checkForExtensionConflicts(installedExtensions) {
     ext.includes('beautify')
   );
   
-  if (formatters.length > 2) { 
+  if (formatters.length > 2) {
     console.warn('⚠️ Mehrere Formatter-Extensions installiert, dies kann zu Konflikten führen');
     extensionStatus.recommendations.push('Reduzieren Sie die Anzahl der Formatter-Extensions');
   }
@@ -230,7 +230,7 @@ function checkForExtensionConflicts(installedExtensions) {
     ext.includes('tslint')
   );
   
-  if (linters.length > 2) { 
+  if (linters.length > 2) {
     console.warn('⚠️ Mehrere Linter-Extensions installiert, dies kann zu Konflikten führen');
     extensionStatus.recommendations.push('Reduzieren Sie die Anzahl der Linter-Extensions');
   }
@@ -244,22 +244,22 @@ function checkSettingsConfiguration() {
   if (!settings) return;
 
   // Prüfe auf Tailwind-Konfiguration
-  if (!settings['tailwindCSS.includeLanguages']) { 
+  if (!settings['tailwindCSS.includeLanguages']) {
     extensionStatus.recommendations.push('Tailwind CSS Sprachunterstützung fehlt');
   }
 
   // Prüfe auf Prettier-Konfiguration
-  if (!settings['prettier.enable']) { 
+  if (!settings['prettier.enable']) {
     extensionStatus.recommendations.push('Prettier ist nicht aktiviert');
   }
 
   // Prüfe auf Barrierefreiheit-Konfiguration
-  if (!settings['accessibility.focusVisible']) { 
+  if (!settings['accessibility.focusVisible']) {
     extensionStatus.recommendations.push('Barrierefreiheits-Fokus ist nicht aktiviert');
   }
 
   // Prüfe auf automatische Updates
-  if (settings['extensions.autoUpdate'] === false) { 
+  if (settings['extensions.autoUpdate'] === false) {
     extensionStatus.recommendations.push('Automatische Extension-Updates sind deaktiviert');
   }
 }
@@ -286,7 +286,7 @@ function createDefaultSettings() {
   };
 
   try {
-    if (!fs.existsSync('.vscode')) { 
+    if (!fs.existsSync('.vscode')) {
       fs.mkdirSync('.vscode');
     }
     fs.writeFileSync(SETTINGS_PATH, JSON.stringify(defaultSettings, null, 2));
@@ -315,7 +315,7 @@ function createDefaultExtensionsRecommendations() {
   };
 
   try {
-    if (!fs.existsSync('.vscode')) { 
+    if (!fs.existsSync('.vscode')) {
       fs.mkdirSync('.vscode');
     }
     fs.writeFileSync(EXTENSIONS_PATH, JSON.stringify(defaultExtensions, null, 2));
@@ -341,35 +341,35 @@ function checkGSCIntegration() {
   
   // Prüfe Service-Account-Datei
   const serviceAccountPath = path.join(__dirname, 'tools', 'gsc-service-account.json');
-  if (!fileExists(serviceAccountPath)) { 
+  if (!fileExists(serviceAccountPath)) {
     log('⚠️ GSC Service-Account-Datei fehlt', 'warn');
     extensionStatus.recommendations.push('GSC Service-Account-Datei wiederherstellen');
     gscStatusOK = false;
-  } else { 
+  } else {
     log('✅ GSC Service-Account-Datei gefunden');
   }
   
   // Prüfe GSC-Tools
   for (const tool of GSC_TOOLS) {
     const toolPath = path.join(__dirname, tool);
-    if (!fileExists(toolPath)) { 
+    if (!fileExists(toolPath)) {
       missingGSCTools.push(path.basename(tool));
     }
   }
   
-  if (missingGSCTools.length > 0) { 
+  if (missingGSCTools.length > 0) {
     log(`⚠️ Fehlende GSC-Tools: ${missingGSCTools.join(', ')}`, 'warn');
     extensionStatus.recommendations.push(`GSC-Tools wiederherstellen: ${missingGSCTools.join(', ')}`);
     gscStatusOK = false;
-  } else { 
+  } else {
     log('✅ Alle GSC-Tools sind vorhanden');
   }
   
   // Prüfe GSC-Integration in Tasks
   const tasksPath = path.join(__dirname, '.vscode', 'tasks.json');
-  if (fileExists(tasksPath)) { 
+  if (fileExists(tasksPath)) {
     const tasksConfig = readJsonFile(tasksPath);
-    if (tasksConfig && Array.isArray(tasksConfig.tasks)) { 
+    if (tasksConfig && Array.isArray(tasksConfig.tasks)) {
       const hasGSCAuthTask = tasksConfig.tasks.some(t => 
         t.label && t.label.includes('GSC Auth') && 
         t.runOptions && t.runOptions.runOn === 'folderOpen');
@@ -377,20 +377,20 @@ function checkGSCIntegration() {
       const hasGSCMonitorTask = tasksConfig.tasks.some(t => 
         t.label && t.label.includes('GSC Integration Monitor'));
       
-      if (!hasGSCAuthTask || !hasGSCMonitorTask) { 
+      if (!hasGSCAuthTask || !hasGSCMonitorTask) {
         log('⚠️ GSC-Tasks fehlen oder sind nicht korrekt konfiguriert', 'warn');
         extensionStatus.recommendations.push('GSC-Tasks in tasks.json konfigurieren');
         gscStatusOK = false;
-      } else { 
+      } else {
         log('✅ GSC-Tasks sind korrekt konfiguriert');
       }
     }
   }
   
-  if (gscStatusOK) { 
+  if (gscStatusOK) {
     log('✅ GSC-Integration scheint vollständig zu sein');
     extensionStatus.healthy.push('gsc-integration');
-  } else { 
+  } else {
     extensionStatus.issues.push('gsc-integration');
     log('⚠️ GSC-Integration hat Probleme');
   }
@@ -400,10 +400,10 @@ function checkGSCIntegration() {
   // Prüfe auf fehlende KI-Integrationsdateien
   const missingFiles = AI_INTEGRATION_FILES.filter(file => !fileExists(file));
   
-  if (missingFiles.length > 0) { 
+  if (missingFiles.length > 0) {
     console.warn(`⚠️ Fehlende KI-Integrationsdateien: ${missingFiles.join(', ')}`);
     extensionStatus.recommendations.push('KI-Integration ist unvollständig');
-  } else { 
+  } else {
     console.log('✅ KI-Integrationsdateien vollständig');
     
     // Prüfe Tasks für automatischen Start
@@ -419,14 +419,14 @@ function checkGSCIntegration() {
  */
 function checkAutoStartTasks() {
   const tasksPath = path.join('.vscode', 'tasks.json');
-  if (!fileExists(tasksPath)) { 
+  if (!fileExists(tasksPath)) {
     console.warn('⚠️ Keine tasks.json gefunden');
     extensionStatus.recommendations.push('tasks.json fehlt für KI-Auto-Start');
     return;
   }
   
   const tasksConfig = readJsonFile(tasksPath);
-  if (!tasksConfig || !Array.isArray(tasksConfig.tasks)) { 
+  if (!tasksConfig || !Array.isArray(tasksConfig.tasks)) {
     console.warn('⚠️ tasks.json hat kein gültiges Format');
     extensionStatus.recommendations.push('tasks.json hat kein gültiges Format');
     return;
@@ -436,17 +436,17 @@ function checkAutoStartTasks() {
   const sessionSaverTask = tasksConfig.tasks.find(task => 
     task.label && task.label.includes('Session-Saver'));
   
-  if (sessionSaverTask) { 
+  if (sessionSaverTask) {
     const autoStart = sessionSaverTask.runOptions && 
                      sessionSaverTask.runOptions.runOn === 'folderOpen';
     
-    if (autoStart) { 
+    if (autoStart) {
       console.log('✅ Session-Saver Auto-Start konfiguriert');
-    } else { 
+    } else {
       console.warn('⚠️ Session-Saver hat keinen automatischen Start');
       extensionStatus.recommendations.push('Session-Saver Auto-Start fehlt');
     }
-  } else { 
+  } else {
     console.warn('⚠️ Kein Session-Saver Task gefunden');
     extensionStatus.recommendations.push('Session-Saver Task fehlt');
   }
@@ -455,17 +455,17 @@ function checkAutoStartTasks() {
   const aiBridgeTask = tasksConfig.tasks.find(task => 
     task.label && task.label.includes('AI Conversation Bridge'));
   
-  if (aiBridgeTask) { 
+  if (aiBridgeTask) {
     const autoStart = aiBridgeTask.runOptions && 
                      aiBridgeTask.runOptions.runOn === 'folderOpen';
     
-    if (autoStart) { 
+    if (autoStart) {
       console.log('✅ AI Conversation Bridge Auto-Start konfiguriert');
-    } else { 
+    } else {
       console.warn('⚠️ AI Conversation Bridge hat keinen automatischen Start');
       extensionStatus.recommendations.push('AI Bridge Auto-Start fehlt');
     }
-  } else { 
+  } else {
     console.warn('⚠️ Kein AI Conversation Bridge Task gefunden');
     extensionStatus.recommendations.push('AI Bridge Task fehlt');
   }
@@ -474,13 +474,13 @@ function checkAutoStartTasks() {
   const extensionCheckTask = tasksConfig.tasks.find(task => 
     task.label && task.label.includes('Extension Check'));
   
-  if (extensionCheckTask) { 
+  if (extensionCheckTask) {
     const autoStart = extensionCheckTask.runOptions && 
                      extensionCheckTask.runOptions.runOn === 'folderOpen';
     
-    if (autoStart) { 
+    if (autoStart) {
       console.log('✅ Automatic Extension Check konfiguriert');
-    } else { 
+    } else {
       console.warn('⚠️ Automatic Extension Check hat keinen automatischen Start');
       extensionStatus.recommendations.push('Extension Check Auto-Start fehlt');
     }
@@ -495,32 +495,32 @@ function checkAIStatusTools() {
   const statusToolsExist = fileExists('tools/ai-status.js') && 
                           fileExists('tools/ai-services-manager.js');
   
-  if (statusToolsExist) { 
+  if (statusToolsExist) {
     log('✅ AI-Status-Tools vorhanden');
     
     // Prüfe, ob entsprechende Tasks existieren
-    if (fileExists(path.join('.vscode', 'tasks.json'))) { 
+    if (fileExists(path.join('.vscode', 'tasks.json'))) {
       const tasksConfig = readJsonFile(path.join('.vscode', 'tasks.json'));
       
-      if (tasksConfig && Array.isArray(tasksConfig.tasks)) { 
+      if (tasksConfig && Array.isArray(tasksConfig.tasks)) {
         const hasStatusTask = tasksConfig.tasks.some(task => 
           task.label && task.label.includes('Show AI Status'));
         
         const hasRestartTask = tasksConfig.tasks.some(task => 
           task.label && task.label.includes('Restart All AI Services'));
         
-        if (!hasStatusTask) { 
+        if (!hasStatusTask) {
           log('⚠️ Kein Task für AI-Status gefunden');
           extensionStatus.recommendations.push('AI Status Task fehlt');
         }
         
-        if (!hasRestartTask) { 
+        if (!hasRestartTask) {
           log('⚠️ Kein Task für AI-Service-Neustarts gefunden');
           extensionStatus.recommendations.push('AI Service Restart Task fehlt');
         }
       }
     }
-  } else { 
+  } else {
     log('⚠️ AI-Status-Tools fehlen oder sind unvollständig');
     extensionStatus.recommendations.push('AI-Status-Tools fehlen oder sind unvollständig');
   }
@@ -535,7 +535,7 @@ function validateTasksStructure() {
   const tasksPath = path.join('.vscode', 'tasks.json');
   
   // Prüfe ob tasks.json existiert
-  if (!fileExists(tasksPath)) { 
+  if (!fileExists(tasksPath)) {
     console.warn('⚠️ tasks.json nicht gefunden');
     extensionStatus.recommendations.push('tasks.json für automatische Tasks fehlt');
     return false;
@@ -543,7 +543,7 @@ function validateTasksStructure() {
   
   // Lese tasks.json
   const tasksConfig = readJsonFile(tasksPath);
-  if (!tasksConfig || !tasksConfig.version || !Array.isArray(tasksConfig.tasks)) { 
+  if (!tasksConfig || !tasksConfig.version || !Array.isArray(tasksConfig.tasks)) {
     console.warn('⚠️ tasks.json hat kein gültiges Format');
     extensionStatus.recommendations.push('tasks.json hat kein gültiges Format');
     return false;
@@ -565,38 +565,38 @@ function validateTasksStructure() {
     const task = tasksConfig.tasks.find(t => 
       t.label && t.label.includes(criticalTask.name));
     
-    if (!task) { 
+    if (!task) {
       missingTasks.push(criticalTask.name);
       continue;
     }
     
     // Prüfe auf Auto-Start wenn erforderlich
-    if (criticalTask.needsAutoStart) { 
+    if (criticalTask.needsAutoStart) {
       const hasAutoStart = task.runOptions && task.runOptions.runOn === 'folderOpen';
-      if (!hasAutoStart) { 
-        misconfiguredTasks.push(`$${criticalTask.name} (fehlt Auto-Start)`);
+      if (!hasAutoStart) {
+        misconfiguredTasks.push(`${criticalTask.name} (fehlt Auto-Start)`);
       }
     }
     
     // Prüfe auf background für Session-Saver und AI Bridge
-    if (criticalTask.name === 'Session-Saver' || criticalTask.name === 'AI Conversation Bridge') { 
-      if (task.isBackground !== true) { 
-        misconfiguredTasks.push(`$${criticalTask.name} (fehlt isBackground)`);
+    if (criticalTask.name === 'Session-Saver' || criticalTask.name === 'AI Conversation Bridge') {
+      if (task.isBackground !== true) {
+        misconfiguredTasks.push(`${criticalTask.name} (fehlt isBackground)`);
       }
     }
   }
   
-  if (missingTasks.length > 0) { 
+  if (missingTasks.length > 0) {
     console.warn(`⚠️ Fehlende kritische Tasks: ${missingTasks.join(', ')}`);
     extensionStatus.recommendations.push(`Kritische Tasks fehlen: ${missingTasks.join(', ')}`);
   }
   
-  if (misconfiguredTasks.length > 0) { 
+  if (misconfiguredTasks.length > 0) {
     console.warn(`⚠️ Falsch konfigurierte Tasks: ${misconfiguredTasks.join(', ')}`);
     extensionStatus.recommendations.push(`Tasks falsch konfiguriert: ${misconfiguredTasks.join(', ')}`);
   }
   
-  if (missingTasks.length === 0 && misconfiguredTasks.length === 0) { 
+  if (missingTasks.length === 0 && misconfiguredTasks.length === 0) {
     console.log('✅ Alle kritischen Tasks sind richtig konfiguriert');
   }
   
@@ -611,19 +611,19 @@ function checkEnvironment() {
   
   // Prüfe auf veraltete Node.js Version
   const nodeVersion = process.versions.node.split('.').map(Number);
-  if (nodeVersion[0] < 14) { 
+  if (nodeVersion[0] < 14) {
     console.warn('⚠️ Veraltete Node.js Version erkannt, bitte auf die neueste LTS-Version aktualisieren');
     extensionStatus.recommendations.push('Node.js auf die neueste LTS-Version aktualisieren');
-  } else { 
+  } else {
     console.log('✅ Node.js Version ist aktuell');
   }
   
   // Prüfe auf veraltete npm Version
   const npmVersion = execSync('npm -v', { encoding: 'utf8' }).trim().split('.').map(Number);
-  if (npmVersion[0] < 6) { 
+  if (npmVersion[0] < 6) {
     console.warn('⚠️ Veraltete npm Version erkannt, bitte auf die neueste Version aktualisieren');
     extensionStatus.recommendations.push('npm auf die neueste Version aktualisieren');
-  } else { 
+  } else {
     console.log('✅ npm Version ist aktuell');
   }
   
@@ -651,66 +651,66 @@ function checkTailwindCSSSetup() {
     
     const tailwindExtension = installedExtensions.find(ext => ext === 'bradlc.vscode-tailwindcss');
     
-    if (tailwindExtension) { 
+    if (tailwindExtension) {
       log('✅ Tailwind CSS Extension ist installiert');
-    } else { 
+    } else {
       log('⚠️ Tailwind CSS Extension ist nicht installiert');
       extensionStatus.issues.push('bradlc.vscode-tailwindcss');
     }
   } catch (err) {
-    log(`❌ Fehler beim Prüfen der Tailwind CSS Extension: $${err.message}`);
+    log(`❌ Fehler beim Prüfen der Tailwind CSS Extension: ${err.message}`);
   }
   
   // Prüfe package.json auf Tailwind CSS Version
   try {
-    if (fileExists('package.json')) { 
+    if (fileExists('package.json')) {
       const packageJsonContent = fs.readFileSync('package.json', 'utf8');
       const packageJson = JSON.parse(packageJsonContent);
       
-      if (packageJson.devDependencies && packageJson.devDependencies.tailwindcss) { 
+      if (packageJson.devDependencies && packageJson.devDependencies.tailwindcss) {
         const tailwindVersion = packageJson.devDependencies.tailwindcss;
-        log(`✅ Tailwind CSS Version: $${tailwindVersion}`);
+        log(`✅ Tailwind CSS Version: ${tailwindVersion}`);
         
         // Extrahiere nur die Versionsnummer ohne das ^ oder ~
         const versionNumber = tailwindVersion.replace(/[\^~]/, '');
         
         // Überprüfe, ob die Version aktuell genug ist
-        if (versionNumber === "4.1.10") { 
+        if (versionNumber === "4.1.10") {
           log('✅ Tailwind CSS ist auf der neuesten Version (4.1.10)');
-        } else { 
-          log(`⚠️ Tailwind CSS sollte auf Version 4.1.10 aktualisiert werden (aktuell: $${versionNumber})`);
-          extensionStatus.recommendations.push(`Tailwind CSS von $${versionNumber} auf 4.1.10 aktualisieren`);
+        } else {
+          log(`⚠️ Tailwind CSS sollte auf Version 4.1.10 aktualisiert werden (aktuell: ${versionNumber})`);
+          extensionStatus.recommendations.push(`Tailwind CSS von ${versionNumber} auf 4.1.10 aktualisieren`);
         }
-      } else { 
+      } else {
         log('⚠️ Tailwind CSS ist nicht in package.json definiert');
         extensionStatus.recommendations.push('Tailwind CSS fehlt in package.json');
       }
-    } else { 
+    } else {
       log('⚠️ package.json nicht gefunden');
     }
   } catch (err) {
-    log(`❌ Fehler beim Prüfen der Tailwind CSS Version: $${err.message}`);
+    log(`❌ Fehler beim Prüfen der Tailwind CSS Version: ${err.message}`);
   }
   
   // Prüfe settings.json auf Tailwind CSS Konfiguration
   const settings = readJsonFile(SETTINGS_PATH);
-  if (settings) { 
-    if (settings['tailwindCSS.includeLanguages']) { 
+  if (settings) {
+    if (settings['tailwindCSS.includeLanguages']) {
       log('✅ Tailwind CSS Sprachunterstützung konfiguriert');
-    } else { 
+    } else {
       log('⚠️ Tailwind CSS Sprachunterstützung fehlt in settings.json');
       extensionStatus.recommendations.push('Tailwind CSS Sprachunterstützung in settings.json konfigurieren');
     }
     
-    if (settings['tailwindCSS.experimental.classRegex']) { 
+    if (settings['tailwindCSS.experimental.classRegex']) {
       log('✅ Tailwind CSS Class-Regex konfiguriert');
     }
   }
   
   // Prüfe auf tailwind.config.js
-  if (fileExists('tailwind.config.js')) { 
+  if (fileExists('tailwind.config.js')) {
     log('✅ tailwind.config.js gefunden');
-  } else { 
+  } else {
     log('⚠️ tailwind.config.js nicht gefunden');
     extensionStatus.recommendations.push('tailwind.config.js erstellen');
   }

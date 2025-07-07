@@ -13,7 +13,7 @@ let targetModel = null;
 
 // Extrahiere das Zielmodell aus den Argumenten
 for (const arg of args) {
-  if (arg.startsWith('--model=')) { 
+  if (arg.startsWith('--model=')) {
     targetModel = arg.split('=')[1];
     break;
   }
@@ -29,14 +29,14 @@ async function main() {
   console.log('🔄 KI-Modell-Wechsel-Tool');
   
   // Prüfe, ob ein Modell angegeben wurde
-  if (!targetModel) { 
+  if (!targetModel) {
     showUsage();
     return;
   }
   
   // Prüfe, ob das angegebene Modell unterstützt wird
-  if (!SUPPORTED_MODELS.includes(targetModel)) { 
-    console.error(`❌ Nicht unterstütztes KI-Modell: $${targetModel}`);
+  if (!SUPPORTED_MODELS.includes(targetModel)) {
+    console.error(`❌ Nicht unterstütztes KI-Modell: ${targetModel}`);
     console.log(`💡 Unterstützte Modelle: ${SUPPORTED_MODELS.join(', ')}`);
     return;
   }
@@ -48,18 +48,18 @@ async function main() {
     // Wechsle zum angegebenen Modell
     const currentModel = aiBridge.getCurrentModel();
     
-    if (currentModel === targetModel) { 
-      console.log(`ℹ️ Sie verwenden bereits $${targetModel}`);
+    if (currentModel === targetModel) {
+      console.log(`ℹ️ Sie verwenden bereits ${targetModel}`);
       return;
     }
     
-    console.log(`🔄 Wechsel von $${currentModel} zu ${targetModel}...`);
+    console.log(`🔄 Wechsel von ${currentModel} zu ${targetModel}...`);
     aiBridge.switchModel(targetModel);
     
-    console.log(`✅ KI-Modell erfolgreich gewechselt zu $${targetModel}`);
+    console.log(`✅ KI-Modell erfolgreich gewechselt zu ${targetModel}`);
     console.log('💡 Der Konversationskontext wurde übertragen');
   } catch (err) {
-    console.error(`❌ Fehler beim Modellwechsel: $${err.message}`);
+    console.error(`❌ Fehler beim Modellwechsel: ${err.message}`);
     console.log('⚠️ Stellen Sie sicher, dass die AI Conversation Bridge läuft');
     console.log('💡 Starten Sie die Bridge mit: node tools/start-ai-bridge.js');
   }

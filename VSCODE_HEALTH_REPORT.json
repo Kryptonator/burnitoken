@@ -1,0 +1,11 @@
+{
+  "success": false,
+  "problems": [
+    "Extension-Check fehlgeschlagen: Command failed: code --uninstall-extension jebbs.plantuml --force",
+    "keybindings.json nicht gefunden",
+    "settings.json nicht gefunden"
+  ],
+  "recommendations": [
+    "VS Code Version: 1.101.2\n2901c5ac6db8a986a5666c3af51ff804d05af0d4\nx64"
+  ]
+}

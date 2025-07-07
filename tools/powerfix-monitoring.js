@@ -56,7 +56,7 @@ const monitoringStatus = {
  */
 function log(message, level = 'info') {
   const timestamp = new Date().toISOString();
-  const formattedMessage = `[$${timestamp}] [${level.toUpperCase()}] ${message}`;
+  const formattedMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
   
   // Log in Konsole
   switch(level) {
@@ -80,7 +80,7 @@ function log(message, level = 'info') {
   try {
     fs.appendFileSync(CONFIG.logFile, formattedMessage + '\n', 'utf8');
   } catch (err) {
-    console.error(`Fehler beim Schreiben ins Log: $${err.message}`);
+    console.error(`Fehler beim Schreiben ins Log: ${err.message}`);
   }
 }
 
@@ -88,13 +88,13 @@ function log(message, level = 'info') {
  * Prüft ob eine Lock-Datei existiert und ob sie gültig ist
  */
 function checkLock() {
-  if (fs.existsSync(CONFIG.lockFile)) { 
+  if (fs.existsSync(CONFIG.lockFile)) {
     const lockData = fs.statSync(CONFIG.lockFile);
     const lockAge = Date.now() - lockData.mtimeMs;
     const maxLockAge = CONFIG.maxLockAgeMinutes * 60 * 1000;
     
     // Wenn der Lock zu alt ist, entfernen wir ihn
-    if (lockAge > maxLockAge) { 
+    if (lockAge > maxLockAge) {
       log(`Lock-Datei ist zu alt (${Math.round(lockAge/1000)}s), wird entfernt`, 'warn');
       fs.unlinkSync(CONFIG.lockFile);
       return false;
@@ -112,7 +112,7 @@ function createLock() {
     fs.writeFileSync(CONFIG.lockFile, new Date().toISOString(), 'utf8');
     return true;
   } catch (err) {
-    log(`Fehler beim Erstellen der Lock-Datei: $${err.message}`, 'error');
+    log(`Fehler beim Erstellen der Lock-Datei: ${err.message}`, 'error');
     return false;
   }
 }
@@ -121,12 +121,12 @@ function createLock() {
  * Entfernt die Lock-Datei
  */
 function removeLock() {
-  if (fs.existsSync(CONFIG.lockFile)) { 
+  if (fs.existsSync(CONFIG.lockFile)) {
     try {
       fs.unlinkSync(CONFIG.lockFile);
       return true;
     } catch (err) {
-      log(`Fehler beim Entfernen der Lock-Datei: $${err.message}`, 'error');
+      log(`Fehler beim Entfernen der Lock-Datei: ${err.message}`, 'error');
       return false;
     }
   }
@@ -138,7 +138,7 @@ function removeLock() {
  */
 function loadStatus() {
   try {
-    if (fs.existsSync(CONFIG.statusFile)) { 
+    if (fs.existsSync(CONFIG.statusFile)) {
       const data = fs.readFileSync(CONFIG.statusFile, 'utf8');
       const loadedStatus = JSON.parse(data);
       
@@ -146,7 +146,7 @@ function loadStatus() {
       monitoringStatus.isFirstRun = false;
     }
   } catch (err) {
-    log(`Fehler beim Laden des Status: $${err.message}`, 'error');
+    log(`Fehler beim Laden des Status: ${err.message}`, 'error');
   }
 }
 
@@ -159,7 +159,7 @@ function saveStatus() {
     fs.writeFileSync(CONFIG.statusFile, JSON.stringify(monitoringStatus, null, 2), 'utf8');
     return true;
   } catch (err) {
-    log(`Fehler beim Speichern des Status: $${err.message}`, 'error');
+    log(`Fehler beim Speichern des Status: ${err.message}`, 'error');
     return false;
   }
 }
@@ -183,17 +183,17 @@ async function checkWebsiteAvailability() {
           lastCheck: new Date().toISOString()
         };
         
-        if (monitoringStatus.websiteStatus.isAvailable) { 
-          log(`✅ Website ist verfügbar. Status: $${res.statusCode}, Zeit: ${responseTime}ms`, 'success');
-        } else { 
-          log(`❌ Website ist nicht verfügbar. Status: $${res.statusCode}, Zeit: ${responseTime}ms`, 'error');
+        if (monitoringStatus.websiteStatus.isAvailable) {
+          log(`✅ Website ist verfügbar. Status: ${res.statusCode}, Zeit: ${responseTime}ms`, 'success');
+        } else {
+          log(`❌ Website ist nicht verfügbar. Status: ${res.statusCode}, Zeit: ${responseTime}ms`, 'error');
         }
         
         resolve(monitoringStatus.websiteStatus.isAvailable);
       });
       
       req.on('error', (err) => {
-        log(`❌ Fehler bei Website-Prüfung: $${err.message}`, 'error');
+        log(`❌ Fehler bei Website-Prüfung: ${err.message}`, 'error');
         
         monitoringStatus.websiteStatus = {
           isAvailable: false,
@@ -223,7 +223,7 @@ async function checkWebsiteAvailability() {
       
       req.end();
     } catch (err) {
-      log(`❌ Unerwarteter Fehler bei Website-Prüfung: $${err.message}`, 'error');
+      log(`❌ Unerwarteter Fehler bei Website-Prüfung: ${err.message}`, 'error');
       monitoringStatus.websiteStatus.isAvailable = false;
       monitoringStatus.websiteStatus.lastCheck = new Date().toISOString();
       monitoringStatus.websiteStatus.error = err.message;
@@ -244,7 +244,7 @@ async function checkSSLCertificate() {
         try {
           const cert = res.socket.getPeerCertificate();
           
-          if (!cert || Object.keys(cert).length === 0) { 
+          if (!cert || Object.keys(cert).length === 0) {
             log(`❌ Kein SSL-Zertifikat gefunden`, 'error');
             monitoringStatus.sslStatus.isValid = false;
             monitoringStatus.sslStatus.lastCheck = new Date().toISOString();
@@ -267,15 +267,15 @@ async function checkSSLCertificate() {
             lastCheck: new Date().toISOString()
           };
           
-          if (isValid) { 
-            log(`✅ SSL-Zertifikat ist gültig (läuft in $${daysRemaining} Tagen ab)`, 'success');
-          } else { 
+          if (isValid) {
+            log(`✅ SSL-Zertifikat ist gültig (läuft in ${daysRemaining} Tagen ab)`, 'success');
+          } else {
             log(`❌ SSL-Zertifikat ist ungültig oder abgelaufen`, 'error');
           }
           
           resolve(isValid);
         } catch (certErr) {
-          log(`❌ SSL-Zertifikatsfehler: $${certErr.message}`, 'error');
+          log(`❌ SSL-Zertifikatsfehler: ${certErr.message}`, 'error');
           monitoringStatus.sslStatus.isValid = false;
           monitoringStatus.sslStatus.lastCheck = new Date().toISOString();
           monitoringStatus.sslStatus.error = certErr.message;
@@ -284,7 +284,7 @@ async function checkSSLCertificate() {
       });
       
       req.on('error', (err) => {
-        log(`❌ Fehler bei SSL-Prüfung: $${err.message}`, 'error');
+        log(`❌ Fehler bei SSL-Prüfung: ${err.message}`, 'error');
         monitoringStatus.sslStatus.isValid = false;
         monitoringStatus.sslStatus.lastCheck = new Date().toISOString();
         monitoringStatus.sslStatus.error = err.message;
@@ -302,7 +302,7 @@ async function checkSSLCertificate() {
       
       req.end();
     } catch (err) {
-      log(`❌ Unerwarteter Fehler bei SSL-Prüfung: $${err.message}`, 'error');
+      log(`❌ Unerwarteter Fehler bei SSL-Prüfung: ${err.message}`, 'error');
       monitoringStatus.sslStatus.isValid = false;
       monitoringStatus.sslStatus.lastCheck = new Date().toISOString();
       monitoringStatus.sslStatus.error = err.message;
@@ -327,7 +327,7 @@ async function runFullMonitoringCheck() {
     
     // Überprüfe SSL nur wenn Website verfügbar ist
     let sslValid = false;
-    if (isAvailable) { 
+    if (isAvailable) {
       sslValid = await checkSSLCertificate();
     }
     
@@ -340,7 +340,7 @@ async function runFullMonitoringCheck() {
       timestamp: new Date().toISOString()
     };
   } catch (err) {
-    log(`❌ Fehler bei Monitoring-Check: $${err.message}`, 'error');
+    log(`❌ Fehler bei Monitoring-Check: ${err.message}`, 'error');
     monitoringStatus.errors.push({
       timestamp: new Date().toISOString(),
       message: err.message
@@ -360,7 +360,7 @@ async function runFullMonitoringCheck() {
  */
 function detectAndHandleIssues(checkResult) {
   // Wenn die Website nicht verfügbar ist, versuche einen Selbstheilungsprozess
-  if (!checkResult.isAvailable) { 
+  if (!checkResult.isAvailable) {
     log('⚠️ Website ist nicht verfügbar, aktiviere Auto-Recovery...', 'warn');
     
     try {
@@ -369,12 +369,12 @@ function detectAndHandleIssues(checkResult) {
         stdio: 'ignore'
       });
     } catch (err) {
-      log(`❌ Fehler beim Aktivieren des Auto-Recovery: $${err.message}`, 'error');
+      log(`❌ Fehler beim Aktivieren des Auto-Recovery: ${err.message}`, 'error');
     }
   }
   
   // Wenn das SSL-Zertifikat nicht gültig ist, gib eine Warnung aus
-  if (!checkResult.sslValid && checkResult.isAvailable) { 
+  if (!checkResult.sslValid && checkResult.isAvailable) {
     log('⚠️ SSL-Zertifikat ist nicht gültig, bitte manuell überprüfen!', 'warn');
   }
 }
@@ -384,7 +384,7 @@ function detectAndHandleIssues(checkResult) {
  */
 async function startContinuousMonitoring() {
   try {
-    if (monitoringStatus.monitoringActive) { 
+    if (monitoringStatus.monitoringActive) {
       log('Kontinuierliches Monitoring läuft bereits', 'info');
       return;
     }
@@ -399,7 +399,7 @@ async function startContinuousMonitoring() {
     
     // Reguläre Checks nach Zeitplänen
     const monitoringInterval = setInterval(async () => {
-      if (!checkLock()) { 
+      if (!checkLock()) {
         createLock();
         const checkResult = await runFullMonitoringCheck();
         detectAndHandleIssues(checkResult);
@@ -409,10 +409,10 @@ async function startContinuousMonitoring() {
     
     // Kritische Checks häufiger
     const criticalCheckInterval = setInterval(async () => {
-      if (!checkLock()) { 
+      if (!checkLock()) {
         createLock();
         const isAvailable = await checkWebsiteAvailability();
-        if (!isAvailable) { 
+        if (!isAvailable) {
           log('⚠️ Critical Check: Website ist nicht verfügbar!', 'warn');
           detectAndHandleIssues({ isAvailable, sslValid: false });
         }
@@ -432,7 +432,7 @@ async function startContinuousMonitoring() {
     
     return { monitoringInterval, criticalCheckInterval };
   } catch (err) {
-    log(`Fehler beim Starten des Monitorings: $${err.message}`, 'error');
+    log(`Fehler beim Starten des Monitorings: ${err.message}`, 'error');
     monitoringStatus.monitoringActive = false;
     monitoringStatus.errors.push({
       timestamp: new Date().toISOString(),
@@ -448,7 +448,7 @@ async function startContinuousMonitoring() {
 async function main(args = []) {
   try {
     // Überprüfe Lock-Datei
-    if (checkLock()) { 
+    if (checkLock()) {
       log('Monitoring Service läuft bereits, Ausführung wird abgebrochen', 'warn');
       return;
     }
@@ -460,15 +460,15 @@ async function main(args = []) {
     loadStatus();
     
     // Stelle sicher, dass der Report-Ordner existiert
-    if (!fs.existsSync(CONFIG.reportPath)) { 
+    if (!fs.existsSync(CONFIG.reportPath)) {
       fs.mkdirSync(CONFIG.reportPath, { recursive: true });
     }
     
     // Lösche alte Log-Datei falls zu groß
     try {
-      if (fs.existsSync(CONFIG.logFile)) { 
+      if (fs.existsSync(CONFIG.logFile)) {
         const logStat = fs.statSync(CONFIG.logFile);
-        if (logStat.size > 1024 * 1024) {  // > 1 MB
+        if (logStat.size > 1024 * 1024) { // > 1 MB
           fs.truncateSync(CONFIG.logFile, 0);
           log('Log-Datei zurückgesetzt (war > 1 MB)', 'info');
         }
@@ -480,25 +480,25 @@ async function main(args = []) {
     const isSingleRun = args.includes('--single');
     const isSilent = args.includes('--silent');
     
-    if (isSilent) { 
+    if (isSilent) {
       log = () => {};
     }
     
-    if (isSingleRun) { 
+    if (isSingleRun) {
       log('🔍 Einmaliger Monitoring-Check wird ausgeführt...', 'info');
       await runFullMonitoringCheck();
       log('✅ Monitoring-Check abgeschlossen', 'success');
-    } else { 
+    } else {
       // Starte kontinuierliches Monitoring
       await startContinuousMonitoring();
     }
     
     // Lock entfernen nach einmaligem Check
-    if (isSingleRun) { 
+    if (isSingleRun) {
       removeLock();
     }
   } catch (err) {
-    log(`Kritischer Fehler im Monitoring-Service: $${err.message}`, 'error');
+    log(`Kritischer Fehler im Monitoring-Service: ${err.message}`, 'error');
     monitoringStatus.errors.push({
       timestamp: new Date().toISOString(),
       message: err.message,
@@ -510,11 +510,11 @@ async function main(args = []) {
 }
 
 // Führe Hauptfunktion aus, wenn direkt aufgerufen
-if (require.main === module) { 
+if (require.main === module) {
   const args = process.argv.slice(2);
   
   main(args).catch(err => {
-    fs.appendFileSync(CONFIG.logFile, `[${new Date().toISOString()}] [CRITICAL] $${err.message}\n${err.stack}\n`, 'utf8');
+    fs.appendFileSync(CONFIG.logFile, `[${new Date().toISOString()}] [CRITICAL] ${err.message}\n${err.stack}\n`, 'utf8');
   });
 }
 

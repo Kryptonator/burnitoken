@@ -15,7 +15,7 @@ function log(message) {
 }
 
 // Lösche alte Log-Datei
-if (fs.existsSync(logFile)) { 
+if (fs.existsSync(logFile)) {
   fs.unlinkSync(logFile);
 }
 
@@ -65,7 +65,7 @@ function fileExists(filePath) {
   try {
     return fs.existsSync(filePath);
   } catch (err) {
-    log(`Fehler beim Prüfen, ob Datei existiert ($${filePath}): ${err.message}`);
+    log(`Fehler beim Prüfen, ob Datei existiert (${filePath}): ${err.message}`);
     return false;
   }
 }
@@ -78,7 +78,7 @@ function readJsonFile(filePath) {
     const data = fs.readFileSync(filePath, 'utf8');
     return JSON.parse(data);
   } catch (err) {
-    log(`Fehler beim Lesen von $${filePath}: ${err.message}`);
+    log(`Fehler beim Lesen von ${filePath}: ${err.message}`);
     return null;
   }
 }
@@ -91,12 +91,12 @@ function checkExtensionStatus() {
   
   try {
     // Prüfe, ob settings.json existiert
-    if (!fileExists(SETTINGS_PATH)) { 
+    if (!fileExists(SETTINGS_PATH)) {
       log('⚠️ Keine settings.json gefunden');
     }
 
     // Prüfe, ob extensions.json existiert
-    if (!fileExists(EXTENSIONS_PATH)) { 
+    if (!fileExists(EXTENSIONS_PATH)) {
       log('⚠️ Keine extensions.json gefunden');
     }
 
@@ -106,34 +106,34 @@ function checkExtensionStatus() {
         .split('\n')
         .filter(Boolean);
       
-      log(`✅ Gefunden: $${installedExtensions.length} installierte Extensions`);
+      log(`✅ Gefunden: ${installedExtensions.length} installierte Extensions`);
       
       for (const ext of CRITICAL_EXTENSIONS) {
-        if (installedExtensions.includes(ext)) { 
+        if (installedExtensions.includes(ext)) {
           extensionStatus.healthy.push(ext);
-        } else { 
+        } else {
           extensionStatus.issues.push(ext);
-          log(`⚠️ Kritische Extension nicht installiert: $${ext}`);
+          log(`⚠️ Kritische Extension nicht installiert: ${ext}`);
         }
       }
     } catch (err) {
-      log(`❌ Fehler beim Prüfen der installierten Extensions: $${err.message}`);
+      log(`❌ Fehler beim Prüfen der installierten Extensions: ${err.message}`);
     }
 
     // Prüfe KI-Integration
     const missingFiles = AI_INTEGRATION_FILES.filter(file => !fileExists(file));
-    if (missingFiles.length > 0) { 
+    if (missingFiles.length > 0) {
       log(`⚠️ Fehlende KI-Integrationsdateien: ${missingFiles.join(', ')}`);
       extensionStatus.recommendations.push('KI-Integration ist unvollständig');
-    } else { 
+    } else {
       log('✅ KI-Integrationsdateien vollständig');
     }
 
     // Ausgabe des Ergebnisses
     log('\n📊 Extension Health Check Ergebnis:');
-    log(`✅ Gesunde Extensions: $${extensionStatus.healthy.length}`);
-    log(`⚠️ Extensions mit Problemen: $${extensionStatus.issues.length}`);
-    log(`💡 Empfehlungen: $${extensionStatus.recommendations.length}`);
+    log(`✅ Gesunde Extensions: ${extensionStatus.healthy.length}`);
+    log(`⚠️ Extensions mit Problemen: ${extensionStatus.issues.length}`);
+    log(`💡 Empfehlungen: ${extensionStatus.recommendations.length}`);
     
     log('Health Check abgeschlossen!');
     
@@ -143,7 +143,7 @@ function checkExtensionStatus() {
       recommendations: extensionStatus.recommendations.length
     };
   } catch (error) {
-    log(`❌ Unerwarteter Fehler: $${error.message}`);
+    log(`❌ Unerwarteter Fehler: ${error.message}`);
     log(error.stack);
     return {
       healthy: 0,
@@ -158,7 +158,7 @@ try {
   const result = checkExtensionStatus();
   log(`Ergebnis: ${JSON.stringify(result)}`);
 } catch (error) {
-  log(`Kritischer Fehler: $${error.message}`);
+  log(`Kritischer Fehler: ${error.message}`);
   log(error.stack);
 }
 

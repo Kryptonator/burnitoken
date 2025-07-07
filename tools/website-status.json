@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-07-07T04:34:04.673Z",
+  "summary": {
+    "overallStatus": "healthy",
+    "availableUrls": 1,
+    "totalUrls": 1,
+    "sslValid": true,
+    "performanceScore": 100
+  },
+  "urls": {
+    "https://burnitoken.website": {
+      "status": 200,
+      "statusText": "OK",
+      "available": true,
+      "responseTime": 78,
+      "loadTime": 146,
+      "contentType": "text/html; charset=UTF-8",
+      "lastChecked": "2025-07-07T04:34:05.004Z"
+    }
+  },
+  "ssl": {
+    "valid": true,
+    "expiry": "2025-09-18T13:46:12.000Z",
+    "daysRemaining": 73,
+    "issuer": "Let's Encrypt"
+  },
+  "performance": {
+    "ttfb": 78,
+    "loadTime": 146
+  }
+}

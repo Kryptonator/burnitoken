@@ -13,11 +13,11 @@ function inspectError(err) {
     stack: err.stack,
   };
   
-  if (err.errors) { 
+  if (err.errors) {
     details.errors = err.errors;
   }
   
-  if (err.response) { 
+  if (err.response) {
     details.response = {
       status: err.response.status,
       statusText: err.response.statusText,
@@ -36,16 +36,16 @@ function inspectError(err) {
  * @returns {Promise<*>} - Ergebnis der Funktion oder null bei Fehler
  */
 async function safeExecute(name, fn, stopOnError = false) {
-  console.log(`🔄 Starte Operation: $${name}`);
+  console.log(`🔄 Starte Operation: ${name}`);
   try {
     const result = await fn();
-    console.log(`✅ Operation erfolgreich: $${name}`);
+    console.log(`✅ Operation erfolgreich: ${name}`);
     return result;
   } catch (error) {
-    console.error(`❌ Fehler bei: $${name}`);
+    console.error(`❌ Fehler bei: ${name}`);
     console.error(inspectError(error));
     
-    if (stopOnError) { 
+    if (stopOnError) {
       throw error;
     }
     

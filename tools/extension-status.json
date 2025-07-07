@@ -1,0 +1,100 @@
+{
+  "timestamp": "2025-07-05T22:34:51.172Z",
+  "summary": {
+    "extensions": {
+      "total": 0,
+      "active": 0,
+      "inactive": 0,
+      "required": 0,
+      "requiredActive": 0
+    },
+    "services": {
+      "total": 10,
+      "active": 10,
+      "inactive": 0
+    },
+    "integrations": {
+      "gscConnected": true,
+      "aiServicesActive": true,
+      "tailwindActive": false
+    },
+    "tasks": {
+      "autoStartConfigured": true,
+      "extensionHealthCheck": false,
+      "gscMonitor": true
+    }
+  },
+  "extensions": [],
+  "services": [
+    {
+      "name": "extension-validator",
+      "file": "../extension-function-validator.js",
+      "exists": true,
+      "status": "active"
+    },
+    {
+      "name": "extension-manager",
+      "file": "../advanced-extension-manager.js",
+      "exists": true,
+      "status": "active"
+    },
+    {
+      "name": "extension-orchestrator",
+      "file": "../master-extension-orchestrator.js",
+      "exists": true,
+      "status": "active"
+    },
+    {
+      "name": "session-saver",
+      "file": "session-saver.js",
+      "exists": true,
+      "status": "active"
+    },
+    {
+      "name": "ai-bridge",
+      "file": "start-ai-bridge.js",
+      "exists": true,
+      "status": "active"
+    },
+    {
+      "name": "gsc-integration",
+      "file": "gsc-integration-monitor.js",
+      "exists": true,
+      "status": "active",
+      "connected": true,
+      "authValid": true,
+      "lastCheck": "2025-07-05T20:57:23.301Z"
+    },
+    {
+      "name": "gsc-auth",
+      "file": "gsc-auth-check.js",
+      "exists": true,
+      "status": "active"
+    },
+    {
+      "name": "lighthouse-perf",
+      "file": "../lighthouserc-performance.js",
+      "exists": true,
+      "status": "active"
+    },
+    {
+      "name": "lighthouse-seo",
+      "file": "../lighthouserc-seo.js",
+      "exists": true,
+      "status": "active"
+    },
+    {
+      "name": "lighthouse-accessibility",
+      "file": "../lighthouserc-accessibility.js",
+      "exists": true,
+      "status": "active"
+    }
+  ],
+  "recommendations": [
+    {
+      "priority": "high",
+      "message": "Installiere fehlende erforderliche Extensions: github.copilot, github.copilot-chat, eamodio.gitlens, esbenp.prettier-vscode, bradlc.vscode-tailwindcss, ritwickdey.liveserver, maxvanderschee.web-accessibility, ms-playwright.playwright",
+      "action": "extension-install"
+    }
+  ]
+}

@@ -19,11 +19,11 @@ function runDiagnosis() {
   console.log('🔍 GOOGLE SEARCH CONSOLE SITEMAP STATUS CHECKER');
   console.log('====================================================');
   console.log(
-    '\nDieses Tool hilft bei der Diagnose von Google Search Console Sitemap-Problemen.\n'),
+    '\nDieses Tool hilft bei der Diagnose von Google Search Console Sitemap-Problemen.\n',
   );
 
   // Fehlerstatus: "Konnte nicht abgerufen werden"
-  if (process.argv.includes('--status=notfetchable')) { 
+  if (process.argv.includes('--status=notfetchable')) {
     console.log('⚠️ ERKANNTER FEHLER: "Konnte nicht abgerufen werden"\n');
     console.log('Mögliche Ursachen und Lösungen:');
     console.log('------------------------------');
@@ -36,7 +36,7 @@ function runDiagnosis() {
     console.log('\n2. ❓ NETLIFY REDIRECTS:');
     console.log('   - Prüfen Sie die netlify.toml-Datei auf falsche Weiterleitungen.');
     console.log(
-      '   - Stellen Sie sicher, dass die sitemap.xml-Datei explizit von Weiterleitungen ausgenommen ist.'),
+      '   - Stellen Sie sicher, dass die sitemap.xml-Datei explizit von Weiterleitungen ausgenommen ist.',
     );
     console.log('   - Aktueller Status (empfohlen):');
     console.log('     [[redirects]]');
@@ -53,7 +53,7 @@ function runDiagnosis() {
 
     console.log('\n4. ❓ FIREWALL/CDN:');
     console.log(
-      '   - Überprüfen Sie, ob Firewalls oder CDN-Einstellungen den Google-Bot blockieren.'),
+      '   - Überprüfen Sie, ob Firewalls oder CDN-Einstellungen den Google-Bot blockieren.',
     );
     console.log('   - Stellen Sie sicher, dass Google-Bot-IPs nicht blockiert werden.');
 
@@ -65,16 +65,16 @@ function runDiagnosis() {
     console.log('📋 EMPFOHLENE SCHRITTE:');
     console.log('------------------------------');
     console.log(
-      '1. Rufen Sie die Sitemap selbst auf: curl -v https://burnitoken.website/sitemap.xml'),
+      '1. Rufen Sie die Sitemap selbst auf: curl -v https://burnitoken.website/sitemap.xml',
     );
     console.log('2. Führen Sie das Prüftool aus: npm run validate:sitemap');
     console.log(
-      '3. Verwenden Sie die Google Mobile-Friendly Test-Seite, um zu testen, ob Google auf die Sitemap zugreifen kann:'),
+      '3. Verwenden Sie die Google Mobile-Friendly Test-Seite, um zu testen, ob Google auf die Sitemap zugreifen kann:',
     );
     console.log(
-      '   https://search.google.com/test/mobile-friendly?url=https://burnitoken.website/sitemap.xml'),
+      '   https://search.google.com/test/mobile-friendly?url=https://burnitoken.website/sitemap.xml',
     );
-  } else { 
+  } else {
     console.log('Verwendung: node gsc-status-check.js --status=notfetchable');
     console.log('\nVerfügbare Status:');
     console.log('  --status=notfetchable  : "Konnte nicht abgerufen werden"');
@@ -89,7 +89,7 @@ async function testSitemapAccess() {
   const googlebot = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)';
 
   try {
-    console.log(`Teste als Googlebot: $${SITEMAP_URL}`);
+    console.log(`Teste als Googlebot: ${SITEMAP_URL}`);
     const url = new URL(SITEMAP_URL);
 
     const options = {
@@ -102,32 +102,32 @@ async function testSitemapAccess() {
     };
 
     const req = https.request(options, (res) => {
-      console.log(`   Status: $${res.statusCode} ${res.statusMessage}`);
+      console.log(`   Status: ${res.statusCode} ${res.statusMessage}`);
 
-      if (res.statusCode === 200) { 
+      if (res.statusCode === 200) {
         console.log('   ✅ Die Sitemap scheint erreichbar zu sein');
-      } else { 
+      } else {
         console.log('   ❌ Die Sitemap ist nicht korrekt erreichbar');
       }
     });
 
     req.on('error', (error) => {
-      console.error(`   ❌ Fehler beim Zugriff auf die Sitemap: $${error.message}`);
+      console.error(`   ❌ Fehler beim Zugriff auf die Sitemap: ${error.message}`);
     });
 
     req.end();
   } catch (error) {
-    console.error(`   ❌ Fehler beim Test der Sitemap: $${error.message}`);
+    console.error(`   ❌ Fehler beim Test der Sitemap: ${error.message}`);
   }
 }
 
 // Prüfe, ob Service Account vorhanden ist oder Diagnose-Modus gefordert ist
-if (process.argv.includes('--diagnose') || !fs.existsSync(SERVICE_ACCOUNT_FILE)) { 
+if (process.argv.includes('--diagnose') || !fs.existsSync(SERVICE_ACCOUNT_FILE)) {
   runDiagnosis();
-} else { 
+} else {
   // API-basierter Check, falls Service Account vorhanden
   const auth = new google.auth.GoogleAuth({
-    keyFile: SERVICE_ACCOUNT_FILE),
+    keyFile: SERVICE_ACCOUNT_FILE,
     scopes: ['https://www.googleapis.com/auth/webmasters.readonly'],
   });
 
@@ -137,13 +137,14 @@ if (process.argv.includes('--diagnose') || !fs.existsSync(SERVICE_ACCOUNT_FILE))
     try {
       // Zeige verfügbare Sitemaps an
       console.log('🔍 Frage GSC API nach Sitemap-Status ab...');
-      console.log(`Site-URL: $${SITE_URL}`);
-      console.log(`Sitemap-URL: $${SITEMAP_URL}`);
+      console.log(`Site-URL: ${SITE_URL}`);
+      console.log(`Sitemap-URL: ${SITEMAP_URL}`);
 
       const sitemaps = await searchconsole.sitemaps.list({
-        siteUrl: SITE_URL),});
+        siteUrl: SITE_URL,
+      });
 
-      if (!sitemaps.data || !sitemaps.data.sitemap || sitemaps.data.sitemap.length === 0) { 
+      if (!sitemaps.data || !sitemaps.data.sitemap || sitemaps.data.sitemap.length === 0) {
         console.log('❌ Keine Sitemaps in der Google Search Console gefunden.');
         return false;
       }
@@ -154,21 +155,21 @@ if (process.argv.includes('--diagnose') || !fs.existsSync(SERVICE_ACCOUNT_FILE))
       let targetSitemap = null;
 
       sitemaps.data.sitemap.forEach((sitemap) => {
-        console.log(`URL: $${sitemap.path}`);
+        console.log(`URL: ${sitemap.path}`);
         console.log(`Status: ${sitemap.lastSubmitted ? 'Eingereicht' : 'Nicht eingereicht'}`);
         console.log(`Letzte Verarbeitung: ${sitemap.lastDownloaded || 'Noch nicht verarbeitet'}`);
 
-        if (sitemap.errors) console.log(`Fehler: $${sitemap.errors}`);
-        if (sitemap.warnings) console.log(`Warnungen: $${sitemap.warnings}`);
+        if (sitemap.errors) console.log(`Fehler: ${sitemap.errors}`);
+        if (sitemap.warnings) console.log(`Warnungen: ${sitemap.warnings}`);
         console.log('------------------------------');
 
-        if (sitemap.path === SITEMAP_URL) { 
+        if (sitemap.path === SITEMAP_URL) {
           targetSitemap = sitemap;
         }
       });
 
-      if (!targetSitemap) { 
-        console.log(`❌ Die angegebene Sitemap $${SITEMAP_URL} wurde nicht in der GSC gefunden.`);
+      if (!targetSitemap) {
+        console.log(`❌ Die angegebene Sitemap ${SITEMAP_URL} wurde nicht in der GSC gefunden.`);
         return false;
       }
 
@@ -182,9 +183,9 @@ if (process.argv.includes('--diagnose') || !fs.existsSync(SERVICE_ACCOUNT_FILE))
   // Führe die Sitemap-Prüfung aus
   checkSitemapStatus()
     .then((success) => {
-      if (!success) { 
+      if (!success) {
         console.log(
-          '⚠️ API-Abfrage fehlgeschlagen oder keine Ergebnisse, wechsele zu Diagnose-Modus'),
+          '⚠️ API-Abfrage fehlgeschlagen oder keine Ergebnisse, wechsele zu Diagnose-Modus',
         );
         runDiagnosis();
       }

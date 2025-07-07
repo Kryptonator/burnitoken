@@ -1,0 +1,18 @@
+---
+Title: Service unerwartet beendet: extension-validator
+Source: Master Task Manager
+Created: 2025-07-05T19:57:54.437Z
+Status: Open
+---
+
+### Problembeschreibung
+
+Der Service "extension-validator" wurde mit dem Fehlercode 1 beendet.
+Script: ../extension-function-validator.js
+
+### Nächste Schritte
+
+1.  Problem analysieren.
+2.  Lösung implementieren.
+3.  Änderungen testen und verifizieren.
+4.  ToDo als "Done" markieren.

@@ -1,0 +1,12 @@
+{
+  "en": {
+    "nav_home": "Home",
+    "nav_about": "About",
+    "nav_tokenomics": "Tokenomics"
+  },
+  "de": {
+    "nav_home": "Startseite",
+    "nav_about": "Über uns",
+    "nav_tokenomics": "Tokenomics"
+  }
+}

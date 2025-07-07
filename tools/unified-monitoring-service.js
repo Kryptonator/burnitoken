@@ -45,23 +45,23 @@ const dashboardGeneratorScript = 'tools/generate-status-dashboard.js';
  * @param {string} scriptPath - Der Pfad zum Skript.
  */
 function runScript(scriptName, scriptPath) {
-    if (!isSilent) { 
-        console.log(`$${colors.cyan}--- Starte: ${scriptName} ---${colors.reset}`);
+    if (!isSilent) {
+        console.log(`${colors.cyan}--- Starte: ${scriptName} ---${colors.reset}`);
     }
     try {
         // Im Silent-Modus wird die Ausgabe unterdrückt, außer bei Fehlern
         const stdioOption = isSilent ? 'pipe' : 'inherit';
-        execSync(`node $${scriptPath}`, { stdio: stdioOption });
-        if (!isSilent) { 
-            console.log(`$${colors.green}--- Beendet: ${scriptName} erfolgreich ---${colors.reset}\n`);
+        execSync(`node ${scriptPath}`, { stdio: stdioOption });
+        if (!isSilent) {
+            console.log(`${colors.green}--- Beendet: ${scriptName} erfolgreich ---${colors.reset}\n`);
         }
         return true;
     } catch (error) {
         // Fehler werden immer angezeigt
-        console.error(`$${colors.red}--- Fehler bei: ${scriptName} ---${colors.reset}`);
+        console.error(`${colors.red}--- Fehler bei: ${scriptName} ---${colors.reset}`);
         // Die detaillierte Fehlermeldung wird bereits vom untergeordneten Skript ausgegeben
-        if (!isSilent) { 
-            console.error(`$${colors.yellow}Fahre mit dem nächsten Skript fort...${colors.reset}\n`);
+        if (!isSilent) {
+            console.error(`${colors.yellow}Fahre mit dem nächsten Skript fort...${colors.reset}\n`);
         }
         return false;
     }
@@ -72,39 +72,39 @@ function runScript(scriptName, scriptPath) {
  */
 function runAllChecks() {
     let hasErrors = false;
-    if (!isSilent) { 
-        console.log(`$${colors.green}🚀 Starte Unified Monitoring Service...${colors.reset}`);
+    if (!isSilent) {
+        console.log(`${colors.green}🚀 Starte Unified Monitoring Service...${colors.reset}`);
     }
 
     // Alle Check-Skripte ausführen
     scriptsToRun.forEach(script => {
         const scriptPath = path.resolve(__dirname, '..', script.file);
         const success = runScript(script.name, scriptPath);
-        if (!success) { 
+        if (!success) {
             hasErrors = true;
         }
     });
 
     // Dashboard am Ende aktualisieren
-    if (!isSilent) { 
-        console.log(`$${colors.cyan}--- Starte: Dashboard-Generierung ---${colors.reset}`);
+    if (!isSilent) {
+        console.log(`${colors.cyan}--- Starte: Dashboard-Generierung ---${colors.reset}`);
     }
     try {
         const dashboardPath = path.resolve(__dirname, '..', dashboardGeneratorScript);
         const stdioOption = isSilent ? 'pipe' : 'inherit';
-        execSync(`node $${dashboardPath}`, { stdio: stdioOption });
-        if (!isSilent) { 
-            console.log(`$${colors.green}--- Beendet: Dashboard-Generierung erfolgreich ---${colors.reset}\n`);
+        execSync(`node ${dashboardPath}`, { stdio: stdioOption });
+        if (!isSilent) {
+            console.log(`${colors.green}--- Beendet: Dashboard-Generierung erfolgreich ---${colors.reset}\n`);
         }
     } catch (error) {
-        console.error(`$${colors.red}--- Fehler bei: Dashboard-Generierung ---${colors.reset}`);
+        console.error(`${colors.red}--- Fehler bei: Dashboard-Generierung ---${colors.reset}`);
         hasErrors = true;
     }
 
-    if (isSilent && hasErrors) { 
-         console.log(`$${colors.red}Einige Monitoring-Checks sind fehlgeschlagen. Bitte führen Sie 'Unified Monitoring Service' manuell aus für Details.${colors.reset}`);
-    } else if (!isSilent) { 
-        console.log(`$${colors.green}✅ Unified Monitoring Service abgeschlossen.${colors.reset}`);
+    if (isSilent && hasErrors) {
+         console.log(`${colors.red}Einige Monitoring-Checks sind fehlgeschlagen. Bitte führen Sie 'Unified Monitoring Service' manuell aus für Details.${colors.reset}`);
+    } else if (!isSilent) {
+        console.log(`${colors.green}✅ Unified Monitoring Service abgeschlossen.${colors.reset}`);
     }
 }
 

@@ -21,7 +21,7 @@ class LiveWebsiteVerification {
     this.verificationResults = [];
     
     // GSC Auth Client initialisieren, falls Service Account verfügbar
-    if (fs.existsSync(SERVICE_ACCOUNT_FILE) { 
+    if (fs.existsSync(SERVICE_ACCOUNT_FILE) {
   {;
 }
   {;
@@ -123,10 +123,10 @@ class LiveWebsiteVerification {
   ) {;
 }
       this.gscAuthClient = new google.auth.GoogleAuth({
-        keyFile: SERVICE_ACCOUNT_FILE),
+        keyFile: SERVICE_ACCOUNT_FILE,
         scopes: ['https://www.googleapis.com/auth/webmasters.readonly'],
       });
-    } else { 
+    } else {
       this.gscAuthClient = null;
     }
   }
@@ -202,22 +202,22 @@ class LiveWebsiteVerification {
 
     let passedChecks = 0;
     checks.forEach((check) => {
-      if (check.test) { 
-        console.log(`   ✅ $${check.name}: PASS`);
+      if (check.test) {
+        console.log(`   ✅ ${check.name}: PASS`);
         passedChecks++;
-      } else { 
-        console.log(`   ❌ $${check.name}: FAIL - Impact: ${check.impact}`);
+      } else {
+        console.log(`   ❌ ${check.name}: FAIL - Impact: ${check.impact}`);
       }
 
       this.verificationResults.push({
-        category: 'HTML Structure'),
+        category: 'HTML Structure',
         check: check.name,
         status: check.test ? 'PASS' : 'FAIL',
         impact: check.impact,
       });
     });
 
-    console.log(`📊 HTML Validation: $${passedChecks}/${checks.length} checks passed`);
+    console.log(`📊 HTML Validation: ${passedChecks}/${checks.length} checks passed`);
   }
 
   async checkAssetAvailability() {
@@ -239,22 +239,22 @@ class LiveWebsiteVerification {
       const assetPath = path.join(this.workspaceRoot, asset);
       const exists = fs.existsSync(assetPath);
 
-      if (exists) { 
-        console.log(`   ✅ $${asset}: Available`);
+      if (exists) {
+        console.log(`   ✅ ${asset}: Available`);
         availableAssets++;
-      } else { 
-        console.log(`   ❌ $${asset}: Missing`);
+      } else {
+        console.log(`   ❌ ${asset}: Missing`);
       }
 
       this.verificationResults.push({
-        category: 'Asset Availability'),
+        category: 'Asset Availability',
         check: asset,
         status: exists ? 'AVAILABLE' : 'MISSING',
         impact: 'Visual display',
       });
     }
 
-    console.log(`📊 Asset Availability: $${availableAssets}/${assetChecks.length} assets found`);
+    console.log(`📊 Asset Availability: ${availableAssets}/${assetChecks.length} assets found`);
   }
 
   async checkCSSConflicts() {
@@ -289,22 +289,22 @@ class LiveWebsiteVerification {
 
     let passedCSSChecks = 0;
     cssChecks.forEach((check) => {
-      if (check.test) { 
-        console.log(`   ✅ $${check.name}: GOOD`);
+      if (check.test) {
+        console.log(`   ✅ ${check.name}: GOOD`);
         passedCSSChecks++;
-      } else { 
-        console.log(`   ⚠️  $${check.name}: NEEDS ATTENTION`);
+      } else {
+        console.log(`   ⚠️  ${check.name}: NEEDS ATTENTION`);
       }
 
       this.verificationResults.push({
-        category: 'CSS Configuration'),
+        category: 'CSS Configuration',
         check: check.name,
         status: check.test ? 'GOOD' : 'NEEDS_ATTENTION',
         impact: check.impact,
       });
     });
 
-    console.log(`📊 CSS Configuration: $${passedCSSChecks}/${cssChecks.length} checks passed`);
+    console.log(`📊 CSS Configuration: ${passedCSSChecks}/${cssChecks.length} checks passed`);
   }
 
   async checkJavaScriptFunctionality() {
@@ -324,22 +324,22 @@ class LiveWebsiteVerification {
       const jsPath = path.join(this.workspaceRoot, jsFile);
       const exists = fs.existsSync(jsPath);
 
-      if (exists) { 
-        console.log(`   ✅ $${jsFile}: Loaded`);
+      if (exists) {
+        console.log(`   ✅ ${jsFile}: Loaded`);
         functionalJS++;
-      } else { 
-        console.log(`   ⚠️  $${jsFile}: Not found`);
+      } else {
+        console.log(`   ⚠️  ${jsFile}: Not found`);
       }
 
       this.verificationResults.push({
-        category: 'JavaScript Functionality'),
+        category: 'JavaScript Functionality',
         check: jsFile,
         status: exists ? 'LOADED' : 'NOT_FOUND',
         impact: 'Interactive features',
       });
     }
 
-    console.log(`📊 JavaScript Files: $${functionalJS}/${jsFiles.length} files available`);
+    console.log(`📊 JavaScript Files: ${functionalJS}/${jsFiles.length} files available`);
   }
 
   async checkResponsiveDesign() {
@@ -374,15 +374,15 @@ class LiveWebsiteVerification {
 
     let responsiveScore = 0;
     responsiveChecks.forEach((check) => {
-      if (check.test) { 
-        console.log(`   ✅ $${check.name}: IMPLEMENTED`);
+      if (check.test) {
+        console.log(`   ✅ ${check.name}: IMPLEMENTED`);
         responsiveScore++;
-      } else { 
-        console.log(`   ⚠️  $${check.name}: MISSING`);
+      } else {
+        console.log(`   ⚠️  ${check.name}: MISSING`);
       }
 
       this.verificationResults.push({
-        category: 'Responsive Design'),
+        category: 'Responsive Design',
         check: check.name,
         status: check.test ? 'IMPLEMENTED' : 'MISSING',
         impact: check.impact,
@@ -390,7 +390,7 @@ class LiveWebsiteVerification {
     });
 
     console.log(
-      `📊 Responsive Design: $${responsiveScore}/${responsiveChecks.length} features implemented`),
+      `📊 Responsive Design: ${responsiveScore}/${responsiveChecks.length} features implemented`,
     );
   }
 
@@ -426,15 +426,15 @@ class LiveWebsiteVerification {
 
     let performanceScore = 0;
     performanceChecks.forEach((check) => {
-      if (check.test) { 
-        console.log(`   ✅ $${check.name}: OPTIMIZED`);
+      if (check.test) {
+        console.log(`   ✅ ${check.name}: OPTIMIZED`);
         performanceScore++;
-      } else { 
-        console.log(`   ⚠️  $${check.name}: NOT OPTIMIZED`);
+      } else {
+        console.log(`   ⚠️  ${check.name}: NOT OPTIMIZED`);
       }
 
       this.verificationResults.push({
-        category: 'Performance'),
+        category: 'Performance',
         check: check.name,
         status: check.test ? 'OPTIMIZED' : 'NOT_OPTIMIZED',
         impact: check.impact,
@@ -442,7 +442,7 @@ class LiveWebsiteVerification {
     });
 
     console.log(
-      `📊 Performance Score: $${performanceScore}/${performanceChecks.length} optimizations active`),
+      `📊 Performance Score: ${performanceScore}/${performanceChecks.length} optimizations active`,
     );
   }
 
@@ -450,13 +450,13 @@ class LiveWebsiteVerification {
     console.log('🔍 CHECKING GOOGLE SEARCH CONSOLE STATUS...');
     console.log('=========================================');
 
-    if (!fs.existsSync(SERVICE_ACCOUNT_FILE)) { 
-      console.log(`⚠️ GSC Service Account Datei nicht gefunden: $${SERVICE_ACCOUNT_FILE}`);
+    if (!fs.existsSync(SERVICE_ACCOUNT_FILE)) {
+      console.log(`⚠️ GSC Service Account Datei nicht gefunden: ${SERVICE_ACCOUNT_FILE}`);
       this.verificationResults.push({
-        category: 'Google Search Console'),
+        category: 'Google Search Console',
         status: 'Not Available',
         message: 'Service Account Datei nicht gefunden',
-        details: `Datei nicht gefunden: $${SERVICE_ACCOUNT_FILE}`
+        details: `Datei nicht gefunden: ${SERVICE_ACCOUNT_FILE}`
       });
       return;
     }
@@ -464,10 +464,10 @@ class LiveWebsiteVerification {
     // Überprüfe die Gültigkeit der Service-Account-Datei
     try {
       const serviceAccountContent = JSON.parse(fs.readFileSync(SERVICE_ACCOUNT_FILE, 'utf8'));
-      if (!serviceAccountContent.client_email || !serviceAccountContent.private_key) { 
+      if (!serviceAccountContent.client_email || !serviceAccountContent.private_key) {
         console.log('⚠️ GSC Service Account Datei ist ungültig oder beschädigt.');
         this.verificationResults.push({
-          category: 'Google Search Console'),
+          category: 'Google Search Console',
           status: 'Error',
           message: 'Service Account Datei ist ungültig',
           details: 'Die Datei enthält nicht die erforderlichen Informationen'
@@ -477,7 +477,7 @@ class LiveWebsiteVerification {
     } catch (err) {
       console.log('⚠️ GSC Service Account konnte nicht gelesen werden:', err.message);
       this.verificationResults.push({
-        category: 'Google Search Console'),
+        category: 'Google Search Console',
         status: 'Error',
         message: 'Service Account Datei konnte nicht gelesen werden',
         details: err.message
@@ -485,10 +485,10 @@ class LiveWebsiteVerification {
       return;
     }
     
-    if (!this.gscAuthClient) { 
+    if (!this.gscAuthClient) {
       console.log('⚠️ Google Search Console Auth Client konnte nicht initialisiert werden');
       this.verificationResults.push({
-        category: 'Google Search Console'),
+        category: 'Google Search Console',
         status: 'Not Available',
         message: 'Auth Client nicht initialisiert',
         details: 'Die GSC API-Integration wurde übersprungen'
@@ -507,14 +507,14 @@ class LiveWebsiteVerification {
         siteUrl: GSC_PROPERTY
       });
 
-      if (siteVerificationResult.data) { 
-        console.log(`✅ GSC API-Zugriff erfolgreich für $${GSC_PROPERTY}`);
+      if (siteVerificationResult.data) {
+        console.log(`✅ GSC API-Zugriff erfolgreich für ${GSC_PROPERTY}`);
         
         // Erfolgreiches Resultat speichern
         this.verificationResults.push({
-          category: 'Google Search Console'),
+          category: 'Google Search Console',
           status: 'Connected',
-          message: `Verbindung mit $${GSC_PROPERTY} hergestellt`,
+          message: `Verbindung mit ${GSC_PROPERTY} hergestellt`,
           details: `Permission Level: ${siteVerificationResult.data.permissionLevel || 'Unknown'}`
         });
         
@@ -527,10 +527,10 @@ class LiveWebsiteVerification {
         const startDateStr = startDate.toISOString().split('T')[0];
         const endDateStr = endDate.toISOString().split('T')[0];
         
-        console.log(`🔄 Rufe Performance-Daten für $${startDateStr} bis ${endDateStr} ab...`);
+        console.log(`🔄 Rufe Performance-Daten für ${startDateStr} bis ${endDateStr} ab...`);
         
         const performanceResponse = await searchconsole.searchanalytics.query({
-          siteUrl: GSC_PROPERTY),
+          siteUrl: GSC_PROPERTY,
           requestBody: {
             startDate: startDateStr,
             endDate: endDateStr,
@@ -539,7 +539,7 @@ class LiveWebsiteVerification {
           },
         });
         
-        if (performanceResponse.data && performanceResponse.data.rows && performanceResponse.data.rows.length > 0) { 
+        if (performanceResponse.data && performanceResponse.data.rows && performanceResponse.data.rows.length > 0) {
           // Gesamtzahlen berechnen
           const totalClicks = performanceResponse.data.rows.reduce((sum, row) => sum + row.clicks, 0);
           const totalImpressions = performanceResponse.data.rows.reduce((sum, row) => sum + row.impressions, 0);
@@ -547,28 +547,28 @@ class LiveWebsiteVerification {
           const avgPosition = performanceResponse.data.rows.reduce((sum, row) => sum + row.position, 0) / 
                               performanceResponse.data.rows.length;
           
-          console.log(`✅ Performance-Daten: $${totalClicks} Klicks, ${totalImpressions} Impressions`);
+          console.log(`✅ Performance-Daten: ${totalClicks} Klicks, ${totalImpressions} Impressions`);
           
           // GSC Performance-Daten speichern
           this.verificationResults.push({
             category: 'GSC Performance (7 days)',
             status: 'Data Available',
-            message: `$${totalClicks} Klicks, ${totalImpressions} Impressions`,
-            details: `CTR: $${avgCtr}%, Avg Position: ${avgPosition.toFixed(1)}`
+            message: `${totalClicks} Klicks, ${totalImpressions} Impressions`,
+            details: `CTR: ${avgCtr}%, Avg Position: ${avgPosition.toFixed(1)}`
           });
-        } else { 
+        } else {
           console.log('⚠️ Keine Performance-Daten für die letzten 7 Tage gefunden');
           this.verificationResults.push({
-            category: 'GSC Performance'),
+            category: 'GSC Performance',
             status: 'No Data',
             message: 'Keine Performance-Daten für die letzten 7 Tage gefunden',
             details: 'Möglicherweise ist die Website noch zu neu in der GSC'
           });
         }
-      } else { 
+      } else {
         console.log('⚠️ GSC-Verification Problem - Keine Daten erhalten');
         this.verificationResults.push({
-          category: 'Google Search Console'),
+          category: 'Google Search Console',
           status: 'Error',
           message: 'Konnte keine GSC-Daten abrufen',
           details: 'Bitte prüfen Sie die GSC-Berechtigungen und -Konfiguration'
@@ -577,7 +577,7 @@ class LiveWebsiteVerification {
     } catch (error) {
       console.error('❌ GSC API-Fehler:', error.message);
       this.verificationResults.push({
-        category: 'Google Search Console'),
+        category: 'Google Search Console',
         status: 'Error',
         message: 'GSC API-Fehler aufgetreten',
         details: error.message
@@ -663,22 +663,22 @@ class LiveWebsiteVerification {
 
     console.log('\n🎯 FINAL VERIFICATION SUMMARY:');
     console.log('==============================');
-    console.log(`🏆 Overall Score: $${overallScore}% (${report.overallScore.status})`);
-    console.log(`✅ Passed Checks: $${overallPassed}/${overallTotal}`);
+    console.log(`🏆 Overall Score: ${overallScore}% (${report.overallScore.status})`);
+    console.log(`✅ Passed Checks: ${overallPassed}/${overallTotal}`);
 
     console.log('\n📊 Category Scores:');
     Object.entries(categoryScores).forEach(([category, score]) => {
-      console.log(`   $${category}: ${score.percentage}% (${score.passed}/${score.total})`);
+      console.log(`   ${category}: ${score.percentage}% (${score.passed}/${score.total})`);
     });
 
-    if (overallScore >= 85) { 
+    if (overallScore >= 85) {
       console.log('\n🎉 WEBSITE VERIFICATION: EXCELLENT!');
       console.log('===================================');
       console.log('✅ Critical issues have been resolved');
       console.log('✅ Website should display correctly');
       console.log('✅ Graphics and layout problems fixed');
       console.log('🚀 Burnitoken.com is ready for production!');
-    } else { 
+    } else {
       console.log('\n⚠️  WEBSITE VERIFICATION: NEEDS ATTENTION');
       console.log('=========================================');
       console.log('📋 Some issues may still need manual review');
@@ -717,7 +717,7 @@ module.exports = {
 };
 
 // Direkter Start wenn Datei ausgeführt wird
-if (require.main === module) { 
+if (require.main === module) {
   runLiveVerification().catch(console.error);
 }
 

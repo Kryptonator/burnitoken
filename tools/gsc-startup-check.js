@@ -20,9 +20,9 @@ function scanHtmlFiles(baseDir) {
       files.forEach(file => {
         const fullPath = path.join(dir, file);
         
-        if (fs.statSync(fullPath).isDirectory() && !fullPath.includes('node_modules')) { 
+        if (fs.statSync(fullPath).isDirectory() && !fullPath.includes('node_modules')) {
           walk(fullPath);
-        } else if (file.endsWith('.html') || file.endsWith('.htm')) { 
+        } else if (file.endsWith('.html') || file.endsWith('.htm')) {
           htmlFiles.push(fullPath);
         }
       });
@@ -40,14 +40,14 @@ function checkForNoindexTags() {
     try {
       const content = fs.readFileSync(file, 'utf8');
       
-      if (content.match(/<meta[^>]*noindex/i)) { 
+      if (content.match(/<meta[^>]*noindex/i)) {
         indexingIssues.push({
-          file),
+          file,
           type: 'noindex',
           content: content.match(/<meta[^>]*noindex[^>]*>/i)[0]
         });
       }    } catch (err) {
-      console.error(`Fehler beim Lesen von $${file}:`, err.message);
+      console.error(`Fehler beim Lesen von ${file}:`, err.message);
     }
   });
 }
@@ -57,11 +57,11 @@ async function main() {
   scanHtmlFiles('.');
   checkForNoindexTags();
   
-  if (indexingIssues.length > 0) { 
+  if (indexingIssues.length > 0) {
     console.log('\n⚠️ ACHTUNG: Es wurden ' + indexingIssues.length + ' Indexierungsprobleme gefunden!');
     console.log('   Bitte führen Sie die Task "🚨 Fix GSC Indexierung (noindex entfernen)" aus.');
     console.log('   Ohne Behebung wird Ihre Website nicht in Google angezeigt.');
-  } else { 
+  } else {
     console.log('✅ Keine Indexierungsprobleme gefunden. Website kann indexiert werden.');
   }
 }
