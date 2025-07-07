@@ -10,18 +10,25 @@ const path = require('path');
 const { execSync } = require('child_process');
 const { promisify } = require('util');
 const exec = promisify(require('child_process').exec);
+const { Octokit } = require('octokit');
+require('dotenv').config();
 
 // Konfiguration
 const config = {
   tools: {
     snyk: true,
-    dependabot: true
+    dependabot: true,
   },
   paths: {
     dependabotConfig: path.join(__dirname, '..', '.github', 'dependabot.yml'),
-    snykConfig: path.join(__dirname, '..', '.snyk')
+    snykConfig: path.join(__dirname, '..', '.snyk'),
+    statusFile: path.join(__dirname, 'dependency-security-status.json'),
   },
-  scanFrequency: 'weekly'
+  scanFrequency: 'weekly',
+  github: {
+    repo: process.env.GITHUB_REPO || 'Kryptonator/burnitoken',
+    token: process.env.GITHUB_TOKEN,
+  },
 };
 
 // Farben für die Konsole
@@ -32,19 +39,27 @@ const colors = {
   yellow: '\x1b[33m',
   blue: '\x1b[34m',
   magenta: '\x1b[35m',
-  cyan: '\x1b[36m'
+  cyan: '\x1b[36m',
 };
+
+let octokit;
+if (config.github.token) {
+  octokit = new Octokit({ auth: config.github.token });
+}
 
 /**
  * Hauptfunktion
  */
-async function main() {
+async function main(silentMode = false) {
   // Überprüfe, ob im Silent-Mode ausgeführt
-  const silentMode = process.argv.includes('--silent');
-  
+  silentMode = process.argv.includes('--silent');
+
   if (!silentMode) {
     console.log(`${colors.cyan}🔒 Dependency Security Manager wird gestartet...${colors.reset}`);
     console.log(`${colors.blue}📅 Startzeit: ${new Date().toLocaleString('de-DE')}${colors.reset}\n`);
+    if (!octokit) {
+      console.log(`${colors.yellow}⚠️ GITHUB_TOKEN nicht gefunden. Kann Dependabot PRs nicht prüfen. Bitte .env-Datei anlegen.${colors.reset}`);
+    }
   }
 
   // Prüfe, ob Tools installiert sind
@@ -57,25 +72,23 @@ async function main() {
   if (!silentMode) {
     printSummary(status);
   }
-  
+
   // Im Silent-Mode Statusdaten speichern
   if (silentMode) {
     const statusData = {
       timestamp: new Date().toISOString(),
       dependabotConfigured: status.dependabot.configured,
+      dependabotPullRequests: status.dependabot.pullRequests,
       snykConfigured: status.snyk.configured,
-      vulnerabilities: status.snyk.vulnerabilities
+      vulnerabilities: status.snyk.vulnerabilities,
     };
-    
+
     try {
-      fs.writeFileSync(
-        path.join(__dirname, 'dependency-security-status.json'), 
-        JSON.stringify(statusData, null, 2)
-      );
+      fs.writeFileSync(config.paths.statusFile, JSON.stringify(statusData, null, 2));
     } catch (error) {
       // Silent error handling im Silent-Mode
     }
-    
+
     // Kritische Sicherheitsprobleme trotz Silent-Mode melden
     const criticalIssues = status.snyk.vulnerabilities.high;
     if (criticalIssues > 0) {
@@ -133,28 +146,47 @@ async function checkStatus(silentMode = false) {
   if (!silentMode) {
     console.log(`${colors.blue}🔍 Prüfe Security-Status...${colors.reset}`);
   }
-  
+
   const status = {
     dependabot: { configured: false, pullRequests: 0 },
-    snyk: { configured: false, vulnerabilities: { high: 0, medium: 0, low: 0 } }
+    snyk: { configured: false, vulnerabilities: { high: 0, medium: 0, low: 0 } },
   };
+
   // Dependabot prüfen
-  if (config.tools.dependabot && fs.existsSync(config.paths.dependabotConfig)) {
-    status.dependabot.configured = true;
-    
-    if (!silentMode) {
-      console.log(`   ${colors.green}✅ Dependabot ist konfiguriert${colors.reset}`);
-      
-      try {
-        // Versuche, offene Pull Requests zu zählen (vereinfacht)
-        console.log(`   ${colors.blue}ℹ️ Prüfe GitHub API für offene Dependabot PRs...${colors.reset}`);
-      } catch (error) {
-        console.log(`   ${colors.yellow}⚠️ Konnte keine GitHub API-Abfrage durchführen${colors.reset}`);
+  if (config.tools.dependabot) {
+    status.dependabot.configured = fs.existsSync(config.paths.dependabotConfig);
+    if (status.dependabot.configured) {
+      if (!silentMode) {
+        console.log(`   ${colors.green}✅ Dependabot ist konfiguriert${colors.reset}`);
+        if (octokit) {
+          process.stdout.write(`   ${colors.blue}ℹ️  Prüfe GitHub API für offene Dependabot PRs... ${colors.reset}`);
+          try {
+            const [owner, repo] = config.github.repo.split('/');
+            const prs = await octokit.pulls.list({
+              owner,
+              repo,
+              state: 'open',
+              head: 'dependabot',
+            });
+            status.dependabot.pullRequests = prs.data.length;
+            process.stdout.write(`${colors.green}${prs.data.length} gefunden${colors.reset}\n`);
+          } catch (error) {
+            process.stdout.write(`${colors.red}Fehler${colors.reset}\n`);
+            if (!silentMode) console.log(`   ${colors.red}   Fehler beim Abrufen von Dependabot PRs: ${error.message}${colors.reset}`);
+            const todoMessage = `Fehler beim Abrufen von Dependabot PRs: ${error.message}`;
+            const todoPath = path.join(__dirname, '..', '.todos', `${new Date().toISOString().replace(/:/g, '-')}-fehler-beim-abrufen-von-dependabot-prs.todo`);
+            if (!fs.existsSync(path.dirname(todoPath))) fs.mkdirSync(path.dirname(todoPath), { recursive: true });
+            fs.writeFileSync(todoPath, todoMessage);
+          }
+        } else if (!silentMode) {
+          console.log(`   ${colors.yellow}⚠️ GitHub-Token fehlt, kann Pull Requests nicht prüfen.${colors.reset}`);
+        }
       }
+    } else if (!silentMode) {
+      console.log(`   ${colors.yellow}⚠️ Dependabot ist nicht konfiguriert${colors.reset}`);
     }
-  } else if (config.tools.dependabot && !silentMode) {
-    console.log(`   ${colors.yellow}⚠️ Dependabot ist nicht konfiguriert${colors.reset}`);
   }
+
   // Snyk prüfen
   if (config.tools.snyk) {
     try {
@@ -272,7 +304,21 @@ function printSummary(status) {
 }
 
 // Startet das Skript
-main().catch(error => {
-  console.error(`${colors.red}⛔ Fehler: ${error.message}${colors.reset}`);
-  process.exit(1);
-});
+if (process.argv.includes('--watch')) {
+  console.log(`${colors.cyan}🔒 Dependency Security Manager startet im Überwachungsmodus...${colors.reset}`);
+  console.log(`${colors.blue}   Nächste Prüfung in 30 Minuten.${colors.reset}`);
+  
+  // Führe den ersten Check sofort aus (im Silent-Mode, um die Konsole nicht vollzuspammen)
+  main(true);
+
+  // Richte den Intervall für zukünftige Prüfungen ein
+  setInterval(() => {
+    console.log(`\n${colors.blue}🔄 Führe periodische Sicherheitsprüfung durch... (${new Date().toLocaleString('de-DE')})${colors.reset}`);
+    main(true); // Führe die Prüfung im Silent-Mode aus
+  }, 1800000); // 30 Minuten
+} else {
+  main().catch(error => {
+    console.error(`${colors.red}⛔ Fehler: ${error.message}${colors.reset}`);
+    process.exit(1);
+  });
+}
