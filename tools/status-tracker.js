@@ -1,10 +1,10 @@
 // tools/status-tracker.js
 /**
  * Status Tracker
- *
+ * 
  * Speichert und liest Zeitstempel für erfolgreiche Health-Checks und andere Tasks.
  * Ermöglicht detaillierte Statusanzeigen (z.B. "Zuletzt geprüft vor X Minuten").
- *
+ * 
  * Erstellt: 2025-06-26
  */
 
@@ -18,9 +18,9 @@ const STATUS_FILE = path.join(STATUS_DIR, 'check-timestamps.json');
  * Stellt sicher, dass das .status-Verzeichnis existiert.
  */
 function ensureStatusDir() {
-  if (!fs.existsSync(STATUS_DIR)) { 
-    fs.mkdirSync(STATUS_DIR, { recursive: true });
-  }
+    if (!fs.existsSync(STATUS_DIR)) {
+        fs.mkdirSync(STATUS_DIR, { recursive: true });
+    }
 }
 
 /**
@@ -28,17 +28,17 @@ function ensureStatusDir() {
  * @returns {Object} Das Status-Objekt.
  */
 function readStatus() {
-  ensureStatusDir();
-  if (!fs.existsSync(STATUS_FILE)) { 
-    return {};
-  }
-  try {
-    const data = fs.readFileSync(STATUS_FILE, 'utf8');
-    return JSON.parse(data);
-  } catch (error) {
-    console.error('Fehler beim Lesen der Status-Datei:', error);
-    return {};
-  }
+    ensureStatusDir();
+    if (!fs.existsSync(STATUS_FILE)) {
+        return {};
+    }
+    try {
+        const data = fs.readFileSync(STATUS_FILE, 'utf8');
+        return JSON.parse(data);
+    } catch (error) {
+        console.error('Fehler beim Lesen der Status-Datei:', error);
+        return {};
+    }
 }
 
 /**
@@ -46,12 +46,12 @@ function readStatus() {
  * @param {Object} statusData - Das zu schreibende Status-Objekt.
  */
 function writeStatus(statusData) {
-  ensureStatusDir();
-  try {
-    fs.writeFileSync(STATUS_FILE, JSON.stringify(statusData, null, 2), 'utf8');
-  } catch (error) {
-    console.error('Fehler beim Schreiben der Status-Datei:', error);
-  }
+    ensureStatusDir();
+    try {
+        fs.writeFileSync(STATUS_FILE, JSON.stringify(statusData, null, 2), 'utf8');
+    } catch (error) {
+        console.error('Fehler beim Schreiben der Status-Datei:', error);
+    }
 }
 
 /**
@@ -61,28 +61,27 @@ function writeStatus(statusData) {
  * @param {string} [message] - Die Erfolgsmeldung.
  */
 function recordCheckSuccess(checkId, checkName, message) {
-  if (!checkId) return;
-  const status = readStatus();
-
-  // Alter Aufruf: nur checkName (jetzt checkId)
-  if (!checkName && !message) { 
-    status[checkId] = {
-      status: 'success',
-      lastSuccess: new Date().toISOString(),
-    };
-    console.log(`✅ Zeitstempel für '$${checkId}' erfolgreich gespeichert.`);
-  } else { 
-    // Neuer Aufruf mit mehr Details
-    status[checkId] = {
-      name: checkName,
-      status: 'success',
-      message: message,
-      lastCheck: new Date().toISOString(),
-    };
-    // console.log(`✅ Status für '$${checkName}' (success) erfolgreich gespeichert.`);
-  }
-
-  writeStatus(status);
+    if (!checkId) return;
+    const status = readStatus();
+    
+    // Alter Aufruf: nur checkName (jetzt checkId)
+    if (!checkName && !message) {
+        status[checkId] = {
+            status: 'success',
+            lastSuccess: new Date().toISOString()
+        };
+        console.log(`✅ Zeitstempel für '${checkId}' erfolgreich gespeichert.`);
+    } else { // Neuer Aufruf mit mehr Details
+        status[checkId] = {
+            name: checkName,
+            status: 'success',
+            message: message,
+            lastCheck: new Date().toISOString(),
+        };
+        // console.log(`✅ Status für '${checkName}' (success) erfolgreich gespeichert.`);
+    }
+    
+    writeStatus(status);
 }
 
 /**
@@ -93,17 +92,17 @@ function recordCheckSuccess(checkId, checkName, message) {
  * @param {string} recommendation - Die Handlungsempfehlung.
  */
 function recordCheckError(checkId, checkName, errorMessage, recommendation) {
-  if (!checkId || !checkName) return;
-  const status = readStatus();
-  status[checkId] = {
-    name: checkName,
-    status: 'error',
-    message: errorMessage,
-    recommendation: recommendation,
-    lastCheck: new Date().toISOString(),
-  };
-  // console.log(`❌ Status für '$${checkName}' (error) erfolgreich gespeichert.`);
-  writeStatus(status);
+    if (!checkId || !checkName) return;
+    const status = readStatus();
+    status[checkId] = {
+        name: checkName,
+        status: 'error',
+        message: errorMessage,
+        recommendation: recommendation,
+        lastCheck: new Date().toISOString(),
+    };
+    // console.log(`❌ Status für '${checkName}' (error) erfolgreich gespeichert.`);
+    writeStatus(status);
 }
 
 /**
@@ -112,8 +111,8 @@ function recordCheckError(checkId, checkName, errorMessage, recommendation) {
  * @returns {string|null} Der ISO-Zeitstempel oder null, wenn nicht vorhanden.
  */
 function getLastSuccess(checkName) {
-  const status = readStatus();
-  return status[checkName] ? status[checkName].lastSuccess : null;
+    const status = readStatus();
+    return status[checkName] ? status[checkName].lastSuccess : null;
 }
 
 /**
@@ -122,25 +121,25 @@ function getLastSuccess(checkName) {
  * @returns {string} Eine menschenlesbare Zeitangabe (z.B. "vor 5 Minuten").
  */
 function getTimeSinceLastSuccess(checkName) {
-  const lastSuccess = getLastSuccess(checkName);
-  if (!lastSuccess) { 
-    return 'nie';
-  }
-  const now = new Date();
-  const lastCheckDate = new Date(lastSuccess);
-  const diffSeconds = Math.floor((now - lastCheckDate) / 1000);
+    const lastSuccess = getLastSuccess(checkName);
+    if (!lastSuccess) {
+        return 'nie';
+    }
+    const now = new Date();
+    const lastCheckDate = new Date(lastSuccess);
+    const diffSeconds = Math.floor((now - lastCheckDate) / 1000);
 
-  if (diffSeconds < 60) return `vor $${diffSeconds} Sekunden`;
-  if (diffSeconds < 3600) return `vor ${Math.floor(diffSeconds / 60)} Minuten`;
-  if (diffSeconds < 86400) return `vor ${Math.floor(diffSeconds / 3600)} Stunden`;
-  return `vor ${Math.floor(diffSeconds / 86400)} Tagen`;
+    if (diffSeconds < 60) return `vor ${diffSeconds} Sekunden`;
+    if (diffSeconds < 3600) return `vor ${Math.floor(diffSeconds / 60)} Minuten`;
+    if (diffSeconds < 86400) return `vor ${Math.floor(diffSeconds / 3600)} Stunden`;
+    return `vor ${Math.floor(diffSeconds / 86400)} Tagen`;
 }
 
 module.exports = {
-  readStatus,
-  writeStatus,
-  recordCheckSuccess,
-  recordCheckError,
-  getLastSuccess,
-  getTimeSinceLastSuccess,
+    readStatus,
+    writeStatus,
+    recordCheckSuccess,
+    recordCheckError,
+    getLastSuccess,
+    getTimeSinceLastSuccess,
 };

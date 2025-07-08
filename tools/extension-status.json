@@ -1,12 +1,12 @@
 {
-  "timestamp": "2025-07-05T22:34:51.172Z",
+  "timestamp": "2025-07-08T18:06:36.403Z",
   "summary": {
     "extensions": {
-      "total": 0,
-      "active": 0,
-      "inactive": 0,
-      "required": 0,
-      "requiredActive": 0
+      "total": 20,
+      "active": 10,
+      "inactive": 2,
+      "required": 8,
+      "requiredActive": 7
     },
     "services": {
       "total": 10,
@@ -16,7 +16,8 @@
     "integrations": {
       "gscConnected": true,
       "aiServicesActive": true,
-      "tailwindActive": false
+      "tailwindActive": false,
+      "playwrightActive": true
     },
     "tasks": {
       "autoStartConfigured": true,
@@ -24,7 +25,80 @@
       "gscMonitor": true
     }
   },
-  "extensions": [],
+  "extensions": [
+    {
+      "id": "github.copilot",
+      "name": "copilot",
+      "isActive": true,
+      "isRequired": true
+    },
+    {
+      "id": "github.copilot-chat",
+      "name": "copilot-chat",
+      "isActive": true,
+      "isRequired": true
+    },
+    {
+      "id": "eamodio.gitlens",
+      "name": "gitlens",
+      "isActive": true,
+      "isRequired": true
+    },
+    {
+      "id": "esbenp.prettier-vscode",
+      "name": "prettier-vscode",
+      "isActive": true,
+      "isRequired": true
+    },
+    {
+      "id": "dbaeumer.vscode-eslint",
+      "name": "vscode-eslint",
+      "isActive": true,
+      "isRequired": false
+    },
+    {
+      "id": "bradlc.vscode-tailwindcss",
+      "name": "vscode-tailwindcss",
+      "isActive": true,
+      "isRequired": true
+    },
+    {
+      "id": "ritwickdey.liveserver",
+      "name": "liveserver",
+      "isActive": true,
+      "isRequired": true
+    },
+    {
+      "id": "ms-playwright.playwright",
+      "name": "playwright",
+      "isActive": true,
+      "isRequired": true
+    },
+    {
+      "id": "streetsidesoftware.code-spell-checker",
+      "name": "code-spell-checker",
+      "isActive": true,
+      "isRequired": false
+    },
+    {
+      "id": "formulahendry.auto-close-tag",
+      "name": "auto-close-tag",
+      "isActive": false,
+      "isRequired": false
+    },
+    {
+      "id": "formulahendry.auto-rename-tag",
+      "name": "auto-rename-tag",
+      "isActive": false,
+      "isRequired": false
+    },
+    {
+      "id": "ms-vscode.powershell",
+      "name": "powershell",
+      "isActive": true,
+      "isRequired": false
+    }
+  ],
   "services": [
     {
       "name": "extension-validator",
@@ -63,7 +137,7 @@
       "status": "active",
       "connected": true,
       "authValid": true,
-      "lastCheck": "2025-07-05T20:57:23.301Z"
+      "lastCheck": "2025-07-08T17:24:45.914Z"
     },
     {
       "name": "gsc-auth",
@@ -93,7 +167,7 @@
   "recommendations": [
     {
       "priority": "high",
-      "message": "Installiere fehlende erforderliche Extensions: github.copilot, github.copilot-chat, eamodio.gitlens, esbenp.prettier-vscode, bradlc.vscode-tailwindcss, ritwickdey.liveserver, maxvanderschee.web-accessibility, ms-playwright.playwright",
+      "message": "Installiere fehlende erforderliche Extensions: maxvanderschee.web-accessibility",
       "action": "extension-install"
     }
   ]

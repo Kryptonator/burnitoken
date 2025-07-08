@@ -1,7 +1,7 @@
 {
   "website-health-check": {
     "status": "success",
-    "lastSuccess": "2025-07-07T06:12:56.712Z"
+    "lastSuccess": "2025-07-08T20:17:26.286Z"
   },
   "ai-auth": {
     "name": "KI Authentifizierungs-Check",
@@ -11,11 +11,11 @@
   },
   "gsc-integration-monitor": {
     "status": "success",
-    "lastSuccess": "2025-07-07T06:13:34.549Z"
+    "lastSuccess": "2025-07-08T20:18:16.447Z"
   },
   "deployment-check": {
     "status": "success",
-    "lastSuccess": "2025-07-07T06:13:36.744Z"
+    "lastSuccess": "2025-07-08T20:18:19.051Z"
   },
   "dependabot-monitor": {
     "status": "success",
