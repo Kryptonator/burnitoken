@@ -1,0 +1,112 @@
+name: SSL Certificate Health Check
+
+on:
+  schedule:
+    # Run daily at 10:00 UTC to check SSL certificate status
+    - cron: '0 10 * * *'
+  workflow_dispatch:
+    # Allow manual triggering
+
+jobs:
+  ssl-health-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Run SSL Certificate Health Check
+      id: ssl-check
+      run: |
+        echo "Running SSL certificate health check..."
+        cd tools
+        node website-health-check.js > ssl-check.log 2>&1 || true
+        
+        # Check if critical SSL issues were found
+        if grep -q "E_SSL_CERT_EXPIRED\|E_SSL_CERT_EXPIRING_SOON" ssl-check.log; then
+          echo "ssl-issues=true" >> $GITHUB_OUTPUT
+          echo "SSL certificate issues detected!"
+          cat ssl-check.log
+        else
+          echo "ssl-issues=false" >> $GITHUB_OUTPUT
+          echo "SSL certificates are healthy"
+        fi
+        
+    - name: Create Issue on SSL Problems
+      if: steps.ssl-check.outputs.ssl-issues == 'true'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          // Read the SSL check log
+          const fs = require('fs');
+          const logContent = fs.readFileSync('tools/ssl-check.log', 'utf8');
+          
+          // Extract error details if available
+          const errorMatch = logContent.match(/\{[\s\S]*"errorCode":\s*"E_SSL_CERT_[^"]*"[\s\S]*?\}/);
+          const errorDetails = errorMatch ? errorMatch[0] : 'SSL certificate issue detected - see logs';
+          
+          const issueTitle = '🚨 [Automatisch erkannt] SSL-Zertifikat Problem';
+          const issueBody = `**Automatische SSL-Zertifikat Überprüfung hat ein Problem erkannt:**
+
+\`\`\`json
+${errorDetails}
+\`\`\`
+
+**Zeitpunkt:** ${new Date().toISOString()}
+
+**Empfohlene Aktionen:**
+1. SSL-Zertifikat Status überprüfen
+2. Domain DNS-Konfiguration validieren
+3. Zertifikat erneuern falls abgelaufen
+
+**Vollständiger Log:**
+\`\`\`
+${logContent}
+\`\`\`
+
+---
+*Dieses Issue wurde automatisch vom SSL-Monitoring erstellt.*`;
+
+          // Check if there's already an open SSL issue
+          const existingIssues = await github.rest.issues.listForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            state: 'open',
+            labels: 'ssl-monitoring'
+          });
+          
+          if (existingIssues.data.length === 0) {
+            // Create new issue
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: issueTitle,
+              body: issueBody,
+              labels: ['ssl-monitoring', 'critical', 'automated']
+            });
+            console.log('Created SSL monitoring issue');
+          } else {
+            // Update existing issue
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: existingIssues.data[0].number,
+              body: `**SSL-Monitoring Update - ${new Date().toISOString()}**\n\n${issueBody}`
+            });
+            console.log('Updated existing SSL monitoring issue');
+          }
+          
+    - name: Upload SSL Check Report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: ssl-health-report
+        path: |
+          tools/ssl-check.log
+          website-health-report.json
+        retention-days: 30
