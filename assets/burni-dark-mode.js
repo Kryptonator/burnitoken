@@ -62,7 +62,7 @@ class BurniDarkModeManager {
   }
 
   detectSystemPreference() {
-    if (window.matchMedia && !localStorage.getItem(this.storageKey)) { 
+    if (window.matchMedia && !localStorage.getItem(this.storageKey)) {
       this.systemMediaMatcher = window.matchMedia('(prefers-color-scheme: dark)');
       this.isDarkMode = this.systemMediaMatcher.matches;
       console.log('🎨 System-Präferenz erkannt:', this.isDarkMode ? 'Dark' : 'Light');
@@ -143,7 +143,7 @@ class BurniDarkModeManager {
   setupKeyboardShortcuts() {
     window.addEventListener('keydown', (e) => {
       // Strg + Alt + D
-      if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'd') { 
+      if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'd') {
         this.toggle();
       }
     });

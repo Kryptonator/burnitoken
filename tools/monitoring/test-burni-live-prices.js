@@ -15,7 +15,7 @@ window.TestBurniLivePrices = {
 
 // Auto-initialize
 document.addEventListener('DOMContentLoaded', function () {
-  if (window.TestBurniLivePrices) { 
+  if (window.TestBurniLivePrices) {
     window.TestBurniLivePrices.init();
   }
 });

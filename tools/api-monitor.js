@@ -46,9 +46,9 @@ async function checkHttp(url, expect) {
   try {
     const res = await fetch(url, { timeout: 8000 });
     if (expect && expect.status && res.status !== expect.status) return false;
-    if (expect && expect.json) { 
+    if (expect && expect.json) {
       const data = await res.json();
-      if (expect.fields) { 
+      if (expect.fields) {
         for (const field of expect.fields) {
           const value = field.split('.').reduce((o, k) => (o || {})[k], data);
           if (typeof value === 'undefined') return false;
@@ -93,7 +93,7 @@ async function checkWs(url) {
     if (!ok) allOk = false;
   }
   fs.writeFileSync('API_STATUS.md', report);
-  if (!allOk) { 
+  if (!allOk) {
     console.error('Mindestens eine API ist nicht erreichbar oder liefert unerwartete Daten!');
     process.exit(1);
   }

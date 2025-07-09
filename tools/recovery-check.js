@@ -22,7 +22,7 @@ for (const file of files) {
 }
 
 fs.writeFileSync('RECOVERY_STATUS.md', report);
-if (!allOk) { 
+if (!allOk) {
   console.error('Mindestens eine Recovery/Backup-Datei fehlt oder ist nicht lesbar!');
   process.exit(1);
 }

@@ -7,9 +7,9 @@ const TODO_DIR = path.join(__dirname, '..', '.todos');
  * Stellt sicher, dass das .todos-Verzeichnis existiert.
  */
 function ensureTodoDir() {
-    if (!fs.existsSync(TODO_DIR)) {
-        fs.mkdirSync(TODO_DIR, { recursive: true });
-    }
+  if (!fs.existsSync(TODO_DIR)) {
+    fs.mkdirSync(TODO_DIR, { recursive: true });
+  }
 }
 
 /**
@@ -20,14 +20,17 @@ function ensureTodoDir() {
  * @returns {string} - Der Pfad zur erstellten ToDo-Datei.
  */
 function createTodo(title, details, source = 'System') {
-    ensureTodoDir();
-    
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const sanitizedTitle = title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-    const fileName = `${timestamp}-${sanitizedTitle}.todo`;
-    const filePath = path.join(TODO_DIR, fileName);
+  ensureTodoDir();
 
-    const content = `---
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const sanitizedTitle = title
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '');
+  const fileName = `${timestamp}-${sanitizedTitle}.todo`;
+  const filePath = path.join(TODO_DIR, fileName);
+
+  const content = `---
 Title: ${title}
 Source: ${source}
 Created: ${new Date().toISOString()}
@@ -46,9 +49,9 @@ ${details}
 4.  ToDo als "Done" markieren.
 `;
 
-    fs.writeFileSync(filePath, content, 'utf8');
-    console.log(`✅ ToDo erstellt: ${filePath}`);
-    return filePath;
+  fs.writeFileSync(filePath, content, 'utf8');
+  console.log(`✅ ToDo erstellt: ${filePath}`);
+  return filePath;
 }
 
 module.exports = { createTodo };

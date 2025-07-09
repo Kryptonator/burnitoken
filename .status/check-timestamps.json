@@ -1,25 +1,26 @@
 {
   "website-health-check": {
     "status": "success",
-    "lastSuccess": "2025-07-09T14:37:56.922Z"
+    "lastSuccess": "2025-07-09T19:51:57.847Z"
   },
   "ai-auth": {
     "name": "KI Authentifizierungs-Check",
-    "status": "success",
-    "message": "Alle erforderlichen KI-API-Schlüssel sind in der .env-Datei konfiguriert.",
-    "lastCheck": "2025-06-30T18:22:59.054Z"
+    "status": "error",
+    "message": "Fehlende KI-API-Schlüssel in der .env-Datei: OPENAI_API_KEY",
+    "recommendation": "Ergänzen Sie die fehlenden API-Schlüssel in der .env-Datei.",
+    "lastCheck": "2025-07-09T19:51:52.145Z"
   },
   "gsc-integration-monitor": {
     "status": "success",
-    "lastSuccess": "2025-07-09T14:38:24.360Z"
+    "lastSuccess": "2025-07-09T19:52:41.871Z"
   },
   "deployment-check": {
     "status": "success",
-    "lastSuccess": "2025-07-09T14:38:26.114Z"
+    "lastSuccess": "2025-07-09T19:52:44.894Z"
   },
   "dependabot-monitor": {
     "status": "success",
-    "lastSuccess": "2025-07-09T14:38:48.999Z"
+    "lastSuccess": "2025-07-09T19:53:07.949Z"
   },
   "extension-health-check": {
     "status": "success",

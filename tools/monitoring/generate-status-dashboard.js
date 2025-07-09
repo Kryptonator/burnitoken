@@ -14,18 +14,18 @@ const MOCK_DATA = {
     domains: [
       { name: 'burnitoken.website', status: '✅ Online', code: 200 },
       { name: 'kryptonator.github.io', status: '✅ Online', code: 200 },
-    ]
+    ],
   },
   lighthouse: {
     status: 'GOOD',
     performance: 95,
     accessibility: 100,
-    seo: 98
+    seo: 98,
   },
   security: {
     status: 'OK',
-    details: 'Keine kritischen Sicherheitsprobleme gefunden.'
-  }
+    details: 'Keine kritischen Sicherheitsprobleme gefunden.',
+  },
 };
 
 function generateHTML(data) {
@@ -57,7 +57,7 @@ function generateHTML(data) {
       <h2>Konnektivität</h2>
       <p class="status-ok">Status: ${data.connectivity.status}</p>
       <ul>
-        ${data.connectivity.domains.map(d => `<li>${d.name}: <strong>${d.status} (${d.code})</strong></li>`).join('')}
+        ${data.connectivity.domains.map((d) => `<li>${d.name}: <strong>${d.status} (${d.code})</strong></li>`).join('')}
       </ul>
     </div>
 

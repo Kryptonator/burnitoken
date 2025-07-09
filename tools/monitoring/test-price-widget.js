@@ -15,7 +15,7 @@ window.TestPriceWidget = {
 
 // Auto-initialize
 document.addEventListener('DOMContentLoaded', function () {
-  if (window.TestPriceWidget) { 
+  if (window.TestPriceWidget) {
     window.TestPriceWidget.init();
   }
 });

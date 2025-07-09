@@ -42,12 +42,5 @@
             "github.copilot-chat",
             "ms-edgedevtools.vscode-edge-devtools"
         ]
-    },
-    "launch": {
-        "version": "0.2.0",
-        "configurations": [
-            
-
-        ]
     }
 }

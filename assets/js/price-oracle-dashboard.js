@@ -12,7 +12,7 @@ class PriceOracleDashboard {
 
     // Keyboard shortcut: Ctrl+Shift+P
     document.addEventListener('keydown', (e) => {
-      if (e.ctrlKey && e.shiftKey && e.key === 'P') { 
+      if (e.ctrlKey && e.shiftKey && e.key === 'P') {
         e.preventDefault();
         this.toggle();
       }
@@ -25,9 +25,9 @@ class PriceOracleDashboard {
   }
 
   toggle() {
-    if (this.isVisible) { 
+    if (this.isVisible) {
       this.hide();
-    } else { 
+    } else {
       this.show();
     }
   }
@@ -50,12 +50,12 @@ class PriceOracleDashboard {
   hide() {
     if (!this.isVisible) return;
 
-    if (this.dashboardElement) { 
+    if (this.dashboardElement) {
       this.dashboardElement.remove();
       this.dashboardElement = null;
     }
 
-    if (this.refreshInterval) { 
+    if (this.refreshInterval) {
       clearInterval(this.refreshInterval);
       this.refreshInterval = null;
     }
@@ -544,7 +544,7 @@ class PriceOracleDashboard {
 
   // Quick Actions
   async forceRefresh() {
-    if (window.xrpOracle) { 
+    if (window.xrpOracle) {
       try {
         await window.xrpOracle.forceRefresh();
         console.log('✅ Force refresh completed');
@@ -555,7 +555,7 @@ class PriceOracleDashboard {
   }
 
   clearCache() {
-    if (window.xrpOracle) { 
+    if (window.xrpOracle) {
       window.xrpOracle.cache.clear();
       console.log('🗑️ Cache cleared');
     }
@@ -603,7 +603,7 @@ class PriceOracleDashboard {
     console.warn('🚨 Oracle Alert:', detail);
 
     // You could add visual indicators, notifications, etc.
-    if (this.isVisible) { 
+    if (this.isVisible) {
       // Flash the dashboard or show an alert
       this.updateDashboard();
     }

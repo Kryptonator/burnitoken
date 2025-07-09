@@ -4,7 +4,7 @@ class PriceOracleDashboard {
     this.refreshInterval = null;
     this.dashboardElement = null;
     document.addEventListener('keydown', (e) => {
-      if (e.ctrlKey && e.shiftKey && e.key === 'P') { 
+      if (e.ctrlKey && e.shiftKey && e.key === 'P') {
         e.preventDefault();
         this.toggle();
       }
@@ -14,9 +14,9 @@ class PriceOracleDashboard {
     });
   }
   toggle() {
-    if (this.isVisible) { 
+    if (this.isVisible) {
       this.hide();
-    } else { 
+    } else {
       this.show();
     }
   }
@@ -32,11 +32,11 @@ class PriceOracleDashboard {
   }
   hide() {
     if (!this.isVisible) return;
-    if (this.dashboardElement) { 
+    if (this.dashboardElement) {
       this.dashboardElement.remove();
       this.dashboardElement = null;
     }
-    if (this.refreshInterval) { 
+    if (this.refreshInterval) {
       clearInterval(this.refreshInterval);
       this.refreshInterval = null;
     }
@@ -133,7 +133,7 @@ class PriceOracleDashboard {
     ].reverse();
   }
   async forceRefresh() {
-    if (window.xrpOracle) { 
+    if (window.xrpOracle) {
       try {
         await window.xrpOracle.forceRefresh();
         console.log('✅ Force refresh completed');
@@ -143,7 +143,7 @@ class PriceOracleDashboard {
     }
   }
   clearCache() {
-    if (window.xrpOracle) { 
+    if (window.xrpOracle) {
       window.xrpOracle.cache.clear();
       console.log('🗑️ Cache cleared');
     }
@@ -180,7 +180,7 @@ class PriceOracleDashboard {
   }
   handleOracleAlert(detail) {
     console.warn('🚨 Oracle Alert:', detail);
-    if (this.isVisible) { 
+    if (this.isVisible) {
       this.updateDashboard();
     }
   }

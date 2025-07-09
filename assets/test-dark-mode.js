@@ -11,27 +11,27 @@ function testDarkMode() {
   console.log('='.repeat(50));
 
   // 1. Überprüfe, ob BurniDarkModeManager geladen ist
-  if (typeof window.BurniDarkModeManager !== 'undefined') { 
+  if (typeof window.BurniDarkModeManager !== 'undefined') {
     console.log('✅ BurniDarkModeManager Klasse geladen');
-  } else { 
+  } else {
     console.log('❌ BurniDarkModeManager Klasse NICHT geladen');
     return;
   }
 
   // 2. Überprüfe, ob die Instanz existiert
-  if (window.burniDarkMode) { 
+  if (window.burniDarkMode) {
     console.log('✅ burniDarkMode Instanz existiert');
-  } else { 
+  } else {
     console.log('⚠️ burniDarkMode Instanz noch nicht erstellt - erstelle jetzt...');
     window.burniDarkMode = new window.BurniDarkModeManager();
   }
 
   // 3. Überprüfe Toggle-Button
   const toggleButton = document.getElementById('burni-dark-mode-toggle');
-  if (toggleButton) { 
+  if (toggleButton) {
     console.log('✅ Dark Mode Toggle-Button gefunden');
     console.log('📍 Button Position:', toggleButton.style.position || 'CSS-gesteuert');
-  } else { 
+  } else {
     console.log('❌ Dark Mode Toggle-Button NICHT gefunden');
   }
 
@@ -49,7 +49,7 @@ function testDarkMode() {
   // 6. Teste Theme-Wechsel
   console.log('\n🔄 TESTE THEME-WECHSEL...');
 
-  if (window.burniDarkMode) { 
+  if (window.burniDarkMode) {
     const originalTheme = window.burniDarkMode.getCurrentTheme();
     console.log('🎯 Original Theme:', originalTheme);
 
@@ -60,9 +60,9 @@ function testDarkMode() {
       const newTheme = window.burniDarkMode.getCurrentTheme();
       console.log('🎯 Neues Theme:', newTheme);
 
-      if (newTheme !== originalTheme) { 
+      if (newTheme !== originalTheme) {
         console.log('✅ Theme-Wechsel ERFOLGREICH');
-      } else { 
+      } else {
         console.log('❌ Theme-Wechsel FEHLGESCHLAGEN');
       }
 
@@ -89,9 +89,9 @@ function testDarkMode() {
         const finalTheme = window.burniDarkMode.getCurrentTheme();
         console.log('🎯 Finales Theme:', finalTheme);
 
-        if (finalTheme === originalTheme) { 
+        if (finalTheme === originalTheme) {
           console.log('✅ Rückwechsel ERFOLGREICH');
-        } else { 
+        } else {
           console.log('❌ Rückwechsel FEHLGESCHLAGEN');
         }
 
@@ -128,15 +128,15 @@ function testDarkMode() {
   let conflicts = 0;
   conflictingElements.forEach((selector) => {
     const elements = document.querySelectorAll(selector);
-    if (elements.length > 0) { 
+    if (elements.length > 0) {
       console.log(`⚠️ Konflikt gefunden: $${selector} (${elements.length} Elemente)`);
       conflicts++;
     }
   });
 
-  if (conflicts === 0) { 
+  if (conflicts === 0) {
     console.log('✅ Keine Konflikte gefunden');
-  } else { 
+  } else {
     console.log(`❌ $${conflicts} Konflikte gefunden`);
   }
 }

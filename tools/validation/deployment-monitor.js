@@ -32,9 +32,9 @@ class DeploymentMonitor {
           timestamp: new Date().toISOString(),
         };
 
-        if (response.statusCode === 200) { 
+        if (response.statusCode === 200) {
           console.log(`✅ $${name} is ONLINE (${response.statusCode})`);
-        } else { 
+        } else {
           console.log(`⚠️ $${name} returned status ${response.statusCode}`);
         }
 
@@ -87,7 +87,7 @@ class DeploymentMonitor {
     const totalChecks = this.results.checks.length;
 
     this.results.deploymentStatus = successfulChecks > 0 ? 'PARTIAL_SUCCESS' : 'FAILED';
-    if (successfulChecks === totalChecks) { 
+    if (successfulChecks === totalChecks) {
       this.results.deploymentStatus = 'SUCCESS';
     }
 
@@ -100,9 +100,9 @@ class DeploymentMonitor {
     console.log('\n💾 Report saved to: deployment-monitor-report.json');
 
     // Provide recommendations
-    if (this.results.deploymentStatus === 'SUCCESS') { 
+    if (this.results.deploymentStatus === 'SUCCESS') {
       console.log('\n🎉 ALL SYSTEMS OPERATIONAL!');
-    } else { 
+    } else {
       console.log('\n🔧 DEPLOYMENT RECOMMENDATIONS:');
       console.log('1. Check GitHub Actions workflow status');
       console.log('2. Verify GitHub Pages settings');
@@ -115,7 +115,7 @@ class DeploymentMonitor {
 }
 
 // Run monitoring
-if (require.main === module) { 
+if (require.main === module) {
   const monitor = new DeploymentMonitor();
   monitor.runMonitoring().catch(console.error);
 }

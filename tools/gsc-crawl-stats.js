@@ -34,48 +34,50 @@ async function getCrawlStats() {
 
     // Vereinfachte Implementation: Performance-Daten abrufen
     console.log('\n🔍 Frage Performance-Daten ab (als Fallback für Crawling-Daten)...');
-    
+
     const oneWeekAgo = new Date();
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-    
+
     const performanceResponse = await searchconsole.searchanalytics.query({
       siteUrl: SITE_URL,
       requestBody: {
         startDate: oneWeekAgo.toISOString().split('T')[0],
         endDate: new Date().toISOString().split('T')[0],
         dimensions: ['date'],
-        rowLimit: 7
-      }
+        rowLimit: 7,
+      },
     });
-    
+
     console.log('\n📈 WEBSITE-PERFORMANCE DER LETZTEN WOCHE:');
     console.log('------------------------------');
-    
+
     if (!performanceResponse.data?.rows || performanceResponse.data.rows.length === 0) {
       console.log('❓ Keine Performance-Daten für die letzte Woche verfügbar.');
       return;
     }
-    
+
     let totalImpressions = 0;
     let totalClicks = 0;
-    
+
     console.log('Datum      | Impressions | Klicks | CTR    | Position');
     console.log('-----------|-------------|--------|--------|----------');
-    
-    performanceResponse.data.rows.forEach(row => {
+
+    performanceResponse.data.rows.forEach((row) => {
       totalImpressions += row.impressions || 0;
       totalClicks += row.clicks || 0;
       const ctr = row.clicks > 0 && row.impressions > 0 ? (row.clicks / row.impressions) * 100 : 0;
-      
+
       console.log(
-        `${row.keys[0]} | ${String(row.impressions || 0).padEnd(11)} | ${String(row.clicks || 0).padEnd(6)} | ${ctr.toFixed(2).padEnd(6)}% | ${(row.position || 0).toFixed(1)}`
+        `${row.keys[0]} | ${String(row.impressions || 0).padEnd(11)} | ${String(row.clicks || 0).padEnd(6)} | ${ctr.toFixed(2).padEnd(6)}% | ${(row.position || 0).toFixed(1)}`,
       );
     });
-    
+
     console.log('------------------------------');
     const averageCtr = totalImpressions > 0 ? (totalClicks / totalImpressions) * 100 : 0;
-    console.log(`GESAMT     | ${totalImpressions.toString().padEnd(11)} | ${totalClicks.toString().padEnd(6)} | ${averageCtr.toFixed(2)}%`);
-    
+    console.log(
+      `GESAMT     | ${totalImpressions.toString().padEnd(11)} | ${totalClicks.toString().padEnd(6)} | ${averageCtr.toFixed(2)}%`,
+    );
+
     console.log('\n✅ Analyse der Crawling-Statistiken abgeschlossen.');
 
     // Im Test-Modus gibt es eine klare Bestätigung zurück
@@ -92,7 +94,7 @@ async function getCrawlStats() {
 
 // Hauptfunktion ausführen
 if (require.main === module) {
-  getCrawlStats().catch(error => {
+  getCrawlStats().catch((error) => {
     console.error('Unbehandelte Ausnahme:', error);
     process.exit(1);
   });

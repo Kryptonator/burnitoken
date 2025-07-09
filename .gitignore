@@ -95,6 +95,15 @@ temp_*.html
 # Local Netlify folder
 .netlify
 
+# Status- und Recovery-Dateien
+.status/
+.recovery-data/
+status-dashboard.html
+tools/*-status.json
+tools/*-status.md
+change_analysis_report.json
+git_status_summary.log
+
 # Google API Schlüssel und Service Accounts
 tools/gsc-service-account.json
 *-service-account.json

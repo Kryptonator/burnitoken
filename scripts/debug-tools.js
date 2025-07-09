@@ -12,11 +12,11 @@ function inspectError(err) {
     name: err.name,
     stack: err.stack,
   };
-  
+
   if (err.errors) {
     details.errors = err.errors;
   }
-  
+
   if (err.response) {
     details.response = {
       status: err.response.status,
@@ -24,7 +24,7 @@ function inspectError(err) {
       data: err.response.data,
     };
   }
-  
+
   return formatJSON(details);
 }
 
@@ -44,11 +44,11 @@ async function safeExecute(name, fn, stopOnError = false) {
   } catch (error) {
     console.error(`❌ Fehler bei: ${name}`);
     console.error(inspectError(error));
-    
+
     if (stopOnError) {
       throw error;
     }
-    
+
     return null;
   }
 }

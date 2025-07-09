@@ -75,37 +75,48 @@ document.addEventListener('DOMContentLoaded', async () => {
   // --- NEU: Zentrales i18n-Statusmanagement & Event-Handling ---
   let i18nState = {
     lang: 'en', // Standard-Sprache
-    locales: { // Behält die Locale-Mappings für Intl-Formatierung bei
-      en: 'en-US', de: 'de-DE', es: 'es-ES', fr: 'fr-FR', ar: 'ar-SA',
-      bn: 'bn-BD', pt: 'pt-BR', ru: 'ru-RU', ko: 'ko-KR', tr: 'tr-TR',
-      zh: 'zh-CN', hi: 'hi-IN', ja: 'ja-JP', it: 'it-IT',
+    locales: {
+      // Behält die Locale-Mappings für Intl-Formatierung bei
+      en: 'en-US',
+      de: 'de-DE',
+      es: 'es-ES',
+      fr: 'fr-FR',
+      ar: 'ar-SA',
+      bn: 'bn-BD',
+      pt: 'pt-BR',
+      ru: 'ru-RU',
+      ko: 'ko-KR',
+      tr: 'tr-TR',
+      zh: 'zh-CN',
+      hi: 'hi-IN',
+      ja: 'ja-JP',
+      it: 'it-IT',
     },
-    translations: {} // Wird durch das globale Event gefüllt
+    translations: {}, // Wird durch das globale Event gefüllt
   };
 
   // Lauscht auf das globale Sprachwechsel-Event von navigation-language.js
   document.addEventListener('languageSwitched', async (e) => {
     console.log(`Main.js hat Sprachwechsel zu ${e.detail.lang} erkannt.`);
     i18nState.lang = e.detail.lang;
-    
+
     // Greift auf die global gecachten Übersetzungen zu
-    const allTranslations = window.burni_translations || await loadTranslations();
+    const allTranslations = window.burni_translations || (await loadTranslations());
     i18nState.translations = allTranslations[e.detail.lang]?.translation || {};
-    
+
     // Alle sprachabhängigen UI-Teile neu rendern/aktualisieren
     await rerenderDynamicContent();
   });
 
   // Bündelt alle Funktionen, die bei Sprachwechsel neu ausgeführt werden müssen
   async function rerenderDynamicContent() {
-      console.log('Rerendering dynamic content for new language:', i18nState.lang);
-      await updateLivePrices();
-      const schedule = generateSchedule(new Date('2024-07-20'), 1000000, 365);
-      renderScheduleTable(schedule);
-      // Zukünftige sprachabhängige Updates können hier hinzugefügt werden
+    console.log('Rerendering dynamic content for new language:', i18nState.lang);
+    await updateLivePrices();
+    const schedule = generateSchedule(new Date('2024-07-20'), 1000000, 365);
+    renderScheduleTable(schedule);
+    // Zukünftige sprachabhängige Updates können hier hinzugefügt werden
   }
   // --- Ende des neuen i18n-Blocks ---
-
 
   const currentYearElement = document.getElementById('currentYear');
   if (currentYearElement) currentYearElement.textContent = new Date().getFullYear();
@@ -208,7 +219,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   let supplyChartInstance, athAtlChartInstance, scheduleChartInstance;
-  
+
   // ===== ENTFERNT: Veraltetes, lokales i18n-System =====
   // Die Objekte 'locales' und 'translations' wurden in den neuen i18nState-Block oben verschoben oder entfernt.
 
@@ -291,18 +302,35 @@ document.addEventListener('DOMContentLoaded', async () => {
       burniPrice: {
         element: document.getElementById('burniPriceValue'),
         tokenIds: { coingecko: 'burni', coincap: 'burni' }, // Annahme, dass 'burni' die ID ist
-        formatter: (price) => new Intl.NumberFormat(currentLocale, { style: 'currency', currency: 'USD', minimumFractionDigits: 6, maximumFractionDigits: 8 }).format(price)
+        formatter: (price) =>
+          new Intl.NumberFormat(currentLocale, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 6,
+            maximumFractionDigits: 8,
+          }).format(price),
       },
       xrpPrice: {
         element: document.getElementById('xrpPriceValue'),
         tokenIds: { coingecko: 'ripple', coincap: 'xrp' },
-        formatter: (price) => new Intl.NumberFormat(currentLocale, { style: 'currency', currency: 'USD', minimumFractionDigits: 4 }).format(price)
+        formatter: (price) =>
+          new Intl.NumberFormat(currentLocale, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 4,
+          }).format(price),
       },
       xpmPrice: {
         element: document.getElementById('xpmPriceValue'),
         tokenIds: { coingecko: 'xpm', coincap: 'xpm' }, // Annahme, dass 'xpm' die ID ist
-        formatter: (price) => new Intl.NumberFormat(currentLocale, { style: 'currency', currency: 'USD', minimumFractionDigits: 10, maximumFractionDigits: 12 }).format(price)
-      }
+        formatter: (price) =>
+          new Intl.NumberFormat(currentLocale, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 10,
+            maximumFractionDigits: 12,
+          }).format(price),
+      },
     };
 
     // Setze alle Elemente in den Ladezustand
@@ -312,7 +340,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         element.textContent = '...';
       }
     });
-    
+
     let allPricesFetched = true;
 
     // Rufe Preise für jedes Element ab
@@ -333,28 +361,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         allPricesFetched = false;
       }
     }
-    
+
     // Update von Metriken, die von Preisen abhängen (z.B. Supply Chart)
     // HINWEIS: Die Logik für `fetchBurniMetrics` etc. sollte hier ebenfalls integriert werden.
     // Der Einfachheit halber wird dies hier übersprungen, aber in einem realen Szenario
     // würden die Daten hier an die Charts weitergegeben.
-    
+
     const lastUpdatedTimestampElement = document.getElementById('lastUpdatedTimestamp');
     if (lastUpdatedTimestampElement) {
-        lastUpdatedTimestampElement.textContent = new Date().toLocaleString(currentLocale);
+      lastUpdatedTimestampElement.textContent = new Date().toLocaleString(currentLocale);
     }
-    
+
     if (priceErrorMessageElement) {
-        if (allPricesFetched) {
-            priceErrorMessageElement.classList.add('hidden');
-        } else {
-            const errorMsgKey = i18nState.translations.price_error_message || 'Price data currently unavailable.'; // NEU: aus i18nState
-            priceErrorMessageElement.textContent = errorMsgKey;
-            priceErrorMessageElement.classList.remove('hidden');
-        }
+      if (allPricesFetched) {
+        priceErrorMessageElement.classList.add('hidden');
+      } else {
+        const errorMsgKey =
+          i18nState.translations.price_error_message || 'Price data currently unavailable.'; // NEU: aus i18nState
+        priceErrorMessageElement.textContent = errorMsgKey;
+        priceErrorMessageElement.classList.remove('hidden');
+      }
     }
   }
-
 
   async function fetchBurniMetrics() {
     const burniIssuerAddress = 'rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2';
@@ -392,7 +420,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  /* 
+  /*
    * [ENTFERNT] Die veraltete Funktion `fetchLivePrices` wurde vollständig gelöscht,
    * um die Codebasis zu bereinigen. Die Funktionalität wird nun von `updateLivePrices`
    * und dem `PriceOracle` übernommen.
@@ -400,7 +428,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Initialer Ladevorgang (wird durch das 'languageSwitched'-Event bei Seitenstart getriggert)
   console.log('main.js wartet auf das erste languageSwitched-Event zur Initialisierung...');
-
 }); // ENDE DOMContentLoaded
 
 // ===== TRANSLATIONS (DYNAMIC LOAD) =====

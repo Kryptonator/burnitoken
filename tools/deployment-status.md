@@ -1,13 +1,13 @@
 # BurniToken Website Deployment Status
 
-**Zeitpunkt:** 9.7.2025, 16:38:26
+**Zeitpunkt:** 9.7.2025, 21:52:44
 **Status:** ✅ DEPLOYED
 
 ## Zusammenfassung
 
 - **Website aktiv:** ✅ Ja
 - **Status-Code:** 200
-- **Antwortzeit:** 136ms
+- **Antwortzeit:** 469ms
 - **Kritische Dateien:** 6/6 gefunden
 - **Kritische Elemente:** 5/5 gefunden
 
@@ -24,4 +24,4 @@
 
 ---
 
-Bericht generiert am 9.7.2025, 16:38:26
+Bericht generiert am 9.7.2025, 21:52:44

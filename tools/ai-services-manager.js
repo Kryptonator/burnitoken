@@ -14,123 +14,123 @@ const SERVICES = [
   {
     name: 'Session-Saver',
     script: path.join(__dirname, 'session-saver.js'),
-    emoji: '💾'
+    emoji: '💾',
   },
   {
     name: 'AI Conversation Bridge',
     script: path.join(__dirname, 'start-ai-bridge.js'),
-    emoji: '🧠'
-  }
+    emoji: '🧠',
+  },
 ];
 
 /**
  * Beendet einen laufenden Prozess
- * (Dies ist eine Vereinfachung - in einer echten Implementierung 
+ * (Dies ist eine Vereinfachung - in einer echten Implementierung
  * würde man die PIDs besser verwalten)
  */
 function killProcess(name) {
   try {
     if (process.platform === 'win32') {
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
-  {;
-}
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
+      {
+      }
       spawn('powershell', ['-Command', `Stop-Process -Name "*node*" -Force`], { stdio: 'ignore' });
     } else {
       spawn('pkill', ['-f', name], { stdio: 'ignore' });
@@ -147,23 +147,23 @@ function killProcess(name) {
  */
 function startService(service) {
   console.log(`${service.emoji} Starte ${service.name}...`);
-  
+
   // Prüfe, ob die Skriptdatei existiert
   if (!fs.existsSync(service.script)) {
     console.error(`❌ Skript nicht gefunden: ${service.script}`);
     return false;
   }
-  
+
   try {
     // Starte den Service als separaten Prozess
     const process = spawn('node', [service.script], {
       detached: true,
-      stdio: 'ignore'
+      stdio: 'ignore',
     });
-    
+
     // Löse den Prozess vom Elternprozess
     process.unref();
-    
+
     console.log(`✅ ${service.name} gestartet`);
     return true;
   } catch (error) {
@@ -177,14 +177,14 @@ function startService(service) {
  */
 function startAllServices() {
   console.log('🚀 Starte alle KI-Services...');
-  
+
   let success = true;
   for (const service of SERVICES) {
     if (!startService(service)) {
       success = false;
     }
   }
-  
+
   if (success) {
     console.log('\n✅ Alle KI-Services wurden erfolgreich gestartet!');
     console.log('\n💡 Tipp: Führe aus, um Status zu prüfen:');
@@ -199,14 +199,14 @@ function startAllServices() {
  */
 function restartAllServices() {
   console.log('🔄 Neustart aller KI-Services...');
-  
+
   // Beende zuerst alle laufenden Services
   console.log('⏹️ Beende laufende Services...');
-  
+
   for (const service of SERVICES) {
     killProcess(path.basename(service.script));
   }
-  
+
   // Kurze Pause, um sicherzustellen, dass alle Prozesse beendet sind
   console.log('⌛ Warte auf Prozessbeendigung...');
   setTimeout(() => {

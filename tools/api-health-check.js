@@ -53,10 +53,10 @@ function checkApiEndpoint(endpoint) {
       });
 
       res.on('end', () => {
-        if (res.statusCode >= 200 && res.statusCode < 300) { 
+        if (res.statusCode >= 200 && res.statusCode < 300) {
           log(`SUCCESS: $${endpoint.name} is responsive. Status: ${res.statusCode}`, 'success');
           resolve(true);
-        } else { 
+        } else {
           log(`ERROR: $${endpoint.name} returned status ${res.statusCode}.`, 'error');
           resolve(false);
         }
@@ -88,15 +88,15 @@ async function runApiHealthCheck() {
 
   for (const endpoint of API_ENDPOINTS) {
     const isHealthy = await checkApiEndpoint(endpoint);
-    if (!isHealthy) { 
+    if (!isHealthy) {
       allApisHealthy = false;
       unhealthyApis.push(endpoint.name);
     }
   }
 
-  if (allApisHealthy) { 
+  if (allApisHealthy) {
     log('All API endpoints are healthy. ✅', 'success');
-  } else { 
+  } else {
     const errorMessage = `API Health Check Failed. Unhealthy services: ${unhealthyApis.join(', ')}`;
     log(errorMessage, 'error');
   }
@@ -105,7 +105,7 @@ async function runApiHealthCheck() {
 }
 
 // If run directly, execute the check
-if (require.main === module) { 
+if (require.main === module) {
   runApiHealthCheck().catch((error) => {
     log(`A critical error occurred during the API health check: $${error.message}`, 'error');
     process.exit(1);

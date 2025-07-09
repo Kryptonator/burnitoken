@@ -24,7 +24,7 @@ function ensureDirectoriesExist() {
   ];
 
   dirs.forEach((dir) => {
-    if (!fs.existsSync(dir)) { 
+    if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
   });
@@ -73,7 +73,7 @@ function main() {
 }
 
 // Ausführen wenn direkt aufgerufen
-if (require.main === module) { 
+if (require.main === module) {
   main();
 }
 

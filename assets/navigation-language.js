@@ -30,18 +30,18 @@ function getInitialLanguage(availableLangs, fallbackLang = 'en') {
 function updateHreflangTags(availableLangs) {
   const head = document.head;
   // Alte hreflang-Tags entfernen, um Duplikate zu vermeiden
-  head.querySelectorAll('link[rel="alternate"]').forEach(el => el.remove());
+  head.querySelectorAll('link[rel="alternate"]').forEach((el) => el.remove());
 
   const baseUrl = window.location.origin + window.location.pathname;
 
-  availableLangs.forEach(lang => {
+  availableLangs.forEach((lang) => {
     const link = document.createElement('link');
     link.rel = 'alternate';
     link.hreflang = lang;
     link.href = baseUrl; // Annahme: URL ändert sich nicht pro Sprache
     head.appendChild(link);
   });
-  
+
   // x-default für die Fallback-Sprache hinzufügen
   const defaultLink = document.createElement('link');
   defaultLink.rel = 'alternate';
@@ -49,7 +49,6 @@ function updateHreflangTags(availableLangs) {
   defaultLink.href = baseUrl;
   head.appendChild(defaultLink);
 }
-
 
 // --- Bestehende Logik (angepasst) ---
 
@@ -85,7 +84,7 @@ function updatePageTitle(trans) {
 async function switchLanguage(lang, availableLangs) {
   const allTranslations = await loadTranslations();
   const trans = allTranslations[lang]?.translation || {};
-  
+
   updateI18nElements(trans);
   updatePageTitle(trans);
   document.documentElement.lang = lang;

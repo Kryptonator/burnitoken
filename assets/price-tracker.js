@@ -20,7 +20,7 @@ window.PriceTracker = {
 
 // Auto-initialize
 document.addEventListener('DOMContentLoaded', function () {
-  if (window.PriceTracker) { 
+  if (window.PriceTracker) {
     window.PriceTracker.init();
   }
 });

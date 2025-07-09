@@ -9,9 +9,9 @@ const { recordCheckSuccess } = require('./status-tracker');
 
 // --- Konfiguration ---
 // Webhook-URL für Benachrichtigungen (aus Umgebungsvariablen oder .env laden)
-const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL || ''; 
+const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL || '';
 // Maximales Alter eines PRs in Tagen, bevor ein Alert gesendet wird
-const MAX_PR_AGE_DAYS = 3; 
+const MAX_PR_AGE_DAYS = 3;
 // GitHub Repository (z.B. 'owner/repo')
 const GITHUB_REPO = 'Kryptonator/burnitoken.com'; // Bitte anpassen, falls nötig
 
@@ -37,11 +37,7 @@ async function monitorDependabot() {
     const errorBody = `Das Dependabot-Monitoring-Tool benötigt die GitHub CLI, um zu funktionieren. Bitte installieren Sie sie von [https://cli.github.com/](https://cli.github.com/) und stellen Sie sicher, dass sie im Systempfad verfügbar ist.`;
     console.error(`❌ ${errorTitle}`);
     await sendAlert(errorTitle, errorBody, ['blocker', 'dependabot', 'setup']);
-    createTodo(
-      errorTitle,
-      errorBody,
-      'Dependabot Monitor'
-    );
+    createTodo(errorTitle, errorBody, 'Dependabot Monitor');
     return;
   }
 
@@ -54,11 +50,7 @@ async function monitorDependabot() {
         const errorTitle = 'Fehler beim Abrufen von Dependabot PRs';
         const errorBody = `Dependabot Monitor konnte keine PRs abrufen.\nFehlerdetails: ${stderr}`;
         await sendAlert(errorTitle, errorBody, ['bug', 'dependabot', 'ci-cd']);
-        createTodo(
-          errorTitle,
-          errorBody,
-          'Dependabot Monitor'
-        );
+        createTodo(errorTitle, errorBody, 'Dependabot Monitor');
         return;
       }
 
@@ -81,13 +73,13 @@ async function monitorDependabot() {
           if (ageInDays > MAX_PR_AGE_DAYS) {
             overduePrs++;
             const alertTitle = `Überfälliger Dependabot PR: #${pr.number}`;
-            const alertBody = `Dependabot PR #${pr.number} ("${pr.title}") ist seit ${Math.floor(ageInDays)} Tagen offen und benötigt eine Überprüfung.`
+            const alertBody = `Dependabot PR #${pr.number} ("${pr.title}") ist seit ${Math.floor(ageInDays)} Tagen offen und benötigt eine Überprüfung.`;
             console.warn(`❗ ALERT: ${alertBody}`);
             await sendAlert(alertTitle, alertBody, ['warning', 'dependabot', 'stale']);
             createTodo(
               alertTitle,
               `Der Dependabot Pull Request #${pr.number} ("${pr.title}") im Repository ${GITHUB_REPO} ist seit ${Math.floor(ageInDays)} Tagen offen und erfordert eine manuelle Überprüfung und Zusammenführung.`,
-              'Dependabot Monitor'
+              'Dependabot Monitor',
             );
           }
         }
@@ -98,19 +90,14 @@ async function monitorDependabot() {
         } else {
           console.log(`🔔 ${overduePrs} überfällige PR(s) gemeldet.`);
         }
-
       } catch (parseError) {
         console.error('Fehler beim Parsen der PR-Daten:', parseError);
         const errorTitle = 'Dependabot Monitor Parsing Fehler';
         const errorBody = `Fehler beim Parsen der PR-Daten von GitHub: ${parseError.message}`;
         await sendAlert(errorTitle, errorBody, ['bug', 'dependabot']);
-        createTodo(
-          errorTitle,
-          errorBody,
-          'Dependabot Monitor'
-        );
+        createTodo(errorTitle, errorBody, 'Dependabot Monitor');
       }
-    }
+    },
   );
 }
 

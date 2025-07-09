@@ -12,10 +12,7 @@ const MAX_ALLOWED_CHANGES = 50; // Sicherheitsgrenze für maximale Dateiänderun
 
 const log = (message) => {
   console.log(message);
-  fs.appendFileSync(
-    LOG_FILE,
-    `[${new Date().toISOString()}] ${message}\n`
-  );
+  fs.appendFileSync(LOG_FILE, `[${new Date().toISOString()}] ${message}\n`);
 };
 
 const getStatus = async () => {
@@ -29,7 +26,7 @@ const getStatus = async () => {
 };
 
 const getLastCommitInfo = () => {
-  if (!fs.existsSync(LAST_COMMIT_INFO_FILE)) { 
+  if (!fs.existsSync(LAST_COMMIT_INFO_FILE)) {
     return { lastHash: null, lastTimestamp: 0 };
   }
   try {
@@ -57,19 +54,19 @@ const autoCommitAndPush = async (reason = 'Automated commit by Auto-Git-Manager'
   log('Starting auto-commit and push process...');
 
   const status = await getStatus();
-  if (status === null) { 
+  if (status === null) {
     log('Could not retrieve git status. Aborting.');
     return;
   }
 
-  if (status === '') { 
+  if (status === '') {
     log('No changes to commit.');
     return;
   }
 
   // NOTBREMSE: Verhindert Commit bei zu vielen Änderungen
   const changedFiles = status.split('\n').filter((line) => line.trim() !== '');
-  if (changedFiles.length > MAX_ALLOWED_CHANGES) { 
+  if (changedFiles.length > MAX_ALLOWED_CHANGES) {
     const errorMessage = `[CRITICAL] NOTBREMSE AKTIVIERT: Es wurden $${changedFiles.length} Änderungen erkannt (Limit: ${MAX_ALLOWED_CHANGES}). Automatischer Commit wird abgebrochen, um eine Überlastung des Repositories zu verhindern. Bitte überprüfen Sie die Änderungen manuell.`;
     log(errorMessage);
     // Hier könnte man zusätzlich den Alert-Service aufrufen
@@ -94,7 +91,7 @@ const autoCommitAndPush = async (reason = 'Automated commit by Auto-Git-Manager'
   log(`Creating commit with message: "${commitMessage}"`);
   try {
     const { stdout: commitOut } = await execAsync(`git commit -m "${commitMessage}"`, {
-      cwd: REPO_PATH
+      cwd: REPO_PATH,
     });
     log(`Commit successful:\n${commitOut}`);
 
@@ -131,7 +128,7 @@ const autoCommitAndPush = async (reason = 'Automated commit by Auto-Git-Manager'
 module.exports = { autoCommitAndPush, getStatus, getLastCommitInfo };
 
 // If called directly from command line, run the function
-if (require.main === module) { 
+if (require.main === module) {
   const reason = process.argv[2] || 'Automated commit from direct script execution';
   autoCommitAndPush(reason);
 }

@@ -89,14 +89,16 @@ function testLiveWebsite() {
 // GSC-Statusprüfung
 async function checkGSCStatus() {
   console.log(`\n🔍 GOOGLE SEARCH CONSOLE STATUS CHECK:`);
-  
+
   // Prüfen, ob die Service Account-Datei existiert
   if (!fs.existsSync(SERVICE_ACCOUNT_FILE)) {
     console.log(`⚠️ GSC Service Account nicht gefunden: ${SERVICE_ACCOUNT_FILE}`);
-    console.log('GSC-Test übersprungen. Kopieren Sie die Service-Account-Datei in das richtige Verzeichnis.');
+    console.log(
+      'GSC-Test übersprungen. Kopieren Sie die Service-Account-Datei in das richtige Verzeichnis.',
+    );
     return;
   }
-  
+
   // Inhalt validieren
   try {
     const serviceAccountContent = JSON.parse(fs.readFileSync(SERVICE_ACCOUNT_FILE, 'utf8'));
@@ -108,7 +110,7 @@ async function checkGSCStatus() {
     console.log('⚠️ GSC Service Account Datei konnte nicht gelesen werden:', err.message);
     return;
   }
-  
+
   try {
     // Auth Client erstellen
     const auth = new google.auth.GoogleAuth({
@@ -118,28 +120,28 @@ async function checkGSCStatus() {
 
     const authClient = await auth.getClient();
     const searchconsole = google.searchconsole({ version: 'v1', auth: authClient });
-    
+
     // Site-Status testen
     console.log('🔄 Überprüfe GSC-Verbindung...');
-    
+
     const siteResult = await searchconsole.sites.get({
-      siteUrl: GSC_PROPERTY
+      siteUrl: GSC_PROPERTY,
     });
-    
+
     if (siteResult.data) {
       console.log(`✅ GSC API-Zugriff bestätigt für ${GSC_PROPERTY}`);
       console.log(`📊 Permission Level: ${siteResult.data.permissionLevel || 'Unknown'}`);
-      
+
       // Performance-Daten für den letzten Tag abrufen
       const today = new Date();
       const yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
-      
+
       const startDateStr = yesterday.toISOString().split('T')[0];
       const endDateStr = today.toISOString().split('T')[0];
-      
+
       console.log(`🔄 Rufe letzte GSC-Daten für ${startDateStr} ab...`);
-      
+
       // Performance-Daten abfragen
       const performanceResponse = await searchconsole.searchanalytics.query({
         siteUrl: GSC_PROPERTY,
@@ -147,13 +149,19 @@ async function checkGSCStatus() {
           startDate: startDateStr,
           endDate: endDateStr,
           dimensions: ['date'],
-          rowLimit: 1
+          rowLimit: 1,
         },
       });
-      
-      if (performanceResponse.data && performanceResponse.data.rows && performanceResponse.data.rows.length > 0) {
+
+      if (
+        performanceResponse.data &&
+        performanceResponse.data.rows &&
+        performanceResponse.data.rows.length > 0
+      ) {
         const data = performanceResponse.data.rows[0];
-        console.log(`✅ Letzte GSC-Daten (${data.keys[0]}): ${data.clicks} Klicks, ${data.impressions} Impressions, Position ${data.position.toFixed(1)}`);
+        console.log(
+          `✅ Letzte GSC-Daten (${data.keys[0]}): ${data.clicks} Klicks, ${data.impressions} Impressions, Position ${data.position.toFixed(1)}`,
+        );
       } else {
         console.log('⚠️ Keine aktuellen GSC-Daten gefunden (normal für neue Websites)');
       }

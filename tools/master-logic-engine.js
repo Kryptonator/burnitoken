@@ -105,7 +105,7 @@ class MasterLogicEngine {
           }
           console.log(`npm install erfolgreich: ${stdout}`);
           autoGitManager.autoCommitAndPush(
-            `Fix: Ran npm install due to ${context.name || 'module not found'}`
+            `Fix: Ran npm install due to ${context.name || 'module not found'}`,
           ); // NEU
         });
         success = true;
@@ -146,12 +146,14 @@ class MasterLogicEngine {
   async resolvePlaceholders(filePath) {
     const placeholders = this.findPlaceholders(filePath);
     if (placeholders.length > 0) {
-      console.log(`[Engine] ${placeholders.length} Platzhalter in ${filePath} gefunden. Erstelle Issues...`);
+      console.log(
+        `[Engine] ${placeholders.length} Platzhalter in ${filePath} gefunden. Erstelle Issues...`,
+      );
       for (const placeholder of placeholders) {
         const context = {
           name: `Platzhalter gefunden: ${placeholder.type}`,
           error: `**Datei:** \`${filePath}\`\n**Zeile ${placeholder.line}:** \`${placeholder.text.trim()}\``,
-          solution: `Bitte den Platzhalter **${placeholder.type}** durch eine korrekte Implementierung ersetzen.`
+          solution: `Bitte den Platzhalter **${placeholder.type}** durch eine korrekte Implementierung ersetzen.`,
         };
         await this.executeAction('create_github_issue', context);
       }
@@ -212,4 +214,3 @@ class MasterLogicEngine {
 }
 
 module.exports = new MasterLogicEngine();
-

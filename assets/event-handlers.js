@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // Helper Functions (falls nicht bereits definiert)
 function scrollToSection(sectionId) {
   const element = document.getElementById(sectionId);
-  if (element) { 
+  if (element) {
     element.scrollIntoView({ behavior: 'smooth' });
   }
 }
@@ -59,14 +59,14 @@ function initializeCalculator() {
 
   // Aktiviere Calculator falls vorhanden
   const calculator = document.querySelector('.calculator-container');
-  if (calculator) { 
+  if (calculator) {
     calculator.style.display = 'block';
   }
 }
 
 function toggleFAQ(faqId) {
   const content = document.getElementById(faqId + '-content');
-  if (content) { 
+  if (content) {
     const isVisible = content.style.display !== 'none';
     content.style.display = isVisible ? 'none' : 'block';
   }

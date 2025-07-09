@@ -7,7 +7,8 @@ const GSC_SERVICE_ACCOUNT_FILE = path.join(__dirname, 'tools', 'gsc-service-acco
 const GSC_ENABLED = fs.existsSync(GSC_SERVICE_ACCOUNT_FILE);
 
 // GSC Quick Test ausführen, um Verbindung zu prüfen
-if (GSC_ENABLED) {  try {
+if (GSC_ENABLED) {
+  try {
     const { execSync } = require('child_process');
     execSync('node tools/gsc-quick-test.js --test', { stdio: 'ignore' });
     console.log('✅ GSC-Verbindung erfolgreich hergestellt');
@@ -37,20 +38,20 @@ module.exports = {
           height: 720,
           deviceScaleFactor: 1,
           mobile: false,
-          disable: false
+          disable: false,
         },
         // Verbesserte Performance beim Testen
         throttling: {
           cpuSlowdownMultiplier: 1,
           downloadThroughputKbps: 1024,
           uploadThroughputKbps: 512,
-          rttMs: 40
+          rttMs: 40,
         },
         // Audit-Konfiguration
         skipAudits: ['uses-http2'],
         onlyAudits: undefined,
         // Kategorien zur Prüfung
-        onlyCategories: ['performance', 'accessibility', 'best-practices', 'seo']
+        onlyCategories: ['performance', 'accessibility', 'best-practices', 'seo'],
       },
     },
     assert: {
@@ -58,21 +59,21 @@ module.exports = {
         'categories:performance': ['error', { minScore: 0.85 }],
         'categories:accessibility': ['error', { minScore: 0.9 }],
         'categories:best-practices': ['error', { minScore: 0.85 }],
-        'categories:seo': ['error', { minScore: 0.9 }]
-      }
+        'categories:seo': ['error', { minScore: 0.9 }],
+      },
     },
     upload: {
       target: 'temporary-public-storage',
       githubToken: process.env.GITHUB_TOKEN,
-      githubStatusContextSuffix: 'lighthouse'
+      githubStatusContextSuffix: 'lighthouse',
     },
     server: {
       port: 9090,
-      serveDir: __dirname
+      serveDir: __dirname,
     },
     wizard: {
       disableInteractiveUi: false,
-      disableGathering: false
-    }
+      disableGathering: false,
+    },
   },
 };

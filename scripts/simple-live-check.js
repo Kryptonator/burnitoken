@@ -73,13 +73,13 @@ function checkWebsite() {
         ].filter(Boolean).length;
         console.log(`📈 Gesamt-Score: $${score}/10`);
 
-        if (score >= 9) { 
+        if (score >= 9) {
           console.log('🎉 STATUS: EXZELLENT');
-        } else if (score >= 7) { 
+        } else if (score >= 7) {
           console.log('👍 STATUS: GUT');
-        } else if (score >= 5) { 
+        } else if (score >= 5) {
           console.log('⚠️ STATUS: VERBESSERUNG NÖTIG');
-        } else { 
+        } else {
           console.log('❌ STATUS: KRITISCHE PROBLEME');
         }
       });

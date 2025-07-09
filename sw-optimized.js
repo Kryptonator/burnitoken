@@ -15,7 +15,7 @@ const CACHE_STRATEGIES = {
   critical: (request) => {
     return caches.open(CRITICAL_CACHE).then((cache) => {
       return cache.match(request).then((response) => {
-        if (response) { 
+        if (response) {
           return response;
         }
         return fetch(request).then((fetchResponse) => {
@@ -44,13 +44,13 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
   // Critical resources
-  if (CRITICAL_URLS.includes(url.pathname)) { 
+  if (CRITICAL_URLS.includes(url.pathname)) {
     event.respondWith(CACHE_STRATEGIES.critical(event.request));
     return;
   }
 
   // API calls - StaleWhileRevalidate
-  if (url.pathname.includes('/api/') || url.hostname.includes('api.')) { 
+  if (url.pathname.includes('/api/') || url.hostname.includes('api.')) {
     event.respondWith(CACHE_STRATEGIES.staleWhileRevalidate(event.request));
     return;
   }

@@ -1,9 +1,9 @@
 /**
  * PowerShell Fix - Auto-Recovery System
- * 
+ *
  * Optimierte Version des Auto-Recovery Systems ohne PowerShell-Probleme
  * Verhindert das ständige Öffnen/Schließen von PowerShell-Fenstern
- * 
+ *
  * Erstellt: 2025-06-23
  */
 
@@ -32,7 +32,7 @@ const recoveryStatus = {
   todaysRecoveries: 0,
   status: 'idle',
   lastActions: [],
-  errors: []
+  errors: [],
 };
 
 /**
@@ -41,9 +41,9 @@ const recoveryStatus = {
 function log(message, level = 'info') {
   const timestamp = new Date().toISOString();
   const formattedMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
-  
+
   // Log in Konsole
-  switch(level) {
+  switch (level) {
     case 'error':
       console.error(message);
       break;
@@ -59,7 +59,7 @@ function log(message, level = 'info') {
     default:
       console.log(message);
   }
-  
+
   // Log in Datei
   try {
     fs.appendFileSync(CONFIG.logFile, formattedMessage + '\n', 'utf8');
@@ -76,10 +76,10 @@ function checkLock() {
     const lockData = fs.statSync(CONFIG.lockFile);
     const lockAge = Date.now() - lockData.mtimeMs;
     const maxLockAge = CONFIG.maxLockAgeMinutes * 60 * 1000;
-    
+
     // Wenn der Lock zu alt ist, entfernen wir ihn
     if (lockAge > maxLockAge) {
-      log(`Lock-Datei ist zu alt (${Math.round(lockAge/1000)}s), wird entfernt`, 'warn');
+      log(`Lock-Datei ist zu alt (${Math.round(lockAge / 1000)}s), wird entfernt`, 'warn');
       fs.unlinkSync(CONFIG.lockFile);
       return false;
     }
@@ -125,14 +125,14 @@ function loadStatus() {
     if (fs.existsSync(CONFIG.statusFile)) {
       const data = fs.readFileSync(CONFIG.statusFile, 'utf8');
       const loadedStatus = JSON.parse(data);
-      
+
       // Prüfe ob wir den Tages-Zähler zurücksetzen müssen
       const today = new Date().toISOString().split('T')[0];
       if (loadedStatus.lastRecoveryDate && !loadedStatus.lastRecoveryDate.startsWith(today)) {
         loadedStatus.todaysRecoveries = 0;
         loadedStatus.lastRecoveryDate = null;
       }
-      
+
       Object.assign(recoveryStatus, loadedStatus);
     }
   } catch (err) {
@@ -161,12 +161,12 @@ function runNodeCommand(command) {
   return new Promise((resolve) => {
     try {
       log(`Führe Befehl aus: ${command}`, 'info');
-      
-      const result = execSync(command, { 
+
+      const result = execSync(command, {
         encoding: 'utf8',
-        stdio: ['ignore', 'pipe', 'pipe']
+        stdio: ['ignore', 'pipe', 'pipe'],
       });
-      
+
       log(`Befehl erfolgreich abgeschlossen: ${command}`, 'success');
       resolve(true);
     } catch (err) {
@@ -182,7 +182,7 @@ function runNodeCommand(command) {
 function performSelfDiagnosis() {
   try {
     log('🔍 Führe Selbstdiagnose durch...', 'info');
-    
+
     // Prüfe ob kritische Dateien existieren
     const criticalFiles = [
       '../index.html',
@@ -190,17 +190,17 @@ function performSelfDiagnosis() {
       '../styles.css',
       '../favicon.ico',
       'website-health-check.js',
-      'deployment-checker.js'
+      'deployment-checker.js',
     ];
-    
-    const missingFiles = criticalFiles.filter(file => !fs.existsSync(path.join(__dirname, file)));
-    
+
+    const missingFiles = criticalFiles.filter((file) => !fs.existsSync(path.join(__dirname, file)));
+
     if (missingFiles.length > 0) {
       log(`⚠️ Kritische Dateien fehlen: ${missingFiles.join(', ')}`, 'warn');
     } else {
       log('✅ Alle kritischen Dateien vorhanden', 'success');
     }
-    
+
     return missingFiles.length === 0;
   } catch (err) {
     log(`Fehler bei der Selbstdiagnose: ${err.message}`, 'error');
@@ -214,11 +214,11 @@ function performSelfDiagnosis() {
 async function checkWebsiteStatus() {
   try {
     log('🔍 Prüfe Website-Status...', 'info');
-    
+
     // Führe Website Health Check aus
     const healthCheck = require('./website-health-check');
     await healthCheck.runHealthCheck();
-    
+
     return true;
   } catch (err) {
     log(`Fehler beim Prüfen des Website-Status: ${err.message}`, 'error');
@@ -232,75 +232,80 @@ async function checkWebsiteStatus() {
 async function performRecoveryActions(force = false) {
   // Prüfe ob maximale Anzahl von Recoveries für heute erreicht ist
   if (!force && recoveryStatus.todaysRecoveries >= CONFIG.maxRecoveriesPerDay) {
-    log(`⚠️ Maximale Anzahl von Recoveries für heute erreicht (${CONFIG.maxRecoveriesPerDay})`, 'warn');
+    log(
+      `⚠️ Maximale Anzahl von Recoveries für heute erreicht (${CONFIG.maxRecoveriesPerDay})`,
+      'warn',
+    );
     return false;
   }
-  
+
   log('🔧 Führe Wiederherstellungsmaßnahmen durch...', 'info');
   recoveryStatus.status = 'recovering';
   saveStatus();
-  
+
   // Liste der auszuführenden Aktionen
   const actions = [
     // Website Health Check ausführen
-    { 
+    {
       name: 'health_check',
-      command: 'node tools/website-health-check.js --silent'
+      command: 'node tools/website-health-check.js --silent',
     },
     // Deployment Status prüfen
     {
       name: 'deployment_check',
-      command: 'node tools/deployment-checker.js --silent'
+      command: 'node tools/deployment-checker.js --silent',
     },
     // HTML validieren
     {
       name: 'validate_html',
-      command: 'npx html-validate index.html 404.html || true'
+      command: 'npx html-validate index.html 404.html || true',
     },
     // Assets optimieren
     {
-      name: 'optimize_assets', 
-      command: 'node tools/optimize-assets.js || true'
-    }
+      name: 'optimize_assets',
+      command: 'node tools/optimize-assets.js || true',
+    },
   ];
-  
+
   // Füge Netlify-spezifische Aktionen hinzu, wenn konfiguriert
   if (CONFIG.isNetlifyDeployEnabled && CONFIG.netlifyDeployHook) {
     actions.push({
       name: 'purge_cache',
-      command: `curl -X POST "${CONFIG.netlifyDeployHook}&clear_cache=true" || true`
+      command: `curl -X POST "${CONFIG.netlifyDeployHook}&clear_cache=true" || true`,
     });
   }
-  
+
   // Führe Aktionen aus
   recoveryStatus.lastActions = [];
   let successCount = 0;
-  
+
   for (const action of actions) {
     const success = await runNodeCommand(action.command);
     recoveryStatus.lastActions.push({
       name: action.name,
       timestamp: new Date().toISOString(),
-      success
+      success,
     });
-    
+
     if (success) successCount++;
-    
+
     // Kleine Pause zwischen den Aktionen
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
-  
+
   // Update Status
   recoveryStatus.recoveriesPerformed++;
   recoveryStatus.todaysRecoveries++;
   recoveryStatus.lastRecoveryDate = new Date().toISOString();
   recoveryStatus.lastRun = new Date().toISOString();
   recoveryStatus.status = 'idle';
-  
+
   const success = successCount > 0;
-  log(`${success ? '✅' : '❌'} Wiederherstellungsmaßnahmen ${success ? 'erfolgreich' : 'teilweise fehlgeschlagen'} (${successCount}/${actions.length} erfolgreich)`, 
-     success ? 'success' : 'warn');
-  
+  log(
+    `${success ? '✅' : '❌'} Wiederherstellungsmaßnahmen ${success ? 'erfolgreich' : 'teilweise fehlgeschlagen'} (${successCount}/${actions.length} erfolgreich)`,
+    success ? 'success' : 'warn',
+  );
+
   saveStatus();
   return success;
 }
@@ -311,50 +316,51 @@ async function performRecoveryActions(force = false) {
 async function main(args = []) {
   try {
     const forceRecovery = args.includes('--force');
-    
+
     // Überprüfe Lock-Datei, um Mehrfachausführungen zu vermeiden
     if (checkLock() && !forceRecovery) {
       log('Auto-Recovery System läuft bereits, Ausführung wird abgebrochen', 'warn');
       return;
     }
-    
+
     // Erstelle Lock-Datei
     createLock();
-    
+
     // Lade den aktuellen Status
     loadStatus();
-    
+
     // Lösche alte Log-Datei falls zu groß
     try {
       const logStat = fs.statSync(CONFIG.logFile);
-      if (logStat.size > 1024 * 1024) { // > 1 MB
+      if (logStat.size > 1024 * 1024) {
+        // > 1 MB
         fs.truncateSync(CONFIG.logFile, 0);
         log('Log-Datei zurückgesetzt (war > 1 MB)', 'info');
       }
     } catch (err) {
       // Ignoriere Fehler beim Zurücksetzen der Log-Datei
     }
-    
+
     log('🚀 Auto-Recovery System wird gestartet...', 'info');
-    
+
     // Prüfe Selbstdiagnose
     const selfDiagnosisOk = performSelfDiagnosis();
-    
+
     if (!selfDiagnosisOk && !forceRecovery) {
       log('❌ Selbstdiagnose fehlgeschlagen, Recovery wird abgebrochen', 'error');
       recoveryStatus.status = 'error';
       recoveryStatus.errors.push({
         timestamp: new Date().toISOString(),
-        message: 'Selbstdiagnose fehlgeschlagen'
+        message: 'Selbstdiagnose fehlgeschlagen',
       });
       saveStatus();
       removeLock();
       return;
     }
-    
+
     // Prüfe Website-Status
     await checkWebsiteStatus();
-    
+
     // Führe Recovery-Aktionen durch
     if (forceRecovery) {
       log('⚠️ Erzwungener Recovery-Modus aktiviert', 'warn');
@@ -363,17 +369,20 @@ async function main(args = []) {
       // Prüfe ob es Zeit für ein reguläres Recovery ist
       const lastRun = recoveryStatus.lastRun ? new Date(recoveryStatus.lastRun) : null;
       const now = new Date();
-      
-      if (!lastRun || ((now - lastRun) / (1000 * 60)) >= CONFIG.recoveryIntervalMinutes) {
+
+      if (!lastRun || (now - lastRun) / (1000 * 60) >= CONFIG.recoveryIntervalMinutes) {
         await performRecoveryActions();
       } else {
-        log(`Nächstes reguläres Recovery in ${Math.ceil(CONFIG.recoveryIntervalMinutes - ((now - lastRun) / (1000 * 60)))} Minuten`, 'info');
+        log(
+          `Nächstes reguläres Recovery in ${Math.ceil(CONFIG.recoveryIntervalMinutes - (now - lastRun) / (1000 * 60))} Minuten`,
+          'info',
+        );
       }
     }
-    
+
     // Lock entfernen
     removeLock();
-    
+
     log('✅ Auto-Recovery System abgeschlossen', 'success');
   } catch (err) {
     log(`Kritischer Fehler im Auto-Recovery System: ${err.message}`, 'error');
@@ -381,7 +390,7 @@ async function main(args = []) {
     recoveryStatus.errors.push({
       timestamp: new Date().toISOString(),
       message: err.message,
-      stack: err.stack
+      stack: err.stack,
     });
     saveStatus();
     removeLock();
@@ -392,19 +401,23 @@ async function main(args = []) {
 if (require.main === module) {
   const args = process.argv.slice(2);
   const silentMode = args.includes('--silent');
-  
+
   if (silentMode) {
     console.log = () => {};
     console.warn = () => {};
     console.error = () => {};
   }
-  
-  main(args).catch(err => {
-    fs.appendFileSync(CONFIG.logFile, `[${new Date().toISOString()}] [CRITICAL] ${err.message}\n${err.stack}\n`, 'utf8');
+
+  main(args).catch((err) => {
+    fs.appendFileSync(
+      CONFIG.logFile,
+      `[${new Date().toISOString()}] [CRITICAL] ${err.message}\n${err.stack}\n`,
+      'utf8',
+    );
   });
 }
 
 module.exports = {
   performRecoveryActions,
-  checkWebsiteStatus
+  checkWebsiteStatus,
 };
