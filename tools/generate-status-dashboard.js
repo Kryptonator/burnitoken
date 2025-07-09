@@ -1,10 +1,10 @@
 // tools/generate-status-dashboard.js
 /**
  * HTML Status Dashboard Generator
- *
+ * 
  * Erstellt eine HTML-Datei mit einer Übersicht über den Systemstatus.
  * Nutzt die Daten aus dem status-tracker.
- *
+ * 
  * Erstellt: 2025-06-26
  */
 
@@ -16,14 +16,14 @@ const DASHBOARD_FILE = path.join(__dirname, '..', 'status-dashboard.html');
 
 // Liste der zu überwachenden Checks (Namen müssen mit denen im status-tracker übereinstimmen)
 const CHECKS_TO_MONITOR = [
-  'extension-health-check',
-  'ki-services-health-check',
-  'gsc-auth-check',
-  'gsc-integration-monitor',
-  'website-health-check',
-  'deployment-check',
-  'dependabot-monitor',
-  'snyk-security-scan', // Hinzugefügt
+    'extension-health-check',
+    'ki-services-health-check',
+    'gsc-auth-check',
+    'gsc-integration-monitor',
+    'website-health-check',
+    'deployment-check',
+    'dependabot-monitor',
+    'snyk-security-scan' // Hinzugefügt
 ];
 
 /**
@@ -31,18 +31,18 @@ const CHECKS_TO_MONITOR = [
  * @returns {string} Der HTML-Code.
  */
 function generateHtml() {
-  let tableRows = '';
-  for (const checkName of CHECKS_TO_MONITOR) {
-    const timeSince = getTimeSinceLastSuccess(checkName);
-    const statusColor = timeSince === 'nie' ? '#ffcccc' : '#ccffcc'; // Rot für 'nie', sonst grün
-    tableRows += `
+    let tableRows = '';
+    for (const checkName of CHECKS_TO_MONITOR) {
+        const timeSince = getTimeSinceLastSuccess(checkName);
+        const statusColor = timeSince === 'nie' ? '#ffcccc' : '#ccffcc'; // Rot für 'nie', sonst grün
+        tableRows += `
             <tr>
-                <td>$${checkName}</td>
+                <td>${checkName}</td>
                 <td style="background-color: ${statusColor};">${timeSince}</td>
             </tr>`;
-  }
+    }
 
-  const html = `
+    const html = `
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -71,32 +71,32 @@ function generateHtml() {
             </tr>
         </thead>
         <tbody>
-            $${tableRows}
+            ${tableRows}
         </tbody>
     </table>
     <footer>Automatisch generierter Bericht.</footer>
 </body>
 </html>
     `;
-  return html;
+    return html;
 }
 
 /**
  * Schreibt die HTML-Datei.
  */
 function createDashboard() {
-  const htmlContent = generateHtml();
-  try {
-    fs.writeFileSync(DASHBOARD_FILE, htmlContent, 'utf8');
-    console.log(`✅ HTML-Dashboard erfolgreich unter $${DASHBOARD_FILE} erstellt.`);
-  } catch (error) {
-    console.error('Fehler beim Erstellen des HTML-Dashboards:', error);
-  }
+    const htmlContent = generateHtml();
+    try {
+        fs.writeFileSync(DASHBOARD_FILE, htmlContent, 'utf8');
+        console.log(`✅ HTML-Dashboard erfolgreich unter ${DASHBOARD_FILE} erstellt.`);
+    } catch (error) {
+        console.error('Fehler beim Erstellen des HTML-Dashboards:', error);
+    }
 }
 
 // Führe die Funktion aus, wenn das Skript direkt aufgerufen wird
-if (require.main === module) { 
-  createDashboard();
+if (require.main === module) {
+    createDashboard();
 }
 
 module.exports = { createDashboard };

@@ -14,18 +14,18 @@ const MOCK_DATA = {
     domains: [
       { name: 'burnitoken.website', status: '✅ Online', code: 200 },
       { name: 'kryptonator.github.io', status: '✅ Online', code: 200 },
-    ],
+    ]
   },
   lighthouse: {
     status: 'GOOD',
     performance: 95,
     accessibility: 100,
-    seo: 98,
+    seo: 98
   },
   security: {
     status: 'OK',
-    details: 'Keine kritischen Sicherheitsprobleme gefunden.',
-  },
+    details: 'Keine kritischen Sicherheitsprobleme gefunden.'
+  }
 };
 
 function generateHTML(data) {
@@ -51,19 +51,19 @@ function generateHTML(data) {
 <body>
   <div class="container">
     <h1>System-Status Dashboard</h1>
-    <p class="footer">Letzte Aktualisierung: $${data.lastUpdated}</p>
+    <p class="footer">Letzte Aktualisierung: ${data.lastUpdated}</p>
 
     <div class="card">
       <h2>Konnektivität</h2>
       <p class="status-ok">Status: ${data.connectivity.status}</p>
       <ul>
-        ${data.connectivity.domains.map((d) => `<li>${d.name}: <strong>${d.status} (${d.code})</strong></li>`).join('')}
+        ${data.connectivity.domains.map(d => `<li>${d.name}: <strong>${d.status} (${d.code})</strong></li>`).join('')}
       </ul>
     </div>
 
     <div class="card">
       <h2>Lighthouse Audit</h2>
-      <p class="status-good">Performance: $${data.lighthouse.performance} | Accessibility: ${data.lighthouse.accessibility} | SEO: ${data.lighthouse.seo}</p>
+      <p class="status-good">Performance: ${data.lighthouse.performance} | Accessibility: ${data.lighthouse.accessibility} | SEO: ${data.lighthouse.seo}</p>
     </div>
 
      <div class="card">
@@ -83,62 +83,12 @@ function saveDashboard() {
   const outputPath = path.join(__dirname, '../../docs', 'status-dashboard.html');
 
   // Sicherstellen, dass das /docs Verzeichnis existiert
-  if (!fs.existsSync) { )) {
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
+  if (!fs.existsSync(path.dirname(outputPath))) {
     fs.mkdirSync(path.dirname(outputPath));
   }
 
   fs.writeFileSync(outputPath, htmlContent);
-  console.log(`✅ Dashboard erfolgreich gespeichert unter: $${outputPath}`);
+  console.log(`✅ Dashboard erfolgreich gespeichert unter: ${outputPath}`);
 }
 
 saveDashboard();
