@@ -13,9 +13,8 @@ const MAX_ALLOWED_CHANGES = 50; // Sicherheitsgrenze für maximale Dateiänderun
 const log = (message) => {
   console.log(message);
   fs.appendFileSync(
-    LOG_FILE),
-    `[${new Date().toISOString()}] $${message}
-`,
+    LOG_FILE,
+    `[${new Date().toISOString()}] ${message}\n`
   );
 };
 
@@ -78,30 +77,35 @@ const autoCommitAndPush = async (reason = 'Automated commit by Auto-Git-Manager'
     return;
   }
 
-  log(`Changes detected ($${changedFiles.length} files). Staging all files...`);
-  try {
-    await execAsync('git add .', { cwd: REPO_PATH });
-  } catch (error) {
-    log(`Error staging files: $${error.message}`);
+  if (changedFiles.length === 0) {
+    log('No changes detected. Working tree is clean.');
     return;
   }
 
-  const commitMessage = `$${reason} - ${new Date().toISOString()}`;
-  log(`Creating commit with message: "$${commitMessage}"`);
+  log(`Changes detected (${changedFiles.length} files). Staging all files...`);
   try {
-    const { stdout: commitOut } = await execAsync(`git commit -m "$${commitMessage}"`, {
-      cwd: REPO_PATH),});
-    log(`Commit successful:
-$${commitOut}`);
+    await execAsync('git add .', { cwd: REPO_PATH });
+  } catch (error) {
+    log(`Error staging files: ${error.message}`);
+    return;
+  }
+
+  const commitMessage = `${reason} - ${new Date().toISOString()}`;
+  log(`Creating commit with message: "${commitMessage}"`);
+  try {
+    const { stdout: commitOut } = await execAsync(`git commit -m "${commitMessage}"`, {
+      cwd: REPO_PATH
+    });
+    log(`Commit successful:\n${commitOut}`);
 
     // Get the new commit hash
     const { stdout: revParseOut } = await execAsync('git rev-parse HEAD', { cwd: REPO_PATH });
     const newCommitHash = revParseOut.trim();
     saveLastCommitInfo(newCommitHash);
   } catch (error) {
-    log(`Error creating commit: $${error.message}`);
+    log(`Error creating commit: ${error.message}`);
     // Check if the error is because there's nothing to commit (e.g., only whitespace changes)
-    if (error.message.includes('nothing to commit')) { 
+    if (error.message.includes('nothing to commit')) {
       log('Nothing to commit, working tree clean.');
       return;
     }
@@ -111,13 +115,12 @@ $${commitOut}`);
   log('Pushing changes to remote...');
   try {
     const { stdout, stderr } = await execAsync('git push', { cwd: REPO_PATH });
-    if (stderr) { 
-      log(`Git push stderr: $${stderr}`);
+    if (stderr) {
+      log(`Git push stderr: ${stderr}`);
     }
-    log(`Push successful:
-$${stdout}`);
+    log(`Push successful:\n${stdout}`);
   } catch (error) {
-    log(`Error pushing to remote: $${error.message}`);
+    log(`Error pushing to remote: ${error.message}`);
   }
 };
 

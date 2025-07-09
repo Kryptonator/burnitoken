@@ -2,6 +2,8 @@
 // Das zentrale Gehirn des Automatisierungs-Orchesters.
 // Stellt intelligente Funktionen für andere Skripte bereit.
 
+require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') }); // Lade Umgebungsvariablen aus der .env-Datei im Projektstammverzeichnis
+
 const fs = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
@@ -72,8 +74,8 @@ class MasterLogicEngine {
   analyzeError(errorLog) {
     console.log(`🔬 Analysiere Fehler...`);
     for (const pattern of this.errorPatterns) {
-      if (pattern.regex.test(errorLog)) { 
-        console.log(`✅ Muster erkannt: $${pattern.name}`);
+      if (pattern.regex.test(errorLog)) {
+        console.log(`✅ Muster erkannt: ${pattern.name}`);
         return {
           name: pattern.name,
           solution: pattern.solution,
@@ -97,29 +99,29 @@ class MasterLogicEngine {
       case 'run_npm_install':
         console.log('Führe `npm install` aus, um fehlende Abhängigkeiten zu installieren...');
         exec('npm install', (error, stdout, stderr) => {
-          if (error) { 
-            console.error(`Fehler bei npm install: $${stderr}`);
+          if (error) {
+            console.error(`Fehler bei npm install: ${stderr}`);
             return;
           }
-          console.log(`npm install erfolgreich: $${stdout}`);
+          console.log(`npm install erfolgreich: ${stdout}`);
           autoGitManager.autoCommitAndPush(
-            `Fix: Ran npm install due to ${context.name || 'module not found'}`),
+            `Fix: Ran npm install due to ${context.name || 'module not found'}`
           ); // NEU
         });
         success = true;
         break;
       case 'create_github_issue':
         console.log('Erstelle GitHub Issue für Entwickler...');
-        if (!GITHUB_TOKEN) { 
+        if (!GITHUB_TOKEN) {
           console.error('GITHUB_TOKEN ist nicht gesetzt. Kann kein Issue erstellen.');
           return;
         }
         try {
           const title = `Automatischer Report: ${context.name || 'Unbekannter Fehler'}`;
-          const body = `**Fehlerdetails:**\n\`\`\`\n$${context.error}\n\`\`\`\n\n**Vorgeschlagene Lösung:**\n$${context.solution}\n\nBitte überprüfen und beheben.`;
+          const body = `**Fehlerdetails:**\n\`\`\`\n${context.error}\n\`\`\`\n\n**Vorgeschlagene Lösung:**\n${context.solution}\n\nBitte überprüfen und beheben.`;
 
           await octokit.issues.create({
-            owner: GITHUB_REPO_OWNER),
+            owner: GITHUB_REPO_OWNER,
             repo: GITHUB_REPO_NAME,
             title: title,
             body: body,
@@ -128,13 +130,32 @@ class MasterLogicEngine {
           console.log('✅ GitHub Issue erfolgreich erstellt.');
           success = true;
         } catch (error) {
-          console.error(`Fehler beim Erstellen des GitHub Issues: $${error.message}`);
+          console.error(`Fehler beim Erstellen des GitHub Issues: ${error.message}`);
         }
         break;
       default:
-        console.warn(`Aktion '$${action}' ist nicht implementiert.`);
+        console.warn(`Aktion '${action}' ist nicht implementiert.`);
     }
     return success;
+  }
+
+  /**
+   * Sucht nach Platzhaltern im Code und erstellt bei Funden GitHub-Issues.
+   * @param {string} filePath - Der Pfad zur zu durchsuchenden Datei.
+   */
+  async resolvePlaceholders(filePath) {
+    const placeholders = this.findPlaceholders(filePath);
+    if (placeholders.length > 0) {
+      console.log(`[Engine] ${placeholders.length} Platzhalter in ${filePath} gefunden. Erstelle Issues...`);
+      for (const placeholder of placeholders) {
+        const context = {
+          name: `Platzhalter gefunden: ${placeholder.type}`,
+          error: `**Datei:** \`${filePath}\`\n**Zeile ${placeholder.line}:** \`${placeholder.text.trim()}\``,
+          solution: `Bitte den Platzhalter **${placeholder.type}** durch eine korrekte Implementierung ersetzen.`
+        };
+        await this.executeAction('create_github_issue', context);
+      }
+    }
   }
 
   /**
@@ -143,7 +164,7 @@ class MasterLogicEngine {
    * @returns {Array} - Eine Liste gefundener Platzhalter.
    */
   findPlaceholders(filePath) {
-    console.log(`🔍 Suche nach Platzhaltern in $${filePath}...`);
+    console.log(`🔍 Suche nach Platzhaltern in ${filePath}...`);
     try {
       const fileContent = fs.readFileSync(filePath, 'utf8');
       const lines = fileContent.split('\n');
@@ -152,9 +173,9 @@ class MasterLogicEngine {
 
       lines.forEach((line, index) => {
         const match = placeholderRegex.exec(line);
-        if (match) { 
+        if (match) {
           placeholders.push({
-            file: filePath),
+            file: filePath,
             line: index + 1,
             type: match[1],
             text: line.trim(),
@@ -162,12 +183,12 @@ class MasterLogicEngine {
         }
       });
 
-      if (placeholders.length > 0) { 
-        console.log(`✅ $${placeholders.length} Platzhalter in ${filePath} gefunden.`);
+      if (placeholders.length > 0) {
+        console.log(`✅ ${placeholders.length} Platzhalter in ${filePath} gefunden.`);
       }
       return placeholders;
     } catch (error) {
-      console.error(`Fehler beim Lesen der Datei $${filePath}: ${error.message}`);
+      console.error(`Fehler beim Lesen der Datei ${filePath}: ${error.message}`);
       return [];
     }
   }
@@ -184,10 +205,11 @@ class MasterLogicEngine {
       console.log('✅ KI-Vorschlag erhalten.');
       return suggestion;
     } catch (error) {
-      console.error(`Fehler beim Abrufen des KI-Vorschlags: $${error.message}`);
+      console.error(`Fehler beim Abrufen des KI-Vorschlags: ${error.message}`);
       return 'KI-Dienst nicht verfügbar.';
     }
   }
 }
 
 module.exports = new MasterLogicEngine();
+

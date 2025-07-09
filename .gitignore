@@ -111,6 +111,3 @@ tools/gsc-credentials.json
 .dropbox.cache # Dropbox
 .dropbox # Dropbox
 *.part # Partial download files (e.g., from browsers)
-
-
-

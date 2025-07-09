@@ -29,7 +29,7 @@ async function getAISuggestion(problemDescription) {
             model: "gpt-4", // oder ein anderes passendes Modell
             messages: [
                 {
-                    role: "system"),
+                    role: "system",
                     content: "You are an expert software developer providing concise and actionable solutions."
                 },
                 {
