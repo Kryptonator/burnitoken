@@ -1,0 +1,81 @@
+{
+  "timestamp": "2025-06-28T19:24:04.648Z",
+  "totalDomains": 3,
+  "healthyDomains": 3,
+  "criticalDomains": 0,
+  "sslTimeouts": 0,
+  "dnsFailures": 3,
+  "httpsFailures": 3,
+  "overallHealth": 100,
+  "details": [
+    {
+      "domain": "burnitoken.website",
+      "timestamp": "2025-06-28T19:24:04.701Z",
+      "dns": {
+        "status": "FAILED",
+        "error": "getaddrinfo EAI_AGAIN burnitoken.website",
+        "code": "EAI_AGAIN"
+      },
+      "ssl": {
+        "status": "CONNECTION_ERROR",
+        "error": "getaddrinfo EAI_AGAIN burnitoken.website",
+        "code": "EAI_AGAIN",
+        "duration": 9
+      },
+      "https": {
+        "status": "FAILED",
+        "error": "getaddrinfo EAI_AGAIN burnitoken.website",
+        "code": "EAI_AGAIN",
+        "duration": 4
+      },
+      "critical": false,
+      "warnings": []
+    },
+    {
+      "domain": "burnitoken.com",
+      "timestamp": "2025-06-28T19:24:04.737Z",
+      "dns": {
+        "status": "FAILED",
+        "error": "getaddrinfo EAI_AGAIN burnitoken.com",
+        "code": "EAI_AGAIN"
+      },
+      "ssl": {
+        "status": "CONNECTION_ERROR",
+        "error": "getaddrinfo EAI_AGAIN burnitoken.com",
+        "code": "EAI_AGAIN",
+        "duration": 4
+      },
+      "https": {
+        "status": "FAILED",
+        "error": "getaddrinfo EAI_AGAIN burnitoken.com",
+        "code": "EAI_AGAIN",
+        "duration": 13
+      },
+      "critical": false,
+      "warnings": []
+    },
+    {
+      "domain": "www.burnitoken.website",
+      "timestamp": "2025-06-28T19:24:04.758Z",
+      "dns": {
+        "status": "FAILED",
+        "error": "getaddrinfo EAI_AGAIN www.burnitoken.website",
+        "code": "EAI_AGAIN"
+      },
+      "ssl": {
+        "status": "CONNECTION_ERROR",
+        "error": "getaddrinfo EAI_AGAIN www.burnitoken.website",
+        "code": "EAI_AGAIN",
+        "duration": 3
+      },
+      "https": {
+        "status": "FAILED",
+        "error": "getaddrinfo EAI_AGAIN www.burnitoken.website",
+        "code": "EAI_AGAIN",
+        "duration": 3
+      },
+      "critical": false,
+      "warnings": []
+    }
+  ]
+}

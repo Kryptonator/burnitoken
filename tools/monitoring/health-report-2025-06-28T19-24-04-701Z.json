@@ -1,0 +1,102 @@
+{
+  "timestamp": "2025-06-28T19:24:04.701Z",
+  "summary": {
+    "total": 3,
+    "healthy": 3,
+    "critical": 0,
+    "sslTimeouts": 0
+  },
+  "domains": [
+    {
+      "domain": "burnitoken.website",
+      "timestamp": "2025-06-28T19:24:04.701Z",
+      "dns": {
+        "status": "FAILED",
+        "error": "getaddrinfo EAI_AGAIN burnitoken.website",
+        "code": "EAI_AGAIN"
+      },
+      "ssl": {
+        "status": "CONNECTION_ERROR",
+        "error": "getaddrinfo EAI_AGAIN burnitoken.website",
+        "code": "EAI_AGAIN",
+        "duration": 9
+      },
+      "https": {
+        "status": "FAILED",
+        "error": "getaddrinfo EAI_AGAIN burnitoken.website",
+        "code": "EAI_AGAIN",
+        "duration": 4
+      },
+      "critical": false,
+      "warnings": []
+    },
+    {
+      "domain": "burnitoken.com",
+      "timestamp": "2025-06-28T19:24:04.737Z",
+      "dns": {
+        "status": "FAILED",
+        "error": "getaddrinfo EAI_AGAIN burnitoken.com",
+        "code": "EAI_AGAIN"
+      },
+      "ssl": {
+        "status": "CONNECTION_ERROR",
+        "error": "getaddrinfo EAI_AGAIN burnitoken.com",
+        "code": "EAI_AGAIN",
+        "duration": 4
+      },
+      "https": {
+        "status": "FAILED",
+        "error": "getaddrinfo EAI_AGAIN burnitoken.com",
+        "code": "EAI_AGAIN",
+        "duration": 13
+      },
+      "critical": false,
+      "warnings": []
+    },
+    {
+      "domain": "www.burnitoken.website",
+      "timestamp": "2025-06-28T19:24:04.758Z",
+      "dns": {
+        "status": "FAILED",
+        "error": "getaddrinfo EAI_AGAIN www.burnitoken.website",
+        "code": "EAI_AGAIN"
+      },
+      "ssl": {
+        "status": "CONNECTION_ERROR",
+        "error": "getaddrinfo EAI_AGAIN www.burnitoken.website",
+        "code": "EAI_AGAIN",
+        "duration": 3
+      },
+      "https": {
+        "status": "FAILED",
+        "error": "getaddrinfo EAI_AGAIN www.burnitoken.website",
+        "code": "EAI_AGAIN",
+        "duration": 3
+      },
+      "critical": false,
+      "warnings": []
+    }
+  ],
+  "recommendations": [
+    {
+      "priority": "HIGH",
+      "issue": "DNS Resolution Failures",
+      "domains": [
+        "burnitoken.website",
+        "burnitoken.com",
+        "www.burnitoken.website"
+      ],
+      "action": "DNS-Konfiguration überprüfen und sicherstellen, dass die A-Records korrekt sind"
+    },
+    {
+      "priority": "MEDIUM",
+      "issue": "HTTPS Connectivity Issues",
+      "domains": [
+        "burnitoken.website",
+        "burnitoken.com",
+        "www.burnitoken.website"
+      ],
+      "action": "Web-Server-Konfiguration und HTTPS-Setup überprüfen"
+    }
+  ]
+}
