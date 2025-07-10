@@ -1,0 +1,162 @@
+name: Website Health Monitoring
+
+on:
+  schedule:
+    # Läuft täglich um 2:00 UTC (entspricht der Zeit im Issue: 02:56)
+    - cron: '0 2 * * *'
+    # Läuft auch alle 6 Stunden zur kontinuierlichen Überwachung
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'Website URL to check'
+        required: false
+        default: 'https://burnitoken.com'
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  health-check:
+    name: 🏥 Website Health Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 📥 Install dependencies
+        run: npm ci --only=production
+        
+      - name: 🏥 Run Website Health Check
+        id: health_check
+        run: |
+          # Führe Health Check aus und fange Exit-Code ab
+          if npm run health:check; then
+            echo "health_status=healthy" >> $GITHUB_OUTPUT
+          else
+            echo "health_status=unhealthy" >> $GITHUB_OUTPUT
+            echo "Website health check detected issues"
+          fi
+        continue-on-error: true
+        
+      - name: 📋 Read Health Report
+        id: read_report
+        if: steps.health_check.outputs.health_status == 'unhealthy'
+        run: |
+          # Finde den neuesten Health Report
+          REPORT_FILE=$(ls -t /tmp/health-check-report-*.json | head -1)
+          if [ -f "$REPORT_FILE" ]; then
+            echo "Found health report: $REPORT_FILE"
+            REPORT_CONTENT=$(cat "$REPORT_FILE")
+            echo "report_content<<EOF" >> $GITHUB_OUTPUT
+            echo "$REPORT_CONTENT" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+        
+      - name: 🚨 Create Issue for SSL Certificate Expiration
+        if: steps.health_check.outputs.health_status == 'unhealthy'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const reportContent = `${{ steps.read_report.outputs.report_content }}`;
+            
+            if (!reportContent) {
+              console.log('No health report content found');
+              return;
+            }
+            
+            let report;
+            try {
+              report = JSON.parse(reportContent);
+            } catch (e) {
+              console.log('Failed to parse health report');
+              return;
+            }
+            
+            // Prüfe ob SSL-Zertifikat-Probleme vorhanden sind
+            const sslIssues = report.issues.filter(issue => 
+              issue.errorCode === 'E_SSL_CERT_EXPIRED' || 
+              issue.errorCode === 'E_SSL_CERT_EXPIRING_SOON'
+            );
+            
+            if (sslIssues.length > 0) {
+              const issue = sslIssues[0]; // Erstes SSL-Issue
+              
+              const title = issue.errorCode === 'E_SSL_CERT_EXPIRED' 
+                ? '🤖 [Automatisch gemeldet] Test: Kritisches SSL-Zertifikat abgelaufen'
+                : '🤖 [Automatisch gemeldet] Warnung: SSL-Zertifikat läuft bald ab';
+              
+              const body = `**Fehlerdetails:**
+
+            \`\`\`json
+            ${JSON.stringify(issue, null, 2)}
+            \`\`\`
+
+            **Kontext:**
+
+            Dieser Fehler wurde vom automatisierten System-Monitoring erkannt. Bitte untersuchen Sie die Ursache und beheben Sie das Problem.
+
+            ---
+            *Dieses Issue wurde automatisch vom System-Monitoring erstellt.*`;
+              
+              // Erstelle Issue
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                labels: ['bug', 'security', 'ssl', 'automated']
+              });
+              
+              console.log('SSL certificate issue created successfully');
+            }
+            
+            // Prüfe auf andere kritische Probleme
+            const criticalIssues = report.issues.filter(issue => 
+              issue.errorCode === 'E_WEBSITE_UNREACHABLE'
+            );
+            
+            if (criticalIssues.length > 0) {
+              const issue = criticalIssues[0];
+              
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: '🤖 [Automatisch gemeldet] Website nicht erreichbar',
+                body: `**Fehlerdetails:**
+
+            \`\`\`json
+            ${JSON.stringify(issue, null, 2)}
+            \`\`\`
+
+            **Kontext:**
+
+            Die Website ist nicht erreichbar. Dies erfordert sofortige Aufmerksamkeit.
+
+            ---
+            *Dieses Issue wurde automatisch vom System-Monitoring erstellt.*`,
+                labels: ['bug', 'critical', 'downtime', 'automated']
+              });
+            }
+        
+      - name: 📧 Send Email Alert for Critical Issues
+        if: steps.health_check.outputs.health_status == 'unhealthy'
+        run: |
+          echo "Health check failed - consider setting up email alerts"
+          echo "Report saved in /tmp/ for debugging"
+        
+      - name: ✅ Health Check Summary
+        run: |
+          echo "Health Check Status: ${{ steps.health_check.outputs.health_status }}"
+          if [ "${{ steps.health_check.outputs.health_status }}" = "healthy" ]; then
+            echo "✅ Website is healthy and SSL certificate is valid"
+          else
+            echo "❌ Website health issues detected - check created issues"
+          fi
