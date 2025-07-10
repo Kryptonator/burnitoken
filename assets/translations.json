@@ -13,7 +13,19 @@
       "menu_button": "Menu",
       "hero_title": "Burni Token - Creating Value Through Scarcity",
       "hero_subtitle": "Join the revolutionary deflationary cryptocurrency that burns tokens to increase value. Built on XRPL with community-driven innovation.",
-      "lang_select_label": "Select language"
+      "lang_select_label": "Select language",
+      "alt_burni_logo": "BurniToken logo - orange flame mascot character",
+      "alt_burni_mascot": "BurniToken mascot - cartoon character with flames",
+      "alt_burni_burning_campfire": "BurniToken mascot burning tokens in a campfire",
+      "alt_burni_locks_vault": "BurniToken mascot locking coins in a secure vault",
+      "alt_gamepad_icon": "Gaming controller icon representing decentralized gaming use case",
+      "alt_palette_icon": "Artist palette icon representing NFT integration",
+      "alt_use_case_rewards": "BurniToken mascot with trophies surrounded by people for rewards system",
+      "alt_exchange_icon": "Exchange arrows icon representing microtransactions",
+      "alt_vote_icon": "Vote icon representing community governance",
+      "alt_burni_schedule_calculation": "BurniToken mascot with calculator and blackboard showing burn calculations",
+      "alt_burni_chart_illustration": "BurniToken mascot in front of a rising price chart",
+      "alt_burnicoin_image": "BurniToken coin with smiling flame face design"
     }
   },
   "de": {
@@ -30,7 +42,19 @@
       "menu_button": "Menü",
       "hero_title": "Burni Token - Wert durch Knappheit schaffen",
       "hero_subtitle": "Schließe dich der revolutionären deflationären Kryptowährung an, die Token verbrennt, um den Wert zu steigern. Entwickelt auf XRPL mit Community-Innovation.",
-      "lang_select_label": "Sprache wählen"
+      "lang_select_label": "Sprache wählen",
+      "alt_burni_logo": "BurniToken Logo - oranges Flammen-Maskottchen",
+      "alt_burni_mascot": "BurniToken Maskottchen - Cartoon-Charakter mit Flammen",
+      "alt_burni_burning_campfire": "BurniToken Maskottchen verbrennt Token am Lagerfeuer",
+      "alt_burni_locks_vault": "BurniToken Maskottchen sperrt Münzen in einem sicheren Tresor",
+      "alt_gamepad_icon": "Gaming-Controller Symbol für dezentrale Spiele",
+      "alt_palette_icon": "Künstlerpalette Symbol für NFT-Integration",
+      "alt_use_case_rewards": "BurniToken Maskottchen mit Pokalen umgeben von Menschen für Belohnungssystem",
+      "alt_exchange_icon": "Austausch-Pfeile Symbol für Mikrotransaktionen",
+      "alt_vote_icon": "Abstimmungs-Symbol für Community-Governance",
+      "alt_burni_schedule_calculation": "BurniToken Maskottchen mit Taschenrechner und Tafel zeigt Burn-Berechnungen",
+      "alt_burni_chart_illustration": "BurniToken Maskottchen vor einem steigenden Preisdiagramm",
+      "alt_burnicoin_image": "BurniToken Münze mit lächelndem Flammengesicht-Design"
     }
   },
   "es": {

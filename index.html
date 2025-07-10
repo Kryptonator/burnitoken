@@ -96,6 +96,36 @@
         0% { background-position: 200% 0; }
         100% { background-position: -200% 0; }
       }
+
+      /* Respect user motion preferences */
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+        
+        .loading-placeholder {
+          animation: none;
+          background: #e0e0e0;
+        }
+        
+        .animate-bounce,
+        .animate-pulse,
+        .animate-spin,
+        .hover-lift:hover,
+        .fade-in,
+        .fade-in-up,
+        .fade-in-scale {
+          animation: none !important;
+          transform: none !important;
+        }
+        
+        .gpu-accelerated {
+          transform: none !important;
+        }
+      }
     </style>
 
 
@@ -464,13 +494,73 @@
   ]
 }
 </script>
+
+    <!-- Complete Organization Schema.org markup for Google Knowledge Panel -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "BurniToken",
+      "alternateName": "BURNI",
+      "url": "https://burnitoken.website",
+      "logo": "https://burnitoken.website/assets/images/burniimage.webp",
+      "description": "Revolutionary deflationary cryptocurrency project built on XRP Ledger with automatic token burning mechanisms and community-driven innovation.",
+      "foundingDate": "2025-05-17",
+      "industry": "Cryptocurrency, Blockchain Technology, DeFi",
+      "areaServed": "Global",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Customer Service",
+        "availableLanguage": ["en", "de", "es", "fr", "ar", "bn", "ja", "pt", "ko", "ru", "tr", "zh", "hi", "it"]
+      },
+      "sameAs": [
+        "https://twitter.com/burnicoin",
+        "https://t.me/burnicoin", 
+        "https://discord.gg/burnicoin",
+        "https://github.com/burnitoken/project",
+        "https://livenet.xrpl.org/accounts/rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2",
+        "https://bithomp.com/explorer/rJzQVveWEob6x6PJQqXm9sdcFjGbACBwv2"
+      ],
+      "knowsAbout": [
+        "Token Burning",
+        "Deflationary Cryptocurrency", 
+        "XRP Ledger",
+        "Blockchain Technology",
+        "DeFi",
+        "Tokenomics",
+        "Smart Contracts"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "Global"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "BurniToken Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Product",
+              "name": "BURNI Token",
+              "description": "Deflationary cryptocurrency token"
+            }
+          }
+        ]
+      },
+      "memberOf": {
+        "@type": "Organization",
+        "name": "XRP Ledger Ecosystem"
+      }
+    }
+    </script>
 </head>
 
   <body class="antialiased">
     <!-- Page Loader -->
-    <div id="pageLoader" class="page-loader">
+    <div id="pageLoader" class="page-loader" role="status" aria-live="polite">
       <div class="text-center">
-        <div class="w-12 h-12 mb-4 border-t-2 border-orange-500 rounded-full animate-spin"></div>
+        <div class="w-12 h-12 mb-4 border-t-2 border-orange-500 rounded-full animate-spin" aria-hidden="true"></div>
         <p class="text-gray-600">Loading Burni Token...</p>
       </div>
     </div>
@@ -519,6 +609,10 @@
         Please enable JavaScript to use all features of this site.
       </div>
     </noscript>
+    <!-- Aria-live regions for dynamic content updates -->
+    <div id="live-announcements" class="sr-only" aria-live="polite" aria-atomic="true" role="status"></div>
+    <div id="urgent-announcements" class="sr-only" aria-live="assertive" aria-atomic="true" role="alert"></div>
+    
     <a href="#main" class="sr-only focus:not-sr-only">Skip to main content</a>
     <header class="sticky top-0 z-50 py-2 shadow-md bg-white/80 backdrop-blur-md">
       <div class="container flex items-center justify-between px-6 mx-auto">
@@ -526,6 +620,7 @@
           <img
             src="/assets/images/favicon-32x32.png"
             alt="Burni Logo"
+            data-i18n-alt="alt_burni_logo"
             class="w-6 h-6 mr-2 optimized-image"
             loading="eager"
             decoding="async"
@@ -748,6 +843,7 @@
                   loading="lazy" srcset="/assets/images/burniimage.jpg 1x, /assets/images/burniimage-2x.jpg 2x"
 
                   alt="Burni Token Mascot - Comic Style Character"
+                  data-i18n-alt="alt_burni_mascot"
                   class="mx-auto mb-6 burni-mascot hover-lift optimized-image fade-in-scale gpu-accelerated"
 
                   decoding="async"
@@ -788,21 +884,21 @@
             </div>
 
             <!-- Live Stats Cards -->
-            <div class="grid grid-cols-2 gap-3 mt-8 md:grid-cols-4 fade-in-up">
+            <div class="grid grid-cols-2 gap-3 mt-8 md:grid-cols-4 fade-in-up" role="region" aria-label="Live Token Statistics">
               <div class="kpi-card hover-lift">
-                <div class="kpi-value" id="total-supply-hero">1,000,000</div>
+                <div class="kpi-value" id="total-supply-hero" aria-live="polite">1,000,000</div>
                 <div class="kpi-label" data-i18n="total_supply">Total Supply</div>
               </div>
               <div class="kpi-card hover-lift">
-                <div class="kpi-value" id="burned-tokens-hero">0</div>
+                <div class="kpi-value" id="burned-tokens-hero" aria-live="polite">0</div>
                 <div class="kpi-label" data-i18n="burned_tokens">Burned </div>
               </div>
               <div class="kpi-card hover-lift">
-                <div class="kpi-value" id="price-hero">$0.00</div>
+                <div class="kpi-value" id="price-hero" aria-live="polite">$0.00</div>
                 <div class="kpi-label" data-i18n="current_price">Price</div>
               </div>
               <div class="kpi-card hover-lift">
-                <div class="kpi-value" id="market-cap-hero">$0</div>
+                <div class="kpi-value" id="market-cap-hero" aria-live="polite">$0</div>
                 <div class="kpi-label" data-i18n="market_cap">Market Cap</div>
               </div>
             </div>
@@ -1208,29 +1304,29 @@
               the economic foundation and potential of the token.
             </p>
           </div>
-          <div class="grid grid-cols-1 gap-6 mb-12 sm:grid-cols-2 lg:grid-cols-3 md:gap-8">
+          <div class="grid grid-cols-1 gap-6 mb-12 sm:grid-cols-2 lg:grid-cols-3 md:gap-8" role="region" aria-label="Token Key Performance Indicators">
             <div class="kpi-card">
               <div class="kpi-value">1,000,000</div>
               <div class="kpi-label" data-i18n="kpi_max_supply">Max Supply</div>
             </div>
             <div class="kpi-card">
-              <div id="circulatingSupplyValue" class="kpi-value">N/A</div>
+              <div id="circulatingSupplyValue" class="kpi-value" aria-live="polite">N/A</div>
               <div class="kpi-label" data-i18n="kpi_circulating_supply">Circulating Supply</div>
             </div>
             <div class="kpi-card">
-              <div id="burniPriceValue" class="kpi-value">N/A</div>
+              <div id="burniPriceValue" class="kpi-value" aria-live="polite">N/A</div>
               <div class="kpi-label" data-i18n="kpi_current_price">Current Burni Price</div>
             </div>
             <div class="kpi-card">
-              <div id="xrpPriceValue" class="kpi-value">N/A</div>
+              <div id="xrpPriceValue" class="kpi-value" aria-live="polite">N/A</div>
               <div class="kpi-label" data-i18n="kpi_xrp_price">Current XRP Price</div>
             </div>
             <div class="kpi-card">
-              <div id="xpmPriceValue" class="kpi-value">N/A</div>
+              <div id="xpmPriceValue" class="kpi-value" aria-live="polite">N/A</div>
               <div class="kpi-label" data-i18n="kpi_xpm_price">Current XPM Price</div>
             </div>
             <div class="kpi-card">
-              <div id="kpi_holders_value" class="kpi-value">N/A</div>
+              <div id="kpi_holders_value" class="kpi-value" aria-live="polite">N/A</div>
               <div class="kpi-label" data-i18n="kpi_holders">Number of Holders</div>
             </div>
             <div class="kpi-card">

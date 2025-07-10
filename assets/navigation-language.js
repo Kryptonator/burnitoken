@@ -17,6 +17,14 @@ function updateI18nElements(trans) {
       el.setAttribute('aria-label', (key in trans) ? trans[key] : key);
     }
   });
+  
+  // Update multilingual alt attributes for images
+  document.querySelectorAll('[data-i18n-alt]').forEach(img => {
+    const altKey = img.getAttribute('data-i18n-alt');
+    if (altKey in trans) {
+      img.setAttribute('alt', trans[altKey]);
+    }
+  });
 }
 
 function updatePageTitle(trans) {
@@ -30,12 +38,36 @@ async function switchLanguage(lang) {
   updatePageTitle(trans);
   // <html lang="...">-Attribut setzen
   document.documentElement.lang = lang;
+  
+  // Update aria-current="true" for active language
+  updateActiveLanguage(lang);
+  
   // Warten, bis alle DOM-Änderungen durch sind (Microtask-Queue leeren)
   await Promise.resolve();
   // Playwright-Testfreundlich: Event erst dispatchen, wenn DOM wirklich aktualisiert
   setTimeout(() => {
     document.dispatchEvent(new CustomEvent('languageSwitched', { detail: { lang } }));
   }, 0);
+}
+
+function updateActiveLanguage(activeLang) {
+  const langSelect = document.getElementById('lang-select');
+  if (langSelect) {
+    // Remove aria-current from all options
+    Array.from(langSelect.options).forEach(option => {
+      option.removeAttribute('aria-current');
+    });
+    
+    // Add aria-current="true" to selected option
+    const activeOption = Array.from(langSelect.options).find(option => option.value === activeLang);
+    if (activeOption) {
+      activeOption.setAttribute('aria-current', 'true');
+    }
+    
+    // Update select element aria-label to reflect current selection
+    const currentLangText = activeOption ? activeOption.textContent : activeLang.toUpperCase();
+    langSelect.setAttribute('aria-label', `Current language: ${currentLangText}. Select to change language.`);
+  }
 }
 
 function initNavigationAndLanguage() {
@@ -46,31 +78,118 @@ function initNavigationAndLanguage() {
     switchLanguage(langSelect.value);
   }
 
-  // Verbesserte Mobile Menü Logik
+  // Enhanced Mobile Navigation with Focus Management and ESC handling
   const mobileBtn = document.getElementById('mobile-menu-button');
   const mobileMenu = document.getElementById('mobile-menu');
+  let focusableElements = [];
+  let isMenuOpen = false;
+  
   if (mobileBtn && mobileMenu) {
+    // Get all focusable elements in mobile menu
+    function updateFocusableElements() {
+      focusableElements = mobileMenu.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
+    }
+    
+    function openMobileMenu() {
+      isMenuOpen = true;
+      mobileMenu.classList.remove('hidden');
+      mobileMenu.classList.add('active');
+      mobileBtn.setAttribute('aria-expanded', 'true');
+      updateFocusableElements();
+      
+      // Focus first menu item
+      if (focusableElements.length > 0) {
+        focusableElements[0].focus();
+      }
+      
+      // Announce menu opened to screen readers
+      const announcement = document.getElementById('live-announcements');
+      if (announcement) {
+        announcement.textContent = 'Navigation menu opened';
+        setTimeout(() => announcement.textContent = '', 1000);
+      }
+    }
+    
+    function closeMobileMenu() {
+      isMenuOpen = false;
+      mobileMenu.classList.add('hidden');
+      mobileMenu.classList.remove('active');
+      mobileBtn.setAttribute('aria-expanded', 'false');
+      
+      // Return focus to menu button
+      mobileBtn.focus();
+      
+      // Announce menu closed to screen readers
+      const announcement = document.getElementById('live-announcements');
+      if (announcement) {
+        announcement.textContent = 'Navigation menu closed';
+        setTimeout(() => announcement.textContent = '', 1000);
+      }
+    }
+    
+    function handleFocusTrap(e) {
+      if (!isMenuOpen) return;
+      
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+      
+      if (e.key === 'Tab') {
+        if (e.shiftKey) {
+          // Shift + Tab
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          // Tab
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
+    }
+    
     // Event-Listener entfernen und neu setzen (Test-Kompatibilität)
     const newBtn = mobileBtn.cloneNode(true);
     mobileBtn.parentNode.replaceChild(newBtn, mobileBtn);
+    
     newBtn.addEventListener('click', () => {
-      const isOpen = !mobileMenu.classList.toggle('hidden');
-      mobileMenu.classList.toggle('active', isOpen);
-      newBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      if (isMenuOpen) {
+        closeMobileMenu();
+      } else {
+        openMobileMenu();
+      }
     });
+    
     // Menü schließt bei Klick auf Link
     mobileMenu.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
-        mobileMenu.classList.add('hidden');
-        mobileMenu.classList.remove('active');
-        newBtn.setAttribute('aria-expanded', 'false');
+        closeMobileMenu();
       });
     });
-    // Tastatursteuerung für mobilen Menü-Button
+    
+    // Enhanced Keyboard Support
     newBtn.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         newBtn.click();
+      }
+    });
+    
+    // Global ESC key handler and focus trap
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && isMenuOpen) {
+        e.preventDefault();
+        closeMobileMenu();
+      }
+      handleFocusTrap(e);
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', e => {
+      if (isMenuOpen && !mobileMenu.contains(e.target) && !newBtn.contains(e.target)) {
+        closeMobileMenu();
       }
     });
   }
