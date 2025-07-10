@@ -13,8 +13,10 @@ Disallow: /*.json$
 Disallow: /audit-*
 Disallow: /comprehensive-*
 
-# Sitemap location
+# Sitemap locations
 Sitemap: https://burnitoken.website/sitemap.xml
+Sitemap: https://burnitoken.website/sitemap-basic.xml
+Sitemap: https://burnitoken.website/sitemapindex.xml
 
 # Crawl-delay for respectful crawling
 Crawl-delay: 1
