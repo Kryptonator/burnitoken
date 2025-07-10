@@ -34,5 +34,7 @@
     "**/node_modules/**": true,
     "**/.git/objects/**": true,
     "**/.git/subtree-cache/**": true
-  }
+  },
+  "task.allowAutomaticTasks": "on",
+  "extensions.ignoreRecommendations": false
 }
