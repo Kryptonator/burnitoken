@@ -21,6 +21,7 @@
 
 **Analytics:**
 - Optional: Plausible, Matomo oder Netlify Analytics einbinden
+- Google Search Console API-Integration (siehe `tools/gsc-status-check.js`)
 
 **Letzter Go-Live:** 19.06.2025
 
