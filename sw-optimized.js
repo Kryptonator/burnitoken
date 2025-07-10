@@ -11,7 +11,7 @@ const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/assets/css/styles.min.css',
+  '/assets/css/main-optimized.css',
   '/assets/images/burniimage.webp',
   '/assets/images/favicon-32x32.png',
   '/assets/images/favicon-16x16.png',

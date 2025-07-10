@@ -56,7 +56,7 @@
   <meta name="apple-mobile-web-app-title" content="BurniToken">
   
   <!-- Preload Critical Resources -->
-  <link rel="preload" href="/assets/css/styles.min.css" as="style">
+  <link rel="preload" href="/assets/css/main-optimized.css" as="style">
   <link rel="preload" href="/assets/images/burniimage.webp" as="image" type="image/webp">
   <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfMZ.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="https://fonts.gstatic.com/s/baloo2/v3/wXKrE3kTposypRyd76j0_w.woff2" as="font" type="font/woff2" crossorigin>
@@ -72,7 +72,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="/assets/css/styles.min.css">
+  <link rel="stylesheet" href="/assets/css/main-optimized.css">
   
   <!-- Security Headers -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; script-src 'self' 'unsafe-inline'; connect-src 'self' https://api.coingecko.com https://livenet.xrpl.org https://bithomp.com; frame-src 'none'; object-src 'none';">
@@ -614,7 +614,7 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
+        navigator.serviceWorker.register('/sw-optimized.js')
           .then(registration => {
             console.log('Service Worker registered successfully:', registration.scope);
           })

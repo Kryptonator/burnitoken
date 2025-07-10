@@ -35,7 +35,7 @@
             "purpose": "any maskable"
         }
     ],
-    "start_url": "/?source=pwa",
+    "start_url": "/",
     "scope": "/",
     "id": "burni-token-app",
     "display": "standalone",
