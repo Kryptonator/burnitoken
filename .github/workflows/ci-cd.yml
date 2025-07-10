@@ -46,6 +46,7 @@ jobs:
             Author: ${{ github.actor }}
             Workflow: ${{ github.workflow }}
             See details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      
       - name: Send E-Mail Alert
         uses: dawidd6/action-send-mail@v3
         with:
