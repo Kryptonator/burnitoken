@@ -46,13 +46,14 @@ jobs:
             Author: ${{ github.actor }}
             Workflow: ${{ github.workflow }}
             See details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      
       - name: Send E-Mail Alert
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.mail.yahoo.com
           server_port: 465
           username: burn.coin@yahoo.com
-          password: ${{ secrets.YAHOO_APP_PASSWORD }}
+          password: ${{ secrets.github }}
           subject: "[BurniToken CI/CD] Build/Test failed!"
           to: burn.coin@yahoo.com
           from: BurniToken CI/CD <burn.coin@yahoo.com>
