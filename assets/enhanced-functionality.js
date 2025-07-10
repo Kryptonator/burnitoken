@@ -250,19 +250,45 @@
     updatePrices: function () {
       var self = this;
 
-      // Update XRP price
-      BurniToken.api
-        .fetch('https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd')
-        .then(function (data) {
-          if (data && data.ripple && data.ripple.usd) {
-            self.data.xrp = data.ripple.usd;
+      // Update XRP price with monitoring
+      var xrpUrl = 'https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd';
+      
+      // Use price feed monitor if available
+      if (window.PriceFeedMonitor) {
+        window.PriceFeedMonitor.monitorFetch(xrpUrl)
+          .then(function (result) {
+            if (result.valid && result.data && result.data.ripple && result.data.ripple.usd) {
+              self.data.xrp = result.data.ripple.usd;
+              self.updateUI();
+              self.notify();
+            } else if (result.error) {
+              console.warn('Price feed validation failed:', result.error);
+              // Continue with existing fallback behavior
+              self.updateUI();
+              self.notify();
+            }
+          })
+          .catch(function (error) {
+            console.warn('Failed to update XRP price:', error);
+            // Continue with existing fallback behavior
             self.updateUI();
             self.notify();
-          }
-        })
-        .catch(function (error) {
-          console.warn('Failed to update XRP price:', error);
-        });
+          });
+      } else {
+        // Fallback to original implementation
+        BurniToken.api
+          .fetch(xrpUrl)
+          .then(function (data) {
+            if (data && data.ripple && data.ripple.usd) {
+              self.data.xrp = data.ripple.usd;
+              self.updateUI();
+              self.notify();
+            }
+          })
+          .catch(function (error) {
+            console.warn('Failed to update XRP price:', error);
+          });
+      }
 
       // Update BURNI price (mock data for now)
       this.data.burni = 0.000001;
