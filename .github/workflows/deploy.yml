@@ -30,3 +30,36 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./
           exclude_assets: '.github'
+        
+      - name: Setze Git-Tag nach erfolgreichem Deploy
+        id: set_tag
+        if: success()
+        run: |
+          TAG="v$(date +'%Y.%m.%d-%H%M')"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git tag $TAG
+          git push origin $TAG
+          echo "tag=$TAG" >> $GITHUB_ENV
+      
+      - name: Automatisches GitHub Release mit Release-Notes
+        if: success()
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.tag }}
+          name: "Release ${{ env.tag }}"
+          body: |
+            Automatisches Release nach Deployment.
+            Siehe Changelog und Commits für Details.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Status-Webhook bei Erfolg
+        if: success()
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{"status":"success","workflow":"Deploy Website"}' ${{ secrets.STATUS_WEBHOOK_URL }}
+
+      - name: Status-Webhook bei Fehler
+        if: failure()
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{"status":"failure","workflow":"Deploy Website"}' ${{ secrets.STATUS_WEBHOOK_URL }}

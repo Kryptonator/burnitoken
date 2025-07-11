@@ -1,0 +1,20 @@
+---
+Title: Fehler beim Abrufen von Dependabot PRs
+Source: Dependabot Monitor
+Created: 2025-07-07T10:08:56.215Z
+Status: Open
+---
+
+### Problembeschreibung
+
+Dependabot Monitor konnte keine PRs abrufen.
+Fehlerdetails: HTTP 401: Bad credentials (https://api.github.com/graphql)
+Try authenticating with:  gh auth login
+
+
+### Nächste Schritte
+
+1.  Problem analysieren.
+2.  Lösung implementieren.
+3.  Änderungen testen und verifizieren.
+4.  ToDo als "Done" markieren.

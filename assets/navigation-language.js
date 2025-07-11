@@ -1,20 +1,78 @@
 // Navigation & Language Switcher Optimierung für Burni Token
 
+// --- NEU: Verbesserte i18n-Logik ---
+
+/**
+ * Bestimmt die initiale Sprache basierend auf der Nutzerpräferenz, den Browser-Einstellungen oder einem Standardwert.
+ * Reihenfolge: localStorage -> navigator.language -> Fallback (z.B. 'en')
+ * @param {string[]} availableLangs - Array der verfügbaren Sprachcodes (z.B. ['en', 'de']).
+ * @param {string} fallbackLang - Die Standardsprache, falls keine andere gefunden wird.
+ * @returns {string} Der zu verwendende Sprachcode.
+ */
+function getInitialLanguage(availableLangs, fallbackLang = 'en') {
+  const savedLang = localStorage.getItem('userLanguage');
+  if (savedLang && availableLangs.includes(savedLang)) {
+    return savedLang;
+  }
+
+  const browserLang = navigator.language.split('-')[0];
+  if (availableLangs.includes(browserLang)) {
+    return browserLang;
+  }
+
+  return fallbackLang;
+}
+
+/**
+ * Aktualisiert die hreflang-Tags im <head> für SEO.
+ * @param {string[]} availableLangs - Array aller verfügbaren Sprachcodes.
+ */
+function updateHreflangTags(availableLangs) {
+  const head = document.head;
+  // Alte hreflang-Tags entfernen, um Duplikate zu vermeiden
+  head.querySelectorAll('link[rel="alternate"]').forEach((el) => el.remove());
+
+  const baseUrl = window.location.origin + window.location.pathname;
+
+  availableLangs.forEach((lang) => {
+    const link = document.createElement('link');
+    link.rel = 'alternate';
+    link.hreflang = lang;
+    link.href = baseUrl; // Annahme: URL ändert sich nicht pro Sprache
+    head.appendChild(link);
+  });
+
+  // x-default für die Fallback-Sprache hinzufügen
+  const defaultLink = document.createElement('link');
+  defaultLink.rel = 'alternate';
+  defaultLink.hreflang = 'x-default';
+  defaultLink.href = baseUrl;
+  head.appendChild(defaultLink);
+}
+
+// --- Bestehende Logik (angepasst) ---
+
 // Sprachumschaltung
-async function loadTranslations(lang) {
-  const res = await fetch('/assets/translations.json');
-  const translations = await res.json();
-  return translations[lang]?.translation || {};
+async function loadTranslations() {
+  // Nur einmal fetchen und cachen für bessere Performance
+  if (!window.burni_translations) {
+    const res = await fetch('/assets/translations.json');
+    window.burni_translations = await res.json();
+  }
+  return window.burni_translations;
 }
 
 function updateI18nElements(trans) {
-  document.querySelectorAll('[data-i18n]').forEach(el => {
+  document.querySelectorAll('[data-i18n]').forEach((el) => {
     const key = el.getAttribute('data-i18n');
     // Immer Wert setzen, auch wenn leer, Fallback: Key selbst
-    el.textContent = (key in trans) ? trans[key] : key;
+    el.textContent = key in trans ? trans[key] : key;
     // aria-label ggf. mitübersetzen, falls vorhanden und identisch mit Key
-    if (el.hasAttribute('aria-label') && el.getAttribute('aria-label').toLowerCase().includes(key.replace(/_/g, ' '))) {
-      el.setAttribute('aria-label', (key in trans) ? trans[key] : key);
+    if (
+      el.hasAttribute('aria-label') &&
+      el.getAttribute('aria-label').toLowerCase().includes(key.replace(/_/g, ' '))
+    ) {
+      el.setAttribute('aria-label', key in trans ? trans[key] : key);
     }
   });
 }
@@ -23,27 +81,36 @@ function updatePageTitle(trans) {
   if (trans.hero_title) document.title = trans.hero_title;
 }
 
-async function switchLanguage(lang) {
-  const trans = await loadTranslations(lang);
-  // Alle i18n-Elemente synchron updaten
+async function switchLanguage(lang, availableLangs) {
+  const allTranslations = await loadTranslations();
+  const trans = allTranslations[lang]?.translation || {};
+
   updateI18nElements(trans);
   updatePageTitle(trans);
-  // <html lang="...">-Attribut setzen
   document.documentElement.lang = lang;
-  // Warten, bis alle DOM-Änderungen durch sind (Microtask-Queue leeren)
+
+  // NEU: Sprache speichern und hreflang-Tags aktualisieren
+  localStorage.setItem('userLanguage', lang);
+  updateHreflangTags(availableLangs);
+
   await Promise.resolve();
-  // Playwright-Testfreundlich: Event erst dispatchen, wenn DOM wirklich aktualisiert
   setTimeout(() => {
     document.dispatchEvent(new CustomEvent('languageSwitched', { detail: { lang } }));
   }, 0);
 }
 
-function initNavigationAndLanguage() {
+async function initNavigationAndLanguage() {
+  const allTranslations = await loadTranslations();
+  const availableLangs = Object.keys(allTranslations);
+  const initialLang = getInitialLanguage(availableLangs, 'de');
+
   // Sprachumschaltung
   const langSelect = document.getElementById('lang-select');
   if (langSelect) {
-    langSelect.addEventListener('change', e => switchLanguage(e.target.value));
-    switchLanguage(langSelect.value);
+    langSelect.value = initialLang; // UI synchronisieren
+    langSelect.addEventListener('change', (e) => switchLanguage(e.target.value, availableLangs));
+    // Initial die Sprache setzen
+    switchLanguage(initialLang, availableLangs);
   }
 
   // Verbesserte Mobile Menü Logik
@@ -59,7 +126,7 @@ function initNavigationAndLanguage() {
       newBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     });
     // Menü schließt bei Klick auf Link
-    mobileMenu.querySelectorAll('a').forEach(link => {
+    mobileMenu.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', () => {
         mobileMenu.classList.add('hidden');
         mobileMenu.classList.remove('active');
@@ -67,7 +134,7 @@ function initNavigationAndLanguage() {
       });
     });
     // Tastatursteuerung für mobilen Menü-Button
-    newBtn.addEventListener('keydown', e => {
+    newBtn.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         newBtn.click();
@@ -77,7 +144,7 @@ function initNavigationAndLanguage() {
 
   // Verbesserte Navigation Active-State beim Scrollen
   const navLinks = Array.from(document.querySelectorAll('a.nav-link'));
-  const sections = navLinks.map(link => document.querySelector(link.getAttribute('href')));
+  const sections = navLinks.map((link) => document.querySelector(link.getAttribute('href')));
   function updateActiveNav() {
     let index = sections.findIndex((section, i) => {
       if (!section) return false;
@@ -91,8 +158,8 @@ function initNavigationAndLanguage() {
   updateActiveNav();
 
   // Verbesserte Smooth Scrolling Logik
-  document.querySelectorAll('a.nav-link, #mobile-menu a').forEach(link => {
-    link.addEventListener('click', function(e) {
+  document.querySelectorAll('a.nav-link, #mobile-menu a').forEach((link) => {
+    link.addEventListener('click', function (e) {
       const href = this.getAttribute('href');
       if (href && href.startsWith('#')) {
         e.preventDefault();
@@ -133,22 +200,22 @@ function initNavigationAndLanguage() {
 
   // Event-Listener für alle ehemals onclick/onkeydown-Elemente
   // scrollToSection
-  document.querySelectorAll('[data-scroll-to]').forEach(el => {
-    el.addEventListener('click', e => {
+  document.querySelectorAll('[data-scroll-to]').forEach((el) => {
+    el.addEventListener('click', (e) => {
       const section = el.getAttribute('data-scroll-to');
       if (section) scrollToSection(section);
     });
   });
   // showTooltip
-  document.querySelectorAll('[data-tooltip]').forEach(el => {
+  document.querySelectorAll('[data-tooltip]').forEach((el) => {
     el.addEventListener('mouseenter', () => showTooltip(el));
   });
   // initializeCalculator
-  document.querySelectorAll('[data-init-calculator]').forEach(el => {
+  document.querySelectorAll('[data-init-calculator]').forEach((el) => {
     el.addEventListener('click', initializeCalculator);
   });
   // toggleFAQ
-  document.querySelectorAll('[data-toggle-faq]').forEach(el => {
+  document.querySelectorAll('[data-toggle-faq]').forEach((el) => {
     el.addEventListener('click', () => {
       const faqId = el.getAttribute('data-toggle-faq');
       if (faqId) toggleFAQ(faqId);
@@ -156,7 +223,11 @@ function initNavigationAndLanguage() {
   });
 
   // Für Playwright-Tests: Desktop-Navigation immer sichtbar machen
-  if (navigator.userAgent.includes('Playwright') || window.__playwright || document.body.getAttribute('data-playwright') === 'true') {
+  if (
+    navigator.userAgent.includes('Playwright') ||
+    window.__playwright ||
+    document.body.getAttribute('data-playwright') === 'true'
+  ) {
     const desktopNav = document.querySelector('nav[aria-label="Main navigation"]');
     if (desktopNav) {
       desktopNav.classList.remove('hidden');

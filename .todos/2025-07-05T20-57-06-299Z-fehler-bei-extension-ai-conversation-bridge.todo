@@ -1,0 +1,17 @@
+---
+Title: Fehler bei Extension: AI Conversation Bridge
+Source: Extension Validator
+Created: 2025-07-05T20:57:06.299Z
+Status: Open
+---
+
+### Problembeschreibung
+
+Die Überprüfung der Extension "AI Conversation Bridge" hat einen Fehler ergeben: Konfigurationsdatei nicht gefunden
+
+### Nächste Schritte
+
+1.  Problem analysieren.
+2.  Lösung implementieren.
+3.  Änderungen testen und verifizieren.
+4.  ToDo als "Done" markieren.

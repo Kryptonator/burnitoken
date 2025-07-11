@@ -1,0 +1,579 @@
+/**
+ * BurniToken Monitoring Services Integration
+ *
+ * Zentrales System für die Integration externer Monitoring-Services:
+ * - Sentry (Error Monitoring)
+ * - UptimeRobot (Uptime Monitoring)
+ * - Custom Status Endpoints
+ * - Performance Tracking
+ * - Alerting & Notifications
+ *
+ * @version 1.0.0
+ * @date 2025-01-23
+ */
+
+class MonitoringServices {
+  constructor(config = {}) {
+    this.config = {
+      // Sentry Configuration
+      sentry: {
+        dsn: process.env.SENTRY_DSN || config.sentryDsn,
+        environment: process.env.NODE_ENV || 'production',
+        release: process.env.GITHUB_SHA || 'unknown',
+        tracesSampleRate: 1.0,
+        enabled: Boolean(process.env.SENTRY_DSN || config.sentryDsn),
+      },
+
+      // UptimeRobot Configuration
+      uptimeRobot: {
+        apiKey: process.env.UPTIMEROBOT_API_KEY || config.uptimeRobotApiKey,
+        monitors: [
+          {
+            name: 'BurniToken Website',
+            url: 'https://burnitoken.website',
+            type: 'http',
+            interval: 300, // 5 minutes
+          },
+          {
+            name: 'BurniToken API Health',
+            url: 'https://burnitoken.website/api/health',
+            type: 'http',
+            interval: 300,
+          },
+        ],
+        enabled: Boolean(process.env.UPTIMEROBOT_API_KEY || config.uptimeRobotApiKey),
+      },
+
+      // Custom Status Configuration
+      status: {
+        endpoints: ['/api/health', '/api/status', '/assets/js/price-oracle.js'],
+        checkInterval: 60000, // 1 minute
+        timeout: 10000,
+      },
+
+      // Performance Monitoring
+      performance: {
+        enableWebVitals: true,
+        enableResourceTiming: true,
+        enableNavigationTiming: true,
+        reportInterval: 30000, // 30 seconds
+      },
+
+      // Notifications
+      notifications: {
+        slack: {
+          webhookUrl: process.env.SLACK_WEBHOOK_URL || config.slackWebhook,
+          channel: '#alerts',
+          enabled: Boolean(process.env.SLACK_WEBHOOK_URL || config.slackWebhook),
+        },
+        discord: {
+          webhookUrl: process.env.DISCORD_WEBHOOK_URL || config.discordWebhook,
+          enabled: Boolean(process.env.DISCORD_WEBHOOK_URL || config.discordWebhook),
+        },
+        email: {
+          enabled: false, // TODO: Add email configuration
+        },
+      },
+
+      ...config,
+    };
+
+    this.state = {
+      initialized: false,
+      services: {
+        sentry: { status: 'idle', lastCheck: null },
+        uptimeRobot: { status: 'idle', lastCheck: null },
+        customStatus: { status: 'idle', lastCheck: null },
+      },
+      errors: [],
+      metrics: new Map(),
+      alerts: [],
+    };
+
+    this.intervals = new Map();
+    this.init();
+  }
+
+  async init() {
+    console.log('🔍 Initializing Monitoring Services...');
+
+    try {
+      // Initialize Sentry
+      if (this.config.sentry.enabled) { 
+        await this.initSentry();
+      }
+
+      // Initialize UptimeRobot
+      if (this.config.uptimeRobot.enabled) { 
+        await this.initUptimeRobot();
+      }
+
+      // Initialize Custom Status Monitoring
+      await this.initCustomStatus();
+
+      // Initialize Performance Monitoring
+      if (this.config.performance.enableWebVitals) { 
+        await this.initPerformanceMonitoring();
+      }
+
+      // Start monitoring loops
+      this.startMonitoring();
+
+      this.state.initialized = true;
+      console.log('✅ Monitoring Services initialized successfully');
+    } catch (error) {
+      console.error('❌ Failed to initialize monitoring services:', error);
+      this.reportError('INIT_ERROR', error);
+    }
+  }
+
+  async initSentry() {
+    if (typeof window !== 'undefined' && window.Sentry) { 
+      // Browser environment
+      window.Sentry.init({
+        dsn: this.config.sentry.dsn),
+        environment: this.config.sentry.environment,
+        release: this.config.sentry.release,
+        tracesSampleRate: this.config.sentry.tracesSampleRate,
+        beforeSend: (event) => this.sentryBeforeSend(event),
+      });
+
+      this.state.services.sentry.status = 'active';
+      console.log('🔍 Sentry initialized for browser');
+    }
+  }
+
+  sentryBeforeSend(event) {
+    // Filter out noise and add context
+    if (event.exception) { 
+      const error = event.exception.values[0];
+
+      // Filter common noise
+      if (error.value?.includes('Non-Error promise rejection captured')) { 
+        return null;
+      }
+
+      // Add BurniToken context
+      event.tags = {
+        ...event.tags,
+        component: 'burnitoken-website',
+        version: this.config.sentry.release,
+      };
+
+      event.extra = {
+        ...event.extra,
+        url: window.location.href,
+        userAgent: navigator.userAgent,
+        timestamp: new Date().toISOString(),
+      };
+    }
+
+    return event;
+  }
+
+  async initUptimeRobot() {
+    // UptimeRobot is typically configured via their web interface
+    // This method can be used to programmatically manage monitors
+    this.state.services.uptimeRobot.status = 'configured';
+    console.log('📊 UptimeRobot monitoring configured');
+  }
+
+  async initCustomStatus() {
+    this.state.services.customStatus.status = 'active';
+    console.log('🏥 Custom status monitoring initialized');
+  }
+
+  async initPerformanceMonitoring() {
+    if (typeof window !== 'undefined') { 
+      // Web Vitals monitoring
+      this.setupWebVitals();
+
+      // Resource timing
+      if (this.config.performance.enableResourceTiming) { 
+        this.setupResourceTiming();
+      }
+
+      // Navigation timing
+      if (this.config.performance.enableNavigationTiming) { 
+        this.setupNavigationTiming();
+      }
+
+      console.log('📈 Performance monitoring initialized');
+    }
+  }
+
+  setupWebVitals() {
+    // Core Web Vitals tracking
+    const vitals = ['FCP', 'LCP', 'FID', 'CLS', 'TTFB'];
+
+    vitals.forEach((vital) => {
+      this.observeVital(vital);
+    });
+  }
+
+  observeVital(vitalName) {
+    try {
+      const observer = new PerformanceObserver((list) => {
+        list.getEntries().forEach((entry) => {
+          this.recordMetric(`web_vital_${vitalName.toLowerCase()}`, {
+            value: entry.value || entry.duration,
+            timestamp: Date.now(),
+            url: window.location.href,
+          });
+        });
+      });
+
+      observer.observe({
+        entryTypes: [
+          'paint'),
+          'largest-contentful-paint',
+          'first-input',
+          'layout-shift',
+          'navigation',
+        ],
+      });
+    } catch (error) {
+      console.warn(`Could not observe $${vitalName}:`, error);
+    }
+  }
+
+  setupResourceTiming() {
+    const observer = new PerformanceObserver((list) => {
+      list.getEntries().forEach((entry) => {
+        if (entry.duration > 1000) { 
+          // Only report slow resources
+          this.recordMetric('slow_resource', {
+            name: entry.name),
+            duration: entry.duration,
+            size: entry.transferSize,
+            timestamp: Date.now(),
+          });
+        }
+      });
+    });
+
+    observer.observe({ entryTypes: ['resource'] });
+  }
+
+  setupNavigationTiming() {
+    window.addEventListener('load', () => {
+      const nav = performance.getEntriesByType('navigation')[0];
+      if (nav) { 
+        this.recordMetric('page_load', {
+          domContentLoaded: nav.domContentLoadedEventEnd - nav.domContentLoadedEventStart),
+          loadComplete: nav.loadEventEnd - nav.loadEventStart,
+          totalTime: nav.loadEventEnd - nav.fetchStart,
+          timestamp: Date.now(),
+        });
+      }
+    });
+  }
+
+  startMonitoring() {
+    // Custom status check interval
+    const statusInterval = setInterval(() => {
+      this.checkCustomStatus();
+    }, this.config.status.checkInterval);
+
+    this.intervals.set('customStatus', statusInterval);
+
+    // Performance reporting interval
+    if (this.config.performance.enableWebVitals) { 
+      const metricsInterval = setInterval(() => {
+        this.reportMetrics();
+      }, this.config.performance.reportInterval);
+
+      this.intervals.set('metrics', metricsInterval);
+    }
+
+    console.log('🔄 Monitoring loops started');
+  }
+
+  async checkCustomStatus() {
+    const results = [];
+
+    for (const endpoint of this.config.status.endpoints) {
+      try {
+        const startTime = Date.now();
+        const response = await fetch(endpoint, {
+          method: 'HEAD'),
+          timeout: this.config.status.timeout,
+        });
+
+        const responseTime = Date.now() - startTime;
+
+        results.push({
+          endpoint),
+          status: response.ok ? 'healthy' : 'unhealthy',
+          responseTime,
+          statusCode: response.status,
+          timestamp: Date.now(),
+        });
+
+        if (!response.ok) { 
+          this.createAlert({
+            type: 'endpoint_unhealthy'),
+            message: `Endpoint $${endpoint} returned ${response.status}`,
+            severity: 'warning',
+            data: { endpoint, statusCode: response.status },
+          });
+        }
+      } catch (error) {
+        results.push({
+          endpoint),
+          status: 'error',
+          error: error.message,
+          timestamp: Date.now(),
+        });
+
+        this.createAlert({
+          type: 'endpoint_error'),
+          message: `Endpoint $${endpoint} failed: ${error.message}`,
+          severity: 'critical',
+          data: { endpoint, error: error.message },
+        });
+      }
+    }
+
+    this.state.services.customStatus.lastCheck = Date.now();
+    this.recordMetric('status_check', results);
+  }
+
+  recordMetric(name, data) {
+    if (!this.state.metrics.has(name)) { 
+      this.state.metrics.set(name, []);
+    }
+
+    const metrics = this.state.metrics.get(name);
+    metrics.push({
+      ...data),
+      timestamp: data.timestamp || Date.now(),
+    });
+
+    // Keep only last 100 entries per metric
+    if (metrics.length > 100) { 
+      metrics.splice(0, metrics.length - 100);
+    }
+  }
+
+  createAlert(alert) {
+    const alertObj = {
+      id: `alert_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      ...alert,
+      timestamp: Date.now(),
+    };
+
+    this.state.alerts.push(alertObj);
+
+    // Send notifications
+    this.sendNotifications(alertObj);
+
+    // Keep only last 50 alerts
+    if (this.state.alerts.length > 50) { 
+      this.state.alerts.splice(0, this.state.alerts.length - 50);
+    }
+
+    console.warn('🚨 Alert created:', alertObj);
+  }
+
+  async sendNotifications(alert) {
+    const promises = [];
+
+    // Slack notification
+    if (this.config.notifications.slack.enabled) { 
+      promises.push(this.sendSlackNotification(alert));
+    }
+
+    // Discord notification
+    if (this.config.notifications.discord.enabled) { 
+      promises.push(this.sendDiscordNotification(alert));
+    }
+
+    await Promise.allSettled(promises);
+  }
+
+  async sendSlackNotification(alert) {
+    try {
+      const payload = {
+        channel: this.config.notifications.slack.channel,
+        text: `🚨 BurniToken Alert: $${alert.message}`,
+        attachments: [
+          {
+            color: alert.severity === 'critical' ? 'danger' : 'warning',
+            fields: [
+              { title: 'Type', value: alert.type, short: true },
+              { title: 'Severity', value: alert.severity, short: true },
+              { title: 'Timestamp', value: new Date(alert.timestamp).toISOString(), short: false },
+            ],
+          },
+        ],
+      };
+
+      await fetch(this.config.notifications.slack.webhookUrl, {
+        method: 'POST'),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+    } catch (error) {
+      console.error('Failed to send Slack notification:', error);
+    }
+  }
+
+  async sendDiscordNotification(alert) {
+    try {
+      const embed = {
+        title: '🚨 BurniToken Alert',
+        description: alert.message,
+        color: alert.severity === 'critical' ? 0xff0000 : 0xffa500,
+        fields: [
+          { name: 'Type', value: alert.type, inline: true },
+          { name: 'Severity', value: alert.severity, inline: true },
+          { name: 'Timestamp', value: new Date(alert.timestamp).toISOString(), inline: false },
+        ],
+        timestamp: new Date(alert.timestamp).toISOString(),
+      };
+
+      await fetch(this.config.notifications.discord.webhookUrl, {
+        method: 'POST'),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ embeds: [embed] }),
+      });
+    } catch (error) {
+      console.error('Failed to send Discord notification:', error);
+    }
+  }
+
+  reportError(type, error) {
+    this.state.errors.push({
+      type),
+      message: error.message,
+      stack: error.stack,
+      timestamp: Date.now(),
+    });
+
+    // Report to Sentry if available
+    if (this.config.sentry.enabled && window.Sentry) { 
+      window.Sentry.captureException(error, {
+        tags: { type }),
+        extra: { component: 'monitoring-services' },
+      });
+    }
+
+    this.createAlert({
+      type: 'monitoring_error'),
+      message: `Monitoring system error: $${error.message}`,
+      severity: 'critical',
+      data: { type, error: error.message },
+    });
+  }
+
+  async reportMetrics() {
+    const metricsToReport = {};
+
+    for (const [name, data] of this.state.metrics.entries()) {
+      if (data.length > 0) { 
+        metricsToReport[name] = {
+          count: data.length,
+          latest: data[data.length - 1],
+          summary: this.summarizeMetrics(data),
+        };
+      }
+    }
+
+    // Send to external monitoring services
+    if (Object.keys(metricsToReport).length > 0) { 
+      console.log('📊 Reporting metrics:', metricsToReport);
+
+      // Custom metrics endpoint (if available)
+      try {
+        await fetch('/api/metrics', {
+          method: 'POST'),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            timestamp: Date.now(),
+            metrics: metricsToReport,
+          }),
+        });
+      } catch (error) {
+        // Ignore if endpoint doesn't exist
+      }
+    }
+  }
+
+  summarizeMetrics(data) {
+    if (data.length === 0) return null;
+
+    const values = data.map((d) => d.value || d.duration || 0).filter((v) => typeof v === 'number');
+
+    if (values.length === 0) return null;
+
+    const sorted = values.sort((a, b) => a - b);
+
+    return {
+      count: values.length,
+      min: sorted[0],
+      max: sorted[sorted.length - 1],
+      avg: values.reduce((a, b) => a + b, 0) / values.length,
+      p50: sorted[Math.floor(sorted.length * 0.5)],
+      p95: sorted[Math.floor(sorted.length * 0.95)],
+      p99: sorted[Math.floor(sorted.length * 0.99)],
+    };
+  }
+
+  // Public API
+  getState() {
+    return { ...this.state };
+  }
+
+  getMetrics(name) {
+    return name ? this.state.metrics.get(name) : Object.fromEntries(this.state.metrics);
+  }
+
+  getAlerts(limit = 10) {
+    return this.state.alerts.slice(-limit);
+  }
+
+  async healthCheck() {
+    const services = {};
+
+    for (const [name, service] of Object.entries(this.state.services)) {
+      services[name] = {
+        status: service.status,
+        lastCheck: service.lastCheck,
+        healthy: service.status === 'active' || service.status === 'configured',
+      };
+    }
+
+    return {
+      overall: Object.values(services).every((s) => s.healthy) ? 'healthy' : 'degraded',
+      services,
+      uptime: this.state.initialized ? Date.now() - this.state.initialized : 0,
+      timestamp: Date.now(),
+    };
+  }
+
+  destroy() {
+    // Clear all intervals
+    for (const [name, intervalId] of this.intervals.entries()) {
+      clearInterval(intervalId);
+    }
+    this.intervals.clear();
+
+    // Clean up state
+    this.state.metrics.clear();
+    this.state.alerts = [];
+    this.state.errors = [];
+
+    console.log('💥 Monitoring Services destroyed');
+  }
+}
+
+// Make it available globally
+window.MonitoringServices = MonitoringServices;
+
+// Auto-initialize in browser
+if (typeof window !== 'undefined') { 
+  window.addEventListener('DOMContentLoaded', () => {
+    window.burniMonitoring = new MonitoringServices();
+  });
+}

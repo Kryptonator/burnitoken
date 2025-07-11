@@ -1,0 +1,26 @@
+{
+  "url": "https://burnitoken.website/robots.txt",
+  "timestamp": "2025-06-30T18:22:44.606Z",
+  "statusCode": 200,
+  "headers": {
+    "accept-ranges": "bytes",
+    "age": "9475",
+    "cache-control": "public,max-age=31536000,immutable",
+    "cache-status": "\"Netlify Edge\"; hit",
+    "content-length": "575",
+    "content-security-policy": "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com https://api.coingecko.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https: wss: ws:; frame-src 'none';",
+    "content-type": "text/plain; charset=UTF-8",
+    "date": "Mon, 30 Jun 2025 18:22:44 GMT",
+    "etag": "\"2a8f8637e6c53f7a7c70aa7241e60a91-ssl\"",
+    "permissions-policy": "geolocation=(), microphone=(), camera=(), fullscreen=(self)",
+    "referrer-policy": "strict-origin-when-cross-origin",
+    "server": "Netlify",
+    "strict-transport-security": "max-age=31536000",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "x-nf-request-id": "01JZ117H2394KXYXYQKVH5BX8M",
+    "x-permitted-cross-domain-policies": "none",
+    "x-xss-protection": "1; mode=block"
+  },
+  "body": "User-agent: *\nAllow: /\n\n# High-priority content\nAllow: /assets/css/\nAllow: /assets/js/\nAllow: /assets/images/\n\n# Block test and temporary files\nDisallow: /test-*\nDisallow: /debug-*\nDisallow: /*.json$\nDisallow: /audit-*\nDisallow: /comprehensive-*\n\n# Sitemap location\nSitemap: https://burnitoken.website/sitemap.xml\n\n# Crawl-delay for respectful crawling\nCrawl-delay: 1\n\n# Specific bot instructions\nUser-agent: Googlebot\nAllow: /\n\nUser-agent: Bingbot\nAllow: /\n\nUser-agent: Slurp\nAllow: /\n\n# Block unwanted bots\nUser-agent: AhrefsBot\nDisallow: /\n\nUser-agent: MJ12bot\nDisallow: /"
+}

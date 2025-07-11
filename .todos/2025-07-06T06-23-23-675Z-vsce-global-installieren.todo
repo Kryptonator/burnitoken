@@ -1,0 +1,17 @@
+---
+Title: vsce global installieren
+Source: setup
+Created: 2025-07-06T06:23:23.675Z
+Status: Open
+---
+
+### Problembeschreibung
+
+vsce global installieren für volle Funktionalität (npm install -g @vscode/vsce).
+
+### Nächste Schritte
+
+1.  Problem analysieren.
+2.  Lösung implementieren.
+3.  Änderungen testen und verifizieren.
+4.  ToDo als "Done" markieren.

@@ -1,0 +1,72 @@
+{
+  "websiteHealth": {
+    "status": "healthy",
+    "details": {
+      "overallStatus": "healthy",
+      "availableUrls": 1,
+      "totalUrls": 1,
+      "sslValid": true,
+      "performanceScore": 100
+    }
+  },
+  "gscIntegration": {
+    "status": "PASS",
+    "details": {
+      "lastCheck": "2025-06-28T11:06:59.135Z",
+      "indexingStatus": "indexable",
+      "url": "https://burnitoken.website",
+      "noindexCount": 0,
+      "sitemapStatus": "valid",
+      "crawlErrors": 0,
+      "lastUpdated": "2025-06-28T11:06:59.538Z",
+      "sitemapUrlCount": 6,
+      "websiteStatus": "online",
+      "statusCode": 200
+    }
+  },
+  "systemDaemons": {
+    "running": [],
+    "stopped": ["live-server", "master-extension-orchestrator.js", "unified-monitoring-service.js"],
+    "details": [
+      {
+        "daemon": "live-server",
+        "status": "STOPPED",
+        "error": "Prozess nicht in der Taskliste gefunden"
+      },
+      {
+        "daemon": "master-extension-orchestrator.js",
+        "status": "STOPPED",
+        "error": "Prozess nicht in der Taskliste gefunden"
+      },
+      {
+        "daemon": "unified-monitoring-service.js",
+        "status": "STOPPED",
+        "error": "Prozess nicht in der Taskliste gefunden"
+      }
+    ],
+    "status": "FAIL"
+  },
+  "overallStatus": "FAIL",
+  "errors": [
+    {
+      "source": "System Daemons",
+      "error": [
+        {
+          "daemon": "live-server",
+          "status": "STOPPED",
+          "error": "Prozess nicht in der Taskliste gefunden"
+        },
+        {
+          "daemon": "master-extension-orchestrator.js",
+          "status": "STOPPED",
+          "error": "Prozess nicht in der Taskliste gefunden"
+        },
+        {
+          "daemon": "unified-monitoring-service.js",
+          "status": "STOPPED",
+          "error": "Prozess nicht in der Taskliste gefunden"
+        }
+      ]
+    }
+  ]
+}

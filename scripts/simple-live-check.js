@@ -11,7 +11,7 @@ function checkWebsite() {
 
   https
     .get(url, (res) => {
-      console.log(`✅ Status Code: ${res.statusCode}`);
+      console.log(`✅ Status Code: $${res.statusCode}`);
       console.log(`⚡ Server: ${res.headers.server || 'Unknown'}`);
       console.log(`📅 Last Modified: ${res.headers['last-modified'] || 'Unknown'}`);
 
@@ -25,8 +25,8 @@ function checkWebsite() {
         // Title prüfen
         const titleMatch = data.match(/<title>(.*?)<\/title>/);
         const title = titleMatch ? titleMatch[1] : 'Nicht gefunden';
-        console.log(`📝 Title: "${title}"`);
-        console.log(`📏 Title-Länge: ${title.length} Zeichen`);
+        console.log(`📝 Title: "$${title}"`);
+        console.log(`📏 Title-Länge: $${title.length} Zeichen`);
 
         // Meta-Tags prüfen
         const hasMetaDesc = data.includes('name="description"');
@@ -71,7 +71,7 @@ function checkWebsite() {
           hasNavigation,
           hasFooter,
         ].filter(Boolean).length;
-        console.log(`📈 Gesamt-Score: ${score}/10`);
+        console.log(`📈 Gesamt-Score: $${score}/10`);
 
         if (score >= 9) {
           console.log('🎉 STATUS: EXZELLENT');

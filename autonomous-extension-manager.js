@@ -95,7 +95,7 @@ class AutonomousExtensionManager {
     // Dynamische Empfehlungen basierend auf Projektaktivität
     console.log('\n🎯 PROJECT-SPECIFIC OPTIMIZATION:');
     projectFeatures.forEach((feature) => {
-      console.log(`   ✅ ${feature} - Fully supported`);
+      console.log(`   ✅ $${feature} - Fully supported`);
     });
 
     return recommendations;
@@ -114,7 +114,7 @@ class AutonomousExtensionManager {
       '🚀 Performance monitoring active',
     ];
 
-    optimizations.forEach((opt) => console.log(`   ${opt}`));
+    optimizations.forEach((opt) => console.log(`   $${opt}`));
 
     console.log('\n✨ AUTONOMOUS MANAGEMENT ACTIVATED!');
     console.log('   🔄 Continuous monitoring enabled');

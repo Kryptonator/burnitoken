@@ -1,0 +1,34 @@
+{
+  "orchestrator": {
+    "running": true,
+    "uptime": 16504378,
+    "startTime": 1751388438555,
+    "version": "1.0.0"
+  },
+  "services": {
+    "healthMonitor": {
+      "status": "running",
+      "pid": 32060,
+      "startTime": 1751388438572
+    },
+    "recoveryCheck": {
+      "status": "completed",
+      "lastRun": 1751404641516,
+      "output": "\u001b[1;36m\n════════════════════════════════════════════════════════════\u001b[0m\n\u001b[1;37m           🔄 VS Code Recovery Center           \u001b[0m\n\u001b[1;36m════════════════════════════════════════════════════════════\n\u001b[0m\n\u001b[1;36m\n📋 Projektübersicht: Ziele, Status & ToDos\u001b[0m\n\u001b[1;37mHauptziele:\u001b[0m\n\u001b[36m  • Technisch: Stabile, automatisierte, sichere Live-Website\u001b[0m\n\u001b[36m  • Inhaltlich: Vollständige, aktuelle, mehrsprachige Inhalte\u001b[0m\n\u001b[36m  • Organisatorisch: Monitoring, Recovery, DX, Dokumentation\u001b[0m\n\u001b[1;3"
+    },
+    "gscCheck": {
+      "status": "error",
+      "lastRun": 1751404640309,
+      "error": "Command failed: node \"C:\\Users\\micha\\OneDrive\\Dokumente\\burnitoken.com\\tools\\gsc-status-check.js\"\nC:\\Users\\micha\\OneDrive\\Dokumente\\burnitoken.com\\tools\\gsc-status-check.js:26\r\n  if (process.argv.includes) { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {) {\r\n                                                                                                                                ^\r\n\r\nSyntaxError: Unexpected token ')'\r\n    at wrapSafe (node:internal/modules/cjs/loader:1662:18)\r\n    at Module._compile (node:internal/modules/cjs/loader:1704:20)\r\n    at Object..js (node:internal/modules/cjs/loader:1895:10)\r\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\r\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\r\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\r\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\r\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\r\n    at node:internal/main/run_main_module:36:49\r\n\r\nNode.js v22.16.0\r\n"
+    }
+  },
+  "processes": [
+    "healthMonitor"
+  ],
+  "health": {
+    "overallStatus": "warning",
+    "lastCheck": 1751404642930,
+    "errorCount": 0
+  },
+  "timestamp": 1751404942933
+}

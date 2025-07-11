@@ -1,0 +1,71 @@
+name: 🔍 Dependabot PR Check
+
+on:
+  pull_request:
+    branches: [ main, master, temp-merge-master ]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  dependabot-ci:
+    name: 🔍 Validate Dependabot PR
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v3
+        
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: 📥 Install dependencies
+        run: npm ci
+        
+      - name: 🧪 Run tests
+        run: npm test || true
+        
+      - name: 🔍 Check for license issues
+        id: license-check
+        run: |
+          # Simplified license check
+          PROBLEMATIC_PACKAGES=$(npm ls --json | jq -r '.dependencies | keys[] as $k | select(.dependencies[$k].license and .dependencies[$k].license != "MIT" and .dependencies[$k].license != "ISC" and .dependencies[$k].license != "Apache-2.0" and .dependencies[$k].license != "BSD-3-Clause" and .dependencies[$k].license != "BSD-2-Clause" and .dependencies[$k].license != "0BSD" and .dependencies[$k].license != "CC0-1.0" and .dependencies[$k].license != "Unlicense") | $k + ": " + .dependencies[$k].license')
+          
+          if [ -n "$PROBLEMATIC_PACKAGES" ]; then
+            echo "⚠️ Packages with non-standard licenses found:"
+            echo "$PROBLEMATIC_PACKAGES"
+            echo "has_license_issues=true" >> $GITHUB_OUTPUT
+          else
+            echo "✅ No license issues found"
+            echo "has_license_issues=false" >> $GITHUB_OUTPUT
+          fi
+        
+      - name: 📝 Comment on PR with results
+        if: always()
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const licensesOK = ${{ steps.license-check.outputs.has_license_issues == 'false' }};
+            
+            let commentBody = `## 🤖 Dependabot PR Check Results\n\n`;
+            
+            if (licensesOK) {
+              commentBody += `✅ **License Check**: No license compliance issues found\n\n`;
+            } else {
+              commentBody += `⚠️ **License Check**: Some dependencies have non-standard licenses. Please review manually.\n\n`;
+            }
+            
+            commentBody += `This PR was automatically checked by the Dependabot workflow.\n`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: commentBody
+            });

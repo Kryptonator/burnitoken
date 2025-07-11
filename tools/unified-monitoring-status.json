@@ -1,0 +1,69 @@
+{
+  "timestamp": "2025-06-26T13:03:05.294Z",
+  "startTime": "2025-06-26T13:03:05.294Z",
+  "lastCheck": "2025-06-26T13:18:05.426Z",
+  "checksPerformed": 2,
+  "monitoringActive": false,
+  "currentStatus": "critical",
+  "history": [
+    {
+      "timestamp": "2025-06-26T13:03:06.668Z",
+      "status": "critical",
+      "websiteStatus": "degraded",
+      "deploymentStatus": "failed",
+      "performanceStatus": "good"
+    },
+    {
+      "timestamp": "2025-06-26T13:18:06.827Z",
+      "status": "critical",
+      "websiteStatus": "degraded",
+      "deploymentStatus": "failed",
+      "performanceStatus": "good"
+    }
+  ],
+  "alerts": [
+    {
+      "timestamp": "2025-06-26T13:03:05.794Z",
+      "type": "deployment_issues",
+      "message": "Probleme mit dem BurniToken-Website-Deployment",
+      "details": {
+        "status": "failed",
+        "timestamp": "2025-06-26T13:03:05.794Z"
+      }
+    },
+    {
+      "timestamp": "2025-06-26T13:18:05.797Z",
+      "type": "deployment_issues",
+      "message": "Probleme mit dem BurniToken-Website-Deployment",
+      "details": {
+        "status": "failed",
+        "timestamp": "2025-06-26T13:18:05.797Z"
+      }
+    }
+  ],
+  "services": {
+    "website": {
+      "status": "degraded",
+      "lastCheck": "2025-06-26T13:23:05.810Z",
+      "checkCount": 6,
+      "errorCount": 6,
+      "details": {
+        "availableUrls": 1,
+        "totalUrls": 3,
+        "sslValid": false
+      }
+    },
+    "deployment": {
+      "status": "failed",
+      "lastCheck": "2025-06-26T13:18:05.797Z",
+      "checkCount": 2,
+      "errorCount": 2
+    },
+    "performance": {
+      "status": "good",
+      "lastCheck": "2025-06-26T13:18:06.827Z",
+      "checkCount": 2,
+      "score": 100
+    }
+  }
+}

@@ -1,0 +1,106 @@
+[
+  {
+    "file": "advanced-lazy-loader.js",
+    "originalSize": 11,
+    "optimizedSize": 7,
+    "savings": 31,
+    "analysis": {
+      "size": 11046,
+      "lines": 431,
+      "functions": 0,
+      "classes": 1,
+      "imports": 0
+    }
+  },
+  {
+    "file": "monitoring-services.js",
+    "originalSize": 34,
+    "optimizedSize": 19,
+    "savings": 45,
+    "analysis": {
+      "size": 34986,
+      "lines": 1272,
+      "functions": 71,
+      "classes": 1,
+      "imports": 0
+    }
+  },
+  {
+    "file": "price-oracle-dashboard.js",
+    "originalSize": 36,
+    "optimizedSize": 19,
+    "savings": 48,
+    "analysis": {
+      "size": 36731,
+      "lines": 1176,
+      "functions": 56,
+      "classes": 1,
+      "imports": 0
+    }
+  },
+  {
+    "file": "price-oracle-recovery.js",
+    "originalSize": 33,
+    "optimizedSize": 18,
+    "savings": 46,
+    "analysis": {
+      "size": 34269,
+      "lines": 1214,
+      "functions": 69,
+      "classes": 1,
+      "imports": 2
+    }
+  },
+  {
+    "file": "price-oracle.js",
+    "originalSize": 0,
+    "optimizedSize": 0,
+    "savings": null,
+    "analysis": {
+      "size": 0,
+      "lines": 1,
+      "functions": 0,
+      "classes": 0,
+      "imports": 0
+    }
+  },
+  {
+    "file": "security-hardening.js",
+    "originalSize": 35,
+    "optimizedSize": 19,
+    "savings": 46,
+    "analysis": {
+      "size": 35819,
+      "lines": 1286,
+      "functions": 71,
+      "classes": 1,
+      "imports": 0
+    }
+  },
+  {
+    "file": "seo-automation.js",
+    "originalSize": 44,
+    "optimizedSize": 16,
+    "savings": 64,
+    "analysis": {
+      "size": 44765,
+      "lines": 1554,
+      "functions": 76,
+      "classes": 1,
+      "imports": 0
+    }
+  },
+  {
+    "file": "system-dashboard.js",
+    "originalSize": 46,
+    "optimizedSize": 25,
+    "savings": 47,
+    "analysis": {
+      "size": 47482,
+      "lines": 1485,
+      "functions": 81,
+      "classes": 1,
+      "imports": 0
+    }
+  }
+]

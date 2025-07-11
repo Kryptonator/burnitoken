@@ -1,0 +1,12 @@
+{
+  "isRunning": true,
+  "startTime": "2025-07-01T17:31:59.489Z",
+  "lastCheck": "2025-07-01T17:37:30.172Z",
+  "changesDetected": 0,
+  "alerts": [],
+  "performance": {
+    "checks": 11,
+    "errors": 0,
+    "avgCheckTime": 131.01171875
+  }
+}

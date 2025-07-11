@@ -28,21 +28,39 @@ Die Live-Website [burnitoken.website](https://burnitoken.website) ist **vollstä
 - ✅ Mobile Responsiveness optimiert
 - ✅ HTTPS/Security Headers aktiv
 
-## 📁 Repository Struktur (Stand: 18.06.2025)
+## 📁 Repository Struktur (Stand: 21.06.2025)
 
 ```text
 burnitoken.com/
-├── assets/           # CSS, JS, Images, Videos
-├── docs/             # Dokumentation & Reports
-├── scripts/          # Build & Audit Scripts
+├── .github/          # GitHub Actions Workflows
+├── .vscode/          # VS Code Konfiguration
+├── assets/           # Statische Assets (CSS, Images, Videos)
+├── docs/             # Konsolidierte Dokumentation
+│   ├── ci-cd/        # CI/CD-Dokumentation
+│   ├── deployment/   # Deployment-Anleitungen
+│   ├── NETLIFY_OPTIMIZATION.md  # Netlify-Optimierungsanleitung
+│   ├── JFROG_NETLIFY_INTEGRATION.md  # JFrog-Netlify-Integration
+│   ├── development/  # Entwicklerdokumentation
+│   └── reports/      # Statusberichte
+├── src/              # Quellcode
+│   ├── js/           # JavaScript-Module
+│   └── css/          # CSS-Quelldateien
+├── tools/            # Entwicklungstools und Skripte
+│   ├── extension-management/ # VS Code Extension-Management
+│   ├── monitoring/   # Website-Monitoring-Tools
+│   ├── powershell/   # PowerShell-Skripte
+│   └── validation/   # Validierungs-Tools
 ├── e2e/              # E2E-Test Suites (Playwright)
 ├── tests/            # Unit-/Integrationstests (Jest)
 ├── config/           # Konfigurationsdateien
-├── .github/          # GitHub Actions (bereinigt)
-└── index.html        # Hauptdatei (optimiert)
+├── netlify/          # Netlify-Funktionen und -Konfiguration
+│   ├── functions/    # Serverlose Funktionen
+│   └── plugin-config.toml  # Plugin-Konfiguration
+├── index.html        # Hauptwebseite
+└── README.md         # Hauptdokumentation
 ```
 
-> **Hinweis:** Am 18.06.2025 wurden temporäre, doppelte und veraltete Dateien/Ordner (z.B. Backups, temp, Coverage, doppelte Tests) entfernt. Die Teststruktur ist jetzt konsolidiert und das Repository maximal aufgeräumt.
+> **Hinweis:** Am 21.06.2025 wurde das Repository vollständig bereinigt und neu strukturiert. Alle temporären Dateien, Backups, leere Dateien und große Binärdateien wurden entfernt. Die Ordnerstruktur wurde optimiert und alle Skripte und Dokumentationen wurden an zentralen Stellen konsolidiert.
 
 ## 🔍 Letzte Audit-Ergebnisse
 
@@ -82,8 +100,9 @@ burnitoken.com/
 
 - Automated Backup System
 - Error Tracking (Sentry)
-- Performance Monitoring
+- Performance Monitoring (Netlify + Lighthouse)
 - Asset Integrity Checks
+- Serverlose API-Funktionen via Netlify
 
 ## 🛠️ Entwicklung
 
@@ -101,13 +120,16 @@ npm start
 
 ```powershell
 # Finale Verifikation
-./scripts/final-live-audit-corrected.ps1
+./tools/powershell/final-validation-clean.ps1
 
 # Asset Check
 ./scripts/quick-asset-check.ps1
 
-# Backup erstellen
-./scripts/create-backup.ps1
+# Extension Management
+node ./tools/extension-management/master-extension-orchestrator.js
+
+# Tool-Validierung
+node ./tools/extension-management/extension-function-validator.js
 ```
 
 ## 📈 Nachgewiesene Verbesserungen
@@ -170,8 +192,18 @@ npm start
 
 - **Feedback-Formular:** Auf der Website integriert
 - **Discord:** [Discord Community (Beispiel)](https://discord.gg/YOUR_INVITE)
-- **GitHub Issues:** [burnitoken.com Issues](https://github.com/YOUR_REPO/issues)
+- **GitHub Issues:** [burnitoken.com Issues](https://github.com/Kryptonator/burnitoken/issues)
 - **E-Mail:** kontakt@burnitoken.website
+
+## 🚀 Deployment
+
+Das Projekt unterstützt automatische Deployments über GitHub Actions:
+
+- **GitHub Pages:** Automatisches Deployment bei Push auf den Main/Master Branch
+- **Netlify:** Paralleles Deployment auf Netlify (optional)
+- **CI/CD Pipeline:** Tests, Linting, und Security Scans vor dem Deployment
+
+Detaillierte Informationen zur Konfiguration findest du in der [GitHub Actions Anleitung](./GITHUB-ACTIONS-GUIDE.md).
 
 ## 🛡️ Beispiel: GitHub Actions Workflow (Security)
 

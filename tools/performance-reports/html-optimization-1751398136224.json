@@ -1,0 +1,13 @@
+{
+  "analysis": {
+    "size": 63934,
+    "scripts": 19,
+    "stylesheets": 5,
+    "images": 1,
+    "preloads": 6,
+    "prefetches": 6
+  },
+  "recommendations": [
+    "Service Worker für Caching implementieren"
+  ]
+}

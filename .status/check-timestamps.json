@@ -1,0 +1,35 @@
+{
+  "website-health-check": {
+    "status": "success",
+    "lastSuccess": "2025-07-09T19:51:57.847Z"
+  },
+  "ai-auth": {
+    "name": "KI Authentifizierungs-Check",
+    "status": "error",
+    "message": "Fehlende KI-API-Schlüssel in der .env-Datei: OPENAI_API_KEY",
+    "recommendation": "Ergänzen Sie die fehlenden API-Schlüssel in der .env-Datei.",
+    "lastCheck": "2025-07-09T19:51:52.145Z"
+  },
+  "gsc-integration-monitor": {
+    "status": "success",
+    "lastSuccess": "2025-07-09T19:52:41.871Z"
+  },
+  "deployment-check": {
+    "status": "success",
+    "lastSuccess": "2025-07-09T19:52:44.894Z"
+  },
+  "dependabot-monitor": {
+    "status": "success",
+    "lastSuccess": "2025-07-09T19:53:07.949Z"
+  },
+  "extension-health-check": {
+    "status": "success",
+    "lastSuccess": "2025-07-06T07:04:46.332Z"
+  },
+  "gsc-auth": {
+    "name": "Google Search Console Authentifizierungs-Check",
+    "status": "success",
+    "message": "GSC-Zugriff für Service-Account searchconsole-service@burnitoken-gsc.iam.gserviceaccount.com bestätigt.",
+    "lastCheck": "2025-07-06T06:23:33.860Z"
+  }
+}

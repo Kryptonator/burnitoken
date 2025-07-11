@@ -129,7 +129,7 @@ function testDarkMode() {
   conflictingElements.forEach((selector) => {
     const elements = document.querySelectorAll(selector);
     if (elements.length > 0) {
-      console.log(`⚠️ Konflikt gefunden: ${selector} (${elements.length} Elemente)`);
+      console.log(`⚠️ Konflikt gefunden: $${selector} (${elements.length} Elemente)`);
       conflicts++;
     }
   });
@@ -137,7 +137,7 @@ function testDarkMode() {
   if (conflicts === 0) {
     console.log('✅ Keine Konflikte gefunden');
   } else {
-    console.log(`❌ ${conflicts} Konflikte gefunden`);
+    console.log(`❌ $${conflicts} Konflikte gefunden`);
   }
 }
 

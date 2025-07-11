@@ -12,12 +12,12 @@ test.describe('Sprachumschaltung & RTL', () => {
   ];
 
   for (const lang of languages) {
-    test(`Sprache ${lang.code} wird korrekt angezeigt`, async ({ page }) => {
+    test(`Sprache $${lang.code} wird korrekt angezeigt`, async ({ page }) => {
       await page.goto('http://localhost:3000');
       await page.selectOption('#lang-select', lang.code);
       await expect(page.locator('h1')).toContainText(lang.text);
       await expect(page.locator('html')).toHaveAttribute('dir', lang.dir);
-      await page.screenshot({ path: `screenshots/i18n-${lang.code}.png` });
+      await page.screenshot({ path: `screenshots/i18n-$${lang.code}.png` });
     });
   }
 });

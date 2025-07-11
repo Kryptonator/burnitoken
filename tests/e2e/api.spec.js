@@ -33,10 +33,10 @@ for (const { name: deviceName, device } of deviceList) {
 
 test.describe('API/Komplett-Audit: Geräte, Sprache, Farbschema, Netzwerk', () => {
   for (const { device, deviceName, url, lang, colorScheme, network } of testMatrix) {
-    const testTitle = `${deviceName} | ${url} | ${lang} | ${colorScheme} | ${network ? '3G' : 'normal'}`;
+    const testTitle = `$${deviceName} | ${url} | ${lang} | ${colorScheme} | ${network ? '3G' : 'normal'}`;
     test(testTitle + ' | Performance-Check', async ({ page, context }) => {
       await context.newPage({ ...device, locale: lang, colorScheme });
-      if (network) {
+      if (network) 
         await context.setOffline(false);
         await context.setNetworkConditions(network);
       }
@@ -57,7 +57,7 @@ test.describe('API/Komplett-Audit: Geräte, Sprache, Farbschema, Netzwerk', () =
       await context.newPage({ ...device, locale: lang, colorScheme });
       await page.goto(url);
       await page.screenshot({
-        path: `screenshots/api-${deviceName}-${lang}-${colorScheme}-${url.replace(/[^a-z0-9]/gi, '_')}-${network ? '3G' : 'normal'}.png`,
+        path: `screenshots/api-$${deviceName}-${lang}-${colorScheme}-${url.replace(/[^a-z0-9]/gi, '_')}-${network ? '3G' : 'normal'}.png`,
         fullPage: true,
       });
     });
@@ -75,7 +75,7 @@ test.describe('API/Komplett-Audit: Geräte, Sprache, Farbschema, Netzwerk', () =
       const response = await page.goto(url);
       const headers = response.headers();
       expect(
-        headers['content-security-policy'] || headers['strict-transport-security'],
+        headers['content-security-policy'] || headers['strict-transport-security']),
       ).toBeDefined();
     });
 

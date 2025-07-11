@@ -81,17 +81,17 @@ dig burnitoken.website
 
 1. **Gehe zu:** https://analytics.google.com
 2. **Erstelle:** Neue Property für "burnitoken.website"
-3. **Kopiere:** Tracking ID (G-XXXXXXXXXX)
+3. **Kopiere:** Tracking ID (z.B. G-REPLACE-WITH-YOUR-ID)
 4. **Integriere:** Code in index.html (siehe google-analytics-integration.html)
 
 ### Analytics Integration Code:
 ```html
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-REPLACE-WITH-YOUR-ID"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-XXXXXXXXXX');
+  gtag('config', 'G-REPLACE-WITH-YOUR-ID');
 </script>
 ```
 

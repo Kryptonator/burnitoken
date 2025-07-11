@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Server Error - Burni Token</title>
+    <meta
+      name="description"
+      content="We're experiencing technical issues. Our team is working to resolve it."
+    />
+
+    <!-- Open Graph Meta Tags für Social Media Sharing -->
+    <meta property="og:title" content="Server Error - Burni Token" />
+    <meta
+      property="og:description"
+      content="We're experiencing technical issues. Our team is working to resolve it."
+    />
+    <meta
+      property="og:image"
+      content="https://burnitoken.website/assets/images/burni-social.webp"
+    />
+    <meta property="og:url" content="https://burnitoken.website/500.html" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Server Error - Burni Token" />
+    <meta
+      name="twitter:description"
+      content="We're experiencing technical issues. Our team is working to resolve it."
+    />
+    <meta
+      name="twitter:image"
+      content="https://burnitoken.website/assets/images/burni-social.webp"
+    />
+
+    <!-- Strukturierte Daten -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Server Error - Burni Token",
+        "description": "We're experiencing technical issues. Our team is working to resolve it.",
+        "publisher": {
+          "@type": "Organization",
+          "name": "BurniToken",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://burnitoken.website/assets/images/burni-logo.webp"
+          }
+        }
+      }
+    </script>
+
+    <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="/assets/css/styles.min.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Baloo+2:wght@700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- 500 Error Tracking -->
+    <script type="text/javascript">
+      // Automatische 500-Fehlermeldung an Analytics senden, falls vorhanden
+      window.addEventListener('DOMContentLoaded', function () {
+        if (typeof gtag === 'function') {
+          gtag('event', 'page_view', {
+            page_title: '500 - Server Error',
+            page_location: window.location.href,
+            page_path: window.location.pathname,
+            send_to: 'G-XXXXXXXXXX', // Analytics ID ergänzen
+          });
+
+          gtag('event', 'error_500', {
+            event_category: 'Error',
+            event_label: window.location.pathname,
+            non_interaction: true,
+          });
+        }
+      });
+    </script>
+  </head>
+
+  <body class="antialiased bg-gradient-to-br from-orange-50 to-orange-100">
+    <div class="min-h-screen flex items-center justify-center px-6">
+      <div class="text-center max-w-md">
+        <a href="/" aria-label="Back to Burni Token Homepage">
+          <img
+            src="/assets/images/burni.png"
+            alt="Burni Token Mascot"
+            class="h-24 mx-auto mb-6"
+            loading="eager"
+          />
+        </a>
+
+        <h1 class="text-4xl font-baloo-2 text-orange-600 mb-4" id="error-heading">
+          <span data-i18n="error_500_title">500 - Server Error</span>
+        </h1>
+
+        <p class="text-lg text-gray-700 mb-4" id="error-message">
+          <span data-i18n="error_500_message"
+            >Our servers are experiencing some heat! We're working to cool them down.</span
+          >
+        </p>
+
+        <p class="text-md text-gray-600 mb-8" id="error-submessage">
+          <span data-i18n="error_500_submessage"
+            >This is a temporary issue. Please try again in a few moments.</span
+          >
+        </p>
+
+        <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+          <p class="text-sm text-gray-600 mb-2" data-i18n="error_500_tip">While you wait:</p>
+          <ul class="space-y-1 text-left">
+            <li>
+              <a
+                href="/"
+                class="text-orange-600 hover:text-orange-800 reload-link"
+                data-i18n="refresh_page"
+                >→ Try refreshing the page</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://twitter.com/BurniToken"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-orange-600 hover:text-orange-800"
+                data-i18n="check_twitter"
+                >→ Check our Twitter for updates</a
+              >
+            </li>
+          </ul>
+        </div>
+
+        <div class="space-y-4">
+          <a href="/" class="pixar-button block w-full" data-i18n="back_to_homepage"
+            >🏠 Back to Homepage</a
+          >
+          <a
+            href="javascript:history.back()"
+            class="pixar-button block w-full bg-gray-600 hover:bg-gray-700"
+            data-i18n="go_back"
+            >⬅️ Go Back</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- NEU: Zentrales Internationalization Script -->
+    <script src="/assets/navigation-language.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // Initialisiert die Sprachlogik aus dem zentralen Skript
+        if (typeof initNavigationAndLanguage === 'function') {
+          initNavigationAndLanguage();
+        }
+
+        // Auto-Reload Link (bleibt spezifisch für diese Seite)
+        const reloadLink = document.querySelector('.reload-link');
+        if (reloadLink) {
+          reloadLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            location.reload();
+          });
+        }
+      });
+    </script>
+
+    <!-- ErrorLog Script - Speichert 500 Fehler für Analyse -->
+    <script>
+      // 500-Fehler im localStorage speichern für spätere Analyse
+      document.addEventListener('DOMContentLoaded', function () {
+        try {
+          // 500 Fehler in lokalem Speicher speichern
+          const errorLog = JSON.parse(localStorage.getItem('burni_error_log') || '[]');
+          errorLog.push({
+            type: '500',
+            path: window.location.pathname,
+            referrer: document.referrer || 'direct',
+            timestamp: new Date().toISOString(),
+          });
+
+          // Maximale Anzahl von Logs begrenzen
+          while (errorLog.length > 20) errorLog.shift();
+          localStorage.setItem('burni_error_log', JSON.stringify(errorLog));
+
+          // Auto-Reload nach 60 Sekunden, wenn der Nutzer zustimmt
+          setTimeout(function () {
+            if (confirm('Do you want to try reloading the page now?')) {
+              location.reload();
+            }
+          }, 60000);
+        } catch (e) {
+          console.error('Error logging failed:', e);
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -6,6 +6,113 @@ const { TextEncoder, TextDecoder } = require('util');
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
 
+// setImmediate Polyfill für jsdom-Umgebung
+if (typeof setImmediate === 'undefined') {
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  {
+  }
+  global.setImmediate = function (callback, ...args) {
+    return setTimeout(() => callback(...args), 0);
+  };
+}
+
 // Example: mock fetch
 beforeAll(() => {
   global.fetch = jest.fn(() =>

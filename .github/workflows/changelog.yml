@@ -1,0 +1,33 @@
+name: Changelog & Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm ci
+      - name: Generate Changelog & Bump Version
+        run: npm run release -- --release-as ${{ github.ref_name }}
+      - name: Commit & Push Changelog
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "Changelog Bot"
+          git config --global user.email "changelog@burnitoken.com"
+          git add CHANGELOG.md package.json package-lock.json
+          git commit -m "chore(release): update CHANGELOG [skip ci]"
+          git push origin HEAD:main
