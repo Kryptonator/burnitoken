@@ -1,15 +1,32 @@
 const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
-  entry: {
-    main: './main.js',
-    styles: './styles.min.css',
-  },
+  entry: './main.js',
   output: {
-    filename: '[name].[contenthash].js',
-    path: path.resolve(__dirname, 'dist'),
-    clean: true,
+    filename: 'main.min.js',
+    path: path.resolve(__dirname, 'dist/assets'),
+    clean: false,
+  },
+  mode: 'production',
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          compress: {
+            drop_console: true,
+            drop_debugger: true,
+            pure_funcs: ['console.log'],
+          },
+          mangle: true,
+          format: {
+            comments: false,
+          },
+        },
+        extractComments: false,
+      }),
+    ],
   },
   module: {
     rules: [
@@ -23,16 +40,17 @@ module.exports = {
           },
         },
       },
-      {
-        test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
-      },
     ],
   },
-  plugins: [new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' })],
-  optimization: {
-    splitChunks: { chunks: 'all' },
+  resolve: {
+    extensions: ['.js'],
   },
-  devtool: 'source-map',
-  mode: 'production',
+  devServer: {
+    static: {
+      directory: path.join(__dirname, './'),
+    },
+    port: 8080,
+    open: true,
+    hot: true,
+  },
 };
