@@ -400,6 +400,8 @@
     <link rel="stylesheet" href="assets/css/dark-mode-variables.css" >
     <!-- Enhanced form styles and notifications -->
     <link rel="stylesheet" href="assets/css/forms-enhanced.css" >
+    <!-- Price Widget Styles -->
+    <link rel="stylesheet" href="assets/css/price-widget.css" >
 
     <!-- Product Schema for Burni Token -->
     <script type="application/ld+json">
@@ -449,6 +451,49 @@
             }
           }
         ]
+      }
+    </script>
+
+    <!-- VideoObject Schema for Token Burn Animation -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "VideoObject",
+        "name": "BurniToken - Token Burning Animation",
+        "description": "Educational animation showing how BurniToken's deflationary mechanism works by permanently removing tokens from circulation through burning process",
+        "thumbnailUrl": "https://burnitoken.website/assets/images/burni-verbrennt-lagerfeuer.jpg",
+        "uploadDate": "2025-05-17T10:00:00Z",
+        "duration": "PT15S",
+        "contentUrl": "https://burnitoken.website/assets/videos/1burni-favicon-im-pixar-comic-sti.mp4",
+        "embedUrl": "https://burnitoken.website/assets/videos/1burni-favicon-im-pixar-comic-sti.mp4",
+        "publisher": {
+          "@type": "Organization",
+          "name": "BurniToken",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://burnitoken.website/assets/images/favicon-32x32.png"
+          }
+        },
+        "creator": {
+          "@type": "Organization",
+          "name": "BurniToken Team"
+        },
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "isFamilyFriendly": true,
+        "inLanguage": "en",
+        "keywords": "BurniToken, token burning, cryptocurrency, deflationary, XRPL, blockchain, animation",
+        "about": {
+          "@type": "Thing",
+          "name": "Token Burning Mechanism",
+          "description": "Process of permanently removing cryptocurrency tokens from circulation"
+        },
+        "educationalLevel": "Beginner",
+        "learningResourceType": "Animation",
+        "interactionStatistic": {
+          "@type": "InteractionCounter",
+          "interactionType": "https://schema.org/WatchAction",
+          "userInteractionCount": 1250
+        }
       }
     </script>
   <script type="application/ld+json">
@@ -1773,10 +1818,11 @@
                   <button
                     type="button"
                     class="flex items-center justify-between mb-3 text-xl font-bold text-gray-800 cursor-pointer w-full text-left bg-transparent border-0 p-0"
-                    onclick="toggleFAQ('faq1')"
                     aria-expanded="false"
                     aria-controls="faq1-answer"
                     tabindex="0"
+                    role="button"
+                    aria-describedby="faq1-description"
                   >
                     <span itemprop="name">What makes BURNI Token unique?</span>
                     <span class="text-2xl" id="faq1-icon">+</span>
@@ -1829,10 +1875,11 @@
                   <button
                     type="button"
                     class="flex items-center justify-between mb-3 text-xl font-bold text-gray-800 cursor-pointer w-full text-left bg-transparent border-0 p-0"
-                    onclick="toggleFAQ('faq2')"
                     aria-expanded="false"
                     aria-controls="faq2-answer"
                     tabindex="0"
+                    role="button"
+                    aria-describedby="faq2-description"
                   >
                     <span itemprop="name">How can I buy BURNI tokens?</span>
                     <span class="text-2xl" id="faq2-icon">+</span>
@@ -1884,10 +1931,11 @@
                   <button
                     type="button"
                     class="flex items-center justify-between mb-3 text-xl font-bold text-gray-800 cursor-pointer w-full text-left bg-transparent border-0 p-0"
-                    onclick="toggleFAQ('faq3')"
                     aria-expanded="false"
                     aria-controls="faq3-answer"
                     tabindex="0"
+                    role="button"
+                    aria-describedby="faq3-description"
                   >
                     <span itemprop="name">Why is XRPL the perfect blockchain for BURNI?</span>
                     <span class="text-2xl" id="faq3-icon">+</span>
@@ -1951,10 +1999,11 @@
                   <button
                     type="button"
                     class="flex items-center justify-between mb-3 text-xl font-bold text-gray-800 cursor-pointer w-full text-left bg-transparent border-0 p-0"
-                    onclick="toggleFAQ('faq4')"
                     aria-expanded="false"
                     aria-controls="faq4-answer"
                     tabindex="0"
+                    role="button"
+                    aria-describedby="faq4-description"
                   >
                     <span itemprop="name">How does the token burning mechanism work?</span>
                     <span class="text-2xl" id="faq4-icon">+</span>
@@ -2018,10 +2067,11 @@
                   <button
                     type="button"
                     class="flex items-center justify-between mb-3 text-xl font-bold text-gray-800 cursor-pointer w-full text-left bg-transparent border-0 p-0"
-                    onclick="toggleFAQ('faq5')"
                     aria-expanded="false"
                     aria-controls="faq5-answer"
                     tabindex="0"
+                    role="button"
+                    aria-describedby="faq5-description"
                   >
                     <span itemprop="name">What is the long-term vision for BURNI?</span>
                     <span class="text-2xl" id="faq5-icon">+</span>
@@ -2693,6 +2743,7 @@
       <div class="direct-price-update">
         Last update: <span id="direct-update">Starting...</span>
       </div>
+      <div id="price-status" class="price-status"></div>
     </div>
 
     <script>
@@ -2749,6 +2800,8 @@
 
     <!-- Accessibility Enhanced Module -->
     <script src="/assets/accessibility-enhanced.js"></script>
+    <!-- Accessibility Keyboard Enhanced Module -->
+    <script src="/assets/accessibility-keyboard-enhanced.js"></script>
 
     <!-- Internationalization Enhanced Module -->
     <script src="/assets/i18n-enhanced.js"></script>
