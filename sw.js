@@ -45,12 +45,62 @@ const ASSETS_TO_CACHE = [
   '/assets/images/vote.webp',
 ];
 
-// Performance monitoring
+// Enhanced performance monitoring with detailed metrics
 const performanceMetrics = {
   cacheHits: 0,
   cacheMisses: 0,
   networkRequests: 0,
   errors: 0,
+  totalResponseTime: 0,
+  networkResponseTime: 0,
+  cacheResponseTime: 0,
+  startTime: Date.now(),
+  lastCleanup: Date.now(),
+};
+
+// Performance monitoring functions
+const trackPerformance = (type, startTime) => {
+  const endTime = Date.now();
+  const duration = endTime - startTime;
+
+  switch (type) {
+    case 'cache-hit':
+      performanceMetrics.cacheHits++;
+      performanceMetrics.cacheResponseTime += duration;
+      break;
+    case 'cache-miss':
+      performanceMetrics.cacheMisses++;
+      performanceMetrics.networkResponseTime += duration;
+      break;
+    case 'network':
+      performanceMetrics.networkRequests++;
+      performanceMetrics.networkResponseTime += duration;
+      break;
+    case 'error':
+      performanceMetrics.errors++;
+      break;
+  }
+
+  performanceMetrics.totalResponseTime += duration;
+
+  // Log performance metrics every 100 requests
+  if ((performanceMetrics.cacheHits + performanceMetrics.cacheMisses) % 100 === 0) {
+    console.log('SW Performance Metrics:', {
+      cacheHitRate:
+        (
+          (performanceMetrics.cacheHits /
+            (performanceMetrics.cacheHits + performanceMetrics.cacheMisses)) *
+          100
+        ).toFixed(2) + '%',
+      avgCacheTime:
+        (performanceMetrics.cacheResponseTime / performanceMetrics.cacheHits).toFixed(2) + 'ms',
+      avgNetworkTime:
+        (performanceMetrics.networkResponseTime / performanceMetrics.networkRequests).toFixed(2) +
+        'ms',
+      totalRequests: performanceMetrics.cacheHits + performanceMetrics.cacheMisses,
+      errors: performanceMetrics.errors,
+    });
+  }
 };
 
 // API URLs with caching strategies

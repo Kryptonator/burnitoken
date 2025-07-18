@@ -1,9 +1,14 @@
-name: Deploy Website
+name: Deploy BurniToken Website
 
 on:
   push:
-    branches: [ master, main ]
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
+
+env:
+  NODE_VERSION: '18'
 
 jobs:
   deploy:
@@ -14,19 +19,45 @@ jobs:
       id-token: write
       
     steps:
-      - name: Checkout
+      - name: 📥 Checkout
         uses: actions/checkout@v4
         
-      - name: Validate
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 📥 Install dependencies
+        run: npm ci
+        
+      - name: 🔍 Validate files
         run: |
           echo "✅ Validating website files..."
           test -f index.html && echo "✅ index.html found" || exit 1
           test -d assets && echo "✅ assets/ found" || exit 1
+          test -f sw.js && echo "✅ Service Worker found" || exit 1
+          test -f _headers && echo "✅ Security headers found" || exit 1
           echo "✅ All critical files present"
         
-      - name: Deploy to GitHub Pages
+      - name: 🔨 Build and optimize
+        run: |
+          npm run build:production
+          echo "✅ Production build completed successfully"
+        
+      - name: 🔍 Validate optimized build
+        run: |
+          echo "✅ Validating optimized build..."
+          test -f ./dist/index.html && echo "✅ dist/index.html found" || exit 1
+          test -d ./dist/assets && echo "✅ dist/assets/ found" || exit 1
+          test -f ./dist/sw.js && echo "✅ dist/sw.js found" || exit 1
+          echo "✅ Optimized build validated"
+        
+      - name: 🚀 Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
+          publish_dir: ./dist
           exclude_assets: '.github'
+          enable_jekyll: false
+          cname: burnitoken.website

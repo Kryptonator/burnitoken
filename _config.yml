@@ -1,0 +1,64 @@
+# GitHub Pages Configuration for BurniToken Website
+title: BurniToken - XRPL Deflation Token
+description: "Die erste deflationäre XRPL-basierte Kryptowährung mit automatischem Token-Burning-Mechanismus"
+url: "https://burnitoken.website"
+baseurl: ""
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+plugins:
+  - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Exclude from processing
+exclude:
+  - node_modules/
+  - package.json
+  - package-lock.json
+  - webpack.config.js
+  - tailwind.config.js
+  - postcss.config.js
+  - .git/
+  - .github/
+  - README.md
+  - test-results/
+  - tests/
+  - e2e/
+  - .lighthouseci/
+
+# Include files
+include:
+  - _headers
+  - .well-known
+
+# SEO settings
+lang: en
+author: BurniToken Team
+twitter:
+  username: BurniToken
+social:
+  name: BurniToken
+  links:
+    - https://twitter.com/BurniToken
+    - https://github.com/Kryptonator/burnitoken
+
+# Performance optimizations
+compress_html:
+  clippings: all
+  comments: all
+  endings: all
+  profile: false
+  startings: []
+  blanklines: false
+  ignore:
+    envs: [development]
+
+# Security
+webrick:
+  headers:
+    X-Frame-Options: DENY
+    X-Content-Type-Options: nosniff
+    X-XSS-Protection: 1; mode=block
+    Referrer-Policy: strict-origin-when-cross-origin
