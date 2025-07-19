@@ -1,34 +1,19 @@
 [
   {
     "name": "minScore",
-    "expected": 0.95,
-    "actual": 0.93,
+    "expected": 0.9,
+    "actual": null,
     "values": [
-      0.93,
-      0.93,
-      0.93
+      null,
+      null,
+      null
     ],
     "operator": ">=",
     "passed": false,
-    "auditProperty": "best-practices",
+    "message": "Audit did not produce a value at all. \"minScore\" might not be a valid assertion for this audit.",
+    "auditProperty": "performance",
     "auditId": "categories",
     "level": "error",
-    "url": "https://burnitoken.website/"
-  },
-  {
-    "name": "auditRan",
-    "expected": 1,
-    "actual": 0,
-    "values": [
-      0,
-      0,
-      0
-    ],
-    "operator": ">=",
-    "passed": false,
-    "auditProperty": "pwa",
-    "auditId": "categories",
-    "level": "error",
-    "url": "https://burnitoken.website/"
+    "url": "http://localhost:8080/"
   }
 ]

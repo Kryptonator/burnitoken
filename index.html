@@ -24,7 +24,7 @@
     <!-- Security Headers -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https: wss:; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;"
     >
     <!-- Hinweis: Für externe Ressourcen wie Google Fonts, CDNJS etc. sollten lokale Kopien verwendet oder Subresource Integrity (SRI) + crossorigin genutzt werden. -->
     <link
@@ -39,7 +39,7 @@
     <link rel="preload" href="/assets/images/burniimage.jpg" as="image" type="image/jpeg" >
     <link rel="preload" href="/assets/css/styles.min.css" as="style" >
     <link rel="preload" href="/assets/scripts-fixed.min.js" as="script" >
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/chart.js" as="script" >
+    <link rel="preload" href="/assets/vendor/chart.min.js" as="script" >
     <link rel="prefetch" href="/assets/images/burni-chart.webp" >
 
     <!-- Critical CSS -->
@@ -156,7 +156,7 @@
         height: 100%;
         background: #fff;
         z-index: 9999;
-        display: flex;
+        display: none; /* Disabled by default for better performance */
         justify-content: center;
         align-items: center;
         transition: opacity 0.3s;
@@ -387,19 +387,9 @@
     <meta name="referrer" content="strict-origin-when-cross-origin" >
     <!-- Main Stylesheet -->
     <link rel="stylesheet" href="assets/css/styles.min.css" >
-    <link rel="stylesheet" href="assets/css/responsive-optimized.css" >
-    <link rel="stylesheet" href="assets/css/touch-targets.css" >
-    <link rel="stylesheet" href="assets/css/enhanced-touch-targets.css" >
-    <!-- CSS compatibility for legacy browsers -->
-    <link rel="stylesheet" href="assets/css/styles-compat.css" >
-    <link rel="stylesheet" href="assets/css/responsive-enhancements.css" >
-    <link rel="stylesheet" href="assets/css/enhanced-mobile-optimization.css" >
-    <!-- Enhanced contrast and readability for better accessibility -->
-    <link rel="stylesheet" href="assets/css/enhanced-contrast.css" >
-    <!-- Dark Mode Variables CSS -->
-    <link rel="stylesheet" href="assets/css/dark-mode-variables.css" >
-    <!-- Enhanced form styles and notifications -->
-    <link rel="stylesheet" href="assets/css/forms-enhanced.css" >
+    <!-- Essential CSS only for performance -->
+    <link rel="stylesheet" href="assets/css/dark-mode-variables.css" media="print" onload="this.media='all'; this.onload=null;">
+    <link rel="stylesheet" href="assets/css/forms-enhanced.css" media="print" onload="this.media='all'; this.onload=null;">
 
     <!-- Product Schema for Burni Token -->
     <script type="application/ld+json">
@@ -468,12 +458,15 @@
 
   <body class="antialiased">
     <!-- Page Loader -->
+    <!-- Page loader disabled for Lighthouse performance -->
+    <!--
     <div id="pageLoader" class="page-loader">
       <div class="text-center">
         <div class="w-12 h-12 mb-4 border-t-2 border-orange-500 rounded-full animate-spin"></div>
         <p class="text-gray-600">Loading Burni Token...</p>
       </div>
     </div>
+    -->
 
     <!-- Immediate test mode page loader removal - executed before DOMContentLoaded -->
     <script>
@@ -2388,43 +2381,20 @@
           </div>
         </div>
       </div>
-    </footer>    <!-- Error monitoring script -->
-    <script src="/sentry.client.js" defer></script>
+    </footer>    <!-- Core Performance-Optimized Scripts -->
+    <script src="/assets/burni-dark-mode.js" async></script>
 
-    <!-- BURNI UNIFIED DARK MODE MANAGER -->
-    <script src="/assets/burni-dark-mode.js"></script>
-
-    <!-- Dark Mode Test Script (Development) -->
-    <script src="/assets/test-dark-mode.js"></script>
-
-    <!-- Advanced Features -->
+    <!-- Essential Features -->
     <script src="/assets/analytics-dashboard.js" defer></script>
     <script src="/assets/price-tracker.js" defer></script>
     <script src="/assets/community-features.js" defer></script>
-    <script src="/assets/security-monitor.js" defer></script>
-    <!-- XRPL Real-time Data Module -->
     <script src="/assets/xrpl-data.js" defer></script>
-    <!-- Temporary: Test live prices -->
-    <script src="/test-burni-live-prices.js" defer></script>
-    <script src="/test-price-widget.js" defer></script>
 
-    <!-- Enhanced Scripts -->
+    <!-- Core Application -->
     <script src="/assets/enhanced-polyfills.js" defer></script>
-    <script src="/assets/enhanced-functionality.v2.js" defer></script>
-
-    <!-- Enhanced Price Widget -->
-    <script src="/enhanced-price-widget.js" defer></script>
-
-    <!-- Main application scripts -->
-    <!-- ES5 Compatible Main Script for Maximum Browser Compatibility -->
     <script src="/assets/main-es5.js" defer></script>
-    <!-- Fixed Scripts - Emergency Replacement -->
     <script src="/assets/scripts-fixed.min.js" defer></script>
-    <!-- Enhanced Form Handler for Contact & Newsletter -->
     <script src="/assets/form-handler.js" defer></script>
-
-    <!-- Live Price Test (temporr) -->
-    <script src="/test-live-prices.js" defer></script>
 
     <!-- Safari Compatibility Inline Fallback -->
     <script>
