@@ -14,6 +14,29 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="https://burnitoken.website/" >
 
+    <!-- OpenGraph Meta Tags for Social Media -->
+    <meta property="og:title" content="BurniToken - XRPL Deflationary Token | Revolutionary Crypto Investment" >
+    <meta property="og:description" content="The first deflationary cryptocurrency on XRP Ledger with automatic token burning. Join the revolution with over 2 billion tokens burned and growing scarcity." >
+    <meta property="og:image" content="https://burnitoken.website/assets/images/burni-social.webp" >
+    <meta property="og:image:alt" content="BurniToken mascot with flames representing the deflationary burn mechanism" >
+    <meta property="og:url" content="https://burnitoken.website/" >
+    <meta property="og:type" content="website" >
+    <meta property="og:site_name" content="BurniToken" >
+    <meta property="og:locale" content="en_US" >
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" >
+    <meta name="twitter:site" content="@burnitoken" >
+    <meta name="twitter:creator" content="@burnitoken" >
+    <meta name="twitter:title" content="BurniToken - XRPL Deflationary Token" >
+    <meta name="twitter:description" content="Revolutionary deflationary cryptocurrency on XRPL creating value through scarcity. 2+ billion tokens already burned!" >
+    <meta name="twitter:image" content="https://burnitoken.website/assets/images/burni-social.webp" >
+    <meta name="twitter:image:alt" content="BurniToken - Deflationary XRPL Token" >
+
+    <!-- Additional Social Meta -->
+    <meta property="article:author" content="BurniToken Team" >
+    <meta property="article:publisher" content="https://burnitoken.website" >
+
     <!-- Enhanced Performance and Compatibility Meta Tags -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge" >
     <meta name="format-detection" content="telephone=no, address=no" >
@@ -21,10 +44,10 @@
 
     <meta name="color-scheme" content="light dark" >
 
-    <!-- Security Headers -->
+    <!-- Security Headers - Updated for Production -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://api.coingecko.com https://xrplcluster.com https://s1.ripple.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';"
     >
     <!-- Hinweis: Für externe Ressourcen wie Google Fonts, CDNJS etc. sollten lokale Kopien verwendet oder Subresource Integrity (SRI) + crossorigin genutzt werden. -->
     <link
@@ -39,8 +62,23 @@
     <link rel="preload" href="/assets/images/burniimage.jpg" as="image" type="image/jpeg" >
     <link rel="preload" href="/assets/css/styles.min.css" as="style" >
     <link rel="preload" href="/assets/scripts-fixed.min.js" as="script" >
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/chart.js" as="script" >
-    <link rel="prefetch" href="/assets/images/burni-chart.webp" >
+    
+    <!-- Preload hero section images with high priority -->
+    <link rel="preload" href="/assets/images/burni-logo.webp" as="image" type="image/webp" fetchpriority="high">
+    <link rel="preload" href="/assets/images/favicon-32x32.png" as="image" type="image/png">
+    
+    <!-- DNS prefetch for external resources -->
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="//api.coingecko.com">
+    
+    <!-- Prefetch important pages and resources -->
+    <link rel="prefetch" href="/assets/images/burni-chart.webp">
+    <link rel="prefetch" href="/404.html">
+    
+    <!-- Preconnect to CDNs -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 
     <!-- Critical CSS -->
     <style>
@@ -58,6 +96,11 @@
 
       :root {
         --theme-color: #f97316;
+        --orange-500: #f97316;
+        --orange-600: #ea580c;
+        --white: #ffffff;
+        --gray-600: #4b5563;
+        --gray-900: #111827;
         color-scheme: light dark;
       }
 
@@ -73,18 +116,104 @@
         }
       }
 
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
       body {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', Arial, sans-serif;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
 
       .font-display {
         font-family: 'Baloo 2', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', Arial, sans-serif;
       }
 
+      /* Hero Section Critical Styles */
       .hero-section {
         min-height: 100vh;
         background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
       }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+      }
+
+      /* KPI Cards Critical Styles */
+      .kpi-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+      }
+
+      .kpi-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        text-align: center;
+        transition: transform 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .kpi-card:hover {
+        transform: translateY(-4px);
+      }
+
+      .kpi-value {
+        font-size: 2rem;
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 0.5rem;
+      }
+
+      .kpi-label {
+        font-size: 0.875rem;
+        opacity: 0.8;
+        font-weight: 500;
+      }
+
+      /* Header Critical Styles */
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.5rem;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--orange-500);
+        text-decoration: none;
+      }
+
+      /* Loading States */
 
       .loading-placeholder {
         background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
@@ -401,29 +530,70 @@
     <!-- Enhanced form styles and notifications -->
     <link rel="stylesheet" href="assets/css/forms-enhanced.css" >
 
-    <!-- Product Schema for Burni Token -->
+    <!-- FinancialProduct Schema for Burni Token -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "Product",
-        "name": "Burni Token",
-        "description": "Revolutionary deflationary cryptocurrency with automatic burn mechanisms on XRPL",
+        "@type": "FinancialProduct",
+        "name": "BURNI Token",
+        "description": "Revolutionary deflationary cryptocurrency with automatic burn mechanisms on XRPL. The first deflationary token on XRP Ledger creating value through scarcity.",
         "brand": {
           "@type": "Brand",
-          "name": "Burni Token"
+          "name": "BurniToken"
         },
         "category": "Cryptocurrency",
+        "provider": {
+          "@type": "Organization",
+          "name": "BurniToken Team",
+          "url": "https://burnitoken.website"
+        },
+        "feesAndCommissionsSpecification": "Ultra-low transaction fees on XRPL network",
+        "interestRate": {
+          "@type": "QuantitativeValue",
+          "name": "Deflationary Rate",
+          "value": "3",
+          "unitText": "% burned every 3 days"
+        },
         "offers": {
           "@type": "Offer",
           "availability": "https://schema.org/InStock",
           "price": "0.001",
-          "priceCurrency": "USD"
+          "priceCurrency": "USD",
+          "priceValidUntil": "2025-12-31",
+          "seller": {
+            "@type": "Organization",
+            "name": "XRPL DEX"
+          }
         },
         "aggregateRating": {
           "@type": "AggregateRating",
           "ratingValue": "4.8",
-          "reviewCount": "127"
-        }
+          "reviewCount": "127",
+          "bestRating": "5",
+          "worstRating": "1"
+        },
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "Blockchain",
+            "value": "XRP Ledger (XRPL)"
+          },
+          {
+            "@type": "PropertyValue",
+            "name": "Token Type",
+            "value": "Deflationary"
+          },
+          {
+            "@type": "PropertyValue",
+            "name": "Max Supply",
+            "value": "100000000000"
+          },
+          {
+            "@type": "PropertyValue",
+            "name": "Burn Mechanism",
+            "value": "Automatic 3% every 3 days"
+          }
+        ]
       }
     </script>
     <!-- FAQ Schema -->
@@ -813,6 +983,21 @@
             <time datetime="2025-06-16">Updated: June 16, 2025</time>
             <span class="live-indicator"> Live Data</span>
           </span>
+        </div>
+
+        <!-- Live Data Controls -->
+        <div class="flex items-center justify-center mt-6 space-x-4">
+          <div class="text-sm text-gray-600" data-last-update>
+            Last updated: Loading...
+          </div>
+          <button 
+            class="px-4 py-2 text-sm text-white bg-orange-500 rounded-lg hover:bg-orange-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            data-refresh-btn
+            onclick="window.burniLiveData?.refresh()"
+            aria-label="Refresh live data"
+          >
+            🔄 Refresh Data
+          </button>
         </div>
 
         <!-- About Burni Section -->
@@ -2388,43 +2573,62 @@
           </div>
         </div>
       </div>
-    </footer>    <!-- Error monitoring script -->
-    <script src="/sentry.client.js" defer></script>
+    </footer>
+    
+    <!-- Critical Scripts (Loaded Early) -->
+    <script>
+      // Performance monitoring start
+      if ('performance' in window) {
+        performance.mark('scripts-start');
+      }
+      
+      // Critical feature detection
+      window.browserSupport = {
+        webp: (function() {
+          const canvas = document.createElement('canvas');
+          return canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+        })(),
+        es6: (function() {
+          try { eval('() => {}'); return true; } catch (e) { return false; }
+        })(),
+        intersection: 'IntersectionObserver' in window
+      };
+    </script>
 
-    <!-- BURNI UNIFIED DARK MODE MANAGER -->
-    <script src="/assets/burni-dark-mode.js"></script>
-
-    <!-- Dark Mode Test Script (Development) -->
-    <script src="/assets/test-dark-mode.js"></script>
-
-    <!-- Advanced Features -->
-    <script src="/assets/analytics-dashboard.js" defer></script>
-    <script src="/assets/price-tracker.js" defer></script>
-    <script src="/assets/community-features.js" defer></script>
-    <script src="/assets/security-monitor.js" defer></script>
-    <!-- XRPL Real-time Data Module -->
-    <script src="/assets/xrpl-data.js" defer></script>
-    <!-- Temporary: Test live prices -->
-    <script src="/test-burni-live-prices.js" defer></script>
-    <script src="/test-price-widget.js" defer></script>
-
-    <!-- Enhanced Scripts -->
-    <script src="/assets/enhanced-polyfills.js" defer></script>
-    <script src="/assets/enhanced-functionality.v2.js" defer></script>
-
-    <!-- Enhanced Price Widget -->
-    <script src="/enhanced-price-widget.js" defer></script>
-
-    <!-- Main application scripts -->
-    <!-- ES5 Compatible Main Script for Maximum Browser Compatibility -->
-    <script src="/assets/main-es5.js" defer></script>
-    <!-- Fixed Scripts - Emergency Replacement -->
+    <!-- Essential Functionality (Non-blocking) -->
     <script src="/assets/scripts-fixed.min.js" defer></script>
-    <!-- Enhanced Form Handler for Contact & Newsletter -->
-    <script src="/assets/form-handler.js" defer></script>
+    <script src="/assets/burni-realtime-dashboard.js" defer></script>
+    <script src="/main.js" defer></script>
 
-    <!-- Live Price Test (temporr) -->
-    <script src="/test-live-prices.js" defer></script>
+    <!-- Enhanced Features (Load after main functionality) -->
+    <script>
+      // Lazy load non-critical features after main content loads
+      window.addEventListener('load', function() {
+        const scripts = [
+          '/assets/analytics-dashboard.js',
+          '/assets/i18n-enhanced.js',
+          '/assets/accessibility-enhanced.js',
+          '/sentry.client.js'
+        ];
+        
+        scripts.forEach(function(src, index) {
+          setTimeout(function() {
+            const script = document.createElement('script');
+            script.src = src;
+            script.defer = true;
+            script.onerror = function() {
+              console.warn('Non-critical script failed to load:', src);
+            };
+            document.head.appendChild(script);
+          }, index * 200); // Stagger loading
+        });
+        
+        if ('performance' in window) {
+          performance.mark('scripts-end');
+          performance.measure('scripts-duration', 'scripts-start', 'scripts-end');
+        }
+      });
+    </script>
 
     <!-- Safari Compatibility Inline Fallback -->
     <script>
