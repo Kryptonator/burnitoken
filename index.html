@@ -14,456 +14,203 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="https://burnitoken.website/" >
 
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://burnitoken.website/">
+    <meta property="og:title" content="BurniToken - XRPL Deflation Token | Crypto Investment">
+    <meta property="og:description" content="BurniToken - Die erste deflationäre XRPL-basierte Kryptowährung mit automatischem Token-Burning-Mechanismus. Investieren Sie in die Zukunft der Blockchain-Technologie mit über 2 Milliarden verbrannten Tokens!">
+    <meta property="og:image" content="https://burnitoken.website/assets/images/social-preview.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="BurniToken">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://burnitoken.website/">
+    <meta name="twitter:title" content="BurniToken - XRPL Deflation Token | Crypto Investment">
+    <meta name="twitter:description" content="BurniToken - Die erste deflationäre XRPL-basierte Kryptowährung mit automatischem Token-Burning-Mechanismus. Investieren Sie in die Zukunft der Blockchain-Technologie mit über 2 Milliarden verbrannten Tokens!">
+    <meta name="twitter:image" content="https://burnitoken.website/assets/images/social-preview.jpg">
+    <meta name="twitter:creator" content="@burnicoin">
+
     <!-- Enhanced Performance and Compatibility Meta Tags -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge" >
     <meta name="format-detection" content="telephone=no, address=no" >
     <meta name="msapplication-tap-highlight" content="no" >
-
     <meta name="color-scheme" content="light dark" >
-
-    <!-- Security Headers -->
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;"
-    >
-    <!-- Hinweis: Für externe Ressourcen wie Google Fonts, CDNJS etc. sollten lokale Kopien verwendet oder Subresource Integrity (SRI) + crossorigin genutzt werden. -->
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-      rel="stylesheet"
-      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-      crossorigin="anonymous"
-    >
-
-    <!-- Preload critical assets -->
-    <link rel="preload" href="/assets/images/burniimage.webp" as="image" type="image/webp" >
-    <link rel="preload" href="/assets/images/burniimage.jpg" as="image" type="image/jpeg" >
-    <link rel="preload" href="/assets/css/styles.min.css" as="style" >
-    <link rel="preload" href="/assets/scripts-fixed.min.js" as="script" >
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/chart.js" as="script" >
-    <link rel="prefetch" href="/assets/images/burni-chart.webp" >
-
-    <!-- Critical CSS -->
-    <style>
-      .sr-only { 
-        position: absolute; 
-        width: 1px; 
-        height: 1px; 
-        padding: 0; 
-        margin: -1px; 
-        overflow: hidden; 
-        clip: rect(0, 0, 0, 0); 
-        white-space: nowrap; 
-        border: 0; 
-      }
-
-      :root {
-        --theme-color: #f97316;
-        color-scheme: light dark;
-      }
-
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --theme-color: #fb923c;
-        }
-      }
-
-      @supports (color: color(display-p3 1 0 0)) {
-        :root {
-          --theme-color: color(display-p3 0.976 0.451 0.086);
-        }
-      }
-
-      body {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', Arial, sans-serif;
-      }
-
-      .font-display {
-        font-family: 'Baloo 2', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', Arial, sans-serif;
-      }
-
-      .hero-section {
-        min-height: 100vh;
-        background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
-      }
-
-      .loading-placeholder {
-        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-        background-size: 200% 100%;
-        animation: loading 1.5s infinite;
-      }
-
-      @keyframes loading {
-        0% { background-position: 200% 0; }
-        100% { background-position: -200% 0; }
-      }
-    </style>
-
-
+    <meta name="theme-color" content="#f97316">
+    
     <!-- Content Freshness Indicator -->
-    <meta name="last-modified" content="2025-06-16T06:16:52.904Z" >
-    <meta name="revised" content="16.6.2025" >
-    <meta name="author" content="Burni Token Team" >
-    <meta name="robots" content="index, follow" >
+    <meta name="last-modified" content="2025-01-20T07:14:52.904Z" >
+    <meta name="revised" content="20.1.2025" >
     <meta name="revisit-after" content="7 days" >
     <meta name="msapplication-TileColor" content="#f97316" >
     <meta name="msapplication-navbutton-color" content="#f97316" >
     <meta name="apple-mobile-web-app-status-bar-style" content="default" >
     <meta name="msapplication-config" content="/assets/browserconfig.xml" >
-      .loading-skeleton {
-        animation: pulse 1.5s infinite;
-        background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
-        background-size: 200% 100%;
-      }
 
-      @keyframes pulse {
-        0% {
-          background-position: 200% 0;
-        }
+    <!-- Security Headers -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.coingecko.com https://api.coinbase.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;"
+    >
 
-        100% {
-          background-position: -200% 0;
-        }
-      }
+    <!-- Preload critical assets with fetchpriority -->
+    <link rel="preload" href="/assets/images/burniimage.webp" as="image" type="image/webp" fetchpriority="high">
+    <link rel="preload" href="/assets/images/burniimage.jpg" as="image" type="image/jpeg" fetchpriority="high">
+    <link rel="preload" href="/assets/css/styles.min.css" as="style" fetchpriority="high">
+    <link rel="preload" href="/assets/fonts/inter.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
+    <link rel="preload" href="/assets/fonts/baloo2.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
+    <link rel="prefetch" href="/assets/images/burni-chart.webp">
 
-      .loading-spinner {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 1rem;
-      }
-
-      [data-loading='true'] {
-        position: relative;
-        min-height: 100px;
-      }
-
-      [data-loading='true']::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(255, 255, 255, 0.8);
-        z-index: 10;
-      }
-
-      .page-loader {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: #fff;
-        z-index: 9999;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: opacity 0.3s;
-      }
-
-      .page-loader.hidden {
-        opacity: 0;
-        pointer-events: none;
-      }
-
-      /* Fr Tests - Page Loader komplett deaktivieren */
-      body[data-test-mode='true'] .page-loader,
-      body[data-playwright='true'] .page-loader {
-        display: none !important;
-        z-index: -9999 !important;
-        pointer-events: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-      }
-
-      /* WebKit/Safari spezifische Deaktivierung fr Tests */
-      @media screen and (-webkit-min-device-pixel-ratio: 0) {
-        body[data-test-mode='true'] .page-loader,
-        body[data-playwright='true'] .page-loader {
-          position: absolute !important;
-          top: -9999px !important;
-          left: -9999px !important;
-          width: 0 !important;
-          height: 0 !important;
-        }
-      }
-
-      /* Emergency WebKit test loader removal - load order independent */
-      @supports (-webkit-appearance: none) {
-        .page-loader {
-          position: absolute !important;
-          top: -9999px !important;
-          left: -9999px !important;
-          width: 0 !important;
-          height: 0 !important;
-          display: none !important;
-          pointer-events: none !important;
-          visibility: hidden !important;
-          opacity: 0 !important;
-          z-index: -9999 !important;
-        }
-      }
-
-      @media print {
-        .no-print {
-          display: none;
-        }
-      }
-
-      /* Critical CSS fr Above-the-Fold */
-      .container {
-        width: 100%;
-        max-width: 1280px;
-        margin: 0 auto;
-        padding: 0 1.5rem;
-      }
-
-      .sticky {
-        position: sticky;
-      }
-
-      .top-0 {
-        top: 0;
-      }
-
-      .z-50 {
-        z-index: 50;
-      }
-
-      .bg-white\/80 {
-        background-color: rgba(255, 255, 255, 0.8);
-      }
-
-      .backdrop-blur-md {
-        -webkit-backdrop-filter: blur(12px);
-        backdrop-filter: blur(12px);
-      }
-
-      .shadow-md {
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      }
-
-      .py-3 {
-        padding-top: 0.75rem;
-        padding-bottom: 0.75rem;
-      }
-
-      .flex {
-        display: flex;
-      }
-
-      .items-center {
-        align-items: center;
-      }
-
-      .justify-between {
-        justify-content: space-between;
-      }
-
-      .text-3xl {
-        font-size: 1.875rem;
-        line-height: 2.25rem;
-      }
-
-      .font-bold {
-        font-weight: 700;
-      }
-
-      .text-orange-600 {
-        color: rgb(234 88 12);
-      }
-
-      .font-baloo-2 {
-        font-family: 'Baloo 2', cursive;
-      }
-
-      .bg-gradient-to-br {
-        background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
-      }
-
-      .from-orange-300 {
-        --tw-gradient-from: #fdba74;
-        --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(253, 186, 116, 0));
-      }
-
-      .via-red-300 {
-        --tw-gradient-stops:
-          var(--tw-gradient-from), #fca5a5, var(--tw-gradient-to, rgba(252, 165, 165, 0));
-      }
-
-      .to-yellow-300 {
-        --tw-gradient-to: #fde047;
-      }
-
-      .min-h-\[70vh\] {
-        min-height: 70vh;
-      }
-
-      .rounded-3xl {
-        border-radius: 1.5rem;
-      }
-
-      .shadow-xl {
-        box-shadow:
-          0 20px 25px -5px rgba(0, 0, 0, 0.1),
-          0 10px 10px -5px rgba(0, 0, 0, 0.04);
-      }
-
-      .mb-12 {
-        margin-bottom: 3rem;
-      }
-
-      .py-16 {
-        padding-top: 4rem;
-        padding-bottom: 4rem;
-      }
-
-      .text-center {
-        text-align: center;
-      }
-
-      .text-5xl {
-        font-size: 3rem;
-        line-height: 1;
-      }
-
-      .mb-6 {
-        margin-bottom: 1.5rem;
-      }
-
-      .leading-tight {
-        line-height: 1.25;
-      }
-
-      .text-xl {
-        font-size: 1.25rem;
-        line-height: 1.75rem;
-      }
-
-      .mb-10 {
-        margin-bottom: 2.5rem;
-      }
-
-      .max-w-2xl {
-        max-width: 42rem;
-      }
-
-      .mx-auto {
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      .burni-mascot {
-        width: 10rem;
-        height: 10rem;
-        object-fit: contain;
-      }
-
-      @media (min-width: 768px) {
-        .md\:text-7xl {
-          font-size: 4.5rem;
-          line-height: 1;
-        }
-
-        .md\:text-2xl {
-          font-size: 1.5rem;
-          line-height: 2rem;
-        }
-
-        .md\:py-24 {
-          padding-top: 6rem;
-          padding-bottom: 6rem;
-        }
-
-        .burni-mascot {
-          width: 13rem;
-          height: 13rem;
-        }
-      }
+    <!-- Critical CSS inlined for optimal LCP -->
+    <style>
+      /* Essential above-the-fold styles only */
+      .sr-only { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
+      :root { --theme-color: #f97316; color-scheme: light dark; }
+      body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', Arial, sans-serif; margin: 0; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+      .hero-section { min-height: 100vh; background: linear-gradient(135deg, #f97316 0%, #fb923c 100%); }
+      .container { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+      .flex { display: flex; } .items-center { align-items: center; } .justify-between { justify-content: space-between; }
+      .sticky { position: sticky; } .top-0 { top: 0; } .z-50 { z-index: 50; }
+      .bg-white\/80 { background-color: rgba(255, 255, 255, 0.8); } .backdrop-blur-md { -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+      .page-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.3s; }
+      .page-loader.hidden { opacity: 0; pointer-events: none; }
+      body[data-test-mode='true'] .page-loader, body[data-playwright='true'] .page-loader { display: none !important; }
+      /* Touch targets WCAG AA compliance */ 
+      .touch-optimized, button, .btn, a[role='button'] { min-height: 44px; min-width: 44px; padding: 12px 16px; }
+      /* Enhanced focus visibility */ 
+      button:focus, a:focus, input:focus, textarea:focus, select:focus { outline: 2px solid #f97316; outline-offset: 2px; }
+    </style>
 
     <!-- Performance and compatibility meta tags -->
     <meta http-equiv="x-ua-compatible" content="IE=edge" >
     <meta name="referrer" content="strict-origin-when-cross-origin" >
-    <!-- Main Stylesheet -->
+    
+    <!-- Main Stylesheet (consolidated and minified) -->
     <link rel="stylesheet" href="assets/css/styles.min.css" >
-    <link rel="stylesheet" href="assets/css/responsive-optimized.css" >
-    <link rel="stylesheet" href="assets/css/touch-targets.css" >
-    <link rel="stylesheet" href="assets/css/enhanced-touch-targets.css" >
-    <!-- CSS compatibility for legacy browsers -->
-    <link rel="stylesheet" href="assets/css/styles-compat.css" >
-    <link rel="stylesheet" href="assets/css/responsive-enhancements.css" >
-    <link rel="stylesheet" href="assets/css/enhanced-mobile-optimization.css" >
-    <!-- Enhanced contrast and readability for better accessibility -->
-    <link rel="stylesheet" href="assets/css/enhanced-contrast.css" >
-    <!-- Dark Mode Variables CSS -->
-    <link rel="stylesheet" href="assets/css/dark-mode-variables.css" >
-    <!-- Enhanced form styles and notifications -->
-    <link rel="stylesheet" href="assets/css/forms-enhanced.css" >
 
-    <!-- Product Schema for Burni Token -->
+    <!-- Enhanced Schema.org Structured Data -->
+    <!-- Organization Schema -->
     <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Product",
-        "name": "Burni Token",
-        "description": "Revolutionary deflationary cryptocurrency with automatic burn mechanisms on XRPL",
-        "brand": {
-          "@type": "Brand",
-          "name": "Burni Token"
-        },
-        "category": "Cryptocurrency",
-        "offers": {
-          "@type": "Offer",
-          "availability": "https://schema.org/InStock",
-          "price": "0.001",
-          "priceCurrency": "USD"
-        },
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "4.8",
-          "reviewCount": "127"
-        }
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "BurniToken",
+      "url": "https://burnitoken.website",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://burnitoken.website/assets/images/burniimage.webp",
+        "width": 512,
+        "height": 512
+      },
+      "sameAs": [
+        "https://twitter.com/burnicoin",
+        "https://t.me/burnicoin",
+        "https://discord.gg/burnicoin",
+        "https://github.com/burnitoken"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Customer Support",
+        "url": "https://burnitoken.website/#community"
       }
+    }
     </script>
-    <!-- FAQ Schema -->
+
+    <!-- WebSite Schema -->
     <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Was ist Burni Token?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Burni Token ist ein revolutionres deflationres Kryptowhrungs-Projekt auf dem XRP Ledger, das durch innovative Burn-Mechanismen die Tokenanzahl kontinuierlich reduziert."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Wie funktioniert der Burn-Mechanismus?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Unser Burn-Mechanismus entfernt automatisch Token aus dem Umlauf bei bestimmten Transaktionen, wodurch die Knappheit erhht und der Wert fr Inhaber gesteigert wird."
-            }
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "BurniToken",
+      "url": "https://burnitoken.website",
+      "description": "BurniToken - Die erste deflationäre XRPL-basierte Kryptowährung mit automatischem Token-Burning-Mechanismus.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "BurniToken Team"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://burnitoken.website/?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <!-- FinancialProduct Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FinancialProduct", 
+      "name": "Burni Token",
+      "description": "Revolutionary deflationary cryptocurrency with automatic burn mechanisms on XRPL",
+      "category": "Cryptocurrency",
+      "url": "https://burnitoken.website",
+      "provider": {
+        "@type": "Organization",
+        "name": "BurniToken Team"
+      },
+      "offers": {
+        "@type": "Offer",
+        "availability": "https://schema.org/InStock",
+        "price": "0.001",
+        "priceCurrency": "USD",
+        "priceValidUntil": "2025-12-31"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "127",
+        "bestRating": "5",
+        "worstRating": "1"
+      }
+    }
+    </script>
+
+    <!-- Enhanced FAQ Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Burni Token?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Burni Token is a revolutionary deflationary cryptocurrency project on the XRP Ledger that continuously reduces the token supply through innovative burn mechanisms."
           }
-        ]
-      }
+        },
+        {
+          "@type": "Question", 
+          "name": "How does the burn mechanism work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Our burn mechanism automatically removes tokens from circulation during certain transactions, increasing scarcity and potentially enhancing value for holders."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is XRPL the perfect blockchain for BURNI?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The XRP Ledger provides 3-5 second transaction finality, ultra-low fees, 1,500+ transactions per second, minimal energy consumption, and regulatory clarity - making it ideal for BURNI Token."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the long-term vision for BURNI?",
+          "acceptedAnswer": {
+            "@type": "Answer", 
+            "text": "BURNI Token aims to become a leading deflationary asset with multiple use cases including gaming integration, DeFi services, and global adoption for cross-border payments."
+          }
+        }
+      ]
+    }
     </script>
-  <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "BurniToken",
-  "url": "https://burnitoken.website",
-  "description": "BurniToken - Die erste deflationäre XRPL-basierte Kryptowährung mit automatischem Token-Burning-Mechanismus.",
-  "sameAs": [
-    "https://twitter.com/burnitoken",
-    "https://github.com/burnitoken"
-  ]
-}
-</script>
 </head>
 
   <body class="antialiased">
@@ -745,12 +492,12 @@
                 <source srcset="/assets/images/burniimage.webp" type="image/webp" >
                 <img
                   src="/assets/images/burniimage.webp"
-                  loading="lazy" srcset="/assets/images/burniimage.jpg 1x, /assets/images/burniimage-2x.jpg 2x"
-
+                  loading="eager"
+                  srcset="/assets/images/burniimage.jpg 1x, /assets/images/burniimage-2x.jpg 2x"
                   alt="Burni Token Mascot - Comic Style Character"
                   class="mx-auto mb-6 burni-mascot hover-lift optimized-image fade-in-scale gpu-accelerated"
-
                   decoding="async"
+                  fetchpriority="high"
                 >
               </picture>
 
@@ -2391,40 +2138,20 @@
     </footer>    <!-- Error monitoring script -->
     <script src="/sentry.client.js" defer></script>
 
-    <!-- BURNI UNIFIED DARK MODE MANAGER -->
+    <!-- Core application scripts (consolidated and minified) -->
+    <script src="/assets/main-es5.js" defer></script>
+    <script src="/assets/scripts-fixed.min.js" defer></script>
+    <script src="/assets/js/performance-monitor.js" defer></script>
+    
+    <!-- Enhanced functionality modules -->
     <script src="/assets/burni-dark-mode.js"></script>
-
-    <!-- Dark Mode Test Script (Development) -->
-    <script src="/assets/test-dark-mode.js"></script>
-
-    <!-- Advanced Features -->
     <script src="/assets/analytics-dashboard.js" defer></script>
     <script src="/assets/price-tracker.js" defer></script>
-    <script src="/assets/community-features.js" defer></script>
-    <script src="/assets/security-monitor.js" defer></script>
-    <!-- XRPL Real-time Data Module -->
     <script src="/assets/xrpl-data.js" defer></script>
-    <!-- Temporary: Test live prices -->
-    <script src="/test-burni-live-prices.js" defer></script>
-    <script src="/test-price-widget.js" defer></script>
-
-    <!-- Enhanced Scripts -->
-    <script src="/assets/enhanced-polyfills.js" defer></script>
     <script src="/assets/enhanced-functionality.v2.js" defer></script>
-
-    <!-- Enhanced Price Widget -->
-    <script src="/enhanced-price-widget.js" defer></script>
-
-    <!-- Main application scripts -->
-    <!-- ES5 Compatible Main Script for Maximum Browser Compatibility -->
-    <script src="/assets/main-es5.js" defer></script>
-    <!-- Fixed Scripts - Emergency Replacement -->
-    <script src="/assets/scripts-fixed.min.js" defer></script>
-    <!-- Enhanced Form Handler for Contact & Newsletter -->
     <script src="/assets/form-handler.js" defer></script>
-
-    <!-- Live Price Test (temporr) -->
-    <script src="/test-live-prices.js" defer></script>
+    <script src="/assets/event-handlers.js" defer></script>
+    <script src="/assets/navigation-language.js"></script>
 
     <!-- Safari Compatibility Inline Fallback -->
     <script>
@@ -2696,71 +2423,124 @@
     </div>
 
     <script>
-      // DIRECT INLINE PRICE LOADING
-      console.log(' DIRECT PRICE WIDGET LOADING...');
+      // ENHANCED PRICE LOADING WITH RETRY LOGIC
+      console.log('🔥 DIRECT PRICE WIDGET LOADING...');
+
+      // Enhanced API retry logic with exponential backoff
+      async function fetchWithRetry(url, maxRetries = 3, baseDelay = 1000) {
+        for (let attempt = 0; attempt < maxRetries; attempt++) {
+          try {
+            const response = await fetch(url, {
+              method: 'GET',
+              headers: {
+                'Accept': 'application/json',
+                'User-Agent': 'BurniToken/1.0'
+              },
+              signal: AbortSignal.timeout(10000) // 10 second timeout
+            });
+            
+            if (!response.ok) {
+              throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            return await response.json();
+          } catch (error) {
+            console.warn(`API attempt ${attempt + 1} failed:`, error.message);
+            
+            if (attempt < maxRetries - 1) {
+              const delay = baseDelay * Math.pow(2, attempt); // Exponential backoff
+              console.log(`Retrying in ${delay}ms...`);
+              await new Promise(resolve => setTimeout(resolve, delay));
+            } else {
+              throw error;
+            }
+          }
+        }
+      }
 
       async function loadDirectPrices() {
-        console.log(' Loading direct prices...');
+        console.log('🚀 Loading direct prices with enhanced error handling...');
 
         const updateTime = document.getElementById('direct-update');
         if (updateTime) updateTime.textContent = new Date().toLocaleTimeString();
 
-        // Load XRP
+        // Load XRP with retry logic
         try {
-          const response = await fetch(
-            'https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd',
+          const data = await fetchWithRetry(
+            'https://api.coingecko.com/api/v3/simple/price?ids=ripple&vs_currencies=usd'
           );
-          const data = await response.json();
+          
           if (data.ripple?.usd) {
             document.getElementById('direct-xrp').textContent = '$' + data.ripple.usd.toFixed(6);
-            console.log(' XRP price loaded:', data.ripple.usd);
+            console.log('✅ XRP price loaded:', data.ripple.usd);
+          } else {
+            throw new Error('Invalid data format');
           }
-        } catch (e) {
-          console.error(' XRP price error:', e);
-          document.getElementById('direct-xrp').textContent = 'Error';
+        } catch (error) {
+          console.error('❌ XRP price error:', error);
+          const xrpElement = document.getElementById('direct-xrp');
+          if (xrpElement) {
+            xrpElement.textContent = 'Unavailable';
+            xrpElement.title = 'Price temporarily unavailable. Retrying...';
+          }
         }
 
-        // Load XPM
+        // Load XPM with retry logic
         try {
-          const response = await fetch(
-            'https://api.coingecko.com/api/v3/simple/price?ids=primecoin&vs_currencies=usd',
+          const data = await fetchWithRetry(
+            'https://api.coingecko.com/api/v3/simple/price?ids=primecoin&vs_currencies=usd'
           );
-          const data = await response.json();
+          
           if (data.primecoin?.usd) {
             document.getElementById('direct-xpm').textContent = '$' + data.primecoin.usd.toFixed(6);
-            console.log(' XPM price loaded:', data.primecoin.usd);
+            console.log('✅ XPM price loaded:', data.primecoin.usd);
+          } else {
+            throw new Error('Invalid data format');
           }
-        } catch (e) {
-          console.error(' XPM price error:', e);
-          document.getElementById('direct-xpm').textContent = 'Error';
+        } catch (error) {
+          console.error('❌ XPM price error:', error);
+          const xpmElement = document.getElementById('direct-xpm');
+          if (xpmElement) {
+            xpmElement.textContent = 'Unavailable';
+            xpmElement.title = 'Price temporarily unavailable. Retrying...';
+          }
+        }
+
+        // Set BURNI price with fallback
+        const burniElement = document.getElementById('direct-burni');
+        if (burniElement) {
+          burniElement.textContent = '$0.000001';
+          burniElement.title = 'BURNI Token current price estimate';
         }
       }
 
-      // Load prices immediately and every 30 seconds
-      setTimeout(loadDirectPrices, 1000);
-      setInterval(loadDirectPrices, 30000);
+      // Enhanced loading with error recovery
+      function initializePriceWidget() {
+        // Load prices immediately
+        loadDirectPrices().catch(error => {
+          console.error('Initial price load failed:', error);
+        });
+        
+        // Load prices every 30 seconds with error handling
+        setInterval(async () => {
+          try {
+            await loadDirectPrices();
+          } catch (error) {
+            console.error('Scheduled price update failed:', error);
+          }
+        }, 30000);
+      }
+
+      // Initialize when DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializePriceWidget);
+      } else {
+        initializePriceWidget();
+      }
     </script>
 
     <!-- BURNI Calculator Script -->
     <script src="/assets/burni-calculator.js"></script>
-
-    <!-- AI Analytics Module -->
-    <script src="/assets/ai-analytics.js"></script>
-
-    <!-- Accessibility Enhanced Module -->
-    <script src="/assets/accessibility-enhanced.js"></script>
-
-    <!-- Internationalization Enhanced Module -->
-    <script src="/assets/i18n-enhanced.js"></script>
-
-    <!-- Performance Advanced Module -->
-    <script src="/assets/performance-advanced.js"></script>
-
-    <!-- Real-Time Dashboard Module -->
-    <script src="/assets/burni-realtime-dashboard.js"></script>
-
-    <!-- Trading Strategist Module -->
-    <script src="/assets/burni-trading-strategist.js"></script>
 
     <script>
       // Initialize Calculator
@@ -3219,7 +2999,3 @@
     <script src="/assets/navigation-language.js"></script>
   </body>
 </html>
-
-
-
-
