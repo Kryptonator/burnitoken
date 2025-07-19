@@ -1,37 +1,21 @@
 User-agent: *
 Allow: /
 
-# High-priority content
-Allow: /assets/css/
-Allow: /assets/js/
-Allow: /assets/images/
-
-# Block test and temporary files
-Disallow: /test-*
-Disallow: /debug-*
-Disallow: /*.json$
-Disallow: /audit-*
-Disallow: /comprehensive-*
-
-# Sitemap location
 Sitemap: https://burnitoken.website/sitemap.xml
 
-# Crawl-delay for respectful crawling
-Crawl-delay: 1
-
-# Specific bot instructions
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Slurp
-Allow: /
-
-# Block unwanted bots
 User-agent: AhrefsBot
-Disallow: /
+Crawl-delay: 10
+
+User-agent: SemrushBot  
+Crawl-delay: 10
 
 User-agent: MJ12bot
-Disallow: /
+Crawl-delay: 10
+
+User-agent: *
+Disallow: /.git/
+Disallow: /node_modules/
+Disallow: *.log$
+
+User-agent: *
+Request-rate: 1/10s
