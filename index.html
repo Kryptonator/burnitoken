@@ -24,7 +24,7 @@
     <!-- Security Headers -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https: wss:; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;"
     >
     <!-- Hinweis: Für externe Ressourcen wie Google Fonts, CDNJS etc. sollten lokale Kopien verwendet oder Subresource Integrity (SRI) + crossorigin genutzt werden. -->
     <link
@@ -39,7 +39,7 @@
     <link rel="preload" href="/assets/images/burniimage.jpg" as="image" type="image/jpeg" >
     <link rel="preload" href="/assets/css/styles.min.css" as="style" >
     <link rel="preload" href="/assets/scripts-fixed.min.js" as="script" >
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/chart.js" as="script" >
+    <link rel="preload" href="/assets/vendor/chart.min.js" as="script" >
     <link rel="prefetch" href="/assets/images/burni-chart.webp" >
 
     <!-- Critical CSS -->
@@ -156,7 +156,7 @@
         height: 100%;
         background: #fff;
         z-index: 9999;
-        display: flex;
+        display: none; /* Disabled by default for better performance */
         justify-content: center;
         align-items: center;
         transition: opacity 0.3s;
@@ -468,12 +468,15 @@
 
   <body class="antialiased">
     <!-- Page Loader -->
+    <!-- Page loader disabled for Lighthouse performance -->
+    <!--
     <div id="pageLoader" class="page-loader">
       <div class="text-center">
         <div class="w-12 h-12 mb-4 border-t-2 border-orange-500 rounded-full animate-spin"></div>
         <p class="text-gray-600">Loading Burni Token...</p>
       </div>
     </div>
+    -->
 
     <!-- Immediate test mode page loader removal - executed before DOMContentLoaded -->
     <script>
