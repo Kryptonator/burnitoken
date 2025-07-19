@@ -387,19 +387,9 @@
     <meta name="referrer" content="strict-origin-when-cross-origin" >
     <!-- Main Stylesheet -->
     <link rel="stylesheet" href="assets/css/styles.min.css" >
-    <link rel="stylesheet" href="assets/css/responsive-optimized.css" >
-    <link rel="stylesheet" href="assets/css/touch-targets.css" >
-    <link rel="stylesheet" href="assets/css/enhanced-touch-targets.css" >
-    <!-- CSS compatibility for legacy browsers -->
-    <link rel="stylesheet" href="assets/css/styles-compat.css" >
-    <link rel="stylesheet" href="assets/css/responsive-enhancements.css" >
-    <link rel="stylesheet" href="assets/css/enhanced-mobile-optimization.css" >
-    <!-- Enhanced contrast and readability for better accessibility -->
-    <link rel="stylesheet" href="assets/css/enhanced-contrast.css" >
-    <!-- Dark Mode Variables CSS -->
-    <link rel="stylesheet" href="assets/css/dark-mode-variables.css" >
-    <!-- Enhanced form styles and notifications -->
-    <link rel="stylesheet" href="assets/css/forms-enhanced.css" >
+    <!-- Essential CSS only for performance -->
+    <link rel="stylesheet" href="assets/css/dark-mode-variables.css" media="print" onload="this.media='all'; this.onload=null;">
+    <link rel="stylesheet" href="assets/css/forms-enhanced.css" media="print" onload="this.media='all'; this.onload=null;">
 
     <!-- Product Schema for Burni Token -->
     <script type="application/ld+json">
@@ -2391,43 +2381,20 @@
           </div>
         </div>
       </div>
-    </footer>    <!-- Error monitoring script -->
-    <script src="/sentry.client.js" defer></script>
+    </footer>    <!-- Core Performance-Optimized Scripts -->
+    <script src="/assets/burni-dark-mode.js" async></script>
 
-    <!-- BURNI UNIFIED DARK MODE MANAGER -->
-    <script src="/assets/burni-dark-mode.js"></script>
-
-    <!-- Dark Mode Test Script (Development) -->
-    <script src="/assets/test-dark-mode.js"></script>
-
-    <!-- Advanced Features -->
+    <!-- Essential Features -->
     <script src="/assets/analytics-dashboard.js" defer></script>
     <script src="/assets/price-tracker.js" defer></script>
     <script src="/assets/community-features.js" defer></script>
-    <script src="/assets/security-monitor.js" defer></script>
-    <!-- XRPL Real-time Data Module -->
     <script src="/assets/xrpl-data.js" defer></script>
-    <!-- Temporary: Test live prices -->
-    <script src="/test-burni-live-prices.js" defer></script>
-    <script src="/test-price-widget.js" defer></script>
 
-    <!-- Enhanced Scripts -->
+    <!-- Core Application -->
     <script src="/assets/enhanced-polyfills.js" defer></script>
-    <script src="/assets/enhanced-functionality.v2.js" defer></script>
-
-    <!-- Enhanced Price Widget -->
-    <script src="/enhanced-price-widget.js" defer></script>
-
-    <!-- Main application scripts -->
-    <!-- ES5 Compatible Main Script for Maximum Browser Compatibility -->
     <script src="/assets/main-es5.js" defer></script>
-    <!-- Fixed Scripts - Emergency Replacement -->
     <script src="/assets/scripts-fixed.min.js" defer></script>
-    <!-- Enhanced Form Handler for Contact & Newsletter -->
     <script src="/assets/form-handler.js" defer></script>
-
-    <!-- Live Price Test (temporr) -->
-    <script src="/test-live-prices.js" defer></script>
 
     <!-- Safari Compatibility Inline Fallback -->
     <script>
